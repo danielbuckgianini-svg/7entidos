@@ -17,3 +17,9 @@ Site do aplicativo 7ENTIDOS (em desenvolvimento). Domínio: 7entidos.com.br.
 - Só fotos 10×10 fornecidas e autorizadas para publicação.
 - Google Analytics (G-0GPWW3EZZF) desligado até haver aviso de consentimento e eventos aprovados. Nunca enviar conteúdo pessoal.
 - Ao apontar o domínio no Registro.br, não alterar os registros de e-mail do Google (MX, SPF, DKIM, DMARC).
+
+## App do piloto (`app/`)
+- `app/index.html` · o app 7ENTIDOS em arquivo único (React 18 via CDN), publicado em 7entidos.com.br/app
+- Os dados de cada pessoa ficam só no navegador dela (localStorage). Nada vai para servidor.
+- O "Nosso combinado" (consentimento) aparece na primeira vez e tem link para `privacidade.html`.
+- Google Analytics só liga se a pessoa marcar "estatísticas anônimas" no combinado, e só no domínio oficial. Eventos enviados: `app_aberto` e `tela` (nome da aba). Nunca respostas, lembranças, textos ou fotos.
