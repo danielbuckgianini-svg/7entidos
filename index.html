@@ -257,7 +257,7 @@
         <li><b>APP GIANINI</b><span>Primeira versão, como projeto pessoal.</span></li>
         <li><b>Boas Sensações</b><span>A ideia passa a ser pensada para outras pessoas.</span></li>
         <li><b>7ENTIDOS</b><span>Os sete sentidos viram a base do método e dão nome à marca.</span></li>
-        <li><b>Hoje</b><span>Protótipo em teste. Início da comercialização em dezembro de 2026, com seleção de 100 pessoas.</span></li>
+        <li><b>Hoje</b><span>Protótipo em teste. Lançamento comercial em dezembro de 2026. Primeira turma limitada a 100 pessoas.</span></li>
       </ol>
     </div>
   </div>
@@ -299,7 +299,7 @@
 <script src="js/conteudo.js"></script>
 <script src="js/site.js"></script>
 <script src="js/consentimento.js"></script>
-<!-- Pré-venda: seleção de 100 pessoas, sem garantia de vaga ou cobrança. -->
+<!-- Pré-venda: R$ 24,90 em pagamento único via Pix. Confirmação manual, limitada a 100 vagas. Rascunho: definir canal de comprovantes e controle de vagas antes de publicar. -->
 <button class="pv-convite" type="button" data-abrir-pre-venda>Dezembro · 100 vagas <span aria-hidden="true">↗</span></button>
 <dialog id="pre-venda" class="pv-modal" aria-labelledby="pv-titulo" aria-describedby="pv-resumo">
   <button type="button" class="pv-fechar" data-fechar-pre-venda aria-label="Fechar convite">×</button>
@@ -307,9 +307,9 @@
     <p class="pv-rotulo">7ENTIDOS · Pré-lançamento</p>
     <p class="pv-numero" aria-hidden="true">100<span>começos</span></p>
     <h2 id="pv-titulo">Faça parte dos<br><em>primeiros 100.</em></h2>
-    <p id="pv-resumo">O 7ENTIDOS começa a ser comercializado em <strong>dezembro de 2026</strong>. Apenas <strong>100 pessoas serão selecionadas em dezembro</strong> para fazer parte da primeira turma do lançamento comercial.</p>
-    <p class="pv-apoio">Deixe seu contato para participar da seleção. Se você for escolhido, entraremos em contato com os próximos passos e as condições de acesso.</p>
-    <div class="pv-preco"><span>Valor de acesso</span><strong>R$ 24,90</strong><p>Você poderá pagar antecipadamente, se quiser. As condições serão apresentadas antes do pagamento.</p><a id="pv-pagar" class="pv-enviar" hidden target="_blank" rel="noopener noreferrer">Quero pagar antecipadamente ↗</a></div>
+    <p id="pv-resumo">O 7ENTIDOS começa a ser comercializado em <strong>dezembro de 2026</strong>. A primeira turma do lançamento comercial terá apenas <strong>100 pessoas</strong>. O pagamento de <strong>R$ 24,90, uma única vez</strong>, garante o direito a uma dessas vagas, após confirmação do Pix e da disponibilidade.</p>
+    <p class="pv-apoio">Cadastre seu contato para receber novidades ou antecipe o pagamento para garantir sua participação na primeira turma. O acesso dessa turma começa em dezembro de 2026.</p>
+    <div class="pv-preco"><span>Pagamento único · primeira turma</span><strong>R$ 24,90</strong><p>Pix · chave celular: <b>+55 (11) 95935-9837</b></p><p>Antes de pagar, confirme a disponibilidade de vaga. Depois do Pix, envie o comprovante pelo canal indicado para vincular o pagamento ao seu cadastro. A confirmação é manual.</p><p id="pv-canal-pendente">Recebimento de comprovantes e controle de vagas em configuração. Aguarde a abertura dos pagamentos.</p></div>
     <form id="pv-form" class="pv-form">
       <label for="pv-nome">Como podemos chamar você?</label>
       <input id="pv-nome" name="nome" autocomplete="given-name" maxlength="80" required placeholder="Seu nome">
@@ -318,10 +318,10 @@
       <label for="pv-whatsapp">WhatsApp <span>(opcional)</span></label>
       <input id="pv-whatsapp" name="whatsapp" type="tel" autocomplete="tel" inputmode="tel" maxlength="24" placeholder="(DDD) 99999-9999" aria-describedby="pv-whatsapp-ajuda">
       <small id="pv-whatsapp-ajuda">Se informar, também poderemos falar com você por WhatsApp sobre esta seleção.</small>
-      <label class="pv-consentimento"><input name="consentimento" type="checkbox" required><span>Autorizo o 7ENTIDOS a usar meu nome e meus contatos para conduzir esta seleção e me informar sobre o lançamento de dezembro de 2026. Li o <a href="privacidade.html#pre-lancamento" target="_blank" rel="noopener">aviso de privacidade</a>.</span></label>
-      <button type="submit" class="pv-enviar" disabled>Quero participar da seleção <span aria-hidden="true">↗</span></button>
+      <label class="pv-consentimento"><input name="consentimento" type="checkbox" required><span>Autorizo o 7ENTIDOS a usar meu nome e meus contatos para conduzir a pré-venda e me informar sobre o lançamento de dezembro de 2026. Li o <a href="privacidade.html#pre-lancamento" target="_blank" rel="noopener">aviso de privacidade</a>.</span></label>
+      <button type="submit" class="pv-enviar" disabled>Quero receber novidades <span aria-hidden="true">↗</span></button>
       <p id="pv-status" class="pv-status" role="status" aria-live="polite">Inscrições em preparação. O formulário será liberado assim que o recebimento dos cadastros estiver conectado.</p>
-      <p class="pv-nota">A inscrição é gratuita e não é uma compra ou reserva. Não garante seleção nem acesso gratuito ao aplicativo. Não há cobrança neste formulário.</p>
+      <p class="pv-nota">O cadastro sem pagamento é gratuito e não reserva vaga. O Pix confirmado garante o direito a uma das 100 vagas da primeira turma, mediante disponibilidade. Preencher o formulário não confirma pagamento.</p>
     </form>
   </div>
 </dialog>
