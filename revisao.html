@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Revisão do site · 7ENTIDOS</title>
+<link rel="icon" href="assets/simbolo-contando-7.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/site.css">
+<style>
+.itens{display:grid;gap:14px;margin-top:28px}
+.item{border:1px solid var(--linha);border-radius:10px;padding:18px 20px;background:var(--branco);display:grid;gap:10px}
+.item.validado{border-color:#8BC9A6;background:#F3FBF6}
+.item.revisar{border-color:#E2B25C;background:#FFF9EC}
+.item .grupo{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--roxo)}
+.item h3{font-family:var(--corpo);font-weight:700;font-size:17px;line-height:1.4}
+.item p{font-size:15px;color:var(--texto-suave)}
+.acoes{display:flex;gap:8px;flex-wrap:wrap}
+.acoes button,.opcoes button,.copiar{font:inherit;font-weight:700;font-size:14px;border-radius:9px;border:1px solid var(--linha);background:var(--branco);color:var(--texto);padding:8px 14px;cursor:pointer}
+.acoes .v[aria-pressed="true"]{background:#1F7A4A;color:#fff;border-color:#1F7A4A}
+.acoes .r[aria-pressed="true"]{background:#9A5B00;color:#fff;border-color:#9A5B00}
+.opcoes{display:grid;gap:8px;padding-top:6px;border-top:1px dashed #E2B25C}
+.opcoes button{text-align:left}
+.opcoes button[aria-pressed="true"]{border-color:var(--roxo);background:var(--lilas);color:var(--violeta)}
+.opcoes label{font-size:13px;font-weight:700}
+.opcoes textarea{font:inherit;font-size:15px;width:100%;min-height:70px;border:1px solid var(--linha);border-radius:9px;padding:10px}
+.resumo{position:sticky;top:76px;z-index:5;background:var(--violeta);color:#fff;border-radius:12px;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.resumo b{color:var(--dourado)}
+.copiar{background:var(--dourado);border-color:var(--dourado);color:var(--texto)}
+.aprendizados{margin-top:40px}
+.aprendizados li{font-size:15px;margin-bottom:6px}
+</style>
+</head>
+<body>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+<header class="topo">
+  <div class="wrap">
+    <a class="marca" href="index.html" aria-label="7ENTIDOS, voltar à prévia"><img src="assets/simbolo-contando-7.svg" alt="" width="36" height="36"><span>7ENTIDOS</span></a>
+    <a href="index.html" style="font-weight:700;font-size:15px">Voltar à prévia</a>
+  </div>
+</header>
+<main id="conteudo" class="pagina">
+  <div class="wrap">
+    <span class="rotulo">Revisão do site</span>
+    <h1>Decisões que dependem de você</h1>
+    <p class="lead">Marque cada item como validado ou peça revisão. Em “Revisar”, escolha a correção. Cada decisão vira um aprendizado. No fim, toque em “Copiar decisões” e cole na conversa com o Claude.</p>
+    <div class="resumo" style="margin-top:28px"><span id="placar"></span><button class="copiar" id="copiar" type="button">Copiar decisões</button></div>
+    <div class="itens" id="itens"></div>
+    <section class="aprendizados" aria-labelledby="t-apr" style="padding:0">
+      <h2 id="t-apr">Aprendizados registrados</h2>
+      <ul id="lista-apr"></ul>
+    </section>
+    <p class="lead" style="margin-top:20px;font-size:15px">As marcações ficam guardadas só neste navegador. Para o Claude receber, use o botão “Copiar decisões”.</p>
+  </div>
+</main>
+<script>
+var ITENS=[
+ {id:"paleta",g:"Identidade visual",t:"O site usa a paleta roxa e dourada que você enviou (a mesma do protótipo hoje). O símbolo fica no quadrado grafite original.",p:"Divergência: o Dossiê de Transição registra a identidade da marca como grafite + amarelo.",o:["Mudar o site para grafite e amarelo","Usar grafite e amarelo só nos detalhes, manter o roxo como base","Decidir depois de um duelo visual"]},
+ {id:"nome",g:"Identidade visual",t:"O nome aparece sempre como 7ENTIDOS, em maiúsculas, como no seu pedido.",p:"Nos materiais anteriores aparece 7entidos, em minúsculas.",o:["Usar 7entidos em minúsculas","Maiúsculas só no logotipo; minúsculas nos textos"]},
+ {id:"simbolo",g:"Identidade visual",t:"O símbolo usado é o “Contando 7”, variação Clássica, sem nenhuma alteração.",o:["Usar a variação Grande","Usar a variação Riscos fortes","Usar a variação Com aro amarelo"]},
+ {id:"gianini",g:"Identidade visual",t:"A assinatura “by Gianini” não aparece no site.",o:["Colocar no rodapé","Colocar na seção Sobre"]},
+ {id:"titulo",g:"Textos",t:"Título principal: “Existe um mundo de boas sensações que você ainda não descobriu.”",o:["Usar: “A vida é feita de boas sensações.”","Usar: “Sete sentidos. Muitas descobertas.”","Vou escrever o meu"]},
+ {id:"funcoes",g:"Aplicativo",t:"As seis funções aparecem com os nomes do seu pedido e o selo “No protótipo” (conferi que existem no código).",p:"No protótipo, o menu atual se chama Sentir · Lembrar · Descobrir · Viver.",o:["Mostrar também os nomes do menu do protótipo","Trocar algumas para “Planejado”","Esconder esta seção até haver capturas reais"]},
+ {id:"capturas",g:"Aplicativo",t:"As telas do aplicativo ficam como espaços reservados até termos capturas reais com dados de teste.",o:["Eu mesmo faço as capturas e envio","Quero que o Claude prepare um roteiro de capturas"]},
+ {id:"galeria",g:"Fotografias",t:"A galeria 10×10 tem 6 espaços, avançados só por botão ou seta do teclado.",o:["Ter 10 espaços","Ter 12 espaços","Outro número (escrevo abaixo)"]},
+ {id:"ciencia",g:"Ciência",t:"A seção Ciência usa 7 referências em três níveis: estabelecida, promissora e hipótese do produto.",p:"Elas vieram da Sala dos 7 Sentidos. Os links ainda precisam ser conferidos.",o:["Retirar alguma referência (escrevo qual)","Mudar uma referência de nível","Pedir mais fontes antes de publicar"]},
+ {id:"sobre",g:"Sobre",t:"A seção Sobre não cita seu nome, sua cidade nem conteúdo dos dossiês pessoais.",o:["Citar o nome do fundador","Citar Santos (SP)","Citar os dois","Escrever a história de origem juntos"]},
+ {id:"contato",g:"Contato",t:"O contato mostra só o e-mail, marcado como “em configuração”. Não há formulário.",o:["Acrescentar o Instagram @7entidos","Acrescentar um canal de WhatsApp"]},
+ {id:"analytics",g:"Medição",t:"O Google Analytics (G-0GPWW3EZZF) está registrado e desligado. Nada é carregado.",o:["Preparar o aviso de consentimento","Usar uma medição mais simples, sem cookies"]},
+ {id:"privacidade",g:"Privacidade",t:"A página de privacidade é uma minuta, identificada como rascunho.",o:["Ajustar o texto (escrevo abaixo)","Pedir revisão por um profissional antes de publicar"]}
+];
+var K="7entidos-site-revisao",E={};try{E=JSON.parse(localStorage.getItem(K)||"{}")}catch(e){}
+function salvar(){try{localStorage.setItem(K,JSON.stringify(E))}catch(e){}}
+function esc(s){return String(s||"").replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function aprendizado(it,e){if(!e||!e.st)return null;if(e.st==="v")return it.g+": validado. "+it.t;var esc_=e.op!=null?it.o[e.op]:"correção a definir";return it.g+": revisar. "+esc_+(e.nota?" ("+e.nota+")":"")}
+function render(){
+ var v=0,r=0;
+ document.getElementById("itens").innerHTML=ITENS.map(function(it){var e=E[it.id]||{};if(e.st==="v")v++;if(e.st==="r")r++;
+  return '<article class="item '+(e.st==="v"?"validado":e.st==="r"?"revisar":"")+'"><span class="grupo">'+esc(it.g)+'</span><h3>'+esc(it.t)+'</h3>'+(it.p?'<p>'+esc(it.p)+'</p>':'')+
+  '<div class="acoes"><button class="v" data-id="'+it.id+'" data-a="v" aria-pressed="'+(e.st==="v")+'">✓ Validado</button><button class="r" data-id="'+it.id+'" data-a="r" aria-pressed="'+(e.st==="r")+'">✎ Revisar</button></div>'+
+  (e.st==="r"?'<div class="opcoes"><span style="font-size:13px;font-weight:700">Qual correção?</span>'+it.o.map(function(o,i){return '<button data-id="'+it.id+'" data-op="'+i+'" aria-pressed="'+(e.op===i)+'">'+esc(o)+'</button>'}).join("")+
+  '<label for="nota-'+it.id+'">Observação (opcional)</label><textarea id="nota-'+it.id+'" data-nota="'+it.id+'">'+esc(e.nota)+'</textarea></div>':'')+'</article>'}).join("");
+ document.getElementById("placar").innerHTML='<b>'+v+'</b> validados · <b>'+r+'</b> para revisar · '+(ITENS.length-v-r)+' em aberto';
+ var a=ITENS.map(function(it){return aprendizado(it,E[it.id])}).filter(Boolean);
+ document.getElementById("lista-apr").innerHTML=a.length?a.map(function(x){return "<li>"+esc(x)+"</li>"}).join(""):"<li>Nenhuma decisão ainda.</li>";
+}
+document.addEventListener("click",function(ev){var b=ev.target.closest("button");if(!b)return;var id=b.dataset.id;
+ if(b.dataset.a){E[id]=E[id]||{};E[id].st=E[id].st===b.dataset.a?null:b.dataset.a;if(E[id].st==="v"){delete E[id].op}salvar();render();var n=document.querySelector('[data-id="'+id+'"][data-a="'+b.dataset.a+'"]');if(n)n.focus();return}
+ if(b.dataset.op!=null&&id){E[id].op=Number(b.dataset.op);salvar();render();var m=document.querySelector('[data-id="'+id+'"][data-op="'+b.dataset.op+'"]');if(m)m.focus();return}
+ if(b.id==="copiar"){var txt="Decisões da revisão do site 7ENTIDOS:\n"+ITENS.map(function(it){return "- "+(aprendizado(it,E[it.id])||it.g+": em aberto. "+it.t)}).join("\n");
+  navigator.clipboard.writeText(txt).then(function(){b.textContent="Copiado ✓"},function(){b.textContent="Não foi possível copiar"});}
+});
+document.addEventListener("input",function(ev){var id=ev.target.dataset.nota;if(!id)return;E[id].nota=ev.target.value;salvar();var a=ITENS.map(function(it){return aprendizado(it,E[it.id])}).filter(Boolean);document.getElementById("lista-apr").innerHTML=a.map(function(x){return "<li>"+esc(x)+"</li>"}).join("")});
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>7ENTIDOS</title>
+<meta name="description" content="7ENTIDOS é um aplicativo em desenvolvimento para explorar sentidos, memórias positivas e experiências que fazem bem a você.">
+<link rel="icon" href="assets/simbolo-contando-7.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/site.css">
+<!-- Google Analytics: DESLIGADO de propósito. Veja js/conteudo.js e o README antes de ativar. -->
+</head>
+<body class="modo-revisao">
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+<header class="topo">
+  <div class="wrap">
+    <a class="marca" href="#inicio" aria-label="7ENTIDOS, voltar ao início">
+      <img src="assets/simbolo-contando-7.svg" alt="" width="36" height="36">
+      <span>7ENTIDOS</span>
+    </a>
+    <button class="botao-menu" id="botao-menu" aria-expanded="false" aria-controls="menu">Menu</button>
+    <nav class="menu" id="menu" aria-label="Seções do site">
+      <ul>
+        <li><a href="#proposta">A proposta</a></li>
+        <li><a href="#como-funciona">Como funciona</a></li>
+        <li><a href="#aplicativo">Aplicativo</a></li>
+        <li><a href="#ciencia">Ciência</a></li>
+        <li><a href="#sobre">Sobre</a></li>
+        <li><a href="#contato">Contato</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="conteudo">
+
+<!-- ============ 1. INÍCIO ============ -->
+<section class="inicio" id="inicio" aria-labelledby="titulo-inicio">
+  <div class="wrap">
+    <div>
+      <span class="selo"><i aria-hidden="true"></i>Aplicativo em desenvolvimento</span>
+      <!-- TEXTO: título principal -->
+      <h1 id="titulo-inicio">Existe um mundo de boas sensações <em>que você ainda não descobriu.</em></h1>
+      <!-- TEXTO: frase de apoio -->
+      <p class="lead">O 7ENTIDOS é um aplicativo para perceber, pelos seus sentidos e pelas suas memórias, o que faz bem a você. E para descobrir experiências novas a partir disso.</p>
+      <a class="cta" href="#proposta">Conheça a proposta
+        <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 4v12m0 0-5-5m5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <ol class="indice" aria-label="Os sete sentidos">
+        <li><b>1</b>visão</li><li><b>2</b>audição</li><li><b>3</b>tato</li><li><b>4</b>olfato</li><li><b>5</b>paladar</li><li><b>6</b>equilíbrio</li><li><b>7</b>noção do corpo</li>
+      </ol>
+    </div>
+    <div data-foto="destaque"></div>
+  </div>
+</section>
+
+<!-- ============ 2. O QUE É ============ -->
+<section class="suave" id="proposta" aria-labelledby="titulo-proposta">
+  <div class="wrap">
+    <div class="cabeca-secao">
+      <span class="rotulo">A proposta</span>
+      <h2 id="titulo-proposta">O que é o 7ENTIDOS</h2>
+    </div>
+    <div class="proposta">
+      <div class="texto">
+        <!-- TEXTO: explicação principal -->
+        <p>Muita coisa boa passa sem a gente reparar: um cheiro, uma música, uma textura, um lugar, uma pessoa.</p>
+        <p>O 7ENTIDOS ajuda você a reconhecer essas experiências, a lembrar das que já viveu e a entender o que elas têm em comum. Com isso, sugere novas experiências possíveis, sempre como hipóteses que você confirma ou corrige.</p>
+        <p>Quem decide o que faz sentido é você. O aplicativo organiza as pistas.</p>
+        <div class="limites">
+          <p><strong>O que ele não é.</strong> O 7ENTIDOS não é terapia nem tratamento, não faz diagnóstico e não promete felicidade permanente. A exploração de memórias é sempre voluntária.</p>
+        </div>
+      </div>
+      <div>
+        <p class="rotulo" style="margin-bottom:6px">Os sete sentidos</p>
+        <ul class="sentidos">
+          <li><span class="marcas" aria-hidden="true">|</span><div><b>Visão</b><small>luz, cores, formas, paisagens</small></div></li>
+          <li><span class="marcas" aria-hidden="true">||</span><div><b>Audição</b><small>música, vozes, sons do ambiente</small></div></li>
+          <li><span class="marcas" aria-hidden="true">|||</span><div><b>Tato</b><small>texturas, temperatura, toque</small></div></li>
+          <li><span class="marcas" aria-hidden="true">||||</span><div><b>Olfato</b><small>aromas e o que eles fazem lembrar</small></div></li>
+          <li><span class="marcas" aria-hidden="true"><s>||||</s></span><div><b>Paladar</b><small>sabores, refeições, rituais</small></div></li>
+          <li><span class="marcas" aria-hidden="true"><s>||||</s> |</span><div><b>Equilíbrio</b><small>movimento, embalo, ritmo</small></div></li>
+          <li><span class="marcas" aria-hidden="true"><s>||||</s> ||</span><div><b>Noção do corpo</b><small>posição, força, estar à vontade no corpo</small></div></li>
+          <li class="extra"><span class="marcas" aria-hidden="true">+</span><div><b>De dentro</b><small>respiração, batimentos, calma (bônus)</small></div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. COMO FUNCIONA ============ -->
+<section class="faixa" id="como-funciona" aria-labelledby="titulo-como">
+  <div class="wrap">
+    <div class="cabeca-secao">
+      <span class="rotulo">Como funciona</span>
+      <h2 id="titulo-como">Uma jornada em cinco movimentos</h2>
+      <p class="lead">Esta é a jornada proposta para o aplicativo. Ela está em teste e pode mudar.</p>
+    </div>
+    <ol class="jornada">
+      <li><h3>Reconhecer</h3><p>Perceber experiências positivas do dia a dia e do passado.</p></li>
+      <li><h3>Explorar</h3><p>Olhar para as sensações e memórias ligadas a elas, sentido por sentido.</p></li>
+      <li><h3>Identificar</h3><p>Encontrar padrões pessoais: o que se repete no que faz bem a você.</p></li>
+      <li><h3>Descobrir</h3><p>Receber sugestões de experiências novas, cada uma com o porquê.</p></li>
+      <li><h3>Registrar</h3><p>Guardar e refletir sobre o vivido, no seu ritmo.</p></li>
+    </ol>
+    <p class="nota-faixa">Sem metas, sem culpa e sem comparação com outras pessoas. As conclusões do aplicativo são hipóteses revisáveis, nunca verdades sobre você.</p>
+  </div>
+</section>
+
+<!-- ============ 4. APLICATIVO ============ -->
+<section id="aplicativo" aria-labelledby="titulo-app">
+  <div class="wrap">
+    <div class="cabeca-secao">
+      <span class="rotulo">Conheça o aplicativo</span>
+      <h2 id="titulo-app">O que já existe e o que ainda vem</h2>
+      <p class="lead">O 7ENTIDOS ainda não está disponível ao público. As funções abaixo existem num protótipo, hoje usado em teste interno.</p>
+    </div>
+    <div class="legenda-status">
+      <span><span class="chip prototipo">No protótipo</span> existe na versão de teste, ainda em ajuste</span>
+      <span><span class="chip planejado">Planejado</span> ainda não construído</span>
+    </div>
+    <div class="funcoes">
+      <article class="funcao">
+        <div data-tela="descoberta-rapida" data-nome="Descoberta Rápida"></div>
+        <div class="topo-funcao"><h3>Descoberta Rápida</h3><span class="chip prototipo">No protótipo</span></div>
+        <p>Três perguntas em cerca de dois minutos. No fim, uma pista nova sobre o que desperta os seus sentidos.</p>
+      </article>
+      <article class="funcao">
+        <div data-tela="sala-detetive" data-nome="Sala de Detetive"></div>
+        <div class="topo-funcao"><h3>Sala de Detetive</h3><span class="chip prototipo">No protótipo</span></div>
+        <p>Uma investigação mais longa, em partes, com perguntas de escolha, escalas e respostas livres. Dá para pausar e retomar.</p>
+      </article>
+      <article class="funcao">
+        <div data-tela="mapa" data-nome="Mapa da Felicidade"></div>
+        <div class="topo-funcao"><h3>Mapa da Felicidade</h3><span class="chip prototipo">No protótipo</span></div>
+        <p>Uma constelação que liga as suas pistas e lembranças. Mostra o que já tem relato seu e o que ainda está em aberto.</p>
+      </article>
+      <article class="funcao">
+        <div data-tela="sensacoes" data-nome="Sensações 10×10"></div>
+        <div class="topo-funcao"><h3>Sensações 10×10</h3><span class="chip prototipo">No protótipo</span></div>
+        <p>O arquivo das suas boas lembranças, com busca e filtros. Trechos que você marcar como sensíveis podem ficar ocultos.</p>
+      </article>
+      <article class="funcao">
+        <div data-tela="descobridor" data-nome="Descobridor de Experiências"></div>
+        <div class="topo-funcao"><h3>Descobridor de Experiências</h3><span class="chip prototipo">No protótipo</span></div>
+        <p>Experiências sugeridas a partir das suas pistas. Cada uma mostra por que foi sugerida e o quanto ainda é incerta.</p>
+      </article>
+      <article class="funcao">
+        <div data-tela="retrospectiva" data-nome="Retrospectiva de memórias"></div>
+        <div class="topo-funcao"><h3>Retrospectiva de memórias</h3><span class="chip prototipo">No protótipo</span></div>
+        <p>Um resumo do mês em formato de Stories. Você escolhe o que aparece; nada sai sem a sua marcação.</p>
+      </article>
+    </div>
+    <div class="planejados">
+      <div><span class="chip planejado">Planejado</span><h3 style="margin-top:12px">Próximas etapas</h3></div>
+      <ul>
+        <li>Versões para lojas de aplicativos (Android e iPhone)</li>
+        <li>Entrar com conta e guardar os dados na nuvem</li>
+        <li>Responder também por voz</li>
+        <li>Um lembrete gentil por dia, se você quiser</li>
+        <li>Sugestões geradas por inteligência artificial dentro do app</li>
+        <li>Apagar todos os seus dados com um toque</li>
+      </ul>
+    </div>
+    <p class="pend">Pendência: capturas reais de tela, feitas com dados de teste</p>
+  </div>
+</section>
+
+<!-- ============ 5. EXPERIÊNCIAS E MEMÓRIAS ============ -->
+<section class="faixa" id="experiencias" aria-labelledby="titulo-galeria">
+  <div class="wrap">
+    <div class="galeria-topo">
+      <div class="cabeca-secao">
+        <span class="rotulo">Experiências e memórias</span>
+        <h2 id="titulo-galeria">Momentos 10×10</h2>
+        <p class="lead">Fotografias de momentos e experiências que inspiram o projeto.</p>
+      </div>
+      <div class="controles">
+        <button type="button" id="foto-anterior" aria-label="Foto anterior" aria-controls="trilho"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M12.5 4 6.5 10l6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <span class="contador" id="contador" aria-live="polite">1 / 6</span>
+        <button type="button" id="foto-proxima" aria-label="Próxima foto" aria-controls="trilho"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m7.5 4 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+    </div>
+    <div class="trilho" id="trilho" tabindex="0" role="region" aria-label="Galeria de fotos, use as setas para navegar"></div>
+    <p class="pend">Pendência: arquivos das fotos 10×10 e autorização para publicar cada uma</p>
+  </div>
+</section>
+
+<!-- ============ 6. CIÊNCIA ============ -->
+<section id="ciencia" aria-labelledby="titulo-ciencia">
+  <div class="wrap">
+    <div class="cabeca-secao">
+      <span class="rotulo">Ciência e descoberta</span>
+      <h2 id="titulo-ciencia">O que se sabe, o que se estuda e o que ainda vamos testar</h2>
+      <p class="lead">Separamos o que tem base sólida do que é promissor e do que é só uma ideia do produto. A ciência apoia o método; quem diz o que faz bem é você.</p>
+    </div>
+    <div class="niveis">
+      <div class="nivel">
+        <header>
+          <div class="forca" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i></div>
+          <h3>Evidência estabelecida</h3>
+          <p>Achados confirmados por vários grupos de pesquisa.</p>
+        </header>
+        <ul>
+          <li><b>A pele tem nervos que respondem ao toque lento e suave.</b><span>Quanto mais eles disparam, mais agradável o toque costuma ser descrito.</span><span class="ref">Löken e colegas, Nature Neuroscience, 2009</span></li>
+          <li><b>Sentimos a posição do corpo graças a sensores específicos.</b><span>A proteína Piezo2 é peça central da noção do corpo. A descoberta desses sensores recebeu o Nobel de Medicina de 2021.</span><span class="ref">Woo e colegas, Nature Neuroscience, 2015 · Nobel 2021</span></li>
+        </ul>
+      </div>
+      <div class="nivel">
+        <header>
+          <div class="forca" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i></div>
+          <h3>Estudos promissores</h3>
+          <p>Resultados interessantes, com amostras pequenas ou ainda pouco repetidos.</p>
+        </header>
+        <ul>
+          <li><b>A música de que gostamos libera dopamina, inclusive na espera pelo trecho preferido.</b><span class="ref">Salimpoor e colegas, Nature Neuroscience, 2011</span></li>
+          <li><b>Lembranças trazidas por cheiros tendem a ser mais emocionais.</b><span class="ref">Herz e Schooler, American Journal of Psychology, 2002</span></li>
+          <li><b>Ser embalado devagar ajudou adultos a dormir mais rápido e mais profundamente.</b><span class="ref">Perrault e colegas, Current Biology, 2019</span></li>
+          <li><b>Caminhadas procurando o que encanta aumentaram emoções positivas em pessoas mais velhas.</b><span class="ref">Sturm e colegas, Emotion, 2020</span></li>
+          <li><b>Prestar atenção ao que se vive (saborear) intensifica experiências positivas.</b><span class="ref">Bryant e Veroff, Savoring, 2007</span></li>
+        </ul>
+      </div>
+      <div class="nivel">
+        <header>
+          <div class="forca" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
+          <h3>Hipóteses do produto</h3>
+          <p>Ideias do 7ENTIDOS que ainda serão testadas.</p>
+        </header>
+        <ul>
+          <li><b>Observar um sentido por vez ajuda a perceber padrões pessoais.</b><span>Inspirado nos estudos sobre saborear. A testar no piloto.</span></li>
+          <li><b>Uma escala própria de 1 a 10 torna os registros comparáveis para a mesma pessoa.</b><span>Cada pessoa define o que cada nível significa. A testar.</span></li>
+          <li><b>Saber que uma experiência vem aí já faz parte do prazer.</b><span>Ideia inspirada nos estudos sobre antecipação. Não comprovada para o aplicativo.</span></li>
+        </ul>
+      </div>
+    </div>
+    <p class="pend">Pendência: conferir cada referência no artigo original e acrescentar os links antes de publicar</p>
+  </div>
+</section>
+
+<!-- ============ 7. SOBRE ============ -->
+<section class="suave" id="sobre" aria-labelledby="titulo-sobre">
+  <div class="wrap">
+    <div class="cabeca-secao">
+      <span class="rotulo">Sobre o projeto</span>
+      <h2 id="titulo-sobre">Um projeto independente, em construção</h2>
+    </div>
+    <div class="sobre">
+      <div class="texto">
+        <!-- TEXTO: história do projeto (só conteúdo autorizado) -->
+        <p>O 7ENTIDOS nasceu de uma pergunta simples: o que, de fato, faz bem a cada pessoa? Começou como um projeto pessoal de autoconhecimento e foi ganhando forma até adotar os sete sentidos como base.</p>
+        <p>É desenvolvido de forma independente, com apoio de ferramentas de inteligência artificial, e passa por testes antes de qualquer lançamento.</p>
+        <p class="pend">Pendência: texto de origem escrito com o fundador e autorização para citar nome e cidade</p>
+      </div>
+      <ol class="linha-tempo" aria-label="Etapas do projeto">
+        <li><b>APP GIANINI</b><span>Primeira versão, como projeto pessoal.</span></li>
+        <li><b>Boas Sensações</b><span>A ideia passa a ser pensada para outras pessoas.</span></li>
+        <li><b>7ENTIDOS</b><span>Os sete sentidos viram a base do método e dão nome à marca.</span></li>
+        <li><b>Hoje</b><span>Protótipo em teste. Sem data pública de lançamento.</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8. CONTATO ============ -->
+<section class="faixa" id="contato" aria-labelledby="titulo-contato">
+  <div class="wrap">
+    <div class="contato">
+      <div>
+        <span class="rotulo">Contato</span>
+        <h2 id="titulo-contato" class="visualmente-oculto">Contato</h2>
+        <p class="email" id="email-contato">contato@7entidos.com.br</p>
+        <p class="estado" id="estado-email">Endereço em configuração. Ainda não envie mensagens.</p>
+      </div>
+      <p class="lead">Este site não tem formulário e não coleta nenhum dado. Quando o e-mail estiver funcionando, ele será o canal oficial do projeto.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ 9. RODAPÉ ============ -->
+<footer class="rodape">
+  <div class="wrap">
+    <a class="marca" href="#inicio"><img src="assets/simbolo-contando-7.svg" alt="" width="36" height="36"><span>7ENTIDOS</span></a>
+    <nav aria-label="Rodapé">
+      <ul>
+        <li><a href="privacidade.html">Privacidade</a></li>
+        <li><a href="#contato">Contato</a></li>
+      </ul>
+    </nav>
+    <p>Aplicativo em desenvolvimento. Não é terapia nem tratamento.</p>
+  </div>
+</footer>
+
+<div class="painel-revisao" id="painel-revisao" role="region" aria-label="Controles da prévia">
+  <span><b>Prévia de revisão</b> · não publicada</span>
+  <button type="button" id="alternar-marcas" aria-pressed="true">Ocultar marcações</button>
+  <a href="revisao.html">Validar decisões</a>
+</div>
+
+<script src="js/conteudo.js"></script>
+<script src="js/site.js"></script>
+</body>
+</html>
