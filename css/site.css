@@ -134,7 +134,8 @@ section{padding:clamp(72px,10vw,128px) 0}
 .funcao .topo-funcao{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .funcao h3{font-size:24px}
 .funcao p{font-size:15.5px;color:var(--texto-suave)}
-.funcao .tela img{border-radius:18px;border:1px solid var(--linha)}
+.funcao .tela img{border-radius:0;border:0;width:auto;max-width:100%;max-height:520px;margin:0 auto;filter:drop-shadow(0 14px 24px rgba(37,29,49,.18))}
+.funcao .tela figcaption{text-align:center}
 .planejados{margin-top:56px;padding:28px;border:1px solid var(--linha);border-radius:6px;background:var(--branco);display:grid;grid-template-columns:minmax(0,260px) 1fr;gap:24px}
 .planejados ul{margin:0;padding-left:18px;columns:2;column-gap:36px;font-size:15.5px}
 .planejados li{margin-bottom:6px;break-inside:avoid}
