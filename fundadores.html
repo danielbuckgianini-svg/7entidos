@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Seja um dos fundadores · 7ENTIDOS</title>
+<meta name="description" content="Cadastre-se para receber o convite do lançamento do 7ENTIDOS nas lojas do Android e do iPhone.">
+<link rel="icon" href="assets/simbolo-contando-7.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/site.css?v=20261102-fundadores">
+<style>
+/* Página de cadastro dos fundadores: usa as cores e letras do site (css/site.css) */
+.fund{padding:clamp(40px,6vw,88px) 0;background:radial-gradient(ellipse at 85% 20%,#2B1E3D 0,transparent 55%),#0B0B0D}
+.fund .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(32px,5vw,72px);align-items:start}
+.fund h1{font-size:clamp(42px,6vw,76px);line-height:1.03;margin:24px 0 18px;font-weight:400}
+.fund h1 em{color:var(--dourado);font-style:italic}
+.fund .lead{margin-bottom:28px}
+.ganha{list-style:none;margin:0;padding:0;display:grid;gap:14px;border-top:1px solid var(--linha);padding-top:22px}
+.ganha li{display:grid;grid-template-columns:28px 1fr;gap:12px;align-items:baseline}
+.ganha b{display:block;font-family:var(--display);font-weight:400;font-size:21px;line-height:1.25}
+.ganha span{color:var(--texto-suave);font-size:15.5px}
+.ganha i{font-style:normal;color:var(--dourado);font-family:var(--display);font-size:22px}
+.preco{margin-top:24px;font-size:15.5px;color:var(--texto-suave);max-width:46ch}
+.preco strong{color:var(--texto)}
+.cartao{background:#15131B;border:1px solid var(--linha);border-radius:16px;padding:clamp(20px,3vw,32px);display:grid;gap:16px}
+.cartao h2{font-size:clamp(26px,3vw,34px)}
+.campo{display:grid;gap:6px}
+.campo label{font-weight:700;font-size:14.5px}
+.campo input,.campo select{font:inherit;font-size:16px;color:var(--texto);background:#0B0B0D;border:1px solid #4A4152;border-radius:10px;padding:12px 14px;min-height:48px;width:100%}
+.campo input:focus,.campo select:focus{outline:2px solid var(--dourado);outline-offset:1px;border-color:var(--dourado)}
+.campo small{color:var(--texto-suave);font-size:13.5px}
+.marcar{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start;font-size:15px;line-height:1.5;cursor:pointer}
+.marcar input{width:20px;height:20px;margin:2px 0 0;accent-color:#F4C51F}
+.marcar span small{display:block;color:var(--texto-suave);font-size:13.5px}
+.sistema{margin-left:32px}
+.cartao .cta{border:0;cursor:pointer;justify-content:center;width:100%;font:inherit;font-weight:700;font-size:16px}
+.cartao .cta[disabled]{opacity:.5;cursor:not-allowed}
+.retorno{border-radius:12px;padding:14px 16px;font-size:15px;line-height:1.5}
+.retorno.ok{background:#1E2A1F;border:1px solid #3E6B45;color:#DDF2DF}
+.retorno.erro{background:#2E1A1F;border:1px solid #7A3B48;color:#F6DCE1}
+.retorno.aviso{background:#2A2414;border:1px solid #6B5A23;color:#F4E6B8}
+.campo[hidden]{display:none}
+.armadilha{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.nota{font-size:13.5px;color:var(--texto-suave)}
+@media (max-width:860px){.fund .wrap{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+<header class="topo">
+  <div class="wrap">
+    <a class="marca" href="index.html" aria-label="7ENTIDOS, voltar à página principal"><img src="assets/simbolo-contando-7.svg" alt="" width="36" height="36"><span>7ENTIDOS</span></a>
+    <a href="index.html" style="font-weight:700;font-size:15px">Voltar ao site</a>
+  </div>
+</header>
+
+<main id="conteudo">
+<section class="fund" aria-labelledby="titulo-fund">
+  <div class="wrap">
+    <div>
+      <span class="selo"><i aria-hidden="true"></i>Lançamento previsto para 1º de dezembro</span>
+      <!-- TEXTO: título da página de fundadores -->
+      <h1 id="titulo-fund">Seja um dos primeiros a <em>sentir</em> o 7ENTIDOS.</h1>
+      <p class="assinatura">A vida é feita de boas sensações.</p>
+      <!-- TEXTO: frase de apoio -->
+      <p class="lead">Cadastre-se e receba o convite no dia em que o aplicativo chegar às lojas do Android e do iPhone.</p>
+      <ul class="ganha">
+        <li><i aria-hidden="true">✦</i><div><b>Seu nome no mural Fundadores</b><span>Dentro do aplicativo, só se você autorizar.</span></div></li>
+        <li><i aria-hidden="true">✦</i><div><b>Testar antes de todo mundo</b><span>De 19 a 28 de novembro, se você quiser participar do teste.</span></div></li>
+        <li><i aria-hidden="true">✦</i><div><b>Convite no dia do lançamento</b><span>Por e-mail e WhatsApp, com o link para baixar.</span></div></li>
+      </ul>
+      <p class="preco">O aplicativo terá um <strong>pagamento único de R$ 24,90</strong>, feito dentro da loja. Cadastrar não custa nada e não obriga a comprar.</p>
+    </div>
+
+    <form class="cartao" id="form-fundadores" novalidate>
+      <h2>Quero ser fundador</h2>
+      <div class="campo"><label for="f-nome">Nome</label><input id="f-nome" name="nome" type="text" autocomplete="name" required maxlength="80"></div>
+      <div class="campo"><label for="f-email">E-mail</label><input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" required maxlength="120"></div>
+      <div class="campo"><label for="f-whats">WhatsApp, com DDD</label><input id="f-whats" name="whatsapp" type="tel" autocomplete="tel" inputmode="tel" placeholder="(13) 90000-0000" required maxlength="20"><small>Só para mandar o convite e avisos do lançamento.</small></div>
+      <div class="armadilha" aria-hidden="true"><label for="f-site">Não preencha</label><input id="f-site" name="site" type="text" tabindex="-1" autocomplete="off"></div>
+
+      <label class="marcar"><input type="checkbox" id="f-idade" required><span>Tenho 18 anos ou mais.</span></label>
+      <label class="marcar"><input type="checkbox" id="f-aceite" required><span>Aceito receber o convite e avisos do 7ENTIDOS por e-mail e WhatsApp. <small>Você pode sair da lista quando quiser.</small></span></label>
+      <label class="marcar"><input type="checkbox" id="f-mural"><span>Quero meu nome no mural Fundadores dentro do aplicativo. <small>Opcional.</small></span></label>
+      <label class="marcar"><input type="checkbox" id="f-testar"><span>Quero testar antes, de 19 a 28 de novembro. <small>Opcional.</small></span></label>
+      <div class="campo sistema" id="bloco-sistema" hidden><label for="f-sistema">Seu celular</label><select id="f-sistema" name="sistema"><option value="">Escolha</option><option value="android">Android</option><option value="iphone">iPhone</option></select></div>
+
+      <div class="retorno" id="retorno" role="status" aria-live="polite" hidden></div>
+      <button type="submit" class="cta" id="f-enviar">Quero ser avisado</button>
+      <p class="nota">Seus dados ficam numa lista privada do 7ENTIDOS, não são vendidos nem passados para terceiros. <a href="privacidade.html">Como cuidamos dos seus dados</a>.</p>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer class="rodape"><div class="wrap"><a class="marca" href="index.html"><img src="assets/simbolo-contando-7.svg" alt="" width="36" height="36"><span>7ENTIDOS</span></a><p>Aplicativo em desenvolvimento. Não é terapia nem tratamento. <a href="#" data-preferencias-estatisticas style="color:inherit">Preferências de estatísticas</a></p></div></footer>
+
+<script src="js/conteudo.js"></script>
+<script src="js/fundadores.js"></script>
+<script src="js/consentimento.js"></script>
+</body>
+</html>

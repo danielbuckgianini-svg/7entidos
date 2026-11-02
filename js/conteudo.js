@@ -59,5 +59,13 @@ window.SITE = {
      consentimento e lista de eventos aprovada. Nunca enviar
      respostas, memórias, relatos ou qualquer conteúdo pessoal.
      --------------------------------------------------------------- */
-  analytics: { idMedicao: "G-0GPWW3EZZF", ativo: true }
+  analytics: { idMedicao: "G-0GPWW3EZZF", ativo: true },
+
+  /* ---------------------------------------------------------------
+     CADASTRO DE FUNDADORES (fundadores.html · js/fundadores.js)
+     "endereco": o link /exec da planilha Google da empresa
+     (instruções em ferramentas/planilha-fundadores.gs).
+     Enquanto "ativo" for false, nada é enviado.
+     --------------------------------------------------------------- */
+  fundadores: { endereco: "", ativo: false }
 };
