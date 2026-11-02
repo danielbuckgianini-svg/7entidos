@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="css/site.css">
 <!-- Google Analytics: DESLIGADO de propósito. Veja js/conteudo.js e o README antes de ativar. -->
 </head>
-<body class="modo-revisao">
+<body>
 <a class="pular" href="#conteudo">Pular para o conteúdo</a>
 
 <header class="topo">
@@ -27,7 +27,6 @@
         <li><a href="#proposta">A proposta</a></li>
         <li><a href="#como-funciona">Como funciona</a></li>
         <li><a href="#aplicativo">Aplicativo</a></li>
-        <li><a href="#ciencia">Ciência</a></li>
         <li><a href="#sobre">Sobre</a></li>
         <li><a href="#contato">Contato</a></li>
       </ul>
@@ -165,12 +164,11 @@
         <li>Apagar todos os seus dados com um toque</li>
       </ul>
     </div>
-    <p class="pend">Pendência: validar as 6 telas (pessoa inventada, sem dados reais) na página de revisão</p>
   </div>
 </section>
 
 <!-- ============ 5. EXPERIÊNCIAS E MEMÓRIAS ============ -->
-<section class="faixa" id="experiencias" aria-labelledby="titulo-galeria">
+<section class="faixa" id="experiencias" aria-labelledby="titulo-galeria" data-galeria>
   <div class="wrap">
     <div class="galeria-topo">
       <div class="cabeca-secao">
@@ -185,12 +183,11 @@
       </div>
     </div>
     <div class="trilho" id="trilho" tabindex="0" role="region" aria-label="Galeria de fotos, use as setas para navegar"></div>
-    <p class="pend">Pendência: as 7 fotos novas, uma por sentido</p>
   </div>
 </section>
 
 <!-- ============ 6. CIÊNCIA ============ -->
-<section id="ciencia" aria-labelledby="titulo-ciencia">
+<section id="ciencia" aria-labelledby="titulo-ciencia" hidden>
   <div class="wrap">
     <div class="cabeca-secao">
       <span class="rotulo">Ciência e descoberta</span>
@@ -236,7 +233,6 @@
         </ul>
       </div>
     </div>
-    <p class="pend">Pendência: conferir cada referência no artigo original e acrescentar os links antes de publicar</p>
   </div>
 </section>
 
@@ -252,7 +248,6 @@
         <!-- TEXTO: história do projeto (só conteúdo autorizado) -->
         <p>O 7ENTIDOS nasceu de uma pergunta simples: o que, de fato, faz bem a cada pessoa? Começou como um projeto pessoal de autoconhecimento e foi ganhando forma até adotar os sete sentidos como base.</p>
         <p>É desenvolvido de forma independente, com apoio de ferramentas de inteligência artificial, e passa por testes antes de qualquer lançamento.</p>
-        <p class="pend">Pendência: texto de origem escrito com o fundador e autorização para citar nome e cidade</p>
       </div>
       <ol class="linha-tempo" aria-label="Etapas do projeto">
         <li><b>APP GIANINI</b><span>Primeira versão, como projeto pessoal.</span></li>
@@ -295,11 +290,6 @@
   </div>
 </footer>
 
-<div class="painel-revisao" id="painel-revisao" role="region" aria-label="Controles da prévia">
-  <span><b>Prévia de revisão</b> · não publicada</span>
-  <button type="button" id="alternar-marcas" aria-pressed="true">Ocultar marcações</button>
-  <a href="revisao.html">Validar decisões</a>
-</div>
 
 <script src="js/conteudo.js"></script>
 <script src="js/site.js"></script>

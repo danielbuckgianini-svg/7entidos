@@ -27,8 +27,10 @@
 
   /* Galeria manual, sem avanço automático */
   var trilho = document.getElementById("trilho");
-  var fotos = S.fotos || [];
-  if (trilho) {
+  var fotos = (S.fotos || []).filter(function (f) { return f.arquivo; });
+  var secGal = document.querySelector("[data-galeria]");
+  if (secGal && fotos.length < 3) { secGal.hidden = true; }
+  if (trilho && !(secGal && secGal.hidden)) {
     trilho.innerHTML = fotos.map(function (f, i) {
       return figura(f, "fotos/", "Foto " + (i + 1) + (f.sentido ? " · " + f.sentido : ""), "Aguardando a foto nova deste sentido.");
     }).join("");
@@ -89,22 +91,6 @@
       if (est) est.textContent = "Escreva para este endereço.";
     }
   }
-
-  /* Marcações de revisão (só na prévia) */
-  var bt = document.getElementById("alternar-marcas");
-  var CH = "7entidos-site-marcas";
-  function aplicar(on) {
-    document.body.classList.toggle("modo-revisao", on);
-    if (bt) { bt.setAttribute("aria-pressed", String(on)); bt.textContent = on ? "Ocultar marcações" : "Mostrar marcações"; }
-  }
-  var salvo = null;
-  try { salvo = localStorage.getItem(CH); } catch (e) {}
-  aplicar(salvo !== "off");
-  if (bt) bt.addEventListener("click", function () {
-    var on = !document.body.classList.contains("modo-revisao");
-    aplicar(on);
-    try { localStorage.setItem(CH, on ? "on" : "off"); } catch (e) {}
-  });
 
   /* Analytics: nada é carregado enquanto S.analytics.ativo for false. */
 })();

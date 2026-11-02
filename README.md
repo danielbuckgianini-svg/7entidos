@@ -2,12 +2,12 @@
 
 Site do aplicativo 7ENTIDOS (em desenvolvimento). Domínio: 7entidos.com.br.
 
-**Situação:** prévia de revisão. Este espaço é privado e o site ainda NÃO está no ar.
+**Situação:** versão pública inicial (02/11/2026). Seções sem conteúdo final ficam escondidas.
 
 ## Onde fica cada coisa
 - `index.html` · página principal (textos marcados com `<!-- TEXTO: ... -->`)
 - `privacidade.html` · política de privacidade (MINUTA, não é documento final)
-- `revisao.html` · painel para validar ou revisar decisões (sai antes de publicar)
+- O painel de revisão fica só na prévia privada do Claude, não neste site
 - `js/conteudo.js` · fotos, telas do app, e-mail e Google Analytics (desligado)
 - `fotos/` · fotografias 10×10 aprovadas
 - `telas/` · capturas reais do aplicativo, sem dados pessoais
