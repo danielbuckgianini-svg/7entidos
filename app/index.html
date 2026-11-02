@@ -286,7 +286,7 @@ const Q20={n:20,text:"Quando aquela felicidade extra de um momento 10/10 começa
     {k:"A",label:"Satisfação tranquila.",desc:"A intensidade passa, mas fico bem por ter vivido aquilo.",hyps:["H08"]},
     {k:"B",label:"Saudade boa.",desc:"Gostaria que durasse mais, mas lembrar do momento ainda me faz feliz.",hyps:["H08","H04"]},
     {k:"C",label:"Vontade de buscar outro pico.",desc:"Começo a desejar uma nova experiência extraordinária.",hyps:["H01"],newHyp:{id:"H09",statement:"Após o declínio de um pico, pode surgir vontade de buscar uma nova experiência extraordinária.",uncertaintyNotes:"Baseada em uma única resposta. Não indica frequência, intensidade da vontade nem o que é feito com ela."}},
-    {k:"D",label:"Um vazio ou uma queda.",desc:"Sinto tristeza, desânimo ou falta daquela sensação intensa.",hyps:[],newHyp:{id:"H09",statement:"O declínio da felicidade residual pode ser acompanhado de vazio ou queda emocional.",uncertaintyNotes:"Baseada em uma única resposta. Relaciona-se com o estado negativo 'vazio' citado na Evidência 037, sem comprovar ligação. Não é diagnóstico."}},
+    {k:"D",label:"Um vazio ou uma queda.",desc:"Sinto tristeza, desânimo ou falta daquela sensação intensa.",hyps:[],newHyp:{id:"H09",statement:"O declínio da felicidade residual pode ser acompanhado de vazio ou queda emocional.",uncertaintyNotes:"Baseada em uma única resposta. Não é diagnóstico."}},
     {k:"E",label:"Volto ao normal.",desc:"A felicidade diminui naturalmente, sem uma reação emocional marcante.",hyps:["H08"]},
     {k:"F",label:"Depende.",desc:"Já senti diferentes reações conforme a experiência.",hyps:["H08"],newUnknown:"Quais fatores fazem a reação ao declínio variar entre experiências."}
   ]};
@@ -354,119 +354,51 @@ function getQuestion(n,state){
 
 /* ============ SEED DATA ============ */
 function seed(){
-  const ev=[];
-  for(let i=1;i<=33;i++)ev.push({id:pad3(i),questionNumber:null,questionText:"Desconhecida",options:[],selectedOptions:[],originalComplement:null,summary:"Conteúdo não recuperado. Pergunta, resposta e complemento desconhecidos.",sourceType:"investigação original",recordedAt:null,status:"não recuperada",theme:null,notes:"",revisions:[]});
-  const R=(id,o)=>ev.push(Object.assign({id,questionNumber:null,questionText:"Texto exato da pergunta não recuperado.",options:[],selectedOptions:[],originalComplement:null,summary:"",sourceType:"material recuperado",recordedAt:null,status:"recuperada",theme:null,notes:"",revisions:[]},o));
-  R("034",{theme:"Amor e pertencimento",summary:"O usuário destacou desejo de prazer e bem-estar. Mencionou descritivamente sensações relacionadas a embriaguez leve e Prozac.",notes:"Registro descritivo. Não é orientação nem recomendação de uso."});
-  R("035",{theme:"Felicidade positiva 10/10",selectedOptions:[{k:"",label:"Euforia e prazer."}],summary:"Felicidade 10/10 associada a euforia e prazer. Associações: alegria intensa, energia e entusiasmo."});
-  R("036",{theme:"Momentos relevantes para o pico emocional",selectedOptions:[{k:"A",label:"Antecipação."},{k:"B",label:"Começo da experiência."}],summary:"Antecipação e começo da experiência foram indicados como momentos relevantes para o pico."});
-  R("037",{theme:"Estados negativos",selectedOptions:[{k:"A",label:"Vazio ou ausência de prazer."},{k:"B",label:"Tristeza e sofrimento."}],summary:"Estados negativos indicados: vazio ou ausência de prazer; tristeza e sofrimento."});
-  R("038",{theme:"Cenário hipotético: intensidade × tranquilidade",summary:"Preferiu um dia com prazer intenso e algum sofrimento emocional a um dia tranquilo sem sofrimento, mas também sem entusiasmo.",notes:"Escolha em cenário hipotético. Não interpretar como aceitação de riscos ilimitados."});
-  R("039",{theme:"Intensidade × duração",summary:"Preferiu uma hora de felicidade 10/10 a um dia inteiro de felicidade 7/10, com ausência de consequências negativas nas duas alternativas."});
-  R("040",{theme:"Categoria de lembranças",selectedOptions:[{k:"",label:"Amor e relacionamentos."}],summary:"Categoria de lembranças indicada: amor e relacionamentos."});
-  R("041",{theme:"Experiências autobiográficas de referência",summary:"O usuário apresentou experiências autobiográficas de referência, reunidas no catálogo Sensações 10 × 10."});
-  R("042",{theme:"Lembrança do Elevador Lacerda",selectedOptions:[{k:"A",label:"Beleza da paisagem, luz e garoa."},{k:"B",label:"Atmosfera cinematográfica da sessão ao ar livre."}],summary:"Na lembrança do Elevador Lacerda, indicou a beleza da paisagem, luz e garoa, e a atmosfera cinematográfica da sessão ao ar livre."});
-  R("043",{theme:"Elevador Lacerda: o que preservar",summary:"Preferiu preservar o pôr do sol e a garoa, mesmo sem o filme, a preservar o filme sem o pôr do sol."});
-  R("044",{theme:"Aspecto visual mais marcante",selectedOptions:[{k:"A",label:"Cores e luz."}],summary:"Aspecto visual mais marcante: cores e luz."});
-  R("045",{theme:"Sensações internas",selectedOptions:[{k:"A",label:"Deslumbramento."},{k:"B",label:"Euforia."}],summary:"Sensações internas indicadas: deslumbramento e euforia."});
-  R("046",{theme:"Como surgiu a euforia",questionText:"Pergunta sobre como surgiu a euforia (texto exato não recuperado).",selectedOptions:[{k:"A",label:"Imediatamente."}],originalComplement:"Foi quando eu fiz uma conexão de que aquele era um momento que eu nunca esqueceria na Vida, como aqueles \"moments\" que vc grava, como estar em cima daquela foto em ilha bela da foto que mandei, ou quando fui para ilha bela com o NETO e o BUCK.",summary:"A euforia surgiu imediatamente, ligada à percepção de estar vivendo um momento que nunca esqueceria.",notes:"A foto mencionada não está disponível neste conjunto de dados."});
-  R("047",{theme:"Elemento comum entre momentos inesquecíveis",selectedOptions:[{k:"C",label:"Companhia e conexão."}],originalComplement:"",summary:"Elemento comum indicado: companhia e conexão."});
-  R("048",{theme:"Aspecto da companhia que mais aumenta a felicidade",selectedOptions:[{k:"B",label:"Intimidade e carinho."}],originalComplement:"",summary:"Aspecto da companhia indicado: intimidade e carinho."});
-  R("049",{theme:"Formas de intimidade que despertam prazer e euforia",options:[{k:"A",label:"Carinho físico."},{k:"B",label:"Desejo e atração sexual."},{k:"C",label:"Intimidade emocional."},{k:"D",label:"Romance e paixão."},{k:"E",label:"Aconchego e convivência."},{k:"F",label:"Combinação."}],selectedOptions:[{k:"F",label:"Combinação."}],originalComplement:"TODAS.",summary:"Indicou a combinação de todas as formas: carinho físico, desejo e atração sexual, intimidade emocional, romance e paixão, aconchego e convivência.",notes:"As letras A–E acima são apenas organização visual; as letras originais dessas alternativas não foram recuperadas."});
-  R("050",{theme:"Sensação única × combinação de intimidades",selectedOptions:[{k:"C",label:"Ambas podem ser 10/10."}],originalComplement:"",summary:"Uma única sensação afetiva extraordinária e várias formas agradáveis de intimidade combinadas podem, ambas, chegar a 10/10."});
-  R("051",{theme:"Depois do 10/10",questionText:"Pensando nos seus momentos reais de felicidade 10/10, o que você costuma sentir nas horas ou nos dias seguintes?",selectedOptions:[{k:"A",label:"Felicidade prolongada."}],originalComplement:"",summary:"O usuário costuma continuar feliz, satisfeito e com uma sensação boa após experiências 10/10."});
-  R("052",{theme:"Duração da felicidade extra",questionText:"Depois de viver um momento de felicidade 10/10, por quanto tempo você costuma sentir essa felicidade extra, mesmo depois que a experiência terminou?",selectedOptions:[{k:"A",label:"Algumas horas."}],originalComplement:"",summary:"A felicidade adicional costuma continuar pelo restante do dia, diminuindo posteriormente."});
-  ev.push({id:"053",questionNumber:20,questionText:Q20.text,options:[],selectedOptions:[],originalComplement:null,summary:"Não coletada. Corresponde à Pergunta 20, pendente.",sourceType:"pendente",recordedAt:null,status:"não coletada",theme:"Declínio da felicidade extra",notes:"",revisions:[]});
-
-  const M=(id,o)=>Object.assign({id,title:"",originalDescription:"",people:[],place:null,date:null,photos:[],emotions:[],sensoryElements:[],intensity:null,anticipation:null,peakMoment:null,duration:null,afterEffect:null,environment:null,meaning:null,relatedEvidenceIds:[],relatedHypothesisIds:[],unknownFields:[],category:"Pessoas e afetos",sensitive:false,substance:false,notes:"",highlight:false,origin:"catálogo recuperado"},o);
-  const UNK=["data","intensidade","emoções","sensações físicas","antecipação","momento do pico","duração","efeito posterior","significado pessoal"];
-  const mem=[
-    M("M01",{title:"Viagem a Ilhabela com Danilo",originalDescription:"Viagem a Ilhabela com Danilo.",people:["Danilo"],place:"Ilhabela",category:"Viagens",unknownFields:UNK}),
-    M("M02",{title:"Com Danilo durante a pandemia",originalDescription:"Estar com Danilo durante a pandemia.",people:["Danilo"],date:"Durante a pandemia",unknownFields:UNK.filter(x=>x!=="data")}),
-    M("M03",{title:"Estadia em Pinheiros com Neto",originalDescription:"Estadia em Pinheiros, São Paulo, com Neto.",people:["Neto"],place:"Pinheiros, São Paulo",category:"Viagens",unknownFields:UNK}),
-    M("M04",{title:"Pôr do sol no Elevador Lacerda",originalDescription:"Pôr do sol no Elevador Lacerda, Salvador, com garoa leve, sessão ao ar livre de O Auto da Compadecida e um pôr do sol extraordinário.",place:"Elevador Lacerda, Salvador",category:"Viagens",highlight:true,
-      sensoryElements:["Garoa leve","Pôr do sol extraordinário","Cores e luz (Evid. 044)","Sessão de cinema ao ar livre"],emotions:["Deslumbramento (Evid. 045)","Euforia (Evid. 045)"],
-      peakMoment:"A euforia surgiu imediatamente, ao perceber que era um momento inesquecível (Evid. 046).",environment:"Ao ar livre; paisagem, luz e garoa; atmosfera cinematográfica (Evid. 042).",
-      meaning:"Preferiria preservar o pôr do sol e a garoa, mesmo sem o filme (Evid. 043).",relatedEvidenceIds:["042","043","044","045","046"],relatedHypothesisIds:["H03","H04"],unknownFields:["data","pessoas presentes","intensidade numérica","antecipação","duração","efeito posterior"]}),
-    M("M05",{title:"Ilhabela com Fabio, Melina e Sade",originalDescription:"Ilhabela com Fabio, Melina e Sade.",people:["Fabio","Melina","Sade"],place:"Ilhabela",category:"Viagens",unknownFields:UNK,notes:"Pode se sobrepor a outras lembranças de Ilhabela — não presumido."}),
-    M("M06",{title:"O dia em que fiquei com Pedro",originalDescription:"Dia em que o usuário ficou com Pedro.",people:["Pedro"],unknownFields:UNK}),
-    M("M07",{title:"Descida da serra no guincho com Neto",originalDescription:"Descida da serra em um guincho com Neto, durante um momento íntimo de natureza sexual.",people:["Neto"],place:"Descida da serra",sensitive:true,relatedHypothesisIds:["H06"],unknownFields:UNK}),
-    M("M08",{title:"Dias de viagem à Bahia",originalDescription:"Dias de viagem à Bahia, especialmente os trajetos.",place:"Bahia",category:"Viagens",unknownFields:UNK,notes:"Destaque para os trajetos."}),
-    M("M09",{title:"Fins de semana de aconchego",originalDescription:"Fins de semana com cachorros, videogames ou Netflix.",people:["Cachorros"],place:null,category:"Cotidiano",unknownFields:UNK}),
-    M("M10",{title:"Dia de pagamento",originalDescription:"Dia de pagamento.",category:"Cotidiano",unknownFields:UNK}),
-    M("M11",{title:"Fumar cannabis",originalDescription:"Fumar cannabis, como relato autobiográfico.",category:"Relatos autobiográficos com substâncias",substance:true,sensitive:true,unknownFields:UNK}),
-    M("M12",{title:"Início de embriaguez leve com cerveja",originalDescription:"Sensação inicial de embriaguez leve após beber cerveja.",category:"Relatos autobiográficos com substâncias",substance:true,sensitive:true,relatedEvidenceIds:["034"],unknownFields:UNK}),
-    M("M13",{title:"Sensação inicial após “bala”",originalDescription:"Sensação inicial após tomar “bala”, expressão coloquial associada a MDMA/ecstasy, como relato autobiográfico.",category:"Relatos autobiográficos com substâncias",substance:true,sensitive:true,unknownFields:UNK}),
-    M("M14",{title:"Fotografia de Ilhabela",originalDescription:"Fotografia de Ilhabela mencionada pelo usuário. A imagem não está disponível.",place:"Ilhabela",category:"Referências",relatedEvidenceIds:["046"],relatedHypothesisIds:["H04"],unknownFields:["a própria imagem","data","quem estava presente"],notes:"Pode se sobrepor a outras lembranças de Ilhabela. Não presumido como episódio independente.",origin:"referência adicional"}),
-    M("M15",{title:"Ilhabela com Neto e Buck",originalDescription:"Viagem a Ilhabela com Neto e Buck.",people:["Neto","Buck"],place:"Ilhabela",category:"Referências",relatedEvidenceIds:["046"],relatedHypothesisIds:["H04","H05"],unknownFields:UNK,notes:"Citada no complemento da Evid. 046 como exemplo de momento inesquecível. Pode se sobrepor a outras lembranças.",origin:"referência adicional"})
-  ];
-  const H=(id,title,statement,sup)=>({id,title,statement,supportingEvidenceIds:sup,contradictoryEvidenceIds:[],relatedEvidenceIds:[],status:"candidata",uncertaintyNotes:"Seleção de alternativas não equivale a comprovação. Revisável.",createdIn:"5.4"});
-  const hyps=[
-    H("H01","Intensidade emocional","Picos de prazer e euforia podem ter valor especial para o usuário.",["035","038","039"]),
-    H("H02","Antecipação e início","A expectativa e o começo de experiências podem ser momentos emocionalmente relevantes.",["036"]),
-    H("H03","Beleza visual","Cores, luz e atmosfera visual podem contribuir para deslumbramento e euforia em determinados contextos.",["042","043","044","045"]),
-    H("H04","Momento inesquecível","Perceber que está vivendo um momento que jamais esquecerá pode estar associado à euforia.",["046"]),
-    H("H05","Conexão afetiva","A presença de pessoas ou animais especiais pode intensificar experiências memoráveis.",["047","048"]),
-    H("H06","Intimidade multidimensional","Carinho físico, desejo, conexão emocional, romance e aconchego podem ser caminhos distintos ou complementares de felicidade.",["048","049"]),
-    H("H07","Múltiplos caminhos para 10/10","Uma única sensação extraordinária ou uma combinação de sensações agradáveis podem alcançar 10/10.",["050"]),
-    H("H08","Felicidade residual","Depois de experiências 10/10, o usuário relata algumas horas adicionais de felicidade e satisfação.",["051","052"])
-  ];
-  const signatures=[
-    {id:"A",title:"Momento Inesquecível Compartilhado",elements:["Experiência marcante","Percepção de viver algo inesquecível","Conexão afetiva","Deslumbramento","Euforia"],note:"Não presumir causalidade."},
-    {id:"B",title:"Pico Extraordinário",elements:["Uma sensação afetiva extremamente intensa pode, em hipótese, produzir felicidade 10/10."],note:"Hipotética."},
-    {id:"C",title:"Intimidade Multidimensional",elements:["Carinho","Desejo","Intimidade emocional","Romance","Aconchego"],note:"Podem formar, juntos, uma experiência muito positiva."},
-    {id:"D",title:"Pico + Felicidade Residual",elements:["Experiência intensa","Algumas horas de satisfação depois"],note:"Não presumir que ocorre em todas as lembranças."}
-  ];
-  const facts=ev.filter(e=>e.status==="recuperada").map(e=>({id:"F-"+e.id,text:e.summary,type:"fato",sourceEvidenceIds:[e.id],date:null,confidence:"Relato direto do usuário",revisable:true}));
-  const unknowns=[
-    {id:"U01",text:"Conteúdo das Evidências 001–033 (perguntas, respostas e complementos).",status:"aberta"},
-    {id:"U02",text:"A fotografia de Ilhabela mencionada na Evidência 046.",status:"aberta"},
-    {id:"U03",text:"Conteúdo integral dos requisitos anteriores a REQ-020.11.",status:"aberta"},
-    {id:"U04",text:"O que o usuário sente quando a felicidade extra de um momento 10/10 começa a diminuir (Pergunta 20).",status:"aberta",resolvedBy:null,questionNumber:20},
-    {id:"U05",text:"Se as referências 14 e 15 (Ilhabela) se sobrepõem a outras lembranças.",status:"aberta"},
-    {id:"U06",text:"Datas e intensidades numéricas das lembranças do catálogo.",status:"aberta"},
-    {id:"U07",text:"Textos exatos das perguntas das Evidências 034–050.",status:"aberta"}
-  ];
-  const requirements=[
-    ["REQ-020.11","Relacionar estímulos sensoriais e emoções com rastreabilidade."],
-    ["REQ-020.12","Investigar percepção de momentos inesquecíveis."],
-    ["REQ-020.13","Registrar contexto afetivo e qualidade da companhia."],
-    ["REQ-020.14","Diferenciar carinho, intimidade emocional, desejo e contato físico."],
-    ["REQ-020.15","Reconhecer combinações de formas de intimidade."],
-    ["REQ-020.16","Permitir múltiplos caminhos para felicidade 10/10."],
-    ["REQ-020.17","Registrar felicidade residual após experiências intensas."],
-    ["REQ-020.18","Distinguir intensidade máxima, duração do efeito positivo e retorno ao estado habitual."]
-  ].map(([id,text])=>({id,text}));
-  const D=(key,label,evidence,hyps,group)=>({key,label,evidence,hyps,group});
+  /* Começo vazio: cada pessoa começa do zero. Nenhum registro de outra pessoa vem junto. */
+  const D=(key,label,group)=>({key,label,evidence:[],hyps:[],group});
   const dims=[
-    D("euforia","Euforia",["035","045","046"],["H01","H04"],"Intensidade"),
-    D("prazer","Prazer",["034","035"],["H01"],"Intensidade"),
-    D("antecipacao","Antecipação",["036"],["H02"],"Tempo"),
-    D("comeco","Começo da experiência",["036"],["H02"],"Tempo"),
-    D("beleza","Beleza visual",["042","043"],["H03"],"Sentidos"),
-    D("cores","Cores e luz",["044"],["H03"],"Sentidos"),
-    D("deslumbramento","Deslumbramento",["045"],["H03"],"Sentidos"),
-    D("companhia","Companhia",["047"],["H05"],"Vínculos"),
-    D("conexao","Conexão afetiva",["047","048"],["H05"],"Vínculos"),
-    D("intimidade","Intimidade",["048","049"],["H06"],"Vínculos"),
-    D("carinho","Carinho físico",["049"],["H06"],"Vínculos"),
-    D("desejo","Desejo",["049"],["H06"],"Vínculos"),
-    D("romance","Romance",["049"],["H06"],"Vínculos"),
-    D("aconchego","Aconchego",["049"],["H06"],"Vínculos"),
-    D("inesquecivel","Memória inesquecível",["046"],["H04"],"Memória"),
-    D("residual","Felicidade residual",["051","052"],["H08"],"Tempo"),
-    D("declinio","Declínio da felicidade extra",[],[],"Tempo"),
-    D("ambiente","Tipo de lugar",[],[],"Sentidos"),
-    D("novidade","Novidade × familiaridade",[],[],"Memória"),
-    D("som","Som e música",[],[],"Sentidos")
+    D("euforia","Euforia","Intensidade"),D("prazer","Prazer","Intensidade"),D("antecipacao","Antecipação","Tempo"),D("comeco","Começo da experiência","Tempo"),
+    D("beleza","Beleza visual","Sentidos"),D("cores","Cores e luz","Sentidos"),D("deslumbramento","Deslumbramento","Sentidos"),D("companhia","Companhia","Vínculos"),
+    D("conexao","Conexão afetiva","Vínculos"),D("intimidade","Intimidade","Vínculos"),D("carinho","Carinho físico","Vínculos"),D("desejo","Desejo","Vínculos"),
+    D("romance","Romance","Vínculos"),D("aconchego","Aconchego","Vínculos"),D("inesquecivel","Memória inesquecível","Memória"),D("residual","Felicidade residual","Tempo"),
+    D("declinio","Declínio da felicidade extra","Tempo"),D("ambiente","Tipo de lugar","Sentidos"),D("novidade","Novidade × familiaridade","Memória"),D("som","Som e música","Sentidos")
   ];
-  return {app:"APP GIANINI",schemaVersion:SCHEMA,createdAt:nowISO(),updatedAt:nowISO(),
-    investigation:{room:"01",roomName:"Arqueologia da Felicidade",currentQuestion:20,lastEvidence:"052",nextEvidence:"053",paused:true,resumedAt:null,pausedAt:null,pauseReason:"Pausada a pedido do usuário."},
-    evidences:ev,memories:mem,hypotheses:hyps,signatures,dims,
-    dossier:{version:{major:5,minor:4},confirmedFacts:facts,unknowns,requirements,requirementsNote:"Os requisitos anteriores a REQ-020.11 não estão integralmente disponíveis.",
-      changeHistory:[{version:"5.4",at:null,text:"Checkpoint recuperado: Evidências 034–052, catálogo Sensações 10 × 10, hipóteses H01–H08 e assinaturas A–D. Evidências 001–033 sem conteúdo recuperado."}]},
-    questionFlags:{},recommendations:[],wellbeing:[],lastDiscovery:{text:"A felicidade adicional de um momento 10/10 costuma continuar por algumas horas, diminuindo depois.",evidenceId:"052"},
+  return {app:"APP GIANINI",schemaVersion:SCHEMA,createdAt:nowISO(),updatedAt:nowISO(),cleanSeedV1:true,
+    investigation:{room:"01",roomName:"Primeira investigação",currentQuestion:20,lastEvidence:"000",nextEvidence:"001",paused:true,resumedAt:null,pausedAt:null,pauseReason:""},
+    evidences:[],memories:[],hypotheses:[],signatures:[],dims,
+    dossier:{version:{major:1,minor:0},confirmedFacts:[],unknowns:[],requirements:[],requirementsNote:"",changeHistory:[{version:"1.0",at:nowISO(),text:"Começo da jornada."}]},
+    questionFlags:{},recommendations:[],wellbeing:[],lastDiscovery:{text:"Ainda não há descobertas. A primeira vem com a sua primeira pista.",evidenceId:null},
     settings:{theme:"light",privacy:{blurSensitive:true},exportPreferences:{},accessibility:{}}};
+}
+/* Correção de 02/11/2026: a versão anterior deste app trazia, por engano, registros pessoais de exemplo.
+   Esta limpeza roda uma única vez em cada navegador, remove só esses registros de exemplo
+   e mantém tudo o que a pessoa registrou por conta própria. */
+const SEED_ANTIGO_ORIGENS=["catálogo recuperado","referência adicional"];
+function limparRegistrosDeExemplo(st){
+  if(!st||st.cleanSeedV1)return st;
+  const n=clone(st);
+  const evRemovidas=new Set();
+  n.evidences=(n.evidences||[]).filter(e=>{const ex=(e.status==="não recuperada"&&e.sourceType==="investigação original")||(e.status==="recuperada"&&e.sourceType==="material recuperado")||(e.id==="053"&&e.status==="não coletada"&&e.sourceType==="pendente");if(ex)evRemovidas.add(e.id);return !ex});
+  n.memories=(n.memories||[]).filter(m=>!(/^M(0[1-9]|1[0-5])$/.test(m.id)&&SEED_ANTIGO_ORIGENS.includes(m.origin)));
+  const hRemovidas=new Set();
+  n.hypotheses=(n.hypotheses||[]).filter(h=>{const ex=/^H0[1-8]$/.test(h.id)&&h.createdIn==="5.4";if(ex)hRemovidas.add(h.id);return !ex});
+  n.hypotheses.forEach(h=>{["supportingEvidenceIds","relatedEvidenceIds","contradictoryEvidenceIds"].forEach(k=>{if(Array.isArray(h[k]))h[k]=h[k].filter(x=>!evRemovidas.has(x))})});
+  n.signatures=[];
+  if(n.dossier){
+    n.dossier.confirmedFacts=(n.dossier.confirmedFacts||[]).filter(f=>!((f.sourceEvidenceIds||[]).length&&f.sourceEvidenceIds.every(x=>evRemovidas.has(x))));
+    n.dossier.unknowns=(n.dossier.unknowns||[]).filter(u=>!/^U0[1-7]$/.test(u.id));
+    n.dossier.requirements=(n.dossier.requirements||[]).filter(r=>!/^REQ-020\.1[1-8]$/.test(r.id));
+    n.dossier.requirementsNote="";
+    n.dossier.changeHistory=(n.dossier.changeHistory||[]).filter(c=>c.version!=="5.4").concat([{version:vstr(n.dossier.version),at:nowISO(),text:"Removidos registros de exemplo que vieram por engano numa versão anterior do app. Os seus registros foram mantidos."}]);
+  }
+  (n.dims||[]).forEach(d=>{d.evidence=(d.evidence||[]).filter(x=>!evRemovidas.has(x));d.hyps=(d.hyps||[]).filter(x=>!hRemovidas.has(x))});
+  (n.memories||[]).forEach(m=>{m.relatedEvidenceIds=(m.relatedEvidenceIds||[]).filter(x=>!evRemovidas.has(x));m.relatedHypothesisIds=(m.relatedHypothesisIds||[]).filter(x=>!hRemovidas.has(x))});
+  if(n.lastDiscovery&&evRemovidas.has(n.lastDiscovery.evidenceId))n.lastDiscovery={text:"Ainda não há descobertas. A primeira vem com a sua primeira pista.",evidenceId:null};
+  const temPropria=(n.evidences||[]).some(e=>["registrada","sincronizada"].includes(e.status));
+  if(!temPropria&&n.investigation){n.evidences=[];n.investigation=Object.assign({},n.investigation,{roomName:"Primeira investigação",lastEvidence:"000",nextEvidence:"001",currentQuestion:20,pauseReason:""})}
+  n.cleanSeedV1=true;
+  try{const sn=localStorage.getItem(LS_SNAP);if(sn&&sn.indexOf("catálogo recuperado")>=0)localStorage.removeItem(LS_SNAP)}catch(e){}
+  return n;
 }
 const vstr=(v)=>v.major+"."+v.minor;
 const bumpVersion=(v)=>{v.minor+=1;if(v.minor>9){v.major+=1;v.minor=0}return v};
@@ -1428,10 +1360,10 @@ function Mapa({s}){
 
 /* ============ DESCOBRIDOR ============ */
 const TERRITORIES=[
-  {t:"Um pôr do sol num mirante que você ainda não conhece, com alguém querido",base:["H03","H05","H04"],why:"Cores e luz, deslumbramento e companhia aparecem nas suas evidências (042–048).",unc:"Não sabemos se um lugar novo repete o efeito do Elevador Lacerda, nem a influência do clima."},
-  {t:"Uma viagem em que o trajeto seja parte do plano",base:["H02"],why:"Antecipação e começo da experiência foram relevantes (036); o catálogo destaca os trajetos da Bahia.",unc:"Não investigamos ainda o papel do movimento e da estrada (dimensão “Tipo de lugar”)."},
-  {t:"Uma primeira vez a dois: uma atividade nova com alguém próximo",base:["H06","H02","H05"],why:"Intimidade multidimensional (049) e início da experiência (036).",unc:"Não sabemos se novidade aumenta ou não sua felicidade (Pergunta 23 do banco)."},
-  {t:"Uma noite de céu estrelado longe das luzes da cidade",base:["H03"],why:"Exploração fora dos interesses conhecidos, a partir de luz e deslumbramento (044–045).",unc:"Totalmente exploratória: nenhuma lembrança sua envolve céu noturno."},
+  {t:"Um pôr do sol num mirante que você ainda não conhece, com alguém querido",base:["H03","H05","H04"],why:"Cores e luz, deslumbramento e companhia costumam aparecer em momentos marcantes.",unc:"Ainda não sabemos se um lugar novo repete esse efeito para você, nem a influência do clima."},
+  {t:"Uma viagem em que o trajeto seja parte do plano",base:["H02"],why:"A antecipação e o começo de uma experiência podem ser momentos especiais.",unc:"Não investigamos ainda o papel do movimento e da estrada (dimensão “Tipo de lugar”)."},
+  {t:"Uma primeira vez a dois: uma atividade nova com alguém próximo",base:["H06","H02","H05"],why:"Intimidade e começo de experiências podem ser caminhos de boas sensações.",unc:"Não sabemos se novidade aumenta ou não sua felicidade (Pergunta 23 do banco)."},
+  {t:"Uma noite de céu estrelado longe das luzes da cidade",base:["H03"],why:"Exploração a partir de luz e deslumbramento.",unc:"Totalmente exploratória."},
   {t:"Algo fora do seu repertório: um ateliê, uma aula prática, um esporte novo",base:[],why:"Sem evidência direta — serve para descobrir, não para repetir.",unc:"Nenhum dado de apoio. Avalie riscos e custos reais antes."}
 ];
 function Descobridor({s,update,toast}){
@@ -1582,7 +1514,7 @@ function Dados({s,setState,saveInfo,update,toast,downloads}){
       <div class="card"><h3>Cópia automática</h3><p class="small muted">Antes de cada importação ou sincronização, o app guarda sozinho uma cópia do estado anterior. Use só se algo der errado.</p><button class="btn" onClick=${openSnap}>Ver cópia automática…</button></div>
       <div class="card"><h3>Aparência</h3><div class="row"><button class="btn" aria-pressed=${s.settings.theme==="light"} onClick=${()=>update(st=>{st.settings.theme="light"},"theme")}>☀ Claro</button><button class="btn" aria-pressed=${s.settings.theme==="dark"} onClick=${()=>update(st=>{st.settings.theme="dark"},"theme")}>☾ Escuro</button></div>
         <label class="small row" style=${{gap:6,marginTop:12}}><input type="checkbox" checked=${s.settings.privacy.blurSensitive} onChange=${e=>update(st=>{st.settings.privacy.blurSensitive=e.target.checked},"privacy")}/> Ocultar lembranças íntimas no museu</label></div>
-      <div class="card"><h3>Apagar tudo</h3><p class="small muted">Volta ao checkpoint original (Dossiê v5.4). Exporte um backup antes.</p><button class="btn danger" onClick=${()=>setConfirmReset(true)}>Restaurar estado inicial…</button></div>
+      <div class="card"><h3>Apagar tudo</h3><p class="small muted">Apaga os seus registros e começa do zero. Exporte um backup antes, se quiser guardar uma cópia.</p><button class="btn danger" onClick=${()=>setConfirmReset(true)}>Restaurar estado inicial…</button></div>
     </div>
     <div class="card" style=${{marginTop:16}}><h3>Próximo passo sugerido</h3><p class="small muted" style=${{margin:0}}>Para usar em vários aparelhos com histórico de versões no servidor, o próximo passo é uma integração com banco de dados próprio com criptografia. Nesta versão, o armazenamento privado da conta e os backups em arquivo cumprem esse papel.</p></div>
     ${exportText?html`<${Modal} title="Seu backup" onClose=${()=>setExportText(null)} wide><p class="small muted">O download direto não está disponível aqui. Copie o conteúdo e salve num arquivo chamado <span class="mono">${exportText.filename}</span>.</p><textarea class="i mono" readonly style=${{minHeight:300}} value=${exportText.data} onFocus=${e=>e.target.select()}></textarea><div class="row" style=${{marginTop:10}}><button class="btn primary" onClick=${copyExport}>Copiar</button><button class="btn" onClick=${()=>setExportText(null)}>Fechar</button></div><//>`:null}
@@ -1940,7 +1872,7 @@ const ALIAS={apoio:"bemestar",dados:"perfil",sensacoes:"lembrancas",descobridor:
 const SHORT={inicio:"Início",sala:"Sala",dossie:"Dossiê",sensacoes:"Museu",mapa:"Mapa",descobridor:"Descobrir",apoio:"Apoio",identidade:"Marca",dados:"Dados"};
 const VIEWS=NAV.map(n=>n[0]).concat(Object.keys(ALIAS));
 function App(){
-  const [state,setStateRaw]=useState(()=>{const l=lsGet();return l&&validateImport(l).length===0?l:seed()});
+  const [state,setStateRaw]=useState(()=>{const l=lsGet();if(l&&validateImport(l).length===0){const c=limparRegistrosDeExemplo(l);if(c!==l)lsSet(c);return c}return seed()});
   const [view,setView]=useState(()=>{const h=(location.hash||"").slice(1);return VIEWS.includes(h)?h:"inicio"});
   const [viewOpts,setViewOpts]=useState({});
   const [save,setSave]=useState({mode:"pending",status:"loading"});
@@ -1958,7 +1890,7 @@ function App(){
     const hadLocal=!!lsGet();
     const r=await cloudInit();if(!alive)return;
     if(r&&r.ok){
-      const cloud=r.data&&validateImport(r.data.payload).length===0?r.data.payload:null;
+      const cloud=r.data&&validateImport(r.data.payload).length===0?limparRegistrosDeExemplo(r.data.payload):null;
       if(r.data&&!cloud){Store.mode="local";lsSet(stateRef.current);setSave({mode:"local",status:"saved"})}
       else{Store.mode="cloud";const local=stateRef.current;
         if(cloud&&(!hadLocal||!local.updatedAt||new Date(cloud.updatedAt)>=new Date(local.updatedAt))){stateRef.current=cloud;setStateRaw(cloud);lsSet(cloud);setSave({mode:"cloud",status:"saved"})}
