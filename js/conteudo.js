@@ -52,11 +52,12 @@ window.SITE = {
   contato: { email: "contato@7entidos.com.br", ativo: false },
 
   /* ---------------------------------------------------------------
-     GOOGLE ANALYTICS · DESLIGADO
-     Identificador registrado, mas NADA é carregado nem enviado.
+     GOOGLE ANALYTICS · SÓ COM CONSENTIMENTO (js/consentimento.js)
+     Nada é carregado antes de a pessoa tocar em "Aceitar" no aviso.
+     "ativo: false" desliga tudo, mesmo para quem já aceitou.
      Antes de ligar: política de privacidade final, aviso de
      consentimento e lista de eventos aprovada. Nunca enviar
      respostas, memórias, relatos ou qualquer conteúdo pessoal.
      --------------------------------------------------------------- */
-  analytics: { idMedicao: "G-0GPWW3EZZF", ativo: false }
+  analytics: { idMedicao: "G-0GPWW3EZZF", ativo: true }
 };

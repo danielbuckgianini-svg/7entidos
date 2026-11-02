@@ -9,15 +9,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/site.css">
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-0GPWW3EZZF"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-0GPWW3EZZF');
-</script>
 </head>
 <body>
 <a class="pular" href="#conteudo">Pular para o conteúdo</a>
@@ -38,15 +29,17 @@
     <p>O site 7ENTIDOS é mantido pelo projeto 7ENTIDOS.</p>
 
     <h2>O que este site coleta hoje</h2>
-    <p>Nesta versão, o site não tem formulários, não pede cadastro e não usa ferramentas de medição de visitas. Ele não guarda dados pessoais seus.</p>
+    <p>Nesta versão, o site não tem formulários e não pede cadastro. Ele só usa uma ferramenta de medição de visitas (Google Analytics) se você aceitar, como explicado abaixo.</p>
     <p>O servidor que hospedar o site poderá registrar dados técnicos básicos de acesso, como endereço de internet e tipo de navegador, para funcionar e se proteger de ataques.</p>
 
     <h2>Medição de visitas</h2>
-    <p>Se no futuro usarmos uma ferramenta de medição, como o Google Analytics, ela só será ativada depois que você concordar, por meio de um aviso claro. Ela servirá apenas para contar visitas e entender quais partes do site são mais lidas.</p>
+    <p>Usamos o Google Analytics só depois que você toca em “Aceitar” no aviso que aparece na primeira visita. Antes disso, nada do Google é carregado. Ele serve apenas para contar visitas e entender quais partes do site são mais lidas, com o endereço de internet anonimizado e sem uso para anúncios.</p>
+    <p>Você pode mudar de ideia quando quiser pelo link “Preferências de estatísticas”, no rodapé. A escolha fica guardada só no seu navegador.</p>
     <p>Respostas, memórias, relatos pessoais ou qualquer conteúdo sensível nunca serão enviados para ferramentas de medição.</p>
 
     <h2>O aplicativo é separado</h2>
-    <p>O aplicativo 7ENTIDOS, quando estiver disponível, terá a sua própria política de privacidade, porque trata informações mais pessoais, como lembranças e sensações. Nada do que você registrar no aplicativo aparece neste site.</p>
+    <p>A versão de teste do aplicativo (7entidos.com.br/app) guarda o que você registra, como lembranças e sensações, só no seu aparelho, dentro do navegador. Nada disso é enviado para nós nem aparece neste site. Na primeira vez, o aplicativo pede o seu consentimento no “Nosso combinado”.</p>
+    <p>No aplicativo, as estatísticas de uso também são opcionais: só são ligadas se você marcar essa opção, e enviam apenas que o aplicativo foi aberto e qual aba foi vista. Nunca respostas, lembranças, textos ou fotos. A versão das lojas terá a sua própria política de privacidade.</p>
 
     <h2>Os seus direitos</h2>
     <p>Pela Lei Geral de Proteção de Dados (LGPD), você pode pedir para saber quais dados temos sobre você, corrigi-los ou apagá-los.</p>
@@ -55,6 +48,8 @@
     <p>contato@7entidos.com.br</p>
   </div>
 </main>
-<footer class="rodape"><div class="wrap"><a class="marca" href="index.html"><img src="assets/simbolo-contando-7.svg" alt="" width="36" height="36"><span>7ENTIDOS</span></a><p>Aplicativo em desenvolvimento. Não é terapia nem tratamento.</p></div></footer>
+<footer class="rodape"><div class="wrap"><a class="marca" href="index.html"><img src="assets/simbolo-contando-7.svg" alt="" width="36" height="36"><span>7ENTIDOS</span></a><p>Aplicativo em desenvolvimento. Não é terapia nem tratamento. <a href="#" data-preferencias-estatisticas style="color:inherit">Preferências de estatísticas</a></p></div></footer>
+<script src="js/conteudo.js"></script>
+<script src="js/consentimento.js"></script>
 </body>
 </html>
