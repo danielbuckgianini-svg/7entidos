@@ -19,12 +19,13 @@ window.SITE = {
   fotoDestaque: { arquivo: "", descricao: "", legenda: "" },
 
   fotos: [
-    { arquivo: "", descricao: "", legenda: "" },
-    { arquivo: "", descricao: "", legenda: "" },
-    { arquivo: "", descricao: "", legenda: "" },
-    { arquivo: "", descricao: "", legenda: "" },
-    { arquivo: "", descricao: "", legenda: "" },
-    { arquivo: "", descricao: "", legenda: "" }
+    { sentido: "Visão",          arquivo: "", descricao: "", legenda: "" },
+    { sentido: "Audição",        arquivo: "", descricao: "", legenda: "" },
+    { sentido: "Tato",           arquivo: "", descricao: "", legenda: "" },
+    { sentido: "Olfato",         arquivo: "", descricao: "", legenda: "" },
+    { sentido: "Paladar",        arquivo: "", descricao: "", legenda: "" },
+    { sentido: "Equilíbrio",     arquivo: "", descricao: "", legenda: "" },
+    { sentido: "Noção do corpo", arquivo: "", descricao: "", legenda: "" }
   ],
 
   /* ---------------------------------------------------------------

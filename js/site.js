@@ -30,7 +30,7 @@
   var fotos = S.fotos || [];
   if (trilho) {
     trilho.innerHTML = fotos.map(function (f, i) {
-      return figura(f, "fotos/", "Foto 10×10 nº " + (i + 1), "Aguardando arquivo e autorização de publicação.");
+      return figura(f, "fotos/", "Foto " + (i + 1) + (f.sentido ? " · " + f.sentido : ""), "Aguardando a foto nova deste sentido.");
     }).join("");
     var itens = trilho.querySelectorAll(".foto");
     var ant = document.getElementById("foto-anterior"), prox = document.getElementById("foto-proxima"), cont = document.getElementById("contador");
