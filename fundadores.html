@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Seja um dos 100 Fundadores · 7ENTIDOS</title>
+<meta name="description" content="Pré-venda do 7entidos: acesso de Fundador por 1 ano por R$ 24,90. Apenas 100 vagas. Acesso a partir de 1º de dezembro de 2026.">
+<link rel="icon" href="assets/simbolo-contando-7.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/site.css?v=20261102-sensorial">
+<style>
+/* Página de pré-venda · noite escura e amarelo */
+.fd{background:radial-gradient(900px 520px at 50% -160px,#2a2244,#101019 70%);color:#F3EEE4;min-height:100vh}
+.fd .wrap{max-width:1080px}
+.fd-topo{padding:clamp(40px,7vw,88px) 0 24px;display:grid;gap:40px;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));align-items:start}
+.fd-selo{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#FFD43B;border:1px solid #4a3f22;padding:8px 14px;border-radius:999px}
+.fd-selo i{width:8px;height:8px;border-radius:50%;background:#FFD43B}
+.fd h1{font-family:var(--display);font-weight:400;font-size:clamp(38px,6vw,68px);line-height:1.05;margin:18px 0 16px;color:#fff}
+.fd h1 em{color:#FFD43B;font-style:italic}
+.fd-lead{font-size:clamp(18px,1.8vw,21px);line-height:1.6;color:#D6CFE3;max-width:46ch;margin:0 0 22px}
+.fd-assin{font-family:var(--display);font-style:italic;color:#BDA8EB;font-size:19px;margin:0}
+.fd-card{background:#17151f;border:1px solid #2f2a3d;border-radius:22px;padding:clamp(22px,3vw,32px)}
+.fd-card .rot{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#BDA8EB;margin:0 0 6px}
+.fd-preco{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:0 0 4px}
+.fd-preco b{font-family:var(--display);font-weight:500;font-size:56px;line-height:1;color:#fff}
+.fd-preco span{color:#B9B2C7;font-size:15px}
+.fd-lista{list-style:none;padding:0;margin:18px 0 22px;display:grid;gap:10px}
+.fd-lista li{display:flex;gap:12px;align-items:flex-start;line-height:1.5;color:#E7E1F0}
+.fd-lista li::before{content:"";flex:none;width:18px;height:18px;margin-top:3px;border-radius:50%;background:#FFD43B url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 10.5l3.2 3L15 7' fill='none' stroke='%23101019' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/14px no-repeat}
+.fd-botao{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:56px;border-radius:999px;background:#FFD43B;color:#101019;font-weight:800;font-size:17px;text-decoration:none;border:0;cursor:pointer}
+.fd-botao:hover{background:#FFE27A;color:#101019}
+.fd-botao[aria-disabled=true]{background:#3a3548;color:#B9B2C7;cursor:default}
+.fd-vagas{margin:14px 0 0;text-align:center;font-size:14.5px;color:#B9B2C7}
+.fd-vagas b{color:#FFD43B}
+.fd-pag{margin:8px 0 0;text-align:center;font-size:13.5px;color:#8f88a0}
+.fd-sec{padding:clamp(36px,6vw,72px) 0;border-top:1px solid #241f33}
+.fd-sec h2{font-family:var(--display);font-weight:400;font-size:clamp(30px,4vw,44px);color:#fff;margin:0 0 24px}
+.fd-passos{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));list-style:none;padding:0;margin:0}
+.fd-passos li{background:#15131c;border:1px solid #2a2537;border-radius:18px;padding:20px}
+.fd-passos b{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:#FFD43B;color:#101019;font-weight:800;margin-bottom:12px}
+.fd-passos h3{font-family:var(--corpo);font-weight:800;font-size:18px;color:#fff;margin:0 0 6px}
+.fd-passos p{color:#CFC8DC;line-height:1.55;margin:0}
+.fd-info{display:grid;gap:14px;max-width:760px}
+.fd-info details{background:#15131c;border:1px solid #2a2537;border-radius:14px;padding:16px 18px}
+.fd-info summary{cursor:pointer;font-weight:800;color:#fff}
+.fd-info p{margin:10px 0 0;color:#CFC8DC;line-height:1.6}
+.fd-aviso{margin-top:22px;max-width:760px;border:1px solid #4a3f22;background:#1b1810;border-radius:14px;padding:14px 18px;color:#E7D9B5;font-size:15.5px;line-height:1.55}
+.fd a:not(.fd-botao){color:#FFD43B}
+.fd :focus-visible{outline:3px solid #FFD43B;outline-offset:3px}
+</style>
+</head>
+<body>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+<header class="topo">
+  <div class="wrap">
+    <a class="marca" href="index.html" aria-label="7ENTIDOS, voltar à página principal"><img src="assets/simbolo-contando-7.svg" alt="" width="36" height="36"><span>7ENTIDOS</span></a>
+    <a href="#comprar" style="font-weight:700;font-size:15px">Quero ser Fundador</a>
+  </div>
+</header>
+
+<main id="conteudo" class="fd">
+  <div class="wrap">
+    <section class="fd-topo" aria-labelledby="titulo">
+      <div>
+        <span class="fd-selo"><i aria-hidden="true"></i>Pré-venda · Lote Fundador</span>
+        <h1 id="titulo">Seja um dos <em>100 Fundadores</em> do 7entidos.</h1>
+        <p class="fd-lead">Uma jornada de 7 dias para descobrir, pelos seus sentidos, o que te faz bem. Sem metas, sem cobranças. No seu ritmo.</p>
+        <p class="fd-assin">A vida é feita de boas sensações.</p>
+      </div>
+
+      <div class="fd-card" id="comprar">
+        <p class="rot">Acesso de Fundador · 1 ano</p>
+        <p class="fd-preco"><b>R$&nbsp;24,90</b><span>pagamento único</span></p>
+        <ul class="fd-lista">
+          <li><span>Seu acesso começa em <b>1º de dezembro de 2026</b></span></li>
+          <li><span>A jornada de 7 dias, a sua régua pessoal de sensações e o seu primeiro mapa</span></li>
+          <li><span>Seu acesso continua quando o app chegar às lojas, até completar 1 ano</span></li>
+          <li><span>Seu nome no mural de Fundadores dentro do app, se você quiser</span></li>
+        </ul>
+        <!-- LINK DO MERCADO PAGO: troque o endereço abaixo. Para encerrar a pré-venda, troque data-esgotado="nao" por data-esgotado="sim". -->
+        <a class="fd-botao" id="botao-comprar" data-esgotado="nao" href="LINK_MERCADO_PAGO" rel="noopener">Quero ser Fundador</a>
+        <p class="fd-vagas" id="texto-vagas">Apenas <b>100 vagas</b> neste lote.</p>
+        <p class="fd-pag">Pix ou cartão, pelo Mercado Pago.</p>
+      </div>
+    </section>
+
+    <section class="fd-sec" aria-labelledby="como">
+      <h2 id="como">Como funciona</h2>
+      <ol class="fd-passos">
+        <li><b>1</b><h3>Garanta sua vaga</h3><p>Pague R$ 24,90 com Pix ou cartão. O e-mail que você usar no pagamento é por onde vamos falar com você.</p></li>
+        <li><b>2</b><h3>Receba seu acesso</h3><p>No dia 1º de dezembro de 2026, você recebe por e-mail o link para entrar no 7entidos.</p></li>
+        <li><b>3</b><h3>Comece sua jornada</h3><p>Crie a sua régua de sensações e, a cada dia, viva uma pequena experiência. No Dia 7, conheça o seu primeiro mapa.</p></li>
+      </ol>
+    </section>
+
+    <section class="fd-sec" aria-labelledby="duvidas">
+      <h2 id="duvidas">Antes de comprar</h2>
+      <div class="fd-info">
+        <details><summary>O que é o 7entidos?</summary><p>Um aplicativo de bem-estar do dia a dia. Ele ajuda você a perceber quais sensações (visão, audição, tato, olfato, paladar, movimento e sinais do corpo) te fazem bem, a partir das suas próprias experiências.</p></details>
+        <details><summary>Em que fase está o app?</summary><p>Os Fundadores entram na primeira versão, a partir de 1º de dezembro de 2026, pelo navegador do celular. A chegada às lojas de aplicativos está prevista para fevereiro de 2027. Como Fundador, você ajuda a melhorar o app desde o começo.</p></details>
+        <details><summary>Onde ficam os meus dados?</summary><p>Nesta primeira versão, o que você registra fica guardado só no seu aparelho. Nunca vendemos nem passamos seus dados para ninguém. Leia a <a href="privacidade.html">política de privacidade</a>.</p></details>
+        <details><summary>E se eu me arrepender?</summary><p>Você pode desistir em até 7 dias depois da compra e receber todo o valor de volta. Basta escrever para contato@7entidos.com.br.</p></details>
+        <details><summary>Por que só 100 vagas?</summary><p>Queremos acompanhar de perto cada pessoa desta primeira turma e ouvir o que ela tem a dizer.</p></details>
+      </div>
+      <p class="fd-aviso" role="note">O 7entidos não é terapia nem tratamento. Se você estiver passando por um momento muito difícil, procure ajuda: o CVV atende pelo telefone 188, todos os dias, a qualquer hora.</p>
+    </section>
+  </div>
+</main>
+
+<footer class="rodape"><div class="wrap"><a class="marca" href="index.html"><img src="assets/simbolo-contando-7.svg" alt="" width="36" height="36"><span>7ENTIDOS</span></a><p>Contato: contato@7entidos.com.br · <a href="privacidade.html" style="color:inherit">Privacidade</a> · <a href="#" data-preferencias-estatisticas style="color:inherit">Preferências de estatísticas</a></p></div></footer>
+<script>
+/* Quando o lote esgotar (data-esgotado="sim"), o botão vira "Esgotado" e oferece a lista de espera por e-mail. */
+(function(){var b=document.getElementById('botao-comprar');if(!b)return;
+  if(b.getAttribute('data-esgotado')==='sim'){b.textContent='Esgotado · entrar na lista de espera';b.href='mailto:contato@7entidos.com.br?subject=Lista%20de%20espera%207entidos';document.getElementById('texto-vagas').innerHTML='As <b>100 vagas</b> deste lote acabaram. Obrigado!';}
+  else if(b.getAttribute('href')==='LINK_MERCADO_PAGO'){b.setAttribute('aria-disabled','true');b.removeAttribute('href');b.textContent='Pagamento abre em instantes';}
+})();
+</script>
+<script src="js/conteudo.js"></script>
+<script src="js/consentimento.js"></script>
+</body>
+</html>
