@@ -34,6 +34,29 @@
 .nc-claro .nc-sent small{color:var(--muted)}.nc-claro .nc-sent.on{border-color:var(--sc)}
 .modal .nc-dot{background:var(--gold-ink)}
 @media (prefers-reduced-motion:reduce){.nc-op,.nc-sent{transition:none}}
+/* ===== Régua pessoal (número + palavra + lembrança) ===== */
+.nc-num{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-weight:800;font-size:15px;color:#161616;background:#ffd43b;flex:none}
+.nc-num.g{width:64px;height:64px;border-radius:18px;font-size:30px}
+.nc-op-tx{flex:1;min-width:0}.nc-op-tx b{display:block;font-size:15px}.nc-op-tx small{display:block;font-weight:400;font-size:13px;color:#b5b5b5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.modal .nc-op-tx small{color:var(--muted)}
+.nc-op.nc-r{padding:7px 10px;gap:11px}
+.nc-regua{display:grid;gap:4px;margin:12px 0 4px}
+.nc-linha{display:flex;align-items:center;gap:11px;padding:7px 10px;border-radius:12px;background:#1f1f1f;border:1px solid #2e2e2e;font:inherit;color:#f4f4f4;text-align:left;width:100%}
+button.nc-linha{cursor:pointer}button.nc-linha:hover{border-color:#5a5a5a}
+.nc-linha .vazio{font-size:12.5px;color:#8f8f8f}
+.nc-sdot{width:10px;height:10px;border-radius:50%;flex:none}
+.nc-barra{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px;flex:1}.nc-barra i{height:4px;border-radius:4px;background:#3a3a3a}.nc-barra i.on{background:#ffd43b}
+.nc-nivel{display:flex;align-items:center;gap:14px;margin:4px 0 14px}.nc-nivel small{display:block;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#ffd43b}.nc-nivel b{display:block;font-size:26px;color:#fff}
+.nc-lbl{display:block;font-size:13px;font-weight:700;color:#a8a8a8;margin:0 0 6px}
+.nc-campo{display:flex;gap:8px;align-items:stretch;margin-bottom:16px}
+.nc-campo textarea{font:inherit;font-size:16px;line-height:1.45;flex:1;min-height:84px;resize:none;box-sizing:border-box;padding:12px 14px;border-radius:14px;border:1.5px solid #3a3a3a;background:#212121;color:#f4f4f4;outline:none}
+.nc-campo textarea:focus{border-color:#ffd43b;background:#2a2614}
+.nc-mic{width:52px;flex:none;border-radius:14px;border:1.5px solid #3a3a3a;background:#212121;color:#ffd43b;display:grid;place-items:center;cursor:pointer}.nc-mic.on{border-color:#ffd43b;background:#2a2614}
+.nc-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.nc-chip{font:inherit;font-size:14px;display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border-radius:999px;border:1.5px solid #3a3a3a;background:#1c1c1c;color:#f4f4f4;cursor:pointer;min-height:38px}
+.nc-chip.on{background:#262626;border-color:var(--sc,#ffd43b)}
+.nc-link{font:inherit;font-weight:700;font-size:15px;border:0;background:transparent;color:#f4f4f4;padding:12px;cursor:pointer;text-decoration:underline;width:100%}
+.nc-edit-nivel{border:1px solid var(--line);border-radius:12px;padding:10px;display:grid;gap:6px}
 </style></head><body>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -780,13 +803,36 @@ function Eu(props){
 
 
 /* ============ NOVO COMEÇO (especificação aprovada em 02/11/2026) ============
-   Tela 1: Minha escala pessoal (10 expressões, sem números na tela; valores 1–10 guardados)
+   Tela 1: Minha régua pessoal (revisada em 02/11/2026: números 1–10 visíveis; a pessoa liga uma lembrança real a cada número, do 10 ao 1)
    Tela 2: Quais sentidos você usa? (seleção múltipla, nada pré-selecionado)
    Tela 3: Sete dias para começar a descobrir (prévia do mapa do Dia 7, sem pressão)
    Dados: st.novoComeco = {versao, escala:[{v,t}], escalaVersao, sentidos:[ids], inicio, concluidoEm}
           st.sensacoes = [{id, at, v, t (expressão no momento do registro), escalaVersao, sentido, origem}]
    Registros antigos nunca são reescritos: cada um guarda o valor e a expressão de quando foi feito. */
-const NC_ESCALA_PADRAO=[[1,"Muito desagradável"],[2,"Desagradável"],[3,"Desconfortável"],[4,"Pouco agradável"],[5,"Neutro"],[6,"Levemente agradável"],[7,"Agradável"],[8,"Muito agradável"],[9,"Intensamente agradável"],[10,"Extraordinário"]].map(([v,t])=>({v,t}));
+/* Régua pessoal (aprovada em 02/11/2026): cada número 1–10 tem a palavra do nível + uma lembrança real da pessoa (m) + sentido opcional (s).
+   Preenchida do 10 para o 1, todos os 10 obrigatórios, por texto ou voz. */
+const NC_ESCALA_PADRAO=[[1,"Péssimo"],[2,"Muito ruim"],[3,"Ruim"],[4,"Desconfortável"],[5,"Razoável"],[6,"Bom"],[7,"Muito bom"],[8,"Felicidade"],[9,"Muita felicidade"],[10,"Êxtase"]].map(([v,t])=>({v,t,m:"",s:null}));
+const NC_GUIA={
+  10:["Lembre de um momento em que tudo pareceu perfeito. Onde você estava? O que sentia no corpo?",["Um abraço demorado","Uma viagem inesquecível","Uma música que arrepiou"]],
+  9:["Um momento de alegria tão grande que você quis guardar para sempre.",["Uma conquista importante","Um reencontro especial","Uma festa com quem eu amo"]],
+  8:["Uma alegria clara, daquelas que deixam o dia mais leve.",["Um almoço com amigos","Um banho de mar","Receber uma boa notícia"]],
+  7:["Algo simples que te fez muito bem.",["Banho quente depois do frio","Caminhada no fim de tarde","Dormir bem a noite toda"]],
+  6:["Um pequeno prazer do dia a dia.",["Cheiro de café passado","Lençol limpo","Uma fruta bem doce"]],
+  5:["Um momento comum, nem bom nem ruim.",["Um dia normal de trabalho","Esperar numa fila","Arrumar a casa"]],
+  4:["Algo do dia a dia que incomoda um pouco o corpo.",["Calor no ônibus lotado","Sapato apertado","Barulho alto por perto"]],
+  3:["Uma sensação ruim, mas que passa.",["Muito tempo com fome","Frio sem agasalho","Uma noite mal dormida"]],
+  2:["Algo que incomodou bastante o seu corpo.",["Uma dor de cabeça forte","Enjoo em viagem","Uma gripe forte"]],
+  1:["A sensação física mais desagradável de que você se lembra. Pode ser algo do corpo, como uma dor.",["Uma dor de dente forte","Uma queimadura de sol","Uma cólica muito forte"]]};
+const ncNumBg=v=>({background:"rgba(255,212,59,"+(.35+v*.065).toFixed(2)+")"});
+/* Botão de voz: só aparece quando o celular/navegador permite ditar */
+function NcVoz({onTexto}){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;const [on,setOn]=useState(false);const ref=useRef(null);
+  useEffect(()=>()=>{try{ref.current&&ref.current.stop()}catch(e){}},[]);
+  if(!SR)return null;
+  function alternar(){if(on){try{ref.current&&ref.current.stop()}catch(e){}setOn(false);return}
+    try{const r=new SR();r.lang="pt-BR";r.interimResults=false;r.maxAlternatives=1;r.onresult=e=>{const t=Array.from(e.results).map(x=>x[0].transcript).join(" ").trim();if(t)onTexto(t)};r.onend=()=>setOn(false);r.onerror=()=>setOn(false);ref.current=r;r.start();setOn(true)}catch(e){setOn(false)}}
+  return html`<button type="button" class=${"nc-mic"+(on?" on":"")} aria-pressed=${on} aria-label=${on?"Parar de ouvir":"Falar em vez de escrever"} onClick=${alternar}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0M12 18v3"></path></svg></button>`;
+}
 const NC_SENTIDOS=[
   {id:"visao",t:"Visão",d:"Luz, cores, formas e paisagens",c:"#4dabf7",ic:"M4 32c7-11 17-17 28-17s21 6 28 17c-7 11-17 17-28 17S11 43 4 32z|C32 32 9"},
   {id:"audicao",t:"Audição",d:"Música, vozes, sons e silêncio",c:"#9b8cff",ic:"M14 24v16M24 16v32M34 22v20M44 12v40M54 26v12"},
@@ -799,10 +845,27 @@ const ncSentido=id=>NC_SENTIDOS.find(x=>x.id===id);
 function NcIcon({ic,c,size=26}){return html`<svg width=${size} height=${size} viewBox="0 0 64 64" aria-hidden="true" fill="none" stroke=${c} stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">${ic.split("|").map((p,i)=>p[0]==="C"?(()=>{const [x,y,r]=p.slice(2).split(" ").map(Number);return html`<circle key=${i} cx=${x} cy=${y} r=${r}/>`})():html`<path key=${i} d=${p}/>`)}</svg>`;}
 function ncEscala(s){const n=s.novoComeco;return (n&&Array.isArray(n.escala)&&n.escala.length===10)?n.escala:NC_ESCALA_PADRAO;}
 function ncDia(s){const n=s.novoComeco;if(!n||!n.inicio)return 0;const a=new Date(n.inicio);a.setHours(0,0,0,0);const b=new Date();b.setHours(0,0,0,0);return Math.floor((b-a)/864e5)+1;}
-function ncRegistrar(st,v,sentido,origem){const esc=ncEscala(st).find(x=>x.v===v);if(!Array.isArray(st.sensacoes))st.sensacoes=[];st.sensacoes.push({id:uid("S"),at:nowISO(),v,t:esc?esc.t:"",escalaVersao:(st.novoComeco&&st.novoComeco.escalaVersao)||1,sentido:sentido||null,origem:origem||"registro"});}
+function ncRegistrar(st,v,sentido,origem){const esc=ncEscala(st).find(x=>x.v===v);if(!Array.isArray(st.sensacoes))st.sensacoes=[];st.sensacoes.push({id:uid("S"),at:nowISO(),v,t:esc?esc.t:"",m:esc&&esc.m?esc.m:"",escalaVersao:(st.novoComeco&&st.novoComeco.escalaVersao)||1,sentido:sentido||null,origem:origem||"registro"});}
 
+/* Escolha na própria régua: número + palavra + lembrança, do 10 para o 1 */
 function NcEscolhaEscala({escala,sel,onSel,label}){
-  return html`<div class="nc-escala" role="radiogroup" aria-label=${label||"Minha escala pessoal"}>${escala.map(x=>html`<button key=${x.v} type="button" role="radio" aria-checked=${sel===x.v} class=${"nc-op"+(sel===x.v?" on":"")} onClick=${()=>onSel(sel===x.v?null:x.v)}><span class="nc-dot" style=${{opacity:.35+x.v*.065}}></span>${x.t}</button>`)}</div>`;
+  const lista=escala.slice().sort((a,b)=>b.v-a.v);
+  return html`<div class="nc-escala" style=${{gap:4}} role="radiogroup" aria-label=${label||"Minha régua pessoal"}>${lista.map(x=>html`<button key=${x.v} type="button" role="radio" aria-checked=${sel===x.v} class=${"nc-op nc-r"+(sel===x.v?" on":"")} onClick=${()=>onSel(sel===x.v?null:x.v)}><span class="nc-num" style=${ncNumBg(x.v)}>${x.v}</span><span class="nc-op-tx"><b>${x.t}</b>${x.m?html`<small>${x.m}</small>`:null}</span></button>`)}</div>`;
+}
+/* Preenchimento de um número da régua (tela 2 aprovada) */
+function NcNivelForm({item,idx,onChange}){
+  const g=NC_GUIA[item.v]||["",[]];
+  const set=(k,val)=>onChange(Object.assign({},item,{[k]:val}));
+  return html`<div>
+    <div class="nc-nivel"><span class="nc-num g" style=${ncNumBg(item.v)}>${item.v}</span><span><small>${item.v===10?"Seu nível mais alto":item.v===1?"Seu nível mais baixo":"Nível "+item.v}</small><b>${item.t}</b></span></div>
+    <p class="nc-p">${g[0]}</p>
+    <label class="nc-lbl" for=${"nc-m-"+item.v}>Minha lembrança para o ${item.v}</label>
+    <div class="nc-campo"><textarea id=${"nc-m-"+item.v} maxlength="120" placeholder="Escreva ou toque no microfone para falar" value=${item.m||""} onInput=${e=>set("m",e.target.value)}></textarea><${NcVoz} onTexto=${t=>set("m",((item.m||"").trim()?(item.m.trim()+" "):"")+t)}/></div>
+    <span class="nc-lbl">Precisa de uma ideia? Toque para usar</span>
+    <div class="nc-chips">${g[1].map(ex=>html`<button key=${ex} type="button" class="nc-chip" onClick=${()=>set("m",ex)}>${ex}</button>`)}</div>
+    <span class="nc-lbl">Por qual sentido passou? <span style=${{fontWeight:400}}>(opcional)</span></span>
+    <div class="nc-chips">${NC_SENTIDOS.map(x=>{const on=item.s===x.id;return html`<button key=${x.id} type="button" class=${"nc-chip"+(on?" on":"")} style=${{"--sc":x.c}} aria-pressed=${on} onClick=${()=>set("s",on?null:x.id)}><span class="nc-sdot" style=${{background:x.c}}></span>${x.t}</button>`})}</div>
+  </div>`;
 }
 function NcEscolhaSentidos({sel,onToggle}){
   return html`<div class="nc-sentidos">${NC_SENTIDOS.map(x=>{const on=sel.includes(x.id);return html`<button key=${x.id} type="button" role="checkbox" aria-checked=${on} class=${"nc-sent"+(on?" on":"")} style=${{"--sc":x.c}} onClick=${()=>onToggle(x.id)}><${NcIcon} ic=${x.ic} c=${on?x.c:"#9a9a9a"}/><span><b>${x.t}</b><small>${x.d}</small></span><span class="nc-check">${on?"✓":""}</span></button>`})}</div>`;
@@ -814,22 +877,41 @@ function NcProgresso({dia,s}){
 
 function NovoComeco({s,update}){
   const [passo,setPasso]=useState(1);
-  const [nivel,setNivel]=useState(null);
   const [sent,setSent]=useState((s.novoComeco&&s.novoComeco.sentidos)||[]);
-  useEffect(()=>{gaEvent("novo_comeco_etapa",{etapa:passo})},[passo]);
-  const escala=ncEscala(s);
+  /* Régua: "intro" → 0..9 (números 10 a 1) → "pronta" */
+  const rasc=s.novoComeco&&Array.isArray(s.novoComeco.rascunho)&&s.novoComeco.rascunho.length===10?s.novoComeco.rascunho:null;
+  const [regua,setRegua]=useState(()=>(rasc||NC_ESCALA_PADRAO).map(x=>Object.assign({},x)));
+  const [etapa,setEtapa]=useState(()=>rasc&&rasc.every(x=>(x.m||"").trim())?"pronta":"intro");
+  const [revisando,setRevisando]=useState(false);
+  const ORDEM=[10,9,8,7,6,5,4,3,2,1];
+  useEffect(()=>{gaEvent("novo_comeco_etapa",{etapa:passo,regua:String(etapa)})},[passo,etapa]);
   const toggle=id=>setSent(sent.includes(id)?sent.filter(x=>x!==id):[...sent,id]);
-  function comecar(){update(st=>{const ant=st.novoComeco||{};st.novoComeco=Object.assign({},ant,{versao:1,escala:ncEscala(st),escalaVersao:ant.escalaVersao||1,sentidos:sent.slice(),inicio:ant.inicio||nowISO(),concluidoEm:nowISO()});if(nivel)ncRegistrar(st,nivel,null,"novo-comeco")},"novo-comeco");gaEvent("jornada_iniciada");}
+  const atual=typeof etapa==="number"?regua.find(x=>x.v===ORDEM[etapa]):null;
+  const mudar=novo=>setRegua(regua.map(x=>x.v===novo.v?novo:x));
+  const guardar=r=>update(st=>{st.novoComeco=Object.assign({},st.novoComeco||{},{rascunho:r.map(x=>Object.assign({},x))})},"novo-comeco");
+  function proximo(){guardar(regua);if(revisando||etapa===9){setRevisando(false);setEtapa("pronta")}else setEtapa(etapa+1)}
+  function anterior(){if(revisando){setRevisando(false);setEtapa("pronta")}else setEtapa(etapa===0?"intro":etapa-1)}
+  function comecar(){const esc=regua.map(x=>({v:x.v,t:x.t,m:(x.m||"").trim(),s:x.s||null}));update(st=>{const ant=st.novoComeco||{};const n=Object.assign({},ant,{versao:2,escala:esc,escalaVersao:ant.escalaVersao||1,sentidos:sent.slice(),inicio:ant.inicio||nowISO(),concluidoEm:nowISO()});delete n.rascunho;st.novoComeco=n},"novo-comeco");gaEvent("jornada_iniciada");}
   return html`<div class="nc-tela" role="dialog" aria-modal="true" aria-label="Novo começo">
-    <div class="nc-caixa fade" key=${passo}>
-      <div class="nc-topo"><${LogoMark} size=${30} variant="dark"/><span class="nc-passos" aria-label=${"Etapa "+passo+" de 3"}>${[1,2,3].map(i=>html`<i key=${i} class=${i<=passo?"on":""}></i>`)}</span></div>
-      ${passo===1?html`
+    <div class="nc-caixa fade" key=${passo+"-"+etapa}>
+      ${passo===1&&typeof etapa==="number"?html`<div class="nc-topo"><span style=${{fontSize:13,fontWeight:700,color:"#a8a8a8"}}>${etapa+1} de 10</span><span class="nc-barra" aria-hidden="true" style=${{marginLeft:12}}>${ORDEM.map((v,i)=>html`<i key=${v} class=${i<=etapa?"on":""}></i>`)}</span></div>`:html`<div class="nc-topo"><${LogoMark} size=${30} variant="dark"/><span class="nc-passos" aria-label=${"Etapa "+passo+" de 3"}>${[1,2,3].map(i=>html`<i key=${i} class=${i<=passo?"on":""}></i>`)}</span></div>`}
+      ${passo===1&&etapa==="intro"?html`
         <div class="nc-eyebrow">Minha escala pessoal</div>
-        <h1 class="nc-h1">Cada sensação tem seu próprio significado.</h1>
-        <p class="nc-p">Não existe uma maneira certa de se sentir. Escolha a expressão que mais se aproxima da sua experiência.</p>
-        <${NcEscolhaEscala} escala=${escala} sel=${nivel} onSel=${setNivel}/>
-        <p class="nc-apoio">Você não precisa sentir algo extraordinário todos os dias. Todas as respostas são válidas.</p>
-        <button class="nc-btn" onClick=${()=>setPasso(2)}>Continuar</button>`:null}
+        <h1 class="nc-h1">Crie a sua régua de sensações.</h1>
+        <p class="nc-p">Cada número vai ganhar um significado só seu. Para cada um, você liga uma lembrança real que represente aquele nível.</p>
+        <div class="nc-regua">${ORDEM.map(v=>{const x=regua.find(z=>z.v===v);return html`<div key=${v} class="nc-linha"><span class="nc-num" style=${ncNumBg(v)}>${v}</span><span style=${{flex:1,fontWeight:600}}>${x.t}</span><span class="vazio">${(x.m||"").trim()?"✓":"a definir"}</span></div>`})}</div>
+        <p class="nc-apoio">Começamos pelo 10, a sua melhor lembrança. Leva cerca de 5 minutos e você pode mudar depois.</p>
+        <button class="nc-btn" onClick=${()=>setEtapa(0)}>Criar minha régua</button>`:null}
+      ${passo===1&&atual?html`
+        <${NcNivelForm} item=${atual} idx=${etapa} onChange=${mudar}/>
+        <div class="nc-acoes"><button class="nc-btn ghost" onClick=${anterior}>Voltar</button><button class="nc-btn" disabled=${!(atual.m||"").trim()} onClick=${proximo}>${revisando?"Salvar e voltar à régua":etapa===9?"Ver minha régua":"Próximo: "+ORDEM[etapa+1]+" · "+regua.find(z=>z.v===ORDEM[etapa+1]).t}</button></div>
+        ${!(atual.m||"").trim()?html`<p class="nc-apoio" style=${{marginTop:8}}>Escreva, fale ou toque numa ideia para continuar.</p>`:null}`:null}
+      ${passo===1&&etapa==="pronta"?html`
+        <div class="nc-eyebrow">Minha régua</div>
+        <h1 class="nc-h1">Sua régua está pronta.</h1>
+        <p class="nc-p">É com ela que o app vai entender cada experiência que você registrar daqui para frente. Toque num número para revisar.</p>
+        <div class="nc-regua">${ORDEM.map((v,i)=>{const x=regua.find(z=>z.v===v);const sc=x.s&&ncSentido(x.s);return html`<button key=${v} type="button" class="nc-linha" aria-label=${"Revisar o número "+v} onClick=${()=>{setRevisando(true);setEtapa(i)}}><span class="nc-num" style=${ncNumBg(v)}>${v}</span><span class="nc-op-tx"><b>${x.t}</b><small>${x.m}</small></span><span class="nc-sdot" style=${{background:sc?sc.c:"transparent",border:"1.5px solid "+(sc?sc.c:"#4a4a4a")}} aria-hidden="true"></span></button>`})}</div>
+        <button class="nc-btn" style=${{marginTop:12}} onClick=${()=>setPasso(2)}>Continuar</button>`:null}
       ${passo===2?html`
         <div class="nc-eyebrow">Seus sentidos</div>
         <h1 class="nc-h1">Quais sentidos você usa?</h1>
@@ -858,7 +940,7 @@ function NcRegistro({s,update,toast,onClose}){
   const meus=((s.novoComeco&&s.novoComeco.sentidos)||[]).map(ncSentido).filter(Boolean);
   function salvar(){update(st=>ncRegistrar(st,v,sentido,"registro"),"sensacao");gaEvent("sensacao_registrada");toast("Registrado. Cada experiência conta.");onClose();}
   return html`<${Modal} title="Como foi essa experiência?" onClose=${onClose}>
-    <p class="small muted" style=${{marginTop:0}}>Escolha a expressão que mais se aproxima do que você sentiu.</p>
+    <p class="small muted" style=${{marginTop:0}}>Compare com a sua régua: qual lembrança chega mais perto do que você sentiu agora?</p>
     <${NcEscolhaEscala} escala=${ncEscala(s)} sel=${v} onSel=${setV} label="Como foi"/>
     ${meus.length?html`<p class="small" style=${{margin:"14px 0 6px"}}><b>Por qual sentido?</b> <span class="muted">(opcional)</span></p>
     <div class="row" style=${{gap:6}}>${meus.map(x=>html`<button key=${x.id} type="button" class=${"btn small"+(sentido===x.id?" primary":"")} aria-pressed=${sentido===x.id} onClick=${()=>setSentido(sentido===x.id?null:x.id)}>${x.t}</button>`)}</div>`:null}
@@ -901,18 +983,22 @@ function NcJornadaCard({s,update,toast,go}){
 /* Eu › Perfil: mudar sentidos e revisar a escala (registros antigos mantêm seus valores e expressões) */
 function NcPerfil({s,update,toast}){
   const n=s.novoComeco;const [editSent,setEditSent]=useState(false);const [sent,setSent]=useState((n&&n.sentidos)||[]);
-  const [editEsc,setEditEsc]=useState(false);const [txt,setTxt]=useState(ncEscala(s).map(x=>x.t));
+  const [editEsc,setEditEsc]=useState(false);const [txt,setTxt]=useState(()=>ncEscala(s).map(x=>Object.assign({m:"",s:null},x)));
   if(!n||!n.concluidoEm)return null;
   const meus=(n.sentidos||[]).map(ncSentido).filter(Boolean);
   function salvarSent(){update(st=>{st.novoComeco.sentidos=sent.slice()},"novo-comeco");setEditSent(false);toast("Sentidos atualizados")}
-  function salvarEsc(){update(st=>{st.novoComeco.escala=txt.map((t,i)=>({v:i+1,t:(t||"").trim()||NC_ESCALA_PADRAO[i].t}));st.novoComeco.escalaVersao=(st.novoComeco.escalaVersao||1)+1},"novo-comeco");setEditEsc(false);toast("Escala revisada. Os registros antigos foram mantidos como estavam.")}
+  const faltando=txt.some(x=>!(x.m||"").trim());
+  function salvarEsc(){if(faltando)return;update(st=>{st.novoComeco.escala=txt.map((x,i)=>({v:x.v,t:(x.t||"").trim()||NC_ESCALA_PADRAO[x.v-1].t,m:(x.m||"").trim(),s:x.s||null}));st.novoComeco.escalaVersao=(st.novoComeco.escalaVersao||1)+1},"novo-comeco");setEditEsc(false);toast("Régua revisada. Os registros antigos foram mantidos como estavam.")}
+  const abrirEdicao=()=>{setTxt(ncEscala(s).map(x=>Object.assign({m:"",s:null},x)));setEditEsc(true)};
+  const mudarTxt=(v,k,val)=>setTxt(txt.map(x=>x.v===v?Object.assign({},x,{[k]:val}):x));
   return html`<div class="card" style=${{marginBottom:16}}>
     <h3 style=${{marginTop:0}}>Meus sentidos</h3>
     ${!editSent?html`<div class="row" style=${{gap:8,alignItems:"center"}}>${meus.map(x=>html`<span key=${x.id} class="chip" style=${{display:"inline-flex",gap:6,alignItems:"center"}}><${NcIcon} ic=${x.ic} c=${x.c} size=${18}/>${x.t}</span>`)}<button class="btn small" onClick=${()=>{setSent(n.sentidos||[]);setEditSent(true)}}>Mudar</button></div>`:html`<div class="nc-claro"><${NcEscolhaSentidos} sel=${sent} onToggle=${id=>setSent(sent.includes(id)?sent.filter(x=>x!==id):[...sent,id])}/></div><div class="row" style=${{marginTop:10}}><button class="btn primary" disabled=${!sent.length} onClick=${salvarSent}>Salvar</button><button class="btn ghost" onClick=${()=>setEditSent(false)}>Cancelar</button></div>`}
-    <h3>Minha escala pessoal</h3>
-    ${!editEsc?html`<p class="small muted" style=${{marginTop:0}}>${ncEscala(s).map(x=>x.t).join(" · ")}</p><button class="btn small" onClick=${()=>{setTxt(ncEscala(s).map(x=>x.t));setEditEsc(true)}}>Revisar minha escala</button>`:html`<p class="small muted" style=${{marginTop:0}}>Troque as palavras para que façam sentido para você, da sensação menos agradável para a mais agradável. Os registros que você já fez continuam com as palavras da época.</p>
-      <div class="grid" style=${{gap:6}}>${txt.map((t,i)=>html`<input key=${i} class="input" aria-label=${"Expressão "+(i+1)+" de 10"} value=${t} maxlength="40" onInput=${e=>{const a=txt.slice();a[i]=e.target.value;setTxt(a)}}/>`)}</div>
-      <div class="row" style=${{marginTop:10}}><button class="btn primary" onClick=${salvarEsc}>Salvar escala</button><button class="btn ghost" onClick=${()=>{setTxt(NC_ESCALA_PADRAO.map(x=>x.t))}}>Voltar ao padrão</button><button class="btn ghost" onClick=${()=>setEditEsc(false)}>Cancelar</button></div>`}
+    <h3>Minha régua pessoal</h3>
+    ${!editEsc?html`<div class="list" style=${{marginBottom:10}}>${ncEscala(s).slice().sort((a,b)=>b.v-a.v).map(x=>html`<div key=${x.v} class="row" style=${{flexWrap:"nowrap",gap:10,alignItems:"center",padding:"4px 0"}}><span class="nc-num" style=${ncNumBg(x.v)}>${x.v}</span><span style=${{minWidth:0}}><b>${x.t}</b>${x.m?html`<span class="small muted"> · ${x.m}</span>`:html`<span class="small muted"> · sem lembrança ainda</span>`}</span></div>`)}</div><button class="btn small" onClick=${abrirEdicao}>Revisar minha régua</button>`:html`<p class="small muted" style=${{marginTop:0}}>Para cada número, ajuste a palavra e a lembrança que representa esse nível para você. Os registros que você já fez continuam como estavam.</p>
+      <div class="grid" style=${{gap:8}}>${txt.slice().sort((a,b)=>b.v-a.v).map(x=>html`<div key=${x.v} class="nc-edit-nivel"><div class="row" style=${{flexWrap:"nowrap",gap:10,alignItems:"center"}}><span class="nc-num" style=${ncNumBg(x.v)}>${x.v}</span><input class="i" aria-label=${"Palavra do número "+x.v} value=${x.t} maxlength="40" onInput=${e=>mudarTxt(x.v,"t",e.target.value)}/></div><input class="i" aria-label=${"Lembrança do número "+x.v} placeholder=${(NC_GUIA[x.v]||[""])[0]} value=${x.m||""} maxlength="120" onInput=${e=>mudarTxt(x.v,"m",e.target.value)}/><div class="row" style=${{gap:4}}>${NC_SENTIDOS.map(z=>html`<button key=${z.id} type="button" class=${"btn small"+(x.s===z.id?" primary":"")} aria-pressed=${x.s===z.id} onClick=${()=>mudarTxt(x.v,"s",x.s===z.id?null:z.id)}>${z.t}</button>`)}</div></div>`)}</div>
+      ${faltando?html`<p class="small muted">Preencha uma lembrança para cada número para salvar.</p>`:null}
+      <div class="row" style=${{marginTop:10}}><button class="btn primary" disabled=${faltando} onClick=${salvarEsc}>Salvar régua</button><button class="btn ghost" onClick=${()=>setEditEsc(false)}>Cancelar</button></div>`}
     <p class="small muted" style=${{marginBottom:0}}>Jornada iniciada em ${fmtDate(n.inicio)} · ${(s.sensacoes||[]).length} ${(s.sensacoes||[]).length===1?"registro":"registros"}</p>
   </div>`;
 }
