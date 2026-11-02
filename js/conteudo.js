@@ -16,10 +16,10 @@ window.SITE = {
      Enquanto "arquivo" estiver vazio, o site mostra um espaço
      reservado identificado.
      --------------------------------------------------------------- */
-  fotoDestaque: { arquivo: "", descricao: "", legenda: "" },
+  fotoDestaque: { arquivo: "visao-por-do-sol-santos.jpg", descricao: "Pôr do sol em Santos: céu rosa e vermelho sobre o mar, com a orla iluminada, a ilha e as montanhas ao fundo.", legenda: "" },
 
   fotos: [
-    { sentido: "Visão",          arquivo: "", descricao: "", legenda: "" },
+    { sentido: "Visão",          arquivo: "visao-por-do-sol-santos.jpg", descricao: "Pôr do sol em Santos: céu rosa e vermelho sobre o mar, com a orla iluminada, a ilha e as montanhas ao fundo.", legenda: "Visão" },
     { sentido: "Audição",        arquivo: "", descricao: "", legenda: "" },
     { sentido: "Tato",           arquivo: "", descricao: "", legenda: "" },
     { sentido: "Olfato",         arquivo: "", descricao: "", legenda: "" },
