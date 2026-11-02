@@ -1,4 +1,40 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}/* ===== Novo Começo · grafite e amarelo ===== */
+.nc-tela{position:fixed;inset:0;z-index:70;background:radial-gradient(900px 500px at 50% -120px,#2c2c2c,#161616);color:#f4f4f4;overflow-y:auto;display:flex;justify-content:center;padding:20px 16px 40px}
+.nc-caixa{width:100%;max-width:560px;margin:auto 0}
+.nc-topo{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.nc-passos{display:flex;gap:6px}.nc-passos i{width:26px;height:4px;border-radius:4px;background:#3a3a3a}.nc-passos i.on{background:#ffd43b}
+.nc-eyebrow{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#ffd43b;margin-bottom:8px}
+.nc-h1{font-family:var(--sans);font-weight:800;font-size:clamp(26px,6.4vw,34px);line-height:1.15;margin:0 0 12px;color:#fff;text-wrap:balance}
+.nc-p{font-size:17px;line-height:1.55;color:#d9d9d9;margin:0 0 12px}
+.nc-apoio{font-size:14.5px;line-height:1.5;color:#a8a8a8;margin:14px 0}
+.nc-escala{display:grid;gap:7px;margin:14px 0 4px}
+.nc-op{font:inherit;font-size:16px;font-weight:600;text-align:left;display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;border:1.5px solid #3a3a3a;background:#212121;color:#f4f4f4;cursor:pointer;transition:border-color .15s,background .15s}
+.nc-op:hover{border-color:#5a5a5a}.nc-op.on{border-color:#ffd43b;background:#2a2614}
+.nc-dot{width:10px;height:10px;border-radius:50%;background:#ffd43b;flex:none}
+.nc-sentidos{display:grid;gap:8px;margin:14px 0 4px}
+.nc-sent{font:inherit;text-align:left;display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;border:1.5px solid #3a3a3a;background:#212121;color:#f4f4f4;cursor:pointer;transition:border-color .15s}
+.nc-sent b{display:block;font-size:16px}.nc-sent small{display:block;color:#a8a8a8;font-size:13.5px;line-height:1.35}
+.nc-sent>span:nth-of-type(1){flex:1}
+.nc-sent.on{border-color:var(--sc)}
+.nc-check{width:24px;height:24px;border-radius:7px;border:2px solid #555;display:grid;place-items:center;font-weight:800;font-size:14px;color:#161616;flex:none}
+.nc-sent.on .nc-check{background:var(--sc);border-color:var(--sc)}
+.nc-btn{font:inherit;font-weight:800;font-size:16px;border-radius:999px;border:0;background:#ffd43b;color:#161616;padding:14px 22px;cursor:pointer;width:100%;margin-top:6px}
+.nc-btn:disabled{opacity:.35;cursor:default}.nc-btn.ghost{background:transparent;color:#f4f4f4;border:1.5px solid #4a4a4a;width:auto;flex:none}
+.nc-acoes{display:flex;gap:10px;align-items:center;margin-top:6px}.nc-acoes .nc-btn:not(.ghost){flex:1}
+.nc-destaque{border-left:3px solid #ffd43b;background:#222;border-radius:10px;padding:12px 14px;color:#f4f4f4;font-size:16px;line-height:1.5;margin:16px 0}
+.nc-mapa-chip{display:flex;justify-content:center;margin:18px 0 10px}.nc-mapa-chip span{border:1.5px solid #ffd43b;color:#ffd43b;border-radius:999px;padding:6px 14px;font-weight:800;font-size:13.5px;letter-spacing:.02em}
+.nc-prog{display:flex;justify-content:center;gap:10px;margin:10px 0 4px}
+.nc-pdot{width:12px;height:12px;border-radius:50%;border:2px solid #6a6a6a;background:transparent}
+.nc-pdot.feito{background:#ffd43b;border-color:#ffd43b}.nc-pdot.hoje{border-color:#ffd43b}
+.nc-tela button:focus-visible{outline:3px solid #ffd43b;outline-offset:2px}
+.nc-card .nc-prog{justify-content:flex-start;margin:12px 0 4px}
+.nc-card .nc-pdot{border-color:var(--line)}.nc-card .nc-pdot.feito{background:var(--gold);border-color:var(--gold)}.nc-card .nc-pdot.hoje{border-color:var(--gold-ink)}
+.modal .nc-escala .nc-op,.nc-claro .nc-sent{background:var(--surface);color:var(--text);border-color:var(--line)}
+.modal .nc-escala .nc-op.on{border-color:var(--gold-ink);background:color-mix(in srgb,var(--gold) 22%,var(--surface))}
+.nc-claro .nc-sent small{color:var(--muted)}.nc-claro .nc-sent.on{border-color:var(--sc)}
+.modal .nc-dot{background:var(--gold-ink)}
+@media (prefers-reduced-motion:reduce){.nc-op,.nc-sent{transition:none}}
+</style></head><body>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -691,6 +727,7 @@ function Home({s,go,resume,pause,update,toast,downloads}){
       ${lastQuick?html`<p class="small" style=${{margin:"14px 0 0",color:"#fff",opacity:.95}}>✦ Sua última pista: ${lastQuick.text}</p>`:null}
       <p class="small" style=${{margin:"12px 0 0",color:"#fff"}} hidden=${!pausado}>⏸ <b>App em pausa.</b> Nada se perde. Volte quando quiser na aba “Eu”.</p>
     </section>
+    <${NcJornadaCard} s=${s} update=${update} toast=${toast} go=${go}/>
     <section class="card"><div class="spread" style=${{alignItems:"center"}}><div><div class="eyebrow">O que fazer hoje</div><h2 style=${{margin:0}}>Seu dia no 7entidos</h2></div>
       <div aria-label=${"Seu dia: "+feitos+" de 2"} title="Descoberta e check-in de hoje" style=${{fontSize:"1.5rem",letterSpacing:2}}>${[0,1].map(i=>html`<span key=${i} style=${{color:i<feitos?"var(--gold)":"var(--line)"}}>★</span>`)}</div></div>
       <div class="list" style=${{marginTop:12}}>${tasks.map(t=>html`<div key=${t.k} class="item spread" style=${{alignItems:"center"}}>
@@ -723,7 +760,7 @@ function Eu(props){
       <div class="card"><h3>Pausar o app</h3><label class="row small" style=${{gap:8}}><input type="checkbox" checked=${!!s.settings.paused} onChange=${e=>update(st=>{st.settings.paused=e.target.checked},"pause")}/> Estou de pausa (férias, dias difíceis). Nada se perde.</label>
         <h3 style=${{marginTop:18}}>Falar com o Daniel 💬</h3><p class="small muted">Dúvida ou erro? Mande mensagem pelo Instagram @bsgianini. No piloto, respondo em até 48 horas.</p><a class="btn" href=${FALAR_URL} target="_blank" rel="noopener">Falar com o Daniel</a></div>
       <div class="card" hidden=${!(s.achievements||[]).length}><h3>Suas conquistas e comemorações 🎉</h3><div class="list">${CONQ.filter(c=>(s.achievements||[]).some(a=>a.id===c.id)).map(c=>{const a=(s.achievements||[]).find(x=>x.id===c.id);return html`<div key=${c.id} class="item row" style=${{flexWrap:"nowrap"}}><${GuideAvatar} s=${s} size=${36}/><div><b>${c.t}</b><div class="small muted">${c.d} · ${fmtDate(a.at)}</div></div></div>`})}</div></div>
-      <${Dados} ...${props}/></div>`:null}
+      <${NcPerfil} ...${props}/><${Dados} ...${props}/></div>`:null}
     ${sub==="lembrancas"?html`<${Sensacoes} ...${props} initialAdd=${!!(opts&&opts.add)}/>`:null}
     ${sub==="bemestar"?html`<div><div class="card" style=${{marginBottom:16}}><div class="spread" style=${{alignItems:"center"}}><div><b>💌 Mandar uma boa sensação</b><p class="small muted" style=${{margin:0}}>Copia uma mensagem carinhosa com a sua última pista para um amigo.</p></div><button class="btn" disabled=${!quickList(s).length} onClick=${()=>{const q=quickList(s);if(q.length)compartilhar(q[q.length-1],toast)}}>Copiar mensagem</button></div></div><${Apoio} ...${props}/></div>`:null}
     ${sub==="experiencias"?html`<${Descobridor} ...${props}/>`:null}
@@ -738,6 +775,145 @@ function Eu(props){
       <div class="card"><div class="spread"><div class="eyebrow">Destaques do mapa</div><button class="btn ghost small" onClick=${()=>go("mapa")}>Ver mapa →</button></div><div class="row" style=${{marginTop:4}}>${facts.map(d=>html`<span key=${d.key} class="chip fact">${d.label}</span>`)}</div></div>
     </div>`:null}
     ${sub==="marca"?html`<${Identidade} ...${props}/>`:null}
+  </div>`;
+}
+
+
+/* ============ NOVO COMEÇO (especificação aprovada em 02/11/2026) ============
+   Tela 1: Minha escala pessoal (10 expressões, sem números na tela; valores 1–10 guardados)
+   Tela 2: Quais sentidos você usa? (seleção múltipla, nada pré-selecionado)
+   Tela 3: Sete dias para começar a descobrir (prévia do mapa do Dia 7, sem pressão)
+   Dados: st.novoComeco = {versao, escala:[{v,t}], escalaVersao, sentidos:[ids], inicio, concluidoEm}
+          st.sensacoes = [{id, at, v, t (expressão no momento do registro), escalaVersao, sentido, origem}]
+   Registros antigos nunca são reescritos: cada um guarda o valor e a expressão de quando foi feito. */
+const NC_ESCALA_PADRAO=[[1,"Muito desagradável"],[2,"Desagradável"],[3,"Desconfortável"],[4,"Pouco agradável"],[5,"Neutro"],[6,"Levemente agradável"],[7,"Agradável"],[8,"Muito agradável"],[9,"Intensamente agradável"],[10,"Extraordinário"]].map(([v,t])=>({v,t}));
+const NC_SENTIDOS=[
+  {id:"visao",t:"Visão",d:"Luz, cores, formas e paisagens",c:"#4dabf7",ic:"M4 32c7-11 17-17 28-17s21 6 28 17c-7 11-17 17-28 17S11 43 4 32z|C32 32 9"},
+  {id:"audicao",t:"Audição",d:"Música, vozes, sons e silêncio",c:"#9b8cff",ic:"M14 24v16M24 16v32M34 22v20M44 12v40M54 26v12"},
+  {id:"tato",t:"Tato",d:"Texturas, contato e temperatura",c:"#f6b46a",ic:"M18 34V16a4 4 0 0 1 8 0v14M26 28V12a4 4 0 0 1 8 0v16M34 28V14a4 4 0 0 1 8 0v18M42 32v-8a4 4 0 0 1 8 0v12c0 10-7 18-17 18h-2c-7 0-12-4-15-10l-6-11a4 4 0 0 1 7-4l5 7"},
+  {id:"olfato",t:"Olfato",d:"Aromas e cheiros",c:"#69db7c",ic:"M20 54c0-10 8-12 8-22s-6-12-6-20M32 54c0-10 8-12 8-22s-6-12-6-20M44 54c0-10 8-12 8-22s-6-12-6-20"},
+  {id:"paladar",t:"Paladar",d:"Sabores e alimentos",c:"#ff6b6b",ic:"M12 28h40c0 13-9 22-20 22S12 41 12 28zM24 20c0-4 3-6 3-10M34 20c0-4 3-6 3-10"},
+  {id:"movimento_propriocepcao",t:"Movimento e posição do corpo",d:"Equilíbrio, movimento e percepção do corpo no espaço",c:"#6fd3c6",ic:"C32 12 5|M32 18v18M32 36l-10 18M32 36l10 18M18 26l14-4 14 4"},
+  {id:"interocepcao",t:"Sinais internos",d:"Respiração, batimentos e outras sensações internas",c:"#da77f2",ic:"M32 52S10 39 10 24a11 11 0 0 1 22-5 11 11 0 0 1 22 5c0 15-22 28-22 28z|M16 32h10l4-7 5 13 4-6h9"}];
+const ncSentido=id=>NC_SENTIDOS.find(x=>x.id===id);
+function NcIcon({ic,c,size=26}){return html`<svg width=${size} height=${size} viewBox="0 0 64 64" aria-hidden="true" fill="none" stroke=${c} stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">${ic.split("|").map((p,i)=>p[0]==="C"?(()=>{const [x,y,r]=p.slice(2).split(" ").map(Number);return html`<circle key=${i} cx=${x} cy=${y} r=${r}/>`})():html`<path key=${i} d=${p}/>`)}</svg>`;}
+function ncEscala(s){const n=s.novoComeco;return (n&&Array.isArray(n.escala)&&n.escala.length===10)?n.escala:NC_ESCALA_PADRAO;}
+function ncDia(s){const n=s.novoComeco;if(!n||!n.inicio)return 0;const a=new Date(n.inicio);a.setHours(0,0,0,0);const b=new Date();b.setHours(0,0,0,0);return Math.floor((b-a)/864e5)+1;}
+function ncRegistrar(st,v,sentido,origem){const esc=ncEscala(st).find(x=>x.v===v);if(!Array.isArray(st.sensacoes))st.sensacoes=[];st.sensacoes.push({id:uid("S"),at:nowISO(),v,t:esc?esc.t:"",escalaVersao:(st.novoComeco&&st.novoComeco.escalaVersao)||1,sentido:sentido||null,origem:origem||"registro"});}
+
+function NcEscolhaEscala({escala,sel,onSel,label}){
+  return html`<div class="nc-escala" role="radiogroup" aria-label=${label||"Minha escala pessoal"}>${escala.map(x=>html`<button key=${x.v} type="button" role="radio" aria-checked=${sel===x.v} class=${"nc-op"+(sel===x.v?" on":"")} onClick=${()=>onSel(sel===x.v?null:x.v)}><span class="nc-dot" style=${{opacity:.35+x.v*.065}}></span>${x.t}</button>`)}</div>`;
+}
+function NcEscolhaSentidos({sel,onToggle}){
+  return html`<div class="nc-sentidos">${NC_SENTIDOS.map(x=>{const on=sel.includes(x.id);return html`<button key=${x.id} type="button" role="checkbox" aria-checked=${on} class=${"nc-sent"+(on?" on":"")} style=${{"--sc":x.c}} onClick=${()=>onToggle(x.id)}><${NcIcon} ic=${x.ic} c=${on?x.c:"#9a9a9a"}/><span><b>${x.t}</b><small>${x.d}</small></span><span class="nc-check">${on?"✓":""}</span></button>`})}</div>`;
+}
+function NcProgresso({dia,s}){
+  const dias=new Set((s.sensacoes||[]).map(r=>{const n=s.novoComeco;if(!n||!n.inicio)return 0;const a=new Date(n.inicio);a.setHours(0,0,0,0);const b=new Date(r.at);b.setHours(0,0,0,0);return Math.floor((b-a)/864e5)+1}));
+  return html`<div class="nc-prog" aria-label=${"Jornada: dia "+Math.min(dia,7)+" de 7"}>${[1,2,3,4,5,6,7].map(d=>html`<span key=${d} class=${"nc-pdot"+(dias.has(d)?" feito":"")+(d===Math.min(dia,7)?" hoje":"")} title=${"Dia "+d}></span>`)}</div>`;
+}
+
+function NovoComeco({s,update}){
+  const [passo,setPasso]=useState(1);
+  const [nivel,setNivel]=useState(null);
+  const [sent,setSent]=useState((s.novoComeco&&s.novoComeco.sentidos)||[]);
+  useEffect(()=>{gaEvent("novo_comeco_etapa",{etapa:passo})},[passo]);
+  const escala=ncEscala(s);
+  const toggle=id=>setSent(sent.includes(id)?sent.filter(x=>x!==id):[...sent,id]);
+  function comecar(){update(st=>{const ant=st.novoComeco||{};st.novoComeco=Object.assign({},ant,{versao:1,escala:ncEscala(st),escalaVersao:ant.escalaVersao||1,sentidos:sent.slice(),inicio:ant.inicio||nowISO(),concluidoEm:nowISO()});if(nivel)ncRegistrar(st,nivel,null,"novo-comeco")},"novo-comeco");gaEvent("jornada_iniciada");}
+  return html`<div class="nc-tela" role="dialog" aria-modal="true" aria-label="Novo começo">
+    <div class="nc-caixa fade" key=${passo}>
+      <div class="nc-topo"><${LogoMark} size=${30} variant="dark"/><span class="nc-passos" aria-label=${"Etapa "+passo+" de 3"}>${[1,2,3].map(i=>html`<i key=${i} class=${i<=passo?"on":""}></i>`)}</span></div>
+      ${passo===1?html`
+        <div class="nc-eyebrow">Minha escala pessoal</div>
+        <h1 class="nc-h1">Cada sensação tem seu próprio significado.</h1>
+        <p class="nc-p">Não existe uma maneira certa de se sentir. Escolha a expressão que mais se aproxima da sua experiência.</p>
+        <${NcEscolhaEscala} escala=${escala} sel=${nivel} onSel=${setNivel}/>
+        <p class="nc-apoio">Você não precisa sentir algo extraordinário todos os dias. Todas as respostas são válidas.</p>
+        <button class="nc-btn" onClick=${()=>setPasso(2)}>Continuar</button>`:null}
+      ${passo===2?html`
+        <div class="nc-eyebrow">Seus sentidos</div>
+        <h1 class="nc-h1">Quais sentidos você usa?</h1>
+        <p class="nc-p">Escolha os sentidos que deseja explorar. Você poderá mudar suas escolhas quando quiser.</p>
+        <${NcEscolhaSentidos} sel=${sent} onToggle=${toggle}/>
+        <p class="nc-apoio">Todos os sentidos são bem-vindos. Explore apenas aqueles que forem confortáveis e acessíveis para você.</p>
+        <div class="nc-acoes"><button class="nc-btn ghost" onClick=${()=>setPasso(1)}>Voltar</button><button class="nc-btn" disabled=${!sent.length} onClick=${()=>setPasso(3)}>Continuar</button></div>
+        ${!sent.length?html`<p class="nc-apoio" style=${{marginTop:8}}>Escolha pelo menos um para continuar.</p>`:null}`:null}
+      ${passo===3?html`
+        <div class="nc-eyebrow">Sua jornada começa aqui</div>
+        <h1 class="nc-h1">Sete dias para começar a descobrir.</h1>
+        <p class="nc-p">A cada dia, uma pequena experiência pode revelar algo sobre o que você gosta de sentir.</p>
+        <p class="nc-p">No Dia 7, você poderá conhecer a primeira versão do seu mapa pessoal, construída a partir das experiências que registrar.</p>
+        <div class="nc-destaque">Seu mapa não será uma resposta definitiva. Será o começo de uma descoberta que evolui com você.</div>
+        <div class="nc-mapa-chip"><span>Seu primeiro mapa · Dia 7</span></div>
+        <div class="nc-prog" aria-hidden="true">${[1,2,3,4,5,6,7].map(d=>html`<span key=${d} class=${"nc-pdot"+(d===1?" hoje":"")}></span>`)}</div>
+        <p class="nc-apoio" style=${{textAlign:"center",marginTop:6}}>Cada experiência conta. Nenhum dia perdido.</p>
+        <div class="nc-acoes"><button class="nc-btn ghost" onClick=${()=>setPasso(2)}>Voltar</button><button class="nc-btn" onClick=${comecar}>Começar minha jornada</button></div>
+        <p class="nc-apoio" style=${{textAlign:"center"}}>No seu ritmo. Sem metas de felicidade, sem cobranças.</p>`:null}
+    </div></div>`;
+}
+
+/* Registro de uma sensação (uma escolha por registro) */
+function NcRegistro({s,update,toast,onClose}){
+  const [v,setV]=useState(null);const [sentido,setSentido]=useState(null);
+  const meus=((s.novoComeco&&s.novoComeco.sentidos)||[]).map(ncSentido).filter(Boolean);
+  function salvar(){update(st=>ncRegistrar(st,v,sentido,"registro"),"sensacao");gaEvent("sensacao_registrada");toast("Registrado. Cada experiência conta.");onClose();}
+  return html`<${Modal} title="Como foi essa experiência?" onClose=${onClose}>
+    <p class="small muted" style=${{marginTop:0}}>Escolha a expressão que mais se aproxima do que você sentiu.</p>
+    <${NcEscolhaEscala} escala=${ncEscala(s)} sel=${v} onSel=${setV} label="Como foi"/>
+    ${meus.length?html`<p class="small" style=${{margin:"14px 0 6px"}}><b>Por qual sentido?</b> <span class="muted">(opcional)</span></p>
+    <div class="row" style=${{gap:6}}>${meus.map(x=>html`<button key=${x.id} type="button" class=${"btn small"+(sentido===x.id?" primary":"")} aria-pressed=${sentido===x.id} onClick=${()=>setSentido(sentido===x.id?null:x.id)}>${x.t}</button>`)}</div>`:null}
+    <div class="row" style=${{marginTop:16}}><button class="btn primary" disabled=${!v} onClick=${salvar}>Registrar</button><button class="btn ghost" onClick=${onClose}>Agora não</button></div>
+  <//>`;
+}
+
+/* Primeira leitura do mapa (a partir do Dia 7), só com os dados que existem */
+function NcPrimeiroMapa({s,onClose,go}){
+  const regs=(s.sensacoes||[]);const meus=((s.novoComeco&&s.novoComeco.sentidos)||[]).map(ncSentido).filter(Boolean);
+  const porSentido=meus.map(x=>{const r=regs.filter(g=>g.sentido===x.id);const media=r.length?r.reduce((a,g)=>a+g.v,0)/r.length:null;return {x,n:r.length,media}});
+  const comDados=porSentido.filter(p=>p.n>0).sort((a,b)=>b.media-a.media);
+  const poucos=regs.length<5||comDados.length<2;
+  const esc=ncEscala(s);const rotulo=m=>{const e=esc.find(z=>z.v===Math.round(m));return e?e.t:""};
+  return html`<${Modal} title="Seu primeiro mapa" onClose=${onClose}>
+    <p style=${{marginTop:0}}>Esta é uma primeira leitura das experiências que você registrou. Não é uma conclusão sobre quem você é: o mapa continua mudando com você.</p>
+    ${poucos?html`<p class="banner small" role="note">Seu mapa ainda está em construção: há poucos registros até agora. Ele fica mais claro a cada experiência registrada.</p>`:null}
+    ${comDados.length?html`<div class="list" style=${{marginTop:10}}>${comDados.map(p=>html`<div key=${p.x.id} class="item row" style=${{flexWrap:"nowrap",gap:12}}><${NcIcon} ic=${p.x.ic} c=${p.x.c}/><div style=${{flex:1}}><b>${p.x.t}</b><div class="small muted">Em geral: ${rotulo(p.media)} · ${p.n} ${p.n===1?"registro":"registros"}</div></div></div>`)}</div>`:html`<p class="muted">Ainda não há registros ligados a um sentido. Ao registrar uma experiência, escolha por qual sentido ela passou.</p>`}
+    ${porSentido.filter(p=>!p.n).length?html`<p class="small muted" style=${{marginTop:12}}>Ainda sem registros: ${porSentido.filter(p=>!p.n).map(p=>p.x.t).join(", ")}.</p>`:null}
+    <div class="row" style=${{marginTop:14}}><button class="btn" onClick=${()=>{onClose();go("mapa")}}>Ver o mapa completo</button><button class="btn ghost" onClick=${onClose}>Fechar</button></div>
+  <//>`;
+}
+
+/* Janelas abertas a partir de um cartão vão direto para o corpo da página (o cartão não pode prendê-las) */
+const ncPortal=el=>(window.ReactDOM&&ReactDOM.createPortal)?ReactDOM.createPortal(el,document.body):el;
+/* Cartão discreto da jornada na tela Hoje */
+function NcJornadaCard({s,update,toast,go}){
+  const [modal,setModal]=useState(null);const dia=ncDia(s);if(!dia)return null;
+  const pronto=dia>=7;
+  return html`<section class="card nc-card">
+    <div class="spread" style=${{alignItems:"center"}}><div><div class="eyebrow">${pronto?"Seu primeiro mapa":"Seu primeiro mapa · Dia 7"}</div><h2 style=${{margin:0}}>${pronto?"Sua primeira leitura está disponível":"Dia "+dia+" da sua jornada"}</h2></div></div>
+    <${NcProgresso} dia=${dia} s=${s}/>
+    <p class="small muted" style=${{margin:"6px 0 12px"}}>Cada experiência conta. Nenhum dia perdido.</p>
+    <div class="row"><button class="btn primary" onClick=${()=>setModal("reg")}>Registrar uma sensação</button>${pronto?html`<button class="btn" onClick=${()=>setModal("mapa")}>Ver meu primeiro mapa</button>`:null}</div>
+    ${modal==="reg"?ncPortal(html`<${NcRegistro} s=${s} update=${update} toast=${toast} onClose=${()=>setModal(null)}/>`):null}
+    ${modal==="mapa"?ncPortal(html`<${NcPrimeiroMapa} s=${s} go=${go} onClose=${()=>setModal(null)}/>`):null}
+  </section>`;
+}
+
+/* Eu › Perfil: mudar sentidos e revisar a escala (registros antigos mantêm seus valores e expressões) */
+function NcPerfil({s,update,toast}){
+  const n=s.novoComeco;const [editSent,setEditSent]=useState(false);const [sent,setSent]=useState((n&&n.sentidos)||[]);
+  const [editEsc,setEditEsc]=useState(false);const [txt,setTxt]=useState(ncEscala(s).map(x=>x.t));
+  if(!n||!n.concluidoEm)return null;
+  const meus=(n.sentidos||[]).map(ncSentido).filter(Boolean);
+  function salvarSent(){update(st=>{st.novoComeco.sentidos=sent.slice()},"novo-comeco");setEditSent(false);toast("Sentidos atualizados")}
+  function salvarEsc(){update(st=>{st.novoComeco.escala=txt.map((t,i)=>({v:i+1,t:(t||"").trim()||NC_ESCALA_PADRAO[i].t}));st.novoComeco.escalaVersao=(st.novoComeco.escalaVersao||1)+1},"novo-comeco");setEditEsc(false);toast("Escala revisada. Os registros antigos foram mantidos como estavam.")}
+  return html`<div class="card" style=${{marginBottom:16}}>
+    <h3 style=${{marginTop:0}}>Meus sentidos</h3>
+    ${!editSent?html`<div class="row" style=${{gap:8,alignItems:"center"}}>${meus.map(x=>html`<span key=${x.id} class="chip" style=${{display:"inline-flex",gap:6,alignItems:"center"}}><${NcIcon} ic=${x.ic} c=${x.c} size=${18}/>${x.t}</span>`)}<button class="btn small" onClick=${()=>{setSent(n.sentidos||[]);setEditSent(true)}}>Mudar</button></div>`:html`<div class="nc-claro"><${NcEscolhaSentidos} sel=${sent} onToggle=${id=>setSent(sent.includes(id)?sent.filter(x=>x!==id):[...sent,id])}/></div><div class="row" style=${{marginTop:10}}><button class="btn primary" disabled=${!sent.length} onClick=${salvarSent}>Salvar</button><button class="btn ghost" onClick=${()=>setEditSent(false)}>Cancelar</button></div>`}
+    <h3>Minha escala pessoal</h3>
+    ${!editEsc?html`<p class="small muted" style=${{marginTop:0}}>${ncEscala(s).map(x=>x.t).join(" · ")}</p><button class="btn small" onClick=${()=>{setTxt(ncEscala(s).map(x=>x.t));setEditEsc(true)}}>Revisar minha escala</button>`:html`<p class="small muted" style=${{marginTop:0}}>Troque as palavras para que façam sentido para você, da sensação menos agradável para a mais agradável. Os registros que você já fez continuam com as palavras da época.</p>
+      <div class="grid" style=${{gap:6}}>${txt.map((t,i)=>html`<input key=${i} class="input" aria-label=${"Expressão "+(i+1)+" de 10"} value=${t} maxlength="40" onInput=${e=>{const a=txt.slice();a[i]=e.target.value;setTxt(a)}}/>`)}</div>
+      <div class="row" style=${{marginTop:10}}><button class="btn primary" onClick=${salvarEsc}>Salvar escala</button><button class="btn ghost" onClick=${()=>{setTxt(NC_ESCALA_PADRAO.map(x=>x.t))}}>Voltar ao padrão</button><button class="btn ghost" onClick=${()=>setEditEsc(false)}>Cancelar</button></div>`}
+    <p class="small muted" style=${{marginBottom:0}}>Jornada iniciada em ${fmtDate(n.inicio)} · ${(s.sensacoes||[]).length} ${(s.sensacoes||[]).length===1?"registro":"registros"}</p>
   </div>`;
 }
 
@@ -1744,7 +1920,7 @@ function App(){
     </main>
     ${toastMsg?html`<div class="toast" role="status">${toastMsg}</div>`:null}
     ${celebra?html`<${Celebra} s=${state} c=${celebra} onClose=${()=>setCelebra(null)}/>`:null}
-    ${okConsent?null:html`<${ConsentGate} s=${state} update=${update}/>`}
+    ${okConsent?(state.novoComeco&&state.novoComeco.concluidoEm?null:html`<${NovoComeco} s=${state} update=${update}/>`):html`<${ConsentGate} s=${state} update=${update}/>`}
   </div>`;
 }
 ReactDOM.createRoot(document.getElementById("root")).render(html`<${App}/>`);
