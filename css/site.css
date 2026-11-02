@@ -229,3 +229,39 @@ body.modo-revisao div.pend,body.modo-revisao p.pend{display:flex;width:fit-conte
 .aviso-estatisticas .botoes{display:flex;gap:8px}
 .aviso-estatisticas button{font:inherit;font-weight:700;font-size:15px;border-radius:999px;padding:10px 18px;cursor:pointer;border:1px solid var(--linha);background:var(--branco);color:var(--texto)}
 .aviso-estatisticas button.aceitar{background:var(--violeta);border-color:var(--violeta);color:var(--branco)}
+
+
+/* Identidade editorial + sensorial. Mantém estrutura e recursos existentes. */
+:root{--violeta:#241C32;--roxo:#C3A5FF;--lavanda:#BDB0D1;--lilas:#15131B;--dourado:#F4C51F;--branco:#0B0B0D;--texto:#F5F1E8;--texto-suave:#BFB8C8;--linha:#38313F;color-scheme:dark}
+body{background:#0B0B0D}
+a:hover{color:var(--dourado)}
+.topo{background:rgba(11,11,13,.94);border-bottom-color:#2C2633}
+.topo .wrap{height:80px}.marca img{border-radius:0}.marca span{letter-spacing:.2em}
+.menu a{font-size:14px;font-weight:500;min-height:44px}.menu a:hover{background:#241C32;color:#F5F1E8}
+section{border-bottom:1px solid #29232F}
+.inicio{position:relative;overflow:hidden;background:radial-gradient(ellipse at 85% 38%,#2B1E3D 0,transparent 55%),#0B0B0D;padding-top:64px}
+.inicio .wrap{align-items:center;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:44px}
+.selo{background:transparent;border-color:#50422C;color:#E7D9B5;font-size:11px;letter-spacing:.13em}
+.inicio h1{font-size:clamp(54px,7.8vw,104px);line-height:1.02;margin:30px 0 22px;font-weight:400}
+.inicio h1 em{color:var(--dourado);font-weight:400}
+.assinatura{font-family:var(--display);font-style:italic;color:var(--dourado);font-size:clamp(21px,2.2vw,28px);margin-bottom:18px}
+.inicio .lead{font-size:18px;max-width:42ch;line-height:1.7}
+.cta{background:var(--dourado);color:#17120B;min-height:52px;border-radius:999px}.cta:hover{background:#FFE183;color:#17120B}
+.indice{gap:8px 18px;margin-top:36px}.indice b{color:var(--dourado)}
+.inicio .arte-inicio{position:relative;margin:0}.arte-inicio img{width:100%;height:auto;max-height:620px;object-fit:contain;mix-blend-mode:screen}.arte-inicio figcaption{font-size:14px;color:var(--texto-suave);text-align:center;margin-top:16px}
+.suave{background:#15131B}.faixa{background:linear-gradient(120deg,#20192B,#101522);color:var(--texto)}
+.rotulo{color:var(--dourado);font-size:12px;letter-spacing:.2em}.lead{color:var(--texto-suave)}
+.sentidos .marcas{color:#C3A5FF}.sentidos li{grid-template-columns:88px 1fr}
+.funcao{padding:22px;background:#15131B;border:1px solid #38313F;border-radius:12px}
+.funcao p,.jornada p{font-size:16px}.funcao .tela figcaption{font-size:14px}
+.planejados{background:#15131B;border-radius:12px}.planejados ul{font-size:16px}
+.chip.prototipo{background:#332448;color:#E1D1FF}.chip.planejado{background:#332B1B;color:#F4DDA8}
+.reservado{background:repeating-linear-gradient(135deg,#1C1725 0 14px,#211A2B 14px 28px);color:#F5F1E8;border-color:#655076}
+.manifesto{background:radial-gradient(ellipse at 50% 100%,#342052,transparent 72%),#101019;text-align:center;padding:110px 0}.manifesto .rotulo{justify-content:center;margin-bottom:32px}.manifesto h2{max-width:950px;margin:auto;font-size:clamp(32px,4.7vw,62px);line-height:1.2}.manifesto em{color:#D1BCEB;font-weight:400}
+.acesso-piloto{display:flex;align-items:center;gap:22px;flex-wrap:wrap;margin:-15px 0 36px}.acesso-piloto>span{font-size:14px;color:var(--texto-suave)}
+.rodape{background:#0B0B0D;border-top:1px solid #38313F}.rodape p{font-size:14px}
+.aviso-estatisticas{background:#18141F;border-color:#796A86;color:#F5F1E8}.aviso-estatisticas button{min-height:44px}.aviso-estatisticas button.aceitar{background:#F4C51F;color:#17120B;border-color:#F4C51F}
+:focus-visible{outline-color:#F4C51F}
+@media(max-width:900px){.menu{top:80px;background:#0B0B0D}.botao-menu{min-height:44px}.inicio .wrap{gap:30px}}
+@media(max-width:860px){.inicio .wrap{grid-template-columns:1fr}.inicio .arte-inicio{order:0;max-width:480px;margin:0 auto}.inicio h1{font-size:clamp(54px,12vw,86px)}.inicio{padding-top:40px}.indice{margin-top:28px}.arte-inicio img{max-height:480px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
