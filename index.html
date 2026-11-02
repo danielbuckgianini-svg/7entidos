@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/site.css?v=20261102-sensorial">
+<link rel="stylesheet" href="css/pre-venda.css?v=20261102">
 </head>
 <body>
 <a class="pular" href="#conteudo">Pular para o conteúdo</a>
@@ -256,7 +257,7 @@
         <li><b>APP GIANINI</b><span>Primeira versão, como projeto pessoal.</span></li>
         <li><b>Boas Sensações</b><span>A ideia passa a ser pensada para outras pessoas.</span></li>
         <li><b>7ENTIDOS</b><span>Os sete sentidos viram a base do método e dão nome à marca.</span></li>
-        <li><b>Hoje</b><span>Protótipo em teste. Sem data pública de lançamento.</span></li>
+        <li><b>Hoje</b><span>Protótipo em teste. Início da comercialização em dezembro de 2026, com seleção de 100 pessoas.</span></li>
       </ol>
     </div>
   </div>
@@ -298,6 +299,35 @@
 <script src="js/conteudo.js"></script>
 <script src="js/site.js"></script>
 <script src="js/consentimento.js"></script>
+<!-- Pré-venda: seleção de 100 pessoas, sem garantia de vaga ou cobrança. -->
+<button class="pv-convite" type="button" data-abrir-pre-venda>Dezembro · 100 vagas <span aria-hidden="true">↗</span></button>
+<dialog id="pre-venda" class="pv-modal" aria-labelledby="pv-titulo" aria-describedby="pv-resumo">
+  <button type="button" class="pv-fechar" data-fechar-pre-venda aria-label="Fechar convite">×</button>
+  <div class="pv-conteudo">
+    <p class="pv-rotulo">7ENTIDOS · Pré-lançamento</p>
+    <p class="pv-numero" aria-hidden="true">100<span>começos</span></p>
+    <h2 id="pv-titulo">Faça parte dos<br><em>primeiros 100.</em></h2>
+    <p id="pv-resumo">O 7ENTIDOS começa a ser comercializado em <strong>dezembro de 2026</strong>. Apenas <strong>100 pessoas serão selecionadas em dezembro</strong> para fazer parte da primeira turma do lançamento comercial.</p>
+    <p class="pv-apoio">Deixe seu contato para participar da seleção. Se você for escolhido, entraremos em contato com os próximos passos e as condições de acesso.</p>
+    <div class="pv-preco"><span>Valor de acesso</span><strong>R$ 24,90</strong><p>Você poderá pagar antecipadamente, se quiser. As condições serão apresentadas antes do pagamento.</p><a id="pv-pagar" class="pv-enviar" hidden target="_blank" rel="noopener noreferrer">Quero pagar antecipadamente ↗</a></div>
+    <form id="pv-form" class="pv-form">
+      <label for="pv-nome">Como podemos chamar você?</label>
+      <input id="pv-nome" name="nome" autocomplete="given-name" maxlength="80" required placeholder="Seu nome">
+      <label for="pv-email">Seu e-mail</label>
+      <input id="pv-email" name="email" type="email" autocomplete="email" maxlength="254" required placeholder="voce@exemplo.com">
+      <label for="pv-whatsapp">WhatsApp <span>(opcional)</span></label>
+      <input id="pv-whatsapp" name="whatsapp" type="tel" autocomplete="tel" inputmode="tel" maxlength="24" placeholder="(DDD) 99999-9999" aria-describedby="pv-whatsapp-ajuda">
+      <small id="pv-whatsapp-ajuda">Se informar, também poderemos falar com você por WhatsApp sobre esta seleção.</small>
+      <label class="pv-consentimento"><input name="consentimento" type="checkbox" required><span>Autorizo o 7ENTIDOS a usar meu nome e meus contatos para conduzir esta seleção e me informar sobre o lançamento de dezembro de 2026. Li o <a href="privacidade.html#pre-lancamento" target="_blank" rel="noopener">aviso de privacidade</a>.</span></label>
+      <button type="submit" class="pv-enviar" disabled>Quero participar da seleção <span aria-hidden="true">↗</span></button>
+      <p id="pv-status" class="pv-status" role="status" aria-live="polite">Inscrições em preparação. O formulário será liberado assim que o recebimento dos cadastros estiver conectado.</p>
+      <p class="pv-nota">A inscrição é gratuita e não é uma compra ou reserva. Não garante seleção nem acesso gratuito ao aplicativo. Não há cobrança neste formulário.</p>
+    </form>
+  </div>
+</dialog>
+<script src="js/pre-venda.js?v=20261102"></script>
+
 </body>
 </html>
+
 
