@@ -1,4 +1,4 @@
-/* 7ENTIDOS · aviso de consentimento das estatísticas (Google Analytics)
+/* 7ENTIDOS · aviso de consentimento das estatísticas (Google Analytics e Metricool)
    Regra: nada do Google é carregado antes de a pessoa tocar em "Aceitar".
    A escolha fica guardada só neste navegador. Para mudar de ideia:
    link "Preferências de estatísticas" no rodapé. */
@@ -23,6 +23,12 @@
     s.async = true;
     s.src = "https://www.googletagmanager.com/gtag/js?id=" + ID;
     document.head.appendChild(s);
+    /* Metricool: contagem de visitas no painel do Metricool, também só depois do "Aceitar" */
+    var m = document.createElement("script");
+    m.async = true;
+    m.src = "https://tracker.metricool.com/resources/be.js";
+    m.onload = function () { try { window.beTracker && window.beTracker.t({ hash: "5e829989b85ed41feb8bce45e5a0e1b3" }); } catch (e) {} };
+    document.head.appendChild(m);
   }
   function desligar() { if (ID) window["ga-disable-" + ID] = true; }
 
@@ -34,7 +40,7 @@
     d.setAttribute("role", "dialog");
     d.setAttribute("aria-label", "Estatísticas de visitas");
     d.innerHTML =
-      '<p><strong>Podemos contar as visitas?</strong> Usamos ferramentas do Google para saber quantas pessoas visitam o site, quais partes são mais lidas e quantas chegaram pelos nossos anúncios. Não usamos para mostrar anúncios personalizados a você. Nada é carregado sem o seu “Aceitar”. <a href="privacidade.html">Saiba mais</a></p>' +
+      '<p><strong>Podemos contar as visitas?</strong> Usamos ferramentas do Google e do Metricool para saber quantas pessoas visitam o site, quais partes são mais lidas e quantas chegaram pelos nossos anúncios. Não usamos para mostrar anúncios personalizados a você. Nada é carregado sem o seu “Aceitar”. <a href="privacidade.html">Saiba mais</a></p>' +
       '<div class="botoes"><button type="button" data-escolha="recusado">Recusar</button><button type="button" class="aceitar" data-escolha="aceito">Aceitar</button></div>';
     document.body.appendChild(d);
     d.addEventListener("click", function (e) {
