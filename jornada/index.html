@@ -35,12 +35,14 @@ h1{font-size:23px;line-height:1.25;margin:4px 0 10px}h2{font-size:18px;margin:22
 .insn{flex:0 0 26px;height:26px;border-radius:50%;background:var(--soft);display:grid;place-items:center;font-weight:900;font-size:13px}.ins.sur .insn{background:#F9CB39;color:#0A0F24}
 .lock{position:relative;margin-top:16px;border-radius:16px;overflow:hidden;border:1px dashed var(--line)}.lockv{filter:blur(4px);opacity:.5;padding:10px;display:grid;gap:8px;pointer-events:none}
 .lockc{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:14px;background:rgba(10,15,36,.55)}
+.mini{position:relative;padding:0;cursor:pointer;background:none}.mini .eu{position:absolute;left:50%;top:50%;width:62%;height:62%;transform:translate(-50%,-50%);border-radius:50%;object-fit:cover;border:2px solid #F9CB39;box-shadow:0 0 12px rgba(0,0,0,.5)}.mini .maisf{position:absolute;left:4px;right:4px;bottom:4px;font-size:11px;font-weight:800;background:rgba(10,15,36,.85);color:#F9CB39;border-radius:8px;padding:2px 0}
+.fotocad{display:flex;gap:12px;align-items:center;text-align:left}.fotob{flex:0 0 64px;width:64px;height:64px;border-radius:50%;border:2px dashed #F9CB39;background:var(--field);font-size:26px;cursor:pointer;padding:0;overflow:hidden}.fotob img{width:100%;height:100%;object-fit:cover}
 .logo{display:flex;align-items:center;gap:8px;color:var(--ink);text-decoration:none;font-size:22px}
 .cad{display:grid;gap:12px;text-align:left;margin:18px 0 4px}.cad label{display:grid;gap:6px;font-weight:700;font-size:15px}.cad input[type=text],.cad input[type=tel]{font:inherit;font-size:17px;padding:13px 14px;border-radius:12px;border:1px solid var(--line);background:var(--field);color:var(--ink)}
 .cad .ck{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:14px;color:var(--mute)}.cad .ck input{width:22px;height:22px;margin-top:1px;flex:0 0 22px}.cad a{color:var(--pe)}.erro{color:#FF9AAE;font-weight:700;margin:0;min-height:1em;font-size:14px}
 .nota{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:16px}@media(min-width:520px){.nota{grid-template-columns:repeat(11,1fr)}}.nota button{font:inherit;font-weight:900;font-size:18px;height:52px;border-radius:12px;border:1px solid var(--line);background:var(--field);color:var(--ink);cursor:pointer}.nota button.on{background:var(--pe);color:#0A0F24;border-color:var(--pe)}
 .hero a.btn{display:inline-block;text-decoration:none;margin-top:10px}
-</style></head><body><div class="w" id="app"></div>
+</style></head><body><div class="w" id="app"></div><input type="file" id="fotoin" accept="image/*" hidden>
 <script src="config.js"></script>
 <script>/* ---------- estímulos sensoriais (sons feitos aqui, sem arquivos) ---------- */
 let AC=null,TOCANDO=null;
@@ -278,13 +280,14 @@ function perfil(){const sc=[0,0,0,0,0,0,0];SEN.forEach(([id,,,,,tiles])=>(J.esc[
 function mapaSVG(){FID=Math.floor(Math.random()*1e6);const fav=SEN.map(([id,,,,,tiles],k)=>{const n=(J.esc[id]||[])[0];return n&&META[id][n]?META[id][n][1]:null;});
  A=fav.map(c=>c||'#3A4270');const v=(J.esc.mapa||[])[0];const tv=SEN[0][5].find(t=>t.n===v);return `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">${(tv?tv.art:vinci)()}</svg>`;}
 function topo(){const n=SEN.filter(s=>feito(s[0])).length;const prox=SEN.findIndex(s=>!feito(s[0]));
- return `<div class="topo"><div class="mini">${mapaSVG()}</div><div style="flex:1;min-width:0"><div class="small mute">Seu mapa · ${n} de 7 sentidos</div>
+ return `<div class="topo"><button class="mini" data-a="foto" aria-label="${J.foto?'Trocar a sua foto':'Colocar a sua foto'}">${mapaSVG()}${J.foto?`<img class="eu" src="${J.foto}" alt="">`:'<span class="maisf">+ sua foto</span>'}</button><div style="flex:1;min-width:0"><div class="small mute">Seu mapa · ${n} de 7 sentidos</div>
  <div class="nums">${SEN.map(([id,sen,ic,cor],k)=>`<button class="num ${feito(id)?'ok':''} ${J.tela==='sen'&&J.i===k?'at':''} ${k===prox?'glow':''}" style="--c:${cor}" data-a="ir" data-k="${k}" aria-label="Sentido ${k+1}: ${sen}${feito(id)?' (feito)':''}">${feito(id)?'✓':k+1}</button>`).join('')}</div>
  <div class="dots">${SEN.map(([id,,,cor])=>`<i style="${feito(id)?`background:${cor};box-shadow:0 0 8px ${cor}`:''}"></i>`).join('')}</div><div class="small mute">${n===7?'Tudo pronto!':`Faltam ${7-n} ${7-n===1?'sentido':'sentidos'}`}</div></div></div>`;}
 function vAbre(){if(!temConvite)return `<div class="hero"><div class="luzes">${C.map(c=>`<i style="background:${c};box-shadow:0 0 10px ${c}"></i>`).join('')}</div><div class="k">Jornada dos 7entidos</div><h1 class="f">Esta jornada é por convite.</h1><p class="mute">Para participar, use o link que você recebeu do 7entidos.</p><a class="btn" href="/">Conhecer o 7entidos</a></div>`;
  return `<div class="hero"><div class="luzes">${C.map(c=>`<i style="background:${c};box-shadow:0 0 10px ${c}"></i>`).join('')}</div><div class="k">Jornada dos 7entidos · fase 1</div><h1 class="f">Escolha 7 de 15.<br>Sete vezes.</h1>
  <p class="mute">Em cada um dos 7 sentidos há 15 opções. Você escolhe as 7 de que mais gosta, na ordem: a primeira é a favorita. No fim, nasce a imagem dos seus 7 sentidos e um relatório com 10 descobertas sobre você. Leva uns 7 minutos.</p>
  <div class="cad"><label>Seu nome<input id="cnome" type="text" maxlength="60" autocomplete="name" value="${esc(J.nome)}"></label><label>Seu celular (WhatsApp)<input id="ccel" type="tel" inputmode="tel" maxlength="20" autocomplete="tel" placeholder="(13) 99999-9999" value="${esc(J.cel)}"></label>
+ <div class="fotocad"><button type="button" class="fotob" data-a="foto">${J.foto?`<img src="${J.foto}" alt="">`:'📷'}</button><div><b>Sua foto (opcional)</b><div class="small mute">Ela aparece no centro do seu mapa. Fica só no seu celular e não vai para lugar nenhum. Dá para trocar a qualquer momento tocando no mapa lá em cima.</div></div></div>
  <label class="ck"><input id="cok" type="checkbox" ${J.ok?'checked':''}><span>Concordo em participar e que o 7entidos guarde meu nome, celular e escolhas para melhorar o app e falar comigo sobre ele. Posso pedir para apagar quando quiser. Veja a <a href="/privacidade.html" target="_blank" rel="noopener">política de privacidade</a>.</span></label><p class="erro" id="cerro" role="alert"></p></div>
  <button class="btn pri big" data-a="comeca">Começar a jornada</button><p class="small mute">Sem resposta certa. O 7entidos não é terapia nem tratamento.</p></div>`;}
 function vNota(){return `<div class="hero" style="padding-top:20px"><div class="k">Antes de ver o seu mapa</div><h1 class="f" style="font-size:30px">Depois dessa fase, qual é a sua sensação agora?</h1><p class="mute">De 0 a 10. Um toque.</p>
@@ -296,7 +299,7 @@ function vSen(){const [id,sen,ic,cor,,tiles]=SEN[J.i];const m=J.esc[id]||[];
  <div class="grid">${(A=['#E9B10E','#2F7FD1','#E8643A','#3E9E5E','#D9487E','#7457C9','#17A99B'],tiles).map((t,k)=>{const o=m.indexOf(t.n);const on=o>=0;const dis=!on&&m.length>=7;return `<div class="tile ${on?'on':''} ${dis?'dis':''}" role="button" tabindex="0" data-a="pick" data-v="${esc(t.n)}" aria-pressed="${on}" style="--c:${cor}"><span class="box">${on?o+1:''}</span>${t.som?`<button class="pl" data-a="play" data-som="${t.som}" aria-label="Ouvir ${esc(t.n)}">▶</button>`:''}<svg viewBox="0 0 300 300">${t.art()}</svg><b>${esc(t.n)}</b></div>`;}).join('')}</div>
  <div class="row"><button class="btn" data-a="volta">← Voltar</button>${m.length?`<button class="btn" data-a="limpa">Limpar</button>`:''}<span class="sp"></span><button class="btn pri" data-a="prox" ${m.length<7?'disabled':''}>${J.i<6?'Próximo sentido →':'Ver meu mapa →'}</button></div>`;}
 function vFim(){const p=perfil();const [tn,ti,tk,td]=TAGS[p.top],[sn,si]=TAGS[p.seg];
- return `<div class="k">Minha imagem dos 7 sentidos</div><h1 class="f" style="font-size:30px">Perfil ${tn} + ${sn}</h1>
+ return `<div class="k">Minha imagem dos 7 sentidos</div><div style="display:flex;gap:12px;align-items:center">${J.foto?`<img src="${J.foto}" alt="" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid #F9CB39">`:''}<h1 class="f" style="font-size:30px;margin:0">Perfil ${tn} + ${sn}</h1></div>
  <div class="mapa" id="mp">${mapaSVG()}</div><p>${esc(td)} Logo depois vem <b>${esc(sn)}</b> (${esc(TAGS[p.seg][2])}).</p>
  ${relHTML(J,p,'pede')}
  <h2>As 7 forças do seu mapa</h2><div class="barras">${TAGS.map(([n,ic],k)=>`<div class="bl"><span>${ic} ${n}</span><div class="bt"><i style="width:${Math.round(p.sc[k]/p.max*100)}%;background:${C[k]}"></i></div><b>${p.sc[k]}</b></div>`).join('')}</div>
@@ -318,6 +321,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b
  if(a==='play'){e.stopPropagation();const on=b.classList.contains('on');para();document.querySelectorAll('.pl.on').forEach(x=>{x.classList.remove('on');x.textContent='▶';});if(!on){toca(b.dataset.som);b.classList.add('on');b.textContent='■';}return;}
  if(a==='comeca'){const nm=document.getElementById('cnome'),ce=document.getElementById('ccel'),ok=document.getElementById('cok'),er=document.getElementById('cerro');if(nm){const nome=nm.value.trim(),dig=ce.value.replace(/\D/g,'');if(nome.length<2){er.textContent='Escreva o seu nome.';nm.focus();return;}if(dig.length<10||dig.length>13){er.textContent='Escreva um celular com DDD, por exemplo (13) 99999-9999.';ce.focus();return;}if(!ok.checked){er.textContent='Marque o "concordo" para continuar.';return;}const novo=!J.ok;J.nome=nome;J.cel=ce.value.trim();J.ok=true;if(novo)enviar('inicio');}
   J.tela='sen';J.i=0;J.t0=Date.now();salva();render();scrollTo(0,0);return;}
+ if(a==='foto'){const i=document.getElementById('fotoin');i.value='';i.click();return;}
  if(a==='nota'){J.nota=+b.dataset.n;salva();render();return;}
  if(a==='verfim'){if(J.nota===null)return;J.tela='fim';salva();enviar('completa');render();scrollTo(0,0);return;}
  if(a==='ir'){para();J.tela='sen';J.i=+b.dataset.k;render();return;}
@@ -327,6 +331,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b
  if(a==='volta'){para();if(J.i>0)J.i--;else J.tela='abre';salva();render();scrollTo(0,0);return;}
  if(a==='refaz'){J.t={};J.pede=null;J.esc={};J.nota=null;J.i=0;J.tela='sen';J.t0=Date.now();salva();render();scrollTo(0,0);return;}
  if(a==='baixa'){baixa();return;}});
+document.getElementById('fotoin').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f)return;const nm=document.getElementById('cnome'),ce=document.getElementById('ccel');if(nm){J.nome=nm.value;J.cel=ce.value;}const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const S=240,cv=document.createElement('canvas');cv.width=cv.height=S;const g=cv.getContext('2d');const m=Math.min(im.width,im.height);g.drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,S,S);J.foto=cv.toDataURL('image/jpeg',.8);const y=scrollY;render();scrollTo(0,y);};im.src=r.result;};r.readAsDataURL(f);});
 document.addEventListener('keydown',e=>{const t=e.target.closest&&e.target.closest('.tile');if(t&&(e.key==='Enter'||e.key===' ')){e.preventDefault();t.click();}});
 render();
 </script></body></html>
