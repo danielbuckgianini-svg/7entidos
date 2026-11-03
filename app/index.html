@@ -245,10 +245,12 @@ const clone=(o)=>JSON.parse(JSON.stringify(o));
 
 /* ============ LOGO ============ */
 function LogoMark({size=40,variant="light",title}){
-  // Símbolo 7entidos “Contando 7”: 5 + 2 risquinhos; o risco do meio em amarelo
-  const ink=variant==="dark"?"#F4EFFC":"#2B2B2B";const diag=variant==="dark"?"#FFD43B":"#E0A800";
-  return html`<svg width=${size} height=${size} viewBox="0 0 64 64" role="img" aria-label=${title||"Símbolo 7entidos"}>
-    <line x1="10.2" y1="15.4" x2="10.2" y2="48.6" stroke=${ink} stroke-width="4.2" stroke-linecap="round"/><line x1="16.6" y1="15.4" x2="16.6" y2="48.6" stroke=${ink} stroke-width="4.2" stroke-linecap="round"/><line x1="23" y1="15.4" x2="23" y2="48.6" stroke=${ink} stroke-width="4.2" stroke-linecap="round"/><line x1="29.4" y1="15.4" x2="29.4" y2="48.6" stroke=${ink} stroke-width="4.2" stroke-linecap="round"/><line x1="44.8" y1="15.4" x2="44.8" y2="48.6" stroke=${ink} stroke-width="4.2" stroke-linecap="round"/><line x1="52.5" y1="15.4" x2="52.5" y2="48.6" stroke=${ink} stroke-width="4.2" stroke-linecap="round"/><line x1="5.1" y1="42.2" x2="34.6" y2="21.8" stroke=${diag} stroke-width="4.2" stroke-linecap="round"/>
+  // Símbolo 7entidos (aprovado em 02/11/2026): 3 traços em cima e 3 embaixo, um conjunto sobre o outro, cortados por uma diagonal amarela
+  const ink=variant==="dark"?"#FFFFFF":"#2B2B2B";const diag=variant==="dark"?"#F9C51B":"#E0A800";
+  const t=[[457,276,510],[509,276,463],[561,276,410],[515,575,706],[567,523,706],[619,477,706]];
+  return html`<svg width=${size} height=${size} viewBox="280 231 520 520" role="img" aria-label=${title||"Símbolo 7entidos"}>
+    ${t.map(([x,a,b],i)=>html`<line key=${i} x1=${x} y1=${a} x2=${x} y2=${b} stroke=${ink} stroke-width="28" stroke-linecap="round"/>`)}
+    <line x1="440" y1="590" x2="637" y2="396" stroke=${diag} stroke-width="26" stroke-linecap="round"/>
   </svg>`;
 }
 function AppIcon({size=96}){
@@ -1443,7 +1445,7 @@ function Identidade({toast}){
   const pal=[["Violeta profundo","#342052"],["Roxo principal","#7954C7"],["Lavanda","#BDA8EB"],["Lilás muito claro","#F4EFFC"],["Dourado suave","#E5BC74"],["Branco","#FFFFFF"],["Texto escuro","#251D31"]];
   async function copy(){try{await navigator.clipboard.writeText(LOGO_SVG_SOURCE);toast("SVG copiado")}catch(e){toast("Não foi possível copiar — selecione o código abaixo")}}
   return html`<div class="fade"><div class="eyebrow">Identidade visual</div><h1>7entidos</h1>
-    <p class="muted" style=${{maxWidth:700}}>O símbolo se chama <b>Contando 7</b>: os risquinhos que a gente usa para contar, 5 e mais 2, como os 7 sentidos. O risco do meio, em amarelo, lembra que cada boa sensação conta.</p>
+    <p class="muted" style=${{maxWidth:700}}>O símbolo do 7entidos tem três traços em cima e três embaixo, um conjunto sobre o outro, cruzados por uma diagonal amarela, sobre o fundo azul-noite.</p>
     <div class="grid g2">
       <div class="card" style=${{display:"grid",placeItems:"center",minHeight:200,background:"#FFFFFF"}}><${Lockup} variant="light" size=${64}/><span class="small" style=${{color:"#6A5F7C"}}>Versão clara</span></div>
       <div class="card" style=${{display:"grid",placeItems:"center",minHeight:200,background:"#342052",border:0}}><${Lockup} variant="dark" size=${64}/><span class="small" style=${{color:"#BDA8EB"}}>Versão escura</span></div>
