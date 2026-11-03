@@ -4,7 +4,7 @@
    link "Preferências de estatísticas" no rodapé. */
 (function () {
   var A = (window.SITE && window.SITE.analytics) || { idMedicao: "G-0GPWW3EZZF", ativo: true };
-  var ID = A.idMedicao, CHAVE = "7entidos-estatisticas", carregado = false;
+  var ID = A.idMedicao, CHAVE = "7entidos-estatisticas-v2", carregado = false;
 
   function ler() { try { return localStorage.getItem(CHAVE); } catch (e) { return null; } }
   function gravar(v) { try { localStorage.setItem(CHAVE, v); } catch (e) {} }
@@ -17,6 +17,8 @@
     window.gtag = function () { window.dataLayer.push(arguments); };
     window.gtag("js", new Date());
     window.gtag("config", ID, { anonymize_ip: true, allow_google_signals: false, allow_ad_personalization_signals: false });
+    /* Página com meta de anúncio (ex.: pré-venda): conta a visita como resultado no Google Ads, só depois do "Aceitar" */
+    if (window.CONVERSAO_ADS) window.gtag("event", window.CONVERSAO_ADS);
     var s = document.createElement("script");
     s.async = true;
     s.src = "https://www.googletagmanager.com/gtag/js?id=" + ID;
@@ -32,7 +34,7 @@
     d.setAttribute("role", "dialog");
     d.setAttribute("aria-label", "Estatísticas de visitas");
     d.innerHTML =
-      '<p><strong>Podemos contar as visitas?</strong> Usamos o Google Analytics só para saber quantas pessoas visitam o site e quais partes são mais lidas. Nada é carregado sem o seu “Aceitar”. <a href="privacidade.html">Saiba mais</a></p>' +
+      '<p><strong>Podemos contar as visitas?</strong> Usamos ferramentas do Google para saber quantas pessoas visitam o site, quais partes são mais lidas e quantas chegaram pelos nossos anúncios. Não usamos para mostrar anúncios personalizados a você. Nada é carregado sem o seu “Aceitar”. <a href="privacidade.html">Saiba mais</a></p>' +
       '<div class="botoes"><button type="button" data-escolha="recusado">Recusar</button><button type="button" class="aceitar" data-escolha="aceito">Aceitar</button></div>';
     document.body.appendChild(d);
     d.addEventListener("click", function (e) {
