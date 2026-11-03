@@ -37,6 +37,7 @@ h1{font-size:23px;line-height:1.25;margin:4px 0 10px}h2{font-size:18px;margin:22
 .lockc{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:14px;background:rgba(10,15,36,.55)}
 .mini{position:relative;padding:0;cursor:pointer;background:none}.mini .eu{position:absolute;left:50%;top:50%;width:62%;height:62%;transform:translate(-50%,-50%);border-radius:50%;object-fit:cover;border:2px solid #F9CB39;box-shadow:0 0 12px rgba(0,0,0,.5)}.mini .maisf{position:absolute;left:4px;right:4px;bottom:4px;font-size:11px;font-weight:800;background:rgba(10,15,36,.85);color:#F9CB39;border-radius:8px;padding:2px 0}
 .fotocad{display:flex;gap:12px;align-items:center;text-align:left}.fotob{flex:0 0 64px;width:64px;height:64px;border-radius:50%;border:2px dashed #F9CB39;background:var(--field);font-size:26px;cursor:pointer;padding:0;overflow:hidden}.fotob img{width:100%;height:100%;object-fit:cover}
+.aval{margin-top:18px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}.aval.ok{border-color:#7DDB8B}.avq{display:block;margin:12px 0}.avo{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.avo button{font:inherit;font-size:14px;font-weight:700;border:1px solid var(--line);background:var(--field);color:var(--ink);border-radius:999px;padding:8px 12px;cursor:pointer}.avo button.on{background:var(--pe);color:#0A0F24;border-color:var(--pe)}.aval textarea{font:inherit;width:100%;margin-top:6px;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--field);color:var(--ink)}
 .logo{display:flex;align-items:center;gap:8px;color:var(--ink);text-decoration:none;font-size:22px}
 .cad{display:grid;gap:12px;text-align:left;margin:18px 0 4px}.cad label{display:grid;gap:6px;font-weight:700;font-size:15px}.cad input[type=text],.cad input[type=tel]{font:inherit;font-size:17px;padding:13px 14px;border-radius:12px;border:1px solid var(--line);background:var(--field);color:var(--ink)}
 .cad .ck{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:14px;color:var(--mute)}.cad .ck input{width:22px;height:22px;margin-top:1px;flex:0 0 22px}.cad a{color:var(--pe)}.erro{color:#FF9AAE;font-weight:700;margin:0;min-height:1em;font-size:14px}
@@ -264,7 +265,7 @@ let J={tela:'abre',i:0,esc:{},id:'',nome:'',cel:'',ok:false,nota:null};let saveT
 try{const s=JSON.parse(localStorage.getItem('jornada7')||'null');if(s&&s.id)J=Object.assign(J,s);}catch(e){}
 if(!J.id)J.id='J'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const temConvite=(()=>{try{const q=new URLSearchParams(location.search).get('c');if(q===CONVITE){localStorage.setItem('jornada7c','1');return true;}return localStorage.getItem('jornada7c')==='1';}catch(e){return new URLSearchParams(location.search).get('c')===CONVITE;}})();
-function enviar(tipo){if(!PLANILHA_URL)return;const p=perfil();const n=SEN.filter(s=>feito(s[0])).length;const corpo={c:CONVITE,tipo,id:J.id,nome:J.nome,cel:J.cel,em:new Date().toISOString(),feitos:n,nota:J.nota,perfil:n===7?TAGS[p.top][0]+' + '+TAGS[p.seg][0]:'',forcas:TAGS.map((t,k)=>t[0]+' '+p.sc[k]).join(' · '),escolhas:SEN.map(s=>s[1]+': '+(J.esc[s[0]]||[]).map((x,i)=>(i+1)+'. '+x).join(' | ')),tempos:SEN.map(s=>Math.round(((J.t||{})[s[0]]||0)/1000)),pede:J.pede||null,descobertas:n===7?insights(J,p,TAGS).map(x=>(x.s?'✨ ':'')+x.t):[]};
+function enviar(tipo){if(!PLANILHA_URL)return;const p=perfil();const n=SEN.filter(s=>feito(s[0])).length;const corpo={c:CONVITE,tipo,id:J.id,nome:J.nome,cel:J.cel,em:new Date().toISOString(),feitos:n,nota:J.nota,perfil:n===7?TAGS[p.top][0]+' + '+TAGS[p.seg][0]:'',forcas:TAGS.map((t,k)=>t[0]+' '+p.sc[k]).join(' · '),escolhas:SEN.map(s=>s[1]+': '+(J.esc[s[0]]||[]).map((x,i)=>(i+1)+'. '+x).join(' | ')),tempos:SEN.map(s=>Math.round(((J.t||{})[s[0]]||0)/1000)),pede:J.pede||null,avaliacao:AV.map((x,i)=>(J.av||{})[i]||''),comentario:J.avTxt||'',descobertas:n===7?insights(J,p,TAGS).map(x=>(x.s?'✨ ':'')+x.t):[]};
  try{fetch(PLANILHA_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(corpo),keepalive:true});}catch(e){}}
 const ESC=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function relHTML(J,p,ed){const L=insights(J,p,TAGS);const a=L.filter(x=>!x.s),b=L.filter(x=>x.s);const it=(x,i)=>`<div class="ins ${x.s?'sur':''}"><span class="insn">${i}</span><div><b>${ESC(x.t)}</b><div class="small" style="opacity:.85;margin-top:2px">${ESC(x.d)}</div></div></div>`;
@@ -290,6 +291,18 @@ function vAbre(){if(!temConvite)return `<div class="hero"><div class="luzes">${C
  <div class="fotocad"><button type="button" class="fotob" data-a="foto">${J.foto?`<img src="${J.foto}" alt="">`:'📷'}</button><div><b>Sua foto (opcional)</b><div class="small mute">Ela aparece no centro do seu mapa. Fica só no seu celular e não vai para lugar nenhum. Dá para trocar a qualquer momento tocando no mapa lá em cima.</div></div></div>
  <label class="ck"><input id="cok" type="checkbox" ${J.ok?'checked':''}><span>Concordo em participar e que o 7entidos guarde meu nome, celular e escolhas para melhorar o app e falar comigo sobre ele. Posso pedir para apagar quando quiser. Veja a <a href="/privacidade.html" target="_blank" rel="noopener">política de privacidade</a>.</span></label><p class="erro" id="cerro" role="alert"></p></div>
  <button class="btn pri big" data-a="comeca">Começar a jornada</button><p class="small mute">Sem resposta certa. O 7entidos não é terapia nem tratamento.</p></div>`;}
+const AV=[['Como foi fazer a Jornada?',['Muito gostoso','Gostoso','Normal','Cansativo']],
+ ['O tamanho (7 sentidos com 15 opções cada) foi…',['Curto demais','Na medida','Um pouco longo','Longo demais']],
+ ['As opções tinham a ver com você?',['Quase todas','Muitas','Poucas','Quase nenhuma']],
+ ['Qual sentido foi mais gostoso de escolher?',['Visão','Audição','Tato','Olfato','Paladar','Equilíbrio','Noção do corpo']],
+ ['A imagem do seu mapa tem a sua cara?',['Muito','Um pouco','Não muito','Nada']],
+ ['As 10 descobertas…',['Me surpreenderam','Confirmaram o que eu já sabia','Algumas não fizeram sentido','Não li direito']],
+ ['Você indicaria a Jornada para um amigo?',['Com certeza','Talvez','Não']]];
+function vAval(){const R=J.av||{};const n=Object.keys(R).length;if(J.avOk)return `<div class="aval ok"><b>Obrigado! ✓</b><div class="small mute">Suas respostas vão ajudar a melhorar a Jornada.</div></div>`;
+ return `<div class="aval"><h2 style="margin-top:0">Ajude a melhorar a Jornada</h2><div class="small mute" style="margin:-4px 0 10px">7 perguntas rápidas, um toque em cada. ${n} de 7 respondidas.</div>
+ ${AV.map(([q,o],i)=>`<div class="avq"><b>${i+1}. ${esc(q)}</b><div class="avo">${o.map(x=>`<button class="${R[i]===x?'on':''}" data-a="av" data-i="${i}" data-v="${esc(x)}">${esc(x)}</button>`).join('')}</div></div>`).join('')}
+ <label class="avq"><b>Quer dizer mais alguma coisa? (opcional)</b><textarea id="avtxt" maxlength="500" rows="3">${esc(J.avTxt||'')}</textarea></label>
+ <p class="erro" id="averro" role="alert"></p><button class="btn pri" style="width:100%" data-a="avenvia">Enviar respostas</button></div>`;}
 function vNota(){return `<div class="hero" style="padding-top:20px"><div class="k">Antes de ver o seu mapa</div><h1 class="f" style="font-size:30px">Depois dessa fase, qual é a sua sensação agora?</h1><p class="mute">De 0 a 10. Um toque.</p>
  <div class="nota">${[...Array(11)].map((_,n)=>`<button class="${J.nota===n?'on':''}" data-a="nota" data-n="${n}">${n}</button>`).join('')}</div><div class="small mute" style="display:flex;justify-content:space-between;margin-top:6px"><span>0 = nada bem</span><span>10 = muito bem</span></div>
  <button class="btn pri big" data-a="verfim" ${J.nota===null?'disabled':''}>Ver a imagem dos meus 7 sentidos →</button></div>`;}
@@ -302,6 +315,7 @@ function vFim(){const p=perfil();const [tn,ti,tk,td]=TAGS[p.top],[sn,si]=TAGS[p.
  return `<div class="k">Minha imagem dos 7 sentidos</div><div style="display:flex;gap:12px;align-items:center">${J.foto?`<img src="${J.foto}" alt="" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid #F9CB39">`:''}<h1 class="f" style="font-size:30px;margin:0">Perfil ${tn} + ${sn}</h1></div>
  <div class="mapa" id="mp">${mapaSVG()}</div><p>${esc(td)} Logo depois vem <b>${esc(sn)}</b> (${esc(TAGS[p.seg][2])}).</p>
  ${relHTML(J,p,'pede')}
+ ${vAval()}
  <h2>As 7 forças do seu mapa</h2><div class="barras">${TAGS.map(([n,ic],k)=>`<div class="bl"><span>${ic} ${n}</span><div class="bt"><i style="width:${Math.round(p.sc[k]/p.max*100)}%;background:${C[k]}"></i></div><b>${p.sc[k]}</b></div>`).join('')}</div>
  <div class="row"><button class="btn pri" data-a="baixa">Baixar minha imagem</button><span class="sp"></span><button class="btn" data-a="refaz">Refazer</button></div><p class="small mute" id="bx"></p>
  <p class="small mute">O perfil mostra só as suas escolhas de hoje. Não é diagnóstico nem avaliação.</p>`;}
@@ -322,6 +336,8 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b
  if(a==='comeca'){const nm=document.getElementById('cnome'),ce=document.getElementById('ccel'),ok=document.getElementById('cok'),er=document.getElementById('cerro');if(nm){const nome=nm.value.trim(),dig=ce.value.replace(/\D/g,'');if(nome.length<2){er.textContent='Escreva o seu nome.';nm.focus();return;}if(dig.length<10||dig.length>13){er.textContent='Escreva um celular com DDD, por exemplo (13) 99999-9999.';ce.focus();return;}if(!ok.checked){er.textContent='Marque o "concordo" para continuar.';return;}const novo=!J.ok;J.nome=nome;J.cel=ce.value.trim();J.ok=true;if(novo)enviar('inicio');}
   J.tela='sen';J.i=0;J.t0=Date.now();salva();render();scrollTo(0,0);return;}
  if(a==='foto'){const i=document.getElementById('fotoin');i.value='';i.click();return;}
+ if(a==='av'){J.av=J.av||{};J.av[b.dataset.i]=b.dataset.v;const y=scrollY;render();scrollTo(0,y);return;}
+ if(a==='avenvia'){const t=document.getElementById('avtxt');J.avTxt=t?t.value.trim():'';const f=7-Object.keys(J.av||{}).length;if(f>0){document.getElementById('averro').textContent='Falta'+(f>1?'m ':' ')+f+(f>1?' perguntas.':' pergunta.');return;}J.avOk=true;enviar('avaliacao');const y=scrollY;render();scrollTo(0,y);return;}
  if(a==='nota'){J.nota=+b.dataset.n;salva();render();return;}
  if(a==='verfim'){if(J.nota===null)return;J.tela='fim';salva();enviar('completa');render();scrollTo(0,0);return;}
  if(a==='ir'){para();J.tela='sen';J.i=+b.dataset.k;render();return;}
@@ -329,7 +345,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b
  if(a==='limpa'){J.esc[SEN[J.i][0]]=[];salva();render();return;}
  if(a==='prox'){para();if(J.i<6){J.i++;J.tela='sen';}else J.tela=J.nota===null?'nota':'fim';render();scrollTo(0,0);return;}
  if(a==='volta'){para();if(J.i>0)J.i--;else J.tela='abre';salva();render();scrollTo(0,0);return;}
- if(a==='refaz'){J.t={};J.pede=null;J.esc={};J.nota=null;J.i=0;J.tela='sen';J.t0=Date.now();salva();render();scrollTo(0,0);return;}
+ if(a==='refaz'){J.av={};J.avOk=false;J.avTxt='';J.t={};J.pede=null;J.esc={};J.nota=null;J.i=0;J.tela='sen';J.t0=Date.now();salva();render();scrollTo(0,0);return;}
  if(a==='baixa'){baixa();return;}});
 document.getElementById('fotoin').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f)return;const nm=document.getElementById('cnome'),ce=document.getElementById('ccel');if(nm){J.nome=nm.value;J.cel=ce.value;}const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const S=240,cv=document.createElement('canvas');cv.width=cv.height=S;const g=cv.getContext('2d');const m=Math.min(im.width,im.height);g.drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,S,S);J.foto=cv.toDataURL('image/jpeg',.8);const y=scrollY;render();scrollTo(0,y);};im.src=r.result;};r.readAsDataURL(f);});
 document.addEventListener('keydown',e=>{const t=e.target.closest&&e.target.closest('.tile');if(t&&(e.key==='Enter'||e.key===' ')){e.preventDefault();t.click();}});
