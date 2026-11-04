@@ -53,17 +53,27 @@ h1{font-size:23px;line-height:1.25;margin:4px 0 10px}h2{font-size:18px;margin:22
 .dez{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.dz{background:var(--field);border:1px solid #F9CB39;border-radius:12px;padding:6px;display:flex;flex-direction:column;gap:2px}.dz svg{width:100%;height:auto;border-radius:8px}.dz b{font-size:12.5px}.dz small{font-size:11px;color:var(--mute)}
 .fav3{display:flex;gap:12px;align-items:center;margin:6px 0 10px}.fav3 svg{width:96px;height:96px;border-radius:14px;flex:0 0 96px}
 .lem{display:flex;gap:10px;align-items:center;background:var(--field);border:1px solid var(--line);border-left:4px solid var(--c);padding:8px 10px;margin-bottom:6px}
-.o2{position:relative;background:var(--field);border:2px solid var(--line);border-radius:14px;padding:6px 6px 8px;cursor:pointer;display:flex;flex-direction:column;gap:5px;-webkit-tap-highlight-color:transparent}
-.o2 svg{width:100%;height:auto;border-radius:10px;display:block}.o2 b{font-size:14px;line-height:1.2}.o2.on{border-color:var(--c);box-shadow:0 0 0 1px var(--c)}.o2.dis{opacity:.45}
+.o2{position:relative;background:var(--field);border:2px solid var(--line);border-radius:14px;padding:6px 6px 8px;cursor:pointer;display:flex;flex-direction:column;gap:5px;-webkit-tap-highlight-color:transparent;transition:transform .15s}
+.o2 svg{width:100%;height:auto;border-radius:10px;display:block}.o2 b{font-size:14px;line-height:1.2}.o2.on{border-color:var(--c);box-shadow:0 0 0 1px var(--c),0 0 18px -4px var(--c)}.o2.dis{opacity:.45}.o2:active{transform:scale(.96)}
 .o2n{position:absolute;top:10px;left:10px;width:34px;height:34px;border-radius:10px;background:#F7F2E8;border:2px solid #0A0F24;display:grid;place-items:center;font-weight:900;color:#0A0F24;font-size:18px;z-index:1}.o2.on .o2n{background:var(--c)}
-.o2 .pl2{position:absolute;top:10px;right:10px;z-index:1}
+.o2 .pl2,.dc .pl2{position:absolute;top:10px;right:10px;z-index:2}
 .ord{display:grid;gap:10px;margin-bottom:6px}.ordA{grid-template-columns:repeat(2,minmax(0,1fr))}.ordA .o2:last-child:nth-child(odd){grid-column:1/-1;width:calc(50% - 5px);justify-self:center}
-.ordB{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.ordB .o2 b{font-size:12.5px}.ordB .o2n{width:28px;height:28px;font-size:15px;top:9px;left:9px}
-.ordC{grid-template-columns:1fr;gap:8px}.ordC .o2{flex-direction:row;align-items:center;gap:12px;padding:6px 10px 6px 6px}.ordC .o2 svg{width:84px;flex:0 0 84px}.ordC .o2 b{flex:1;font-size:16px}.ordC .o2n{position:static;order:3;flex:0 0 40px;width:40px;height:40px;font-size:20px}.ordC .o2 .pl2{position:static;order:-1}
-.ordD{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.ordD .o2 b{font-size:12.5px}.ordD .o2n{display:none}
-.fila{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin:0 0 12px;position:sticky;top:58px;z-index:4;background:rgba(10,15,36,.96);padding:6px 0}
+.ordD{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.ordD .o2 b{font-size:12.5px}
+.fila{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin:0 0 12px;position:sticky;top:74px;z-index:4;background:rgba(10,15,36,.96);padding:6px 0}
 .sl{position:relative;aspect-ratio:1;border-radius:10px;border:2px dashed var(--line);display:grid;place-items:center;overflow:hidden;color:var(--mute);font-weight:900}.sl.on{border:2px solid var(--c);cursor:pointer}.sl svg{position:absolute;inset:0;width:100%;height:100%}.sl span{position:relative;z-index:1}.sl.on span{position:absolute;top:2px;left:2px;background:var(--c);color:#0A0F24;border-radius:6px;font-size:11px;padding:0 4px}
+.pop{animation:pop .45s cubic-bezier(.3,1.6,.5,1)}@keyframes pop{0%{transform:scale(.85)}55%{transform:scale(1.08);box-shadow:0 0 0 3px var(--c),0 0 34px 6px var(--c)}100%{transform:scale(1)}}
+.tp{display:flex;gap:10px;align-items:center}.mm{width:54px;height:54px;flex:0 0 54px;border-radius:12px;overflow:hidden;border:1px solid var(--line)}.mm svg{display:block}
+.duh{text-align:center;font-weight:800;color:var(--pe);font-size:14px;margin:4px 0 8px}
+.duelo{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center}.vs{font-family:Fraunces,serif;font-size:20px;color:var(--mute)}
+.dc{position:relative;background:var(--field);border:2px solid var(--line);border-radius:16px;padding:7px 7px 10px;cursor:pointer;display:flex;flex-direction:column;gap:6px;transition:transform .25s,opacity .25s;-webkit-tap-highlight-color:transparent}.dc svg{width:100%;height:auto;border-radius:11px;display:block}.dc b{font-size:15px;text-align:center}
+.dc:hover{border-color:var(--c)}.dc.win{border-color:var(--c);transform:scale(1.06)}.dc.lose{opacity:.25;transform:scale(.9)}
+.cel{position:relative;text-align:center;background:var(--card);border:1px solid var(--c);border-radius:20px;padding:18px 14px;overflow:hidden;animation:pop .5s cubic-bezier(.3,1.6,.5,1)}
+.confe{position:absolute;inset:0;pointer-events:none}.confe i{position:absolute;top:-10px;width:8px;height:12px;border-radius:2px;animation:cai 1.4s ease-in forwards}@keyframes cai{to{transform:translateY(520px) rotate(540deg);opacity:0}}
+.celm{display:flex;justify-content:center;margin:12px 0 6px}.celm svg{border-radius:22px;border:1px solid var(--line);box-shadow:0 10px 40px -10px rgba(249,203,57,.35)}
+.celc{display:flex;gap:12px;align-items:center;text-align:left;justify-content:center;margin:14px 0}.celc svg{width:84px;height:84px;flex:0 0 84px;border-radius:14px}
+.f3p{margin-top:18px;background:linear-gradient(135deg,#1b1846,#111A3D);border:1px dashed #A98BFF;border-radius:16px;padding:14px;text-align:center}.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.chips span{font-size:13px;font-weight:700;background:var(--soft);border-radius:999px;padding:5px 10px;filter:blur(.3px)}
 .lays{background:#1d1640;border:1px dashed #F9CB39;border-radius:14px;padding:10px;margin-bottom:10px}.layb{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.layb button{font:inherit;font-size:13px;font-weight:700;border:1px solid var(--line);background:var(--field);color:var(--ink);border-radius:999px;padding:7px 11px;cursor:pointer}.layb button.on{background:#F9CB39;color:#0A0F24;border-color:#F9CB39}
+@media (prefers-reduced-motion:reduce){.pop,.cel,.confe i{animation:none}}
 </style></head><body><div class="w" id="app"></div><input type="file" id="fotoin" accept="image/*" hidden>
 <script src="../config.js"></script>
 <script>/* ---------- estímulos sensoriais (sons feitos aqui, sem arquivos) ---------- */
@@ -293,55 +303,94 @@ function bloqueio(fase){if(!temConvite)return `<div class="hero"><div class="k">
 const DEF_A=['#E9B10E','#2F7FD1','#E8643A','#3E9E5E','#D9487E','#7457C9','#17A99B'];
 
 const PERG2={mapa:'Qual imagem você mais gosta?',aud:'Toque ▶ para ouvir. Qual som você mais gosta?',tato:'Qual textura você mais gosta?',olf:'Qual cheiro você mais gosta?',pal:'Qual sabor você mais gosta?',equi:'Qual movimento você mais gosta?',corpo:'Qual destas você mais gosta?'};
-const LAYS=[['A','Grandes, 2 por linha'],['B','Médias, 3 por linha'],['C','Lista'],['D','Pódio: sobem para a fila']];
-let LAY='A';try{LAY=localStorage.getItem('j7lay')||(window.LAYOUT_PADRAO||'A');}catch(e){}
-let F=(J&&J.f2&&J.f2.ord)?J.f2:{i:-1,ord:{},mix:{},sens:null,quer3:false,fim:false};
+const MODOS=[['T','Toque e brilha'],['P','Pódio que sobe'],['D','Duelos: 2 por vez'],['R','Torneio da campeã']];
+const FORCA=[['Raiz','🌿','Parece que o ar livre e a natureza te fazem bem.'],['Ninho','☕','Parece que você se sente bem quando se sente em casa.'],['Vento','🌀','Parece que o seu corpo gosta de sair do lugar.'],['Lago','🌊','Parece que a pausa e a calma te fazem bem.'],['Faísca','✨','Parece que o que é intenso te acende.'],['Brisa','🍃','Parece que o leve e o fresco te fazem bem.'],['Abraço','🤗','Parece que estar junto de alguém te faz bem.']];
+let MODO='T';try{MODO=localStorage.getItem('j7modo')||(window.MODO_PADRAO||'T');}catch(e){}
+let F=(J&&J.f2&&J.f2.ord)?J.f2:{i:-1,ord:{},mix:{},du:{},tor:{},cel:false,sens:null,quer3:false,fim:false};F.du=F.du||{};F.tor=F.tor||{};
 const salva2=()=>{if(J){J.f2=F;salvaJ();}};
 const tileDe=(id,n)=>SEN.find(s=>s[0]===id)[5].find(t=>t.n===n);
 const ordDe=id=>F.ord[id]||(F.ord[id]=[]);
 const feito2=id=>ordDe(id).length>=7;
+let LASTK=null;
 function mix(id){if(!F.mix[id]){const L=(J.esc[id]||[]).slice();let s=0;for(const ch of (J.id||'x')+id)s=(s*31+ch.charCodeAt(0))%2147483647;const r=()=>(s=(s*16807+7)%2147483647)/2147483647;for(let i=L.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[L[i],L[j]]=[L[j],L[i]];}if(L.join()===(J.esc[id]||[]).join()&&L.length>1)L.push(L.shift());F.mix[id]=L;}return F.mix[id];}
 const fav=id=>(ordDe(id)[0])||(J.esc[id]||[])[0]||'';
+const forcaDe=(id,n)=>{try{return META[id][n][0];}catch(e){return 0;}};
+const corDe=(id,n)=>{try{return META[id][n][1];}catch(e){return '#888';}};
+/* ---------- retorno a cada toque: brilho, vibração e um som curtinho ---------- */
+const BASE={mapa:523.3,aud:587.3,tato:659.3,olf:698.5,pal:784,equi:880,corpo:987.8};
+function plim(id,pos){try{if(navigator.vibrate)navigator.vibrate(pos>=7?[18,40,18]:14);}catch(e){}const c=ac();if(!c)return;const go=()=>{const t=c.currentTime,f=(BASE[id]||660)*Math.pow(1.06,pos||0);tom(c,c.destination,f,t,.22,'sine',.16);tom(c,c.destination,f*2,t+.03,.14,'sine',.05);if(pos>=7){tom(c,c.destination,f*1.25,t+.12,.3,'sine',.12);tom(c,c.destination,f*1.5,t+.24,.4,'sine',.12);}};if(c.state!=='running')c.resume().then(go).catch(()=>{});else go();}
+/* ---------- o mapa que ganha cor ---------- */
+function mapa(tam){const vis=fav('mapa');const t=tileDe('mapa',vis);A=SEN.map(([id],k)=>feito2(id)?corDe(id,fav(id)):'#2A3360');const s=`<svg viewBox="0 0 300 300" width="${tam}" height="${tam}">${t?t.art():''}</svg>`;A=DEF_A.slice();return s;}
 function experiencias(){const top={};SEN.forEach(([id])=>top[id]=fav(id));const lo=s=>s.charAt(0).toLowerCase()+s.slice(1);
  return [`Ouça "${top.aud}" por 5 minutos enquanto toca em algo de ${lo(top.tato)}.`,`Prepare algo com sabor ${lo(top.pal)} e sinta o cheiro de ${lo(top.olf)}. Coma devagar, sem tela.`,`Comece com "${top.corpo}", depois faça um movimento de "${lo(top.equi)}". Termine olhando a imagem "${top.mapa}".`];}
 function mudou(){return SEN.filter(([id])=>ordDe(id)[0]&&(J.esc[id]||[])[0]&&ordDe(id)[0]!==(J.esc[id]||[])[0]);}
 function art(id,x){const t=tileDe(id,x);A=DEF_A.slice();return `<svg viewBox="0 0 300 300">${t?t.art():''}</svg>`;}
-function cartao(id,x,cor){const t=tileDe(id,x);const p=ordDe(id).indexOf(x)+1;const cheio=ordDe(id).length>=7&&!p;
- return `<div class="o2${p?' on':''}${cheio?' dis':''}" data-a="ord" data-k="${esc(x)}" style="--c:${cor}" role="button" tabindex="0" aria-label="${esc(x)}${p?', posição '+p:''}"><span class="o2n">${p||''}</span>${t&&t.som?`<button class="pl2" data-a="play" data-som="${t.som}" aria-label="Ouvir">▶</button>`:''}${art(id,x)}<b>${esc(x)}</b></div>`;}
-function fila(id,cor){const O=ordDe(id);return `<div class="fila">${[...Array(7)].map((_,k)=>{const x=O[k];return x?`<div class="sl on" data-a="ord" data-k="${esc(x)}" style="--c:${cor}" role="button" title="Tocar para tirar"><span>${k+1}</span>${art(id,x)}</div>`:`<div class="sl" style="--c:${cor}"><span>${k+1}</span></div>`;}).join('')}</div>`;}
-function seletor(){if(!window.PREVIA)return '';return `<div class="lays"><div class="small"><b>Sala visual:</b> como as imagens aparecem?</div><div class="layb">${LAYS.map(([k,t])=>`<button class="${LAY===k?'on':''}" data-a="lay" data-l="${k}">${k} · ${t}</button>`).join('')}</div></div>`;}
+const somBtn=(id,x)=>{const t=tileDe(id,x);return t&&t.som?`<button class="pl2" data-a="play" data-som="${t.som}" aria-label="Ouvir">▶</button>`:'';};
+function cartao(id,x,cor,semNum){const p=ordDe(id).indexOf(x)+1;const cheio=ordDe(id).length>=7&&!p;
+ return `<div class="o2${p?' on':''}${cheio?' dis':''}${LASTK===x?' pop':''}" data-a="ord" data-k="${esc(x)}" style="--c:${cor}" role="button" tabindex="0" aria-label="${esc(x)}${p?', posição '+p:''}">${semNum?'':`<span class="o2n">${p||''}</span>`}${somBtn(id,x)}${art(id,x)}<b>${esc(x)}</b></div>`;}
+function fila(id,cor){const O=ordDe(id);return `<div class="fila">${[...Array(7)].map((_,k)=>{const x=O[k];return x?`<div class="sl on${LASTK===x?' pop':''}" data-a="ord" data-k="${esc(x)}" style="--c:${cor}" role="button" title="Tocar para tirar"><span>${k+1}</span>${art(id,x)}</div>`:`<div class="sl" style="--c:${cor}"><span>${k+1}</span></div>`;}).join('')}</div>`;}
+/* ---------- duelos: a ordem sai sozinha (inserção por comparação) ---------- */
+function duEstado(id){let d=F.du[id];if(!d){const L=mix(id);d=F.du[id]={S:[L[0]],P:L.slice(1),lo:0,hi:1,n:0};}return d;}
+function duPar(id){const d=duEstado(id);if(!d.P.length)return null;const mid=Math.floor((d.lo+d.hi)/2);return [d.P[0],d.S[mid],mid];}
+function duVence(id,ganhou){const d=duEstado(id);const [x,y,mid]=duPar(id);d.n++;if(ganhou===x)d.hi=mid;else d.lo=mid+1;if(d.lo>=d.hi){d.S.splice(d.lo,0,x);d.P.shift();d.lo=0;d.hi=d.S.length;}if(!d.P.length)F.ord[id]=d.S.slice();}
+/* ---------- torneio: chaveamento até a campeã, depois ordena o resto ---------- */
+function torEstado(id){let t=F.tor[id];if(!t){t=F.tor[id]={viv:mix(id).slice(),prox:[],i:0,rod:1,n:0};}return t;}
+function torPar(id){const t=torEstado(id);if(t.viv.length===1)return null;if(t.i+1>=t.viv.length)return null;return [t.viv[t.i],t.viv[t.i+1]];}
+function torVence(id,g){const t=torEstado(id);t.prox.push(g);t.i+=2;t.n++;torFecha(id);}
+function torFecha(id){const t=torEstado(id);if(t.i===t.viv.length-1){t.prox.push(t.viv[t.i]);t.i++;}if(t.i>=t.viv.length){t.viv=t.prox;t.prox=[];t.i=0;t.rod++;}if(t.viv.length===1&&!ordDe(id).length){F.ord[id]=[t.viv[0]];}}
+function rodNome(t){return t.viv.length===2?'Final':t.viv.length<=4?'Semifinal':'1ª rodada';}
+function duelo(id,cor,a,b,cab){return `<div class="duh">${cab}</div><div class="duelo">${[a,b].map(x=>`<div class="dc${LASTK===x?' pop':''}" data-a="${MODO==='D'?'du':'tor'}" data-k="${esc(x)}" style="--c:${cor}" role="button" tabindex="0">${somBtn(id,x)}${art(id,x)}<b>${esc(x)}</b></div>`).join('<div class="vs">ou</div>')}</div><p class="small mute" style="text-align:center">Toque na que você prefere.</p>`;}
+function seletor(){if(!window.PREVIA)return '';return `<div class="lays"><div class="small"><b>Sala visual:</b> teste os 4 jeitos de ordenar</div><div class="layb">${MODOS.map(([k,t])=>`<button class="${MODO===k?'on':''}" data-a="modo" data-l="${k}">${t}</button>`).join('')}</div></div>`;}
+function topo(){return `<div class="topo2"><div class="tp"><div class="mm" title="O seu mapa ganha cor a cada sentido">${mapa(54)}</div><div style="flex:1"><div class="dots">${SEN.map(([sid,,,c],k)=>`<i style="${feito2(sid)?`background:${c};box-shadow:0 0 8px ${c}`:''}${k===F.i?';outline:2px solid #F4F1EA':''}"></i>`).join('')}</div><div class="small mute">Sentido ${F.i+1} de 7 · o seu mapa ganha cor a cada sentido</div></div></div></div>`;}
+function celebra(id,sen,ic,cor){const c=fav(id),fz=FORCA[forcaDe(id,c)]||FORCA[0];const antes=(J.esc[id]||[])[0];
+ return `<div class="cel" style="--c:${cor}"><div class="confe">${[...Array(14)].map((_,k)=>`<i style="left:${(k*7+3)%100}%;animation-delay:${(k%5)*.08}s;background:${[cor,'#F9CB39','#F4F1EA'][k%3]}"></i>`).join('')}</div>
+  <div class="k" style="color:${cor}">${ic} ${esc(sen)} · pronto!</div><div class="celm">${mapa(150)}</div><div class="small mute">O seu mapa ganhou a cor de ${esc(sen.toLowerCase())}.</div>
+  <div class="celc">${art(id,c)}<div><div class="small mute">A sua nº 1</div><b style="font-size:19px">${esc(c)}</b></div></div>
+  <div class="ins5" style="text-align:left"><b>${fz[1]} Descoberta: ${fz[2]}</b><div class="small mute" style="margin-top:6px">${antes&&antes!==c?`Na Fase 1 a sua nº 1 era "${esc(antes)}". Olhando de novo, mudou.`:'É a mesma nº 1 da Fase 1: você sabe bem do que gosta.'}</div></div>
+  <div class="row" style="justify-content:center"><button class="btn" data-a="ajusta">Ajustar a ordem</button><button class="btn pri" data-a="prox">${F.i<6?'Próximo sentido →':'Ver as minhas favoritas →'}</button></div></div>`;}
 function v2(){const b=bloqueio(2);if(b)return b;const nome=(J.nome||'').split(' ')[0];
- if(F.i<0)return `<div class="hero"><div class="luzes">${C.map(c=>`<i style="background:${c};box-shadow:0 0 10px ${c}"></i>`).join('')}</div><div class="k">Jornada dos 7entidos · Fase 2</div><h1 class="f">A sua ordem, ${esc(nome)}.</h1><p class="mute">Na Fase 1 você escolheu 7 em cada sentido. Agora, em cada um, <b>coloque as suas 7 em ordem</b>: toque primeiro na que você mais gosta, depois na segunda… até a sétima. Leva uns 5 minutos.</p><button class="btn pri big" data-a="ini">Começar a Fase 2 →</button><p class="small mute">Sem resposta certa. O 7entidos não é terapia nem tratamento.</p></div>`;
- if(F.i<7){const [id,sen,ic,cor]=SEN[F.i];const O=ordDe(id);const n=O.length;const L=mix(id);const lista=LAY==='D'?L.filter(x=>!O.includes(x)):L;
-  return `${seletor()}<div class="topo2"><div class="dots">${SEN.map(([sid,,,c],k)=>`<i style="${feito2(sid)?`background:${c};box-shadow:0 0 8px ${c}`:''}${k===F.i?';outline:2px solid #F4F1EA':''}"></i>`).join('')}</div><div class="small mute">Sentido ${F.i+1} de 7 · ${n} de 7 em ordem</div></div>
-  <div class="k" style="color:${cor}">${ic} ${esc(sen)}</div><h1 style="font-size:22px">${esc(PERG2[id])}</h1>
-  <div class="cont${n>=7?' ok':''}">${n>=7?'<b>Pronto!</b> A sua ordem está feita. Toque numa imagem para tirar e refazer.':n?`Agora toque na <b>${n+1}ª</b>. Faltam ${7-n}.`:'Toque primeiro na que você <b>mais gosta</b>. Ela vira a nº 1.'}</div>
-  ${LAY==='D'?fila(id,cor):''}
-  <div class="ord ord${LAY}">${lista.map(x=>cartao(id,x,cor)).join('')}</div>
-  <div class="row navfix"><button class="btn" data-a="volta">← Voltar</button>${n?'<button class="btn" data-a="limpa">Limpar</button>':''}<button class="btn pri" data-a="prox" ${n<7?'disabled':''}>${F.i<6?'Próximo sentido →':'Ver as minhas favoritas →'}</button></div>`;}
- if(!F.fim){const E=experiencias();const M=mudou();const man=7-M.length;
-  return `<div class="k">A sua ordem dos 7 sentidos</div><h1 class="f" style="font-size:30px">As suas 7 favoritas</h1><p class="small mute">A nº 1 de cada sentido.</p>
+ if(F.i<0)return `<div class="hero"><div class="luzes">${C.map(c=>`<i style="background:${c};box-shadow:0 0 10px ${c}"></i>`).join('')}</div><div class="k">Jornada dos 7entidos · Fase 2</div><h1 class="f">A sua ordem, ${esc(nome)}.</h1><p class="mute">Na Fase 1 você escolheu 7 em cada sentido. Agora descubra <b>qual é a sua nº 1</b> de cada um. A cada sentido, o seu mapa ganha cor e você ganha uma descoberta. Leva uns 5 minutos.</p><div class="celm" style="opacity:.8">${mapa(140)}</div><button class="btn pri big" data-a="ini">Começar a Fase 2 →</button><p class="small mute">Sem resposta certa. O 7entidos não é terapia nem tratamento.</p></div>`;
+ if(F.i<7){const [id,sen,ic,cor]=SEN[F.i];const O=ordDe(id);const n=O.length;
+  if(F.cel&&n>=7)return seletor()+topo()+celebra(id,sen,ic,cor);
+  let corpo='',dica='';
+  if(MODO==='D'&&n<7){const p=duPar(id),d=duEstado(id);corpo=p?duelo(id,cor,p[0],p[1],`Duelo ${d.n+1} · já em ordem: ${d.S.length} de 7`):'';}
+  else if(MODO==='R'&&n<1){const t=torEstado(id),p=torPar(id);corpo=p?duelo(id,cor,p[0],p[1],`${rodNome(t)} · quem segue na disputa?`):'';}
+  else{const L=mix(id);const lista=MODO==='P'?L.filter(x=>!O.includes(x)):L;
+   dica=`<div class="cont${n>=7?' ok':''}">${MODO==='R'&&n?`🏆 <b>${esc(O[0])}</b> é a campeã! Agora toque nas outras na ordem: a <b>${n+1}ª</b>.`:n>=7?'<b>Pronto!</b> Toque numa imagem para tirar e refazer.':n?`Agora toque na <b>${n+1}ª</b>. Faltam ${7-n}.`:'Toque primeiro na que você <b>mais gosta</b>. Ela vira a nº 1.'}</div>`;
+   corpo=dica+(MODO==='P'?fila(id,cor):'')+`<div class="ord ord${MODO==='P'?'D':'A'}">${lista.map(x=>cartao(id,x,cor,MODO==='P')).join('')}</div>`;}
+  return `${seletor()}${topo()}<div class="k" style="color:${cor}">${ic} ${esc(sen)}</div><h1 style="font-size:22px">${esc(PERG2[id])}</h1>${corpo}
+  <div class="row navfix"><button class="btn" data-a="volta">← Voltar</button>${n||(F.du[id]&&F.du[id].n)||(F.tor[id]&&F.tor[id].n)?'<button class="btn" data-a="limpa">Recomeçar</button>':''}<button class="btn pri" data-a="fecha" ${n<7?'disabled':''}>${n<7?`${n} de 7`:'Pronto ✓'}</button></div>`;}
+ if(!F.fim){const E=experiencias();const M=mudou();const man=7-M.length;const f3=fav('mapa');
+  return `<div class="k">A sua ordem dos 7 sentidos</div><h1 class="f" style="font-size:30px">As suas 7 favoritas</h1><div class="celm">${mapa(200)}</div><p class="small mute" style="text-align:center">O seu mapa, pintado com as suas 7 nº 1.</p>
   <div class="dez">${SEN.map(([id,sen,ic,cor])=>`<div class="dz" style="border-color:${cor}">${art(id,fav(id))}<b>${esc(fav(id))}</b><small>${ic} ${esc(sen)}</small></div>`).join('')}</div>
-  <div class="ins5" style="margin-top:14px"><b>${man===7?'Você manteve a mesma favorita da Fase 1 nos 7 sentidos. Parece que você sabe bem do que gosta.':`Você manteve a favorita da Fase 1 em ${man} de 7 sentidos.`}</b>${M.slice(0,3).map(([id,sen])=>`<div class="small mute" style="margin-top:6px">${esc(sen)}: antes era "${esc(J.esc[id][0])}", agora é "${esc(fav(id))}".</div>`).join('')}${M.length?'<div class="small mute" style="margin-top:6px">Quando a gente olha de novo, com calma, a preferência às vezes muda. Tudo bem.</div>':''}</div>
+  <div class="ins5" style="margin-top:14px"><b>${man===7?'Você manteve a mesma nº 1 da Fase 1 nos 7 sentidos. Parece que você sabe bem do que gosta.':`Você manteve a nº 1 da Fase 1 em ${man} de 7 sentidos.`}</b>${M.slice(0,3).map(([id,sen])=>`<div class="small mute" style="margin-top:6px">${esc(sen)}: antes era "${esc(J.esc[id][0])}", agora é "${esc(fav(id))}".</div>`).join('')}${M.length?'<div class="small mute" style="margin-top:6px">Quando a gente olha de novo, com calma, a preferência às vezes muda. Tudo bem.</div>':''}</div>
   <h2>✨ 3 experiências de 5 minutos para esta semana</h2>${E.map((t,i)=>`<div class="ins5"><b>${i+1}. ${esc(t)}</b></div>`).join('')}
+  <div class="f3p"><div class="k">Um gostinho da Fase 3</div><div class="celc" style="margin:10px 0">${art('mapa',f3)}<div style="text-align:left"><b>"${esc(f3)}" te lembra…</b><div class="chips"><span>📍 um lugar?</span><span>🧑 uma pessoa?</span><span>📅 uma época?</span><span>🌅 um momento?</span></div></div></div><div class="small mute">Na Fase 3, cada uma das suas 7 favoritas te leva a uma lembrança. No fim, aparece o que se repete nelas.</div></div>
   <h2>Depois desta fase, qual é a sua sensação agora?</h2><div class="c11 grande">${[...Array(11)].map((_,k)=>`<button class="${F.sens===k?'on':''}" data-a="sens" data-n="${k}">${k}</button>`).join('')}</div><div class="small mute" style="display:flex;justify-content:space-between"><span>0 = nada bem</span><span>10 = muito bem</span></div>
-  <div class="f2"><b>A Fase 3 traz as suas lembranças.</b><a class="btn pri" style="display:block;margin-top:10px;text-decoration:none" href="/jornada/fase3/?c=${CONVITE}" data-a="quer3">Ir para a Fase 3 →</a></div>
+  <div class="f2"><b>Quer descobrir as suas lembranças?</b><a class="btn pri" style="display:block;margin-top:10px;text-decoration:none" href="/jornada/fase3/?c=${CONVITE}" data-a="quer3">Ir para a Fase 3 →</a></div>
   <p class="erro" id="er2"></p><button class="btn pri big" data-a="fim2">Finalizar a Fase 2 ✓</button>`;}
- return `<div class="hero"><div class="k">Fase 2 finalizada ✓</div><h1 class="f">Obrigado, ${esc(nome)}!</h1><p class="mute">A sua ordem está salva.</p><a class="btn pri big" style="display:block;text-decoration:none" href="/jornada/fase3/?c=${CONVITE}">Ir para a Fase 3 →</a></div>`;}
+ return `<div class="hero"><div class="k">Fase 2 finalizada ✓</div><h1 class="f">Obrigado, ${esc(nome)}!</h1><div class="celm">${mapa(180)}</div><p class="mute">A sua ordem está salva.</p><a class="btn pri big" style="display:block;text-decoration:none" href="/jornada/fase3/?c=${CONVITE}">Ir para a Fase 3 →</a></div>`;}
 function resumo2(){const notas=SEN.map(([id,sen])=>sen+': '+ordDe(id).map((n,k)=>(k+1)+'. '+n).join(' | '));const M=mudou();
  return {notas,media:(7-M.length)+' de 7',dez:SEN.map(([id,sen])=>fav(id)+' ('+sen+')'),experiencias:experiencias(),sensacao:F.sens};}
-function render(){document.getElementById('app').innerHTML=topoLogo()+v2();}
-document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a;
+function render(){document.getElementById('app').innerHTML=topoLogo()+v2();LASTK=null;}
+function rerender(){const y=scrollY;render();scrollTo(0,y);}
+function completou(id){F.cel=true;salva2();plim(id,7);render();scrollTo(0,0);}
+let TRAVA=false;
+document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b||TRAVA)return;const a=b.dataset.a;
  if(a==='play'){e.stopPropagation();const on=b.classList.contains('on');para();document.querySelectorAll('.pl2.on').forEach(x=>{x.classList.remove('on');x.textContent='▶';});if(!on){toca(b.dataset.som);b.classList.add('on');b.textContent='■';}return;}
- if(a==='lay'){LAY=b.dataset.l;try{localStorage.setItem('j7lay',LAY);}catch(e){}const y=scrollY;render();scrollTo(0,y);return;}
- if(a==='ini'){F.i=0;salva2();post('fase2_inicio');render();scrollTo(0,0);return;}
- if(a==='ord'){const id=SEN[F.i][0],O=ordDe(id),x=b.dataset.k,p=O.indexOf(x);if(p>=0)O.splice(p,1);else if(O.length<7)O.push(x);salva2();const y=scrollY;render();scrollTo(0,y);return;}
- if(a==='limpa'){F.ord[SEN[F.i][0]]=[];salva2();render();return;}
- if(a==='prox'){para();F.i++;salva2();post('fase2_progresso',{feitos:F.i});render();scrollTo(0,0);return;}
- if(a==='volta'){para();F.i=Math.max(-1,F.i-1);salva2();render();scrollTo(0,0);return;}
- if(a==='sens'){F.sens=+b.dataset.n;salva2();const y=scrollY;render();scrollTo(0,y);return;}
+ if(a==='modo'){MODO=b.dataset.l;try{localStorage.setItem('j7modo',MODO);}catch(e){}const id=SEN[Math.max(0,F.i)][0];if(F.i>=0&&F.i<7&&!feito2(id)){F.ord[id]=[];delete F.du[id];delete F.tor[id];}rerender();return;}
+ if(a==='ini'){F.i=0;F.cel=false;salva2();post('fase2_inicio');render();scrollTo(0,0);return;}
+ if(a==='ord'){const id=SEN[F.i][0],O=ordDe(id),x=b.dataset.k,p=O.indexOf(x);if(MODO==='R'&&p===0)return;if(p>=0)O.splice(p,1);else if(O.length<7){O.push(x);LASTK=x;plim(id,O.length);}salva2();if(O.length>=7&&p<0){TRAVA=true;rerender();setTimeout(()=>{TRAVA=false;completou(id);},450);return;}rerender();return;}
+ if(a==='du'||a==='tor'){const id=SEN[F.i][0],x=b.dataset.k;b.classList.add('pop','win');const outro=[...document.querySelectorAll('.dc')].find(d=>d!==b);if(outro)outro.classList.add('lose');plim(id,a==='du'?duEstado(id).S.length:3);TRAVA=true;
+  setTimeout(()=>{TRAVA=false;if(a==='du')duVence(id,x);else torVence(id,x);salva2();if(feito2(id))completou(id);else{if(a==='tor'&&ordDe(id).length===1){LASTK=ordDe(id)[0];plim(id,6);}rerender();}},320);return;}
+ if(a==='fecha'){const id=SEN[F.i][0];if(feito2(id))completou(id);return;}
+ if(a==='ajusta'){F.cel=false;salva2();render();scrollTo(0,0);return;}
+ if(a==='limpa'){const id=SEN[F.i][0];F.ord[id]=[];delete F.du[id];delete F.tor[id];F.cel=false;salva2();render();return;}
+ if(a==='prox'){para();F.cel=false;F.i++;salva2();post('fase2_progresso',{feitos:F.i});render();scrollTo(0,0);return;}
+ if(a==='volta'){para();if(F.cel){F.cel=false;}else F.i=Math.max(-1,F.i-1);salva2();render();scrollTo(0,0);return;}
+ if(a==='sens'){F.sens=+b.dataset.n;salva2();rerender();return;}
  if(a==='quer3'){F.quer3=true;F.fim=true;salva2();post('fase2',resumo2());return;}
  if(a==='fim2'){if(F.sens==null){document.getElementById('er2').textContent='Dê a sua nota de 0 a 10 antes de finalizar.';return;}F.fim=true;salva2();post('fase2',resumo2());render();scrollTo(0,0);return;}});
-document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('.o2,.sl.on')){e.preventDefault();e.target.click();}});
+document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('.o2,.sl.on,.dc')){e.preventDefault();e.target.click();}});
 render();
 </script></body></html>
