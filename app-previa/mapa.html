@@ -556,11 +556,29 @@ function imagem7(){
 const PINTOR_FORCA=[1,5,8,3,2,0,7]; // Raiz→Van Gogh, Ninho→Rembrandt, Vento→Munch, Lago→Monet, Faísca→Picasso, Brisa→Da Vinci, Abraço→Frida
 function pintor7(){const i=(J.esc.mapa||[]).map(n=>MAPAS.findIndex(m=>m[0]===n)).find(i=>i>=0);return i!==undefined&&i>=0?i:PINTOR_FORCA[perfil().top];}
 function imagemPintor(){
- const chave=(J.id||'')+'|'+SEN.map(s=>(J.esc[s[0]]||[]).join(',')).join('|');let s2=hash7(chave);const r=()=>((s2=s2*16807%2147483647)/2147483647);
- const fav=SEN.map(s=>{const n=(J.esc[s[0]]||[])[0];const m=n&&META[s[0]]&&META[s[0]][n];return m?m[1]:null;});
- const antes=A;FID=Math.floor(Math.random()*1e6);A=fav.map(c=>c||'#3A4270');let arte='';try{arte=MAPAS[pintor7()][3]();}finally{A=antes;}
- const espelho=hash7(chave+'e')%2?' transform="translate(300 0) scale(-1 1)"':'';
- return `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Imagem dos 7 sentidos no estilo de ${MAPAS[pintor7()][1].split(' · ')[0]}"><g${espelho}>${arte}</g>${detalhe7(r)}</svg>`;}
+ /* Revisão do Daniel (04/11, "mais diferente"): o DESENHO é o da pessoa (imagem7: mundo, textura, 7 luzes, tema);
+    o pintor entra só no JEITO DE PINTAR (pinceladas, textura, luz, moldura). Assim não repete a opção vista em Visão. */
+ const chave=(J.id||'')+'|'+SEN.map(s=>(J.esc[s[0]]||[]).join(',')).join('|');let s2=hash7(chave+'p');const r=()=>((s2=s2*16807%2147483647)/2147483647);
+ const base=imagem7().replace(/^<svg[^>]*>/,'').replace(/<\/svg>$/,'');const pi=pintor7();const id='p'+(hash7(chave+'q')%1e6);
+ const fav=SEN.map(s=>{const n=(J.esc[s[0]]||[])[0];const m=n&&META[s[0]]&&META[s[0]][n];return m?m[1]:null;}).map((c,k)=>c||C[k]);
+ const disp=(esc,fr,oc)=>`<filter id="${id}d" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="${fr}" numOctaves="${oc||3}" seed="${hash7(chave)%97}"/><feDisplacementMap in="SourceGraphic" scale="${esc}" xChannelSelector="R" yChannelSelector="G"/></filter>`;
+ let f='',o='',pos='',tom='';
+ if(pi===0){f=disp(10,.03);tom=`<feColorMatrix type="matrix" values=".55 .35 .1 0 .08  .45 .4 .1 0 .05  .3 .3 .2 0 .02  0 0 0 1 0"/>`;
+  for(let i=0;i<26;i++){const x=r()*300,y=r()*300;o+=`<path d="M${x.toFixed(0)} ${y.toFixed(0)} q ${(r()*60-30).toFixed(0)} ${(r()*40-20).toFixed(0)} ${(r()*90-45).toFixed(0)} ${(r()*30-15).toFixed(0)}" fill="none" stroke="#3B2A1A" stroke-width=".7" opacity=".45"/>`;}
+  o+=`<rect width="300" height="300" fill="#E8D4A8" opacity=".22"/>`;}
+ if(pi===1){f=disp(14,.02,4);for(let i=0;i<340;i++){const x=r()*300,y=r()*300,a=Math.atan2(y-150,x-150)+1.57+(r()-.5)*.6,l=7+r()*9;o+=`<line x1="${x.toFixed(0)}" y1="${y.toFixed(0)}" x2="${(x+Math.cos(a)*l).toFixed(0)}" y2="${(y+Math.sin(a)*l).toFixed(0)}" stroke="${r()<.5?'#F6E7A8':fav[Math.floor(r()*7)]}" stroke-width="2.6" stroke-linecap="round" opacity=".35"/>`;}}
+ if(pi===2){for(let i=0;i<9;i++){const x=r()*300,y=r()*300,pts=[0,1,2,3].map(()=>[x+(r()-.5)*170,y+(r()-.5)*170].map(v=>v.toFixed(0)).join(',')).join(' ');o+=`<polygon points="${pts}" fill="${fav[i%7]}" opacity=".22" stroke="#111" stroke-width="2.4" stroke-opacity=".75"/>`;}}
+ if(pi===3){f=disp(4,.07);for(let i=0;i<520;i++)o+=`<ellipse cx="${(r()*300).toFixed(0)}" cy="${(r()*300).toFixed(0)}" rx="${(2+r()*3).toFixed(1)}" ry="${(1.2+r()*1.6).toFixed(1)}" fill="${r()<.4?'#FFF6EA':fav[Math.floor(r()*7)]}" opacity=".32"/>`;o+=`<rect width="300" height="300" fill="#F3E6F0" opacity=".14"/>`;}
+ if(pi===4){f=disp(8,.012,2);o+=`<rect y="215" width="300" height="85" fill="#C98A3A" opacity=".28"/>`;for(let k=0;k<7;k++){const x=20+k*42+r()*12,h=30+r()*60;o+=`<path d="M${x-9} 0 V${h} q9 22 18 0 V0Z" fill="${fav[k]}" opacity=".5"/>`;}o+=`<line x1="0" y1="215" x2="300" y2="215" stroke="#3B2416" stroke-width="1.2" opacity=".6"/>`;}
+ if(pi===5){pos=`<defs><radialGradient id="${id}v" cx="${(.4+r()*.2).toFixed(2)}" cy=".42" r=".62"><stop offset=".35" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#0A0604" stop-opacity=".88"/></radialGradient></defs>`;o+=`<rect width="300" height="300" fill="#F2B45A" opacity=".12"/><rect width="300" height="300" fill="url(#${id}v)"/>`;f=disp(5,.04);}
+ if(pi===6){f=disp(3,.05);o+=`<rect width="300" height="300" fill="#EADCC4" opacity=".3"/>`;for(let i=0;i<14;i++){let x=r()*300,y=r()*300,d=`M${x.toFixed(0)} ${y.toFixed(0)}`;for(let j=0;j<5;j++){x+=(r()-.5)*40;y+=(r()-.5)*40;d+=` L${x.toFixed(0)} ${y.toFixed(0)}`;}o+=`<path d="${d}" fill="none" stroke="#6B5A44" stroke-width=".8" opacity=".5"/>`;}o+=`<path d="M10 300 V120 A140 110 0 0 1 290 120 V300" fill="none" stroke="#EADCC4" stroke-width="14" opacity=".85"/>`;}
+ if(pi===7){for(let i=0;i<28;i++){const a=i/28*6.28,x=150+Math.cos(a)*138,y=150+Math.sin(a)*138;o+=i%3?`<ellipse cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" rx="15" ry="6" fill="#2E7A44" transform="rotate(${(a*57.3+90).toFixed(0)} ${x.toFixed(0)} ${y.toFixed(0)})"/>`:[0,1,2,3,4].map(j=>{const b=j*1.256;return `<ellipse cx="${(x+Math.cos(b)*6).toFixed(1)}" cy="${(y+Math.sin(b)*6).toFixed(1)}" rx="6" ry="4" fill="${fav[i%7]}" transform="rotate(${(b*57.3).toFixed(0)} ${(x+Math.cos(b)*6).toFixed(1)} ${(y+Math.sin(b)*6).toFixed(1)})"/>`}).join('')+`<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="3" fill="#3B2416"/>`;}}
+ if(pi===8){f=disp(18,.008,2);for(let k=0;k<6;k++){let d='';for(let x=-10;x<=310;x+=6){const y=25+k*52+Math.sin(x/30+k)*14;d+=(x<0?'M':'L')+x+' '+y.toFixed(1);}o+=`<path d="${d}" fill="none" stroke="${fav[k]}" stroke-width="16" stroke-linecap="round" opacity=".22"/>`;}}
+ if(pi===9){const G=['#D4AF37','#B88A1E','#E9C960','#8C6A14'];for(let i=0;i<300;i++){const x=Math.floor(r()*30)*10,y=Math.floor(r()*30)*10,ed=x<34||x>256||y<34||y>256;if(!ed&&r()>.12)continue;o+=`<rect x="${x}" y="${y}" width="9" height="9" fill="${r()<.15?'#1B1A1A':G[Math.floor(r()*4)]}" opacity="${ed?.92:.45}"/>`;}}
+ const filtro=f?`<filter id="${id}t">${tom}</filter>`:'';
+ const fdef=(f||'')+(tom?`<filter id="${id}c">${tom}</filter>`:'');
+ const g1=f?` filter="url(#${id}d)"`:'',g2=tom?` filter="url(#${id}c)"`:'';
+ return `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Imagem dos 7 sentidos no estilo de ${MAPAS[pi][1].split(' · ')[0]}"><defs>${fdef}</defs>${pos}<g${g2}><g${g1}><g transform="translate(-15 -15) scale(1.1)">${base}</g></g></g>${o}</svg>`;}
 function legenda7(){const m=MAPAS[pintor7()];return m[0]+' · inspirada em '+m[1].split(' · ')[0];}
 mapaSVG=function(){return imagemPintor();};
 /* Uma palavra por descoberta (só as que a pessoa talvez não tenha percebido) */
