@@ -349,10 +349,9 @@ function vSen(){const [id,sen,ic,cor,,tiles]=SEN[J.i];const m=J.esc[id]||[];
  <div class="grid">${(A=['#E9B10E','#2F7FD1','#E8643A','#3E9E5E','#D9487E','#7457C9','#17A99B'],tiles).map((t,k)=>{const o=m.indexOf(t.n);const on=o>=0;const dis=!on&&m.length>=7;return `<div class="tile ${on?'on':''} ${dis?'dis':''}" role="button" tabindex="0" data-a="pick" data-v="${esc(t.n)}" aria-pressed="${on}" style="--c:${cor}"><span class="box">${on?'✓':''}</span>${t.som?`<button class="pl" data-a="play" data-som="${t.som}" aria-label="Ouvir ${esc(t.n)}">▶</button>`:''}<svg viewBox="0 0 300 300">${t.art()}</svg><b>${esc(t.n)}</b></div>`;}).join('')}</div>
  <div class="row"><button class="btn" data-a="volta">← Voltar</button>${m.length?`<button class="btn" data-a="limpa">Limpar</button>`:''}${!pulado(id)&&m.length<7?`<button class="btn" data-a="pula">Pular este sentido</button>`:''}<span class="sp"></span><button class="btn pri" data-a="prox" ${m.length<7&&!pulado(id)?'disabled':''}>${J.i<6?'Próximo sentido →':'Ver meu mapa →'}</button></div>${J.i===6&&nCompletos()<3&&(m.length>=7||pulado(id))?`<p class="small mute">Para ver o seu mapa, faça pelo menos 3 sentidos.</p>`:''}`;}
 function vFim(){const p=perfil();const [tn,ti,tk,td]=TAGS[p.top],[sn,si]=TAGS[p.seg];
- return `<div class="k">Minha imagem dos 7 sentidos</div><h1 class="f" style="font-size:30px">Perfil ${tn} + ${sn}</h1>
- <div class="mapa img7" id="mp">${mapaSVG()}</div><p class="small mute" style="text-align:center;margin:-4px 0 6px">${legenda7()}<br>Uma imagem só sua, feita a partir das suas escolhas.</p>
+ return `<div class="k">Fase 1 concluída</div><h1 class="f" style="font-size:30px">Perfil ${tn} + ${sn}</h1>
  <h2>✨ O que você talvez não tenha percebido</h2><div class="pal7">${insights(J,p,TAGS).filter(x=>x.s).map(x=>`<div class="pal7-i"><small>${esc(rotulo7(x))}</small><b>${esc(palavra7(x))}</b></div>`).join('')}</div>
- <div class="row"><button class="btn" data-a="baixa">Baixar minha imagem</button><span class="sp"></span><button class="btn pri big" data-a="fim">${QS.get('modo')==='refazer'?'Guardar este mapa →':'Continuar →'}</button></div><p class="small mute" id="bx"></p>
+ <div class="row"><span class="sp"></span><button class="btn pri big" data-a="fim">${QS.get('modo')==='refazer'?'Guardar este mapa →':'Continuar →'}</button></div><p class="small mute" id="bx"></p>
  <p class="small mute">O perfil mostra só as suas escolhas de hoje. Não é diagnóstico nem avaliação.</p>`;}
 function render(){if(typeof PD!=='undefined'&&PD)return renderPodio();salva();document.getElementById('app').innerHTML=`<div class="bar0"><a class="logo" aria-label="7entidos"><img src="/assets/simbolo-contando-7.svg?v=20261102-novo" alt="" width="30" height="30"><b class="f"><span style="color:#FFD43B">7</span>entidos</b></a><span class="sp"></span><span class="small mute" id="sv">${esc(saveTxt)}</span></div>`+(J.tela==='abre'?vAbre():J.tela==='sen'?vSen():vFim());}
 function setSave(t){saveTxt=t;const e=document.getElementById('sv');if(e)e.textContent=t;}
@@ -384,7 +383,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b
  if(a==='refaz'){J.t={};J.pede=null;J.esc={};J.nota=null;J.i=0;J.tela='sen';J.t0=Date.now();salva();render();scrollTo(0,0);return;}
  if(a==='baixa'){baixa();return;}});
 document.addEventListener('keydown',e=>{const t=e.target.closest&&e.target.closest('.tile');if(t&&(e.key==='Enter'||e.key===' ')){e.preventDefault();t.click();}});
-function entrega(){const p=perfil();const L=insights(J,p,TAGS);let svg='';try{svg=document.querySelector('#mp svg').outerHTML;}catch(e){}
+function entrega(){const p=perfil();const L=insights(J,p,TAGS);let svg='';try{svg=document.querySelector('#mp svg').outerHTML;}catch(e){}if(!svg){try{svg=mapaSVG();}catch(e){}}if(!svg){try{svg=mapaSVG();}catch(e){}}
  const mapa={id:'M'+Date.now().toString(36),em:new Date().toISOString(),esc:J.esc,t:J.t||{},pul:Object.keys(J.pul||{}).filter(k=>J.pul[k]),completos:SEN.filter(s=>completo(s[0])).map(s=>s[0]),perfil:{top:TAGS[p.top][0],seg:TAGS[p.seg][0],sc:p.sc,forcas:TAGS.map(t=>t[0])},descobertas:L.map(x=>({t:x.t,d:x.d,s:x.s})),svg};
  try{parent.postMessage({tipo:'7e-mapa',mapa},location.origin);}catch(e){}
  try{localStorage.removeItem(LSK);}catch(e){}}
@@ -428,7 +427,7 @@ function constel(){const ids=PD.ordem;return `<div class="pd-const" aria-label="
 function carta(id,n,lado){const t=tileDe(id,n);const s=senDe(id);return `<div class="pd-carta" role="button" tabindex="0" data-a="duelo" data-v="${esc(n)}" data-lado="${lado}" style="--c:${s[3]}">${t&&t.som?`<button class="pl" data-a="play" data-som="${t.som}" aria-label="Ouvir ${esc(n)}">▶</button>`:''}<svg viewBox="0 0 300 300">${t?t.art():''}</svg><b>${esc(n)}</b></div>`;}
 function vPdAbre(){const blur=mapaSVG();return `<div class="hero" style="padding-top:18px"><div class="luzes">${C.map(c=>`<i style="background:${c};box-shadow:0 0 10px ${c}"></i>`).join('')}</div><div class="k">Fase 2 · Pódio dos Sentidos</div>
  <h1 class="f">Hora de pôr em ordem!</h1><p class="mute">Em cada sentido, você arrasta as suas 7 escolhas com o dedo. Lá em cima fica a que você mais gosta. No fim, faz o mesmo com as campeãs.</p>
- <div class="pd-previa" aria-hidden="true">${blur}<span>No fim, o seu mapa ganha a nova ordem</span></div>
+ 
  <p class="pd-frase">Não existe ordem certa. É só a sua ordem de hoje.</p>
   <button class="btn pri big" data-a="pdcomeca">Começar</button><p class="small mute">Leva uns 3 minutos.</p></div>`;}
 function vPdDuelo(){const id=PD.ordem[PD.si];const s=senDe(id);const par=tPar(PD.T);if(!par)return '';const fin=PD.T.fase==='3'?'Disputa do 3º lugar':PD.T.cur.length===2?'Final':'Duelo '+(PD.T.duelos+1);
