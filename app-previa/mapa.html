@@ -73,6 +73,12 @@ h1{font-size:23px;line-height:1.25;margin:4px 0 10px}h2{font-size:18px;margin:22
 @keyframes pnentra{from{opacity:0;transform:translateY(-6px)}}
 .pn-anel{position:relative;flex:0 0 26px;width:26px;height:26px}.pn-anel i{position:absolute;width:6px;height:6px;border-radius:50%}
 @media (prefers-reduced-motion:reduce){.pn-pisca,.pn-brisa{animation:none}}
+.pal7{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin:6px 0 14px}
+.pal7-i{background:#1d1a10;border:1.5px solid #F9CB39;border-radius:14px;padding:12px 12px 14px;display:grid;gap:4px;text-align:center}
+.pal7-i small{font-size:12px;color:#E7DFC6;opacity:.85}.pal7-i b{font-family:Fraunces,Georgia,serif;font-weight:400;font-size:26px;line-height:1.1;color:#F9CB39}
+.img7{animation:img7entra 1.2s ease}@keyframes img7entra{from{opacity:0;transform:scale(.96);filter:blur(8px)}}
+.pn .mini svg{filter:blur(5px) saturate(1.15);transform:scale(1.15)}
+@media (prefers-reduced-motion:reduce){.img7{animation:none}}
 </style></head><body><div class="w" id="app"></div>
 <script>/* ---------- estímulos sensoriais (sons feitos aqui, sem arquivos) ---------- */
 let AC=null,TOCANDO=null;
@@ -337,9 +343,8 @@ function vSen(){const [id,sen,ic,cor,,tiles]=SEN[J.i];const m=J.esc[id]||[];
  <div class="row"><button class="btn" data-a="volta">← Voltar</button>${m.length?`<button class="btn" data-a="limpa">Limpar</button>`:''}${!pulado(id)&&m.length<7?`<button class="btn" data-a="pula">Pular este sentido</button>`:''}<span class="sp"></span><button class="btn pri" data-a="prox" ${m.length<7&&!pulado(id)?'disabled':''}>${J.i<6?'Próximo sentido →':'Ver meu mapa →'}</button></div>${J.i===6&&nCompletos()<3&&(m.length>=7||pulado(id))?`<p class="small mute">Para ver o seu mapa, faça pelo menos 3 sentidos.</p>`:''}`;}
 function vFim(){const p=perfil();const [tn,ti,tk,td]=TAGS[p.top],[sn,si]=TAGS[p.seg];
  return `<div class="k">Minha imagem dos 7 sentidos</div><h1 class="f" style="font-size:30px">Perfil ${tn} + ${sn}</h1>
- <div class="mapa" id="mp">${mapaSVG()}</div><p>${esc(td)} Logo depois vem <b>${esc(sn)}</b> (${esc(TAGS[p.seg][2])}).</p>
- ${relHTML(J,p,'pede').replace(/<div class="lock"[\s\S]*$/,'')}
- <h2>As 7 forças do seu mapa</h2><div class="barras">${TAGS.map(([n,ic],k)=>`<div class="bl"><span>${ic} ${n}</span><div class="bt"><i style="width:${Math.round(p.sc[k]/p.max*100)}%;background:${C[k]}"></i></div><b>${p.sc[k]}</b></div>`).join('')}</div>
+ <div class="mapa img7" id="mp">${mapaSVG()}</div><p class="small mute" style="text-align:center;margin:-4px 0 6px">Uma imagem só sua, feita a partir das suas escolhas.</p>
+ <h2>✨ O que você talvez não tenha percebido</h2><div class="pal7">${insights(J,p,TAGS).filter(x=>x.s).map(x=>`<div class="pal7-i"><small>${esc(rotulo7(x))}</small><b>${esc(palavra7(x))}</b></div>`).join('')}</div>
  <div class="row"><button class="btn" data-a="baixa">Baixar minha imagem</button><span class="sp"></span><button class="btn pri big" data-a="fim">${QS.get('modo')==='refazer'?'Guardar este mapa →':'Continuar →'}</button></div><p class="small mute" id="bx"></p>
  <p class="small mute">O perfil mostra só as suas escolhas de hoje. Não é diagnóstico nem avaliação.</p>`;}
 function render(){if(typeof PD!=='undefined'&&PD)return renderPodio();salva();document.getElementById('app').innerHTML=`<div class="bar0"><a class="logo" aria-label="7entidos"><img src="/assets/simbolo-contando-7.svg?v=20261102-novo" alt="" width="30" height="30"><b class="f"><span style="color:#FFD43B">7</span>entidos</b></a><span class="sp"></span><span class="small mute" id="sv">${esc(saveTxt)}</span></div>`+(J.tela==='abre'?vAbre():J.tela==='sen'?vSen():vFim());}
@@ -487,6 +492,67 @@ document.addEventListener('click',e=>{if(PD||!window.__PD)return;const b=e.targe
  e.stopImmediatePropagation();para();PD=window.__PD;window.__PD=null;PD.voltar=null;PD.ordem.push(id);PD.si=PD.ordem.length-1;pdComecaSentido();renderPodio();scrollTo(0,0);},true);
 setInterval(()=>{if(PD&&PD.rel&&PD.fase==='duelo'){const el=document.getElementById('pdrelo');const id=PD.ordem[PD.si];if(el)el.textContent='⚡ '+Math.round((Date.now()-PD.relT[id])/1000)+' s';}},1000);
 if(EH_PODIO){try{const s=JSON.parse(localStorage.getItem(PDK)||'null');if(s&&s.ordem){PD=s;let ent=null;try{ent=JSON.parse(localStorage.getItem(LSK+'-entrada')||'null');}catch(e){}if(ent){J.esc=ent.esc||{};J.t=ent.t||{};}PD.ordem.forEach(id=>{if(PD.res[id])J.esc[id]=PD.res[id].slice();});}}catch(e){}if(!PD)pdInicia();}
+
+/* ================= IMAGEM DOS 7 SENTIDOS (04/11/2026) =================
+   Uma imagem nova para cada pessoa, que ela não viu durante as escolhas. Padrão em camadas:
+   1. Mundo (fundo e formato) = força principal do perfil (Raiz, Ninho, Vento, Lago, Faísca, Brisa, Abraço)
+   2. Textura por cima = segunda força
+   3. 7 luzes = a cor da favorita de cada sentido (sentido pulado fica sem luz)
+   4. Detalhe = o tema que mais se repete nas escolhas (água, noite, infância, natureza, aconchego, cozinha)
+   5. Variação própria = semente tirada das escolhas e do código da pessoa */
+function hash7(t){let h=2166136261;for(let i=0;i<t.length;i++){h^=t.charCodeAt(i);h=Math.imul(h,16777619);}return (h>>>0)||7;}
+function imagem7(){
+ const P=perfil();const top=P.top,seg=P.seg;const chave=(J.id||'')+'|'+SEN.map(s=>(J.esc[s[0]]||[]).join(',')).join('|');
+ let sd=hash7(chave);const r=()=>((sd=sd*16807%2147483647)/2147483647);const id='i'+(hash7(chave+'x')%1e6);
+ const fav=SEN.map(s=>{const n=(J.esc[s[0]]||[])[0];const m=n&&META[s[0]]&&META[s[0]][n];return m?m[1]:null;});
+ const cores=fav.map((c,k)=>c||null);const qtd=SEN.map(s=>(J.esc[s[0]]||[]).length);
+ const MUNDO=[
+  {a:'#0E2A1A',b:'#3E6B3A',c:'#C9A46A'}, // Raiz: verde e terra
+  {a:'#2A160C',b:'#6B3F22',c:'#F2C27A'}, // Ninho: âmbar e aconchego
+  {a:'#0C0F33',b:'#2B3A8A',c:'#9DB4FF'}, // Vento: índigo em movimento
+  {a:'#081B2E',b:'#1E5A7A',c:'#BFE3FF'}, // Lago: azul calmo
+  {a:'#1E0A26',b:'#6B1F5A',c:'#FFD23F'}, // Faísca: ameixa e energia
+  {a:'#0F3A45',b:'#6FC3C9',c:'#F4FBFF'}, // Brisa: água e leveza
+  {a:'#3A1424',b:'#C8577A',c:'#FFD6C2'}];// Abraço: rosa e calor
+ const M=MUNDO[top],M2=MUNDO[seg];let s='';
+ s+=`<defs><radialGradient id="${id}f" cx="${(.3+r()*.4).toFixed(2)}" cy="${(.25+r()*.3).toFixed(2)}" r=".95"><stop offset="0" stop-color="${M.b}"/><stop offset="1" stop-color="${M.a}"/></radialGradient>`;
+ C.forEach((c,k)=>{const cc=cores[k]||c;s+=`<radialGradient id="${id}l${k}"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".95"/><stop offset=".25" stop-color="${cc}" stop-opacity=".95"/><stop offset="1" stop-color="${cc}" stop-opacity="0"/></radialGradient>`;});
+ s+=`<filter id="${id}b"><feGaussianBlur stdDeviation="1.4"/></filter></defs><rect width="300" height="300" fill="url(#${id}f)"/>`;
+ // 1. formato do mundo
+ const forma=(t,op,cor)=>{let o='';
+  if(t===0){for(let i=0;i<4;i++){const y=190+i*28+r()*10;o+=`<path d="M0 ${y} Q 75 ${y-30-r()*30} 150 ${y} T 300 ${y-10} V300 H0Z" fill="${cor}" opacity="${(op*(.35+i*.15)).toFixed(2)}"/>`;}}
+  if(t===1){for(let i=0;i<9;i++){o+=`<ellipse cx="150" cy="${160+r()*8}" rx="${40+i*13}" ry="${22+i*8}" fill="none" stroke="${cor}" stroke-width="${2+r()*2}" opacity="${(op*.5).toFixed(2)}" transform="rotate(${(r()-.5)*14} 150 160)"/>`;}}
+  if(t===2){for(let k=0;k<3;k++){let p='';const a0=r()*6.28;for(let a=0;a<14;a+=.12){const rr=4+a*9;p+=(a?'L':'M')+(150+rr*Math.cos(a+a0)).toFixed(1)+' '+(150+rr*Math.sin(a+a0)).toFixed(1);}o+=`<path d="${p}" fill="none" stroke="${cor}" stroke-width="${1.5+k}" opacity="${(op*.45).toFixed(2)}"/>`;}}
+  if(t===3){for(let i=0;i<14;i++){const y=150+i*11;o+=`<line x1="${10+r()*40}" y1="${y}" x2="${250+r()*45}" y2="${y}" stroke="${cor}" stroke-width="${1+r()*2}" stroke-linecap="round" opacity="${(op*(.2+i*.04)).toFixed(2)}"/>`;}}
+  if(t===4){for(let i=0;i<22;i++){const a=i/22*6.28+r()*.2,l=60+r()*90;o+=`<line x1="150" y1="150" x2="${(150+Math.cos(a)*l).toFixed(1)}" y2="${(150+Math.sin(a)*l).toFixed(1)}" stroke="${cor}" stroke-width="${1+r()*2.5}" stroke-linecap="round" opacity="${(op*.5).toFixed(2)}"/>`;}}
+  if(t===5){for(let i=0;i<8;i++){const y=60+i*30;o+=`<path d="M-10 ${y} C 60 ${y-22} 120 ${y+22} 180 ${y} S 280 ${y-20} 320 ${y}" fill="none" stroke="${cor}" stroke-width="${2+r()*2}" opacity="${(op*.4).toFixed(2)}"/>`;}}
+  if(t===6){for(let i=0;i<6;i++){o+=`<circle cx="${110+r()*80}" cy="${110+r()*80}" r="${50+r()*50}" fill="${cor}" opacity="${(op*.16).toFixed(2)}"/>`;}}
+  return o;};
+ s+=forma(top,1,M.c);s+=forma(seg,.55,M2.c);
+ // 4. detalhe do tema mais repetido
+ const E=J.esc||{};const tem=Object.entries(TEMAS).map(([n,L])=>[n,SEN.filter(x=>(E[x[0]]||[]).some(v=>L.includes(v))).length]).sort((a,b)=>b[1]-a[1])[0];
+ const tema=tem&&tem[1]>=2?tem[0]:'';let d='';
+ if(tema==='água'){for(let i=0;i<3;i++){const y=262+i*12;d+=`<path d="M0 ${y} Q 25 ${y-7} 50 ${y} T 100 ${y} T 150 ${y} T 200 ${y} T 250 ${y} T 300 ${y}" fill="none" stroke="#BFE3FF" stroke-width="1.6" opacity=".5"/>`;}}
+ if(tema==='noite'){for(let i=0;i<40;i++)d+=`<circle cx="${(r()*300).toFixed(0)}" cy="${(r()*140).toFixed(0)}" r="${(.5+r()*1.2).toFixed(1)}" fill="#FFF6E0" opacity="${(.4+r()*.5).toFixed(2)}"/>`;}
+ if(tema==='infância'){for(let i=0;i<24;i++)d+=`<rect x="${(r()*290).toFixed(0)}" y="${(r()*290).toFixed(0)}" width="4" height="7" rx="1.5" fill="${C[i%7]}" opacity=".55" transform="rotate(${(r()*180).toFixed(0)} 150 150)"/>`;}
+ if(tema==='natureza'){for(let i=0;i<12;i++){const x=r()*300,y=r()*300,a=r()*180;d+=`<path d="M${x.toFixed(0)} ${y.toFixed(0)} q 6 -10 0 -20 q -6 10 0 20z" fill="#9BE38F" opacity=".35" transform="rotate(${a.toFixed(0)} ${x.toFixed(0)} ${y.toFixed(0)})"/>`;}}
+ if(tema==='calor e aconchego'){d+=`<circle cx="150" cy="150" r="120" fill="#FFB27A" opacity=".10"/><circle cx="150" cy="150" r="70" fill="#FFD6A8" opacity=".10"/>`;}
+ if(tema==='cozinha e mesa'){for(let i=0;i<5;i++){const x=60+i*45;d+=`<path d="M${x} 280 c -10 -20 10 -30 0 -50 c -10 -20 10 -30 0 -50" fill="none" stroke="#F4F1EA" stroke-width="2" opacity=".22"/>`;}}
+ s+=d;
+ // 3. as 7 luzes, no desenho do mundo
+ const pos=k=>{const t=k/7;if(top===0)return [30+k*40,205-Math.sin(t*3.14)*60+r()*14];if(top===3||top===5)return [30+k*40,140+Math.sin(t*6.28+r())*26];
+  if(top===2){const a=t*8+r()*.3,rr=26+k*15;return [150+Math.cos(a)*rr,150+Math.sin(a)*rr];}if(top===4){const a=t*6.28+r()*.4,rr=55+r()*55;return [150+Math.cos(a)*rr,150+Math.sin(a)*rr];}
+  const a=(-90+k*360/7)*Math.PI/180,rr=top===6?62:80;return [150+Math.cos(a)*rr+(r()-.5)*10,150+Math.sin(a)*rr+(r()-.5)*10];};
+ const L=SEN.map((x,k)=>[k,...pos(k)]);
+ if(top===1||top===6||top===2){let p='';L.filter(([k])=>cores[k]).forEach(([k,x,y],i)=>{p+=(i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1);});s+=`<path d="${p}" fill="none" stroke="${M.c}" stroke-width="1" opacity=".35"/>`;}
+ L.forEach(([k,x,y])=>{if(!cores[k]){s+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4" fill="none" stroke="${M.c}" stroke-opacity=".35" stroke-dasharray="2 2"/>`;return;}const rr=16+Math.min(7,qtd[k])*2.2+r()*6;
+  s+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${rr.toFixed(1)}" fill="url(#${id}l${k})"/><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(rr*.18).toFixed(1)}" fill="#FFFFFF" opacity=".9" filter="url(#${id}b)"/>`;});
+ return `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Imagem dos 7 sentidos">${s}</svg>`;}
+mapaSVG=function(){return imagem7();};
+/* Uma palavra por descoberta (só as que a pessoa talvez não tenha percebido) */
+function palavra7(x){const t=x.t;if(t.indexOf(':')>0){let w=t.split(':').pop().trim();w=({'calor e aconchego':'aconchego','cozinha e mesa':'mesa'})[w]||w;return w.charAt(0).toUpperCase()+w.slice(1);}
+ const M={'Onde você é mais decidido':'Decisão','Sua paleta é quente':'Calor','Sua paleta é fria':'Frescor','Sua paleta mistura quente e frio':'Equilíbrio','Não foi acaso':'Coerência','Uma criança no mapa':'Infância'};return M[t]||t;}
+function rotulo7(x){const t=x.t;if(t.indexOf('O fio invisível')===0)return 'o fio que liga as suas escolhas';if(t.indexOf('O que quase não apareceu')===0)return 'o que quase não apareceu';if(t.indexOf('Onde você é mais decidido')===0)return 'onde você é mais decidido';if(t.indexOf('Sua paleta')===0)return 'a sua paleta';if(t==='Não foi acaso')return 'não foi acaso';if(t==='Uma criança no mapa')return 'uma criança no mapa';return '';}
 
 render();
 </script></body></html>
