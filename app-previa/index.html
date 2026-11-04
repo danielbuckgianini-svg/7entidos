@@ -48,6 +48,27 @@
 .bv-fala{font-family:Fraunces,Georgia,serif;font-size:clamp(22px,5.6vw,28px);line-height:1.3;color:#fff;min-height:150px;margin:0 0 16px;animation:fadein .5s ease}
 @keyframes fadein{from{opacity:0;transform:translateY(6px)}}
 @media (prefers-reduced-motion:reduce){.bv-ceu i,.bv-anel.fala i,.bv-fala{animation:none}}
+/* ===== Guardião do Hall da Fama · Theo, Guardião dos Campeões (04/11) ===== */
+.gh-fig{position:relative;width:190px;height:190px;margin:8px auto 4px}
+.gh-fig img,.gh-fig svg{width:100%;height:100%;object-fit:contain;display:block}
+.gh-fig.revela{animation:ghrevela .9s ease}@keyframes ghrevela{from{opacity:0;transform:scale(.8);filter:brightness(3)}}
+.gh-balao{position:relative;background:#F4F1EA;color:#0A0F24;border-radius:18px;padding:14px 16px;font-family:Fraunces,Georgia,serif;font-size:21px;line-height:1.3;margin:10px 0 16px;border:3px solid #0A0F24;box-shadow:4px 4px 0 #F9CB39;animation:fadein .4s ease}
+.gh-balao:before{content:"";position:absolute;top:-14px;left:50%;margin-left:-10px;border:10px solid transparent;border-bottom-color:#0A0F24;border-top:0}
+.gh-nome{font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#5AB8FF}
+.gh-senha{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0 10px}
+.gh-senha button{font:inherit;font-weight:700;font-size:14px;border-radius:14px;border:2px solid #3A4680;background:#18224A;color:#F4F1EA;padding:12px 8px;cursor:pointer}
+.gh-senha button:focus-visible,.gh-ouvir:focus-visible{outline:3px solid #F9CB39;outline-offset:2px}
+.gh-medalhas{display:flex;flex-direction:column;gap:8px;text-align:left;margin:4px 0 14px}
+.gh-med{display:flex;align-items:center;gap:12px;background:#18224A;border-radius:14px;padding:10px 12px;font-weight:700}
+.gh-med i{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:900;color:#0A0F24;flex:none}
+.gh-med.off{opacity:.45}.gh-med.off i{background:#26315F!important;color:#AEB5D6}
+.gh-trofeu{width:150px;margin:6px auto 0;animation:ghrevela .9s ease}
+.gh-ouvir{font:inherit;font-size:13px;font-weight:700;background:none;border:1px solid #3A4680;color:#AEB5D6;border-radius:999px;padding:6px 12px;cursor:pointer;margin-bottom:6px}
+.gh-sombra{display:flex;gap:12px;align-items:center}.gh-sombra .gh-fig{width:84px;height:84px;margin:0;flex:none}
+.gh-sec{background:#0A0F24;color:#F4F1EA}.gh-sec .muted{color:#AEB5D6!important}
+.cj-guard{display:inline-block;width:22px;height:22px;vertical-align:middle;margin-left:4px}
+@media (prefers-reduced-motion:reduce){.gh-fig.revela,.gh-balao,.gh-trofeu{animation:none}}
+
 
 /* ===== Régua pessoal (número + palavra + lembrança) ===== */
 .nc-num{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-weight:800;font-size:15px;color:#161616;background:#ffd43b;flex:none}
@@ -700,6 +721,7 @@ function Home({s,go,resume,pause,update,toast,downloads}){
       <p class="small" style=${{margin:"12px 0 0",color:"#fff"}} hidden=${!pausado}>⏸ <b>App em pausa.</b> Nada se perde. Volte quando quiser na aba “Eu”.</p>
     </section>
     <${NcJornadaCard} s=${s} update=${update} toast=${toast} go=${go}/>
+    <${HallPortaCard} s=${s} downloads=${downloads} toast=${toast}/>
     <section class="card"><div class="spread" style=${{alignItems:"center"}}><div><div class="eyebrow">O que fazer hoje</div><h2 style=${{margin:0}}>Seu dia no 7entidos</h2></div>
       <div aria-label=${"Seu dia: "+feitos+" de 2"} title="Descoberta e check-in de hoje" style=${{fontSize:"1.5rem",letterSpacing:2}}>${[0,1].map(i=>html`<span key=${i} style=${{color:i<feitos?"var(--gold)":"var(--line)"}}>★</span>`)}</div></div>
       <div class="list" style=${{marginTop:12}}>${tasks.map(t=>html`<div key=${t.k} class="item spread" style=${{alignItems:"center"}}>
@@ -881,9 +903,100 @@ function Constelacao({feitas,titulo,frase,onFim}){
     <div class="cj" aria-hidden="true"><svg viewBox="0 0 120 410" width="120" height="410">
       ${P.slice(1).map((q,k)=>html`<line key=${"l"+k} x1=${P[k][0]} y1=${P[k][1]} x2=${q[0]} y2=${q[1]} stroke=${k+1<=feitas?"#F9CB39":"#3A4680"} stroke-width=${k+1<=feitas?2.5:1.5} stroke-dasharray=${k+1<=feitas?"":"4 5"}/>`)}
       ${P.map((q,k)=>{const e=est(k);return html`<g key=${k} class=${"cj-"+e}><circle cx=${q[0]} cy=${q[1]} r=${e==="agora"?13:10} fill=${e==="breve"?"#18224A":C7[k]} stroke=${e==="breve"?"#5A6492":"#0A0F24"} stroke-width="2"/>${e==="feita"?html`<text x=${q[0]} y=${q[1]+4} text-anchor="middle" font-size="12" font-weight="900" fill="#0A0F24">✓</text>`:null}</g>`})}
-    </svg>${P.map((q,k)=>{const e=est(k);return html`<span key=${k} class=${"cj-nome cj-"+e} style=${{left:q[0]+20,top:q[1]-10,width:"calc(100% - "+(q[0]+20)+"px)"}}>${FASES7[k][0]}${e==="agora"?html`<small>Agora</small>`:e==="breve"?html`<small>${k>=4?"Em breve":"Bloqueada"}</small>`:null}</span>`})}</div>
+    </svg>${P.map((q,k)=>{const e=est(k);return html`<span key=${k} class=${"cj-nome cj-"+e} style=${{left:q[0]+20,top:q[1]-10,width:"calc(100% - "+(q[0]+20)+"px)"}}>${FASES7[k][0]}${e==="agora"?html`<small>Agora</small>`:e==="breve"?html`<small>${k===6?"Um guardião espera aqui":k>=4?"Em breve":"Bloqueada"}</small>`:null}${k===6&&e!=="feita"?html`<span class="cj-guard"><${TheoGibi} sombra=${true}/></span>`:null}</span>`})}</div>
     <button class="nc-btn" onClick=${onFim}>Continuar</button>
   </div></div>`;
+}
+/* ===== Guardião do Hall da Fama (Sala do Theo, 04/11) =====
+   Personagem criado pelo Theo (9 anos), com autorização da mãe (Adriana):
+   "Theo, Guardião dos Campeões" · armadura dourada de cavaleiro, coroa, um dragãozinho, luz azul,
+   ouvido supersônico, Hall numa nave espacial, entrega troféu, abre o portão com senha secreta, estilo gibi.
+   Imagem final: app-previa/theo/guardiao.png (feita no Canva IA a partir da foto). Enquanto não chega, aparece o desenho provisório abaixo.
+   Voz: app-previa/theo/01..07.mp3 (gravadas pelo Theo). Se o arquivo não existir, aparece só o balão. */
+const GH_FALAS={
+  porta:{a:"07-porta",t:"Ei! O Hall ainda está fechado. Continue a jornada que eu te espero aqui."},
+  oi:{a:"01-bem-vindo",t:"Bem-vindo ao Hall da Fama!"},
+  sou:{a:"02-quem-sou",t:"Eu sou o Theo, Guardião dos Campeões."},
+  senha:{a:"03-senha",t:"Pra entrar, diga a senha secreta!"},
+  quase:{a:null,t:"Quase! Meu ouvido supersônico ouviu outra coisa. Pensa no 1º lugar do seu pódio."},
+  medalhas:{a:"04-medalhas",t:"Olha as medalhas que você conquistou!"},
+  trofeu:{a:"05-trofeu",t:"Esse troféu é seu, campeão!"},
+  bau:{a:"06-bau",t:"Aqui está o seu baú. Ele guarda toda a sua jornada."}
+};
+function ghTocar(k){const f=GH_FALAS[k];if(!f||!f.a)return;try{const au=new Audio("theo/"+f.a+".mp3");au.play().catch(()=>{})}catch(e){}}
+function TheoGibi({sombra}){
+  const o="#0A0F24";const sw=3;
+  if(sombra)return html`<svg viewBox="0 0 200 200" role="img" aria-label="Silhueta de um guardião misterioso">
+    <circle cx="100" cy="104" r="84" fill="#5AB8FF" opacity=".16"/>
+    <g fill="#1B2552" stroke="#3A4680" stroke-width="2"><path d="M70 62l10 14 10-18 10 18 10-18 10 18 10-14v22H70z"/><circle cx="100" cy="98" r="28"/><path d="M52 196c0-40 20-62 48-62s48 22 48 62z"/><path d="M150 150c10-14 30-14 36 0-6 4-10 12-8 20-10-2-20-6-28-20z"/></g>
+    <text x="100" y="110" text-anchor="middle" font-size="34" font-weight="900" fill="#5AB8FF" font-family="Georgia,serif">?</text></svg>`;
+  return html`<svg viewBox="0 0 200 200" role="img" aria-label="Theo, Guardião dos Campeões, de armadura dourada, coroa e um dragãozinho">
+    <circle cx="100" cy="104" r="84" fill="#5AB8FF" opacity=".22"/><circle cx="100" cy="104" r="62" fill="#5AB8FF" opacity=".18"/>
+    <path d="M52 196c0-40 20-62 48-62s48 22 48 62z" fill="#F2B632" stroke=${o} stroke-width=${sw}/>
+    <path d="M100 136v60M72 160h56" stroke="#C98A12" stroke-width="4"/><circle cx="100" cy="160" r="9" fill="#5AB8FF" stroke=${o} stroke-width=${sw}/>
+    <path d="M58 152c-8 4-14 12-14 22h22z" fill="#F9CB39" stroke=${o} stroke-width=${sw}/><path d="M142 152c8 4 14 12 14 22h-22z" fill="#F9CB39" stroke=${o} stroke-width=${sw}/>
+    <circle cx="100" cy="98" r="30" fill="#F1C7A0" stroke=${o} stroke-width=${sw}/>
+    <path d="M72 90c2-16 14-24 28-24s26 8 28 24c-8-6-18-8-28-8s-20 2-28 8z" fill="#6B4226" stroke=${o} stroke-width=${sw}/>
+    <path d="M74 64l10 14 8-18 8 16 8-16 8 18 10-14v20H74z" fill="#F9CB39" stroke=${o} stroke-width=${sw} stroke-linejoin="round"/>
+    <circle cx="100" cy="72" r="4" fill="#5AB8FF" stroke=${o} stroke-width="1.5"/>
+    <circle cx="89" cy="100" r="3.6" fill=${o}/><circle cx="111" cy="100" r="3.6" fill=${o}/>
+    <path d="M89 112c6 6 16 6 22 0" fill="none" stroke=${o} stroke-width=${sw} stroke-linecap="round"/>
+    <path d="M68 96c-6 0-8 10-2 12M132 96c6 0 8 10 2 12" fill="#F1C7A0" stroke=${o} stroke-width="2"/>
+    <path d="M60 92c-6-4-10 2-8 8M140 92c6-4 10 2 8 8" fill="none" stroke="#5AB8FF" stroke-width="2.5" stroke-linecap="round"/>
+    <g transform="translate(146 128)"><path d="M4 26c0-16 12-24 24-20 10 4 12 16 6 24-6 6-20 8-30-4z" fill="#7DDB8B" stroke=${o} stroke-width=${sw}/>
+      <path d="M14 8l4-10 6 8M26 6l6-8 2 10" fill="#7DDB8B" stroke=${o} stroke-width="2" stroke-linejoin="round"/>
+      <path d="M8 14c-8-8-14-2-12 6 4-2 8-2 12-2z" fill="#5AB8FF" stroke=${o} stroke-width="2"/>
+      <circle cx="24" cy="16" r="2.6" fill=${o}/><path d="M34 22c4 0 6 2 8 0" stroke="#FF8A5C" stroke-width="2.5" stroke-linecap="round" fill="none"/></g>
+  </svg>`;
+}
+function TheoFigura({sombra,revela}){
+  const [semImg,setSemImg]=useState(false);
+  return html`<div class=${"gh-fig"+(revela?" revela":"")}>${sombra||semImg?html`<${TheoGibi} sombra=${sombra}/>`:html`<img src="theo/guardiao.png" alt="Theo, Guardião dos Campeões" onError=${()=>setSemImg(true)}/>`}</div>`;
+}
+function TrofeuSVG(){return html`<svg class="gh-trofeu" viewBox="0 0 120 130" aria-hidden="true"><path d="M30 10h60v30c0 22-14 36-30 36S30 62 30 40z" fill="#F9CB39" stroke="#0A0F24" stroke-width="3"/><path d="M30 18H12c0 18 8 28 20 30M90 18h18c0 18-8 28-20 30" fill="none" stroke="#0A0F24" stroke-width="3"/><path d="M52 76h16v18H52z" fill="#F2B632" stroke="#0A0F24" stroke-width="3"/><path d="M34 94h52v14H34z" fill="#5AB8FF" stroke="#0A0F24" stroke-width="3"/><path d="M26 108h68v12H26z" fill="#F2B632" stroke="#0A0F24" stroke-width="3"/><path d="M60 24l5 10 11 1-8 8 2 11-10-5-10 5 2-11-8-8 11-1z" fill="#fff" opacity=".85"/></svg>`;}
+const ghFeitas=s=>{const v=s.videos||{};let n=0;if(v.v1)n=1;if(ultimoMapa(s))n=2;if(s.podio)n=3;if(s.novoComeco&&s.novoComeco.concluidoEm)n=4;return n};
+async function ghBaixar(downloads,filename,data,type){
+  if(downloads){try{await downloads.save({filename,data});return true}catch(e){if(e&&e.code==="declined")return false}}
+  try{const url=URL.createObjectURL(new Blob([data],{type}));const a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);return true}catch(e){return false}
+}
+function GuardiaoHall({s,downloads,toast,onClose}){
+  const [passo,setPasso]=useState("oi");const [fala,setFala]=useState("oi");
+  const campea=sentidosDoPodio(s.podio)[0]||null;const feitas=ghFeitas(s);const nome=(personOf(s).name||"").trim();
+  const ir=(p,f)=>{setPasso(p);setFala(f||p);ghTocar(f||p)};
+  useEffect(()=>{ghTocar("oi")},[]);
+  const fl=GH_FALAS[fala];const txt=fala==="trofeu"&&nome?"Esse troféu é seu, "+nome+"!":fl.t;
+  const stamp=new Date().toISOString().slice(0,10);
+  async function bau(kind){let ok=false;try{ok=kind==="livro"?await ghBaixar(downloads,"livro-7entidos-"+stamp+".html",livroHTML(s),"text/html"):await ghBaixar(downloads,"jornada-7entidos-"+stamp+".json",JSON.stringify(s,null,2),"application/json")}catch(e){console.warn(e)}if(ok&&toast)toast("Seu baú foi aberto")}
+  return ncPortal(html`<div class="nc-tela bv-tela" role="dialog" aria-modal="true" aria-label="Hall da Fama"><div class="nc-caixa fade" style=${{textAlign:"center"}}>
+    <div class="nc-eyebrow">Hall da Fama · a bordo da nave</div>
+    ${passo==="trofeu"?html`<${TrofeuSVG}/>`:html`<${TheoFigura} revela=${passo==="oi"}/>`}
+    <div class="gh-nome">Theo, Guardião dos Campeões</div>
+    <div class="gh-balao" aria-live="polite" key=${fala+passo}>${txt}</div>
+    ${fl.a?html`<button class="gh-ouvir" onClick=${()=>ghTocar(fala)}>🔊 Ouvir o Theo</button>`:null}
+    ${passo==="oi"?html`<button class="nc-btn" onClick=${()=>ir("sou")}>Continuar</button>`:null}
+    ${passo==="sou"?html`<button class="nc-btn" onClick=${()=>ir("senha")}>Quero entrar</button>`:null}
+    ${passo==="senha"?html`<p class="nc-apoio" style=${{marginTop:0}}>Dica: a senha é o seu sentido campeão, o 1º lugar do seu pódio.</p>
+      <div class="gh-senha">${NC_SENTIDOS.map(x=>html`<button key=${x.id} style=${{borderColor:x.c}} onClick=${()=>{if(!campea||x.id===campea.id)ir("medalhas");else{setFala("quase")}}}>${x.t}</button>`)}</div>`:null}
+    ${passo==="medalhas"?html`<div class="gh-medalhas">${FASES7.slice(0,6).map((f,k)=>{const on=k<feitas;return html`<div key=${k} class=${"gh-med"+(on?"":" off")}><i style=${{background:["#FFD23F","#5AB8FF","#FF8A5C","#7DDB8B","#FF6FA3","#A98BFF"][k]}}>${on?"★":k+1}</i><span>${f[0]}<br/><small style=${{fontWeight:600,color:"#AEB5D6"}}>${on?"Conquistada":k>=4?"Em breve":"Ainda não"}</small></span></div>`})}</div>
+      <button class="nc-btn" onClick=${()=>ir("trofeu")}>Receber meu troféu</button>`:null}
+    ${passo==="trofeu"?html`<button class="nc-btn" onClick=${()=>ir("bau")}>Abrir o baú</button>`:null}
+    ${passo==="bau"?html`<p class="nc-apoio" style=${{marginTop:0}}>O baú guarda todo o seu histórico. Só você tem a chave: o arquivo fica no seu celular.</p>
+      <button class="nc-btn" onClick=${()=>bau("livro")}>Baixar meu livro da jornada</button>
+      <button class="nc-btn" style=${{background:"#18224A",color:"#F4F1EA",border:"1px solid #3A4680"}} onClick=${()=>bau("json")}>Baixar tudo (cópia completa)</button>`:null}
+    <button class="nc-btn" style=${{background:"none",color:"#AEB5D6",fontWeight:600}} onClick=${onClose}>Sair do Hall</button>
+  </div></div>`);
+}
+/* Na tela inicial: a porta fechada do Hall com a silhueta do Guardião (sem revelar o rosto). */
+function HallPortaCard({s,downloads,toast}){
+  const [aberto,setAberto]=useState(false);const [disse,setDisse]=useState(false);
+  if(!s.videos||!s.videos.v1)return null;
+  return html`<section class="card gh-sec"><div class="gh-sombra">
+    <button aria-label="Tocar no guardião" onClick=${()=>{setDisse(true);ghTocar("porta")}} style=${{background:"none",border:0,padding:0,cursor:"pointer"}}><${TheoFigura} sombra=${true}/></button>
+    <div><div class="eyebrow" style=${{color:"#5AB8FF"}}>Hall da Fama · Em breve</div><b>${disse?GH_FALAS.porta.t:"Um guardião espera você no fim da jornada."}</b>
+      <div class="small muted" style=${{marginTop:4}}>Toque nele para ouvir.</div></div></div>
+    <div class="row" style=${{marginTop:12}}><button class="btn" onClick=${()=>setAberto(true)}>Espiar o Hall (só na prévia)</button></div>
+    ${aberto?html`<${GuardiaoHall} s=${s} downloads=${downloads} toast=${toast} onClose=${()=>setAberto(false)}/>`:null}
+  </section>`;
 }
 function PodioVer({p,onClose}){
   const top=(p.campeas||[]).slice(0,3);
@@ -2053,7 +2166,14 @@ function App(){
     ${okConsent?(state.novoComeco&&state.novoComeco.concluidoEm?null:html`<${NovoComeco} s=${state} update=${update}/>`):html`<${ConsentGate} s=${state} update=${update}/>`}
   </div>`;
 }
-ReactDOM.createRoot(document.getElementById("root")).render(html`<${App}/>`);
+/* Prévia: link com #theo abre direto o Hall da Fama com o Guardião (pula vídeo, fases e combinado). */
+function AtalhoTheo(){
+  const [dl,setDl]=useState(null);
+  useEffect(()=>{try{if(window.claude&&window.claude.use)window.claude.use("downloads").then(d=>d&&setDl(d)).catch(()=>{})}catch(e){}},[]);
+  const s=lsGet()||{};
+  return html`<${GuardiaoHall} s=${s} downloads=${dl} toast=${null} onClose=${()=>{location.hash="";location.reload()}}/>`;
+}
+ReactDOM.createRoot(document.getElementById("root")).render(location.hash==="#theo"?html`<${AtalhoTheo}/>`:html`<${App}/>`);
 </script>
 </body>
 </html>
