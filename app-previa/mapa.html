@@ -63,6 +63,16 @@ h1{font-size:23px;line-height:1.25;margin:4px 0 10px}h2{font-size:18px;margin:22
 .pd-deg1{padding-bottom:34px}.pd-deg2{padding-bottom:18px}
 .pd-det{margin:14px 0;background:var(--field);border:1px solid var(--line);border-radius:14px;padding:10px 14px}.pd-det summary{cursor:pointer;font-weight:800}.pd-det p{font-size:14.5px;margin:8px 0 0}
 @media (prefers-reduced-motion:reduce){.pd-carta,.pd-const i{transition:none}.pd-campea{animation:none}}
+.pn{align-items:center;min-width:0}.pn>div{min-width:0}.pn .mini{width:56px;height:56px;flex:0 0 56px;border-radius:12px}
+.pn-abas{display:flex;gap:3px}.pn-aba{flex:1 1 0;min-width:0;text-overflow:ellipsis;text-align:center;font-size:10.5px;font-weight:800;padding:5px 2px;border-radius:9px 9px 0 0;border:1px solid var(--line);background:#0F1636;color:var(--mute);white-space:nowrap;overflow:hidden}
+.pn-aba.on{background:var(--soft);color:var(--ink);border-color:#3A4680;border-bottom:2px solid #E9C46A}.pn-aba.tr{filter:blur(1.6px);opacity:.6}
+.pn-ceu{width:100%;height:38px;display:block;border-radius:10px;background:linear-gradient(180deg,#0B1230,#121B44)}
+.pn-leg{display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap;font-size:11px;color:var(--mute)}
+.pn-pisca{animation:pnpisca 1.2s ease-in-out 2;transform-box:fill-box;transform-origin:center}@keyframes pnpisca{50%{transform:scale(2.2);opacity:1}}
+.pn-brisa{display:flex;gap:10px;align-items:center;background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:8px 12px;margin:0 0 10px;font-size:15px;animation:pnentra .5s ease}
+@keyframes pnentra{from{opacity:0;transform:translateY(-6px)}}
+.pn-anel{position:relative;flex:0 0 26px;width:26px;height:26px}.pn-anel i{position:absolute;width:6px;height:6px;border-radius:50%}
+@media (prefers-reduced-motion:reduce){.pn-pisca,.pn-brisa{animation:none}}
 </style></head><body><div class="w" id="app"></div>
 <script>/* ---------- estímulos sensoriais (sons feitos aqui, sem arquivos) ---------- */
 let AC=null,TOCANDO=null;
@@ -299,10 +309,20 @@ function perfil(){const sc=[0,0,0,0,0,0,0];SEN.forEach(([id,,,,,tiles])=>(J.esc[
  const ordem=sc.map((v,k)=>[v,k]).sort((a,b)=>b[0]-a[0]);return {sc,top:ordem[0][1],seg:ordem[1][1],max:Math.max(1,...sc)};}
 function mapaSVG(){FID=Math.floor(Math.random()*1e6);const fav=SEN.map(([id,,,,,tiles],k)=>{const n=(J.esc[id]||[])[0];return n&&META[id][n]?META[id][n][1]:null;});
  A=fav.map(c=>c||'#3A4270');const v=(J.esc.mapa||[])[0];const tv=SEN[0][5].find(t=>t.n===v);return `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">${(tv?tv.art:vinci)()}</svg>`;}
-function topo(){const n=SEN.filter(s=>feito(s[0])).length;const prox=SEN.findIndex(s=>!feito(s[0]));
- return `<div class="topo"><div class="mini">${mapaSVG()}</div><div style="flex:1;min-width:0"><div class="small mute">Seu mapa · ${n} de 7 sentidos</div>
- <div class="nums">${SEN.map(([id,sen,ic,cor],k)=>`<button class="num ${feito(id)?'ok':''} ${J.tela==='sen'&&J.i===k?'at':''} ${k===prox?'glow':''}" style="--c:${cor}" data-a="ir" data-k="${k}" aria-label="Sentido ${k+1}: ${sen}${pulado(id)?' (pulado)':feito(id)?' (feito)':''}">${pulado(id)?'–':feito(id)?'✓':k+1}</button>`).join('')}</div>
- <div class="dots">${SEN.map(([id,,,cor])=>`<i style="${feito(id)?`background:${cor};box-shadow:0 0 8px ${cor}`:''}"></i>`).join('')}</div><div class="small mute">${n===7?'Tudo pronto!':`Faltam ${7-n} ${7-n===1?'sentido':'sentidos'}`}</div></div></div>`;}
+/* Painel da Fase 1 (Sala "A Brisa e a Fase 1", validado em 04/11): compacto no topo; o quadradinho da imagem se formando;
+   4 fases em abas de livro, só a Fase 1 aberta e as outras borradas; céu de estrelas: uma estrela acende a cada escolha
+   (49 no total), com brilho extra quando um sentido fecha; a Brisa comenta quando um sentido termina. */
+let ESTRELAS=null;
+function topo(){if(!ESTRELAS){let sd=7;const rn=()=>((sd=sd*16807%2147483647)/2147483647);ESTRELAS=Array.from({length:49},()=>[6+rn()*244,5+rn()*28]);}
+ const tot=SEN.reduce((a,s)=>a+Math.min(7,(J.esc[s[0]]||[]).length),0);const br=J.brilho?SEN.findIndex(s=>s[0]===J.brilho):-1;
+ const ab=['Fase 1','Fase 2','Fase 3','Fase 4'].map((n,k)=>`<span class="pn-aba ${k?'tr':'on'}">${k?'🔒':''}${n}</span>`).join('');
+ const est=ESTRELAS.slice(0,tot).map(([x,y],i)=>{const ult=i===tot-1;const fx=br>=0&&i>=tot-7;return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${ult?2.4:1.5}" fill="#FFF6E0" opacity="${ult?1:.85}" class="${fx?'pn-pisca':''}" style="${ult?'filter:drop-shadow(0 0 3px #FFE9B0)':''}${fx?';animation-delay:'+((i-(tot-7))*.08)+'s':''}"/>`;}).join('');
+ J.brilho=null;
+ return `<div class="topo pn"><div class="mini">${mapaSVG()}</div><div style="flex:1;min-width:0;display:grid;gap:6px"><div class="pn-abas" aria-label="Fase 1 de 4; as fases 2, 3 e 4 se desbloqueiam depois">${ab}</div>
+ <svg class="pn-ceu" viewBox="0 0 256 38" preserveAspectRatio="none" aria-hidden="true">${est}</svg><div class="pn-leg"><span>${tot} de 49 estrelas acesas</span><span>uma a cada escolha</span></div></div></div>`;}
+const BRISA_FECHA=['Você está indo muito bem.','Que escolhas bonitas!','Bora para o próximo?','Seu mapa está ganhando cor.','Adorei essas escolhas.','Falta pouco!','Último sentido chegando!'];
+function balaoBrisa(){const id=J.fechou;if(!id)return '';const s=SEN.find(x=>x[0]===id);if(!s)return '';const k=SEN.indexOf(s);
+ return `<div class="pn-brisa" role="status"><span class="pn-anel" aria-hidden="true">${C.map((c,i)=>{const a=(-90+i*360/7)*Math.PI/180;return `<i style="background:${c};left:${10+Math.cos(a)*9}px;top:${10+Math.sin(a)*9}px"></i>`;}).join('')}</span><span><b>Brisa:</b> Sentido ${k+1} concluído! ${BRISA_FECHA[k%BRISA_FECHA.length]}</span></div>`;}
 function vAbre(){return `<div class="hero"><div class="luzes">${C.map(c=>`<i style="background:${c};box-shadow:0 0 10px ${c}"></i>`).join('')}</div><div class="k">Meu mapa dos 7 sentidos</div><h1 class="f">Escolha 7 de 15.<br>Sete vezes.</h1>
  <p class="mute">Em cada um dos 7 sentidos há 15 opções. Você escolhe as 7 de que mais gosta. Na Fase 2, elas vão se enfrentar num torneio. No fim, nasce a imagem dos seus 7 sentidos e 10 descobertas sobre você. Leva uns 7 minutos.</p>
  <p class="mute small">Se algum sentido não fizer parte da sua vida, você pode pular. Suas escolhas ficam guardadas só neste aparelho.</p>
@@ -311,7 +331,7 @@ function vNota(){return `<div class="hero" style="padding-top:20px"><div class="
  <div class="nota">${[...Array(11)].map((_,n)=>`<button class="${J.nota===n?'on':''}" data-a="nota" data-n="${n}">${n}</button>`).join('')}</div><div class="small mute" style="display:flex;justify-content:space-between;margin-top:6px"><span>0 = nada bem</span><span>10 = muito bem</span></div>
  <button class="btn pri big" data-a="verfim" ${J.nota===null?'disabled':''}>Ver a imagem dos meus 7 sentidos →</button></div>`;}
 function vSen(){const [id,sen,ic,cor,,tiles]=SEN[J.i];const m=J.esc[id]||[];
- return topo()+`<div class="k" style="color:${cor}">${ic} Sentido ${J.i+1} de 7 · ${esc(sen)}</div><h1>${esc(PERG[id])}</h1>
+ return topo()+balaoBrisa()+`<div class="k" style="color:${cor}">${ic} Sentido ${J.i+1} de 7 · ${esc(sen)}</div><h1>${esc(PERG[id])}</h1>
  ${pulado(id)?`<div class="cont">Você pulou este sentido. <button class="btn" style="min-height:36px;padding:6px 12px;margin-left:6px" data-a="despula">Fazer este sentido</button></div>`:`<div class="cont ${m.length>=7?'ok':''}">Escolhidas: <b>${m.length} de 7</b>${m.length<7?` · faltam ${7-m.length}`:' ✓'}</div>`}
  <div class="grid">${(A=['#E9B10E','#2F7FD1','#E8643A','#3E9E5E','#D9487E','#7457C9','#17A99B'],tiles).map((t,k)=>{const o=m.indexOf(t.n);const on=o>=0;const dis=!on&&m.length>=7;return `<div class="tile ${on?'on':''} ${dis?'dis':''}" role="button" tabindex="0" data-a="pick" data-v="${esc(t.n)}" aria-pressed="${on}" style="--c:${cor}"><span class="box">${on?'✓':''}</span>${t.som?`<button class="pl" data-a="play" data-som="${t.som}" aria-label="Ouvir ${esc(t.n)}">▶</button>`:''}<svg viewBox="0 0 300 300">${t.art()}</svg><b>${esc(t.n)}</b></div>`;}).join('')}</div>
  <div class="row"><button class="btn" data-a="volta">← Voltar</button>${m.length?`<button class="btn" data-a="limpa">Limpar</button>`:''}${!pulado(id)&&m.length<7?`<button class="btn" data-a="pula">Pular este sentido</button>`:''}<span class="sp"></span><button class="btn pri" data-a="prox" ${m.length<7&&!pulado(id)?'disabled':''}>${J.i<6?'Próximo sentido →':'Ver meu mapa →'}</button></div>${J.i===6&&nCompletos()<3&&(m.length>=7||pulado(id))?`<p class="small mute">Para ver o seu mapa, faça pelo menos 3 sentidos.</p>`:''}`;}
@@ -344,11 +364,11 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b
  if(a==='fim'){entrega();return;}
  if(a==='nota'){J.nota=+b.dataset.n;salva();render();return;}
  if(a==='verfim'){if(J.nota===null)return;J.tela='fim';salva();enviar('completa');render();scrollTo(0,0);return;}
- if(a==='ir'){para();J.tela='sen';J.i=+b.dataset.k;render();return;}
+ if(a==='ir'){para();J.fechou=null;J.tela='sen';J.i=+b.dataset.k;render();return;}
  if(a==='pick'){const id=SEN[J.i][0];const m=J.esc[id]=J.esc[id]||[];const v=b.dataset.v;const o=m.indexOf(v);if(o>=0)m.splice(o,1);else if(m.length<7)m.push(v);salva();const y=scrollY;render();scrollTo(0,y);return;}
  if(a==='limpa'){J.esc[SEN[J.i][0]]=[];salva();render();return;}
- if(a==='prox'){para();if(J.i<6){J.i++;J.tela='sen';}else{if(nCompletos()<3){const k=SEN.findIndex(s=>!completo(s[0])&&!pulado(s[0]));if(k>=0){J.i=k;J.tela='sen';}render();scrollTo(0,0);return;}J.tela='fim';}salva();render();scrollTo(0,0);return;}
- if(a==='volta'){para();if(J.i>0)J.i--;else J.tela='abre';salva();render();scrollTo(0,0);return;}
+ if(a==='prox'){para();J.fechou=null;{const id0=SEN[J.i][0];if(completo(id0)&&!(J.ditos||{})[id0]){J.ditos=Object.assign({},J.ditos,{[id0]:1});J.fechou=id0;J.brilho=id0;}}if(J.i<6){J.i++;J.tela='sen';}else{if(nCompletos()<3){const k=SEN.findIndex(s=>!completo(s[0])&&!pulado(s[0]));if(k>=0){J.i=k;J.tela='sen';}render();scrollTo(0,0);return;}J.tela='fim';}salva();render();scrollTo(0,0);return;}
+ if(a==='volta'){para();J.fechou=null;if(J.i>0)J.i--;else J.tela='abre';salva();render();scrollTo(0,0);return;}
  if(a==='refaz'){J.t={};J.pede=null;J.esc={};J.nota=null;J.i=0;J.tela='sen';J.t0=Date.now();salva();render();scrollTo(0,0);return;}
  if(a==='baixa'){baixa();return;}});
 document.addEventListener('keydown',e=>{const t=e.target.closest&&e.target.closest('.tile');if(t&&(e.key==='Enter'||e.key===' ')){e.preventDefault();t.click();}});
