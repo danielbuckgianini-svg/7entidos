@@ -329,14 +329,14 @@ function cinco(){const p=perfil(),E=J.esc||{},out=[];
 function vFim(){const p=perfil();const [tn,ti,tk,td]=TAGS[p.top],[sn]=TAGS[p.seg];const L=cinco();const C5=J.conc||{};
  if(J.fim)return `<div class="hero" style="padding-top:20px"><div class="luzes">${C.map(c=>`<i style="background:${c};box-shadow:0 0 10px ${c}"></i>`).join('')}</div><div class="k">Pesquisa finalizada ✓</div><h1 class="f" style="font-size:32px">Obrigado, ${esc((J.nome||'').split(' ')[0])}!</h1>
  <div class="mapa" id="mp" style="max-width:320px;margin:12px auto">${mapaSVG()}</div><p class="mute">Perfil ${tn} + ${sn}</p>
- ${J.pede?`<p style="color:#7DDB8B;font-weight:800">Você está na lista da Fase 2. Vamos te chamar.</p>`:''}
+ <a class="btn pri" style="display:block;text-decoration:none;margin:8px 0" href="/jornada/fase2/?c=${CONVITE}">Começar a Fase 2 →</a>
  <div style="display:grid;gap:10px;margin-top:10px"><button class="btn pri" data-a="baixa">Baixar minha imagem</button><button class="btn" data-a="convida">📲 Convidar alguém pelo WhatsApp</button></div><p class="small mute" id="bx"></p></div>`;
  return `<div class="k">Minha imagem dos 7 sentidos</div><div style="display:flex;gap:12px;align-items:center">${J.foto?`<img src="${J.foto}" alt="" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid #F9CB39">`:''}<h1 class="f" style="font-size:30px;margin:0">Perfil ${tn} + ${sn}</h1></div>
  <div class="mapa" id="mp">${mapaSVG()}</div>
  <div class="row" style="margin-top:0"><button class="btn" data-a="baixa">Baixar minha imagem</button></div><p class="small mute" id="bx"></p>
  <h2>✨ 5 coisas que você talvez não tenha percebido</h2><div class="small mute" style="margin:-4px 0 10px">Para cada uma: de 0 a 10, quanto você concorda?</div>
  ${L.map((t,i)=>`<div class="ins5"><b>${i+1}. ${esc(t)}</b><div class="c10">${[...Array(11)].map((_,n)=>`<button class="${C5[i]===n?'on':''}" data-a="conc" data-i="${i}" data-n="${n}" aria-label="${n}">${n}</button>`).join('')}</div><div class="small mute" style="display:flex;justify-content:space-between"><span>0 = discordo</span><span>10 = concordo total</span></div></div>`).join('')}
- <div class="f2"><b>Gostou? A Fase 2 vai mais fundo.</b>${J.pede?`<div style="color:#7DDB8B;font-weight:800;margin-top:6px">Pedido recebido ✓ Vamos te chamar para a Fase 2.</div>`:`<button class="btn pri" style="width:100%;margin-top:10px" data-a="pede">Quero ir para a Fase 2 →</button>`}
+ <div class="f2"><b>Gostou? A Fase 2 vai mais fundo.</b>${J.pede?`<div style="color:#7DDB8B;font-weight:800;margin-top:6px">Pedido recebido ✓</div><a class="btn pri" style="display:block;margin-top:10px;text-decoration:none" href="/jornada/fase2/?c=${CONVITE}">Começar a Fase 2 agora →</a>`:`<button class="btn pri" style="width:100%;margin-top:10px" data-a="pede">Quero ir para a Fase 2 →</button>`}
  <button class="btn" style="width:100%;margin-top:8px" data-a="convida">📲 Convidar alguém pelo WhatsApp</button></div>
  ${vAval()}
  <p class="erro" id="fimerro" role="alert"></p><button class="btn pri big" data-a="finaliza">Finalizar a pesquisa ✓</button>
