@@ -55,6 +55,13 @@ h1{font-size:23px;line-height:1.25;margin:4px 0 10px}h2{font-size:18px;margin:22
 .pd-rel{display:flex;gap:10px;justify-content:center;align-items:flex-start;text-align:left;font-size:14px;color:var(--mute);margin:8px auto 14px;max-width:420px}.pd-rel input{width:22px;height:22px;flex:0 0 22px;margin-top:1px}
 .pd-campea{position:relative;width:min(260px,72%);margin:10px auto;border-radius:20px;overflow:hidden;border:2px solid var(--c);box-shadow:0 0 30px var(--c);animation:pdbrilho 2.4s ease-in-out infinite}.pd-campea svg{width:100%;display:block}.pd-campea span{position:absolute;inset:auto 0 0;background:rgba(10,15,36,.8);padding:8px;font-weight:800;font-size:13.5px;text-align:center}
 @keyframes pdbrilho{0%,100%{box-shadow:0 0 18px var(--c)}50%{box-shadow:0 0 38px var(--c)}}
+.ar-lista{list-style:none;padding:0;margin:10px 0 14px;display:grid;gap:8px;touch-action:none;user-select:none;-webkit-user-select:none}
+.ar-li{display:flex;align-items:center;gap:10px;background:var(--field);border:2px solid var(--line);border-radius:14px;padding:6px 10px 6px 6px;cursor:grab;transition:box-shadow .15s;position:relative}
+.ar-li.arrasta{z-index:5;border-color:var(--c);box-shadow:0 10px 26px rgba(0,0,0,.5);cursor:grabbing;transition:none}
+.ar-n{flex:0 0 30px;height:30px;border-radius:9px;display:grid;place-items:center;font-weight:900;color:#0A0F24;background:var(--c)}
+.ar-img{flex:0 0 46px;height:46px;border-radius:10px;overflow:hidden}.ar-img svg{width:100%;height:100%;display:block}
+.ar-nm{flex:1;min-width:0;font-weight:700;line-height:1.2}.ar-nm small{display:block;font-weight:500;opacity:.7}
+.ar-alca{font-size:26px;opacity:.6;padding:0 4px}
 .pd-lista{list-style:none;padding:0;margin:8px 0;display:grid;gap:6px}.pd-lista li{display:flex;align-items:center;gap:10px;background:var(--field);border:1px solid var(--line);border-radius:12px;padding:6px 8px}
 .pd-n{flex:0 0 28px;height:28px;border-radius:8px;display:grid;place-items:center;font-weight:900;color:#0A0F24}.pd-nm{flex:1;min-width:0;font-weight:700}
 .pd-seta{font:inherit;font-weight:900;width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--soft);color:var(--ink);cursor:pointer}.pd-seta:disabled{opacity:.3}
@@ -414,17 +421,16 @@ function pdInicia(){let ent=null;try{ent=JSON.parse(localStorage.getItem(LSK+'-e
  const tt=J.t||{};const ord=comp.slice().sort((a,b)=>((tt[a]||9e9)-(tt[b]||9e9)));
  PD={fase:'abre',ordem:ord,si:0,T:null,res:{},tempos:{},rel:false,hist:[],pend:SEN.map(s=>s[0]).filter(id=>!comp.includes(id)),final:null,ini:Date.now(),relT:{}};pdSalva();}
 function pdSnap(){PD.hist.push(JSON.stringify(Object.assign({},PD,{hist:[]})));if(PD.hist.length>80)PD.hist.shift();}
-function pdComecaSentido(){const id=PD.ordem[PD.si];const itens=(J.esc[id]||[]).slice();
- for(let i=itens.length-1;i>0;i--){const j=(i*7+3)%(i+1);[itens[i],itens[j]]=[itens[j],itens[i]];}
- PD.T=novoT(itens);PD.relT[id]=Date.now();PD.fase='duelo';}
+/* Fase 2 refeita (Daniel, 04/11): sem torneio. Em cada sentido a pessoa ARRASTA com o dedo as 7 escolhas
+   até a ordem ficar do jeito dela (começa na ordem da Fase 1). No fim, arrasta as campeãs do mesmo jeito. */
+function pdComecaSentido(){const id=PD.ordem[PD.si];PD.lista=(J.esc[id]||[]).slice();PD.relT[id]=Date.now();PD.fase='ordena';}
 function constel(){const ids=PD.ordem;return `<div class="pd-const" aria-label="Constelação: ${Object.keys(PD.res).length} de ${ids.length} sentidos">${ids.map(id=>{const s=senDe(id);const ok=PD.res[id];return `<i title="${esc(s[1])}" style="${ok?`background:${s[3]};box-shadow:0 0 12px ${s[3]}`:''}">${ok?'★':''}</i>`;}).join('')}</div>`;}
 function carta(id,n,lado){const t=tileDe(id,n);const s=senDe(id);return `<div class="pd-carta" role="button" tabindex="0" data-a="duelo" data-v="${esc(n)}" data-lado="${lado}" style="--c:${s[3]}">${t&&t.som?`<button class="pl" data-a="play" data-som="${t.som}" aria-label="Ouvir ${esc(n)}">▶</button>`:''}<svg viewBox="0 0 300 300">${t?t.art():''}</svg><b>${esc(n)}</b></div>`;}
 function vPdAbre(){const blur=mapaSVG();return `<div class="hero" style="padding-top:18px"><div class="luzes">${C.map(c=>`<i style="background:${c};box-shadow:0 0 10px ${c}"></i>`).join('')}</div><div class="k">Fase 2 · Pódio dos Sentidos</div>
- <h1 class="f">Hora do torneio!</h1><p class="mute">Suas 7 escolhas de cada sentido vão se enfrentar, duas de cada vez. Você toca na que prefere. No fim, a campeã de cada sentido disputa a grande final.</p>
+ <h1 class="f">Hora de pôr em ordem!</h1><p class="mute">Em cada sentido, você arrasta as suas 7 escolhas com o dedo. Lá em cima fica a que você mais gosta. No fim, faz o mesmo com as campeãs.</p>
  <div class="pd-previa" aria-hidden="true">${blur}<span>No fim, o seu mapa ganha a nova ordem</span></div>
  <p class="pd-frase">Não existe ordem certa. É só a sua ordem de hoje.</p>
- <label class="pd-rel"><input type="checkbox" id="pdrel" ${PD.rel?'checked':''}><span><b>Modo relâmpago</b> · opcional: mostra quanto tempo você leva em cada sentido</span></label>
- <button class="btn pri big" data-a="pdcomeca">Começar o torneio</button><p class="small mute">Leva uns 5 minutos.</p></div>`;}
+  <button class="btn pri big" data-a="pdcomeca">Começar</button><p class="small mute">Leva uns 3 minutos.</p></div>`;}
 function vPdDuelo(){const id=PD.ordem[PD.si];const s=senDe(id);const par=tPar(PD.T);if(!par)return '';const fin=PD.T.fase==='3'?'Disputa do 3º lugar':PD.T.cur.length===2?'Final':'Duelo '+(PD.T.duelos+1);
  return `${constel()}<div class="k" style="color:${s[3]}">${s[2]} ${esc(s[1])} · ${fin}</div><h1>Qual você prefere?</h1>
  ${PD.T.duelos===0?`<p class="pd-brisa"><b>Brisa:</b> ${esc(BRISA_L[Math.min(PD.si,6)])}</p>`:''}
@@ -436,6 +442,26 @@ function vPdFechou(){const id=PD.ordem[PD.si];const s=senDe(id);const L=PD.res[i
  <h2>Sua ordem em ${esc(s[1])}</h2><p class="small mute" style="margin-top:-6px">Se quiser, ajuste com as setas.</p>
  <ol class="pd-lista">${L.map((n,i)=>`<li><span class="pd-n" style="background:${s[3]}">${i+1}</span><span class="pd-nm">${esc(n)}</span><button class="pd-seta" data-a="pdsobe" data-k="${i}" ${i===0?'disabled':''} aria-label="Subir ${esc(n)}">↑</button><button class="pd-seta" data-a="pddesce" data-k="${i}" ${i===L.length-1?'disabled':''} aria-label="Descer ${esc(n)}">↓</button></li>`).join('')}</ol>
  <div class="row"><button class="btn" data-a="pdvolta">↶ Desfazer</button><span class="sp"></span><button class="btn pri" data-a="pdprox">${PD.si<PD.ordem.length-1?'Próximo sentido →':'Continuar →'}</button></div>`;}
+function linhaArr(v,i,cor,nome,sub,art){return `<li class="ar-li" data-i="${i}" style="--c:${cor}"><span class="ar-n">${i+1}</span><span class="ar-img"><svg viewBox="0 0 300 300">${art}</svg></span><span class="ar-nm">${esc(nome)}${sub?`<small>${esc(sub)}</small>`:''}</span><span class="ar-alca" aria-hidden="true">≡</span></li>`;}
+function vPdOrdena(){const id=PD.ordem[PD.si];const s=senDe(id);
+ return `${constel()}<div class="k" style="color:${s[3]}">${s[2]} ${esc(s[1])} · sentido ${PD.si+1} de ${PD.ordem.length}</div><h1>Arraste para pôr em ordem</h1>
+ <p class="pd-brisa"><b>Brisa:</b> Segure e arraste. Lá em cima fica a que você mais gosta.</p>
+ <ol class="ar-lista" id="arl">${PD.lista.map((n,i)=>{const tl=tileDe(id,n);return linhaArr(n,i,s[3],n,'',tl?tl.art():'');}).join('')}</ol>
+ <div class="row">${PD.hist.length?`<button class="btn" data-a="pdvolta">↶ Voltar</button>`:''}<span class="sp"></span><button class="btn pri" data-a="pdok">Pronto, essa é a minha ordem →</button></div>`;}
+function vPdOrdenaF(){return `${constel()}<div class="k">A grande final</div><h1>Agora, as campeãs</h1>
+ <p class="pd-brisa"><b>Brisa:</b> Estas são as nº 1 de cada sentido. Arraste para cima a que você mais gosta de todas.</p>
+ <ol class="ar-lista" id="arl">${PD.lista.map((v,i)=>{const [id,n]=v.split('|');const s=senDe(id);const tl=tileDe(id,n);return linhaArr(v,i,s[3],n,s[1],tl?tl.art():'');}).join('')}</ol>
+ <div class="row"><button class="btn" data-a="pdvolta">↶ Voltar</button><span class="sp"></span><button class="btn pri" data-a="pdokF">Pronto, ver meu pódio →</button></div>`;}
+/* arrastar com o dedo (ou mouse): a linha segue o dedo e troca de lugar com a vizinha */
+function arLiga(){const ol=document.getElementById('arl');if(!ol)return;let li=null,y0=0,h=0,idx=0;
+ const linhas=()=>[...ol.children];
+ ol.addEventListener('pointerdown',e=>{const x=e.target.closest('.ar-li');if(!x)return;e.preventDefault();li=x;idx=linhas().indexOf(x);y0=e.clientY;h=x.getBoundingClientRect().height+8;li.classList.add('arrasta');try{li.setPointerCapture(e.pointerId);}catch(_){}try{navigator.vibrate&&navigator.vibrate(10);}catch(_){}});
+ ol.addEventListener('pointermove',e=>{if(!li)return;e.preventDefault();let dy=e.clientY-y0;const L=linhas();
+  while(dy>h/2&&idx<L.length-1){ol.insertBefore(L[idx+1],li);idx++;y0+=h;dy-=h;}
+  while(dy<-h/2&&idx>0){ol.insertBefore(li,L[idx-1]);idx--;y0-=h;dy+=h;}
+  li.style.transform=`translateY(${dy}px) scale(1.03)`;linhas().forEach((x,i)=>{x.querySelector('.ar-n').textContent=i+1;});});
+ const solta=()=>{if(!li)return;li.style.transform='';li.classList.remove('arrasta');const nova=linhas().map(x=>PD.lista[+x.dataset.i]);if(nova.join('|')!==PD.lista.join('|')){pdSnap();PD.lista=nova;}li=null;renderPodio();};
+ ol.addEventListener('pointerup',solta);ol.addEventListener('pointercancel',solta);}
 function vPdPular(){const id=PD.pend[0];const s=senDe(id);return `${constel()}<div class="hero" style="padding-top:10px"><div class="k" style="color:${s[3]}">${s[2]} ${esc(s[1])}</div><h1 class="f" style="font-size:28px">Na Fase 1 você pulou ${esc(s[1])}.</h1><p class="mute">Quer tentar este sentido agora? Você escolhe 7 de 15 e elas entram no torneio.</p>
  <div class="row" style="justify-content:center"><button class="btn" data-a="pdnao">Agora não</button><button class="btn pri" data-a="pdsim">Quero tentar</button></div></div>`;}
 function pdChampions(){return PD.ordem.filter(id=>PD.res[id]).map(id=>id+'|'+PD.res[id][0]);}
@@ -444,7 +470,7 @@ function vPdFinal(){const par=tPar(PD.T);if(!par)return '';const lab=PD.T.fase==
  return `${constel()}<div class="k">${lab}</div><h1>Entre as campeãs, qual você prefere?</h1>${PD.T.duelos===0?`<p class="pd-brisa"><b>Brisa:</b> Agora é sério: só campeãs! Quem vai para o topo do seu pódio?</p>`:''}
  <div class="pd-duelo">${cartaF(par[0],'a')}<span class="pd-x" aria-hidden="true">×</span>${cartaF(par[1],'b')}</div>
  <div class="row">${PD.hist.length?`<button class="btn" data-a="pdvolta">↶ Desfazer</button>`:''}</div>`;}
-function pdDescobertas(){const out=[];PD.ordem.forEach(id=>{const s=senDe(id);const L=PD.res[id];if(!L)return;out.push({t:`${s[1][0].toUpperCase()+s[1].slice(1)}: ${L[0]}`,d:`Venceu o torneio de ${s[1]}. ${L[1]?`${L[1]} ficou em 2º`+(L[2]?` e ${L[2]} em 3º.`:'.'):''}`});});return out.slice(0,7);}
+function pdDescobertas(){const out=[];PD.ordem.forEach(id=>{const s=senDe(id);const L=PD.res[id];if(!L)return;out.push({t:`${s[1][0].toUpperCase()+s[1].slice(1)}: ${L[0]}`,d:`É a sua nº 1 em ${s[1]}. ${L[1]?`${L[1]} ficou em 2º`+(L[2]?` e ${L[2]} em 3º.`:'.'):''}`});});return out.slice(0,7);}
 function vPdFim(){const F=PD.final||[];const top=F.slice(0,3).map(v=>v.split('|'));PD.ordem.forEach(id=>{if(PD.res[id])J.esc[id]=PD.res[id].slice();});
  const pod=(i)=>{const x=top[i];if(!x)return '<div></div>';const s=senDe(x[0]);const t=tileDe(x[0],x[1]);return `<div class="pd-deg pd-deg${i+1}" style="--c:${s[3]}"><svg viewBox="0 0 300 300">${t?t.art():''}</svg><b>${esc(x[1])}</b><small>${esc(s[1])}</small><span>${i+1}º</span></div>`;};
  const D=pdDescobertas();
@@ -455,11 +481,11 @@ function vPdFim(){const F=PD.final||[];const top=F.slice(0,3).map(v=>v.split('|'
  <details class="pd-det"><summary>Ver a ordem completa de cada sentido</summary>${PD.ordem.filter(id=>PD.res[id]).map(id=>{const s=senDe(id);return `<p><b style="color:${s[3]}">${esc(s[1])}</b>: ${PD.res[id].map((n,i)=>(i+1)+'. '+esc(n)).join(' · ')}</p>`;}).join('')}</details>
  <div class="row"><button class="btn" data-a="pdbaixa">Baixar imagem para o Instagram</button><span class="sp"></span><button class="btn pri big" data-a="pdfim">${MODO==='podio-refazer'?'Guardar este pódio →':'Continuar para a Fase 3 →'}</button></div><p class="small mute" id="bx"></p>
  <p class="small mute">É a sua ordem de hoje. Não é diagnóstico nem avaliação.</p>`;}
-function renderPodio(){pdSalva();const v=PD.fase==='abre'?vPdAbre():PD.fase==='duelo'?vPdDuelo():PD.fase==='fechou'?vPdFechou():PD.fase==='pular'?vPdPular():PD.fase==='final'?vPdFinal():vPdFim();
- document.getElementById('app').innerHTML=`<div class="bar0"><a class="logo" aria-label="7entidos"><img src="/assets/simbolo-contando-7.svg?v=20261102-novo" alt="" width="30" height="30"><b class="f"><span style="color:#FFD43B">7</span>entidos</b></a><span class="sp"></span></div>`+v;}
+function renderPodio(){pdSalva();const v=PD.fase==='abre'?vPdAbre():PD.fase==='ordena'?vPdOrdena():PD.fase==='ordenaF'?vPdOrdenaF():PD.fase==='duelo'?vPdDuelo():PD.fase==='fechou'?vPdFechou():PD.fase==='pular'?vPdPular():PD.fase==='final'?vPdFinal():vPdFim();
+ document.getElementById('app').innerHTML=`<div class="bar0"><a class="logo" aria-label="7entidos"><img src="/assets/simbolo-contando-7.svg?v=20261102-novo" alt="" width="30" height="30"><b class="f"><span style="color:#FFD43B">7</span>entidos</b></a><span class="sp"></span></div>`+v;arLiga();}
 function pdDepoisSentido(){if(PD.si<PD.ordem.length-1){PD.si++;pdComecaSentido();return;}
  if(PD.pend.length){PD.fase='pular';return;}
- const ch=pdChampions();if(ch.length>=2){PD.T=novoT(ch);PD.fase='final';}else{PD.final=ch;PD.fase='fim';}}
+ const ch=pdChampions();if(ch.length>=2){PD.lista=ch;PD.fase='ordenaF';}else{PD.final=ch;PD.fase='fim';}}
 function pdEscolhe(v){const par=tPar(PD.T);if(!par)return;const perd=par[0]===v?par[1]:par[0];const ms=Date.now()-(PD.T.t0||Date.now());
  pdSnap();const chave=(PD.fase==='final'?'final':PD.ordem[PD.si])+'_'+PD.T.duelos;PD.tempos[chave]=ms;tEscolhe(PD.T,v,perd,ms);PD.T.t0=Date.now();
  if(PD.T.fase==='fim'||(PD.T.cur.length===1&&PD.T.fase!=='3')){const R=tRanking(PD.T);
@@ -481,8 +507,10 @@ document.addEventListener('click',e=>{if(!PD)return;const b=e.target.closest('[d
   document.querySelectorAll('.pd-carta').forEach(x=>x.classList.add('vai'));setTimeout(()=>{pdEscolhe(v);renderPodio();},430);e.stopImmediatePropagation();return;}
  if(a==='pdvolta'){const h=PD.hist.pop();if(h){const hist=PD.hist;PD=JSON.parse(h);PD.hist=hist;if(PD.fase==='duelo'||PD.fase==='final')PD.T.t0=Date.now();}renderPodio();e.stopImmediatePropagation();return;}
  if(a==='pdsobe'||a==='pddesce'){const id=PD.ordem[PD.si];const L=PD.res[id];const k=+b.dataset.k,j=a==='pdsobe'?k-1:k+1;if(j<0||j>=L.length)return;pdSnap();[L[k],L[j]]=[L[j],L[k]];renderPodio();e.stopImmediatePropagation();return;}
+ if(a==='pdok'){const id=PD.ordem[PD.si];pdSnap();PD.res[id]=PD.lista.slice();PD.tempos[id+'_total']=Date.now()-PD.relT[id];pdDepoisSentido();renderPodio();scrollTo(0,0);e.stopImmediatePropagation();return;}
+ if(a==='pdokF'){pdSnap();PD.final=PD.lista.slice();PD.fase='fim';renderPodio();scrollTo(0,0);e.stopImmediatePropagation();return;}
  if(a==='pdprox'){pdSnap();pdDepoisSentido();renderPodio();scrollTo(0,0);e.stopImmediatePropagation();return;}
- if(a==='pdnao'){PD.pend.shift();if(PD.pend.length){PD.fase='pular';}else{const ch=pdChampions();if(ch.length>=2){PD.T=novoT(ch);PD.fase='final';}else{PD.final=ch;PD.fase='fim';}}renderPodio();scrollTo(0,0);e.stopImmediatePropagation();return;}
+ if(a==='pdnao'){PD.pend.shift();if(PD.pend.length){PD.fase='pular';}else{const ch=pdChampions();if(ch.length>=2){PD.lista=ch;PD.fase='ordenaF';}else{PD.final=ch;PD.fase='fim';}}renderPodio();scrollTo(0,0);e.stopImmediatePropagation();return;}
  if(a==='pdsim'){const id=PD.pend.shift();delete J.pul[id];PD.voltar=id;J.tela='sen';J.i=SEN.findIndex(s=>s[0]===id);J.t0=Date.now();pdSalva();const pd=PD;PD=null;window.__PD=pd;render();scrollTo(0,0);e.stopImmediatePropagation();return;}
  if(a==='pdbaixa'){pdBaixa();e.stopImmediatePropagation();return;}
  if(a==='pdfim'){pdEntrega();e.stopImmediatePropagation();return;}
