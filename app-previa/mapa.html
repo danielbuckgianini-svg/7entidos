@@ -343,7 +343,7 @@ function vSen(){const [id,sen,ic,cor,,tiles]=SEN[J.i];const m=J.esc[id]||[];
  <div class="row"><button class="btn" data-a="volta">← Voltar</button>${m.length?`<button class="btn" data-a="limpa">Limpar</button>`:''}${!pulado(id)&&m.length<7?`<button class="btn" data-a="pula">Pular este sentido</button>`:''}<span class="sp"></span><button class="btn pri" data-a="prox" ${m.length<7&&!pulado(id)?'disabled':''}>${J.i<6?'Próximo sentido →':'Ver meu mapa →'}</button></div>${J.i===6&&nCompletos()<3&&(m.length>=7||pulado(id))?`<p class="small mute">Para ver o seu mapa, faça pelo menos 3 sentidos.</p>`:''}`;}
 function vFim(){const p=perfil();const [tn,ti,tk,td]=TAGS[p.top],[sn,si]=TAGS[p.seg];
  return `<div class="k">Minha imagem dos 7 sentidos</div><h1 class="f" style="font-size:30px">Perfil ${tn} + ${sn}</h1>
- <div class="mapa img7" id="mp">${mapaSVG()}</div><p class="small mute" style="text-align:center;margin:-4px 0 6px">Uma imagem só sua, feita a partir das suas escolhas.</p>
+ <div class="mapa img7" id="mp">${mapaSVG()}</div><p class="small mute" style="text-align:center;margin:-4px 0 6px">${legenda7()}<br>Uma imagem só sua, feita a partir das suas escolhas.</p>
  <h2>✨ O que você talvez não tenha percebido</h2><div class="pal7">${insights(J,p,TAGS).filter(x=>x.s).map(x=>`<div class="pal7-i"><small>${esc(rotulo7(x))}</small><b>${esc(palavra7(x))}</b></div>`).join('')}</div>
  <div class="row"><button class="btn" data-a="baixa">Baixar minha imagem</button><span class="sp"></span><button class="btn pri big" data-a="fim">${QS.get('modo')==='refazer'?'Guardar este mapa →':'Continuar →'}</button></div><p class="small mute" id="bx"></p>
  <p class="small mute">O perfil mostra só as suas escolhas de hoje. Não é diagnóstico nem avaliação.</p>`;}
@@ -501,6 +501,17 @@ if(EH_PODIO){try{const s=JSON.parse(localStorage.getItem(PDK)||'null');if(s&&s.o
    4. Detalhe = o tema que mais se repete nas escolhas (água, noite, infância, natureza, aconchego, cozinha)
    5. Variação própria = semente tirada das escolhas e do código da pessoa */
 function hash7(t){let h=2166136261;for(let i=0;i<t.length;i++){h^=t.charCodeAt(i);h=Math.imul(h,16777619);}return (h>>>0)||7;}
+/* Detalhe do tema que mais se repete nas escolhas (usado nas duas imagens) */
+function detalhe7(r){
+ const E=J.esc||{};const tem=Object.entries(TEMAS).map(([n,L])=>[n,SEN.filter(x=>(E[x[0]]||[]).some(v=>L.includes(v))).length]).sort((a,b)=>b[1]-a[1])[0];
+ const tema=tem&&tem[1]>=2?tem[0]:'';let d='';
+ if(tema==='água'){for(let i=0;i<3;i++){const y=262+i*12;d+=`<path d="M0 ${y} Q 25 ${y-7} 50 ${y} T 100 ${y} T 150 ${y} T 200 ${y} T 250 ${y} T 300 ${y}" fill="none" stroke="#BFE3FF" stroke-width="1.6" opacity=".5"/>`;}}
+ if(tema==='noite'){for(let i=0;i<40;i++)d+=`<circle cx="${(r()*300).toFixed(0)}" cy="${(r()*140).toFixed(0)}" r="${(.5+r()*1.2).toFixed(1)}" fill="#FFF6E0" opacity="${(.4+r()*.5).toFixed(2)}"/>`;}
+ if(tema==='infância'){for(let i=0;i<24;i++)d+=`<rect x="${(r()*290).toFixed(0)}" y="${(r()*290).toFixed(0)}" width="4" height="7" rx="1.5" fill="${C[i%7]}" opacity=".55" transform="rotate(${(r()*180).toFixed(0)} 150 150)"/>`;}
+ if(tema==='natureza'){for(let i=0;i<12;i++){const x=r()*300,y=r()*300,a=r()*180;d+=`<path d="M${x.toFixed(0)} ${y.toFixed(0)} q 6 -10 0 -20 q -6 10 0 20z" fill="#9BE38F" opacity=".35" transform="rotate(${a.toFixed(0)} ${x.toFixed(0)} ${y.toFixed(0)})"/>`;}}
+ if(tema==='calor e aconchego'){d+=`<circle cx="150" cy="150" r="120" fill="#FFB27A" opacity=".10"/><circle cx="150" cy="150" r="70" fill="#FFD6A8" opacity=".10"/>`;}
+ if(tema==='cozinha e mesa'){for(let i=0;i<5;i++){const x=60+i*45;d+=`<path d="M${x} 280 c -10 -20 10 -30 0 -50 c -10 -20 10 -30 0 -50" fill="none" stroke="#F4F1EA" stroke-width="2" opacity=".22"/>`;}}
+ return d;}
 function imagem7(){
  const P=perfil();const top=P.top,seg=P.seg;const chave=(J.id||'')+'|'+SEN.map(s=>(J.esc[s[0]]||[]).join(',')).join('|');
  let sd=hash7(chave);const r=()=>((sd=sd*16807%2147483647)/2147483647);const id='i'+(hash7(chave+'x')%1e6);
@@ -529,16 +540,7 @@ function imagem7(){
   if(t===6){for(let i=0;i<6;i++){o+=`<circle cx="${110+r()*80}" cy="${110+r()*80}" r="${50+r()*50}" fill="${cor}" opacity="${(op*.16).toFixed(2)}"/>`;}}
   return o;};
  s+=forma(top,1,M.c);s+=forma(seg,.55,M2.c);
- // 4. detalhe do tema mais repetido
- const E=J.esc||{};const tem=Object.entries(TEMAS).map(([n,L])=>[n,SEN.filter(x=>(E[x[0]]||[]).some(v=>L.includes(v))).length]).sort((a,b)=>b[1]-a[1])[0];
- const tema=tem&&tem[1]>=2?tem[0]:'';let d='';
- if(tema==='água'){for(let i=0;i<3;i++){const y=262+i*12;d+=`<path d="M0 ${y} Q 25 ${y-7} 50 ${y} T 100 ${y} T 150 ${y} T 200 ${y} T 250 ${y} T 300 ${y}" fill="none" stroke="#BFE3FF" stroke-width="1.6" opacity=".5"/>`;}}
- if(tema==='noite'){for(let i=0;i<40;i++)d+=`<circle cx="${(r()*300).toFixed(0)}" cy="${(r()*140).toFixed(0)}" r="${(.5+r()*1.2).toFixed(1)}" fill="#FFF6E0" opacity="${(.4+r()*.5).toFixed(2)}"/>`;}
- if(tema==='infância'){for(let i=0;i<24;i++)d+=`<rect x="${(r()*290).toFixed(0)}" y="${(r()*290).toFixed(0)}" width="4" height="7" rx="1.5" fill="${C[i%7]}" opacity=".55" transform="rotate(${(r()*180).toFixed(0)} 150 150)"/>`;}
- if(tema==='natureza'){for(let i=0;i<12;i++){const x=r()*300,y=r()*300,a=r()*180;d+=`<path d="M${x.toFixed(0)} ${y.toFixed(0)} q 6 -10 0 -20 q -6 10 0 20z" fill="#9BE38F" opacity=".35" transform="rotate(${a.toFixed(0)} ${x.toFixed(0)} ${y.toFixed(0)})"/>`;}}
- if(tema==='calor e aconchego'){d+=`<circle cx="150" cy="150" r="120" fill="#FFB27A" opacity=".10"/><circle cx="150" cy="150" r="70" fill="#FFD6A8" opacity=".10"/>`;}
- if(tema==='cozinha e mesa'){for(let i=0;i<5;i++){const x=60+i*45;d+=`<path d="M${x} 280 c -10 -20 10 -30 0 -50 c -10 -20 10 -30 0 -50" fill="none" stroke="#F4F1EA" stroke-width="2" opacity=".22"/>`;}}
- s+=d;
+ s+=detalhe7(r);
  // 3. as 7 luzes, no desenho do mundo
  const pos=k=>{const t=k/7;if(top===0)return [30+k*40,205-Math.sin(t*3.14)*60+r()*14];if(top===3||top===5)return [30+k*40,140+Math.sin(t*6.28+r())*26];
   if(top===2){const a=t*8+r()*.3,rr=26+k*15;return [150+Math.cos(a)*rr,150+Math.sin(a)*rr];}if(top===4){const a=t*6.28+r()*.4,rr=55+r()*55;return [150+Math.cos(a)*rr,150+Math.sin(a)*rr];}
@@ -548,7 +550,19 @@ function imagem7(){
  L.forEach(([k,x,y])=>{if(!cores[k]){s+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4" fill="none" stroke="${M.c}" stroke-opacity=".35" stroke-dasharray="2 2"/>`;return;}const rr=16+Math.min(7,qtd[k])*2.2+r()*6;
   s+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${rr.toFixed(1)}" fill="url(#${id}l${k})"/><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(rr*.18).toFixed(1)}" fill="#FFFFFF" opacity=".9" filter="url(#${id}b)"/>`;});
  return `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Imagem dos 7 sentidos">${s}</svg>`;}
-mapaSVG=function(){return imagem7();};
+/* Estilo da imagem (decisão do Daniel, 04/11): inspirada em pintores clássicos, sem copiar obras.
+   Pintor = o 1º pintor que a pessoa escolheu em Visão; se não escolheu nenhum, vem da força principal.
+   Cores = a favorita de cada sentido. Variação própria = espelhamento + detalhe do tema, tirados das escolhas. */
+const PINTOR_FORCA=[1,5,8,3,2,0,7]; // Raiz→Van Gogh, Ninho→Rembrandt, Vento→Munch, Lago→Monet, Faísca→Picasso, Brisa→Da Vinci, Abraço→Frida
+function pintor7(){const i=(J.esc.mapa||[]).map(n=>MAPAS.findIndex(m=>m[0]===n)).find(i=>i>=0);return i!==undefined&&i>=0?i:PINTOR_FORCA[perfil().top];}
+function imagemPintor(){
+ const chave=(J.id||'')+'|'+SEN.map(s=>(J.esc[s[0]]||[]).join(',')).join('|');let s2=hash7(chave);const r=()=>((s2=s2*16807%2147483647)/2147483647);
+ const fav=SEN.map(s=>{const n=(J.esc[s[0]]||[])[0];const m=n&&META[s[0]]&&META[s[0]][n];return m?m[1]:null;});
+ const antes=A;FID=Math.floor(Math.random()*1e6);A=fav.map(c=>c||'#3A4270');let arte='';try{arte=MAPAS[pintor7()][3]();}finally{A=antes;}
+ const espelho=hash7(chave+'e')%2?' transform="translate(300 0) scale(-1 1)"':'';
+ return `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Imagem dos 7 sentidos no estilo de ${MAPAS[pintor7()][1].split(' · ')[0]}"><g${espelho}>${arte}</g>${detalhe7(r)}</svg>`;}
+function legenda7(){const m=MAPAS[pintor7()];return m[0]+' · inspirada em '+m[1].split(' · ')[0];}
+mapaSVG=function(){return imagemPintor();};
 /* Uma palavra por descoberta (só as que a pessoa talvez não tenha percebido) */
 function palavra7(x){const t=x.t;if(t.indexOf(':')>0){let w=t.split(':').pop().trim();w=({'calor e aconchego':'aconchego','cozinha e mesa':'mesa'})[w]||w;return w.charAt(0).toUpperCase()+w.slice(1);}
  const M={'Onde você é mais decidido':'Decisão','Sua paleta é quente':'Calor','Sua paleta é fria':'Frescor','Sua paleta mistura quente e frio':'Equilíbrio','Não foi acaso':'Coerência','Uma criança no mapa':'Infância'};return M[t]||t;}
