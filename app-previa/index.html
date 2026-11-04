@@ -37,7 +37,7 @@
 .cj{position:relative;max-width:340px;height:410px;margin:6px auto 8px}.cj svg{position:absolute;left:0;top:0}
 .cj-nome{position:absolute;font-size:14px;line-height:1.25;font-weight:700;color:#F4F1EA;text-align:left}.cj-nome small{display:block;font-size:12px;font-weight:600;color:#AEB5D6}
 .cj-nome.cj-agora{color:#F9CB39}.cj-nome.cj-agora small{color:#F9CB39}
-.cj-breve{filter:blur(1.6px);opacity:.6}
+.cj-breve{filter:blur(1.6px);opacity:.6}.cj-ir{cursor:pointer;pointer-events:auto}.cj-ir:hover,.cj-ir:focus-visible{color:#F9CB39;outline:none}.cj-livre circle{fill:#26315F}
 .cj-agora circle{animation:cjpulsa 1.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}@keyframes cjpulsa{50%{transform:scale(1.25)}}
 .bv-tela{background:radial-gradient(420px 320px at 12% 8%,rgba(90,184,255,.22),transparent 70%),radial-gradient(420px 320px at 92% 30%,rgba(255,111,163,.2),transparent 70%),radial-gradient(460px 360px at 30% 96%,rgba(125,219,139,.18),transparent 70%),#0A0F24}
 .bv-ceu{position:fixed;inset:0;pointer-events:none}.bv-ceu i{position:absolute;border-radius:50%;animation:bvflutua 7s ease-in-out infinite}
@@ -907,15 +907,16 @@ function BrisaVideo({n,onFim}){
    Fases bloqueadas aparecem borradas (Sala "A Brisa e a Fase 1"). */
 const FASES7=[["Vídeo de apresentação","v"],["Fase 1 · Mapa dos 7 sentidos","f1"],["Fase 2 · Pódio dos Sentidos","f2"],["Fase 3 · Minha régua","f3"],["Fase 4","f4"],["Hall da Fama","hall"]];
 const GH_PECAS=["SU","PER","SÔ","NI","CO"]; /* senha secreta do portão = SUPERSÔNICO (superpoder do Theo); 1 pedaço por etapa: Vídeo, Fase 1, 2, 3 e 4 */
-function Constelacao({feitas,titulo,frase,onFim}){
+function Constelacao({feitas,titulo,frase,onFim,onIr}){
   const P=[[22,26],[86,96],[28,166],[92,236],[30,306],[70,386]];const C7=["#FFD23F","#5AB8FF","#FF8A5C","#7DDB8B","#FF6FA3","#A98BFF","#3FE0D0"];
-  const est=k=>k<feitas?"feita":k===feitas?"agora":"breve";
+  const PV_LIVRE=true; /* prévia: todas as fases liberadas (pedido do Daniel, 04/11) */
+  const est=k=>k<feitas?"feita":k===feitas?"agora":(PV_LIVRE&&FASES7[k][1]!=="f4")?"livre":"breve";
   return html`<div class="nc-tela bv-tela" role="dialog" aria-modal="true" aria-label="Minha jornada"><div class="nc-caixa fade">
     <div class="nc-eyebrow">Minha jornada</div><h1 class="nc-h1">${titulo}</h1><p class="nc-p">${frase}</p>
-    <div class="cj" aria-hidden="true"><svg viewBox="0 0 120 410" width="120" height="410">
+    <div class="cj"><svg aria-hidden="true" viewBox="0 0 120 410" width="120" height="410">
       ${P.slice(1).map((q,k)=>html`<line key=${"l"+k} x1=${P[k][0]} y1=${P[k][1]} x2=${q[0]} y2=${q[1]} stroke=${k+1<=feitas?"#F9CB39":"#3A4680"} stroke-width=${k+1<=feitas?2.5:1.5} stroke-dasharray=${k+1<=feitas?"":"4 5"}/>`)}
       ${P.map((q,k)=>{const e=est(k);return html`<g key=${k} class=${"cj-"+e}><circle cx=${q[0]} cy=${q[1]} r=${e==="agora"?13:10} fill=${e==="breve"?"#18224A":C7[k]} stroke=${e==="breve"?"#5A6492":"#0A0F24"} stroke-width="2"/>${e==="feita"?html`<text x=${q[0]} y=${q[1]+4} text-anchor="middle" font-size="12" font-weight="900" fill="#0A0F24">✓</text>`:null}</g>`})}
-    </svg>${P.map((q,k)=>{const e=est(k);return html`<span key=${k} class=${"cj-nome cj-"+e} style=${{left:q[0]+20,top:q[1]-10,width:"calc(100% - "+(q[0]+20)+"px)"}}>${FASES7[k][0]}${e==="agora"?html`<small>Agora</small>`:e==="breve"?html`<small>${k===5?"Um guardião espera aqui":k>=4?"Em breve":"Bloqueada"}</small>`:null}${k===5&&e!=="feita"?html`<span class="cj-guard"><${TheoGibi} sombra=${true}/></span>`:null}</span>`})}</div>
+    </svg>${P.map((q,k)=>{const e=est(k);const pode=onIr&&e!=="breve";return html`<span key=${k} class=${"cj-nome cj-"+e+(pode?" cj-ir":"")} role=${pode?"button":null} tabIndex=${pode?0:null} onClick=${pode?()=>onIr(FASES7[k][1]):null} onKeyDown=${pode?ev=>{if(ev.key==="Enter")onIr(FASES7[k][1])}:null} style=${{left:q[0]+20,top:q[1]-10,width:"calc(100% - "+(q[0]+20)+"px)"}}>${FASES7[k][0]}${e==="agora"?html`<small>Agora</small>`:e==="livre"?html`<small>Liberada · toque para ir</small>`:e==="breve"?html`<small>${k===5?"Um guardião espera aqui":k>=4?"Em breve":"Bloqueada"}</small>`:null}${k===5&&e!=="feita"?html`<span class="cj-guard"><${TheoGibi} sombra=${true}/></span>`:null}</span>`})}</div>
     <p class="nc-apoio">Peças da senha secreta do Hall: <b style=${{color:"#F9CB39",letterSpacing:".06em"}}>${GH_PECAS.map((x,i)=>i<feitas?x:"?").join(" · ")}</b></p>
     <button class="nc-btn" onClick=${onFim}>Continuar</button>
   </div></div>`;
@@ -1048,10 +1049,12 @@ function NovoComeco({s,update,inicio}){
   function proximo(){guardar(regua);if(revisando||etapa===9){setRevisando(false);setEtapa("pronta")}else setEtapa(etapa+1)}
   function anterior(){if(revisando){setRevisando(false);setEtapa("pronta")}else setEtapa(etapa===0?"intro":etapa-1)}
   function comecar(){const esc=regua.map(x=>({v:x.v,t:x.t,m:(x.m||"").trim(),s:x.s||null}));update(st=>{const ant=st.novoComeco||{};const n=Object.assign({},ant,{versao:2,escala:esc,escalaVersao:ant.escalaVersao||1,sentidos:sent.slice(),inicio:ant.inicio||nowISO(),concluidoEm:nowISO()});delete n.rascunho;st.novoComeco=n},"novo-comeco");gaEvent("jornada_iniciada");}
+  const irFase=f=>({v:()=>setPasso("v1"),f1:()=>setPasso(0),f2:()=>setPasso("podio"),f3:()=>{setPasso(1);setEtapa("intro")},hall:()=>setPasso("hall")}[f]||(()=>{}))();
+  if(passo==="hall")return html`<${GuardiaoHall} s=${s} downloads=${null} toast=${null} onClose=${()=>setPasso("c2")}/>`;
   if(passo==="v1")return html`<${BrisaVideo} n="v1" onFim=${()=>{viu("v1");setPasso(0)}}/>`;
   if(passo===0)return html`<${MapaFrame} onPronto=${mapaPronto}/>`;
-  if(passo==="c1")return html`<${Constelacao} feitas=${2} titulo="Você desbloqueou a Fase 2" frase="Sua primeira estrela acendeu. Agora vem o Pódio dos Sentidos." onFim=${()=>{viu("c1");setPasso("v2")}}/>`;
-  if(passo==="c2")return html`<${Constelacao} feitas=${3} titulo="Você desbloqueou a Fase 3" frase="Mais uma estrela na sua constelação. Agora é a vez da sua régua." onFim=${()=>{viu("c2");setPasso(1)}}/>`;
+  if(passo==="c1")return html`<${Constelacao} feitas=${2} onIr=${irFase} titulo="Você desbloqueou a Fase 2" frase="Sua primeira estrela acendeu. Agora vem o Pódio dos Sentidos." onFim=${()=>{viu("c1");setPasso("v2")}}/>`;
+  if(passo==="c2")return html`<${Constelacao} feitas=${3} onIr=${irFase} titulo="Você desbloqueou a Fase 3" frase="Mais uma estrela na sua constelação. Agora é a vez da sua régua." onFim=${()=>{viu("c2");setPasso(1)}}/>`;
   if(passo==="v2")return html`<${BrisaVideo} n="v2" onFim=${()=>{viu("v2");setPasso("podio")}}/>`;
   if(passo==="podio"){podioEntrada(MAPA_K+"-p",ultimoMapa(s)||{});return html`<${MapaFrame} k=${MAPA_K+"-p"} modo="podio" onPronto=${podioPronto}/>`;}
   const pi=3;
@@ -2195,9 +2198,9 @@ function pularTudo(update){update(st=>{const agora=nowISO();
   if(!(st.novoComeco&&st.novoComeco.concluidoEm)){const ant=st.novoComeco||{};st.novoComeco=Object.assign({},ant,{versao:2,escala:NC_ESCALA_PADRAO.map(x=>({v:x.v,t:x.t,m:"(teste da prévia)",s:null})),escalaVersao:ant.escalaVersao||1,sentidos:ant.sentidos||[],inicio:ant.inicio||agora,concluidoEm:agora});delete st.novoComeco.rascunho}
 },"previa-pular")}
 function AtalhosPrevia({aberto,setAberto,ir}){
-  const op=[["Vídeo da Brisa","v1"],["Fase 1 · Mapa dos 7 sentidos",0],["Fase 2 · Pódio dos Sentidos","podio"],["Fase 3 · Minha régua",1],["Hall da Fama · Theo","hall"],["Pular tudo e ir para o app","app"]];
+  const op=[["Ver o caminho com tudo liberado","c2"],["Vídeo da Brisa","v1"],["Fase 1 · Mapa dos 7 sentidos",0],["Fase 2 · Pódio dos Sentidos","podio"],["Fase 3 · Minha régua",1],["Hall da Fama · Theo","hall"],["Pular tudo e ir para o app","app"]];
   return html`${aberto?html`<div class="pv-menu" role="menu"><b>Atalhos da prévia</b>${op.map(([t,f])=>html`<button key=${t} role="menuitem" onClick=${()=>ir(f)}>${t}</button>`)}<small>Não precisa refazer as fases anteriores.</small></div>`:null}
-    <button class="pv-btn" aria-expanded=${aberto} onClick=${()=>setAberto(!aberto)}>${aberto?"✕ Fechar":"⚡ Atalhos"}</button>`;
+    <button class="pv-btn" aria-expanded=${aberto} onClick=${()=>setAberto(!aberto)}>${aberto?"✕ Fechar":"🔓 Fases livres"}</button>`;
 }
 /* Prévia: link com #theo abre direto o Hall da Fama com o Guardião (pula vídeo, fases e combinado). */
 function AtalhoTheo(){
