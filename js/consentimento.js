@@ -40,7 +40,7 @@
     d.setAttribute("role", "dialog");
     d.setAttribute("aria-label", "Estatísticas de visitas");
     d.innerHTML =
-      '<p><strong>Podemos contar as visitas?</strong> Usamos ferramentas do Google e do Metricool para saber quantas pessoas visitam o site, quais partes são mais lidas e quantas chegaram pelos nossos anúncios. Não usamos para mostrar anúncios personalizados a você. Nada é carregado sem o seu “Aceitar”. <a href="privacidade.html">Saiba mais</a></p>' +
+      '<p><strong>Podemos contar as visitas?</strong> Usamos ferramentas do Google e do Metricool para saber quantas pessoas visitam o site, quais partes são mais lidas e quantas chegaram pelos nossos anúncios. Não usamos para mostrar anúncios personalizados a você. Nada é carregado sem o seu “Aceitar”. <a href="/privacidade.html">Saiba mais</a></p>' +
       '<div class="botoes"><button type="button" data-escolha="recusado">Recusar</button><button type="button" class="aceitar" data-escolha="aceito">Aceitar</button></div>';
     document.body.appendChild(d);
     d.addEventListener("click", function (e) {

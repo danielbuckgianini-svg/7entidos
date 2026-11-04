@@ -312,4 +312,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b
  if(a==='fim3'){if(G.sens==null){document.getElementById('er3').textContent='Dê a sua nota de 0 a 10 antes de finalizar.';return;}G.fim=true;salva3();
   post('fase3',{lembrancas:itens().map(([id,sen,,,n])=>{const x=G.ass[id]||{};return sen+': '+n+' → '+(x.v||'-')+(x.p?' ("'+x.p+'")':'');}),padroes:padroes(),sensacao:G.sens});render();scrollTo(0,0);return;}});
 render();
-</script></body></html>
+</script>
+<style>.aviso-estatisticas{position:fixed;left:12px;right:12px;bottom:12px;z-index:100;max-width:640px;margin:0 auto;background:#18141F;color:#F5F1E8;border:1px solid #796A86;border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.4);padding:16px 18px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;font-family:Manrope,system-ui,sans-serif}.aviso-estatisticas p{margin:0;flex:1 1 280px;font-size:15px;line-height:1.5}.aviso-estatisticas a{color:#F4C51F}.aviso-estatisticas .botoes{display:flex;gap:8px}.aviso-estatisticas button{font:inherit;font-weight:700;font-size:15px;border-radius:999px;padding:10px 18px;min-height:44px;cursor:pointer;border:1px solid #796A86;background:#18141F;color:#F5F1E8}.aviso-estatisticas button.aceitar{background:#F4C51F;border-color:#F4C51F;color:#17120B}</style>
+<script src="/js/consentimento.js?v=20261104-jornada"></script>
+</body></html>
