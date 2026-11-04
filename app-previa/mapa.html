@@ -40,6 +40,29 @@ h1{font-size:23px;line-height:1.25;margin:4px 0 10px}h2{font-size:18px;margin:22
 .cad .ck{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:14px;color:var(--mute)}.cad .ck input{width:22px;height:22px;margin-top:1px;flex:0 0 22px}.cad a{color:var(--pe)}.erro{color:#FF9AAE;font-weight:700;margin:0;min-height:1em;font-size:14px}
 .nota{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:16px}@media(min-width:520px){.nota{grid-template-columns:repeat(11,1fr)}}.nota button{font:inherit;font-weight:900;font-size:18px;height:52px;border-radius:12px;border:1px solid var(--line);background:var(--field);color:var(--ink);cursor:pointer}.nota button.on{background:var(--pe);color:#0A0F24;border-color:var(--pe)}
 .hero a.btn{display:inline-block;text-decoration:none;margin-top:10px}
+
+.pd-const{display:flex;gap:8px;justify-content:center;margin:2px 0 12px}.pd-const i{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);background:var(--soft);display:grid;place-items:center;font-style:normal;font-size:13px;color:#0A0F24;transition:all .4s}
+.pd-duelo{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;margin:14px 0 6px}
+.pd-x{font-family:Fraunces,Georgia,serif;font-size:26px;color:var(--pe)}
+.pd-carta{position:relative;background:var(--field);border:2px solid var(--line);border-radius:16px;padding:6px 6px 10px;cursor:pointer;display:flex;flex-direction:column;gap:6px;text-align:center;transition:transform .42s,opacity .42s,box-shadow .42s}
+.pd-carta svg{width:100%;height:auto;border-radius:11px;display:block}.pd-carta b{font-size:15px;line-height:1.25}.pd-carta small{color:var(--mute);font-size:12px}
+.pd-carta:hover{border-color:var(--c)}.pd-carta .pl{position:absolute;top:10px;right:10px;width:38px;height:38px;border-radius:50%;border:none;background:#F9CB39;color:#0A0F24;font-weight:900;cursor:pointer;z-index:1}
+.pd-carta.vence{transform:translateY(-14px) scale(1.04);border-color:var(--c);box-shadow:0 0 26px var(--c)}
+.pd-carta.perde{transform:rotate(-18deg) scale(.7);opacity:0}
+.pd-brisa{background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin:6px 0}
+.pd-previa{position:relative;width:min(260px,70%);margin:16px auto 6px;border-radius:18px;overflow:hidden}.pd-previa svg{width:100%;display:block;filter:blur(9px) saturate(1.2)}.pd-previa span{position:absolute;inset:auto 0 0;background:rgba(10,15,36,.75);padding:8px;font-size:13px;font-weight:700}
+.pd-frase{font-family:Fraunces,Georgia,serif;font-size:20px;margin:12px 0}
+.pd-rel{display:flex;gap:10px;justify-content:center;align-items:flex-start;text-align:left;font-size:14px;color:var(--mute);margin:8px auto 14px;max-width:420px}.pd-rel input{width:22px;height:22px;flex:0 0 22px;margin-top:1px}
+.pd-campea{position:relative;width:min(260px,72%);margin:10px auto;border-radius:20px;overflow:hidden;border:2px solid var(--c);box-shadow:0 0 30px var(--c);animation:pdbrilho 2.4s ease-in-out infinite}.pd-campea svg{width:100%;display:block}.pd-campea span{position:absolute;inset:auto 0 0;background:rgba(10,15,36,.8);padding:8px;font-weight:800;font-size:13.5px;text-align:center}
+@keyframes pdbrilho{0%,100%{box-shadow:0 0 18px var(--c)}50%{box-shadow:0 0 38px var(--c)}}
+.pd-lista{list-style:none;padding:0;margin:8px 0;display:grid;gap:6px}.pd-lista li{display:flex;align-items:center;gap:10px;background:var(--field);border:1px solid var(--line);border-radius:12px;padding:6px 8px}
+.pd-n{flex:0 0 28px;height:28px;border-radius:8px;display:grid;place-items:center;font-weight:900;color:#0A0F24}.pd-nm{flex:1;min-width:0;font-weight:700}
+.pd-seta{font:inherit;font-weight:900;width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--soft);color:var(--ink);cursor:pointer}.pd-seta:disabled{opacity:.3}
+.pd-podio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;align-items:end;margin:8px 0}
+.pd-deg{background:var(--field);border:2px solid var(--c);border-radius:14px 14px 6px 6px;padding:6px;text-align:center;display:flex;flex-direction:column;gap:4px}.pd-deg svg{width:100%;border-radius:9px}.pd-deg b{font-size:13.5px;line-height:1.2}.pd-deg small{color:var(--mute);font-size:11.5px}.pd-deg span{font-family:Fraunces,Georgia,serif;font-size:24px;color:var(--pe)}
+.pd-deg1{padding-bottom:34px}.pd-deg2{padding-bottom:18px}
+.pd-det{margin:14px 0;background:var(--field);border:1px solid var(--line);border-radius:14px;padding:10px 14px}.pd-det summary{cursor:pointer;font-weight:800}.pd-det p{font-size:14.5px;margin:8px 0 0}
+@media (prefers-reduced-motion:reduce){.pd-carta,.pd-const i{transition:none}.pd-campea{animation:none}}
 </style></head><body><div class="w" id="app"></div>
 <script>/* ---------- estímulos sensoriais (sons feitos aqui, sem arquivos) ---------- */
 let AC=null,TOCANDO=null;
@@ -281,7 +304,7 @@ function topo(){const n=SEN.filter(s=>feito(s[0])).length;const prox=SEN.findInd
  <div class="nums">${SEN.map(([id,sen,ic,cor],k)=>`<button class="num ${feito(id)?'ok':''} ${J.tela==='sen'&&J.i===k?'at':''} ${k===prox?'glow':''}" style="--c:${cor}" data-a="ir" data-k="${k}" aria-label="Sentido ${k+1}: ${sen}${pulado(id)?' (pulado)':feito(id)?' (feito)':''}">${pulado(id)?'–':feito(id)?'✓':k+1}</button>`).join('')}</div>
  <div class="dots">${SEN.map(([id,,,cor])=>`<i style="${feito(id)?`background:${cor};box-shadow:0 0 8px ${cor}`:''}"></i>`).join('')}</div><div class="small mute">${n===7?'Tudo pronto!':`Faltam ${7-n} ${7-n===1?'sentido':'sentidos'}`}</div></div></div>`;}
 function vAbre(){return `<div class="hero"><div class="luzes">${C.map(c=>`<i style="background:${c};box-shadow:0 0 10px ${c}"></i>`).join('')}</div><div class="k">Meu mapa dos 7 sentidos</div><h1 class="f">Escolha 7 de 15.<br>Sete vezes.</h1>
- <p class="mute">Em cada um dos 7 sentidos há 15 opções. Você escolhe as 7 de que mais gosta, na ordem: a primeira é a favorita. No fim, nasce a imagem dos seus 7 sentidos e 10 descobertas sobre você. Leva uns 7 minutos.</p>
+ <p class="mute">Em cada um dos 7 sentidos há 15 opções. Você escolhe as 7 de que mais gosta. Na Fase 2, elas vão se enfrentar num torneio. No fim, nasce a imagem dos seus 7 sentidos e 10 descobertas sobre você. Leva uns 7 minutos.</p>
  <p class="mute small">Se algum sentido não fizer parte da sua vida, você pode pular. Suas escolhas ficam guardadas só neste aparelho.</p>
  <button class="btn pri big" data-a="comeca">Começar meu mapa</button><p class="small mute">Sem resposta certa. O 7entidos não é terapia nem tratamento.</p></div>`;}
 function vNota(){return `<div class="hero" style="padding-top:20px"><div class="k">Antes de ver o seu mapa</div><h1 class="f" style="font-size:30px">Depois dessa fase, qual é a sua sensação agora?</h1><p class="mute">De 0 a 10. Um toque.</p>
@@ -289,8 +312,8 @@ function vNota(){return `<div class="hero" style="padding-top:20px"><div class="
  <button class="btn pri big" data-a="verfim" ${J.nota===null?'disabled':''}>Ver a imagem dos meus 7 sentidos →</button></div>`;}
 function vSen(){const [id,sen,ic,cor,,tiles]=SEN[J.i];const m=J.esc[id]||[];
  return topo()+`<div class="k" style="color:${cor}">${ic} Sentido ${J.i+1} de 7 · ${esc(sen)}</div><h1>${esc(PERG[id])}</h1>
- ${pulado(id)?`<div class="cont">Você pulou este sentido. <button class="btn" style="min-height:36px;padding:6px 12px;margin-left:6px" data-a="despula">Fazer este sentido</button></div>`:`<div class="cont ${m.length>=7?'ok':''}">Escolhidas: <b>${m.length} de 7</b>${m.length<7?` · faltam ${7-m.length}`:' ✓'} <span class="mute small">· a 1ª é a sua favorita</span></div>`}
- <div class="grid">${(A=['#E9B10E','#2F7FD1','#E8643A','#3E9E5E','#D9487E','#7457C9','#17A99B'],tiles).map((t,k)=>{const o=m.indexOf(t.n);const on=o>=0;const dis=!on&&m.length>=7;return `<div class="tile ${on?'on':''} ${dis?'dis':''}" role="button" tabindex="0" data-a="pick" data-v="${esc(t.n)}" aria-pressed="${on}" style="--c:${cor}"><span class="box">${on?o+1:''}</span>${t.som?`<button class="pl" data-a="play" data-som="${t.som}" aria-label="Ouvir ${esc(t.n)}">▶</button>`:''}<svg viewBox="0 0 300 300">${t.art()}</svg><b>${esc(t.n)}</b></div>`;}).join('')}</div>
+ ${pulado(id)?`<div class="cont">Você pulou este sentido. <button class="btn" style="min-height:36px;padding:6px 12px;margin-left:6px" data-a="despula">Fazer este sentido</button></div>`:`<div class="cont ${m.length>=7?'ok':''}">Escolhidas: <b>${m.length} de 7</b>${m.length<7?` · faltam ${7-m.length}`:' ✓'}</div>`}
+ <div class="grid">${(A=['#E9B10E','#2F7FD1','#E8643A','#3E9E5E','#D9487E','#7457C9','#17A99B'],tiles).map((t,k)=>{const o=m.indexOf(t.n);const on=o>=0;const dis=!on&&m.length>=7;return `<div class="tile ${on?'on':''} ${dis?'dis':''}" role="button" tabindex="0" data-a="pick" data-v="${esc(t.n)}" aria-pressed="${on}" style="--c:${cor}"><span class="box">${on?'✓':''}</span>${t.som?`<button class="pl" data-a="play" data-som="${t.som}" aria-label="Ouvir ${esc(t.n)}">▶</button>`:''}<svg viewBox="0 0 300 300">${t.art()}</svg><b>${esc(t.n)}</b></div>`;}).join('')}</div>
  <div class="row"><button class="btn" data-a="volta">← Voltar</button>${m.length?`<button class="btn" data-a="limpa">Limpar</button>`:''}${!pulado(id)&&m.length<7?`<button class="btn" data-a="pula">Pular este sentido</button>`:''}<span class="sp"></span><button class="btn pri" data-a="prox" ${m.length<7&&!pulado(id)?'disabled':''}>${J.i<6?'Próximo sentido →':'Ver meu mapa →'}</button></div>${J.i===6&&nCompletos()<3&&(m.length>=7||pulado(id))?`<p class="small mute">Para ver o seu mapa, faça pelo menos 3 sentidos.</p>`:''}`;}
 function vFim(){const p=perfil();const [tn,ti,tk,td]=TAGS[p.top],[sn,si]=TAGS[p.seg];
  return `<div class="k">Minha imagem dos 7 sentidos</div><h1 class="f" style="font-size:30px">Perfil ${tn} + ${sn}</h1>
@@ -299,7 +322,7 @@ function vFim(){const p=perfil();const [tn,ti,tk,td]=TAGS[p.top],[sn,si]=TAGS[p.
  <h2>As 7 forças do seu mapa</h2><div class="barras">${TAGS.map(([n,ic],k)=>`<div class="bl"><span>${ic} ${n}</span><div class="bt"><i style="width:${Math.round(p.sc[k]/p.max*100)}%;background:${C[k]}"></i></div><b>${p.sc[k]}</b></div>`).join('')}</div>
  <div class="row"><button class="btn" data-a="baixa">Baixar minha imagem</button><span class="sp"></span><button class="btn pri big" data-a="fim">${QS.get('modo')==='refazer'?'Guardar este mapa →':'Continuar →'}</button></div><p class="small mute" id="bx"></p>
  <p class="small mute">O perfil mostra só as suas escolhas de hoje. Não é diagnóstico nem avaliação.</p>`;}
-function render(){salva();document.getElementById('app').innerHTML=`<div class="bar0"><a class="logo" aria-label="7entidos"><img src="/assets/simbolo-contando-7.svg?v=20261102-novo" alt="" width="30" height="30"><b class="f"><span style="color:#FFD43B">7</span>entidos</b></a><span class="sp"></span><span class="small mute" id="sv">${esc(saveTxt)}</span></div>`+(J.tela==='abre'?vAbre():J.tela==='sen'?vSen():vFim());}
+function render(){if(typeof PD!=='undefined'&&PD)return renderPodio();salva();document.getElementById('app').innerHTML=`<div class="bar0"><a class="logo" aria-label="7entidos"><img src="/assets/simbolo-contando-7.svg?v=20261102-novo" alt="" width="30" height="30"><b class="f"><span style="color:#FFD43B">7</span>entidos</b></a><span class="sp"></span><span class="small mute" id="sv">${esc(saveTxt)}</span></div>`+(J.tela==='abre'?vAbre():J.tela==='sen'?vSen():vFim());}
 function setSave(t){saveTxt=t;const e=document.getElementById('sv');if(e)e.textContent=t;}
 function salva(){try{const c=Object.assign({},J);localStorage.setItem(LSK,JSON.stringify(c));}catch(e){}}
 async function baixa(){const out=document.getElementById('bx');
@@ -330,8 +353,120 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b
  if(a==='baixa'){baixa();return;}});
 document.addEventListener('keydown',e=>{const t=e.target.closest&&e.target.closest('.tile');if(t&&(e.key==='Enter'||e.key===' ')){e.preventDefault();t.click();}});
 function entrega(){const p=perfil();const L=insights(J,p,TAGS);let svg='';try{svg=document.querySelector('#mp svg').outerHTML;}catch(e){}
- const mapa={id:'M'+Date.now().toString(36),em:new Date().toISOString(),esc:J.esc,pul:Object.keys(J.pul||{}).filter(k=>J.pul[k]),completos:SEN.filter(s=>completo(s[0])).map(s=>s[0]),perfil:{top:TAGS[p.top][0],seg:TAGS[p.seg][0],sc:p.sc,forcas:TAGS.map(t=>t[0])},descobertas:L.map(x=>({t:x.t,d:x.d,s:x.s})),svg};
+ const mapa={id:'M'+Date.now().toString(36),em:new Date().toISOString(),esc:J.esc,t:J.t||{},pul:Object.keys(J.pul||{}).filter(k=>J.pul[k]),completos:SEN.filter(s=>completo(s[0])).map(s=>s[0]),perfil:{top:TAGS[p.top][0],seg:TAGS[p.seg][0],sc:p.sc,forcas:TAGS.map(t=>t[0])},descobertas:L.map(x=>({t:x.t,d:x.d,s:x.s})),svg};
  try{parent.postMessage({tipo:'7e-mapa',mapa},location.origin);}catch(e){}
  try{localStorage.removeItem(LSK);}catch(e){}}
+/* ================= FASE 2 · PÓDIO DOS SENTIDOS (aprovado em 04/11/2026) =================
+   Torneio com as 7 escolhas de cada sentido da Fase 1 (no máximo 7 duelos por sentido, sem empate,
+   desfazer sempre), começando pelo sentido mais decidido da Fase 1. Depois, a "Campeã das campeãs".
+   Fim: o mapa da Fase 1 redesenhado com a nova ordem + pódio para baixar. O tempo de cada decisão
+   é guardado como pista para a IA, sem aparecer para a pessoa. */
+const MODO=QS.get('modo')||'';const EH_PODIO=MODO.indexOf('podio')===0;
+const PDK=LSK+'-podio';let PD=null;
+const BRISA_L=['Bora começar pelo seu sentido mais decidido. Escolha rápido, sem pensar muito!','Esse aqui promete. Qual dos dois ganha?','Uau, que disputa! Vai no coração.','Mais um sentido, mais um campeão. Você está indo muito bem.','Quase lá! Só mais alguns duelos.','Penúltimo sentido! Sente o que ele te pede.','Último sentido. Depois vem a grande final!'];
+function novoT(itens){return {cur:itens.slice(),win:[],pos:0,rnd:1,elim:[],semi:[],fin:null,third:null,fase:'r',duelos:0,campea:null,vice:null,t0:Date.now()};}
+function tInicioRodada(T){if(T.cur.length%2===1&&T.cur.length>1){T.win.push(T.cur[0]);T.pos=1;}else T.pos=0;}
+function tPar(T){if(T.fase==='3'){return T.third;}if(T.fase==='fim')return null;if(T.cur.length===1){return null;}if(T.pos===0&&T.win.length===0&&T.cur.length%2===1)tInicioRodada(T);return [T.cur[T.pos],T.cur[T.pos+1]];}
+function tEscolhe(T,venc,perd,ms){T.duelos++;
+ if(T.fase==='3'){T.third={v:venc,p:perd};T.fase='fim';return;}
+ T.win.push(venc);T.elim.push({n:perd,r:T.rnd,t:ms});T.pos+=2;
+ if(T.pos>=T.cur.length){
+  if(T.win.length===1){T.campea=venc;T.vice=perd;
+   T.semi=T.elim.filter(e=>e.r===T.rnd-1&&T.rodadaAnteriorTinha2);
+   if(T.semi.length===2){T.fase='3';T.third=[T.semi[0].n,T.semi[1].n];}else T.fase='fim';return;}
+  T.rodadaAnteriorTinha2=(T.win.length===2&&T.elim.filter(e=>e.r===T.rnd).length===2);
+  T.cur=T.win;T.win=[];T.pos=0;T.rnd++;if(T.cur.length%2===1)tInicioRodada(T);}}
+function tRanking(T){if(T.cur.length===1&&T.duelos===0)return T.cur.slice();
+ const out=[T.campea,T.vice];let resto=T.elim.filter(e=>e.n!==T.vice);
+ if(T.third&&T.third.v){out.push(T.third.v,T.third.p);resto=resto.filter(e=>e.n!==T.third.v&&e.n!==T.third.p);}
+ resto.sort((a,b)=>b.r-a.r||b.t-a.t);return out.concat(resto.map(e=>e.n));}
+function pdSalva(){try{localStorage.setItem(PDK,JSON.stringify(PD));}catch(e){}}
+function senDe(id){return SEN.find(s=>s[0]===id);}
+function tileDe(id,n){const s=senDe(id);return s?s[5].find(t=>t.n===n):null;}
+function pdInicia(){let ent=null;try{ent=JSON.parse(localStorage.getItem(LSK+'-entrada')||'null');}catch(e){}
+ if(ent){J.esc=ent.esc||{};J.pul={};(ent.pul||[]).forEach(id=>J.pul[id]=true);J.t=ent.t||{};}
+ const comp=SEN.map(s=>s[0]).filter(id=>(J.esc[id]||[]).length>=7);
+ const tt=J.t||{};const ord=comp.slice().sort((a,b)=>((tt[a]||9e9)-(tt[b]||9e9)));
+ PD={fase:'abre',ordem:ord,si:0,T:null,res:{},tempos:{},rel:false,hist:[],pend:SEN.map(s=>s[0]).filter(id=>!comp.includes(id)),final:null,ini:Date.now(),relT:{}};pdSalva();}
+function pdSnap(){PD.hist.push(JSON.stringify(Object.assign({},PD,{hist:[]})));if(PD.hist.length>80)PD.hist.shift();}
+function pdComecaSentido(){const id=PD.ordem[PD.si];const itens=(J.esc[id]||[]).slice();
+ for(let i=itens.length-1;i>0;i--){const j=(i*7+3)%(i+1);[itens[i],itens[j]]=[itens[j],itens[i]];}
+ PD.T=novoT(itens);PD.relT[id]=Date.now();PD.fase='duelo';}
+function constel(){const ids=PD.ordem;return `<div class="pd-const" aria-label="Constelação: ${Object.keys(PD.res).length} de ${ids.length} sentidos">${ids.map(id=>{const s=senDe(id);const ok=PD.res[id];return `<i title="${esc(s[1])}" style="${ok?`background:${s[3]};box-shadow:0 0 12px ${s[3]}`:''}">${ok?'★':''}</i>`;}).join('')}</div>`;}
+function carta(id,n,lado){const t=tileDe(id,n);const s=senDe(id);return `<div class="pd-carta" role="button" tabindex="0" data-a="duelo" data-v="${esc(n)}" data-lado="${lado}" style="--c:${s[3]}">${t&&t.som?`<button class="pl" data-a="play" data-som="${t.som}" aria-label="Ouvir ${esc(n)}">▶</button>`:''}<svg viewBox="0 0 300 300">${t?t.art():''}</svg><b>${esc(n)}</b></div>`;}
+function vPdAbre(){const blur=mapaSVG();return `<div class="hero" style="padding-top:18px"><div class="luzes">${C.map(c=>`<i style="background:${c};box-shadow:0 0 10px ${c}"></i>`).join('')}</div><div class="k">Fase 2 · Pódio dos Sentidos</div>
+ <h1 class="f">Hora do torneio!</h1><p class="mute">Suas 7 escolhas de cada sentido vão se enfrentar, duas de cada vez. Você toca na que prefere. No fim, a campeã de cada sentido disputa a grande final.</p>
+ <div class="pd-previa" aria-hidden="true">${blur}<span>No fim, o seu mapa ganha a nova ordem</span></div>
+ <p class="pd-frase">Não existe ordem certa. É só a sua ordem de hoje.</p>
+ <label class="pd-rel"><input type="checkbox" id="pdrel" ${PD.rel?'checked':''}><span><b>Modo relâmpago</b> · opcional: mostra quanto tempo você leva em cada sentido</span></label>
+ <button class="btn pri big" data-a="pdcomeca">Começar o torneio</button><p class="small mute">Leva uns 5 minutos.</p></div>`;}
+function vPdDuelo(){const id=PD.ordem[PD.si];const s=senDe(id);const par=tPar(PD.T);if(!par)return '';const fin=PD.T.fase==='3'?'Disputa do 3º lugar':PD.T.cur.length===2?'Final':'Duelo '+(PD.T.duelos+1);
+ return `${constel()}<div class="k" style="color:${s[3]}">${s[2]} ${esc(s[1])} · ${fin}</div><h1>Qual você prefere?</h1>
+ ${PD.T.duelos===0?`<p class="pd-brisa"><b>Brisa:</b> ${esc(BRISA_L[Math.min(PD.si,6)])}</p>`:''}
+ <div class="pd-duelo">${carta(id,par[0],'a')}<span class="pd-x" aria-hidden="true">×</span>${carta(id,par[1],'b')}</div>
+ <div class="row">${PD.hist.length?`<button class="btn" data-a="pdvolta">↶ Desfazer</button>`:''}<span class="sp"></span>${PD.rel?`<span class="small mute" id="pdrelo">⚡ ${Math.round((Date.now()-PD.relT[id])/1000)} s</span>`:''}</div>`;}
+function vPdFechou(){const id=PD.ordem[PD.si];const s=senDe(id);const L=PD.res[id];const t1=tileDe(id,L[0]);const rs=PD.rel&&PD.tempos[id+'_total']?Math.round(PD.tempos[id+'_total']/1000):null;
+ return `${constel()}<div class="k" style="color:${s[3]}">${s[2]} ${esc(s[1])} · pódio fechado</div><h1 class="f" style="font-size:28px">Sua campeã: ${esc(L[0])}</h1>
+ <div class="pd-campea" style="--c:${s[3]}"><svg viewBox="0 0 300 300">${t1?t1.art():''}</svg><span>★ entrou na sua constelação</span></div>${rs?`<p class="small mute">⚡ Você fez este sentido em ${rs} s.</p>`:''}
+ <h2>Sua ordem em ${esc(s[1])}</h2><p class="small mute" style="margin-top:-6px">Se quiser, ajuste com as setas.</p>
+ <ol class="pd-lista">${L.map((n,i)=>`<li><span class="pd-n" style="background:${s[3]}">${i+1}</span><span class="pd-nm">${esc(n)}</span><button class="pd-seta" data-a="pdsobe" data-k="${i}" ${i===0?'disabled':''} aria-label="Subir ${esc(n)}">↑</button><button class="pd-seta" data-a="pddesce" data-k="${i}" ${i===L.length-1?'disabled':''} aria-label="Descer ${esc(n)}">↓</button></li>`).join('')}</ol>
+ <div class="row"><button class="btn" data-a="pdvolta">↶ Desfazer</button><span class="sp"></span><button class="btn pri" data-a="pdprox">${PD.si<PD.ordem.length-1?'Próximo sentido →':'Continuar →'}</button></div>`;}
+function vPdPular(){const id=PD.pend[0];const s=senDe(id);return `${constel()}<div class="hero" style="padding-top:10px"><div class="k" style="color:${s[3]}">${s[2]} ${esc(s[1])}</div><h1 class="f" style="font-size:28px">Na Fase 1 você pulou ${esc(s[1])}.</h1><p class="mute">Quer tentar este sentido agora? Você escolhe 7 de 15 e elas entram no torneio.</p>
+ <div class="row" style="justify-content:center"><button class="btn" data-a="pdnao">Agora não</button><button class="btn pri" data-a="pdsim">Quero tentar</button></div></div>`;}
+function pdChampions(){return PD.ordem.filter(id=>PD.res[id]).map(id=>id+'|'+PD.res[id][0]);}
+function cartaF(v,lado){const [id,n]=v.split('|');const t=tileDe(id,n);const s=senDe(id);return `<div class="pd-carta" role="button" tabindex="0" data-a="duelo" data-v="${esc(v)}" data-lado="${lado}" style="--c:${s[3]}">${t&&t.som?`<button class="pl" data-a="play" data-som="${t.som}" aria-label="Ouvir ${esc(n)}">▶</button>`:''}<svg viewBox="0 0 300 300">${t?t.art():''}</svg><b>${esc(n)}</b><small>${esc(s[1])}</small></div>`;}
+function vPdFinal(){const par=tPar(PD.T);if(!par)return '';const lab=PD.T.fase==='3'?'Disputa do 3º lugar':PD.T.cur.length===2?'A grande final':'Campeã das campeãs';
+ return `${constel()}<div class="k">${lab}</div><h1>Entre as campeãs, qual você prefere?</h1>${PD.T.duelos===0?`<p class="pd-brisa"><b>Brisa:</b> Agora é sério: só campeãs! Quem vai para o topo do seu pódio?</p>`:''}
+ <div class="pd-duelo">${cartaF(par[0],'a')}<span class="pd-x" aria-hidden="true">×</span>${cartaF(par[1],'b')}</div>
+ <div class="row">${PD.hist.length?`<button class="btn" data-a="pdvolta">↶ Desfazer</button>`:''}</div>`;}
+function pdDescobertas(){const out=[];PD.ordem.forEach(id=>{const s=senDe(id);const L=PD.res[id];if(!L)return;out.push({t:`${s[1][0].toUpperCase()+s[1].slice(1)}: ${L[0]}`,d:`Venceu o torneio de ${s[1]}. ${L[1]?`${L[1]} ficou em 2º`+(L[2]?` e ${L[2]} em 3º.`:'.'):''}`});});return out.slice(0,7);}
+function vPdFim(){const F=PD.final||[];const top=F.slice(0,3).map(v=>v.split('|'));PD.ordem.forEach(id=>{if(PD.res[id])J.esc[id]=PD.res[id].slice();});
+ const pod=(i)=>{const x=top[i];if(!x)return '<div></div>';const s=senDe(x[0]);const t=tileDe(x[0],x[1]);return `<div class="pd-deg pd-deg${i+1}" style="--c:${s[3]}"><svg viewBox="0 0 300 300">${t?t.art():''}</svg><b>${esc(x[1])}</b><small>${esc(s[1])}</small><span>${i+1}º</span></div>`;};
+ const D=pdDescobertas();
+ return `<div class="k">Fase 2 · Pódio dos Sentidos</div><h1 class="f" style="font-size:30px">Seu mapa com a nova ordem</h1>
+ <div class="mapa" id="mp">${mapaSVG()}</div>
+ ${top.length?`<h2>Seu pódio</h2><div class="pd-podio">${pod(1)}${pod(0)}${pod(2)}</div>`:''}
+ <h2>${D.length} descobertas</h2><div class="insg">${D.map((x,i)=>`<div class="ins"><span class="insn">${i+1}</span><div><b>${esc(x.t)}</b><div class="small" style="opacity:.85;margin-top:2px">${esc(x.d)}</div></div></div>`).join('')}</div>
+ <details class="pd-det"><summary>Ver a ordem completa de cada sentido</summary>${PD.ordem.filter(id=>PD.res[id]).map(id=>{const s=senDe(id);return `<p><b style="color:${s[3]}">${esc(s[1])}</b>: ${PD.res[id].map((n,i)=>(i+1)+'. '+esc(n)).join(' · ')}</p>`;}).join('')}</details>
+ <div class="row"><button class="btn" data-a="pdbaixa">Baixar imagem para o Instagram</button><span class="sp"></span><button class="btn pri big" data-a="pdfim">${MODO==='podio-refazer'?'Guardar este pódio →':'Continuar para a Fase 3 →'}</button></div><p class="small mute" id="bx"></p>
+ <p class="small mute">É a sua ordem de hoje. Não é diagnóstico nem avaliação.</p>`;}
+function renderPodio(){pdSalva();const v=PD.fase==='abre'?vPdAbre():PD.fase==='duelo'?vPdDuelo():PD.fase==='fechou'?vPdFechou():PD.fase==='pular'?vPdPular():PD.fase==='final'?vPdFinal():vPdFim();
+ document.getElementById('app').innerHTML=`<div class="bar0"><a class="logo" aria-label="7entidos"><img src="/assets/simbolo-contando-7.svg?v=20261102-novo" alt="" width="30" height="30"><b class="f"><span style="color:#FFD43B">7</span>entidos</b></a><span class="sp"></span></div>`+v;}
+function pdDepoisSentido(){if(PD.si<PD.ordem.length-1){PD.si++;pdComecaSentido();return;}
+ if(PD.pend.length){PD.fase='pular';return;}
+ const ch=pdChampions();if(ch.length>=2){PD.T=novoT(ch);PD.fase='final';}else{PD.final=ch;PD.fase='fim';}}
+function pdEscolhe(v){const par=tPar(PD.T);if(!par)return;const perd=par[0]===v?par[1]:par[0];const ms=Date.now()-(PD.T.t0||Date.now());
+ pdSnap();const chave=(PD.fase==='final'?'final':PD.ordem[PD.si])+'_'+PD.T.duelos;PD.tempos[chave]=ms;tEscolhe(PD.T,v,perd,ms);PD.T.t0=Date.now();
+ if(PD.T.fase==='fim'||(PD.T.cur.length===1&&PD.T.fase!=='3')){const R=tRanking(PD.T);
+  if(PD.fase==='final'){PD.final=R;PD.fase='fim';}else{const id=PD.ordem[PD.si];PD.res[id]=R;PD.tempos[id+'_total']=Date.now()-PD.relT[id];PD.fase='fechou';}}}
+async function pdBaixa(){const out=document.getElementById('bx');try{const svg=document.querySelector('#mp svg').outerHTML;const W=1080,H=1350;const cv=document.createElement('canvas');cv.width=W;cv.height=H;const g=cv.getContext('2d');g.fillStyle='#0A0F24';g.fillRect(0,0,W,H);
+ const img=new Image();img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);await img.decode();g.drawImage(img,140,140,800,800);
+ g.textAlign='center';g.fillStyle='#F9CB39';g.font='700 34px system-ui, sans-serif';g.fillText('MEU PÓDIO DOS SENTIDOS',W/2,90);
+ const top=(PD.final||[]).slice(0,3).map(v=>v.split('|')[1]);g.fillStyle='#F4F1EA';g.font='600 52px Georgia, serif';top.forEach((n,i)=>g.fillText((i+1)+'º  '+n,W/2,1040+i*72));
+ g.fillStyle='#AEB5D6';g.font='32px system-ui, sans-serif';g.fillText('7entidos.com.br',W/2,1300);
+ cv.toBlob(b=>{const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='meu-podio-7entidos.png';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);if(out)out.textContent='Imagem salva ✓';},'image/png');}catch(e){if(out)out.textContent='Não consegui gerar a imagem neste aparelho.';}}
+function pdEntrega(){let svg='';try{svg=document.querySelector('#mp svg').outerHTML;}catch(e){}
+ const F=(PD.final||[]).map(v=>{const [id,n]=v.split('|');return {sen:id,n};});const ordSen=F.map(x=>x.sen).concat(PD.ordem.filter(id=>!F.some(x=>x.sen===id)));
+ const podio={id:'P'+Date.now().toString(36),em:new Date().toISOString(),ordem:PD.res,campeas:F,sentidosOrdem:ordSen,completos:SEN.filter(s=>(J.esc[s[0]]||[]).length>=7).map(s=>s[0]),esc:J.esc,tempos:PD.tempos,descobertas:pdDescobertas(),svg};
+ try{parent.postMessage({tipo:'7e-podio',podio},location.origin);}catch(e){}try{localStorage.removeItem(PDK);}catch(e){}}
+document.addEventListener('click',e=>{if(!PD)return;const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a;
+ if(a==='play')return;
+ if(a==='pdcomeca'){const r=document.getElementById('pdrel');PD.rel=!!(r&&r.checked);PD.si=0;if(PD.ordem.length){pdComecaSentido();}else if(PD.pend.length){PD.fase='pular';}renderPodio();scrollTo(0,0);e.stopImmediatePropagation();return;}
+ if(a==='duelo'){if(b.classList.contains('vai'))return;const v=b.dataset.v;b.classList.add('vence');const o=[...document.querySelectorAll('.pd-carta')].find(x=>x!==b);if(o)o.classList.add('perde');try{navigator.vibrate&&navigator.vibrate(15);}catch(_){}para();
+  document.querySelectorAll('.pd-carta').forEach(x=>x.classList.add('vai'));setTimeout(()=>{pdEscolhe(v);renderPodio();},430);e.stopImmediatePropagation();return;}
+ if(a==='pdvolta'){const h=PD.hist.pop();if(h){const hist=PD.hist;PD=JSON.parse(h);PD.hist=hist;if(PD.fase==='duelo'||PD.fase==='final')PD.T.t0=Date.now();}renderPodio();e.stopImmediatePropagation();return;}
+ if(a==='pdsobe'||a==='pddesce'){const id=PD.ordem[PD.si];const L=PD.res[id];const k=+b.dataset.k,j=a==='pdsobe'?k-1:k+1;if(j<0||j>=L.length)return;pdSnap();[L[k],L[j]]=[L[j],L[k]];renderPodio();e.stopImmediatePropagation();return;}
+ if(a==='pdprox'){pdSnap();pdDepoisSentido();renderPodio();scrollTo(0,0);e.stopImmediatePropagation();return;}
+ if(a==='pdnao'){PD.pend.shift();if(PD.pend.length){PD.fase='pular';}else{const ch=pdChampions();if(ch.length>=2){PD.T=novoT(ch);PD.fase='final';}else{PD.final=ch;PD.fase='fim';}}renderPodio();scrollTo(0,0);e.stopImmediatePropagation();return;}
+ if(a==='pdsim'){const id=PD.pend.shift();delete J.pul[id];PD.voltar=id;J.tela='sen';J.i=SEN.findIndex(s=>s[0]===id);J.t0=Date.now();pdSalva();const pd=PD;PD=null;window.__PD=pd;render();scrollTo(0,0);e.stopImmediatePropagation();return;}
+ if(a==='pdbaixa'){pdBaixa();e.stopImmediatePropagation();return;}
+ if(a==='pdfim'){pdEntrega();e.stopImmediatePropagation();return;}
+},true);
+/* Volta do "quero tentar": ao terminar as 7 escolhas do sentido pulado, ele entra no torneio */
+document.addEventListener('click',e=>{if(PD||!window.__PD)return;const b=e.target.closest('[data-a="prox"]');if(!b)return;const id=window.__PD.voltar;if(!id||(J.esc[id]||[]).length<7)return;
+ e.stopImmediatePropagation();para();PD=window.__PD;window.__PD=null;PD.voltar=null;PD.ordem.push(id);PD.si=PD.ordem.length-1;pdComecaSentido();renderPodio();scrollTo(0,0);},true);
+setInterval(()=>{if(PD&&PD.rel&&PD.fase==='duelo'){const el=document.getElementById('pdrelo');const id=PD.ordem[PD.si];if(el)el.textContent='⚡ '+Math.round((Date.now()-PD.relT[id])/1000)+' s';}},1000);
+if(EH_PODIO){try{const s=JSON.parse(localStorage.getItem(PDK)||'null');if(s&&s.ordem){PD=s;let ent=null;try{ent=JSON.parse(localStorage.getItem(LSK+'-entrada')||'null');}catch(e){}if(ent){J.esc=ent.esc||{};J.t=ent.t||{};}PD.ordem.forEach(id=>{if(PD.res[id])J.esc[id]=PD.res[id].slice();});}}catch(e){}if(!PD)pdInicia();}
+
 render();
 </script></body></html>

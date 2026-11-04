@@ -816,9 +816,9 @@ const MAPA_SENT={mapa:"visao",aud:"audicao",tato:"tato",olf:"olfato",pal:"palada
 const sentidosDoMapa=m=>((m&&m.completos)||[]).map(id=>MAPA_SENT[id]).filter(Boolean);
 const ultimoMapa=s=>(Array.isArray(s.mapas)&&s.mapas.length)?s.mapas[s.mapas.length-1]:null;
 function guardaMapa(st,m){if(!Array.isArray(st.mapas))st.mapas=[];st.mapas.push(m);}
-function MapaFrame({modo,onPronto,onFechar}){
-  useEffect(()=>{function f(e){if(e.origin!==location.origin||!e.data||e.data.tipo!=="7e-mapa")return;onPronto(e.data.mapa)}window.addEventListener("message",f);return()=>window.removeEventListener("message",f)},[onPronto]);
-  const k=MAPA_K+(modo==="refazer"?"-r":"");
+function MapaFrame({modo,onPronto,onFechar,k:kk}){
+  useEffect(()=>{function f(e){if(e.origin!==location.origin||!e.data||(e.data.tipo!=="7e-mapa"&&e.data.tipo!=="7e-podio"))return;onPronto(e.data.mapa||e.data.podio)}window.addEventListener("message",f);return()=>window.removeEventListener("message",f)},[onPronto]);
+  const k=kk||(MAPA_K+(modo==="refazer"?"-r":""));
   return html`<div style=${{position:"fixed",inset:0,zIndex:90,background:"#0A0F24"}} role="dialog" aria-modal="true" aria-label="Mapa dos 7 sentidos">
     <iframe title="Mapa dos 7 sentidos" src=${"mapa.html?k="+encodeURIComponent(k)+(modo?"&modo="+modo:"")} style=${{border:0,width:"100%",height:"100%",display:"block"}} allow="autoplay"></iframe>
     ${onFechar?html`<button type="button" onClick=${onFechar} aria-label="Fechar o mapa" style=${{position:"absolute",top:10,right:10,width:44,height:44,borderRadius:12,border:"1px solid #26315F",background:"#111A3D",color:"#F4F1EA",fontSize:20,cursor:"pointer"}}>✕</button>`:null}
@@ -832,10 +832,41 @@ function MapaVer({m,onClose}){
     <p class="small muted">São leituras das escolhas daquele dia, não verdades. Não é diagnóstico nem avaliação.</p>
   <//>`;
 }
+/* Vídeos da Brisa: espaço reservado com o roteiro até o vídeo ficar pronto (assistir até o fim, sem pular) */
+const BRISA_V={
+  v1:{t:"Vídeo de apresentação",l:["Oi, eu sou a Brisa.","Aqui no 7entidos, a gente descobre junto o que te faz bem, pelos seus sentidos.","Primeiro, você vai montar o seu mapa: em cada sentido, escolhe 7 de 15 coisas de que gosta.","Sem resposta certa. No seu ritmo. Vamos?"]},
+  v2:{t:"Brisa apresenta a Fase 2",l:["Que mapa lindo você fez!","Agora vem a parte divertida: um torneio!","Suas escolhas vão se enfrentar, duas de cada vez. Você só toca na que prefere.","No fim, a campeã de cada sentido vai para a grande final. Vamos nessa?"]}};
+function BrisaVideo({n,onFim}){
+  const V=BRISA_V[n];const [i,setI]=useState(0);
+  useEffect(()=>{if(i>=V.l.length)return;const t=setTimeout(()=>setI(i+1),i===0?1200:2800);return()=>clearTimeout(t)},[i]);
+  const fim=i>=V.l.length;
+  return html`<div class="nc-tela" role="dialog" aria-modal="true" aria-label=${V.t}><div class="nc-caixa fade" style=${{textAlign:"center"}}>
+    <div class="nc-eyebrow">${V.t}</div>
+    <div style=${{width:120,height:120,margin:"16px auto 18px",borderRadius:"50%",background:"radial-gradient(circle at 40% 35%,#3a2a1a,#161616)",border:"3px solid #ffd43b",display:"grid",placeItems:"center",fontFamily:"Fraunces,Georgia,serif",fontSize:46,color:"#ffd43b",boxShadow:"0 0 40px rgba(255,212,59,.35)"}} aria-hidden="true">B</div>
+    <div style=${{minHeight:190,display:"grid",gap:10,alignContent:"start"}} aria-live="polite">${V.l.slice(0,i).map((x,k)=>html`<p key=${k} class="nc-p fade" style=${{margin:0,fontSize:k===i-1?19:16,color:k===i-1?"#fff":"#a8a8a8"}}>${x}</p>`)}</div>
+    <div class="nc-barra" aria-hidden="true" style=${{margin:"14px 0"}}>${V.l.map((x,k)=>html`<i key=${k} class=${k<i?"on":""}></i>`)}</div>
+    <button class="nc-btn" disabled=${!fim} onClick=${onFim}>${fim?"Continuar":"Assistindo…"}</button>
+    <p class="nc-apoio">Vídeo da Brisa em produção. Por enquanto, aqui está o que ela vai dizer.</p>
+  </div></div>`;
+}
+function PodioVer({p,onClose}){
+  const top=(p.campeas||[]).slice(0,3);
+  return html`<${Modal} title="Meu pódio dos sentidos" onClose=${onClose}>
+    <p class="small muted" style=${{marginTop:0}}>Feito em ${fmtDate(p.em)}</p>
+    ${p.svg?html`<div style=${{borderRadius:16,overflow:"hidden",margin:"6px 0 12px"}} dangerouslySetInnerHTML=${{__html:p.svg}}></div>`:null}
+    ${top.length?html`<ol style=${{margin:"0 0 12px",paddingLeft:22}}>${top.map((x,i)=>html`<li key=${i}><b>${x.n}</b></li>`)}</ol>`:null}
+    <div class="list">${(p.descobertas||[]).map((d,i)=>html`<div key=${i} class="item"><b>${(i+1)+". "+d.t}</b><div class="small muted">${d.d}</div></div>`)}</div>
+    <p class="small muted">É a ordem daquele dia. Não é diagnóstico nem avaliação.</p>
+  <//>`;
+}
+const podioEntrada=(k,base)=>{try{localStorage.setItem(k+"-entrada",JSON.stringify({esc:base.esc||{},pul:base.pul||[],t:base.t||{}}))}catch(e){}};
+const sentidosDoPodio=p=>((p&&p.sentidosOrdem)||[]).filter(id=>(p.completos||[]).includes(id)).map(id=>MAPA_SENT[id]).filter(Boolean);
 function NovoComeco({s,update}){
-  const [passo,setPasso]=useState(()=>ultimoMapa(s)?1:0);
+  const [passo,setPasso]=useState(()=>{const v=s.videos||{};if(!v.v1)return "v1";if(!ultimoMapa(s))return 0;if(!v.v2)return "v2";if(!s.podio)return "podio";return 1;});
   const [sent,setSent]=useState(()=>(s.novoComeco&&s.novoComeco.sentidos&&s.novoComeco.sentidos.length)?s.novoComeco.sentidos:sentidosDoMapa(ultimoMapa(s)));
-  const mapaPronto=useCallback(m=>{update(st=>{guardaMapa(st,m)},"mapa");setSent(sentidosDoMapa(m));setPasso(1);gaEvent("mapa_feito")},[update]);
+  const mapaPronto=useCallback(m=>{update(st=>{guardaMapa(st,m)},"mapa");setSent(sentidosDoMapa(m));setPasso("v2");gaEvent("mapa_feito")},[update]);
+  const viu=n=>update(st=>{st.videos=Object.assign({},st.videos||{},{[n]:true})},"video");
+  const podioPronto=useCallback(p=>{const so=sentidosDoPodio(p);update(st=>{st.podio=p;st.novoComeco=Object.assign({},st.novoComeco||{},{sentidos:so})},"podio");setSent(so);setPasso(1);gaEvent("podio_feito")},[update]);
   /* Régua: "intro" → 0..9 (números 10 a 1) → "pronta" */
   const rasc=s.novoComeco&&Array.isArray(s.novoComeco.rascunho)&&s.novoComeco.rascunho.length===10?s.novoComeco.rascunho:null;
   const [regua,setRegua]=useState(()=>(rasc||NC_ESCALA_PADRAO).map(x=>Object.assign({},x)));
@@ -850,13 +881,16 @@ function NovoComeco({s,update}){
   function proximo(){guardar(regua);if(revisando||etapa===9){setRevisando(false);setEtapa("pronta")}else setEtapa(etapa+1)}
   function anterior(){if(revisando){setRevisando(false);setEtapa("pronta")}else setEtapa(etapa===0?"intro":etapa-1)}
   function comecar(){const esc=regua.map(x=>({v:x.v,t:x.t,m:(x.m||"").trim(),s:x.s||null}));update(st=>{const ant=st.novoComeco||{};const n=Object.assign({},ant,{versao:2,escala:esc,escalaVersao:ant.escalaVersao||1,sentidos:sent.slice(),inicio:ant.inicio||nowISO(),concluidoEm:nowISO()});delete n.rascunho;st.novoComeco=n},"novo-comeco");gaEvent("jornada_iniciada");}
+  if(passo==="v1")return html`<${BrisaVideo} n="v1" onFim=${()=>{viu("v1");setPasso(0)}}/>`;
   if(passo===0)return html`<${MapaFrame} onPronto=${mapaPronto}/>`;
-  const pi=passo===1?2:3;
+  if(passo==="v2")return html`<${BrisaVideo} n="v2" onFim=${()=>{viu("v2");setPasso("podio")}}/>`;
+  if(passo==="podio"){podioEntrada(MAPA_K+"-p",ultimoMapa(s)||{});return html`<${MapaFrame} k=${MAPA_K+"-p"} modo="podio" onPronto=${podioPronto}/>`;}
+  const pi=3;
   return html`<div class="nc-tela" role="dialog" aria-modal="true" aria-label="Novo começo">
     <div class="nc-caixa fade" key=${passo+"-"+etapa}>
       ${passo===1&&typeof etapa==="number"?html`<div class="nc-topo"><span style=${{fontSize:13,fontWeight:700,color:"#a8a8a8"}}>${etapa+1} de 10</span><span class="nc-barra" aria-hidden="true" style=${{marginLeft:12}}>${ORDEM.map((v,i)=>html`<i key=${v} class=${i<=etapa?"on":""}></i>`)}</span></div>`:html`<div class="nc-topo"><${LogoMark} size=${30} variant="dark"/><span class="nc-passos" aria-label=${"Etapa "+pi+" de 3"}>${[1,2,3].map(i=>html`<i key=${i} class=${i<=pi?"on":""}></i>`)}</span></div>`}
       ${passo===1&&etapa==="intro"?html`
-        <div class="nc-eyebrow">Minha escala pessoal</div>
+        <div class="nc-eyebrow">Fase 3 · Minha escala pessoal</div>
         <h1 class="nc-h1">Crie a sua régua de sensações.</h1>
         <p class="nc-p">Cada número vai ganhar um significado só seu. Para cada um, você liga uma lembrança real que represente aquele nível.</p>
         <div class="nc-regua">${ORDEM.map(v=>{const x=regua.find(z=>z.v===v);return html`<div key=${v} class="nc-linha"><span class="nc-num" style=${ncNumBg(v)}>${v}</span><span style=${{flex:1,fontWeight:600}}>${x.t}</span><span class="vazio">${(x.m||"").trim()?"✓":"a definir"}</span></div>`})}</div>
@@ -943,7 +977,8 @@ function NcJornadaCard({s,update,toast,go}){
 /* Eu › Perfil: mudar sentidos e revisar a escala (registros antigos mantêm seus valores e expressões) */
 function NcPerfil({s,update,toast}){
   const n=s.novoComeco;const [mapaModo,setMapaModo]=useState(null);const um=ultimoMapa(s);
-  const mapaRefeito=useCallback(m=>{update(st=>{guardaMapa(st,m)},"mapa");setMapaModo(null);toast("Mapa novo guardado. O anterior continua guardado.")},[update,toast]);const [editSent,setEditSent]=useState(false);const [sent,setSent]=useState((n&&n.sentidos)||[]);
+  const mapaRefeito=useCallback(m=>{update(st=>{guardaMapa(st,m)},"mapa");setMapaModo(null);toast("Mapa novo guardado. O anterior continua guardado.")},[update,toast]);
+  const podioRefeito=useCallback(p=>{const so=sentidosDoPodio(p);update(st=>{st.podio=p;if(so.length)st.novoComeco.sentidos=so},"podio");setMapaModo(null);toast("Pódio novo guardado.")},[update,toast]);const [editSent,setEditSent]=useState(false);const [sent,setSent]=useState((n&&n.sentidos)||[]);
   const [editEsc,setEditEsc]=useState(false);const [txt,setTxt]=useState(()=>ncEscala(s).map(x=>Object.assign({m:"",s:null},x)));
   if(!n||!n.concluidoEm)return null;
   const meus=(n.sentidos||[]).map(ncSentido).filter(Boolean);
@@ -958,6 +993,11 @@ function NcPerfil({s,update,toast}){
     <div class="row" style=${{gap:8,marginBottom:14}}>${um?html`<button class="btn small" onClick=${()=>setMapaModo("ver")}>Ver meu mapa</button>`:null}<button class="btn small" onClick=${()=>setMapaModo("refazer")}>${um?"Refazer meu mapa":"Fazer meu mapa"}</button></div>
     ${mapaModo==="ver"&&um?ncPortal(html`<${MapaVer} m=${um} onClose=${()=>setMapaModo(null)}/>`):null}
     ${mapaModo==="refazer"?ncPortal(html`<${MapaFrame} modo="refazer" onPronto=${mapaRefeito} onFechar=${()=>setMapaModo(null)}/>`):null}
+    <h3>Meu pódio dos sentidos</h3>
+    ${s.podio?html`<p class="small muted" style=${{marginTop:0}}>Campeã das campeãs: ${(s.podio.campeas&&s.podio.campeas[0]&&s.podio.campeas[0].n)||"—"} · feito em ${fmtDate(s.podio.em)}</p>`:html`<p class="small muted" style=${{marginTop:0}}>Você ainda não fez o seu pódio.</p>`}
+    <div class="row" style=${{gap:8,marginBottom:14}}>${s.podio?html`<button class="btn small" onClick=${()=>setMapaModo("verpodio")}>Ver meu pódio</button>`:null}${um?html`<button class="btn small" onClick=${()=>{podioEntrada(MAPA_K+"-pr",um);setMapaModo("podio")}}>${s.podio?"Refazer meu pódio":"Fazer meu pódio"}</button>`:null}</div>
+    ${mapaModo==="verpodio"&&s.podio?ncPortal(html`<${PodioVer} p=${s.podio} onClose=${()=>setMapaModo(null)}/>`):null}
+    ${mapaModo==="podio"?ncPortal(html`<${MapaFrame} k=${MAPA_K+"-pr"} modo="podio-refazer" onPronto=${podioRefeito} onFechar=${()=>setMapaModo(null)}/>`):null}
     <h3>Meus sentidos</h3>
     ${!editSent?html`<div class="row" style=${{gap:8,alignItems:"center"}}>${meus.map(x=>html`<span key=${x.id} class="chip" style=${{display:"inline-flex",gap:6,alignItems:"center"}}><${NcIcon} ic=${x.ic} c=${x.c} size=${18}/>${x.t}</span>`)}<button class="btn small" onClick=${()=>{setSent(n.sentidos||[]);setEditSent(true)}}>Mudar</button></div>`:html`<div class="nc-claro"><${NcEscolhaSentidos} sel=${sent} onToggle=${id=>setSent(sent.includes(id)?sent.filter(x=>x!==id):[...sent,id])}/></div><div class="row" style=${{marginTop:10}}><button class="btn primary" disabled=${!sent.length} onClick=${salvarSent}>Salvar</button><button class="btn ghost" onClick=${()=>setEditSent(false)}>Cancelar</button></div>`}
     <h3>Minha régua pessoal</h3>
