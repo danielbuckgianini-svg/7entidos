@@ -53,6 +53,17 @@ h1{font-size:23px;line-height:1.25;margin:4px 0 10px}h2{font-size:18px;margin:22
 .dez{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.dz{background:var(--field);border:1px solid #F9CB39;border-radius:12px;padding:6px;display:flex;flex-direction:column;gap:2px}.dz svg{width:100%;height:auto;border-radius:8px}.dz b{font-size:12.5px}.dz small{font-size:11px;color:var(--mute)}
 .fav3{display:flex;gap:12px;align-items:center;margin:6px 0 10px}.fav3 svg{width:96px;height:96px;border-radius:14px;flex:0 0 96px}
 .lem{display:flex;gap:10px;align-items:center;background:var(--field);border:1px solid var(--line);border-left:4px solid var(--c);padding:8px 10px;margin-bottom:6px}
+.o2{position:relative;background:var(--field);border:2px solid var(--line);border-radius:14px;padding:6px 6px 8px;cursor:pointer;display:flex;flex-direction:column;gap:5px;-webkit-tap-highlight-color:transparent}
+.o2 svg{width:100%;height:auto;border-radius:10px;display:block}.o2 b{font-size:14px;line-height:1.2}.o2.on{border-color:var(--c);box-shadow:0 0 0 1px var(--c)}.o2.dis{opacity:.45}
+.o2n{position:absolute;top:10px;left:10px;width:34px;height:34px;border-radius:10px;background:#F7F2E8;border:2px solid #0A0F24;display:grid;place-items:center;font-weight:900;color:#0A0F24;font-size:18px;z-index:1}.o2.on .o2n{background:var(--c)}
+.o2 .pl2{position:absolute;top:10px;right:10px;z-index:1}
+.ord{display:grid;gap:10px;margin-bottom:6px}.ordA{grid-template-columns:repeat(2,minmax(0,1fr))}.ordA .o2:last-child:nth-child(odd){grid-column:1/-1;width:calc(50% - 5px);justify-self:center}
+.ordB{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.ordB .o2 b{font-size:12.5px}.ordB .o2n{width:28px;height:28px;font-size:15px;top:9px;left:9px}
+.ordC{grid-template-columns:1fr;gap:8px}.ordC .o2{flex-direction:row;align-items:center;gap:12px;padding:6px 10px 6px 6px}.ordC .o2 svg{width:84px;flex:0 0 84px}.ordC .o2 b{flex:1;font-size:16px}.ordC .o2n{position:static;order:3;flex:0 0 40px;width:40px;height:40px;font-size:20px}.ordC .o2 .pl2{position:static;order:-1}
+.ordD{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.ordD .o2 b{font-size:12.5px}.ordD .o2n{display:none}
+.fila{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin:0 0 12px;position:sticky;top:58px;z-index:4;background:rgba(10,15,36,.96);padding:6px 0}
+.sl{position:relative;aspect-ratio:1;border-radius:10px;border:2px dashed var(--line);display:grid;place-items:center;overflow:hidden;color:var(--mute);font-weight:900}.sl.on{border:2px solid var(--c);cursor:pointer}.sl svg{position:absolute;inset:0;width:100%;height:100%}.sl span{position:relative;z-index:1}.sl.on span{position:absolute;top:2px;left:2px;background:var(--c);color:#0A0F24;border-radius:6px;font-size:11px;padding:0 4px}
+.lays{background:#1d1640;border:1px dashed #F9CB39;border-radius:14px;padding:10px;margin-bottom:10px}.layb{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.layb button{font:inherit;font-size:13px;font-weight:700;border:1px solid var(--line);background:var(--field);color:var(--ink);border-radius:999px;padding:7px 11px;cursor:pointer}.layb button.on{background:#F9CB39;color:#0A0F24;border-color:#F9CB39}
 </style></head><body><div class="w" id="app"></div><input type="file" id="fotoin" accept="image/*" hidden>
 <script src="../config.js"></script>
 <script>/* ---------- estímulos sensoriais (sons feitos aqui, sem arquivos) ---------- */
@@ -281,40 +292,56 @@ function bloqueio(fase){if(!temConvite)return `<div class="hero"><div class="k">
  if(!fase1Ok())return `<div class="hero"><div class="k">Fase ${fase}</div><h1 class="f">Primeiro, a Fase 1</h1><p class="mute">Não encontramos a sua Fase 1 neste celular. Se você fez em outro aparelho, abra este link nele. Se ainda não fez, comece por ela: leva uns 7 minutos.</p><a class="btn pri big" style="display:block;text-decoration:none" href="/jornada/?c=${CONVITE}">Fazer a Fase 1 →</a></div>`;return '';}
 const DEF_A=['#E9B10E','#2F7FD1','#E8643A','#3E9E5E','#D9487E','#7457C9','#17A99B'];
 
-const PERG2={mapa:'Quanto cada imagem te faz bem?',aud:'Toque ▶ e ouça de novo. Quanto cada som te faz bem?',tato:'Quanto cada textura te faz bem?',olf:'Quanto cada cheiro te faz bem?',pal:'Quanto cada sabor te faz bem?',equi:'Quanto cada movimento te faz bem?',corpo:'Quanto cada coisa te faz bem?'};
-let F=(J&&J.f2)||{i:-1,notas:{},sens:null,quer3:false,fim:false};
+const PERG2={mapa:'Qual imagem você mais gosta?',aud:'Toque ▶ para ouvir. Qual som você mais gosta?',tato:'Qual textura você mais gosta?',olf:'Qual cheiro você mais gosta?',pal:'Qual sabor você mais gosta?',equi:'Qual movimento você mais gosta?',corpo:'Qual destas você mais gosta?'};
+const LAYS=[['A','Grandes, 2 por linha'],['B','Médias, 3 por linha'],['C','Lista'],['D','Pódio: sobem para a fila']];
+let LAY='A';try{LAY=localStorage.getItem('j7lay')||(window.LAYOUT_PADRAO||'A');}catch(e){}
+let F=(J&&J.f2&&J.f2.ord)?J.f2:{i:-1,ord:{},mix:{},sens:null,quer3:false,fim:false};
 const salva2=()=>{if(J){J.f2=F;salvaJ();}};
 const tileDe=(id,n)=>SEN.find(s=>s[0]===id)[5].find(t=>t.n===n);
-const feito2=id=>(J.esc[id]||[]).every(n=>F.notas[id+'|'+n]!=null);
-function dez(){const L=[];SEN.forEach(([id,sen])=>(J.esc[id]||[]).forEach(n=>{if(F.notas[id+'|'+n]===10)L.push([id,sen,n]);}));return L;}
-function experiencias(){const top={};SEN.forEach(([id])=>{const L=(J.esc[id]||[]).map(n=>[n,F.notas[id+'|'+n]??0]).sort((a,b)=>b[1]-a[1]);top[id]=L[0]?L[0][0]:'';});const lo=s=>s.charAt(0).toLowerCase()+s.slice(1);
+const ordDe=id=>F.ord[id]||(F.ord[id]=[]);
+const feito2=id=>ordDe(id).length>=7;
+function mix(id){if(!F.mix[id]){const L=(J.esc[id]||[]).slice();let s=0;for(const ch of (J.id||'x')+id)s=(s*31+ch.charCodeAt(0))%2147483647;const r=()=>(s=(s*16807+7)%2147483647)/2147483647;for(let i=L.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[L[i],L[j]]=[L[j],L[i]];}if(L.join()===(J.esc[id]||[]).join()&&L.length>1)L.push(L.shift());F.mix[id]=L;}return F.mix[id];}
+const fav=id=>(ordDe(id)[0])||(J.esc[id]||[])[0]||'';
+function experiencias(){const top={};SEN.forEach(([id])=>top[id]=fav(id));const lo=s=>s.charAt(0).toLowerCase()+s.slice(1);
  return [`Ouça "${top.aud}" por 5 minutos enquanto toca em algo de ${lo(top.tato)}.`,`Prepare algo com sabor ${lo(top.pal)} e sinta o cheiro de ${lo(top.olf)}. Coma devagar, sem tela.`,`Comece com "${top.corpo}", depois faça um movimento de "${lo(top.equi)}". Termine olhando a imagem "${top.mapa}".`];}
+function mudou(){return SEN.filter(([id])=>ordDe(id)[0]&&(J.esc[id]||[])[0]&&ordDe(id)[0]!==(J.esc[id]||[])[0]);}
+function art(id,x){const t=tileDe(id,x);A=DEF_A.slice();return `<svg viewBox="0 0 300 300">${t?t.art():''}</svg>`;}
+function cartao(id,x,cor){const t=tileDe(id,x);const p=ordDe(id).indexOf(x)+1;const cheio=ordDe(id).length>=7&&!p;
+ return `<div class="o2${p?' on':''}${cheio?' dis':''}" data-a="ord" data-k="${esc(x)}" style="--c:${cor}" role="button" tabindex="0" aria-label="${esc(x)}${p?', posição '+p:''}"><span class="o2n">${p||''}</span>${t&&t.som?`<button class="pl2" data-a="play" data-som="${t.som}" aria-label="Ouvir">▶</button>`:''}${art(id,x)}<b>${esc(x)}</b></div>`;}
+function fila(id,cor){const O=ordDe(id);return `<div class="fila">${[...Array(7)].map((_,k)=>{const x=O[k];return x?`<div class="sl on" data-a="ord" data-k="${esc(x)}" style="--c:${cor}" role="button" title="Tocar para tirar"><span>${k+1}</span>${art(id,x)}</div>`:`<div class="sl" style="--c:${cor}"><span>${k+1}</span></div>`;}).join('')}</div>`;}
+function seletor(){if(!window.PREVIA)return '';return `<div class="lays"><div class="small"><b>Sala visual:</b> como as imagens aparecem?</div><div class="layb">${LAYS.map(([k,t])=>`<button class="${LAY===k?'on':''}" data-a="lay" data-l="${k}">${k} · ${t}</button>`).join('')}</div></div>`;}
 function v2(){const b=bloqueio(2);if(b)return b;const nome=(J.nome||'').split(' ')[0];
- if(F.i<0)return `<div class="hero"><div class="luzes">${C.map(c=>`<i style="background:${c};box-shadow:0 0 10px ${c}"></i>`).join('')}</div><div class="k">Jornada dos 7entidos · Fase 2</div><h1 class="f">A sua régua, ${esc(nome)}.</h1><p class="mute">Na Fase 1 você escolheu do que gosta. Agora, de 0 a 10, diga <b>o quanto</b> cada uma das suas 49 escolhas te faz bem. Um toque em cada. Leva uns 5 minutos.</p><button class="btn pri big" data-a="ini">Começar a Fase 2 →</button><p class="small mute">Sem resposta certa. O 7entidos não é terapia nem tratamento.</p></div>`;
- if(F.i<7){const [id,sen,ic,cor]=SEN[F.i];const L=J.esc[id]||[];const n=L.filter(x=>F.notas[id+'|'+x]!=null).length;A=DEF_A.slice();
-  return `<div class="topo2"><div class="dots">${SEN.map(([sid,,,c],k)=>`<i style="${feito2(sid)?`background:${c};box-shadow:0 0 8px ${c}`:''}${k===F.i?';outline:2px solid #F4F1EA':''}"></i>`).join('')}</div><div class="small mute">Sentido ${F.i+1} de 7 · ${n} de 7 notas</div></div>
-  <div class="k" style="color:${cor}">${ic} ${esc(sen)}</div><h1 style="font-size:22px">${esc(PERG2[id])}</h1><div class="small mute" style="margin-bottom:10px">0 = nada · 10 = êxtase</div>
-  ${L.map(x=>{const t=tileDe(id,x);const v=F.notas[id+'|'+x];return `<div class="r2"><div class="r2t">${t&&t.som?`<button class="pl2" data-a="play" data-som="${t.som}" aria-label="Ouvir">▶</button>`:''}<svg viewBox="0 0 300 300">${t?t.art():''}</svg><b>${esc(x)}</b></div><div class="c11">${[...Array(11)].map((_,k)=>`<button class="${v===k?'on':''}" data-a="nota" data-k="${esc(id+'|'+x)}" data-n="${k}">${k}</button>`).join('')}</div></div>`;}).join('')}
-  <div class="row navfix"><button class="btn" data-a="volta">← Voltar</button><button class="btn pri" data-a="prox" ${n<7?'disabled':''}>${F.i<6?'Próximo sentido →':'Ver a minha régua →'}</button></div>`;}
- if(!F.fim){const L=dez();const E=experiencias();const C5=F.conc||{};
-  return `<div class="k">A sua régua dos 7 sentidos</div><h1 class="f" style="font-size:30px">Os seus 10</h1><p class="small mute">O que você marcou como êxtase.</p>
-  <div class="dez">${L.length?L.map(([id,sen,n])=>{const t=tileDe(id,n);A=DEF_A.slice();return `<div class="dz"><svg viewBox="0 0 300 300">${t?t.art():''}</svg><b>${esc(n)}</b><small>${esc(sen)}</small></div>`;}).join(''):'<p class="mute">Nenhum 10 ainda. Tudo bem: seus maiores estão no topo da régua.</p>'}</div>
+ if(F.i<0)return `<div class="hero"><div class="luzes">${C.map(c=>`<i style="background:${c};box-shadow:0 0 10px ${c}"></i>`).join('')}</div><div class="k">Jornada dos 7entidos · Fase 2</div><h1 class="f">A sua ordem, ${esc(nome)}.</h1><p class="mute">Na Fase 1 você escolheu 7 em cada sentido. Agora, em cada um, <b>coloque as suas 7 em ordem</b>: toque primeiro na que você mais gosta, depois na segunda… até a sétima. Leva uns 5 minutos.</p><button class="btn pri big" data-a="ini">Começar a Fase 2 →</button><p class="small mute">Sem resposta certa. O 7entidos não é terapia nem tratamento.</p></div>`;
+ if(F.i<7){const [id,sen,ic,cor]=SEN[F.i];const O=ordDe(id);const n=O.length;const L=mix(id);const lista=LAY==='D'?L.filter(x=>!O.includes(x)):L;
+  return `${seletor()}<div class="topo2"><div class="dots">${SEN.map(([sid,,,c],k)=>`<i style="${feito2(sid)?`background:${c};box-shadow:0 0 8px ${c}`:''}${k===F.i?';outline:2px solid #F4F1EA':''}"></i>`).join('')}</div><div class="small mute">Sentido ${F.i+1} de 7 · ${n} de 7 em ordem</div></div>
+  <div class="k" style="color:${cor}">${ic} ${esc(sen)}</div><h1 style="font-size:22px">${esc(PERG2[id])}</h1>
+  <div class="cont${n>=7?' ok':''}">${n>=7?'<b>Pronto!</b> A sua ordem está feita. Toque numa imagem para tirar e refazer.':n?`Agora toque na <b>${n+1}ª</b>. Faltam ${7-n}.`:'Toque primeiro na que você <b>mais gosta</b>. Ela vira a nº 1.'}</div>
+  ${LAY==='D'?fila(id,cor):''}
+  <div class="ord ord${LAY}">${lista.map(x=>cartao(id,x,cor)).join('')}</div>
+  <div class="row navfix"><button class="btn" data-a="volta">← Voltar</button>${n?'<button class="btn" data-a="limpa">Limpar</button>':''}<button class="btn pri" data-a="prox" ${n<7?'disabled':''}>${F.i<6?'Próximo sentido →':'Ver as minhas favoritas →'}</button></div>`;}
+ if(!F.fim){const E=experiencias();const M=mudou();const man=7-M.length;
+  return `<div class="k">A sua ordem dos 7 sentidos</div><h1 class="f" style="font-size:30px">As suas 7 favoritas</h1><p class="small mute">A nº 1 de cada sentido.</p>
+  <div class="dez">${SEN.map(([id,sen,ic,cor])=>`<div class="dz" style="border-color:${cor}">${art(id,fav(id))}<b>${esc(fav(id))}</b><small>${ic} ${esc(sen)}</small></div>`).join('')}</div>
+  <div class="ins5" style="margin-top:14px"><b>${man===7?'Você manteve a mesma favorita da Fase 1 nos 7 sentidos. Parece que você sabe bem do que gosta.':`Você manteve a favorita da Fase 1 em ${man} de 7 sentidos.`}</b>${M.slice(0,3).map(([id,sen])=>`<div class="small mute" style="margin-top:6px">${esc(sen)}: antes era "${esc(J.esc[id][0])}", agora é "${esc(fav(id))}".</div>`).join('')}${M.length?'<div class="small mute" style="margin-top:6px">Quando a gente olha de novo, com calma, a preferência às vezes muda. Tudo bem.</div>':''}</div>
   <h2>✨ 3 experiências de 5 minutos para esta semana</h2>${E.map((t,i)=>`<div class="ins5"><b>${i+1}. ${esc(t)}</b></div>`).join('')}
   <h2>Depois desta fase, qual é a sua sensação agora?</h2><div class="c11 grande">${[...Array(11)].map((_,k)=>`<button class="${F.sens===k?'on':''}" data-a="sens" data-n="${k}">${k}</button>`).join('')}</div><div class="small mute" style="display:flex;justify-content:space-between"><span>0 = nada bem</span><span>10 = muito bem</span></div>
   <div class="f2"><b>A Fase 3 traz as suas lembranças.</b><a class="btn pri" style="display:block;margin-top:10px;text-decoration:none" href="/jornada/fase3/?c=${CONVITE}" data-a="quer3">Ir para a Fase 3 →</a></div>
   <p class="erro" id="er2"></p><button class="btn pri big" data-a="fim2">Finalizar a Fase 2 ✓</button>`;}
- return `<div class="hero"><div class="k">Fase 2 finalizada ✓</div><h1 class="f">Obrigado, ${esc(nome)}!</h1><p class="mute">A sua régua está salva.</p><a class="btn pri big" style="display:block;text-decoration:none" href="/jornada/fase3/?c=${CONVITE}">Ir para a Fase 3 →</a></div>`;}
-function resumo2(){const notas=SEN.map(([id,sen])=>sen+': '+(J.esc[id]||[]).map(n=>n+' '+(F.notas[id+'|'+n]??'-')).join(' | '));const all=Object.values(F.notas);const med=all.length?Math.round(all.reduce((a,b)=>a+b,0)/all.length*10)/10:'';
- return {notas,media:med,dez:dez().map(([,s,n])=>n+' ('+s+')'),experiencias:experiencias(),sensacao:F.sens};}
+ return `<div class="hero"><div class="k">Fase 2 finalizada ✓</div><h1 class="f">Obrigado, ${esc(nome)}!</h1><p class="mute">A sua ordem está salva.</p><a class="btn pri big" style="display:block;text-decoration:none" href="/jornada/fase3/?c=${CONVITE}">Ir para a Fase 3 →</a></div>`;}
+function resumo2(){const notas=SEN.map(([id,sen])=>sen+': '+ordDe(id).map((n,k)=>(k+1)+'. '+n).join(' | '));const M=mudou();
+ return {notas,media:(7-M.length)+' de 7',dez:SEN.map(([id,sen])=>fav(id)+' ('+sen+')'),experiencias:experiencias(),sensacao:F.sens};}
 function render(){document.getElementById('app').innerHTML=topoLogo()+v2();}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a;
  if(a==='play'){e.stopPropagation();const on=b.classList.contains('on');para();document.querySelectorAll('.pl2.on').forEach(x=>{x.classList.remove('on');x.textContent='▶';});if(!on){toca(b.dataset.som);b.classList.add('on');b.textContent='■';}return;}
+ if(a==='lay'){LAY=b.dataset.l;try{localStorage.setItem('j7lay',LAY);}catch(e){}const y=scrollY;render();scrollTo(0,y);return;}
  if(a==='ini'){F.i=0;salva2();post('fase2_inicio');render();scrollTo(0,0);return;}
- if(a==='nota'){F.notas[b.dataset.k]=+b.dataset.n;salva2();const y=scrollY;render();scrollTo(0,y);return;}
+ if(a==='ord'){const id=SEN[F.i][0],O=ordDe(id),x=b.dataset.k,p=O.indexOf(x);if(p>=0)O.splice(p,1);else if(O.length<7)O.push(x);salva2();const y=scrollY;render();scrollTo(0,y);return;}
+ if(a==='limpa'){F.ord[SEN[F.i][0]]=[];salva2();render();return;}
  if(a==='prox'){para();F.i++;salva2();post('fase2_progresso',{feitos:F.i});render();scrollTo(0,0);return;}
  if(a==='volta'){para();F.i=Math.max(-1,F.i-1);salva2();render();scrollTo(0,0);return;}
  if(a==='sens'){F.sens=+b.dataset.n;salva2();const y=scrollY;render();scrollTo(0,y);return;}
  if(a==='quer3'){F.quer3=true;F.fim=true;salva2();post('fase2',resumo2());return;}
  if(a==='fim2'){if(F.sens==null){document.getElementById('er2').textContent='Dê a sua nota de 0 a 10 antes de finalizar.';return;}F.fim=true;salva2();post('fase2',resumo2());render();scrollTo(0,0);return;}});
+document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('.o2,.sl.on')){e.preventDefault();e.target.click();}});
 render();
 </script></body></html>
