@@ -111,6 +111,201 @@ function toca1(k){const c=ac();if(!c)return;para();const t=c.currentTime,D=5,g=c
  if(k==='trovao'){const n=ruido(c,D),l=filt('lowpass',180),v=c.createGain();v.gain.setValueAtTime(0,t);v.gain.linearRampToValueAtTime(.9,t+.5);v.gain.linearRampToValueAtTime(.35,t+1.6);v.gain.linearRampToValueAtTime(.7,t+2.2);v.gain.exponentialRampToValueAtTime(.01,t+4.8);n.connect(l);l.connect(v);v.connect(g);n.start(t);N.push(n);}
  if(k==='caixinha'){[[1047,0],[1319,.35],[1568,.7],[2093,1.05],[1976,1.6],[1568,1.95],[1319,2.3],[1568,2.65],[1047,3.2]].forEach(([f,o])=>{N.push(tom(c,g,f,t+o,1.1,'sine',.12));N.push(tom(c,g,f*3,t+o,.3,'sine',.02));});}
  TOCANDO={g,nodes:N};const dur=k==='coracao'?10:D;const me=TOCANDO;setTimeout(()=>{if(TOCANDO===me)para();},dur*1000+200);}</script>
+<script>/* ARTE7 — imagens dos 7 sentidos (sala de 04/11/2026)
+   Critérios de beleza:
+   1. Paleta harmônica: a cor de cada sentido mantém o tom, mas a luz e a força se ajustam ao estilo.
+   2. Um ponto principal: a escolha campeã é maior, num terço da imagem (nunca no centro de um anel).
+   3. Profundidade: fundo, meio e primeiro plano.
+   4. Textura de pincel densa (milhares de toques), não linhas soltas.
+   5. Luz que brilha de verdade.
+   6. Respiro: uma área calma para o olhar descansar.
+   7. Nada de diagrama: as 7 luzes se espalham de forma natural.
+   Entrada: perfil = {cores:[7 cores ou null], campea: índice, semente: número}
+*/
+(function(){
+const TAU=Math.PI*2;
+function rng(seed){let s=(Math.abs(Math.floor(seed))%2147483646)+1;return()=>(s=s*16807%2147483647)/2147483647;}
+function hex2rgb(h){h=h.replace('#','');return[parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
+function rgb2hsl([r,g,b]){r/=255;g/=255;b/=255;const M=Math.max(r,g,b),m=Math.min(r,g,b);let h=0,s=0;const l=(M+m)/2;if(M!==m){const d=M-m;s=l>.5?d/(2-M-m):d/(M+m);h=M===r?(g-b)/d+(g<b?6:0):M===g?(b-r)/d+2:(r-g)/d+4;h/=6;}return[h*360,s,l];}
+function hsl(h,s,l,a=1){return`hsla(${((h%360)+360)%360},${Math.round(Math.max(0,Math.min(1,s))*100)}%,${Math.round(Math.max(0,Math.min(1,l))*100)}%,${a})`;}
+function H(c){return rgb2hsl(hex2rgb(c));}
+function mix(a,b,t){const A=hex2rgb(a),B=hex2rgb(b);return'#'+A.map((v,i)=>Math.round(v+(B[i]-v)*t).toString(16).padStart(2,'0')).join('');}
+// ruído suave (value noise com interpolação)
+function ruido(seed){const r=rng(seed),P=new Float32Array(512);for(let i=0;i<512;i++)P[i]=r();const f=t=>t*t*(3-2*t);
+ const v=(x,y)=>P[((x&255)+((y&255)*31))&511];
+ return(x,y)=>{const xi=Math.floor(x),yi=Math.floor(y),xf=f(x-xi),yf=f(y-yi);const a=v(xi,yi),b=v(xi+1,yi),c=v(xi,yi+1),d=v(xi+1,yi+1);return a+(b-a)*xf+(c-a)*yf+(a-b-c+d)*xf*yf;};}
+function fbm(n,x,y,o=4){let s=0,a=.5,f=1;for(let i=0;i<o;i++){s+=a*n(x*f,y*f);a*=.5;f*=2;}return s;}
+// posições naturais: campeã num terço, as outras espalhadas com distância mínima
+function posicoes(r,W,Hh,n,camp,area){const [x0,y0,x1,y1]=area||[.1,.1,.9,.9];const P=[];const terços=[[.32,.3],[.68,.3],[.32,.62],[.68,.62]];
+ const t=terços[Math.floor(r()*4)];P[camp]=[t[0]*W,t[1]*Hh];
+ for(let k=0;k<n;k++){if(k===camp)continue;let best=null,bd=-1;for(let tent=0;tent<60;tent++){const p=[(x0+r()*(x1-x0))*W,(y0+r()*(y1-y0))*Hh];let d=1e9;P.forEach(q=>{if(q)d=Math.min(d,Math.hypot(p[0]-q[0],p[1]-q[1]))});if(d>bd){bd=d;best=p;}}P[k]=best;}
+ return P;}
+function brilho(g,x,y,R,cor,a=1){g.save();g.globalCompositeOperation='lighter';const gr=g.createRadialGradient(x,y,0,x,y,R);gr.addColorStop(0,cor.replace(/[\d.]+\)$/,a+')'));gr.addColorStop(1,cor.replace(/[\d.]+\)$/,'0)'));g.fillStyle=gr;g.beginPath();g.arc(x,y,R,0,TAU);g.fill();g.restore();}
+function grao(g,W,Hh,r,forca=10,qtd=1){const n=Math.floor(W*Hh/40*qtd);g.save();for(let i=0;i<n;i++){const v=r()<.5?0:255;g.fillStyle=`rgba(${v},${v},${v},${(r()*forca/255).toFixed(3)})`;g.fillRect(r()*W,r()*Hh,1.2,1.2);}g.restore();}
+function pincel(g,x,y,ang,len,lar,cor){g.save();g.translate(x,y);g.rotate(ang);g.fillStyle=cor;g.beginPath();g.ellipse(0,0,len/2,lar/2,0,0,TAU);g.fill();g.restore();}
+function prep(p){const C=['#FFD23F','#5AB8FF','#FF8A5C','#7DDB8B','#FF6FA3','#A98BFF','#3FE0D0'];return p.cores.map((c,k)=>c?{h:H(c),hex:c,k}:null);}
+
+const ESTILOS={};
+
+/* 1. NOITE EM REDEMOINHO — inspirada em Van Gogh */
+ESTILOS.gogh={nome:'Noite em Redemoinho',pintor:'Van Gogh',desc:'Céu de pinceladas que giram; a sua campeã vira a lua e as outras escolhas, estrelas.',
+draw(g,W,Hh,p){const r=rng(p.semente),n=ruido(p.semente),L=prep(p);
+ const gr=g.createLinearGradient(0,0,0,Hh);gr.addColorStop(0,'#0A1640');gr.addColorStop(.6,'#1E3F86');gr.addColorStop(1,'#14244F');g.fillStyle=gr;g.fillRect(0,0,W,Hh);
+ const P=posicoes(r,W,Hh,7,p.campea,[.08,.07,.92,.6]);
+ const vort=[[.45+r()*.15,.36+r()*.1],[.2+r()*.1,.2],[.8,.18+r()*.1]].map(v=>[v[0]*W,v[1]*Hh]);
+ const ang=(x,y)=>{let a=fbm(n,x/W*2.2,y/Hh*2.2)*TAU*1.4;let wx=Math.cos(a),wy=Math.sin(a);vort.forEach(([vx,vy],i)=>{const dx=x-vx,dy=y-vy,d=Math.hypot(dx,dy)+1,f=Math.exp(-d/(W*(i?0.12:0.2)))*3;wx+=-dy/d*f;wy+=dx/d*f;});P.forEach((q,k)=>{if(!L[k])return;const dx=x-q[0],dy=y-q[1],d=Math.hypot(dx,dy)+1,f=Math.exp(-d/(W*.07))*2.4;wx+=-dy/d*f;wy+=dx/d*f;});return Math.atan2(wy,wx);};
+ const azuis=[[220,.6,.22],[218,.55,.32],[212,.6,.44],[205,.55,.6],[48,.75,.7],[200,.4,.78]];
+ const sky=Hh*.74;
+ for(let i=0;i<9000;i++){const x=r()*W,y=r()*sky;let c=azuis[Math.floor(r()*4)];
+  let near=null,nd=1e9;P.forEach((q,k)=>{if(!L[k])return;const d=Math.hypot(x-q[0],y-q[1]);if(d<nd){nd=d;near=k;}});
+  const rr=W*(near===p.campea?.16:.1);if(near!==null&&nd<rr&&r()<1-nd/rr){const h=L[near].h;c=r()<.5?[h[0],Math.min(.9,h[1]+.1),.62+r()*.2]:[48,.85,.72+r()*.15];}
+  else if(r()<.06)c=azuis[4+Math.floor(r()*2)];
+  pincel(g,x,y,ang(x,y),W*(.018+r()*.022),W*(.006+r()*.005),hsl(c[0],c[1],c[2]+(r()-.5)*.08,.85));}
+ P.forEach((q,k)=>{if(!L[k])return;const h=L[k].h,R=W*(k===p.campea?.075:.032);
+  brilho(g,q[0],q[1],R*3.2,hsl(h[0],.9,.65,1),.55);
+  for(let ring=0;ring<(k===p.campea?5:3);ring++){const rad=R*(.6+ring*.32);const m=Math.floor(rad*1.1);for(let j=0;j<m;j++){const a=j/m*TAU+r()*.1;pincel(g,q[0]+Math.cos(a)*rad,q[1]+Math.sin(a)*rad,a+Math.PI/2,W*.022,W*.008,ring%2?hsl(h[0],.85,.7,.9):hsl(52,.95,.82,.9));}}
+  g.fillStyle=hsl(52,1,.9,1);g.beginPath();g.arc(q[0],q[1],R*.55,0,TAU);g.fill();brilho(g,q[0],q[1],R,hsl(h[0],1,.85,1),.9);});
+ // morros e vila
+ for(let layer=0;layer<3;layer++){const base=sky-W*.03+layer*W*.07;for(let i=0;i<2600;i++){const x=r()*W;const top=base+Math.sin(x/W*TAU*(1+layer*.5)+layer*2+p.semente%7)*W*.04;const y=top+r()*(Hh-top);
+  pincel(g,x,y,Math.sin(x/W*9+layer)*.4+(r()-.5)*.3,W*(.02+r()*.02),W*.008,hsl(layer===2?150:225,.4+layer*.05,.1+layer*.05+r()*.06,.9));}}
+ for(let i=0;i<14;i++){const x=W*(.25+r()*.5),y=Hh*(.86+r()*.06);g.fillStyle=hsl(46,.95,.7,.9);g.fillRect(x,y,W*.006,W*.007);brilho(g,x,y,W*.015,hsl(46,1,.7,1),.4);}
+ // cipreste
+ const cx=W*(P[p.campea][0]>W/2?.12:.86);g.fillStyle='#0A1A12';for(let i=0;i<900;i++){const t=r(),y=Hh*(.32+t*.68),w=W*.05*Math.sin(t*Math.PI*.95)+W*.01;pincel(g,cx+(r()-.5)*w,y,-1.4+(r()-.5)*.6,W*.03,W*.01,hsl(150,.35,.08+r()*.08,.95));}
+ grao(g,W,Hh,r,8);}};
+
+/* 2. NENÚFARES DA MANHÃ — inspirada em Monet */
+ESTILOS.monet={nome:'Nenúfares da Manhã',pintor:'Monet',desc:'Um lago calmo de toques leves; cada escolha é uma flor sobre a água, a campeã é a maior.',
+draw(g,W,Hh,p){const r=rng(p.semente),n=ruido(p.semente+3),L=prep(p);
+ const gr=g.createLinearGradient(0,0,0,Hh);gr.addColorStop(0,'#D8E6E4');gr.addColorStop(.35,'#9CC3CC');gr.addColorStop(1,'#3B6E80');g.fillStyle=gr;g.fillRect(0,0,W,Hh);
+ const agua=[[190,.35,.72],[200,.4,.58],[170,.3,.55],[255,.28,.74],[330,.4,.84],[55,.55,.86],[150,.3,.45]];
+ for(let i=0;i<16000;i++){const x=r()*W,y=r()*Hh,t=y/Hh;let c=agua[Math.floor(r()*agua.length)];const sh=fbm(n,x/W*3,y/Hh*6);
+  pincel(g,x,y,(r()-.5)*.2,W*(.018+r()*.022)*(.6+t),W*(.006+r()*.004)*(.6+t),hsl(c[0],c[1],c[2]*(.78+sh*.4)-t*.15,.55));}
+ // salgueiro: fios que caem do alto, curvos
+ for(let f=0;f<34;f++){const x0=r()*W*1.1-W*.05,len=Hh*(.12+r()*.3),cur=(r()-.5)*W*.08;for(let j=0;j<70;j++){const t=j/70;const x=x0+cur*t*t,y=t*len;pincel(g,x+(r()-.5)*W*.012,y,Math.PI/2+(r()-.5)*.5,W*.022,W*.007,hsl(85+r()*45,.38,.32+r()*.28,.7));}}
+ const P=posicoes(r,W,Hh,7,p.campea,[.1,.45,.9,.9]);
+ const folha=(x,y,s)=>{g.save();g.translate(x,y);g.scale(1,.42);for(let j=0;j<110;j++){const a=r()*TAU*.92+.3,d=Math.sqrt(r())*s;pincel(g,Math.cos(a)*d,Math.sin(a)*d,a,W*.022,W*.012,hsl(105+r()*35,.42,.25+r()*.22,.85));}g.restore();};
+ for(let i=0;i<10;i++)folha(r()*W,Hh*(.42+r()*.55),W*(.04+r()*.05));
+ const tam=(k,q)=>W*(k===p.campea?.12:.065)*(.75+q[1]/Hh*.4);
+ P.forEach((q,k)=>{if(!L[k])return;folha(q[0],q[1]+tam(k,q)*.25,tam(k,q)*1.6);});
+ P.forEach((q,k)=>{if(!L[k])return;const h=L[k].h,s=tam(k,q);
+  for(let j=0;j<50;j++)pincel(g,q[0]+(r()-.5)*s*.9,q[1]+s*.45+r()*s*1.3,0,W*.02,W*.005,hsl(h[0],h[1]*.7,.72,.22));
+  const petala=(a,len,lar,l)=>{g.save();g.translate(q[0],q[1]);g.scale(1,.55);g.rotate(a);g.fillStyle=hsl(h[0],Math.min(.85,h[1]+.05),l,.95);g.beginPath();g.moveTo(0,0);g.quadraticCurveTo(lar,-len*.5,0,-len);g.quadraticCurveTo(-lar,-len*.5,0,0);g.fill();g.restore();};
+  for(let j=0;j<12;j++)petala(j/12*TAU+r()*.2,s,s*.32,.5+r()*.08);
+  for(let j=0;j<9;j++)petala(j/9*TAU+.2,s*.78,s*.28,.66+r()*.08);
+  for(let j=0;j<7;j++){g.save();g.translate(0,-s*.12);petala(j/7*TAU+.5,s*.55,s*.22,.8);g.restore();}
+  brilho(g,q[0],q[1]-s*.08,s*.22,hsl(50,1,.7,1),.9);brilho(g,q[0],q[1],s*1.6,hsl(h[0],.8,.85,1),.18);});
+ brilho(g,W*.72,Hh*.12,W*.45,hsl(48,.8,.92,1),.14);grao(g,W,Hh,r,7);}};
+
+/* 3. JOIAS DE OURO — inspirada em Klimt */
+ESTILOS.klimt={nome:'Joias de Ouro',pintor:'Klimt',desc:'Fundo de ouro com mosaicos e espirais; cada escolha é uma joia, a campeã no centro da árvore.',
+draw(g,W,Hh,p){const r=rng(p.semente),L=prep(p);
+ const gr=g.createRadialGradient(W*.5,Hh*.45,W*.05,W*.5,Hh*.5,W*.75);gr.addColorStop(0,'#F0CF6A');gr.addColorStop(.6,'#C9972E');gr.addColorStop(1,'#6E4C10');g.fillStyle=gr;g.fillRect(0,0,W,Hh);
+ const ouros=['#E9C960','#D4AF37','#B88A1E','#F6E7A8','#8C6A14'];
+ for(let i=0;i<2200;i++){const s=W*(.008+r()*.02),x=r()*W,y=r()*Hh;g.fillStyle=r()<.06?'#1B1612':r()<.05?'#F6EFD8':ouros[Math.floor(r()*5)];g.globalAlpha=.55+r()*.4;g.fillRect(x,y,s,s*(.6+r()*.8));}g.globalAlpha=1;
+ // árvore da vida: espirais em galhos
+ const P=posicoes(r,W,Hh,7,p.campea,[.1,.1,.9,.82]);const tronco=[W*.5,Hh];
+ g.strokeStyle='#5A3E0C';g.lineCap='round';
+ const espiral=(x,y,R,voltas,lw,cor)=>{g.strokeStyle=cor;g.lineWidth=lw;g.beginPath();for(let t=0;t<voltas*TAU;t+=.08){const rr=R*t/(voltas*TAU);const px=x+Math.cos(t)*rr,py=y+Math.sin(t)*rr;t?g.lineTo(px,py):g.moveTo(px,py);}g.stroke();};
+ P.forEach((q,k)=>{if(!L[k])return;g.strokeStyle='#5A3E0C';g.lineWidth=W*.012;g.beginPath();g.moveTo(tronco[0],tronco[1]);g.bezierCurveTo(tronco[0],Hh*.7,q[0]+(r()-.5)*W*.2,q[1]+Hh*.2,q[0],q[1]);g.stroke();g.lineWidth=W*.004;g.strokeStyle='#F6E7A8';g.stroke();});
+ for(let i=0;i<26;i++){espiral(r()*W,r()*Hh,W*(.02+r()*.04),2.5,W*.004,'#6B4E10');}
+ // motivos "olho" e triângulos
+ for(let i=0;i<40;i++){const x=r()*W,y=r()*Hh,s=W*(.01+r()*.012);g.fillStyle='#F6EFD8';g.beginPath();g.ellipse(x,y,s,s*.55,r()*TAU,0,TAU);g.fill();g.fillStyle='#1B1612';g.beginPath();g.arc(x,y,s*.35,0,TAU);g.fill();}
+ P.forEach((q,k)=>{if(!L[k])return;const h=L[k].h,R=W*(k===p.campea?.095:.05);
+  brilho(g,q[0],q[1],R*2.2,hsl(48,1,.8,1),.4);
+  g.fillStyle='#3A2808';g.beginPath();g.arc(q[0],q[1],R*1.12,0,TAU);g.fill();
+  const gj=g.createRadialGradient(q[0]-R*.35,q[1]-R*.35,R*.1,q[0],q[1],R);gj.addColorStop(0,hsl(h[0],Math.min(1,h[1]+.15),.78));gj.addColorStop(1,hsl(h[0],Math.min(1,h[1]+.1),.36));g.fillStyle=gj;g.beginPath();g.arc(q[0],q[1],R,0,TAU);g.fill();
+  espiral(q[0],q[1],R*.8,3.2,W*.004,'#F6E7A8');
+  g.strokeStyle='#E9C960';g.lineWidth=W*.006;g.beginPath();g.arc(q[0],q[1],R*1.05,0,TAU);g.stroke();
+  const nd=k===p.campea?22:12;for(let j=0;j<nd;j++){const a=j/nd*TAU;g.fillStyle=j%2?'#1B1612':'#F6EFD8';g.beginPath();g.arc(q[0]+Math.cos(a)*R*1.28,q[1]+Math.sin(a)*R*1.28,W*.006,0,TAU);g.fill();}
+  brilho(g,q[0]-R*.3,q[1]-R*.35,R*.5,'rgba(255,255,255,1)',.6);});
+ grao(g,W,Hh,r,14);}};
+
+/* 4. LUZ NA PENUMBRA — inspirada em Rembrandt */
+ESTILOS.rembrandt={nome:'Luz na Penumbra',pintor:'Rembrandt',desc:'Fundo escuro e quente; as suas escolhas surgem como luzes de vela, a campeã ilumina tudo.',
+draw(g,W,Hh,p){const r=rng(p.semente),n=ruido(p.semente+9),L=prep(p);
+ g.fillStyle='#120A06';g.fillRect(0,0,W,Hh);
+ const P=posicoes(r,W,Hh,7,p.campea,[.12,.15,.88,.85]);const cp=P[p.campea];
+ for(let i=0;i<5000;i++){const x=r()*W,y=r()*Hh;const d=Math.hypot(x-cp[0],y-cp[1])/W;const l=Math.max(.04,.42-d*.55)+fbm(n,x/W*4,y/Hh*4)*.08;
+  pincel(g,x,y,fbm(n,x/W*2,y/Hh*2)*TAU,W*(.04+r()*.05),W*(.015+r()*.015),hsl(28+r()*14,.55,l,.35));}
+ P.forEach((q,k)=>{if(!L[k])return;const h=L[k].h,R=W*(k===p.campea?.11:.045);const quente=hsl(h[0],Math.min(.9,h[1]),.6,1);
+  brilho(g,q[0],q[1],R*4,hsl(36,.9,.55,1),k===p.campea?.45:.2);brilho(g,q[0],q[1],R*2,quente,.6);
+  for(let j=0;j<120;j++){const a=r()*TAU,d=r()*R;pincel(g,q[0]+Math.cos(a)*d,q[1]+Math.sin(a)*d,a,W*.02,W*.008,hsl(mixH(h[0],40,.35),.85,.6+(1-d/R)*.3,.5));}
+  brilho(g,q[0],q[1],R*.7,'rgba(255,245,220,1)',.95);});
+ const v=g.createRadialGradient(cp[0],cp[1],W*.15,W/2,Hh/2,W*.85);v.addColorStop(0,'rgba(0,0,0,0)');v.addColorStop(1,'rgba(5,2,0,.85)');g.fillStyle=v;g.fillRect(0,0,W,Hh);
+ // craquelado do verniz
+ g.strokeStyle='rgba(0,0,0,.18)';g.lineWidth=.8;for(let i=0;i<60;i++){let x=r()*W,y=r()*Hh;g.beginPath();g.moveTo(x,y);for(let j=0;j<6;j++){x+=(r()-.5)*W*.06;y+=(r()-.5)*W*.06;g.lineTo(x,y);}g.stroke();}
+ grao(g,W,Hh,r,10);}};
+function mixH(a,b,t){let d=((b-a+540)%360)-180;return a+d*t;}
+
+/* 5. MAR DE LUZ — inspirada em Turner */
+ESTILOS.turner={nome:'Mar de Luz',pintor:'Turner',desc:'Névoa dourada sobre o mar; a campeã é o sol e as outras cores se desmancham no céu e na água.',
+draw(g,W,Hh,p){const r=rng(p.semente),n=ruido(p.semente+5),L=prep(p);
+ const gr=g.createLinearGradient(0,0,0,Hh);gr.addColorStop(0,'#8C7A8E');gr.addColorStop(.35,'#D9B08A');gr.addColorStop(.58,'#E9C27A');gr.addColorStop(.62,'#9C6E4E');gr.addColorStop(1,'#2E2430');g.fillStyle=gr;g.fillRect(0,0,W,Hh);
+ const hor=Hh*.6;const P=posicoes(r,W,Hh,7,p.campea,[.05,.1,.95,.48]);const sol=[P[p.campea][0],Math.min(P[p.campea][1],hor-W*.14)];P[p.campea]=sol;
+ const veu=(x,y,R,cor,a)=>{const gg=g.createRadialGradient(x,y,0,x,y,R);gg.addColorStop(0,cor.replace(/[\d.]+\)$/,a+')'));gg.addColorStop(1,cor.replace(/[\d.]+\)$/,'0)'));g.fillStyle=gg;g.beginPath();g.arc(x,y,R,0,TAU);g.fill();};
+ P.forEach((q,k)=>{if(!L[k])return;const h=L[k].h;for(let j=0;j<6;j++)veu(q[0]+(r()-.5)*W*.25,q[1]+(r()-.5)*W*.1,W*(.12+r()*.16),hsl(h[0],.65,.62,1),.22);});
+ for(let i=0;i<7000;i++){const x=r()*W,y=r()*Hh;const ab=y>hor;const sh=fbm(n,x/W*3,y/Hh*5);const dsol=Math.hypot(x-sol[0],y-sol[1])/W;
+  pincel(g,x,y,(ab?0:Math.sin(sh*6)*.6)+(r()-.5)*.15,W*(.05+r()*.07),W*(.006+r()*.008),ab?hsl(28+sh*20,.45,.22+sh*.3+Math.max(0,.3-Math.abs(x-sol[0])/W)*.8,.3):hsl(36+sh*18,.55,.55+sh*.2+Math.max(0,.4-dsol)*.6,.22));}
+ veu(sol[0],sol[1],W*.5,'rgba(255,236,190,1)',.55);
+ brilho(g,sol[0],sol[1],W*.14,hsl(L[p.campea].h[0],.85,.65,1),.45);
+ veu(sol[0],sol[1],W*.07,'rgba(255,250,235,1)',.95);
+ P.forEach((q,k)=>{if(!L[k]||k===p.campea)return;const h=L[k].h;brilho(g,q[0],q[1],W*.05,hsl(h[0],.8,.6,1),.35);});
+ P.forEach((q,k)=>{if(!L[k])return;const h=L[k].h;const n2=k===p.campea?160:35;for(let j=0;j<n2;j++){const y=hor+r()*(Hh-hor)*.9;pincel(g,q[0]+(r()-.5)*W*(k===p.campea?.1:.04)*(1+(y-hor)/Hh*3),y,0,W*(.03+r()*.04),W*.004,hsl(h[0],.7,.72,.4));}});
+ g.fillStyle='rgba(30,18,16,.7)';const bx=W*(sol[0]>W/2?.2:.72);g.beginPath();g.moveTo(bx,hor+W*.012);g.lineTo(bx+W*.08,hor+W*.012);g.lineTo(bx+W*.068,hor+W*.028);g.lineTo(bx+W*.012,hor+W*.028);g.fill();g.fillRect(bx+W*.036,hor-W*.08,W*.004,W*.092);g.beginPath();g.moveTo(bx+W*.04,hor-W*.075);g.lineTo(bx+W*.07,hor-W*.01);g.lineTo(bx+W*.04,hor-W*.01);g.fill();
+ grao(g,W,Hh,r,9);}};
+
+/* 6. RECORTES DE PAPEL — inspirada em Matisse */
+ESTILOS.matisse={nome:'Recortes de Papel',pintor:'Matisse',desc:'Formas recortadas em cores chapadas, alegres e simples; a campeã é a maior folha.',
+draw(g,W,Hh,p){const r=rng(p.semente),L=prep(p);
+ const fundos=[['#1C3F94','#F4EBDA'],['#F4EBDA','#1C3F94'],['#0F5C4A','#F4EBDA'],['#E5603A','#F4EBDA']];const [fundo,papel]=fundos[p.semente%4];
+ g.fillStyle=fundo;g.fillRect(0,0,W,Hh);
+ // um grande retângulo de papel, levemente torto
+ g.save();g.translate(W/2,Hh/2);g.rotate((r()-.5)*.06);g.fillStyle=papel;g.globalAlpha=.16;g.fillRect(-W*.38,-Hh*.4,W*.76,Hh*.8);g.restore();g.globalAlpha=1;
+ const folha=(x,y,s,rot,cor,lob,larg)=>{g.save();g.translate(x,y);g.rotate(rot);g.fillStyle=cor;g.beginPath();const N=160;const lado=sg=>{for(let i=0;i<=N;i++){const t=sg>0?i/N:1-i/N;const env=Math.pow(Math.sin(t*Math.PI),.75);const ond=.62+.38*Math.cos(t*lob*TAU+(sg>0?0:.8));const w=sg*s*larg*env*ond;const yy=-s+t*2*s;i||sg<0?g.lineTo(w,yy):g.moveTo(w,yy);}};lado(1);lado(-1);g.closePath();g.fill();g.restore();};
+ const alga=(x,y,s,rot,cor)=>{g.save();g.translate(x,y);g.rotate(rot);g.strokeStyle=cor;g.lineCap='round';g.lineWidth=s*.09;g.beginPath();g.moveTo(0,s);g.quadraticCurveTo(s*.15,0,0,-s);g.stroke();for(let i=0;i<6;i++){const yy=s*.8-i*s*.3,sg=i%2?1:-1;g.beginPath();g.moveTo(s*.05,yy);g.quadraticCurveTo(sg*s*.35,yy-s*.05,sg*s*.42,yy-s*.25);g.stroke();}g.restore();};
+ for(let i=0;i<4;i++)alga(r()*W,r()*Hh,W*(.08+r()*.06),(r()-.5)*1.2,papel);
+ const P=posicoes(r,W,Hh,7,p.campea,[.14,.14,.86,.86]);
+ P.forEach((q,k)=>{if(!L[k])return;const h=L[k].h;const s=W*(k===p.campea?.24:.12+r()*.03);folha(q[0],q[1],s,(r()-.5)*1.4,hsl(h[0],Math.min(.85,h[1]+.12),Math.max(.42,Math.min(.6,h[2]))),2+Math.floor(r()*2),.5);});
+ for(let i=0;i<14;i++){const x=r()*W,y=r()*Hh;g.fillStyle=papel;g.beginPath();g.arc(x,y,W*(.006+r()*.012),0,TAU);g.fill();}
+ for(let i=0;i<3;i++){const x=r()*W,y=r()*Hh,s=W*(.025+r()*.02);g.fillStyle=papel;g.beginPath();for(let j=0;j<10;j++){const a=j/10*TAU-Math.PI/2,rr=j%2?s*.42:s;j?g.lineTo(x+Math.cos(a)*rr,y+Math.sin(a)*rr):g.moveTo(x+Math.cos(a)*rr,y+Math.sin(a)*rr);}g.fill();}
+ grao(g,W,Hh,r,5,.6);}};
+
+/* 7. CÍRCULOS QUE VIBRAM — inspirada em Kandinsky */
+ESTILOS.kandinsky={nome:'Círculos que Vibram',pintor:'Kandinsky',desc:'Círculos transparentes que se sobrepõem num céu escuro; cada sentido é uma cor que vibra.',
+draw(g,W,Hh,p){const r=rng(p.semente),n=ruido(p.semente+2),L=prep(p);
+ g.fillStyle='#0E0F1E';g.fillRect(0,0,W,Hh);
+ for(let i=0;i<40;i++)brilho(g,r()*W,r()*Hh,W*(.1+r()*.25),hsl(230+r()*40,.4,.25,1),.25);
+ const P=posicoes(r,W,Hh,7,p.campea,[.15,.15,.85,.85]);
+ // grande círculo escuro com halo (assinatura)
+ const big=[W*(.5+(r()-.5)*.2),Hh*(.5+(r()-.5)*.2)];brilho(g,big[0],big[1],W*.48,'rgba(90,110,200,1)',.35);g.fillStyle='rgba(18,22,60,.9)';g.beginPath();g.arc(big[0],big[1],W*.36,0,TAU);g.fill();
+ const circ=(x,y,R,h,s,l,a)=>{brilho(g,x,y,R*1.45,hsl(h,s,Math.min(.85,l+.2),1),.5);g.save();g.globalCompositeOperation='screen';g.fillStyle=hsl(h,s,l,a);g.beginPath();g.arc(x,y,R,0,TAU);g.fill();g.restore();};
+ for(let i=0;i<16;i++){const k=Math.floor(r()*7);const h=L[k]?L[k].h[0]:r()*360;circ(r()*W,r()*Hh,W*(.01+r()*.025),h,.7,.55,.9);}
+ P.forEach((q,k)=>{if(!L[k])return;const h=L[k].h,R=W*(k===p.campea?.13:.06+r()*.02);circ(q[0],q[1],R,h[0],Math.min(.95,h[1]+.1),.5,.85);
+  if(k===p.campea||r()<.5){g.fillStyle=hsl(h[0]+180,.7,.45,.9);g.beginPath();g.arc(q[0]+R*(r()-.5)*.6,q[1]+R*(r()-.5)*.6,R*.38,0,TAU);g.fill();}});
+ // linhas finas
+ g.strokeStyle='rgba(246,239,216,.5)';g.lineWidth=W*.002;for(let i=0;i<5;i++){g.beginPath();g.moveTo(r()*W,r()*Hh);g.lineTo(r()*W,r()*Hh);g.stroke();}
+ grao(g,W,Hh,r,10);}};
+
+/* 8. TARDE DE PONTINHOS — inspirada em Seurat */
+ESTILOS.seurat={nome:'Tarde de Pontinhos',pintor:'Seurat',desc:'Milhares de pontinhos formam um fim de tarde à beira-mar; as suas cores acendem o céu.',
+draw(g,W,Hh,p){const r=rng(p.semente),n=ruido(p.semente+4),L=prep(p);
+ g.fillStyle='#F4EBD9';g.fillRect(0,0,W,Hh);
+ const hor=Hh*.55,areia=Hh*.78;const P=posicoes(r,W,Hh,7,p.campea,[.08,.08,.92,.48]);
+ const base=(x,y)=>{if(y<hor){const t=y/hor;return t<.6?[205,.5,.8]:[30,.7,.8];}if(y<areia){return[205,.6,.45+fbm(n,x/W*6,y/Hh*12)*.2];}return[38,.55,.7];};
+ const D=W*.0085;
+ for(let i=0;i<34000;i++){const x=r()*W,y=r()*Hh;let c=base(x,y);let tot=0,hh=0,wsum=0;
+  P.forEach((q,k)=>{if(!L[k])return;const R=W*(k===p.campea?.32:.16);const d=Math.hypot(x-q[0],(y<hor?y:hor-(y-hor)*.6)-q[1]);const w=Math.max(0,1-d/R);if(w>0){wsum+=w;hh+=w;}});
+  if(wsum>0&&r()<Math.min(.85,wsum)){let pick=r()*wsum,kk=-1;P.forEach((q,k)=>{if(!L[k]||kk>=0)return;const R=W*(k===p.campea?.32:.16);const d=Math.hypot(x-q[0],(y<hor?y:hor-(y-hor)*.6)-q[1]);const w=Math.max(0,1-d/R);pick-=w;if(pick<=0)kk=k;});if(kk>=0){const h=L[kk].h;c=[h[0]+(r()-.5)*30,Math.min(.95,h[1]+.1),.55+r()*.25];}}
+  else if(r()<.18)c=[c[0]+180,c[1]*.7,c[2]];
+  g.fillStyle=hsl(c[0],c[1],c[2]+(r()-.5)*.1,.95);g.beginPath();g.arc(x,y,D*(.6+r()*.5),0,TAU);g.fill();}
+ // figuras simples na areia: guarda-sol e barco
+ const gx=W*(P[p.campea][0]>W/2?.2:.78);const hc=L[p.campea].h[0];for(let i=0;i<500;i++){const a=Math.PI+r()*Math.PI,d=r()*W*.09;g.fillStyle=hsl(hc,.75,.55+r()*.15,.95);g.beginPath();g.arc(gx+Math.cos(a)*d,areia+W*.02+Math.sin(a)*d*.5,D*.8,0,TAU);g.fill();}
+ for(let i=0;i<120;i++){g.fillStyle=hsl(25,.3,.25+r()*.1,.95);g.beginPath();g.arc(gx+(r()-.5)*W*.006,areia+W*.02+r()*W*.12,D*.7,0,TAU);g.fill();}
+ }};
+
+window.ARTE7={ESTILOS,desenha(canvas,estilo,perfil){const g=canvas.getContext('2d');const W=canvas.width,Hh=canvas.height;g.save();ESTILOS[estilo].draw(g,W,Hh,perfil);g.restore();}};
+})();
+</script>
 <script>const C=['#FFD23F','#5AB8FF','#FF8A5C','#7DDB8B','#FF6FA3','#A98BFF','#3FE0D0'],W='#F4F1EA',cx=150,cy=150,R=Math.PI/180;
 let A=['#E9B10E','#2F7FD1','#E8643A','#3E9E5E','#D9487E','#7457C9','#17A99B'];let FID=0,sd=7;
 const rnd=()=>((sd=sd*16807%2147483647)/2147483647);
@@ -343,7 +538,7 @@ function vSen(){const [id,sen,ic,cor,,tiles]=SEN[J.i];const m=J.esc[id]||[];
  <div class="row"><button class="btn" data-a="volta">← Voltar</button>${m.length?`<button class="btn" data-a="limpa">Limpar</button>`:''}${!pulado(id)&&m.length<7?`<button class="btn" data-a="pula">Pular este sentido</button>`:''}<span class="sp"></span><button class="btn pri" data-a="prox" ${m.length<7&&!pulado(id)?'disabled':''}>${J.i<6?'Próximo sentido →':'Ver meu mapa →'}</button></div>${J.i===6&&nCompletos()<3&&(m.length>=7||pulado(id))?`<p class="small mute">Para ver o seu mapa, faça pelo menos 3 sentidos.</p>`:''}`;}
 function vFim(){const p=perfil();const [tn,ti,tk,td]=TAGS[p.top],[sn,si]=TAGS[p.seg];
  return `<div class="k">Minha imagem dos 7 sentidos</div><h1 class="f" style="font-size:30px">Perfil ${tn} + ${sn}</h1>
- <div class="mapa img7" id="mp">${mapaSVG()}</div><p class="small mute" style="text-align:center;margin:-4px 0 6px">Uma imagem só sua, feita a partir das suas escolhas.</p>
+ <div class="mapa img7" id="mp">${mapaSVG()}</div><p class="small mute" style="text-align:center;margin:-4px 0 6px">${legenda7()}<br>Uma imagem só sua, feita a partir das suas escolhas.</p>
  <h2>✨ O que você talvez não tenha percebido</h2><div class="pal7">${insights(J,p,TAGS).filter(x=>x.s).map(x=>`<div class="pal7-i"><small>${esc(rotulo7(x))}</small><b>${esc(palavra7(x))}</b></div>`).join('')}</div>
  <div class="row"><button class="btn" data-a="baixa">Baixar minha imagem</button><span class="sp"></span><button class="btn pri big" data-a="fim">${QS.get('modo')==='refazer'?'Guardar este mapa →':'Continuar →'}</button></div><p class="small mute" id="bx"></p>
  <p class="small mute">O perfil mostra só as suas escolhas de hoje. Não é diagnóstico nem avaliação.</p>`;}
@@ -501,6 +696,17 @@ if(EH_PODIO){try{const s=JSON.parse(localStorage.getItem(PDK)||'null');if(s&&s.o
    4. Detalhe = o tema que mais se repete nas escolhas (água, noite, infância, natureza, aconchego, cozinha)
    5. Variação própria = semente tirada das escolhas e do código da pessoa */
 function hash7(t){let h=2166136261;for(let i=0;i<t.length;i++){h^=t.charCodeAt(i);h=Math.imul(h,16777619);}return (h>>>0)||7;}
+/* Detalhe do tema que mais se repete nas escolhas (usado nas duas imagens) */
+function detalhe7(r){
+ const E=J.esc||{};const tem=Object.entries(TEMAS).map(([n,L])=>[n,SEN.filter(x=>(E[x[0]]||[]).some(v=>L.includes(v))).length]).sort((a,b)=>b[1]-a[1])[0];
+ const tema=tem&&tem[1]>=2?tem[0]:'';let d='';
+ if(tema==='água'){for(let i=0;i<3;i++){const y=262+i*12;d+=`<path d="M0 ${y} Q 25 ${y-7} 50 ${y} T 100 ${y} T 150 ${y} T 200 ${y} T 250 ${y} T 300 ${y}" fill="none" stroke="#BFE3FF" stroke-width="1.6" opacity=".5"/>`;}}
+ if(tema==='noite'){for(let i=0;i<40;i++)d+=`<circle cx="${(r()*300).toFixed(0)}" cy="${(r()*140).toFixed(0)}" r="${(.5+r()*1.2).toFixed(1)}" fill="#FFF6E0" opacity="${(.4+r()*.5).toFixed(2)}"/>`;}
+ if(tema==='infância'){for(let i=0;i<24;i++)d+=`<rect x="${(r()*290).toFixed(0)}" y="${(r()*290).toFixed(0)}" width="4" height="7" rx="1.5" fill="${C[i%7]}" opacity=".55" transform="rotate(${(r()*180).toFixed(0)} 150 150)"/>`;}
+ if(tema==='natureza'){for(let i=0;i<12;i++){const x=r()*300,y=r()*300,a=r()*180;d+=`<path d="M${x.toFixed(0)} ${y.toFixed(0)} q 6 -10 0 -20 q -6 10 0 20z" fill="#9BE38F" opacity=".35" transform="rotate(${a.toFixed(0)} ${x.toFixed(0)} ${y.toFixed(0)})"/>`;}}
+ if(tema==='calor e aconchego'){d+=`<circle cx="150" cy="150" r="120" fill="#FFB27A" opacity=".10"/><circle cx="150" cy="150" r="70" fill="#FFD6A8" opacity=".10"/>`;}
+ if(tema==='cozinha e mesa'){for(let i=0;i<5;i++){const x=60+i*45;d+=`<path d="M${x} 280 c -10 -20 10 -30 0 -50 c -10 -20 10 -30 0 -50" fill="none" stroke="#F4F1EA" stroke-width="2" opacity=".22"/>`;}}
+ return d;}
 function imagem7(){
  const P=perfil();const top=P.top,seg=P.seg;const chave=(J.id||'')+'|'+SEN.map(s=>(J.esc[s[0]]||[]).join(',')).join('|');
  let sd=hash7(chave);const r=()=>((sd=sd*16807%2147483647)/2147483647);const id='i'+(hash7(chave+'x')%1e6);
@@ -529,16 +735,7 @@ function imagem7(){
   if(t===6){for(let i=0;i<6;i++){o+=`<circle cx="${110+r()*80}" cy="${110+r()*80}" r="${50+r()*50}" fill="${cor}" opacity="${(op*.16).toFixed(2)}"/>`;}}
   return o;};
  s+=forma(top,1,M.c);s+=forma(seg,.55,M2.c);
- // 4. detalhe do tema mais repetido
- const E=J.esc||{};const tem=Object.entries(TEMAS).map(([n,L])=>[n,SEN.filter(x=>(E[x[0]]||[]).some(v=>L.includes(v))).length]).sort((a,b)=>b[1]-a[1])[0];
- const tema=tem&&tem[1]>=2?tem[0]:'';let d='';
- if(tema==='água'){for(let i=0;i<3;i++){const y=262+i*12;d+=`<path d="M0 ${y} Q 25 ${y-7} 50 ${y} T 100 ${y} T 150 ${y} T 200 ${y} T 250 ${y} T 300 ${y}" fill="none" stroke="#BFE3FF" stroke-width="1.6" opacity=".5"/>`;}}
- if(tema==='noite'){for(let i=0;i<40;i++)d+=`<circle cx="${(r()*300).toFixed(0)}" cy="${(r()*140).toFixed(0)}" r="${(.5+r()*1.2).toFixed(1)}" fill="#FFF6E0" opacity="${(.4+r()*.5).toFixed(2)}"/>`;}
- if(tema==='infância'){for(let i=0;i<24;i++)d+=`<rect x="${(r()*290).toFixed(0)}" y="${(r()*290).toFixed(0)}" width="4" height="7" rx="1.5" fill="${C[i%7]}" opacity=".55" transform="rotate(${(r()*180).toFixed(0)} 150 150)"/>`;}
- if(tema==='natureza'){for(let i=0;i<12;i++){const x=r()*300,y=r()*300,a=r()*180;d+=`<path d="M${x.toFixed(0)} ${y.toFixed(0)} q 6 -10 0 -20 q -6 10 0 20z" fill="#9BE38F" opacity=".35" transform="rotate(${a.toFixed(0)} ${x.toFixed(0)} ${y.toFixed(0)})"/>`;}}
- if(tema==='calor e aconchego'){d+=`<circle cx="150" cy="150" r="120" fill="#FFB27A" opacity=".10"/><circle cx="150" cy="150" r="70" fill="#FFD6A8" opacity=".10"/>`;}
- if(tema==='cozinha e mesa'){for(let i=0;i<5;i++){const x=60+i*45;d+=`<path d="M${x} 280 c -10 -20 10 -30 0 -50 c -10 -20 10 -30 0 -50" fill="none" stroke="#F4F1EA" stroke-width="2" opacity=".22"/>`;}}
- s+=d;
+ s+=detalhe7(r);
  // 3. as 7 luzes, no desenho do mundo
  const pos=k=>{const t=k/7;if(top===0)return [30+k*40,205-Math.sin(t*3.14)*60+r()*14];if(top===3||top===5)return [30+k*40,140+Math.sin(t*6.28+r())*26];
   if(top===2){const a=t*8+r()*.3,rr=26+k*15;return [150+Math.cos(a)*rr,150+Math.sin(a)*rr];}if(top===4){const a=t*6.28+r()*.4,rr=55+r()*55;return [150+Math.cos(a)*rr,150+Math.sin(a)*rr];}
@@ -548,7 +745,25 @@ function imagem7(){
  L.forEach(([k,x,y])=>{if(!cores[k]){s+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4" fill="none" stroke="${M.c}" stroke-opacity=".35" stroke-dasharray="2 2"/>`;return;}const rr=16+Math.min(7,qtd[k])*2.2+r()*6;
   s+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${rr.toFixed(1)}" fill="url(#${id}l${k})"/><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(rr*.18).toFixed(1)}" fill="#FFFFFF" opacity=".9" filter="url(#${id}b)"/>`;});
  return `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Imagem dos 7 sentidos">${s}</svg>`;}
-mapaSVG=function(){return imagem7();};
+/* Estilo da imagem (decisão do Daniel, 04/11): inspirada em pintores clássicos, sem copiar obras.
+   Pintor = o 1º pintor que a pessoa escolheu em Visão; se não escolheu nenhum, vem da força principal.
+   Cores = a favorita de cada sentido. Variação própria = espelhamento + detalhe do tema, tirados das escolhas. */
+const PINTOR_FORCA=[1,5,8,3,2,0,7]; // Raiz→Van Gogh, Ninho→Rembrandt, Vento→Munch, Lago→Monet, Faísca→Picasso, Brisa→Da Vinci, Abraço→Frida
+function pintor7(){const i=(J.esc.mapa||[]).map(n=>MAPAS.findIndex(m=>m[0]===n)).find(i=>i>=0);return i!==undefined&&i>=0?i:PINTOR_FORCA[perfil().top];}
+function imagemPintor(){
+ /* Escolha do Daniel (04/11, Sala das Imagens): nº 8 "Tarde de Pontinhos", inspirada em Seurat, para todas as pessoas.
+    Milhares de pontinhos formam um fim de tarde à beira-mar; a cor da favorita de cada sentido acende o céu;
+    a campeã (o sentido da força principal) é a maior luz. Feito em canvas e guardado pronto, para não pesar no celular. */
+ const chave=(J.id||'')+'|'+SEN.map(s=>(J.esc[s[0]]||[]).join(',')).join('|');
+ imagemPintor.cache=imagemPintor.cache||{};if(imagemPintor.cache[chave])return imagemPintor.cache[chave];
+ const fav=SEN.map(s=>{const n=(J.esc[s[0]]||[])[0];const m=n&&META[s[0]]&&META[s[0]][n];return m?m:null;});
+ const P=perfil();let camp=fav.findIndex(m=>m&&m[0]===P.top);if(camp<0)camp=fav.findIndex(m=>m);if(camp<0)camp=0;
+ const cores=fav.map(m=>m?m[1]:null);if(!cores.some(c=>c))cores[0]='#FFD23F';if(!cores[camp])cores[camp]=cores.find(c=>c);
+ const cv=document.createElement('canvas');cv.width=cv.height=720;ARTE7.desenha(cv,'seurat',{cores,campea:camp,semente:hash7(chave)});
+ const svg=`<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="Imagem dos 7 sentidos: Tarde de Pontinhos, inspirada em Seurat"><image width="300" height="300" href="${cv.toDataURL('image/jpeg',.9)}" xlink:href="${cv.toDataURL('image/jpeg',.9)}"/></svg>`;
+ imagemPintor.cache={[chave]:svg};return svg;}
+function legenda7(){return 'Tarde de Pontinhos · inspirada em Seurat';}
+mapaSVG=function(){return imagemPintor();};
 /* Uma palavra por descoberta (só as que a pessoa talvez não tenha percebido) */
 function palavra7(x){const t=x.t;if(t.indexOf(':')>0){let w=t.split(':').pop().trim();w=({'calor e aconchego':'aconchego','cozinha e mesa':'mesa'})[w]||w;return w.charAt(0).toUpperCase()+w.slice(1);}
  const M={'Onde você é mais decidido':'Decisão','Sua paleta é quente':'Calor','Sua paleta é fria':'Frescor','Sua paleta mistura quente e frio':'Equilíbrio','Não foi acaso':'Coerência','Uma criança no mapa':'Infância'};return M[t]||t;}
