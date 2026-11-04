@@ -34,6 +34,11 @@
 .nc-claro .nc-sent small{color:var(--muted)}.nc-claro .nc-sent.on{border-color:var(--sc)}
 .modal .nc-dot{background:var(--gold-ink)}
 @media (prefers-reduced-motion:reduce){.nc-op,.nc-sent{transition:none}}
+.cj{position:relative;max-width:340px;height:410px;margin:6px auto 8px}.cj svg{position:absolute;left:0;top:0}
+.cj-nome{position:absolute;font-size:14px;line-height:1.25;font-weight:700;color:#F4F1EA;text-align:left}.cj-nome small{display:block;font-size:12px;font-weight:600;color:#AEB5D6}
+.cj-nome.cj-agora{color:#F9CB39}.cj-nome.cj-agora small{color:#F9CB39}
+.cj-breve{filter:blur(1.6px);opacity:.6}
+.cj-agora circle{animation:cjpulsa 1.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}@keyframes cjpulsa{50%{transform:scale(1.25)}}
 .bv-tela{background:radial-gradient(420px 320px at 12% 8%,rgba(90,184,255,.22),transparent 70%),radial-gradient(420px 320px at 92% 30%,rgba(255,111,163,.2),transparent 70%),radial-gradient(460px 360px at 30% 96%,rgba(125,219,139,.18),transparent 70%),#0A0F24}
 .bv-ceu{position:fixed;inset:0;pointer-events:none}.bv-ceu i{position:absolute;border-radius:50%;animation:bvflutua 7s ease-in-out infinite}
 @keyframes bvflutua{50%{transform:translateY(-14px)}}
@@ -865,6 +870,21 @@ function BrisaVideo({n,onFim}){
       <p class="nc-apoio">Vídeo da Brisa em produção. Por enquanto, aqui está o que ela vai dizer.</p>
     </div></div>`;
 }
+/* Constelação das fases (Sala "O caminho do app", 04/11): estrelas ligadas por linhas, mostrada entre uma fase e outra.
+   Fases bloqueadas aparecem borradas (Sala "A Brisa e a Fase 1"). */
+const FASES7=[["Vídeo de apresentação","v"],["Fase 1 · Mapa dos 7 sentidos","f1"],["Fase 2 · Pódio dos Sentidos","f2"],["Fase 3 · Minha régua","f3"],["Fase 4","f4"],["Fase 5","f5"],["Hall da Fama","hall"]];
+function Constelacao({feitas,titulo,frase,onFim}){
+  const P=[[22,26],[86,86],[28,146],[92,206],[30,266],[94,326],[40,386]];const C7=["#FFD23F","#5AB8FF","#FF8A5C","#7DDB8B","#FF6FA3","#A98BFF","#3FE0D0"];
+  const est=k=>k<feitas?"feita":k===feitas?"agora":"breve";
+  return html`<div class="nc-tela bv-tela" role="dialog" aria-modal="true" aria-label="Minha jornada"><div class="nc-caixa fade">
+    <div class="nc-eyebrow">Minha jornada</div><h1 class="nc-h1">${titulo}</h1><p class="nc-p">${frase}</p>
+    <div class="cj" aria-hidden="true"><svg viewBox="0 0 120 410" width="120" height="410">
+      ${P.slice(1).map((q,k)=>html`<line key=${"l"+k} x1=${P[k][0]} y1=${P[k][1]} x2=${q[0]} y2=${q[1]} stroke=${k+1<=feitas?"#F9CB39":"#3A4680"} stroke-width=${k+1<=feitas?2.5:1.5} stroke-dasharray=${k+1<=feitas?"":"4 5"}/>`)}
+      ${P.map((q,k)=>{const e=est(k);return html`<g key=${k} class=${"cj-"+e}><circle cx=${q[0]} cy=${q[1]} r=${e==="agora"?13:10} fill=${e==="breve"?"#18224A":C7[k]} stroke=${e==="breve"?"#5A6492":"#0A0F24"} stroke-width="2"/>${e==="feita"?html`<text x=${q[0]} y=${q[1]+4} text-anchor="middle" font-size="12" font-weight="900" fill="#0A0F24">✓</text>`:null}</g>`})}
+    </svg>${P.map((q,k)=>{const e=est(k);return html`<span key=${k} class=${"cj-nome cj-"+e} style=${{left:q[0]+20,top:q[1]-10,width:"calc(100% - "+(q[0]+20)+"px)"}}>${FASES7[k][0]}${e==="agora"?html`<small>Agora</small>`:e==="breve"?html`<small>${k>=4?"Em breve":"Bloqueada"}</small>`:null}</span>`})}</div>
+    <button class="nc-btn" onClick=${onFim}>Continuar</button>
+  </div></div>`;
+}
 function PodioVer({p,onClose}){
   const top=(p.campeas||[]).slice(0,3);
   return html`<${Modal} title="Meu pódio dos sentidos" onClose=${onClose}>
@@ -878,11 +898,11 @@ function PodioVer({p,onClose}){
 const podioEntrada=(k,base)=>{try{localStorage.setItem(k+"-entrada",JSON.stringify({esc:base.esc||{},pul:base.pul||[],t:base.t||{}}))}catch(e){}};
 const sentidosDoPodio=p=>((p&&p.sentidosOrdem)||[]).filter(id=>(p.completos||[]).includes(id)).map(id=>MAPA_SENT[id]).filter(Boolean);
 function NovoComeco({s,update}){
-  const [passo,setPasso]=useState(()=>{const v=s.videos||{};if(!v.v1)return "v1";if(!ultimoMapa(s))return 0;if(!v.v2)return "v2";if(!s.podio)return "podio";return 1;});
+  const [passo,setPasso]=useState(()=>{const v=s.videos||{};if(!v.v1)return "v1";if(!ultimoMapa(s))return 0;if(!v.c1)return "c1";if(!v.v2)return "v2";if(!s.podio)return "podio";if(!v.c2)return "c2";return 1;});
   const [sent,setSent]=useState(()=>(s.novoComeco&&s.novoComeco.sentidos&&s.novoComeco.sentidos.length)?s.novoComeco.sentidos:sentidosDoMapa(ultimoMapa(s)));
-  const mapaPronto=useCallback(m=>{update(st=>{guardaMapa(st,m)},"mapa");setSent(sentidosDoMapa(m));setPasso("v2");gaEvent("mapa_feito")},[update]);
+  const mapaPronto=useCallback(m=>{update(st=>{guardaMapa(st,m)},"mapa");setSent(sentidosDoMapa(m));setPasso("c1");gaEvent("mapa_feito")},[update]);
   const viu=n=>update(st=>{st.videos=Object.assign({},st.videos||{},{[n]:true})},"video");
-  const podioPronto=useCallback(p=>{const so=sentidosDoPodio(p);update(st=>{st.podio=p;st.novoComeco=Object.assign({},st.novoComeco||{},{sentidos:so})},"podio");setSent(so);setPasso(1);gaEvent("podio_feito")},[update]);
+  const podioPronto=useCallback(p=>{const so=sentidosDoPodio(p);update(st=>{st.podio=p;st.novoComeco=Object.assign({},st.novoComeco||{},{sentidos:so})},"podio");setSent(so);setPasso("c2");gaEvent("podio_feito")},[update]);
   /* Régua: "intro" → 0..9 (números 10 a 1) → "pronta" */
   const rasc=s.novoComeco&&Array.isArray(s.novoComeco.rascunho)&&s.novoComeco.rascunho.length===10?s.novoComeco.rascunho:null;
   const [regua,setRegua]=useState(()=>(rasc||NC_ESCALA_PADRAO).map(x=>Object.assign({},x)));
@@ -899,6 +919,8 @@ function NovoComeco({s,update}){
   function comecar(){const esc=regua.map(x=>({v:x.v,t:x.t,m:(x.m||"").trim(),s:x.s||null}));update(st=>{const ant=st.novoComeco||{};const n=Object.assign({},ant,{versao:2,escala:esc,escalaVersao:ant.escalaVersao||1,sentidos:sent.slice(),inicio:ant.inicio||nowISO(),concluidoEm:nowISO()});delete n.rascunho;st.novoComeco=n},"novo-comeco");gaEvent("jornada_iniciada");}
   if(passo==="v1")return html`<${BrisaVideo} n="v1" onFim=${()=>{viu("v1");setPasso(0)}}/>`;
   if(passo===0)return html`<${MapaFrame} onPronto=${mapaPronto}/>`;
+  if(passo==="c1")return html`<${Constelacao} feitas=${2} titulo="Você desbloqueou a Fase 2" frase="Sua primeira estrela acendeu. Agora vem o Pódio dos Sentidos." onFim=${()=>{viu("c1");setPasso("v2")}}/>`;
+  if(passo==="c2")return html`<${Constelacao} feitas=${3} titulo="Você desbloqueou a Fase 3" frase="Mais uma estrela na sua constelação. Agora é a vez da sua régua." onFim=${()=>{viu("c2");setPasso(1)}}/>`;
   if(passo==="v2")return html`<${BrisaVideo} n="v2" onFim=${()=>{viu("v2");setPasso("podio")}}/>`;
   if(passo==="podio"){podioEntrada(MAPA_K+"-p",ultimoMapa(s)||{});return html`<${MapaFrame} k=${MAPA_K+"-p"} modo="podio" onPronto=${podioPronto}/>`;}
   const pi=3;
