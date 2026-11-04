@@ -1,0 +1,751 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sala da Fase 2</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Jornada dos 7entidos: escolha 7 de 15 em cada sentido e descubra a imagem dos seus 7 sentidos.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..600&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0F24;--card:#111A3D;--field:#0D1430;--soft:#18224A;--line:#26315F;--ink:#F4F1EA;--mute:#AEB5D6;--pe:#F9CB39;color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0;background:radial-gradient(900px 600px at 80% -10%,#1a2552 0%,#0E1533 40%,#0A0F24 75%) fixed,var(--bg);color:var(--ink);font:17px/1.5 Manrope,system-ui,-apple-system,Segoe UI,sans-serif}
+.w{max-width:620px;margin:0 auto;padding:12px 16px 60px}.f{font-family:Fraunces,Georgia,serif;font-weight:400}
+.bar0{display:flex;align-items:center;margin-bottom:10px}.sp{flex:1}.mute{color:var(--mute)}.small{font-size:13px}
+h1{font-size:23px;line-height:1.25;margin:4px 0 10px}h2{font-size:18px;margin:22px 0 10px}.k{font-size:13px;letter-spacing:.1em;font-weight:800;text-transform:uppercase;color:var(--pe)}
+.hero{text-align:center;padding:40px 0}.hero h1{font-size:36px;margin:12px 0}.luzes{display:flex;gap:10px;justify-content:center;margin-bottom:18px}.luzes i{width:12px;height:12px;border-radius:50%}
+.btn{font:inherit;font-weight:800;border:1px solid var(--line);background:var(--soft);color:var(--ink);border-radius:14px;padding:12px 16px;cursor:pointer;min-height:48px}.btn.pri{background:var(--pe);border-color:var(--pe);color:#0A0F24}.btn[disabled]{opacity:.4;cursor:not-allowed}.btn.big{width:100%;margin:18px 0 10px;font-size:18px}
+.topo{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;background:rgba(10,15,36,.96);padding:8px 0 10px;border-bottom:1px solid var(--line);margin-bottom:12px}
+.mini{width:92px;height:92px;flex:0 0 92px;border-radius:14px;overflow:hidden;border:1px solid var(--line)}.mini svg{width:100%;height:100%;display:block}
+.nums{display:flex;gap:5px;margin:4px 0 6px}.num{font:inherit;font-weight:900;font-size:14px;width:32px;height:32px;border-radius:9px;border:2px solid var(--c);background:transparent;color:var(--ink);cursor:pointer;padding:0}
+.num.ok{background:var(--c);color:#0A0F24}.num.at{outline:3px solid var(--ink);outline-offset:1px}
+.dots{display:flex;gap:6px;margin:2px 0 4px}.dots i{width:12px;height:12px;border-radius:50%;background:var(--soft);border:1px solid var(--line)}
+.num.glow{animation:glow 1.6s ease-in-out infinite}@keyframes glow{0%,100%{box-shadow:0 0 0 0 var(--c)}50%{box-shadow:0 0 12px 2px var(--c)}}
+.barra{height:7px;border-radius:9px;background:var(--soft);overflow:hidden}.barra i{display:block;height:100%;background:linear-gradient(90deg,#FFD23F,#5AB8FF,#FF8A5C,#7DDB8B,#FF6FA3,#A98BFF,#3FE0D0)}
+.cont{background:var(--field);border:1px solid var(--line);border-radius:12px;padding:8px 12px;margin-bottom:10px}.cont.ok{border-color:#7DDB8B}.cont b{color:var(--pe)}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}@media(min-width:560px){.grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
+.tile{position:relative;background:var(--field);border:2px solid var(--line);border-radius:12px;padding:5px 5px 7px;cursor:pointer;display:flex;flex-direction:column;gap:4px}
+.tile svg{width:100%;height:auto;border-radius:8px;display:block}.tile b{font-size:12.5px;line-height:1.2}
+.tile .box{position:absolute;top:9px;left:9px;width:26px;height:26px;border-radius:7px;background:#F7F2E8;border:2px solid #0A0F24;display:grid;place-items:center;font-weight:900;color:#0A0F24;font-size:15px;z-index:1}
+.tile.on{border-color:var(--c)}.tile.on .box{background:var(--c)}.tile.dis{opacity:.4}
+.tile .pl{position:absolute;top:9px;right:9px;width:34px;height:34px;border-radius:50%;border:none;background:#F9CB39;color:#0A0F24;font-weight:900;cursor:pointer;z-index:1}.tile .pl.on{background:#F4F1EA}
+.row{display:flex;gap:8px;margin-top:16px;align-items:center;flex-wrap:wrap}
+.mapa{border-radius:18px;overflow:hidden;border:1px solid var(--line);margin:8px 0 12px}.mapa svg{width:100%;height:auto;display:block}
+.barras{display:grid;gap:8px}.bl{display:grid;grid-template-columns:110px 1fr 30px;gap:8px;align-items:center;font-size:15px}.bt{height:12px;background:var(--soft);border-radius:9px;overflow:hidden}.bt i{display:block;height:100%;border-radius:9px}
+.favs{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px}.fav{display:flex;gap:10px;align-items:center;background:var(--field);border:1px solid var(--line);border-left:4px solid var(--c);border-radius:0;padding:8px 10px}
+@media (prefers-reduced-motion:reduce){.num.glow{animation:none}}
+.insg{display:grid;gap:8px}.ins{display:flex;gap:10px;align-items:flex-start;background:var(--field);border:1px solid var(--line);border-radius:14px;padding:10px 12px}.ins.sur{border-color:#F9CB39;background:color-mix(in srgb,#F9CB39 8%,var(--field))}
+.insn{flex:0 0 26px;height:26px;border-radius:50%;background:var(--soft);display:grid;place-items:center;font-weight:900;font-size:13px}.ins.sur .insn{background:#F9CB39;color:#0A0F24}
+.lock{position:relative;margin-top:16px;border-radius:16px;overflow:hidden;border:1px dashed var(--line)}.lockv{filter:blur(4px);opacity:.5;padding:10px;display:grid;gap:8px;pointer-events:none}
+.lockc{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:14px;background:rgba(10,15,36,.55)}
+.mini{position:relative;padding:0;cursor:pointer;background:none}.mini .eu{position:absolute;left:50%;top:50%;width:62%;height:62%;transform:translate(-50%,-50%);border-radius:50%;object-fit:cover;border:2px solid #F9CB39;box-shadow:0 0 12px rgba(0,0,0,.5)}.mini .maisf{position:absolute;left:4px;right:4px;bottom:4px;font-size:11px;font-weight:800;background:rgba(10,15,36,.85);color:#F9CB39;border-radius:8px;padding:2px 0}
+.fotocad{display:flex;gap:12px;align-items:center;text-align:left}.fotob{flex:0 0 64px;width:64px;height:64px;border-radius:50%;border:2px dashed #F9CB39;background:var(--field);font-size:26px;cursor:pointer;padding:0;overflow:hidden}.fotob img{width:100%;height:100%;object-fit:cover}
+.aval{margin-top:18px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}.aval.ok{border-color:#7DDB8B}.avq{display:block;margin:12px 0}.avo{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.avo button{font:inherit;font-size:14px;font-weight:700;border:1px solid var(--line);background:var(--field);color:var(--ink);border-radius:999px;padding:8px 12px;cursor:pointer}.avo button.on{background:var(--pe);color:#0A0F24;border-color:var(--pe)}.aval textarea{font:inherit;width:100%;margin-top:6px;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--field);color:var(--ink)}
+.navfix{position:sticky;bottom:0;z-index:4;background:linear-gradient(180deg,rgba(10,15,36,0),rgba(10,15,36,.96) 28%);padding:22px 0 12px;margin-top:8px}.navfix .btn.pri[disabled]{opacity:.55}.navfix{flex-wrap:nowrap;gap:6px}.navfix .sp{display:none}.navfix .btn{padding:10px 12px;font-size:15px;min-height:46px}.navfix .btn.pri{flex:1;white-space:nowrap}
+.ins5{background:var(--field);border:1px solid #F9CB39;border-radius:14px;padding:12px;margin-bottom:10px}.c10{display:grid;grid-template-columns:repeat(11,1fr);gap:3px;margin:8px 0 4px}.c10 button{font:inherit;font-size:13px;font-weight:800;height:34px;padding:0;border-radius:8px;border:1px solid var(--line);background:var(--soft);color:var(--ink);cursor:pointer}.c10 button.on{background:#F9CB39;color:#0A0F24;border-color:#F9CB39}
+.f2{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;text-align:center}.lnk{font:inherit;background:none;border:none;color:var(--pe);text-decoration:underline;cursor:pointer;padding:0}
+.logo{display:flex;align-items:center;gap:8px;color:var(--ink);text-decoration:none;font-size:22px}
+.cad{display:grid;gap:12px;text-align:left;margin:18px 0 4px}.cad label{display:grid;gap:6px;font-weight:700;font-size:15px}.cad input[type=text],.cad input[type=tel]{font:inherit;font-size:17px;padding:13px 14px;border-radius:12px;border:1px solid var(--line);background:var(--field);color:var(--ink)}
+.cad .ck{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:14px;color:var(--mute)}.cad .ck input{width:22px;height:22px;margin-top:1px;flex:0 0 22px}.cad a{color:var(--pe)}.erro{color:#FF9AAE;font-weight:700;margin:0;min-height:1em;font-size:14px}
+.nota{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:16px}@media(min-width:520px){.nota{grid-template-columns:repeat(11,1fr)}}.nota button{font:inherit;font-weight:900;font-size:18px;height:52px;border-radius:12px;border:1px solid var(--line);background:var(--field);color:var(--ink);cursor:pointer}.nota button.on{background:var(--pe);color:#0A0F24;border-color:var(--pe)}
+.hero a.btn{display:inline-block;text-decoration:none;margin-top:10px}
+.topo2{position:sticky;top:0;z-index:5;background:rgba(10,15,36,.96);padding:8px 0;margin-bottom:8px;border-bottom:1px solid var(--line)}
+.r2{background:var(--field);border:1px solid var(--line);border-radius:14px;padding:8px;margin-bottom:8px}.r2t{display:flex;align-items:center;gap:10px;position:relative}.r2t svg{width:52px;height:52px;border-radius:10px;flex:0 0 52px}
+.pl2{width:34px;height:34px;border-radius:50%;border:none;background:#F9CB39;color:#0A0F24;font-weight:900;cursor:pointer;flex:0 0 34px}.pl2.on{background:#F4F1EA}
+.c11{display:grid;grid-template-columns:repeat(11,1fr);gap:3px;margin-top:8px}.c11 button{font:inherit;font-size:13px;font-weight:800;height:34px;padding:0;border-radius:8px;border:1px solid var(--line);background:var(--soft);color:var(--ink);cursor:pointer}.c11 button.on{background:#F9CB39;color:#0A0F24;border-color:#F9CB39}.c11.grande button{height:44px;font-size:15px}
+.dez{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.dz{background:var(--field);border:1px solid #F9CB39;border-radius:12px;padding:6px;display:flex;flex-direction:column;gap:2px}.dz svg{width:100%;height:auto;border-radius:8px}.dz b{font-size:12.5px}.dz small{font-size:11px;color:var(--mute)}
+.fav3{display:flex;gap:12px;align-items:center;margin:6px 0 10px}.fav3 svg{width:96px;height:96px;border-radius:14px;flex:0 0 96px}
+.lem{display:flex;gap:10px;align-items:center;background:var(--field);border:1px solid var(--line);border-left:4px solid var(--c);padding:8px 10px;margin-bottom:6px}
+.tp7{position:sticky;top:0;z-index:6;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:4px;background:rgba(10,15,36,.97);padding:8px 0 4px}
+.pb{font:inherit;border:2px solid var(--c);background:transparent;color:var(--ink);border-radius:10px;padding:4px 0;cursor:pointer;display:flex;flex-direction:column;align-items:center;line-height:1.1}.pb b{font-size:17px}.pb small{font-size:10px;color:var(--mute)}.pb.ok{background:color-mix(in srgb,var(--c) 30%,transparent)}.pb.at{outline:3px solid var(--ink);outline-offset:1px}
+.tot{height:4px;background:var(--soft);border-radius:4px;overflow:hidden;margin-bottom:14px;position:sticky;top:58px;z-index:6}.tot i{display:block;height:100%;background:linear-gradient(90deg,#FFD23F,#5AB8FF,#FF8A5C,#7DDB8B,#FF6FA3,#A98BFF,#3FE0D0)}
+.alah{margin:6px 0 14px}.alah h1{font-size:30px;margin:2px 0 6px}
+.zinfo{background:#3a1c2c;border:1px solid #FF9AAE;border-radius:12px;padding:10px 12px;font-size:14px}
+.pq{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--c);border-radius:16px;padding:12px;margin-bottom:14px}.pq.feito{border-color:var(--c)}.pq.z{border-left-color:#FF5A5A;background:linear-gradient(180deg,#2a1530,#111A3D)}
+.pqh{display:flex;gap:10px}.num{flex:0 0 28px;height:28px;border-radius:50%;background:var(--c);color:#0A0F24;font-weight:900;display:grid;place-items:center;font-size:13px}.qt{font-size:17px;line-height:1.3}.por{margin:4px 0 8px;font-size:13px;color:var(--mute)}
+.op{border:1px solid var(--line);border-radius:12px;margin-top:8px;background:var(--field)}.op.on{border-color:var(--c);box-shadow:0 0 0 1px var(--c)}.op.nq{opacity:.45}.op.nq .opb b{text-decoration:line-through}
+.opr{display:flex;align-items:stretch}.opb{flex:1;font:inherit;color:var(--ink);background:none;border:none;text-align:left;padding:10px;display:flex;gap:10px;align-items:flex-start;cursor:pointer}.opb small{display:block;color:var(--mute);font-size:12.5px;margin-top:2px}
+.rd{flex:0 0 18px;height:18px;border-radius:50%;border:2px solid var(--mute);margin-top:2px}.op.on .rd{background:var(--c);border-color:var(--c);box-shadow:inset 0 0 0 3px var(--field)}
+.tst{font:inherit;font-size:12.5px;font-weight:800;border:none;border-left:1px solid var(--line);background:none;color:var(--pe);padding:0 10px;cursor:pointer;white-space:nowrap}.tst.on{color:var(--ink)}
+.nqb{font:inherit;border:none;border-left:1px solid var(--line);background:none;color:var(--mute);width:40px;cursor:pointer;font-size:15px}.nqb.on{background:#FF9AAE;color:#0A0F24;border-radius:0 11px 11px 0}
+.nota{width:100%;margin-top:10px;font:inherit;font-size:14px;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--field);color:var(--ink)}
+.demo{position:relative;overflow:hidden;margin:0 8px 10px;padding:12px;border-radius:12px;background:#0B1028;border:1px dashed var(--line);min-height:90px}
+.dh{margin:0 0 8px;font-size:14px;color:var(--mute)}.dh b{color:var(--ink)}
+.tb,.jg2{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.jg2{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0}
+.tt{position:relative;font:inherit;color:var(--ink);background:var(--field);border:2px solid var(--line);border-radius:12px;padding:4px 4px 6px;cursor:pointer;display:flex;flex-direction:column;gap:3px;-webkit-tap-highlight-color:transparent}.tt svg{width:100%;height:auto;border-radius:8px;display:block}.tt b{font-size:11.5px;line-height:1.15}.tt.on{border-color:var(--c,#F9CB39)}
+.tn{position:absolute;top:6px;left:6px;width:22px;height:22px;border-radius:7px;background:#F7F2E8;color:#0A0F24;font-weight:900;font-size:13px;display:grid;place-items:center;z-index:1}.tt.on .tn{background:var(--c,#F9CB39)}
+.tt .pl,.dd .pl{position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:50%;background:#F9CB39;color:#0A0F24;font-size:12px;display:grid;place-items:center;font-weight:900}
+.pop{animation:pop .45s cubic-bezier(.3,1.6,.5,1)}@keyframes pop{0%{transform:scale(.85)}55%{transform:scale(1.1);box-shadow:0 0 26px 4px var(--c,#F9CB39)}100%{transform:scale(1)}}
+.dm{margin-top:10px;font-size:15px;background:var(--field);border:1px solid var(--line);border-radius:10px;padding:8px 10px}.dm.rev{border-color:#F9CB39;animation:pop .5s}
+.carregando{letter-spacing:.4em;color:#F9CB39;animation:pulsa .5s infinite alternate}@keyframes pulsa{to{opacity:.3;transform:scale(1.15)}}
+.hold{font:inherit;font-weight:800;width:100%;padding:14px;border-radius:12px;border:1px solid #F9CB39;color:#0A0F24;background:linear-gradient(90deg,#F9CB39 var(--p,0%),#F4F1EA var(--p,0%));cursor:pointer;touch-action:none;user-select:none}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.ch{font:inherit;font-size:13.5px;font-weight:700;border:1px solid var(--line);background:var(--field);color:var(--ink);border-radius:999px;padding:7px 11px;cursor:pointer}.ch.on{background:#F9CB39;color:#0A0F24}
+.du{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center}.du span{color:var(--mute)}.dd{position:relative;font:inherit;color:var(--ink);background:var(--field);border:2px solid var(--line);border-radius:14px;padding:6px;cursor:pointer;display:flex;flex-direction:column;gap:4px}.dd svg{width:100%;height:auto;border-radius:10px}
+.ol{margin:0;padding-left:20px}.ol li{margin:3px 0}
+.rowi{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;margin:8px 0}.rowi i{width:16px;height:16px;border-radius:50%;display:block}
+.bar{height:12px;background:var(--soft);border-radius:9px;overflow:hidden;margin:8px 0}.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#FFD23F,#5AB8FF,#FF8A5C,#7DDB8B,#FF6FA3,#A98BFF,#3FE0D0);transition:width .5s}
+.anel{position:relative;width:120px;height:120px;margin:6px auto}.anel i{position:absolute;left:50%;top:50%;width:18px;height:18px;margin:-9px;border-radius:50%;background:var(--soft);border:2px solid var(--c);transition:.3s}.anel i.ok{background:var(--c);box-shadow:0 0 14px var(--c)}
+.alb{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin:8px 0}.alb .sl{aspect-ratio:1;border:2px dashed var(--c);border-radius:8px;overflow:hidden}.alb .sl.ok{border-style:solid}.alb .sl svg{width:100%;height:100%;display:block}.alb.mini{margin:0}
+.btn{font:inherit;font-weight:800;border:1px solid var(--line);background:var(--soft);color:var(--ink);border-radius:12px;padding:10px 14px;cursor:pointer;margin-top:6px}.btn.pri{background:var(--pe);border-color:var(--pe);color:#0A0F24}.btn.big{width:100%;font-size:17px;padding:14px}
+.carta{display:flex;flex-direction:column;align-items:center;gap:4px;width:150px;margin:10px auto;padding:8px;border-radius:14px;background:linear-gradient(160deg,#1d2a5e,#111A3D);border:2px solid #F9CB39;text-align:center}.carta svg{width:120px;height:120px;border-radius:10px}.carta small{color:var(--mute);font-size:11px}
+.pint{position:relative;height:140px;border-radius:14px;background:#0E1533;overflow:hidden;margin:8px 0}.pint i{position:absolute;width:70px;height:70px;border-radius:50%;background:radial-gradient(circle,var(--c),transparent 70%);opacity:0;transform:scale(.3);transition:.6s}.pint i.ok{opacity:.9;transform:scale(1);animation:surge .8s both}@keyframes surge{from{opacity:0;transform:scale(.2)}to{opacity:.9;transform:scale(1)}}
+.pint.grande{height:300px}.pint.grande i{width:130px;height:130px}.pint.lento i.ok{animation-duration:2.4s}.pint.mini{height:90px}.pint.mini i{width:50px;height:50px}
+.pint .pc{position:absolute;width:22%;aspect-ratio:1;border-radius:50%;overflow:hidden;border:3px solid var(--c);box-shadow:0 0 22px -4px var(--c);animation:surge .8s both}.pint .pc svg{width:100%;height:100%;display:block}.pint.lento .pc{animation-duration:2.4s}
+.mist{position:relative;display:block;width:100%;box-sizing:border-box;border:1px dashed #F9CB39;border-radius:12px;padding:12px;text-align:center}.mist .bl{filter:blur(5px);transition:filter 1s}.mist.aberto .bl{filter:none}.mist span{position:absolute;inset:0;display:grid;place-items:center;font-weight:800;color:#F9CB39}.mist.mini{margin:12px 0}
+.inp{width:100%;font:inherit;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--field);color:var(--ink);margin-top:8px}
+.mold{padding:10px;border-radius:12px;border:6px solid transparent}.mold[data-m=Dourada]{border-color:#D4AF37;box-shadow:0 0 0 2px #8a6a1c}.mold[data-m=Madeira]{border-color:#8A5A32}.mold[data-m=Luz]{box-shadow:0 0 24px #F9CB39;border-color:#F9CB39}
+.story{position:relative;height:240px;border-radius:16px;background:radial-gradient(circle at 30% 20%,var(--c),#0A0F24 80%);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;padding:16px}.story b{font-family:Fraunces,serif;font-size:30px;font-weight:400}.story small{color:#F4F1EA;opacity:.8}.story span{position:absolute;bottom:10px;font-size:11px;color:var(--mute)}.sbar{position:absolute;top:10px;left:10px;right:10px;display:flex;gap:4px}.sbar i{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.25)}.sbar i.ok{background:#fff}.story.big2{height:70vh}
+.big{font-size:20px;margin:6px 0}.big.f{font-size:24px}
+.brisa{text-align:center}.luzes7{display:inline-flex;gap:6px}.luzes7 i{width:10px;height:10px;border-radius:50%;animation:pulsa .8s infinite alternate}.luzes7.mini i{width:6px;height:6px}
+.fadein{animation:fade 1.2s both}@keyframes fade{from{opacity:0}to{opacity:1}}.tb.lento .tt{cursor:default}
+.lac .blur{filter:blur(6px);transition:filter .8s}.lac .blur.vis{filter:none;color:#F9CB39;font-weight:800}
+.stc{width:160px;margin:6px auto;padding:10px;border-radius:16px;background:linear-gradient(160deg,#1a2552,#0A0F24);border:1px solid var(--line);text-align:center}.stc small{display:block;color:var(--mute)}
+.mur{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.dia{border:2px solid var(--c);border-radius:8px;padding:4px 2px;text-align:center;font-size:16px;opacity:.5}.dia small{display:block;font-size:9px;color:var(--mute)}.dia.ok{opacity:1;background:color-mix(in srgb,var(--c) 30%,transparent)}.dia.hoje{opacity:1;outline:2px solid #fff}
+.qd{line-height:0;text-align:center}.qd i{display:inline-block;width:16px;height:16px;margin:1px;border-radius:3px}
+.planta{position:relative;height:160px}.planta .caule{position:absolute;left:50%;bottom:0;width:4px;height:85%;background:#3E9E5E;border-radius:4px}.planta i{position:absolute;width:30px;height:16px;border-radius:50% 0;background:var(--c);animation:pop .5s}
+.resp{display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px}.resp .bola{width:80px;height:80px;border-radius:50%;background:radial-gradient(circle,#3FE0D0,#17A99B);animation:resp 4.5s ease-in-out infinite}@keyframes resp{0%,100%{transform:scale(.6)}50%{transform:scale(1.15)}}
+.zp{border:1px solid #FF5A5A;border-radius:12px;padding:12px;background:#2a1020;text-align:center}.rol{font-size:44px}.rol.gira{animation:gira .15s linear infinite}@keyframes gira{to{transform:rotate(360deg)}}
+.push{background:#F4F1EA;color:#0A0F24;border-radius:12px;padding:8px 10px;margin:4px 0;font-size:13px;text-align:left;animation:fade .4s both}.push.ok{border:2px solid #7DDB8B}
+.inf{max-height:150px;overflow:auto;text-align:left}.inf div{padding:10px;border-bottom:1px solid #4a2030}.rk li{text-align:left}
+.confe{position:absolute;inset:0;pointer-events:none;z-index:9}.confe i{position:absolute;top:-10px;width:8px;height:12px;border-radius:2px;animation:cai 1.4s ease-in forwards}@keyframes cai{to{transform:translateY(420px) rotate(540deg);opacity:0}}
+.navfix{position:sticky;bottom:0;display:flex;gap:8px;justify-content:space-between;background:linear-gradient(180deg,rgba(10,15,36,0),rgba(10,15,36,.96) 30%);padding:20px 0 10px}.navfix .btn{flex:1}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}.tg{font-size:13px;border:1px solid var(--line);border-radius:999px;padding:5px 10px;background:var(--field)}
+.jogo{position:fixed;inset:0;z-index:50;background:radial-gradient(800px 600px at 50% 0%,var(--fundo,transparent),transparent 70%),#0A0F24;overflow:auto}#jg{max-width:560px;margin:0 auto;padding:10px 16px 40px;min-height:100%}
+.jtop{display:flex;align-items:center;gap:10px;position:sticky;top:0;background:rgba(10,15,36,.9);padding:8px 0;z-index:5}.jtop>*:not(.x){flex:1}.x{font:inherit;background:none;border:1px solid var(--line);color:var(--ink);border-radius:50%;width:34px;height:34px;cursor:pointer}
+.jc{text-align:center;padding-top:10px}.jc h2{font-size:22px;margin:8px 0}.rv p{font-size:16px}.rvt{font-size:18px}.quase{color:#F9CB39;font-weight:800;animation:pulsa .6s infinite alternate}
+.aviso{background:#3a1c2c;border:1px solid #FF9AAE;border-radius:10px;padding:8px 12px;font-size:14px}
+.bar0{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body><div class="w" id="app"></div><script>/* ---------- estímulos sensoriais (sons feitos aqui, sem arquivos) ---------- */
+let AC=null,TOCANDO=null;
+function ac(){try{if(navigator.audioSession)navigator.audioSession.type='playback';}catch(e){}if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;AC=new C();}if(AC.state!=='running')AC.resume();return AC;}
+function destrava(){const c=ac();if(!c)return;try{const b=c.createBuffer(1,1,22050),s=c.createBufferSource();s.buffer=b;s.connect(c.destination);s.start(0);}catch(e){}}
+['touchend','click','keydown'].forEach(ev=>document.addEventListener(ev,function f(){destrava();if(AC&&AC.state==='running')['touchend','click','keydown'].forEach(x=>document.removeEventListener(x,f,true));},true));
+function para(){if(TOCANDO){try{TOCANDO.g.gain.setTargetAtTime(0,AC.currentTime,.08);const n=TOCANDO.nodes;setTimeout(()=>n.forEach(x=>{try{x.stop&&x.stop();}catch(e){}}),400);}catch(e){}TOCANDO=null;document.querySelectorAll('.play.on').forEach(b=>{b.classList.remove('on');b.textContent='▶';});}}
+function ruido(c,d){const b=c.createBuffer(1,c.sampleRate*d,c.sampleRate),x=b.getChannelData(0);for(let i=0;i<x.length;i++)x[i]=Math.random()*2-1;const s=c.createBufferSource();s.buffer=b;return s;}
+function tom(c,dest,f,t,dur,tipo,vol){const o=c.createOscillator(),g=c.createGain();o.type=tipo||'sine';o.frequency.setValueAtTime(f,t);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol||.3,t+.01);g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(g);g.connect(dest);o.start(t);o.stop(t+dur+.05);return o;}
+function toca(k){const c0=ac();if(!c0)return;if(c0.state!=='running'){c0.resume().then(()=>toca1(k)).catch(()=>{});return;}toca1(k);}
+function toca1(k){const c=ac();if(!c)return;para();const t=c.currentTime,D=5,g=c.createGain();g.gain.value=.9;g.connect(c.destination);const N=[];const filt=(tp,f,q)=>{const x=c.createBiquadFilter();x.type=tp;x.frequency.value=f;if(q)x.Q.value=q;return x;};
+ if(k==='chuva'){const n=ruido(c,D),h=filt('highpass',900),l=filt('lowpass',7000),v=c.createGain();v.gain.value=.22;n.connect(h);h.connect(l);l.connect(v);v.connect(g);n.start(t);N.push(n);for(let i=0;i<40;i++)N.push(tom(c,g,1800+Math.random()*2500,t+Math.random()*D,.05,'sine',.05));}
+ if(k==='mar'){const n=ruido(c,D),l=filt('lowpass',600),v=c.createGain();v.gain.setValueAtTime(.05,t);[0,2.5].forEach(o=>{v.gain.linearRampToValueAtTime(.45,t+o+1.4);v.gain.linearRampToValueAtTime(.06,t+o+2.5);});n.connect(l);l.connect(v);v.connect(g);n.start(t);N.push(n);}
+ if(k==='passaros'){for(let i=0;i<14;i++){const s=t+Math.random()*(D-.4),o=c.createOscillator(),e=c.createGain();o.frequency.setValueAtTime(2600+Math.random()*800,s);o.frequency.exponentialRampToValueAtTime(4200+Math.random()*900,s+.08);o.frequency.exponentialRampToValueAtTime(3000,s+.16);e.gain.setValueAtTime(0,s);e.gain.linearRampToValueAtTime(.12,s+.02);e.gain.exponentialRampToValueAtTime(.001,s+.18);o.connect(e);e.connect(g);o.start(s);o.stop(s+.2);N.push(o);}}
+ if(k==='piano'){[[261.6,0],[329.6,.5],[392,1],[523.3,1.5],[392,2.2],[329.6,2.7],[261.6,3.2]].forEach(([f,o])=>{N.push(tom(c,g,f,t+o,1.8,'triangle',.18));N.push(tom(c,g,f*2,t+o,1,'sine',.05));});}
+ if(k==='violao'){[[196,0],[246.9,.35],[293.7,.7],[392,1.05],[293.7,1.6],[246.9,1.95],[196,2.5],[246.9,2.85]].forEach(([f,o])=>{const sr=c.sampleRate,p=Math.round(sr/f),b=c.createBuffer(1,sr*1.6,sr),x=b.getChannelData(0);for(let i=0;i<p;i++)x[i]=Math.random()*2-1;for(let i=p;i<x.length;i++)x[i]=.996*.5*(x[i-p]+x[i-p+1]);const s=c.createBufferSource(),v=c.createGain();v.gain.value=.35;s.buffer=b;s.connect(v);v.connect(g);s.start(t+o);N.push(s);});}
+ if(k==='batida'){for(let i=0;i<8;i++){const s=t+i*.6667;const o=c.createOscillator(),e=c.createGain();o.frequency.setValueAtTime(130,s);o.frequency.exponentialRampToValueAtTime(45,s+.18);e.gain.setValueAtTime(.7,s);e.gain.exponentialRampToValueAtTime(.001,s+.3);o.connect(e);e.connect(g);o.start(s);o.stop(s+.32);N.push(o);const h=ruido(c,.06),hf=filt('highpass',7000),hv=c.createGain();hv.gain.value=.12;h.connect(hf);hf.connect(hv);hv.connect(g);h.start(s+.333);N.push(h);}}
+ if(k==='cafe'){const n=ruido(c,D),b=filt('bandpass',400,.8),v=c.createGain();v.gain.value=.08;n.connect(b);b.connect(v);v.connect(g);n.start(t);N.push(n);for(let i=0;i<28;i++){const s=t+Math.random()*D,o=c.createOscillator(),e=c.createGain();o.frequency.setValueAtTime(250+Math.random()*200,s);o.frequency.exponentialRampToValueAtTime(700+Math.random()*400,s+.06);e.gain.setValueAtTime(.12,s);e.gain.exponentialRampToValueAtTime(.001,s+.08);o.connect(e);e.connect(g);o.start(s);o.stop(s+.1);N.push(o);}}
+ if(k==='panela'){const n=ruido(c,D),h=filt('highpass',2500),v=c.createGain();v.gain.setValueAtTime(.2,t);for(let i=0;i<60;i++)v.gain.setValueAtTime(.08+Math.random()*.25,t+i*D/60);n.connect(h);h.connect(v);v.connect(g);n.start(t);N.push(n);}
+ if(k==='respiracao'){const n=ruido(c,D),b=filt('bandpass',700,.7),v=c.createGain();v.gain.setValueAtTime(0,t);v.gain.linearRampToValueAtTime(.35,t+2);v.gain.linearRampToValueAtTime(0,t+4.5);n.connect(b);b.connect(v);v.connect(g);n.start(t);N.push(n);}
+ if(k==='coracao'){const per=60/64;for(let i=0;i*per<10;i++){[0,.28].forEach((o,j)=>{const s=t+i*per+o,x=c.createOscillator(),e=c.createGain();x.frequency.setValueAtTime(j?55:65,s);x.frequency.exponentialRampToValueAtTime(35,s+.12);e.gain.setValueAtTime(j?.5:.8,s);e.gain.exponentialRampToValueAtTime(.001,s+.18);x.connect(e);e.connect(g);x.start(s);x.stop(s+.2);N.push(x);});}}
+ if(k==='vento'){const n=ruido(c,D),b=filt('bandpass',500,.6),v=c.createGain();v.gain.setValueAtTime(.05,t);for(let i=1;i<=5;i++){v.gain.linearRampToValueAtTime(.12+Math.random()*.35,t+i);b.frequency.linearRampToValueAtTime(300+Math.random()*700,t+i);}n.connect(b);b.connect(v);v.connect(g);n.start(t);N.push(n);}
+ if(k==='fogueira'){const n=ruido(c,D),l=filt('lowpass',700),v=c.createGain();v.gain.value=.18;n.connect(l);l.connect(v);v.connect(g);n.start(t);N.push(n);for(let i=0;i<45;i++){const s=t+Math.random()*D,h=ruido(c,.03),hf=filt('highpass',1800),hv=c.createGain();hv.gain.value=.15+Math.random()*.3;h.connect(hf);hf.connect(hv);hv.connect(g);h.start(s);N.push(h);}}
+ if(k==='tigela'){[[196,.22],[523,.09],[934,.05],[1430,.03]].forEach(([f,vv])=>{const o=c.createOscillator(),e=c.createGain();o.frequency.value=f;e.gain.setValueAtTime(0,t);e.gain.linearRampToValueAtTime(vv,t+.02);e.gain.exponentialRampToValueAtTime(.0001,t+4.8);const l=c.createOscillator(),lg=c.createGain();l.frequency.value=3;lg.gain.value=vv*.3;l.connect(lg);lg.connect(e.gain);o.connect(e);e.connect(g);o.start(t);l.start(t);o.stop(t+5);l.stop(t+5);N.push(o,l);});}
+ if(k==='grilos'){for(let i=0;i<9;i++)for(let j=0;j<3;j++)N.push(tom(c,g,4400+Math.random()*200,t+i*.55+j*.06+Math.random()*.05,.035,'sine',.07));}
+ if(k==='riacho'){const n=ruido(c,D),b=filt('bandpass',1400,.5),v=c.createGain();v.gain.setValueAtTime(.15,t);for(let i=0;i<80;i++)v.gain.setValueAtTime(.08+Math.random()*.16,t+i*D/80);n.connect(b);b.connect(v);v.connect(g);n.start(t);N.push(n);for(let i=0;i<20;i++)N.push(tom(c,g,700+Math.random()*900,t+Math.random()*D,.07,'sine',.05));}
+ if(k==='flauta'){[[523,0,.6],[587,.6,.6],[659,1.2,.9],[587,2.1,.5],[523,2.6,1.1],[440,3.7,1.2]].forEach(([f,o,d])=>{const x=c.createOscillator(),e=c.createGain(),l=c.createOscillator(),lg=c.createGain();x.frequency.value=f;l.frequency.value=5;lg.gain.value=f*.012;l.connect(lg);lg.connect(x.frequency);const s=t+o;e.gain.setValueAtTime(0,s);e.gain.linearRampToValueAtTime(.16,s+.08);e.gain.setValueAtTime(.16,s+d-.1);e.gain.linearRampToValueAtTime(0,s+d);x.connect(e);e.connect(g);x.start(s);l.start(s);x.stop(s+d+.05);l.stop(s+d+.05);N.push(x,l);});}
+ if(k==='sinos'){const P=[1047,1175,1319,1568,1760,2093];for(let i=0;i<16;i++){const f=P[Math.floor(Math.random()*6)],s=t+Math.random()*(D-1);N.push(tom(c,g,f,s,1.6,'sine',.07));N.push(tom(c,g,f*2.76,s,.5,'sine',.015));}}
+ if(k==='ronronar'){const n=ruido(c,D),l=filt('lowpass',260),v=c.createGain(),lfo=c.createOscillator(),lg=c.createGain();v.gain.value=.3;lfo.frequency.value=25;lg.gain.value=.28;lfo.connect(lg);lg.connect(v.gain);n.connect(l);l.connect(v);v.connect(g);n.start(t);lfo.start(t);lfo.stop(t+D);N.push(n,lfo);}
+ if(k==='trovao'){const n=ruido(c,D),l=filt('lowpass',180),v=c.createGain();v.gain.setValueAtTime(0,t);v.gain.linearRampToValueAtTime(.9,t+.5);v.gain.linearRampToValueAtTime(.35,t+1.6);v.gain.linearRampToValueAtTime(.7,t+2.2);v.gain.exponentialRampToValueAtTime(.01,t+4.8);n.connect(l);l.connect(v);v.connect(g);n.start(t);N.push(n);}
+ if(k==='caixinha'){[[1047,0],[1319,.35],[1568,.7],[2093,1.05],[1976,1.6],[1568,1.95],[1319,2.3],[1568,2.65],[1047,3.2]].forEach(([f,o])=>{N.push(tom(c,g,f,t+o,1.1,'sine',.12));N.push(tom(c,g,f*3,t+o,.3,'sine',.02));});}
+ TOCANDO={g,nodes:N};const dur=k==='coracao'?10:D;const me=TOCANDO;setTimeout(()=>{if(TOCANDO===me)para();},dur*1000+200);}
+</script><script>const C=['#FFD23F','#5AB8FF','#FF8A5C','#7DDB8B','#FF6FA3','#A98BFF','#3FE0D0'],W='#F4F1EA',cx=150,cy=150,R=Math.PI/180;
+let A=['#E9B10E','#2F7FD1','#E8643A','#3E9E5E','#D9487E','#7457C9','#17A99B'];let FID=0,sd=7;
+const rnd=()=>((sd=sd*16807%2147483647)/2147483647);
+const fx=(sc,bl,seed,fr)=>{const id='f'+(FID++);return [id,`<filter id="${id}" x="-30%" y="-30%" width="160%" height="160%"><feTurbulence type="fractalNoise" baseFrequency="${fr||0.02}" numOctaves="4" seed="${seed}"/><feDisplacementMap in="SourceGraphic" scale="${sc}"/>${bl?`<feGaussianBlur stdDeviation="${bl}"/>`:''}</filter>`];};
+const gid=()=>'g'+(FID++);
+const st=(x,y,L,an,c,w,o)=>`<line x1="${(x-L/2).toFixed(1)}" y1="${y.toFixed(1)}" x2="${(x+L/2).toFixed(1)}" y2="${y.toFixed(1)}" stroke="${c}" stroke-width="${w}" stroke-linecap="round" opacity="${o}" transform="rotate(${an.toFixed(0)} ${x.toFixed(1)} ${y.toFixed(1)})"/>`;
+const pt=(r,k,c0)=>{const a=(-90+k*360/7)*R,c=c0||150;return [c+r*Math.cos(a),c+r*Math.sin(a)];};
+function vinci(){sd=3;const [f,d]=fx(26,16,4,.012),[g,e]=fx(1.2,0,8,.06);let v='',s='';
+ for(let k=0;k<7;k++){const [x,y]=pt(70,k);v+=`<circle cx="${x}" cy="${y}" r="62" fill="${A[k]}" opacity=".33"/>`;}
+ const P7=[...Array(7)].map((_,k)=>pt(112,k));s+=`<circle cx="150" cy="150" r="112" fill="none" stroke="#5A3B1E" stroke-width=".9"/><circle cx="150" cy="150" r="124" fill="none" stroke="#5A3B1E" stroke-width=".5" stroke-dasharray="2 3"/><path d="M${P7.map(p=>p.map(n=>n.toFixed(1)).join(' ')).join(' L')}Z" fill="none" stroke="#5A3B1E" stroke-width=".8"/>`;
+ for(let i=0;i<7;i++)for(let j=i+2;j<7;j++)if(j-i!==6)s+=`<line x1="${P7[i][0]}" y1="${P7[i][1]}" x2="${P7[j][0]}" y2="${P7[j][1]}" stroke="#5A3B1E" stroke-width=".35" opacity=".6"/>`;
+ let sp='M150 150';for(let t=0;t<12.6;t+=.08){const r=3*Math.exp(.25*t);sp+=` L${(150+r*Math.cos(t)).toFixed(1)} ${(150+r*Math.sin(t)).toFixed(1)}`;}s+=`<path d="${sp}" fill="none" stroke="#5A3B1E" stroke-width="1"/>`;
+ for(let i=0;i<26;i++)s+=`<line x1="${200+i*3}" y1="${236-i*1.2}" x2="${214+i*3}" y2="${222-i*1.2}" stroke="#5A3B1E" stroke-width=".6" opacity=".5"/>`;
+ P7.forEach((p,k)=>s+=`<circle cx="${p[0]}" cy="${p[1]}" r="4.5" fill="${A[k]}" stroke="#5A3B1E" stroke-width=".8"/>`);
+ return `<defs>${d}${e}</defs><rect width="300" height="300" fill="#E8D6B0"/><g filter="url(#${f})">${v}</g><g filter="url(#${g})">${s}</g>`;}
+function gogh(){sd=17;let s='';const B=['#14306E','#1F4A93','#3567B5','#6D93D1','#A9C3EA'];
+ for(let i=0;i<620;i++){const x=rnd()*300,y=rnd()*300,an=(Math.sin(x/38)+Math.cos(y/31))*57+ (Math.atan2(y-150,x-150)*57.3+90)*.5;s+=st(x,y,8+rnd()*6,an,B[Math.floor(rnd()*5)],3.2,.9);}
+ for(let k=0;k<7;k++){const [x,y]=pt(88,k);for(let r=1;r<=3;r++)for(let j=0;j<10+r*5;j++){const t=j/(10+r*5)*6.28,px=x+r*8*Math.cos(t),py=y+r*8*Math.sin(t);s+=st(px,py,7,t*57.3+90,r===3?'#FFF3B0':A[k],3,.95);}s+=`<circle cx="${x}" cy="${y}" r="6" fill="#FFF8D0"/>`;}
+ for(let j=0;j<40;j++){const t=j/40*6.28*1.6,r=8+j*1.1;s+=st(150+r*Math.cos(t),150+r*Math.sin(t),9,t*57.3+90,j%3?'#FFE27A':'#FFF8D0',3.4,.95);}
+ return `<rect width="300" height="300" fill="#0E1F4F"/>${s}`;}
+function picasso(){sd=29;let s='';
+ for(let k=0;k<7;k++){const [x,y]=pt(62,k);const n=4+k%2,pts=[];for(let j=0;j<n;j++){const a=j/n*6.28+rnd()*.6,r=38+rnd()*30;pts.push([x+r*Math.cos(a),y+r*Math.sin(a)]);}
+  const id=gid();s+=`<defs><pattern id="${id}" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(${k*30})"><line x1="0" y1="0" x2="0" y2="6" stroke="#1B1A1A" stroke-width="1" opacity=".35"/></pattern></defs><path d="M${pts.map(p=>p.map(n=>n.toFixed(1)).join(' ')).join(' L')}Z" fill="${A[k]}" opacity=".92" stroke="#1B1A1A" stroke-width="2.4" stroke-linejoin="round"/>${k%2?`<path d="M${pts.slice(0,3).map(p=>p.map(n=>n.toFixed(1)).join(' ')).join(' L')}Z" fill="url(#${id})"/>`:''}`;}
+ s+=`<path d="M150 70 L205 150 L150 230 L95 150Z" fill="#F4EBD8" opacity=".55" stroke="#1B1A1A" stroke-width="2.4"/><circle cx="150" cy="150" r="16" fill="#1B1A1A"/><circle cx="154" cy="146" r="5" fill="#F4EBD8"/><line x1="40" y1="250" x2="270" y2="40" stroke="#1B1A1A" stroke-width="1.6"/><line x1="60" y1="40" x2="250" y2="270" stroke="#1B1A1A" stroke-width="1"/>`;
+ return `<rect width="300" height="300" fill="#E6D9BE"/>${s}`;}
+function monet(){sd=41;const [f,d]=fx(2,.5,3,.08);let s='';const H=['#F3C9A8','#E8B7B2','#C9B8D6','#AFC2D9','#9DB6C8'];
+ for(let i=0;i<900;i++){const y=rnd()*300,x=rnd()*300,band=Math.min(4,Math.floor(y/60));let c=H[band];if(y>165&&Math.abs(x-195)<22+ (y-165)*.15&&rnd()<.7)c='#F06A2E';s+=st(x,y,7+rnd()*8,(rnd()-.5)*14,c,3+rnd()*2,.55+rnd()*.35);}
+ for(let k=0;k<7;k++){const x=40+k*37,y=170+ (k%2)*10;for(let j=0;j<14;j++)s+=st(x+(rnd()-.5)*22,y+rnd()*40,8,(rnd()-.5)*10,A[k],3.4,.8);}
+ return `<defs>${d}</defs><rect width="300" height="300" fill="#D9C3B8"/><g filter="url(#${f})">${s}<circle cx="195" cy="105" r="17" fill="#F06A2E" opacity=".95"/></g>`;}
+function dali(){sd=53;const g1=gid();let s='';
+ for(let k=0;k<7;k++){const x=40+k*37+(k%2)*6,y=150+ (k%3)*22,r=13+(k%3)*3,h=26+(k*7)%22;
+  s+=`<ellipse cx="${x+18}" cy="${y+h+r+18}" rx="${r+10}" ry="4" fill="#5A3A1A" opacity=".35"/><path d="M${x-r} ${y} A${r} ${r} 0 0 1 ${x+r} ${y} C${x+r} ${y+h} ${x+r*.3} ${y+h} ${x+r*.25} ${y+h+r*.8} C${x+r*.2} ${y+h+r*1.4} ${x-r*.3} ${y+h+r*1.4} ${x-r*.3} ${y+h+r*.6} C${x-r*.3} ${y+h*.6} ${x-r} ${y+h*.7} ${x-r} ${y}Z" fill="${A[k]}"/><path d="M${x-r*.55} ${y-r*.3} A${r*.6} ${r*.6} 0 0 1 ${x+r*.2} ${y-r*.75}" fill="none" stroke="#FFF" stroke-width="2" opacity=".6" stroke-linecap="round"/>`;}
+ return `<defs><linearGradient id="${g1}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7FA6CF"/><stop offset=".55" stop-color="#F3D9A4"/><stop offset=".56" stop-color="#C9955A"/><stop offset="1" stop-color="#8A5A2E"/></linearGradient></defs><rect width="300" height="300" fill="url(#${g1})"/><path d="M0 168 L80 164 L120 150 L150 166 L300 166" fill="none" stroke="#6E4520" stroke-width="1.2" opacity=".6"/><circle cx="240" cy="60" r="20" fill="#FFF3C9" opacity=".8"/>${s}`;}
+function rembrandt(){sd=61;const g0=gid(),[f,d]=fx(4,1.2,5,.03);let s='';
+ for(let k=0;k<7;k++){const [x,y]=pt(74,k),gi=gid();s+=`<defs><radialGradient id="${gi}" cx=".38" cy=".35"><stop offset="0" stop-color="#FFF6DE"/><stop offset=".25" stop-color="${A[k]}"/><stop offset="1" stop-color="#1A120B" stop-opacity="0"/></radialGradient></defs><circle cx="${x}" cy="${y}" r="${24+(k%3)*4}" fill="url(#${gi})"/>`;}
+ return `<defs>${d}<radialGradient id="${g0}" cx=".45" cy=".42"><stop offset="0" stop-color="#F0C46A"/><stop offset=".22" stop-color="#B57A32"/><stop offset=".6" stop-color="#3D2512"/><stop offset="1" stop-color="#140C06"/></radialGradient></defs><rect width="300" height="300" fill="url(#${g0})"/><g filter="url(#${f})">${s}<circle cx="140" cy="135" r="14" fill="#FFF3D0" opacity=".85"/></g>`;}
+function michel(){sd=71;const [f,d]=fx(2,0,9,.05);const nz=gid();let s='';const L=[[22,22],[112,22],[202,22],[22,112],[202,112],[22,202],[202,202]];
+ L.forEach(([x,y],k)=>{s+=`<path d="M${x} ${y+76} L${x} ${y+26} A38 26 0 0 1 ${x+76} ${y+26} L${x+76} ${y+76}Z" fill="${A[k]}" opacity=".5" stroke="#8A6E4B" stroke-width="1.6"/><path d="M${x+12} ${y+66} C${x+20} ${y+30} ${x+56} ${y+60} ${x+64} ${y+24}" fill="none" stroke="#6B4E2E" stroke-width="1.4" opacity=".7"/><circle cx="${x+38}" cy="${y+36}" r="7" fill="#F2E3C8" opacity=".8" stroke="#8A6E4B" stroke-width=".8"/>`;});
+ s+=`<rect x="112" y="112" width="76" height="76" fill="#F2E3C8" stroke="#8A6E4B" stroke-width="1.6"/><path d="M118 168 C130 124 170 176 182 128" fill="none" stroke="#6B4E2E" stroke-width="1.6"/><circle cx="150" cy="150" r="10" fill="${A[6]}" opacity=".7"/>`;
+ let c='';for(let i=0;i<6;i++){let x=rnd()*300,y=rnd()*300,p=`M${x} ${y}`;for(let j=0;j<6;j++){x+=(rnd()-.5)*40;y+=(rnd()-.3)*30;p+=` L${x.toFixed(0)} ${y.toFixed(0)}`;}c+=`<path d="${p}" fill="none" stroke="#7A6248" stroke-width=".5" opacity=".6"/>`;}
+ return `<defs>${d}<filter id="${nz}"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 .45 0 0 0 0 .38 0 0 0 0 .28 0 0 0 .22 0"/></filter></defs><rect width="300" height="300" fill="#E8D8BC"/><rect width="300" height="300" filter="url(#${nz})"/><g filter="url(#${f})">${s}</g>${c}`;}
+function frida(){sd=83;let s='';
+ for(let i=0;i<18;i++){const a=i/18*6.28,x=150+132*Math.cos(a),y=150+132*Math.sin(a);s+=`<ellipse cx="${x}" cy="${y}" rx="30" ry="11" fill="${i%2?'#2E7D4F':'#4FA36A'}" transform="rotate(${(a*57.3+60).toFixed(0)} ${x.toFixed(1)} ${y.toFixed(1)})"/><line x1="${x}" y1="${y}" x2="${x+24*Math.cos(a+1.05)}" y2="${y+24*Math.sin(a+1.05)}" stroke="#1F5A36" stroke-width=".8"/>`;}
+ for(let k=0;k<7;k++){const [x,y]=pt(k===0?0:78,k===0?0:k);const r=k===0?30:24,n=k%2?8:10;for(let j=0;j<n;j++){const a=j/n*360;s+=`<ellipse cx="${x}" cy="${y-r*.55}" rx="${r*.32}" ry="${r*.58}" fill="${A[k]}" stroke="#7A1E2E" stroke-width=".7" transform="rotate(${a} ${x} ${y})"/>`;}s+=`<circle cx="${x}" cy="${y}" r="${r*.32}" fill="#3A1A10"/>`;for(let j=0;j<8;j++){const a=j/8*6.28;s+=`<circle cx="${x+r*.2*Math.cos(a)}" cy="${y+r*.2*Math.sin(a)}" r="1.4" fill="#F2C94C"/>`;}}
+ for(let i=0;i<40;i++)s+=`<circle cx="${(30+rnd()*240).toFixed(0)}" cy="${(30+rnd()*240).toFixed(0)}" r="1.6" fill="${A[i%7]}"/>`;
+ return `<rect width="300" height="300" fill="#F4D35E"/><circle cx="150" cy="150" r="120" fill="#F7E7B4"/>${s}`;}
+function munch(){let s='';
+ for(let k=0;k<7;k++){let p='';for(let x=-10;x<=310;x+=4){const y=30+k*38+Math.sin(x/34+k*.9)*16+Math.sin(x/13+k)*4;p+=(x===-10?'M':'L')+x+' '+y.toFixed(1);}
+  s+=`<path d="${p}" fill="none" stroke="${A[k]}" stroke-width="30" stroke-linecap="round" opacity=".92"/><path d="${p}" fill="none" stroke="#2A1A2A" stroke-width="1.1" opacity=".55" transform="translate(0 15)"/><path d="${p}" fill="none" stroke="#FFF" stroke-width="1" opacity=".3" transform="translate(0 -9)"/>`;}
+ const [f,d]=fx(5,0,4,.04);return `<defs>${d}</defs><rect width="300" height="300" fill="#3A2440"/><g filter="url(#${f})">${s}</g>`;}
+function klimt(){sd=97;const [f,d]=fx(1.5,0,2,.06),nz=gid();let s='';const G=['#D4AF37','#B88A1E','#E9C960','#8C6A14'];
+ for(let i=0;i<240;i++){const x=Math.floor(rnd()*30)*10,y=Math.floor(rnd()*30)*10,w=6+rnd()*8;s+=`<rect x="${x}" y="${y}" width="${w.toFixed(0)}" height="${(w*(.6+rnd()*.8)).toFixed(0)}" fill="${rnd()<.12?'#1B1A1A':rnd()<.1?'#F6EFD8':G[Math.floor(rnd()*4)]}" opacity=".9"/>`;}
+ for(let k=0;k<7;k++){const [x,y]=pt(k?84:0,k);const r=k?30:36;s+=`<circle cx="${x}" cy="${y}" r="${r}" fill="${A[k]}" stroke="#6B4E10" stroke-width="2"/><circle cx="${x}" cy="${y}" r="${r*.72}" fill="none" stroke="#F6E7A8" stroke-width="2.2"/>`;let sp=`M${x} ${y}`;for(let t=0;t<14;t+=.25){const rr=t*r*.045;sp+=` L${(x+rr*Math.cos(t)).toFixed(1)} ${(y+rr*Math.sin(t)).toFixed(1)}`;}s+=`<path d="${sp}" fill="none" stroke="#F6E7A8" stroke-width="1.8"/>`;for(let j=0;j<10;j++){const a=j/10*6.28;s+=`<circle cx="${x+r*.86*Math.cos(a)}" cy="${y+r*.86*Math.sin(a)}" r="2" fill="#1B1A1A"/>`;}}
+ return `<defs>${d}<filter id="${nz}"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2"/><feColorMatrix values="0 0 0 0 .4 0 0 0 0 .3 0 0 0 0 .05 0 0 0 .25 0"/></filter></defs><rect width="300" height="300" fill="#C99A2E"/><g filter="url(#${f})">${s}</g><rect width="300" height="300" filter="url(#${nz})"/>`;}
+const MAPAS=[
+ ['O Esboço da Alma','Leonardo da Vinci · Renascimento','Véus de cor esfumados sob um desenho fino, como um caderno de estudos. Seu mapa é um projeto de você.',vinci],
+ ['Céu em Redemoinho','Vincent van Gogh · Pós-Impressionismo','Pinceladas grossas que giram; cada sentido é uma estrela acesa no céu da noite.',gogh],
+ ['Retrato em Facetas','Pablo Picasso · Cubismo','Formas geométricas com contorno preto; cada sentido é uma face de quem você é.',picasso],
+ ['Nascer das Sensações','Claude Monet · Impressionismo','Toques leves de cor numa manhã enevoada; os sentidos aparecem como reflexos na água.',monet],
+ ['O Tempo que Derrete','Salvador Dalí · Surrealismo','Formas que escorrem numa paisagem de sonho; cada sentido é uma gota de memória.',dali],
+ ['Luz no Escuro','Rembrandt · Barroco','Fundo escuro e luz dourada; os sentidos surgem como brilhos saindo da sombra.',rembrandt],
+ ['Afresco dos Sentidos','Michelangelo · Renascimento','Painéis de parede antiga em tons suaves; cada sentido ganha um arco do seu teto.',michel],
+ ['Jardim de Coragem','Frida Kahlo · Realismo Mágico','Flores vivas e folhas em volta; cada sentido é uma flor da sua coroa.',frida],
+ ['Ondas de Emoção','Edvard Munch · Expressionismo','Faixas de cor que ondulam como o que você sente; cada sentido é uma onda.',munch],
+ ['Mosaico Dourado','Gustav Klimt · Art Nouveau','Fundo de ouro com mosaicos e espirais; cada sentido é uma joia.',klimt]];
+
+const bg=(c)=>`<rect width="300" height="300" fill="${c}"/>`;
+const blob=(c,seed)=>{sd=seed;let s='';for(let i=0;i<5;i++)s+=`<circle cx="${(90+rnd()*120).toFixed(0)}" cy="${(90+rnd()*120).toFixed(0)}" r="${(60+rnd()*40).toFixed(0)}" fill="${c}" opacity=".35"/>`;return s;};
+const emo=(e,c1,c2,seed)=>bg(c1)+blob(c2,seed)+`<text x="150" y="190" font-size="130" text-anchor="middle">${e}</text>`;
+const onda=(c,f,a)=>{let p='';for(let x=20;x<=280;x+=4)p+=(x==20?'M':'L')+x+' '+(230+Math.sin(x/f)*a*Math.sin((x-20)/260*Math.PI)).toFixed(1);return `<path d="${p}" fill="none" stroke="${c}" stroke-width="6" stroke-linecap="round" opacity=".8"/>`;};
+const som=(e,c1,c2,f,a,seed)=>bg(c1)+blob(c2,seed)+`<text x="150" y="165" font-size="110" text-anchor="middle">${e}</text>`+onda('#fff',f,a);
+const AUD=[['Chuva','chuva','🌧️','#22406A','#5AB8FF',5,10],['Mar','mar','🌊','#0B3A6E','#3FE0D0',22,24],['Pássaros','passaros','🐦','#2F6B4A','#9BE38F',4,18],['Piano','piano','🎹','#2A2440','#A98BFF',14,14],['Violão','violao','🎸','#5A2E1A','#FFB27A',9,16],['Batida','batida','🥁','#3A1A2A','#FF6FA3',3,26],['Café passando','cafe','☕','#4A2A18','#C98A5A',7,8],['Panela no fogo','panela','🍲','#5A2A10','#FF8A5C',6,12],['Respiração','respiracao','🌬️','#1E3550','#AFC2D9',30,20],['Coração','coracao','💓','#4A1428','#FF6FA3',12,22]].map(([n,k,e,c1,c2,f,a],i)=>({n,som:k,art:()=>som(e,c1,c2,f,a,i+3)}));
+function tex(k){sd=101+k;let s='';
+ if(k===0){const g=gid();return `<defs><radialGradient id="${g}" cx=".35" cy=".3"><stop offset="0" stop-color="#C0558A"/><stop offset="1" stop-color="#3E0B26"/></radialGradient></defs><rect width="300" height="300" fill="url(#${g})"/>`+[...Array(30)].map((_,i)=>`<path d="M${i*12-40} 0 Q${i*12+20} 150 ${i*12-40} 300" fill="none" stroke="#fff" stroke-width="1" opacity=".07"/>`).join('');}
+ if(k===1){s=bg('#D9B77A');for(let i=0;i<1400;i++)s+=`<circle cx="${(rnd()*300).toFixed(0)}" cy="${(rnd()*300).toFixed(0)}" r="${(.8+rnd()*1.6).toFixed(1)}" fill="${['#B8945A','#F0D9A8','#9A7440','#FFF1D0'][Math.floor(rnd()*4)]}"/>`;return s;}
+ if(k===2){s=bg('#1E6FB8');for(let y=10;y<300;y+=18){let p='';for(let x=0;x<=300;x+=6)p+=(x?'L':'M')+x+' '+(y+Math.sin(x/22+y)*5).toFixed(1);s+=`<path d="${p}" fill="none" stroke="#BFE3FF" stroke-width="2.5" opacity="${.3+(y%36)/60}"/>`;}return s;}
+ if(k===3){s=bg('#8A5A32');for(let i=0;i<40;i++){let p='';const y0=i*8;for(let x=0;x<=300;x+=10)p+=(x?'L':'M')+x+' '+(y0+Math.sin(x/50+i*.3)*10+(Math.abs(x-150)<40&&i>15&&i<22?Math.cos((x-150)/40*1.57)*14:0)).toFixed(1);s+=`<path d="${p}" fill="none" stroke="${i%3?'#6B4222':'#B07A48'}" stroke-width="${i%3?2:3}"/>`;}return s;}
+ if(k===4){s=bg('#EDE3CF');for(let y=0;y<320;y+=16)for(let x=(y/16%2)*8;x<320;x+=16)s+=`<circle cx="${x}" cy="${y}" r="9" fill="none" stroke="#C9B48E" stroke-width="3"/>`;return s;}
+ if(k===5){s=bg('#2A3038');[[110,120,80,60],[200,190,70,50],[90,230,50,36],[220,80,46,34]].forEach(([x,y,rx,ry],i)=>{const g=gid();s+=`<defs><radialGradient id="${g}" cx=".35" cy=".3"><stop offset="0" stop-color="#E4E6EA"/><stop offset="1" stop-color="#6E7480"/></radialGradient></defs><ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="url(#${g})"/>`;});return s;}
+ if(k===6){s=bg('#DCEBC9')+`<path d="M150 30 C250 90 240 220 150 275 C60 220 50 90 150 30Z" fill="#4FA36A"/><line x1="150" y1="40" x2="150" y2="270" stroke="#2E6B42" stroke-width="3"/>`;for(let i=0;i<7;i++){const y=80+i*26;s+=`<path d="M150 ${y} Q185 ${y-8} 205 ${y-26}" fill="none" stroke="#2E6B42" stroke-width="2"/><path d="M150 ${y} Q115 ${y-8} 95 ${y-26}" fill="none" stroke="#2E6B42" stroke-width="2"/>`;}return s;}
+ if(k===7){const g=gid();s=`<defs><linearGradient id="${g}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F7C6D9"/><stop offset=".5" stop-color="#E07AA6"/><stop offset="1" stop-color="#F7C6D9"/></linearGradient></defs><rect width="300" height="300" fill="url(#${g})"/>`;for(let i=0;i<9;i++)s+=`<path d="M-20 ${40+i*30} C80 ${i*30} 180 ${90+i*30} 320 ${30+i*30}" fill="none" stroke="#fff" stroke-width="${3-i%3}" opacity=".45"/>`;return s;}
+ if(k===8){s=bg('#9CC8EC');[[150,150,60],[100,165,44],[200,165,46],[125,120,40],[180,118,42],[150,190,40]].forEach(([x,y,r])=>s+=`<circle cx="${x}" cy="${y}" r="${r}" fill="#fff"/>`);return s+`<circle cx="130" cy="130" r="20" fill="#F3F7FB"/>`;}
+ s=bg('#5E9E44');for(let i=0;i<420;i++){const x=rnd()*300,y=40+rnd()*270,h=18+rnd()*26;s+=`<path d="M${x.toFixed(0)} ${y.toFixed(0)} q${(rnd()*8-4).toFixed(0)} ${(-h/2).toFixed(0)} ${(rnd()*10-5).toFixed(0)} ${(-h).toFixed(0)}" stroke="${['#2F6B2A','#7DBF5A','#A7D97A'][Math.floor(rnd()*3)]}" stroke-width="2" fill="none"/>`;}return s;}
+const TATO=['Veludo','Areia','Água','Madeira','Lã de tricô','Pedra lisa','Folha','Seda','Algodão / nuvem','Grama'].map((n,k)=>({n,art:()=>tex(k)}));
+const OLF=[['Café coado','☕','#3B2416','#C98A5A'],['Chuva na terra','🌧️','#2C3A2A','#8FB4D6'],['Bolo no forno','🍰','#5A3418','#F3C9A8'],['Maresia','🌊','#0B3A6E','#9BD5E8'],['Roupa limpa','🧺','#3A4A6A','#E8EEF7'],['Grama cortada','🌿','#1F4A2A','#9BE38F'],['Flor de laranjeira','🌼','#4A3A10','#FFE27A'],['Canela','🪵','#4A2010','#E8964A'],['Lavanda','💜','#2E2450','#C9B8F0'],['Pão quentinho','🥖','#5A3A18','#F2C47A']].map(([n,e,c1,c2],i)=>({n,art:()=>emo(e,c1,c2,200+i)}));
+const PAL=[['Doce (mel)','🍯','#5A3A08','#F2B705'],['Salgado','🧂','#2A3440','#AFC2D9'],['Azedinho (limão)','🍋','#3A4A08','#E8E05A'],['Amargo (chocolate)','🍫','#2A160C','#8A5A3A'],['Picante','🌶️','#4A0F0A','#FF6A4A'],['Fresco (hortelã)','🌱','#0F3A2A','#7DDB8B'],['Frutas vermelhas','🍓','#4A0F24','#FF6FA3'],['Caldo quentinho','🍜','#4A2A10','#FFB27A'],['Café','☕','#2E1A10','#B07A48'],['Gelado (sorvete)','🍦','#3A3A5A','#F7E7F0']].map(([n,e,c1,c2],i)=>({n,art:()=>emo(e,c1,c2,300+i)}));
+const an=(attr,vals,dur)=>`<animateTransform attributeName="transform" type="${attr}" values="${vals}" dur="${dur}s" repeatCount="indefinite" calcMode="spline" keySplines="${vals.split(';').slice(1).map(()=>'.45 0 .55 1').join(';')}"/>`;
+const MOV=[
+ ['Balanço de rede',`<g>${an('rotate','-14 150 60;14 150 60;-14 150 60',4)}<line x1="150" y1="60" x2="90" y2="190" stroke="#C9B8F0" stroke-width="3"/><line x1="150" y1="60" x2="210" y2="190" stroke="#C9B8F0" stroke-width="3"/><path d="M80 190 Q150 250 220 190" fill="none" stroke="#FFB27A" stroke-width="14" stroke-linecap="round"/></g>`],
+ ['Ir e vir de onda',`<path d="M0 200 Q37 170 75 200 T150 200 T225 200 T300 200 V300 H0Z" fill="#2F7FD1" opacity=".7"><animateTransform attributeName="transform" type="translate" values="-75 0;0 0;-75 0" dur="4s" repeatCount="indefinite"/></path><circle cx="150" cy="170" r="16" fill="#FFD23F">${'<animateTransform attributeName="transform" type="translate" values="-40 6;40 -6;-40 6" dur="4s" repeatCount="indefinite"/>'}</circle>`],
+ ['Girar devagar',`<g>${'<animateTransform attributeName="transform" type="rotate" values="0 150 150;360 150 150" dur="8s" repeatCount="indefinite"/>'}${[...Array(7)].map((_,k)=>{const [x,y]=pt(80,k);return `<circle cx="${x}" cy="${y}" r="14" fill="${C[k]}"/>`;}).join('')}</g><circle cx="150" cy="150" r="10" fill="#F4F1EA"/>`],
+ ['Ficar parado, firme',`<rect x="135" y="120" width="30" height="140" rx="8" fill="#8a5a3a"/><circle cx="150" cy="105" r="55" fill="#3E9E5E"><animate attributeName="r" values="53;57;53" dur="6s" repeatCount="indefinite"/></circle><rect x="60" y="258" width="180" height="8" rx="4" fill="#C9B8F0"/>`],
+ ['Flutuar',`<circle cx="150" cy="150" r="40" fill="#A9C3EA">${'<animateTransform attributeName="transform" type="translate" values="0 18;0 -18;0 18" dur="5s" repeatCount="indefinite"/>'}</circle><ellipse cx="150" cy="250" rx="40" ry="6" fill="#000" opacity=".3"><animate attributeName="rx" values="44;30;44" dur="5s" repeatCount="indefinite"/></ellipse>`],
+ ['Gangorra',`<polygon points="150,220 130,260 170,260" fill="#C9B8F0"/><g>${an('rotate','-16 150 215;16 150 215;-16 150 215',3)}<rect x="40" y="208" width="220" height="12" rx="6" fill="#FFB27A"/><circle cx="55" cy="192" r="14" fill="#FF6FA3"/><circle cx="245" cy="192" r="14" fill="#5AB8FF"/></g>`],
+ ['Balançar como árvore',`<g>${an('rotate','-7 150 270;7 150 270;-7 150 270',5)}<path d="M150 270 Q146 190 150 120" stroke="#8a5a3a" stroke-width="12" fill="none" stroke-linecap="round"/><circle cx="150" cy="100" r="50" fill="#3E9E5E"/><circle cx="120" cy="125" r="30" fill="#4FA36A"/><circle cx="182" cy="122" r="30" fill="#4FA36A"/></g>`],
+ ['Pedalar',`<g>${'<animateTransform attributeName="transform" type="rotate" values="0 100 190;360 100 190" dur="2s" repeatCount="indefinite"/>'}<circle cx="100" cy="190" r="40" fill="none" stroke="#F4F1EA" stroke-width="5"/><line x1="60" y1="190" x2="140" y2="190" stroke="#F4F1EA" stroke-width="2"/><line x1="100" y1="150" x2="100" y2="230" stroke="#F4F1EA" stroke-width="2"/></g><g>${'<animateTransform attributeName="transform" type="rotate" values="0 210 190;360 210 190" dur="2s" repeatCount="indefinite"/>'}<circle cx="210" cy="190" r="40" fill="none" stroke="#F4F1EA" stroke-width="5"/><line x1="170" y1="190" x2="250" y2="190" stroke="#F4F1EA" stroke-width="2"/><line x1="210" y1="150" x2="210" y2="230" stroke="#F4F1EA" stroke-width="2"/></g><path d="M100 190 L150 130 L210 190 M150 130 L190 130" stroke="#FF8A5C" stroke-width="6" fill="none"/>`],
+ ['Dança lenta',`<g>${'<animateTransform attributeName="transform" type="rotate" values="0 150 150;360 150 150" dur="6s" repeatCount="indefinite"/>'}<circle cx="115" cy="150" r="24" fill="#FF6FA3"/><circle cx="185" cy="150" r="24" fill="#5AB8FF"/><path d="M115 150 Q150 110 185 150" fill="none" stroke="#F4F1EA" stroke-width="3"/></g>`],
+ ['Pular',`<circle cx="150" cy="120" r="26" fill="#FFD23F"><animate attributeName="cy" values="230;80;230" dur="1.4s" repeatCount="indefinite" calcMode="spline" keySplines=".2 .6 .4 1;.6 0 .8 .4"/></circle><rect x="60" y="256" width="180" height="8" rx="4" fill="#C9B8F0"/>`]].map(([n,s])=>({n,art:()=>bg('#1E1840')+s}));
+const CORPO=[['Espreguiçar','🙆','#2A3A6E','#9DB4FF'],['Alongar o pescoço','🦒','#3A2A5A','#C9B8F0'],['Abraço apertado','🤗','#6E2A4A','#FF9AC0'],['Dançar','💃','#5A2A6E','#FF6FA3'],['Deitar no chão','🛌','#2A4A5A','#9BD5E8'],['Caminhar','🚶','#3A5A2A','#9BE38F'],['Respirar fundo','🌬️','#1E3550','#AFC2D9'],['Massagem nas mãos','👐','#5A3A1A','#FFB27A'],['Pés descalços na grama','🦶','#1F4A2A','#7DDB8B'],['Rolar os ombros','🔄','#2A2A4A','#3FE0D0']].map(([n,e,c1,c2],i)=>({n,art:()=>emo(e,c1,c2,400+i)}));
+const VIS=MAPAS.map(m=>({n:m[0],sub:m[1].split(' · ')[0],art:m[3]}));
+const SEN=[['mapa','Visão','👁️','#FFD23F','Qual estilo de mapa? Inspirados em pintores, sem copiar obras.',VIS],['aud','Audição','👂','#5AB8FF','Quais sons entram? Toque ▶ para ouvir.',AUD],['tato','Tato','✋','#FF8A5C','Quais texturas entram?',TATO],['olf','Olfato','👃','#7DDB8B','Quais cheiros entram?',OLF],['pal','Paladar','👅','#FF6FA3','Quais sabores entram?',PAL],['equi','Equilíbrio','🌀','#A98BFF','Quais movimentos entram?',MOV],['corpo','Noção do corpo','🧘','#3FE0D0','O que o corpo pode pedir?',CORPO]];
+
+/* ---- Visão: 10 cenas do dia a dia ---- */
+function cJunina(){let s=bg('#1E2A5A');for(let r=0;r<5;r++){const y=40+r*52;s+=`<path d="M0 ${y} Q150 ${y+22} 300 ${y}" fill="none" stroke="#C9B48E" stroke-width="1.5"/>`;for(let i=0;i<9;i++){const x=10+i*33,yy=y+22*Math.sin(Math.PI*x/300)*.9;s+=`<path d="M${x} ${yy} l26 0 l-13 26z" fill="${A[(i+r*2)%7]}"/>`;}}return s;}
+function cCeu(){sd=301;let s=bg('#0B1033');for(let i=0;i<120;i++)s+=`<circle cx="${(rnd()*300).toFixed(0)}" cy="${(rnd()*300).toFixed(0)}" r="${(rnd()*1.4+.3).toFixed(1)}" fill="#fff" opacity="${(.3+rnd()*.7).toFixed(2)}"/>`;for(let k=0;k<7;k++){const [x,y]=pt(90,k);s+=`<circle cx="${x}" cy="${y}" r="16" fill="${A[k]}" opacity=".25"/><path d="M${x} ${y-12} L${x+3} ${y-3} L${x+12} ${y} L${x+3} ${y+3} L${x} ${y+12} L${x-3} ${y+3} L${x-12} ${y} L${x-3} ${y-3}Z" fill="${A[k]}"/>`;}return s+`<path d="M150 112 a38 38 0 1 0 30 62 a30 30 0 1 1 -30 -62z" fill="#FFF3C9"/>`;}
+function cPraia(){let s='';const cs=['#3B2A6E','#7457C9','#D9487E','#E8643A','#F2B705'];cs.forEach((c,i)=>s+=`<rect y="${i*34}" width="300" height="36" fill="${c}"/>`);s+=`<circle cx="150" cy="172" r="40" fill="#FFE27A"/><rect y="170" width="300" height="130" fill="#1E5FA8"/>`;for(let i=0;i<7;i++)s+=`<rect x="${120-i*6}" y="${180+i*12}" width="${60+i*12}" height="4" rx="2" fill="${A[i]}" opacity=".85"/>`;return s+`<path d="M0 262 Q150 240 300 262 V300 H0Z" fill="#E9C98A"/>`;}
+function cFogos(){let s=bg('#0E0F26');for(let k=0;k<7;k++){const [x,y]=pt(k?88:0,k);for(let j=0;j<14;j++){const a=j/14*6.28,r1=8,r2=34;s+=`<line x1="${x+r1*Math.cos(a)}" y1="${y+r1*Math.sin(a)}" x2="${x+r2*Math.cos(a)}" y2="${y+r2*Math.sin(a)}" stroke="${A[k]}" stroke-width="2.5" stroke-linecap="round"/><circle cx="${x+(r2+5)*Math.cos(a)}" cy="${y+(r2+5)*Math.sin(a)}" r="2" fill="${A[k]}"/>`;}}return s;}
+function cArco(){let s=bg('#BFE0F5');for(let k=0;k<7;k++)s+=`<path d="M${30+k*12} 250 A${120-k*12} ${120-k*12} 0 0 1 ${270-k*12} 250" fill="none" stroke="${A[k]}" stroke-width="12"/>`;return s+`<circle cx="50" cy="250" r="30" fill="#fff"/><circle cx="80" cy="258" r="24" fill="#fff"/><circle cx="250" cy="250" r="30" fill="#fff"/><circle cx="222" cy="258" r="24" fill="#fff"/>`;}
+function cMar(){sd=307;let s=bg('#0B3A6E');for(let k=0;k<7;k++){const x=25+k*42,h=60+(k%3)*30;s+=`<path d="M${x} 300 C${x-14} ${300-h} ${x+30} ${300-h-20} ${x+18} 300Z" fill="${A[k]}"/>`;}for(let i=0;i<30;i++)s+=`<circle cx="${(rnd()*300).toFixed(0)}" cy="${(rnd()*200).toFixed(0)}" r="${(2+rnd()*6).toFixed(0)}" fill="none" stroke="#BFE3FF" stroke-width="1.5" opacity=".7"/>`;return s;}
+function cCidade(){let s=bg('#141633')+`<circle cx="240" cy="60" r="22" fill="#FFF3C9"/>`;for(let k=0;k<7;k++){const x=6+k*42,h=110+((k*53)%110);s+=`<rect x="${x}" y="${300-h}" width="38" height="${h}" fill="#23264A"/>`;for(let y=300-h+10;y<290;y+=16)for(let i=0;i<3;i++)s+=`<rect x="${x+5+i*11}" y="${y}" width="7" height="9" fill="${(y+i+k)%3?A[k]:'#2E3260'}"/>`;}return s;}
+function cJardim(){let s=bg('#CFE8B0')+`<rect y="230" width="300" height="70" fill="#5E9E44"/>`;for(let k=0;k<7;k++){const x=30+k*40,y=150+(k%2)*40;s+=`<line x1="${x}" y1="${y}" x2="${x}" y2="300" stroke="#2E6B42" stroke-width="4"/>`;for(let j=0;j<6;j++){const a=j*60;s+=`<ellipse cx="${x}" cy="${y-12}" rx="7" ry="13" fill="${A[k]}" transform="rotate(${a} ${x} ${y})"/>`;}s+=`<circle cx="${x}" cy="${y}" r="6" fill="#FFF3C9"/>`;}return s;}
+function cBaloes(){let s=bg('#BFE0F5');for(let k=0;k<7;k++){const x=40+k*37,y=70+((k*37)%90);s+=`<path d="M${x} ${y+30} Q${x+8} ${y+80} ${x-4} ${y+140}" fill="none" stroke="#5A6A8A" stroke-width="1.2"/><ellipse cx="${x}" cy="${y}" rx="22" ry="28" fill="${A[k]}"/><ellipse cx="${x-7}" cy="${y-9}" rx="5" ry="8" fill="#fff" opacity=".45"/>`;}return s;}
+function cPipas(){let s=bg('#9CD0F2');for(let k=0;k<7;k++){const x=40+k*37,y=60+((k*61)%120);s+=`<path d="M${x} ${y+26} q10 30 -6 50 q-12 20 4 44" fill="none" stroke="#3A4A6A" stroke-width="1.2"/><path d="M${x} ${y-26} L${x+18} ${y} L${x} ${y+26} L${x-18} ${y}Z" fill="${A[k]}"/><line x1="${x}" y1="${y-26}" x2="${x}" y2="${y+26}" stroke="#fff" stroke-width="1"/><line x1="${x-18}" y1="${y}" x2="${x+18}" y2="${y}" stroke="#fff" stroke-width="1"/>`;}return s;}
+const CENAS=[['Bandeirinhas de festa junina','Cena do dia a dia','',cJunina],['Céu estrelado','Cena do dia a dia','',cCeu],['Pôr do sol na praia','Cena do dia a dia','',cPraia],['Fogos de Ano Novo','Cena do dia a dia','',cFogos],['Arco-íris depois da chuva','Cena do dia a dia','',cArco],['Fundo do mar','Cena do dia a dia','',cMar],['Luzes da cidade à noite','Cena do dia a dia','',cCidade],['Jardim florido','Cena do dia a dia','',cJardim],['Balões de festa','Cena do dia a dia','',cBaloes],['Pipas no céu','Cena do dia a dia','',cPipas]];
+/* ---- Tato extra ---- */
+function tex2(k){sd=501+k;let s='';
+ if(k===0){s=bg('#C9A27A');for(let i=0;i<600;i++){const x=rnd()*300,y=rnd()*300;s+=`<path d="M${x.toFixed(0)} ${y.toFixed(0)} q4 8 2 16" stroke="${['#A9825A','#E2C49E','#8A6A48'][Math.floor(rnd()*3)]}" stroke-width="2" fill="none"/>`;}return s;}
+ if(k===1){s=bg('#D8F0FA');for(let i=0;i<9;i++)s+=`<polygon points="${[...Array(5)].map(()=>`${(rnd()*300).toFixed(0)},${(rnd()*300).toFixed(0)}`).join(' ')}" fill="#fff" opacity=".35" stroke="#9CC8E0" stroke-width="1.2"/>`;return s;}
+ if(k===2){s=bg('#C8784A');for(let i=0;i<14;i++)s+=`<path d="M${20+i*20} 20 q12 130 -4 260" fill="none" stroke="#A85E36" stroke-width="5" opacity=".6"/>`;return s+`<circle cx="120" cy="140" r="22" fill="#B86A40"/><circle cx="190" cy="180" r="16" fill="#B86A40"/>`;}
+ if(k===3){s=bg('#6E7480');for(let i=0;i<70;i++)s+=`<ellipse cx="${(rnd()*300).toFixed(0)}" cy="${(rnd()*300).toFixed(0)}" rx="${(10+rnd()*14).toFixed(0)}" ry="${(7+rnd()*9).toFixed(0)}" fill="${['#C9C2B6','#9AA0A8','#E2DDD2','#B5A48E'][Math.floor(rnd()*4)]}"/>`;return s;}
+ if(k===4){s=bg('#EFEDE6');for(let i=0;i<26;i++)s+=`<polygon points="${[...Array(3)].map(()=>`${(rnd()*300).toFixed(0)},${(rnd()*300).toFixed(0)}`).join(' ')}" fill="${rnd()<.5?'#fff':'#D9D6CC'}" opacity=".7" stroke="#C9C5B8" stroke-width=".8"/>`;return s;}
+ if(k===5){s=bg('#6B3A1E')+`<rect x="20" y="20" width="260" height="260" rx="20" fill="#7E4626"/><rect x="34" y="34" width="232" height="232" rx="14" fill="none" stroke="#E2B07A" stroke-width="3" stroke-dasharray="9 7"/>`;for(let i=0;i<200;i++)s+=`<circle cx="${(rnd()*300).toFixed(0)}" cy="${(rnd()*300).toFixed(0)}" r="1" fill="#5A2E14" opacity=".6"/>`;return s;}
+ if(k===6){s=bg('#CFE6F7');for(let i=0;i<40;i++){const x=rnd()*300,y=rnd()*300,r=6+rnd()*24;s+=`<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="${r.toFixed(0)}" fill="#fff" opacity=".55" stroke="#A9CBE8" stroke-width="1.2"/><circle cx="${(x-r*.35).toFixed(0)}" cy="${(y-r*.35).toFixed(0)}" r="${(r*.18).toFixed(1)}" fill="#fff"/>`;}return s;}
+ if(k===7){s=bg('#F3F1EC');for(let i=0;i<7;i++){let p=`M${(rnd()*300).toFixed(0)} 0`;let x=+p.split(' ')[0].slice(1);for(let y=20;y<=300;y+=20){x+=(rnd()-.5)*40;p+=` L${x.toFixed(0)} ${y}`;}s+=`<path d="${p}" fill="none" stroke="#A8A49A" stroke-width="${(.6+rnd()*1.6).toFixed(1)}" opacity=".7"/>`;}return s;}
+ if(k===8){s=bg('#F5E6D8');for(let y=0;y<300;y+=8)for(let x=(y/8%2)*4;x<300;x+=8)s+=`<circle cx="${x}" cy="${y}" r="3" fill="#E8CDB8"/>`;return s;}
+ s=bg('#BFE3F5');for(let y=22;y<300;y+=36)for(let x=22+((y/36)%2)*18;x<300;x+=36)s+=`<circle cx="${x}" cy="${y}" r="14" fill="#E8F6FC" stroke="#8CC4E0" stroke-width="2"/><circle cx="${x-5}" cy="${y-5}" r="3" fill="#fff"/>`;return s;}
+const TATO2=['Pelo de bichinho','Cubo de gelo','Massinha de modelar','Pedrinhas de rio','Papel amassado','Couro de jaqueta','Espuma de banho','Mármore gelado','Toalha felpuda','Plástico bolha'].map((n,k)=>({n,art:()=>tex2(k)}));
+const AUD2=[['Vento nas árvores','vento','🌬️','#1E3A2A','#9BE38F',18,14],['Fogueira estalando','fogueira','🔥','#3A1408','#FF8A5C',5,14],['Sino de meditação','tigela','🔔','#3A2A10','#F2C94C',30,10],['Grilos à noite','grilos','🦗','#0E1A2A','#7DDB8B',3,8],['Riacho correndo','riacho','🏞️','#123A3A','#3FE0D0',8,10],['Flauta','flauta','🎶','#2A1E40','#C9B8F0',14,12],['Sininho de vento na varanda','sinos','🎐','#1E3550','#BFE3FF',6,10],['Gato ronronando','ronronar','🐈','#3A2A20','#E2C49E',4,6],['Trovão ao longe','trovao','⛈️','#1A1E2A','#8A929C',26,22],['Caixinha de música','caixinha','🎠','#40182A','#FF9AC0',7,10]].map(([n,k,e,c1,c2,f,a],i)=>({n,som:k,art:()=>som(e,c1,c2,f,a,i+40)}));
+const OLF2=[['Perfume de rosa','🌹','#4A0F24','#FF9AC0'],['Eucalipto','🍃','#123A2A','#9BE38F'],['Pipoca de cinema','🍿','#4A1414','#FFE27A'],['Laranja descascada','🍊','#4A2A08','#FFB27A'],['Livro novo','📚','#2A2440','#C9B8F0'],['Protetor solar','🧴','#0B3A6E','#FFE27A'],['Churrasco de domingo','🍖','#3A1408','#E8964A'],['Vela acesa','🕯️','#1E1A2A','#F2C94C'],['Cheirinho de bebê','👶','#3A3050','#FFD6E6'],['Terra molhada do jardim','🌱','#2A1E10','#9BE38F']].map(([n,e,c1,c2],i)=>({n,art:()=>emo(e,c1,c2,600+i)}));
+const PAL2=[['Pão de queijo','🧀','#4A3408','#F2C94C'],['Melancia','🍉','#3A0F14','#FF6F7E'],['Chá quentinho','🍵','#1E3A2A','#9BE38F'],['Brigadeiro','🍬','#2A140A','#8A5A3A'],['Manga','🥭','#4A2A08','#FFB23F'],['Água de coco','🥥','#1E3A2A','#E8F0D8'],['Arroz com feijão','🍛','#3A2410','#C98A5A'],['Pastel de feira','🥟','#4A3010','#F2C47A'],['Açaí','🫐','#2A1040','#7457C9'],['Pipoca doce','🍿','#4A1430','#FF9AC0']].map(([n,e,c1,c2],i)=>({n,art:()=>emo(e,c1,c2,700+i)}));
+const MOV2=[
+ ['Balanço de parquinho',`<line x1="40" y1="40" x2="260" y2="40" stroke="#C9B8F0" stroke-width="6"/><g>${an('rotate','-28 150 40;28 150 40;-28 150 40',3)}<line x1="130" y1="40" x2="130" y2="210" stroke="#F4F1EA" stroke-width="2.5"/><line x1="170" y1="40" x2="170" y2="210" stroke="#F4F1EA" stroke-width="2.5"/><rect x="120" y="206" width="60" height="10" rx="4" fill="#FF8A5C"/></g>`],
+ ['Cavalinho de balanço',`<g>${an('rotate','-10 150 250;10 150 250;-10 150 250',2.4)}<path d="M60 240 Q150 280 240 240" fill="none" stroke="#C98A5A" stroke-width="8" stroke-linecap="round"/><rect x="100" y="150" width="100" height="40" rx="18" fill="#FF6FA3"/><rect x="186" y="110" width="26" height="54" rx="10" fill="#FF6FA3"/><line x1="115" y1="190" x2="100" y2="240" stroke="#FF6FA3" stroke-width="8"/><line x1="185" y1="190" x2="200" y2="240" stroke="#FF6FA3" stroke-width="8"/></g>`],
+ ['Barquinho no mar',`<path d="M0 220 Q37 200 75 220 T150 220 T225 220 T300 220 V300 H0Z" fill="#2F7FD1"/><g>${an('rotate','-8 150 200;8 150 200;-8 150 200',3)}<path d="M100 200 L200 200 L185 225 L115 225Z" fill="#E8643A"/><line x1="150" y1="200" x2="150" y2="120" stroke="#F4F1EA" stroke-width="3"/><path d="M152 125 L195 190 L152 190Z" fill="#F4F1EA"/></g>`],
+ ['Carrossel',`<g>${'<animateTransform attributeName="transform" type="rotate" values="0 150 160;360 150 160" dur="6s" repeatCount="indefinite"/>'}${[...Array(7)].map((_,k)=>{const [x,y]=pt(80,k,150);return `<circle cx="${x}" cy="${y+10}" r="13" fill="${C[k]}"/>`;}).join('')}</g><path d="M80 80 L150 40 L220 80Z" fill="#FF6FA3"/><line x1="150" y1="80" x2="150" y2="260" stroke="#F4F1EA" stroke-width="4"/>`],
+ ['Escorregador',`<path d="M60 80 L60 260 M60 80 L240 250" stroke="#C9B8F0" stroke-width="8" fill="none" stroke-linecap="round"/><circle r="14" fill="#FFD23F"><animateMotion dur="2.2s" repeatCount="indefinite" path="M66 70 L238 236" keyPoints="0;1" keyTimes="0;1" calcMode="spline" keySplines=".6 0 .9 .6"/></circle>`],
+ ['Ficar num pé só',`<g>${an('rotate','-4 150 270;4 150 270;-4 150 270',3)}<circle cx="150" cy="80" r="18" fill="#3FE0D0"/><line x1="150" y1="98" x2="150" y2="190" stroke="#3FE0D0" stroke-width="8" stroke-linecap="round"/><line x1="150" y1="190" x2="150" y2="270" stroke="#3FE0D0" stroke-width="8" stroke-linecap="round"/><path d="M150 190 L120 215 L150 230" fill="none" stroke="#3FE0D0" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><path d="M100 120 L150 130 L200 120" fill="none" stroke="#3FE0D0" stroke-width="8" stroke-linecap="round"/></g>`],
+ ['Boiar na piscina',`<rect width="300" height="300" fill="#38B6E0"/><g>${'<animateTransform attributeName="transform" type="translate" values="0 -6;0 6;0 -6" dur="4s" repeatCount="indefinite"/>'}<ellipse cx="150" cy="150" rx="80" ry="22" fill="#FF8A5C"/><ellipse cx="150" cy="150" rx="50" ry="10" fill="#38B6E0"/></g>${[60,120,180,240].map(y=>`<path d="M20 ${y} q20 -8 40 0 t40 0" fill="none" stroke="#BFE3FF" stroke-width="2"/>`).join('')}`],
+ ['Cambalhota',`<g>${'<animateTransform attributeName="transform" type="rotate" values="0 150 150;360 150 150" dur="2.5s" repeatCount="indefinite"/>'}<circle cx="150" cy="110" r="18" fill="#FFD23F"/><path d="M150 128 Q190 150 150 190 Q110 150 150 128" fill="none" stroke="#FFD23F" stroke-width="10"/></g><rect x="60" y="250" width="180" height="10" rx="5" fill="#C9B8F0"/>`],
+ ['Andar no meio-fio',`<rect x="0" y="230" width="300" height="20" fill="#8A929C"/><rect x="0" y="250" width="300" height="50" fill="#3A3F4A"/><g>${'<animateTransform attributeName="transform" type="translate" values="-60 0;60 0;-60 0" dur="6s" repeatCount="indefinite"/>'}<g>${an('rotate','-6 150 230;6 150 230;-6 150 230',1.5)}<circle cx="150" cy="120" r="14" fill="#7DDB8B"/><line x1="150" y1="134" x2="150" y2="230" stroke="#7DDB8B" stroke-width="6"/><line x1="100" y1="160" x2="200" y2="160" stroke="#7DDB8B" stroke-width="6" stroke-linecap="round"/></g></g>`],
+ ['Montanha-russa',`<path d="M10 240 C60 60 110 60 150 200 S240 60 290 160" fill="none" stroke="#C9B8F0" stroke-width="6"/><rect x="-14" y="-9" width="28" height="18" rx="5" fill="#FF6FA3"><animateMotion dur="3s" repeatCount="indefinite" rotate="auto" path="M10 240 C60 60 110 60 150 200 S240 60 290 160"/></rect>`]].map(([n,s])=>({n,art:()=>bg('#1E1840')+s}));
+const CORPO2=[['Banho quente','🛁','#1E3550','#BFE3FF'],['Rir até doer a barriga','😂','#4A3008','#FFE27A'],['Cochilo depois do almoço','😴','#2A2440','#C9B8F0'],['Nadar','🏊','#0B3A6E','#5AB8FF'],['Cantar no chuveiro','🎤','#3A1430','#FF9AC0'],['Mão no coração','🫶','#4A0F24','#FF6FA3'],['Ficar na ponta dos pés','🩰','#3A2440','#FFD6E6'],['Bocejar e esticar','🥱','#2A3A4A','#AFC2D9'],['Cafuné','🤲','#3A2A1A','#FFB27A'],['Tirar o sapato no fim do dia','👟','#1E2A3A','#9DB4FF']].map(([n,e,c1,c2],i)=>({n,art:()=>emo(e,c1,c2,800+i)}));
+SEN[0][5]=VIS.concat(CENAS.map(m=>({n:m[0],sub:m[1],art:m[3]})));SEN[1][5]=AUD.concat(AUD2);SEN[2][5]=TATO.concat(TATO2);SEN[3][5]=OLF.concat(OLF2);SEN[4][5]=PAL.concat(PAL2);SEN[5][5]=MOV.concat(MOV2);SEN[6][5]=CORPO.concat(CORPO2);
+
+const META20={
+mapa:[[3,'#C9A46A'],[2,'#2F5DA8'],[4,'#E8643A'],[0,'#F3A07A'],[5,'#7FA6CF'],[1,'#B57A32'],[6,'#D9B98A'],[0,'#E85A4F'],[4,'#D9487E'],[1,'#D4AF37'],[6,'#E8643A'],[3,'#2B3A8A'],[5,'#F2A03A'],[4,'#D9487E'],[0,'#6FBF73'],[5,'#1E6FB8'],[4,'#F2C94C'],[0,'#7DBF5A'],[6,'#FF6FA3'],[2,'#5AB8FF']],
+aud:[[3,'#5A7FA8'],[5,'#2F9FC9'],[0,'#7DBF5A'],[3,'#7457C9'],[6,'#E8964A'],[4,'#D9487E'],[1,'#8A5A3A'],[1,'#E8643A'],[3,'#AFC2D9'],[6,'#E8457E'],[2,'#9BE38F'],[1,'#FF8A5C'],[3,'#F2C94C'],[0,'#3E9E5E'],[5,'#3FE0D0'],[3,'#C9B8F0'],[5,'#BFE3FF'],[1,'#E2C49E'],[4,'#5A6A8A'],[1,'#FF9AC0']],
+tato:[[1,'#8A2A5A'],[5,'#D9B77A'],[5,'#1E6FB8'],[0,'#8A5A32'],[1,'#C9B48E'],[3,'#8A929C'],[0,'#4FA36A'],[3,'#E07AA6'],[3,'#C9DFF2'],[0,'#5E9E44'],[1,'#C9A27A'],[5,'#9CC8E0'],[4,'#C8784A'],[0,'#9AA0A8'],[2,'#D9D6CC'],[1,'#7E4626'],[5,'#BFE3FF'],[3,'#E8E6E0'],[1,'#F5E6D8'],[4,'#8CC4E0']],
+olf:[[1,'#6B3F22'],[0,'#5A6A4A'],[6,'#C98A5A'],[5,'#3FA9C9'],[5,'#AFC2D9'],[0,'#7DBF5A'],[3,'#F2D35E'],[4,'#B5652A'],[3,'#9F86D6'],[1,'#D9A35A'],[3,'#E85A7E'],[5,'#6FBF8A'],[6,'#F2D35E'],[4,'#F28C28'],[3,'#9F86D6'],[5,'#F2C94C'],[6,'#B5652A'],[3,'#F2C94C'],[1,'#FFD6E6'],[0,'#6B5A3A']],
+pal:[[1,'#E9B10E'],[6,'#8A9CB0'],[5,'#D9D23A'],[3,'#5A3424'],[4,'#D9342A'],[5,'#3EB57E'],[4,'#D9365E'],[1,'#E8964A'],[2,'#6B3F22'],[5,'#F2C6D9'],[1,'#F2C94C'],[5,'#E8455A'],[3,'#7DBF5A'],[6,'#5A3424'],[4,'#F2A03A'],[5,'#E8F0D8'],[1,'#8A5A3A'],[6,'#E8B45A'],[4,'#5A2A8A'],[6,'#FF9AC0']],
+equi:[[3,'#FFB27A'],[5,'#2F7FD1'],[2,'#A98BFF'],[3,'#3E9E5E'],[3,'#A9C3EA'],[6,'#E8643A'],[0,'#4FA36A'],[2,'#FF8A5C'],[6,'#FF6FA3'],[4,'#FFD23F'],[2,'#FF8A5C'],[1,'#FF6FA3'],[5,'#2F7FD1'],[6,'#D9487E'],[4,'#FFD23F'],[3,'#3FE0D0'],[5,'#38B6E0'],[4,'#F2B705'],[2,'#7DDB8B'],[4,'#E8455A']],
+corpo:[[1,'#9DB4FF'],[3,'#C9B8F0'],[6,'#FF9AC0'],[4,'#FF6FA3'],[3,'#9BD5E8'],[0,'#9BE38F'],[3,'#AFC2D9'],[1,'#FFB27A'],[0,'#7DDB8B'],[2,'#3FE0D0'],[1,'#BFE3FF'],[6,'#FFE27A'],[3,'#C9B8F0'],[5,'#5AB8FF'],[4,'#FF9AC0'],[3,'#FF6FA3'],[2,'#FFD6E6'],[3,'#AFC2D9'],[6,'#FFB27A'],[1,'#9DB4FF']]};
+const FICAM={"aud": ["Chuva", "Mar", "Pássaros", "Café passando", "Panela no fogo", "Grilos à noite", "Sino de meditação", "Gato ronronando", "Coração", "Fogueira estalando", "Sininho de vento na varanda", "Trovão ao longe", "Violão", "Riacho correndo", "Vento nas árvores"], "corpo": ["Abraço apertado", "Alongar o pescoço", "Espreguiçar", "Deitar no chão", "Respirar fundo", "Massagem nas mãos", "Pés descalços na grama", "Banho quente", "Rir até doer a barriga", "Cochilo depois do almoço", "Cantar no chuveiro", "Ficar na ponta dos pés", "Bocejar e esticar", "Cafuné", "Tirar o sapato no fim do dia"], "equi": ["Balanço de rede", "Ir e vir de onda", "Girar devagar", "Gangorra", "Pedalar", "Dança lenta", "Pular", "Carrossel", "Andar no meio-fio", "Cambalhota", "Ficar num pé só", "Balanço de parquinho", "Cavalinho de balanço", "Barquinho no mar", "Montanha-russa"], "mapa": ["O Esboço da Alma", "Céu em Redemoinho", "Retrato em Facetas", "Nascer das Sensações", "O Tempo que Derrete", "Luz no Escuro", "Jardim de Coragem", "Mosaico Dourado", "Céu estrelado", "Fundo do mar", "Pôr do sol na praia", "Fogos de Ano Novo", "Luzes da cidade à noite", "Bandeirinhas de festa junina", "Arco-íris depois da chuva"], "olf": ["Café coado", "Chuva na terra", "Bolo no forno", "Maresia", "Roupa limpa", "Grama cortada", "Flor de laranjeira", "Canela", "Pão quentinho", "Eucalipto", "Pipoca de cinema", "Laranja descascada", "Livro novo", "Protetor solar", "Cheirinho de bebê"], "pal": ["Doce (mel)", "Salgado", "Azedinho (limão)", "Amargo (chocolate)", "Picante", "Fresco (hortelã)", "Caldo quentinho", "Café", "Gelado (sorvete)", "Pão de queijo", "Chá quentinho", "Brigadeiro", "Pipoca doce", "Pastel de feira", "Água de coco"], "tato": ["Veludo", "Areia", "Água", "Madeira", "Lã de tricô", "Grama", "Seda", "Massinha de modelar", "Pedrinhas de rio", "Plástico bolha", "Toalha felpuda", "Mármore gelado", "Espuma de banho", "Pelo de bichinho", "Papel amassado"]};
+const META={};SEN.forEach(s=>{const id=s[0];META[id]={};s[5].forEach((t,i)=>{META[id][t.n]=META20[id][i];});s[5]=s[5].filter(t=>FICAM[id].includes(t.n));});
+
+const TEMAS={
+ 'água':['Chuva','Mar','Riacho correndo','Água','Espuma de banho','Maresia','Chuva na terra','Água de coco','Ir e vir de onda','Barquinho no mar','Boiar na piscina','Nadar','Banho quente','Fundo do mar','Pôr do sol na praia','Arco-íris depois da chuva','Nascer das Sensações','Cubo de gelo','Trovão ao longe','Melancia'],
+ 'cozinha e mesa':['Café passando','Panela no fogo','Café coado','Bolo no forno','Pão quentinho','Canela','Pipoca de cinema','Laranja descascada','Churrasco de domingo','Caldo quentinho','Café','Pão de queijo','Arroz com feijão','Pastel de feira','Brigadeiro','Chá quentinho','Doce (mel)','Pipoca doce'],
+ 'infância':['Caixinha de música','Bolo no forno','Massinha de modelar','Plástico bolha','Pipoca doce','Brigadeiro','Balanço de parquinho','Cavalinho de balanço','Gangorra','Carrossel','Escorregador','Cambalhota','Pular','Andar no meio-fio','Pipas no céu','Bandeirinhas de festa junina','Balões de festa','Cheirinho de bebê','Pelo de bichinho','Gelado (sorvete)','Cafuné','Pipoca de cinema'],
+ 'noite':['Céu estrelado','Luzes da cidade à noite','Fogos de Ano Novo','Luz no Escuro','Céu em Redemoinho','Grilos à noite','Vela acesa','Fogueira estalando','Trovão ao longe'],
+ 'calor e aconchego':['Fogueira estalando','Banho quente','Chá quentinho','Caldo quentinho','Toalha felpuda','Lã de tricô','Veludo','Gato ronronando','Cafuné','Abraço apertado','Vela acesa','Pão quentinho','Café coado','Espreguiçar','Cochilo depois do almoço'],
+ 'natureza':['Pássaros','Grilos à noite','Vento nas árvores','Riacho correndo','Grama','Folha','Pedrinhas de rio','Areia','Grama cortada','Eucalipto','Flor de laranjeira','Terra molhada do jardim','Pés descalços na grama','Jardim de Coragem','Jardim florido','Arco-íris depois da chuva','Chuva na terra']};
+const FORCA_BAIXA=['a natureza aparece pouco: suas boas sensações, hoje, acontecem mais perto de casa do que ao ar livre.','o aconchego quase não aparece: você parece buscar mais estímulo do que colo.','o movimento quase não aparece: seu corpo parece pedir mais pausa do que agito.','a calma aparece pouco: você parece se sentir bem quando as coisas estão acontecendo.','a energia intensa quase não aparece: você parece preferir o suave ao forte.','o frescor quase não aparece: suas boas sensações parecem mais quentes do que leves.','o encontro com pessoas aparece pouco: suas boas sensações, hoje, parecem mais suas do que compartilhadas.'];
+const SEN_NOME={mapa:'visão',aud:'audição',tato:'tato',olf:'olfato',pal:'paladar',equi:'equilíbrio',corpo:'corpo'};
+function hueQuente(hex){const r=parseInt(hex.slice(1,3),16)/255,g=parseInt(hex.slice(3,5),16)/255,b=parseInt(hex.slice(5,7),16)/255;const mx=Math.max(r,g,b),mn=Math.min(r,g,b);if(mx-mn<.08)return null;let h;if(mx===r)h=((g-b)/(mx-mn))%6;else if(mx===g)h=(b-r)/(mx-mn)+2;else h=(r-g)/(mx-mn)+4;h=(h*60+360)%360;return h<70||h>300;}
+function insights(J,P,TAGS){const E=J.esc||{},fav=SEN.map(s=>(E[s[0]]||[])[0]);const out=[];const T=TAGS;
+ const fv=(i)=>fav[i]?fav[i].toLowerCase():'—';
+ out.push({s:0,t:'Sua força principal: '+T[P.top][0],d:T[P.top][3]});
+ out.push({s:0,t:'Logo depois vem '+T[P.seg][0],d:'A sua segunda força é '+T[P.seg][2]+'. Juntas, as duas desenham o jeito como você se sente bem.'});
+ const calma=P.sc[3]+P.sc[1],agito=P.sc[4]+P.sc[2];out.push({s:0,t:calma>agito*1.3?'Mais pausa do que agito':agito>calma*1.3?'Mais agito do que pausa':'Pausa e agito em equilíbrio',d:calma>agito*1.3?'Calma e aconchego somam '+calma+' pontos; energia e movimento, '+agito+'. Você parece recarregar desacelerando.':agito>calma*1.3?'Energia e movimento somam '+agito+' pontos; calma e aconchego, '+calma+'. Você parece recarregar se mexendo.':'Calma ('+calma+') e energia ('+agito+') quase empatam: você parece precisar dos dois, em horas diferentes.'});
+ const fora=P.sc[0]+P.sc[5],dentro=P.sc[1]+P.sc[6];out.push({s:0,t:fora>dentro?'Seu bem-estar mora lá fora':'Seu bem-estar mora perto de casa',d:fora>dentro?'Natureza e frescor ('+fora+') pesam mais que casa e gente ('+dentro+'). Céu, água e vento parecem te devolver para você.':'Casa e gente ('+dentro+') pesam mais que natureza e frescor ('+fora+'). O conhecido e o próximo parecem te fazer bem.'});
+ out.push({s:0,t:'O seu dia perfeito',d:`Teria ${fv(0)} para olhar, ${fv(1)} para ouvir, ${fv(2)} para tocar, ${fv(3)} no ar, ${fv(4)} na boca, ${fv(5)} no corpo e ${fv(6)} para fechar.`});
+ const sur=[];
+ const tem=Object.entries(TEMAS).map(([n,L])=>{const hits=SEN.map(s=>[s[0],(E[s[0]]||[]).filter(x=>L.includes(x))]).filter(x=>x[1].length);return {n,hits};}).sort((a,b)=>b.hits.length-a.hits.length);
+ tem.slice(0,2).forEach(x=>{if(x.hits.length>=3)sur.push({s:1,t:'O fio invisível: '+x.n,d:`O tema "${x.n}" aparece em ${x.hits.length} dos seus 7 sentidos: ${x.hits.slice(0,4).map(([id,L])=>L[0]+' ('+SEN_NOME[id]+')').join(', ')}. Você escolheu cada um separado, mas eles contam a mesma história.`});});
+ const tt=J.t||{};const tk=Object.keys(tt).filter(k=>tt[k]>1500);if(tk.length>=4){tk.sort((a,b)=>tt[a]-tt[b]);const r=k=>Math.max(1,Math.round(tt[k]/1000));sur.push({s:1,t:'Onde você é mais decidido',d:`Você escolheu ${SEN_NOME[tk[0]]} em ${r(tk[0])} s e ${SEN_NOME[tk[tk.length-1]]} em ${r(tk[tk.length-1])} s. O sentido rápido costuma ser o que você já conhece bem; o lento pode ser um território novo para explorar.`});}
+ const low=P.sc.indexOf(Math.min(...P.sc));sur.push({s:1,t:'O que quase não apareceu: '+T[low][0],d:'Nas suas 49 escolhas, '+FORCA_BAIXA[low]+' Vale testar uma experiência desse lado, só para ver.'});
+ const cores=SEN.map(s=>{const n=fav[SEN.indexOf(s)];const m=n&&META[s[0]][n];return m?hueQuente(m[1]):null;}).filter(x=>x!==null);const q=cores.filter(x=>x).length;if(cores.length>=5)sur.push({s:1,t:q>=cores.length-1?'Sua paleta é quente':q<=1?'Sua paleta é fria':'Sua paleta mistura quente e frio',d:`${q} das ${cores.length} cores das suas favoritas são quentes (amarelos, laranjas, vermelhos). É essa paleta que pinta a sua imagem.`});
+ const cons=SEN.filter((s,i)=>fav[i]&&META[s[0]][fav[i]]&&META[s[0]][fav[i]][0]===P.top).length;if(cons>=2)sur.push({s:1,t:'Não foi acaso',d:`Em ${cons} dos 7 sentidos, a sua escolha nº 1 foi do tipo ${T[P.top][0]}. Sem combinar, os sentidos repetiram o mesmo pedido.`});
+ const inf=tem.find(x=>x.n==='infância');if(inf&&inf.hits.length>=2&&!sur.some(x=>x.t.includes('infância')))sur.push({s:1,t:'Uma criança no mapa',d:`${inf.hits.length} sentidos trouxeram coisas de infância (${inf.hits.slice(0,3).map(([,L])=>L[0]).join(', ')}). Parte do que te faz bem hoje parece vir de muito tempo atrás.`});
+ return out.concat(sur.slice(0,5));}
+
+const CONVITE='7s0a4653';const PLANILHA_URL=window.PLANILHA_URL||'';
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let J=null;try{J=JSON.parse(localStorage.getItem('jornada7')||'null');}catch(e){}
+const temConvite=(()=>{try{const q=new URLSearchParams(location.search).get('c');if(q===CONVITE){localStorage.setItem('jornada7c','1');return true;}return localStorage.getItem('jornada7c')==='1';}catch(e){return new URLSearchParams(location.search).get('c')===CONVITE;}})();
+const fase1Ok=()=>J&&J.esc&&SEN.every(s=>(J.esc[s[0]]||[]).length>=7);
+function salvaJ(){try{localStorage.setItem('jornada7',JSON.stringify(J));}catch(e){}}
+function post(tipo,extra){if(!PLANILHA_URL||!J)return;const corpo=Object.assign({c:CONVITE,tipo,id:J.id,nome:J.nome,cel:J.cel,em:new Date().toISOString()},extra||{});try{fetch(PLANILHA_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(corpo),keepalive:true});}catch(e){}}
+const topoLogo=()=>`<div class="bar0"><a class="logo" href="/" aria-label="7entidos"><img src="/assets/simbolo-contando-7.svg?v=20261102-novo" alt="" width="30" height="30"><b class="f"><span style="color:#FFD43B">7</span>entidos</b></a></div>`;
+function bloqueio(fase){if(!temConvite)return `<div class="hero"><div class="k">Jornada dos 7entidos</div><h1 class="f">Esta jornada é por convite.</h1><p class="mute">Use o link que você recebeu do 7entidos.</p><a class="btn" href="/">Conhecer o 7entidos</a></div>`;
+ if(!fase1Ok())return `<div class="hero"><div class="k">Fase ${fase}</div><h1 class="f">Primeiro, a Fase 1</h1><p class="mute">Não encontramos a sua Fase 1 neste celular. Se você fez em outro aparelho, abra este link nele. Se ainda não fez, comece por ela: leva uns 7 minutos.</p><a class="btn pri big" style="display:block;text-decoration:none" href="/jornada/?c=${CONVITE}">Fazer a Fase 1 →</a></div>`;return '';}
+const DEF_A=['#E9B10E','#2F7FD1','#E8643A','#3E9E5E','#D9487E','#7457C9','#17A99B'];
+
+</script><script>window.DANIEL_ESC={"mapa": ["O Esboço da Alma", "Céu em Redemoinho", "Retrato em Facetas", "Nascer das Sensações", "O Tempo que Derrete", "Luz no Escuro", "Jardim de Coragem"], "aud": ["Chuva", "Mar", "Pássaros", "Café passando", "Panela no fogo", "Grilos à noite", "Sino de meditação"], "tato": ["Veludo", "Areia", "Água", "Madeira", "Lã de tricô", "Grama", "Seda"], "olf": ["Café coado", "Chuva na terra", "Bolo no forno", "Maresia", "Roupa limpa", "Grama cortada", "Flor de laranjeira"], "pal": ["Doce (mel)", "Salgado", "Azedinho (limão)", "Amargo (chocolate)", "Picante", "Fresco (hortelã)", "Caldo quentinho"], "equi": ["Balanço de rede", "Ir e vir de onda", "Girar devagar", "Gangorra", "Pedalar", "Dança lenta", "Pular"], "corpo": ["Abraço apertado", "Alongar o pescoço", "Espreguiçar", "Deitar no chão", "Respirar fundo", "Massagem nas mãos", "Pés descalços na grama"]};const SOC={"n": 12, "pres": {"mapa": {"Pôr do sol na praia": 9, "Jardim de Coragem": 3, "Luzes da cidade à noite": 5, "Céu estrelado": 10, "Arco-íris depois da chuva": 7, "Nascer das Sensações": 11, "Luz no Escuro": 6, "O Esboço da Alma": 7, "Céu em Redemoinho": 5, "O Tempo que Derrete": 4, "Fogos de Ano Novo": 6, "Retrato em Facetas": 3, "Mosaico Dourado": 1, "Fundo do mar": 3, "Bandeirinhas de festa junina": 4}, "aud": {"Chuva": 8, "Mar": 11, "Violão": 5, "Grilos à noite": 5, "Sino de meditação": 6, "Café passando": 6, "Panela no fogo": 1, "Vento nas árvores": 9, "Pássaros": 7, "Riacho correndo": 4, "Fogueira estalando": 5, "Trovão ao longe": 6, "Coração": 6, "Gato ronronando": 2, "Sininho de vento na varanda": 3}, "tato": {"Seda": 8, "Pelo de bichinho": 5, "Mármore gelado": 7, "Veludo": 10, "Areia": 8, "Água": 11, "Lã de tricô": 3, "Madeira": 3, "Grama": 7, "Pedrinhas de rio": 6, "Plástico bolha": 3, "Espuma de banho": 4, "Toalha felpuda": 6, "Massinha de modelar": 3}, "olf": {"Grama cortada": 8, "Chuva na terra": 8, "Roupa limpa": 8, "Cheirinho de bebê": 7, "Laranja descascada": 2, "Maresia": 8, "Café coado": 9, "Eucalipto": 6, "Pão quentinho": 5, "Flor de laranjeira": 5, "Bolo no forno": 3, "Canela": 4, "Protetor solar": 4, "Livro novo": 4, "Pipoca de cinema": 3}, "pal": {"Salgado": 8, "Doce (mel)": 7, "Caldo quentinho": 5, "Chá quentinho": 4, "Pipoca doce": 3, "Água de coco": 3, "Fresco (hortelã)": 8, "Azedinho (limão)": 8, "Café": 9, "Pão de queijo": 4, "Gelado (sorvete)": 9, "Brigadeiro": 5, "Pastel de feira": 3, "Amargo (chocolate)": 5, "Picante": 3}, "equi": {"Pedalar": 9, "Dança lenta": 6, "Girar devagar": 7, "Ir e vir de onda": 7, "Andar no meio-fio": 4, "Balanço de rede": 8, "Pular": 7, "Gangorra": 4, "Carrossel": 2, "Balanço de parquinho": 9, "Cavalinho de balanço": 4, "Montanha-russa": 6, "Cambalhota": 4, "Ficar num pé só": 2, "Barquinho no mar": 5}, "corpo": {"Deitar no chão": 8, "Banho quente": 9, "Respirar fundo": 8, "Rir até doer a barriga": 10, "Tirar o sapato no fim do dia": 6, "Bocejar e esticar": 4, "Pés descalços na grama": 8, "Massagem nas mãos": 4, "Cochilo depois do almoço": 5, "Espreguiçar": 5, "Abraço apertado": 9, "Cafuné": 4, "Cantar no chuveiro": 1, "Alongar o pescoço": 3}}, "top": {"mapa": {"Pôr do sol na praia": 3, "O Esboço da Alma": 3, "Arco-íris depois da chuva": 1, "Luz no Escuro": 1, "Céu em Redemoinho": 1, "Fundo do mar": 1, "Nascer das Sensações": 2}, "aud": {"Chuva": 3, "Vento nas árvores": 1, "Trovão ao longe": 1, "Mar": 5, "Grilos à noite": 1, "Pássaros": 1}, "tato": {"Seda": 2, "Veludo": 4, "Areia": 2, "Espuma de banho": 1, "Água": 2, "Madeira": 1}, "olf": {"Grama cortada": 1, "Chuva na terra": 2, "Bolo no forno": 1, "Pão quentinho": 2, "Café coado": 4, "Roupa limpa": 1, "Maresia": 1}, "pal": {"Salgado": 3, "Doce (mel)": 4, "Gelado (sorvete)": 1, "Café": 2, "Fresco (hortelã)": 1, "Amargo (chocolate)": 1}, "equi": {"Pedalar": 3, "Pular": 1, "Girar devagar": 1, "Balanço de rede": 3, "Ir e vir de onda": 1, "Balanço de parquinho": 1, "Montanha-russa": 1, "Gangorra": 1}, "corpo": {"Deitar no chão": 2, "Banho quente": 2, "Abraço apertado": 4, "Respirar fundo": 1, "Espreguiçar": 2, "Rir até doer a barriga": 1}}};
+/* Sala da Fase 2 Irresistível · 7 alas × 7 perguntas */
+const ALAS=[
+ {n:'Prazer no cérebro',ic:'🧠',c:'#FFD23F',sub:'O que o cérebro sente como recompensa: expectativa, surpresa e o instante do toque.'},
+ {n:'Gatilhos de jogo',ic:'🎮',c:'#5AB8FF',sub:'Progresso, coleção, controle e o "quase lá" que faz querer terminar.'},
+ {n:'Memória e emoção',ic:'💫',c:'#FF8A5C',sub:'A gente lembra do pico e do final. Como criar um momento inesquecível.'},
+ {n:'Gente como eu',ic:'🤝',c:'#7DDB8B',sub:'Pertencimento, raridade, compartilhar e presentear.'},
+ {n:'Testar referências',ic:'🕹️',c:'#FF6FA3',sub:'O que pegar (adaptado) de Wrapped, Wordle, álbum, Duolingo, Finch, Headspace e jogos contemplativos.'},
+ {n:'Curiosidade e ritmo',ic:'🔍',c:'#A98BFF',sub:'O sentimento que você escolheu para o fim: curiosidade. Em 3 a 5 minutos.'},
+ {n:'Zona Proibida',ic:'⚠️',c:'#FF5A5A',sub:'Técnicas fortes que viciam do jeito ruim. Conheça, teste e descarte (ou escolha uma versão suave).'}];
+const O=(t,por,demo,set)=>({t,por,demo,set:set||{}});
+const PERGS=[
+/* ALA 1 · PRAZER */
+{a:0,id:'p1',q:'O que acontece no instante em que a pessoa toca numa escolha?',d:'O cérebro libera dopamina quando uma ação tem retorno imediato. Quanto mais rápido e mais sensorial, mais gostoso.',o:[
+ O('Um "plim" e uma vibração leve','Som + tato no mesmo instante = recompensa dupla.','fb_som',{fb:'som'}),
+ O('Só um brilho na cor do sentido','Retorno visual, silencioso e elegante.','fb_luz',{fb:'luz'}),
+ O('O próprio som da escolha toca (o mar, a chuva…)','A pessoa sente de novo aquilo que escolheu: o mais sensorial de todos.','fb_item',{fb:'item'}),
+ O('Nada acontece, só marca o número','Para comparar: sem retorno, o toque perde a graça.','fb_nada',{fb:'nada'})]},
+{a:0,id:'p2',q:'Quando vem a recompensa maior?',d:'Recompensas pequenas e frequentes mantêm o ritmo; uma grande no fim cria memória.',o:[
+ O('Um pouquinho a cada toque','Microrrecompensas: o jogo nunca fica parado.','rec_toque',{rec:'toque'}),
+ O('Uma celebração ao fim de cada sentido','7 pequenos picos ao longo da fase.','rec_sentido',{rec:'sentido'}),
+ O('Tudo guardado para o grande final','Mais tensão, mas o meio pode ficar sem graça.','rec_final',{rec:'final'})]},
+{a:0,id:'p3',q:'Antes de uma revelação, quanta expectativa?',d:'A dopamina sobe mais na ESPERA do que na recompensa. Um segundo de suspense vale ouro.',o:[
+ O('Revela na hora','Direto, sem espera.','susp0',{susp:0}),
+ O('1 segundo de brilho crescendo antes','A antecipação aumenta o prazer da revelação.','susp1',{susp:1}),
+ O('A pessoa segura o dedo para revelar','Ela participa do suspense: vira um ritual.','segura',{susp:'segura'})]},
+{a:0,id:'p4',q:'Que tipo de surpresa a fase entrega?',d:'O cérebro se acostuma com o previsível. Surpresa verdadeira (não sorteio) renova o interesse.',o:[
+ O('Sempre o mesmo tipo de revelação','Previsível e tranquilo.','surp_fixa',{surp:'fixa'}),
+ O('Cada sentido revela algo de um jeito diferente','Variedade sem aleatoriedade.','surp_varia',{surp:'varia'}),
+ O('Uma descoberta sobre a pessoa, tirada da ordem dela','Surpresa que só ela poderia receber.','surp_pessoal',{surp:'pessoal'})]},
+{a:0,id:'p5',q:'Quanto desafio?',d:'Desafio na medida certa gera "fluxo": nem fácil demais (tédio), nem difícil (frustração).',o:[
+ O('Só ordenar, sem desafio','Leve e rápido.','desafio0',{desafio:0}),
+ O('Antes de ordenar, adivinhar qual vai ser a nº 1','Uma aposta consigo mesma: curiosidade pura.','adivinha',{desafio:'adivinha'}),
+ O('Ordenar em duelos, 2 por vez','Decisões pequenas e fáceis, uma de cada vez.','duelo',{desafio:'duelo'})]},
+{a:0,id:'p6',q:'Quantos sentidos a tela ativa ao mesmo tempo?',d:'Experiências multissensoriais são lembradas melhor e parecem mais intensas.',o:[
+ O('Imagem + som + vibração juntos','A fase sente com a pessoa.','multi',{multi:'tudo'}),
+ O('O fundo muda de cor a cada sentido','Cada sentido tem o seu "clima".','fundo',{multi:'fundo'}),
+ O('Só visual','Mais simples e silencioso.','mono',{multi:'visual'})]},
+{a:0,id:'p7',q:'A mecânica muda ao longo da fase?',d:'Novidade reativa a atenção. Repetir 7 vezes igual cansa.',o:[
+ O('Igual nos 7 sentidos','Fácil de aprender.','nov_igual',{nov:'igual'}),
+ O('Um mini-jogo diferente em cada sentido','Sempre algo novo.','nov_varia',{nov:'varia'}),
+ O('Muda uma vez, na metade (4º sentido)','Equilíbrio entre conforto e novidade.','nov_meio',{nov:'meio'})]},
+/* ALA 2 · GATILHOS */
+{a:1,id:'g1',q:'Como a pessoa vê o próprio progresso?',d:'Ver o avanço é uma das recompensas mais fortes ("efeito do progresso").',o:[
+ O('Barra que enche','Clássico e claro.','prog_barra',{prog:'barra'}),
+ O('Anel de 7 luzes que acendem','A marca do 7entidos virando progresso.','prog_anel',{prog:'anel'}),
+ O('Álbum com 7 espaços para completar','Vontade de completar a coleção.','prog_album',{prog:'album'}),
+ O('Sem indicador','Para comparar.','prog0',{prog:0})]},
+{a:1,id:'g2',q:'Avisar quando falta pouco?',d:'"Efeito do objetivo próximo": quanto mais perto do fim, mais rápido a gente corre.',o:[
+ O('Sim: "Falta só 1!" no último sentido','Empurrão gostoso no final.','quase',{quase:1}),
+ O('Não avisar','Sem pressão.','sem',{quase:0})]},
+{a:1,id:'g3',q:'O que a pessoa "coleciona" a cada sentido?',d:'Colecionar ativa o desejo de completar (pense em álbum de figurinhas).',o:[
+ O('Uma carta com a nº 1 do sentido','7 cartas no fim.','colecao_carta',{col:'carta'}),
+ O('Um pedaço da pintura dela','A obra se completa no fim.','colecao_pintura',{col:'pintura'}),
+ O('Uma luz do anel','Simples e simbólico.','prog_anel',{col:'luz'})]},
+{a:1,id:'g4',q:'Quem escolhe a ordem dos sentidos?',d:'Sentir controle aumenta o envolvimento ("autonomia").',o:[
+ O('A pessoa escolhe por qual sentido começa','Ela manda no caminho.','ctrl_livre',{ctrl:'livre'}),
+ O('Ordem fixa (Visão → Corpo)','Mais simples.','ctrl_fixa',{ctrl:'fixa'}),
+ O('Começa pelo sentido que ela mais gostou na Fase 1','Começo já com prazer.','ctrl_fav',{ctrl:'fav'})]},
+{a:1,id:'g5',q:'Quando ela acerta a própria nº 1 (adivinhar), como reagir?',d:'Celebrar o acerto reforça; reagir com calma mantém o tom adulto.',o:[
+ O('Festa: "Você se conhece bem!" com confete','Orgulho e alegria.','acerto_festa',{acerto:'festa'}),
+ O('Com calma: "Interessante…" e uma reflexão','Mais elegante.','acerto_calmo',{acerto:'calmo'})]},
+{a:1,id:'g6',q:'Algo fica trancado até o fim?',d:'Um mistério visível desde o começo cria vontade de chegar ao final.',o:[
+ O('Sim: um cartão borrado "O que as suas escolhas dizem" abre no fim','Curiosidade do começo ao fim.','misterio',{misterio:1}),
+ O('Não, tudo aberto','Sem mistério.','sem',{misterio:0})]},
+{a:1,id:'g7',q:'A pessoa personaliza algo?',d:'"Efeito IKEA": a gente valoriza mais o que ajudou a criar.',o:[
+ O('Dar um nome à própria imagem','Fica dela de verdade.','nomeia',{nomeia:1}),
+ O('Escolher a moldura da imagem','Toque final de autoria.','moldura',{moldura:1}),
+ O('Nada','Mais rápido.','sem',{})]},
+/* ALA 3 · MEMÓRIA */
+{a:2,id:'m1',q:'Como é o final da Fase 2?',d:'"Regra do pico e do fim": a gente lembra da experiência pelo melhor momento e pelo final.',o:[
+ O('Grandioso: música, confete e a imagem completa','Final de festa.','final_pico',{final:'pico'}),
+ O('Calmo e contemplativo, a imagem surge devagar','Final de respirar fundo.','final_calmo',{final:'calmo'}),
+ O('"O seu resumo" em telas, como um story','Estilo Spotify Wrapped.','wrapped',{final:'wrapped'})]},
+{a:2,id:'m2',q:'Um momento especial no meio?',d:'Um pico no meio evita a "queda" de atenção do meio do caminho.',o:[
+ O('Sim: no 4º sentido, uma surpresa extra','Renova a energia.','pico4',{pico4:1}),
+ O('Não','Linear.','sem',{pico4:0})]},
+{a:2,id:'m3',q:'Como a fase começa?',d:'A primeira impressão decide se a pessoa continua.',o:[
+ O('Com uma pergunta curiosa','"Você sabe qual é o seu som favorito de verdade?"','abre_pergunta',{abre:'pergunta'}),
+ O('Já jogando, sem explicação','Ação imediata.','abre_jogo',{abre:'jogo'}),
+ O('Com uma fala curta da Brisa (as 7 luzes)','Acolhimento.','brisa_fala',{abre:'brisa'})]},
+{a:2,id:'m4',q:'Ligar escolhas a lembranças já na Fase 2?',d:'Memórias pessoais dão emoção às escolhas.',o:[
+ O('Sim, um toque rápido: "isso te lembra algo?"','Mais emoção, mais tempo.','lembra',{lembra:1}),
+ O('Não, deixar para a Fase 3','Mantém a Fase 2 rápida (3 a 5 min).','sem',{lembra:0})]},
+{a:2,id:'m5',q:'A pessoa diz como se sentiu ao fim de cada sentido?',d:'Nomear a emoção torna a experiência mais consciente.',o:[
+ O('Sim, com 1 emoji','Rápido.','emo',{emo:1}),
+ O('Não','Mais fluido.','sem',{emo:0})]},
+{a:2,id:'m6',q:'Relembrar a escolha da Fase 1?',d:'Comparar o "antes e depois" gera reflexão e curiosidade.',o:[
+ O('Sim: "Na Fase 1, a sua nº 1 era X. Ainda é?"','Gera um pequeno "ahá".','reviver',{reviver:1}),
+ O('Não','Foco no agora.','sem',{reviver:0})]},
+{a:2,id:'m7',q:'Como fechar a fase para deixar vontade de voltar?',d:'"Efeito Zeigarnik": a gente lembra mais do que ficou em aberto.',o:[
+ O('Uma pergunta aberta: "O que a sua nº 1 diz sobre você? Na Fase 3."','Curiosidade para a próxima.','gancho_pergunta',{gancho:'pergunta'}),
+ O('Um cartão borrado da Fase 3','Mistério visual.','gancho_borrado',{gancho:'borrado'}),
+ O('Final fechado, sem gancho','Sensação de completo.','sem',{gancho:0})]},
+/* ALA 4 · SOCIAL */
+{a:3,id:'s1',q:'Mostrar que outras pessoas escolheram igual?',d:'Saber que "tem gente como eu" acalma e aproxima.',o:[
+ O('Com número: "5 de 12 também escolheram o mar"','Concreto.','social_num',{social:'num'}),
+ O('Sem número: "Muita gente também ama o mar"','Mais leve.','social_frase',{social:'frase'}),
+ O('Não mostrar','Experiência individual.','sem',{social:0})]},
+{a:3,id:'s2',q:'Destacar o que é raro na pessoa?',d:'Sentir-se único é tão forte quanto pertencer.',o:[
+ O('Sim: "Só você colocou nesta ordem"','Orgulho de ser único.','raro',{raro:1}),
+ O('Não','Sem comparação.','sem',{raro:0})]},
+{a:3,id:'s3',q:'Compartilhar no fim?',d:'Compartilhar aumenta o orgulho e traz novas pessoas.',o:[
+ O('Cartão pronto para Stories','Um toque e compartilha.','share',{share:1}),
+ O('Não','Fica só com a pessoa.','sem',{share:0})]},
+{a:3,id:'s4',q:'Comparar com um amigo?',d:'Comparar com alguém próximo é curiosidade social.',o:[
+ O('"Mande para alguém e veja se vocês combinam"','Viraliza de forma gostosa.','amigo',{amigo:1}),
+ O('Não','Individual.','sem',{amigo:0})]},
+{a:3,id:'s5',q:'Presentear alguém?',d:'Dar algo faz bem a quem dá (e traz quem recebe).',o:[
+ O('Enviar uma "boa sensação" para alguém','Ex.: "O seu som do dia: mar"','presente',{presente:1}),
+ O('Não','Sem presente.','sem',{presente:0})]},
+{a:3,id:'s6',q:'Ver as imagens de outras pessoas?',d:'Uma galeria anônima mostra que cada pessoa é diferente.',o:[
+ O('Sim, uma galeria anônima','Inspiração.','mural',{mural:1}),
+ O('Não','Privacidade total.','sem',{mural:0})]},
+{a:3,id:'s7',q:'A Brisa acompanha?',d:'Uma "presença" amiga torna a experiência mais humana.',o:[
+ O('Comenta algumas escolhas (só as 7 luzes falando)','Companhia leve.','brisa_comenta',{brisa:'comenta'}),
+ O('Aparece só no fim','Discreta.','brisa_fala',{brisa:'fim'}),
+ O('Não aparece','Silêncio.','sem',{brisa:0})]},
+/* ALA 5 · REFERÊNCIAS */
+{a:4,id:'r1',q:'Spotify Wrapped: "o seu resumo" em telas, para compartilhar',d:'O conteúdo mais compartilhado do mundo todo ano: as pessoas amam ver a si mesmas em dados.',o:[
+ O('Quero','Resumo em telas no final.','wrapped',{final:'wrapped'}),O('Quero adaptado','Só 3 telas.','wrapped',{wrap3:1}),O('Não quero','','sem',{})]},
+{a:4,id:'r2',q:'Wordle: um desafio por dia, com quadradinhos coloridos para compartilhar',d:'Uma vez por dia cria um ritual; o resultado em quadradinhos coloridos é fácil de mostrar.',o:[
+ O('Quero','Um sentido por dia.','diario',{diario:1}),O('Quero adaptado','Só o compartilhar em quadradinhos.','quadradinhos',{quadradinhos:1}),O('Não quero','A Fase 2 é numa sentada só.','sem',{})]},
+{a:4,id:'r3',q:'Álbum de figurinhas / Pokémon: completar a coleção',d:'O "efeito coleção": espaços vazios pedem para ser preenchidos.',o:[
+ O('Quero','Álbum de 7.','prog_album',{prog:'album'}),O('Quero adaptado','Só a carta final.','colecao_carta',{col:'carta'}),O('Não quero','','sem',{})]},
+{a:4,id:'r4',q:'Duolingo: celebrações animadas (SEM a sequência que zera)',d:'Celebrar cada pequena conquista mantém o ânimo.',o:[
+ O('Quero','Celebração a cada sentido.','rec_sentido',{rec:'sentido'}),O('Quero adaptado','Só no final.','final_pico',{final:'pico'}),O('Não quero','','sem',{})]},
+{a:4,id:'r5',q:'Finch: algo vivo que cresce com você',d:'Cuidar de algo cria vínculo (uma plantinha de luz que cresce a cada sentido).',o:[
+ O('Quero','Uma plantinha de 7 folhas.','mascote',{mascote:1}),O('Quero adaptado','Só a imagem crescendo.','colecao_pintura',{col:'pintura'}),O('Não quero','','sem',{})]},
+{a:4,id:'r6',q:'Headspace: uma respiração guiada entre os sentidos',d:'Uma pausa de 3 segundos reinicia a atenção e combina com a marca.',o:[
+ O('Quero','Respiração entre sentidos.','respira',{pausa:1}),O('Quero adaptado','Só uma, no meio.','respira',{pausa:'meio'}),O('Não quero','Fica longo.','sem',{pausa:0})]},
+{a:4,id:'r7',q:'Jogos contemplativos (Alto, Journey): música ambiente e transições lentas',d:'Beleza e calma também prendem: a pessoa fica porque é gostoso estar ali.',o:[
+ O('Quero','Som ambiente suave.','ambiente',{ambiente:1}),O('Quero adaptado','Só nas transições.','ambiente',{ambiente:'trans'}),O('Não quero','','sem',{ambiente:0})]},
+/* ALA 6 · CURIOSIDADE E RITMO */
+{a:5,id:'c1',q:'Qual o ritmo dos toques?',d:'Em 3 a 5 minutos, ritmo é tudo.',o:[
+ O('Rápido e animado','Toques seguidos, energia.','ritmo_rapido',{ritmo:'rapido'}),
+ O('Médio','Equilíbrio.','fb_luz',{ritmo:'medio'}),
+ O('Lento e contemplativo','Cada toque com espaço.','ritmo_lento',{ritmo:'lento'})]},
+{a:5,id:'c2',q:'Quantas decisões por sentido?',d:'Menos decisões = menos cansaço. Mais decisões = mais dados.',o:[
+ O('Ordenar as 7 (7 toques)','Ordem completa.','fb_luz',{toques:7}),
+ O('Só o pódio: 1º, 2º e 3º','Rápido: cabe em 3 minutos.','top3',{toques:3}),
+ O('Duelos (a ordem sai sozinha)','Escolhas fáceis.','duelo',{desafio:'duelo'})]},
+{a:5,id:'c3',q:'Mostrar a descoberta só pela metade?',d:'"Lacuna de curiosidade": quando a gente sabe metade, PRECISA saber o resto.',o:[
+ O('Sim: "Você é do tipo que… (toque para ver)"','Curiosidade máxima.','lacuna',{lacuna:1}),
+ O('Não, mostra inteira','Direto.','surp_fixa',{lacuna:0})]},
+{a:5,id:'c4',q:'Mostrar um pedaço da Fase 3 no fim?',d:'Um "trailer" cria desejo pelo próximo capítulo.',o:[
+ O('Prévia borrada da Fase 3','Mistério.','gancho_borrado',{teaser:'borrado'}),
+ O('Uma pergunta da Fase 3','"Que lugar o mar te lembra?"','gancho_pergunta',{teaser:'pergunta'}),
+ O('Não','','sem',{teaser:0})]},
+{a:5,id:'c5',q:'Pode pular um sentido?',d:'Liberdade reduz o abandono.',o:[
+ O('Sim, e volta depois','Sem travar.','pular',{pular:1}),
+ O('Não','Completa tudo.','sem',{pular:0})]},
+{a:5,id:'c6',q:'Mostrar o tempo ("leva 3 minutos")?',d:'Saber que é curto faz mais gente começar.',o:[
+ O('Sim, no começo','Promessa de rapidez.','tempo',{tempo:1}),
+ O('Não','Sem relógio.','sem',{tempo:0})]},
+{a:5,id:'c7',q:'Qual curiosidade fica no fim?',d:'Você escolheu que a pessoa termine CURIOSA. Qual pergunta fica na cabeça dela?',o:[
+ O('"Por que você escolheu isso?"','Sobre os motivos.','lacuna',{curio:'porque'}),
+ O('"O que isso diz sobre você?"','Sobre a personalidade.','misterio',{curio:'diz'}),
+ O('"O que vai acontecer com a sua imagem?"','Sobre o app.','gancho_borrado',{curio:'imagem'})]},
+/* ALA 7 · ZONA PROIBIDA */
+{a:6,id:'z1',q:'⚠️ Sequência que zera (streak)',d:'Viciante pela culpa: "Você perdeu 12 dias!". Gera ansiedade e abandono quando quebra. Contra as suas regras.',z:1,o:[
+ O('Entendi, descarto','','streak',{}),O('Versão suave: dias que só somam','"Você já viveu 7 dias de boas sensações" (nunca zera).','soma',{soma:1}),O('Quero assim ⚠️','','streak',{proibido_streak:1})]},
+{a:6,id:'z2',q:'⚠️ Recompensa por sorteio (caça-níquel)',d:'O mais viciante que existe: o cérebro nunca sabe quando vem o prêmio. É o mecanismo das apostas.',z:1,o:[
+ O('Entendi, descarto','','roleta',{}),O('Versão suave: surpresa sobre a pessoa, nunca sorteio','Já está na Ala 1.','surp_pessoal',{surp:'pessoal'}),O('Quero assim ⚠️','','roleta',{proibido_roleta:1})]},
+{a:6,id:'z3',q:'⚠️ Escassez e urgência ("última chance", contagem regressiva)',d:'Gera medo de perder. Funciona, mas a pessoa decide com pressa e se sente pressionada.',z:1,o:[
+ O('Entendi, descarto','','escassez',{}),O('Versão suave: "no seu ritmo"','Sem relógio.','ritmo_lento',{}),O('Quero assim ⚠️','','escassez',{proibido_escassez:1})]},
+{a:6,id:'z4',q:'⚠️ Notificações insistentes',d:'"Sentimos sua falta!" várias vezes por dia. Traz de volta, mas irrita e cansa.',z:1,o:[
+ O('Entendi, descarto','','notifica',{}),O('Versão suave: só se a pessoa pedir, 1 por dia','Respeito.','notifica_suave',{notif:'pedido'}),O('Quero assim ⚠️','','notifica',{proibido_notif:1})]},
+{a:6,id:'z5',q:'⚠️ Ranking competitivo',d:'Comparar quem é "melhor". Motiva poucos e desanima a maioria; boas sensações não são competição.',z:1,o:[
+ O('Entendi, descarto','','ranking',{}),O('Versão suave: "gente como você" (sem ranking)','Já está na Ala 4.','social_frase',{social:'frase'}),O('Quero assim ⚠️','','ranking',{proibido_ranking:1})]},
+{a:6,id:'z6',q:'⚠️ "Só mais um" sem fim (rolagem infinita)',d:'Nunca acaba, então a pessoa nunca para. É o que prende nas redes sociais.',z:1,o:[
+ O('Entendi, descarto','','infinito',{}),O('Versão suave: fase com começo, meio e fim claros','3 a 5 minutos e pronto.','final_calmo',{}),O('Quero assim ⚠️','','infinito',{proibido_infinito:1})]},
+{a:6,id:'z7',q:'⚠️ Culpa e perda ("o seu progresso vai sumir")',d:'Ameaça perder o que já foi feito. Prende pelo medo, não pelo prazer.',z:1,o:[
+ O('Entendi, descarto','','culpa',{}),O('Versão suave: "está tudo guardado, volte quando quiser"','Segurança.','guardado',{}),O('Quero assim ⚠️','','culpa',{proibido_culpa:1})]}];
+
+/* ---------- mini-demonstrações (cada uma cabe numa caixinha) ---------- */
+const AUD4=['Mar','Chuva','Pássaros','Café passando'];
+const tAud=n=>SEN.find(s=>s[0]==='aud')[5].find(t=>t.n===n);
+const artOf=(id,n,cls)=>{const t=SEN.find(s=>s[0]===id)[5].find(x=>x.n===n);A=DEF_A.slice();return `<svg class="${cls||''}" viewBox="0 0 300 300">${t?t.art():''}</svg>`;};
+const CORS=['#FFD23F','#5AB8FF','#FF8A5C','#7DDB8B','#FF6FA3','#A98BFF','#3FE0D0'];
+function vib(p){try{navigator.vibrate&&navigator.vibrate(p||14);}catch(e){}}
+function plim(i,big){const c=ac();if(!c)return;const go=()=>{const t=c.currentTime,f=587*Math.pow(1.06,i||0);tom(c,c.destination,f,t,.22,'sine',.16);tom(c,c.destination,f*2,t+.03,.14,'sine',.05);if(big){tom(c,c.destination,f*1.25,t+.12,.3,'sine',.12);tom(c,c.destination,f*1.5,t+.24,.45,'sine',.12);}};c.state!=='running'?c.resume().then(go):go();}
+function confete(box,cor){const d=document.createElement('div');d.className='confe';d.innerHTML=[...Array(16)].map((_,k)=>`<i style="left:${(k*6.3+3)%100}%;animation-delay:${(k%5)*.07}s;background:${[cor||'#F9CB39','#F4F1EA',CORS[k%7]][k%3]}"></i>`).join('');box.appendChild(d);setTimeout(()=>d.remove(),1600);}
+/* tabuleiro genérico: 4 escolhas para ordenar */
+function tab(box,o){o=o||{};let ord=[];const lista=o.lista||AUD4;
+ const draw=()=>{box.querySelector('.tb').innerHTML=lista.map(n=>{const p=ord.indexOf(n)+1;return `<button class="tt${p?' on':''}" data-n="${n}">${o.semNum?'':`<span class="tn">${p||''}</span>`}${artOf(o.id||'aud',n)}<b>${n}</b></button>`;}).join('');};
+ box.innerHTML=(o.topo||'')+`<div class="tb"></div>`+(o.rodape||'');draw();
+ box.querySelector('.tb').onclick=e=>{const b=e.target.closest('.tt');if(!b)return;const n=b.dataset.n;if(ord.includes(n)){if(o.travado)return;ord=ord.filter(x=>x!==n);draw();o.mudou&&o.mudou(ord);return;}
+  if(ord.length>=lista.length)return;ord.push(n);draw();const nb=box.querySelector(`.tt[data-n="${n}"]`);o.toque&&o.toque(n,ord.length,nb,ord);if(ord.length===lista.length)o.fim&&o.fim(ord);};
+ return {reset:()=>{ord=[];draw();},get ord(){return ord;}};}
+const msg=(box,html,cls)=>{let m=box.querySelector('.dm');if(!m){m=document.createElement('div');m.className='dm';box.appendChild(m);}m.className='dm '+(cls||'');m.innerHTML=html;};
+const DEMOS={
+ fb_som:b=>tab(b,{topo:'<p class="dh">Toque nas escolhas:</p>',toque:(n,i,el)=>{el.classList.add('pop');plim(i);vib();}}),
+ fb_luz:b=>tab(b,{topo:'<p class="dh">Toque nas escolhas:</p>',toque:(n,i,el)=>el.classList.add('pop')}),
+ fb_item:b=>tab(b,{topo:'<p class="dh">Toque (e ouça):</p>',toque:(n,i,el)=>{el.classList.add('pop');para();const t=tAud(n);t&&t.som&&toca(t.som);vib();setTimeout(para,2200);}}),
+ fb_nada:b=>tab(b,{topo:'<p class="dh">Toque nas escolhas:</p>'}),
+ rec_toque:b=>tab(b,{toque:(n,i,el)=>{el.classList.add('pop');plim(i);msg(b,['Boa!','Que escolha!','Hmm, gostoso…','✨ Pronto!'][i-1]);}}),
+ rec_sentido:b=>tab(b,{fim:()=>{plim(4,1);vib([18,40,18]);confete(b);msg(b,'🎉 <b>Audição completa!</b> Uma luz acendeu no seu anel.');}}),
+ rec_final:b=>tab(b,{fim:()=>msg(b,'(nada agora… a festa fica só para o final da fase)')}),
+ susp0:b=>tab(b,{fim:o=>msg(b,`<b>Descoberta:</b> parece que o som que se move (${o[0].toLowerCase()}) te acalma.`)}),
+ susp1:b=>tab(b,{fim:o=>{msg(b,'<span class="carregando">✦ ✦ ✦</span>','susp');setTimeout(()=>{plim(5,1);msg(b,`<b>Descoberta:</b> parece que o som que se move (${o[0].toLowerCase()}) te acalma.`,'rev');},1100);}}),
+ segura:b=>tab(b,{fim:o=>{msg(b,'<button class="hold">Segure para revelar</button>');const h=b.querySelector('.hold');let t=null,k=0;const go=()=>{k=0;t=setInterval(()=>{k+=10;h.style.setProperty('--p',k+'%');if(k>=100){clearInterval(t);plim(5,1);vib([18,40,18]);msg(b,`<b>Descoberta:</b> parece que o som que se move (${o[0].toLowerCase()}) te acalma.`,'rev');}},90);};const st=()=>{clearInterval(t);h.style.setProperty('--p','0%');};h.addEventListener('pointerdown',go);h.addEventListener('pointerup',st);h.addEventListener('pointerleave',st);}}),
+ surp_fixa:b=>tab(b,{fim:o=>msg(b,`<b>A sua nº 1:</b> ${o[0]}.`)}),
+ surp_varia:b=>{let k=0;const V=[o=>`🎨 A sua cor deste sentido é <b style="color:#5AB8FF">azul-mar</b>.`,o=>`🔢 ${o[0]} venceu ${o[3]} por 3 posições.`,o=>`💬 Uma palavra para você: <b>fluir</b>.`];tab(b,{topo:'<p class="dh">Ordene 2 vezes para ver revelações diferentes:</p>',fim:function(o){msg(b,V[k++%3](o),'rev');}});},
+ surp_pessoal:b=>tab(b,{fim:o=>msg(b,`<b>Só sobre você:</b> você colocou ${o[0].toLowerCase()} acima de ${o[3].toLowerCase()}. Parece que você prefere o som que ${o[0]==='Mar'||o[0]==='Chuva'?'vem da natureza':'vem de dentro de casa'}.`,'rev')}),
+ desafio0:b=>tab(b,{}),
+ adivinha:b=>{b.innerHTML=`<p class="dh">Antes: qual você acha que vai ser a sua nº 1?</p><div class="chips">${AUD4.map(n=>`<button class="ch" data-g="${n}">${n}</button>`).join('')}</div>`;b.querySelector('.chips').onclick=e=>{const c=e.target.closest('.ch');if(!c)return;const g=c.dataset.g;const box=document.createElement('div');b.innerHTML='';b.appendChild(box);tab(box,{topo:`<p class="dh">Você apostou em <b>${g}</b>. Agora ordene:</p>`,fim:o=>{if(o[0]===g){plim(5,1);confete(b);msg(box,'🎯 <b>Acertou!</b> Você se conhece bem.','rev');}else msg(box,`Interessante… você apostou em ${g}, mas escolheu <b>${o[0]}</b>.`,'rev');}});};},
+ duelo:b=>{let S=[AUD4[0]],P=AUD4.slice(1),lo=0,hi=1;const go=()=>{if(!P.length){b.innerHTML=`<p class="dh">A ordem saiu sozinha:</p><ol class="ol">${S.map(x=>`<li>${x}</li>`).join('')}</ol>`;return;}const m=Math.floor((lo+hi)/2);const x=P[0],y=S[m];b.innerHTML=`<p class="dh">Qual você prefere?</p><div class="du">${[x,y].map(n=>`<button class="dd" data-n="${n}">${artOf('aud',n)}<b>${n}</b></button>`).join('<span>ou</span>')}</div>`;b.querySelector('.du').onclick=e=>{const d=e.target.closest('.dd');if(!d)return;plim(2);if(d.dataset.n===x)hi=m;else lo=m+1;if(lo>=hi){S.splice(lo,0,x);P.shift();lo=0;hi=S.length;}go();};};go();},
+ multi:b=>tab(b,{toque:(n,i,el)=>{el.classList.add('pop');para();const t=tAud(n);t&&t.som&&toca(t.som);vib([10,30,10]);b.style.background='radial-gradient(circle at 50% 30%,#1d4a7a,#0D1430)';setTimeout(para,1600);}}),
+ fundo:b=>{let k=0;b.innerHTML='<p class="dh">Toque para passar de sentido:</p><button class="btn">Próximo sentido →</button><div class="fd"></div>';const f=b.querySelector('.fd');const nm=['Visão','Audição','Tato','Olfato','Paladar','Equilíbrio','Corpo'];const up=()=>{f.style.background=`radial-gradient(circle at 50% 30%,${CORS[k]}55,#0D1430 70%)`;f.textContent=nm[k];};up();b.querySelector('.btn').onclick=()=>{k=(k+1)%7;up();};},
+ mono:b=>tab(b,{}),
+ nov_igual:b=>{b.innerHTML='<p class="dh">Os 7 sentidos com a mesma mecânica: toque em ordem.</p><div class="rowi">'+CORS.map(c=>`<i style="background:${c}"></i>`).join('')+'</div>';},
+ nov_varia:b=>{b.innerHTML='<p class="dh">Um jogo por sentido:</p><ol class="ol"><li>👁️ Visão: duelos de imagens</li><li>👂 Audição: de olhos fechados, só ouvindo</li><li>✋ Tato: arrastar para a balança</li><li>👃 Olfato: "qual cheiro de casa?"</li><li>👅 Paladar: montar o prato</li><li>🌀 Equilíbrio: inclinar o celular</li><li>🧘 Corpo: respirar e escolher</li></ol>';},
+ nov_meio:b=>{b.innerHTML='<p class="dh">Sentidos 1 a 3: tocar em ordem. No 4º, muda para duelos. No 7º, uma surpresa.</p><div class="rowi">'+CORS.map((c,i)=>`<i style="background:${c};${i===3?'outline:3px solid #fff':''}"></i>`).join('')+'</div>';},
+ prog_barra:b=>{let k=0;b.innerHTML='<div class="bar"><i></i></div><button class="btn">Completar um sentido</button>';b.querySelector('.btn').onclick=()=>{k=Math.min(7,k+1);b.querySelector('.bar i').style.width=(k/7*100)+'%';plim(k);};},
+ prog_anel:b=>{let k=0;b.innerHTML=`<div class="anel">${CORS.map((c,i)=>`<i style="--c:${c};transform:rotate(${i*51.4}deg) translate(46px) rotate(-${i*51.4}deg)"></i>`).join('')}</div><button class="btn">Completar um sentido</button>`;b.querySelector('.btn').onclick=()=>{if(k>=7)return;b.querySelectorAll('.anel i')[k].classList.add('ok');k++;plim(k,k===7);if(k===7)confete(b);};},
+ prog_album:b=>{let k=0;b.innerHTML=`<div class="alb">${CORS.map(c=>`<div class="sl" style="--c:${c}"></div>`).join('')}</div><button class="btn">Ganhar uma figurinha</button>`;b.querySelector('.btn').onclick=()=>{if(k>=7)return;const s=b.querySelectorAll('.sl')[k];s.classList.add('ok','pop');s.innerHTML=artOf(SEN[k][0],SEN[k][5][0].n);k++;plim(k,k===7);if(k===7)confete(b);};},
+ prog0:b=>{b.innerHTML='<p class="dh">Sem indicador: a pessoa não sabe quanto falta.</p>';},
+ sem:b=>{b.innerHTML='<p class="dh">Sem este recurso: a fase segue simples, sem esse elemento.</p>';},
+ quase:b=>{let k=5;b.innerHTML='<div class="bar"><i style="width:71%"></i></div><button class="btn">Completar</button><div class="dm"></div>';b.querySelector('.btn').onclick=()=>{k++;b.querySelector('.bar i').style.width=(k/7*100)+'%';plim(k,k===7);msg(b,k===6?'🔥 <b>Falta só 1!</b>':'✓ Todos os 7!','rev');};},
+ colecao_carta:b=>tab(b,{fim:o=>{plim(5,1);msg(b,`<div class="carta">${artOf('aud',o[0])}<b>${o[0]}</b><small>Carta 2 de 7 · Audição</small></div>`,'rev');}}),
+ colecao_pintura:b=>{let k=0;b.innerHTML=`<div class="pint">${CORS.map((c,i)=>`<i style="--c:${c};left:${8+i*12}%;top:${20+(i%3)*20}%"></i>`).join('')}</div><button class="btn">Completar um sentido</button>`;b.querySelector('.btn').onclick=()=>{if(k>=7)return;b.querySelectorAll('.pint i')[k].classList.add('ok');k++;plim(k,k===7);};},
+ ctrl_livre:b=>{b.innerHTML='<p class="dh">Por qual sentido você quer começar?</p><div class="chips">'+SEN.map(s=>`<button class="ch" style="border-color:${s[3]}">${s[2]} ${s[1]}</button>`).join('')+'</div>';b.onclick=e=>{const c=e.target.closest('.ch');if(c){b.querySelectorAll('.ch').forEach(x=>x.classList.remove('on'));c.classList.add('on');plim(3);}};},
+ ctrl_fixa:b=>{b.innerHTML='<p class="dh">Ordem fixa:</p><div class="rowi">'+SEN.map(s=>`<span>${s[2]}</span>`).join(' → ')+'</div>';},
+ ctrl_fav:b=>{b.innerHTML='<p class="dh">"Você amou o <b>mar</b> na Fase 1. Vamos começar pela Audição."</p>';},
+ acerto_festa:b=>{b.innerHTML='<button class="btn">Simular acerto</button>';b.querySelector('.btn').onclick=()=>{plim(5,1);vib([18,40,18]);confete(b);msg(b,'🎯 <b>Você se conhece bem!</b>','rev');};},
+ acerto_calmo:b=>{b.innerHTML='<button class="btn">Simular acerto</button>';b.querySelector('.btn').onclick=()=>msg(b,'Interessante… você sabia. Parece que essa escolha é antiga em você.','rev');},
+ misterio:b=>{b.innerHTML='<div class="mist"><div class="bl">O que as suas 49 escolhas dizem sobre você: você é alguém que…</div><span>🔒 abre no fim da fase</span></div><button class="btn">Terminar a fase</button>';b.querySelector('.btn').onclick=()=>{const m=b.querySelector('.mist');m.classList.add('aberto');m.querySelector('span').textContent='';plim(5,1);};},
+ nomeia:b=>{b.innerHTML='<div class="pint mini">'+CORS.map((c,i)=>`<i class="ok" style="--c:${c};left:${8+i*12}%;top:${20+(i%3)*20}%"></i>`).join('')+'</div><input class="inp" placeholder="Dê um nome à sua imagem" maxlength="30"><div class="dm"></div>';b.querySelector('.inp').oninput=e=>msg(b,`“${esc(e.target.value)}”, por você`);},
+ moldura:b=>{b.innerHTML='<div class="mold"><div class="pint mini">'+CORS.map((c,i)=>`<i class="ok" style="--c:${c};left:${8+i*12}%;top:${20+(i%3)*20}%"></i>`).join('')+'</div></div><div class="chips">'+['Dourada','Madeira','Luz','Nenhuma'].map(m=>`<button class="ch">${m}</button>`).join('')+'</div>';b.querySelector('.chips').onclick=e=>{const c=e.target.closest('.ch');if(!c)return;b.querySelector('.mold').dataset.m=c.textContent;};},
+ final_pico:b=>{b.innerHTML='<button class="btn pri">Ver o final</button>';b.querySelector('.btn').onclick=()=>{b.innerHTML='<div class="pint grande">'+CORS.map((c,i)=>`<i class="ok" style="--c:${c};left:${6+i*13}%;top:${15+(i%3)*25}%;animation-delay:${i*.12}s"></i>`).join('')+'</div><p class="dh" style="text-align:center"><b>A sua imagem dos 7 sentidos!</b></p>';plim(6,1);vib([20,40,20,40,60]);confete(b);setTimeout(()=>confete(b,'#5AB8FF'),500);};},
+ final_calmo:b=>{b.innerHTML='<button class="btn">Ver o final</button>';b.querySelector('.btn').onclick=()=>{b.innerHTML='<div class="pint grande lento">'+CORS.map((c,i)=>`<i class="ok" style="--c:${c};left:${6+i*13}%;top:${15+(i%3)*25}%;animation-delay:${i*.6}s"></i>`).join('')+'</div><p class="dh fadein" style="text-align:center">Respira… essa é você.</p>';};},
+ wrapped:b=>{const T=[['A sua Fase 2','em 3 telas'],['Seu som nº 1','🌊 Mar'],['Você é','do tipo que sente pelo corpo inteiro'],['E agora?','O que isso diz sobre você? → Fase 3']];let k=0;const go=()=>{b.innerHTML=`<div class="story" style="--c:${CORS[k*2%7]}"><div class="sbar">${T.map((_,i)=>`<i class="${i<=k?'ok':''}"></i>`).join('')}</div><small>${T[k][0]}</small><b>${T[k][1]}</b><span>toque para avançar</span></div>`;b.querySelector('.story').onclick=()=>{k=(k+1)%T.length;plim(k);go();};};go();},
+ pico4:b=>{b.innerHTML='<div class="rowi">'+CORS.map((c,i)=>`<i style="background:${c};${i===3?'transform:scale(1.6);box-shadow:0 0 16px '+c:''}"></i>`).join('')+'</div><button class="btn">Chegar ao 4º sentido</button>';b.querySelector('.btn').onclick=()=>{plim(5,1);confete(b,'#7DDB8B');msg(b,'✨ <b>Metade do caminho!</b> Ganhou um presente: o seu cheiro nº 1 vira o perfume do seu app.','rev');};},
+ abre_pergunta:b=>{b.innerHTML='<div class="big f">Você sabe qual é o seu som favorito <i>de verdade</i>?</div><button class="btn pri">Descobrir →</button>';},
+ abre_jogo:b=>tab(b,{topo:'<p class="dh">(abre direto aqui, sem texto)</p>'}),
+ brisa_fala:b=>{b.innerHTML=`<div class="brisa"><div class="luzes7">${CORS.map((c,i)=>`<i style="background:${c};animation-delay:${i*.15}s"></i>`).join('')}</div><p class="fadein">"Agora vamos descobrir o que você mais gosta, entre o que você já gosta."</p></div>`;},
+ lembra:b=>tab(b,{lista:AUD4.slice(0,3),fim:o=>msg(b,`<b>${o[0]}</b> te lembra… <div class="chips"><button class="ch">📍 um lugar</button><button class="ch">🧑 uma pessoa</button><button class="ch">📅 uma época</button></div>`)}),
+ emo:b=>tab(b,{lista:AUD4.slice(0,3),fim:()=>msg(b,'Como você se sente agora? <div class="chips"><button class="ch">😌</button><button class="ch">😊</button><button class="ch">🤩</button><button class="ch">😐</button></div>')}),
+ reviver:b=>{b.innerHTML=`<p class="dh">Na Fase 1, a sua nº 1 em Audição foi:</p><div class="carta">${artOf('aud','Chuva')}<b>Chuva</b></div><p class="dh">Ainda é?</p><div class="chips"><button class="ch">Sim!</button><button class="ch">Mudou…</button></div>`;b.querySelector('.chips').onclick=e=>{if(e.target.closest('.ch'))msg(b,'Vamos ver na ordem de agora 👀','rev');};},
+ gancho_pergunta:b=>{b.innerHTML='<div class="big f">O que a sua nº 1 diz sobre você?</div><p class="dh">Descubra na Fase 3.</p>';},
+ gancho_borrado:b=>{b.innerHTML='<div class="mist"><div class="bl">Fase 3 · As suas lembranças: o mar te leva para… a praia da sua infância e…</div><span>🔒 Fase 3</span></div>';},
+ social_num:b=>tab(b,{fim:o=>msg(b,`🤝 <b>${SOC.top.aud[o[0]]||1} de ${SOC.n}</b> pessoas também escolheram <b>${o[0].toLowerCase()}</b> como nº 1.`,'rev')}),
+ social_frase:b=>tab(b,{fim:o=>msg(b,`🤝 Muita gente também ama <b>${o[0].toLowerCase()}</b>. Você não está só.`,'rev')}),
+ raro:b=>tab(b,{fim:o=>msg(b,'💎 <b>Só você</b> colocou os sons nesta ordem.','rev')}),
+ share:b=>{b.innerHTML=`<div class="stc"><div class="pint mini">${CORS.map((c,i)=>`<i class="ok" style="--c:${c};left:${8+i*12}%;top:${20+(i%3)*20}%"></i>`).join('')}</div><b>Os meus 7 sentidos</b><small>7entidos.com.br</small></div><button class="btn">📲 Compartilhar nos Stories</button>`;},
+ amigo:b=>{b.innerHTML='<p class="dh">"Eu fiz a minha. Faz a sua e vamos ver se combinamos? 🌊☕"</p><button class="btn">💬 Mandar no WhatsApp</button><p class="dh small">Quando o amigo terminar: "Vocês combinam em 4 de 7 sentidos!"</p>';},
+ presente:b=>{b.innerHTML='<p class="dh">Mande uma boa sensação:</p><div class="carta">'+artOf('aud','Mar')+'<b>"Hoje, ouça o mar 5 minutos. Lembrei de você."</b></div><button class="btn">🎁 Enviar</button>';},
+ mural:b=>{b.innerHTML='<div class="mur">'+[...Array(9)].map((_,k)=>`<div class="pint mini" style="--r:${k*40}deg">${CORS.map((c,i)=>`<i class="ok" style="--c:${CORS[(i+k)%7]};left:${8+((i*k+3)%7)*12}%;top:${10+((i+k)%4)*20}%"></i>`).join('')}</div>`).join('')+'</div><p class="dh small">Imagens anônimas de outras pessoas.</p>';},
+ brisa_comenta:b=>tab(b,{toque:(n,i)=>{if(i===1)msg(b,`<span class="luzes7 mini">${CORS.map(c=>`<i style="background:${c}"></i>`).join('')}</span> "${n} primeiro? Que bonito."`);}}),
+ diario:b=>{b.innerHTML='<div class="cal">'+SEN.map((s,i)=>`<div class="dia${i<2?' ok':''}${i===2?' hoje':''}" style="--c:${s[3]}"><small>Dia ${i+1}</small>${s[2]}</div>`).join('')+'</div><p class="dh small">Um sentido por dia. Hoje: Tato. Amanhã abre o Olfato.</p>';},
+ quadradinhos:b=>{b.innerHTML='<div class="qd">'+SEN.map(s=>[...Array(7)].map((_,k)=>`<i style="background:${s[3]};opacity:${1-k*.12}"></i>`).join('')).join('<br>')+'</div><p class="dh small">7entidos · Fase 2 ✓ (compartilhe sem mostrar as escolhas)</p>';},
+ mascote:b=>{let k=0;b.innerHTML='<div class="planta"><div class="caule"></div></div><button class="btn">Completar um sentido</button>';b.querySelector('.btn').onclick=()=>{if(k>=7)return;const f=document.createElement('i');f.style.cssText=`--c:${CORS[k]};bottom:${12+k*11}%;${k%2?'left':'right'}:50%`;b.querySelector('.planta').appendChild(f);k++;plim(k,k===7);};},
+ respira:b=>{b.innerHTML='<div class="resp"><div class="bola"></div><span>Inspira…</span></div>';const s=b.querySelector('.resp span');let i=0;const T=['Inspira…','Segura…','Solta…'];const t=setInterval(()=>{if(!document.body.contains(b)){clearInterval(t);return;}s.textContent=T[++i%3];},1500);},
+ ambiente:b=>{b.innerHTML='<button class="btn">▶ Ouvir o ambiente</button><p class="dh small">Som suave de fundo e transições lentas entre os sentidos.</p>';b.querySelector('.btn').onclick=()=>{toca('tigela');};},
+ ritmo_rapido:b=>tab(b,{toque:(n,i,el)=>{el.classList.add('pop');plim(i);}}),
+ ritmo_lento:b=>{b.innerHTML='<div class="tb lento">'+AUD4.map((n,i)=>`<div class="tt fadein" style="animation-delay:${i*.8}s">${artOf('aud',n)}<b>${n}</b></div>`).join('')+'</div>';},
+ top3:b=>tab(b,{topo:'<p class="dh">Só o pódio: toque em 3.</p>',toque:(n,i,el,o)=>{el.classList.add('pop');plim(i);if(i===3){msg(b,'🏆 Pódio pronto!','rev');}}}),
+ lacuna:b=>tab(b,{fim:o=>{msg(b,'<div class="lac">Você é do tipo que <span class="blur">sente o mundo pelo movimento</span> <button class="ch">toque para ver</button></div>');b.querySelector('.lac .ch').onclick=e=>{b.querySelector('.blur').classList.add('vis');e.target.remove();plim(5,1);};}}),
+ pular:b=>{b.innerHTML='<div class="chips"><button class="ch">⏭️ Pular este sentido</button></div><p class="dh small">"Tudo bem! Ele fica te esperando no fim."</p>';},
+ tempo:b=>{b.innerHTML='<div class="big f">⏱️ Leva 3 minutos.</div><button class="btn pri">Começar</button>';},
+ streak:b=>{b.innerHTML='<div class="zp"><div class="big">🔥 12 dias seguidos</div><p>Se você não voltar hoje, <b>perde tudo</b> e volta para 0.</p></div>';},
+ soma:b=>{b.innerHTML='<div class="big f">✨ 7 dias de boas sensações</div><p class="dh">Só soma. Nunca zera. Volte quando quiser.</p>';},
+ roleta:b=>{b.innerHTML='<div class="zp"><div class="rol">🎰</div><button class="btn">Girar para ganhar um prêmio</button></div>';b.querySelector('.btn').onclick=()=>{const r=b.querySelector('.rol');r.classList.add('gira');setTimeout(()=>{r.classList.remove('gira');r.textContent=Math.random()<.3?'🎁 Ganhou!':'😕 Não foi dessa vez… tente de novo!';},900);};},
+ escassez:b=>{let s=59;b.innerHTML='<div class="zp"><div class="big">⏰ ÚLTIMA CHANCE</div><p>Termine em <b class="ct">00:59</b> ou perde a sua imagem!</p></div>';const t=setInterval(()=>{if(!document.body.contains(b)){clearInterval(t);return;}s=Math.max(0,s-1);const c=b.querySelector('.ct');c&&(c.textContent='00:'+String(s).padStart(2,'0'));},1000);},
+ notifica:b=>{b.innerHTML='<div class="zp nt">'+['Sentimos sua falta! 😢','Você não terminou a Fase 2!','Seu anel está se apagando…','Volte agora!!'].map((t,i)=>`<div class="push" style="animation-delay:${i*.4}s">🔔 7entidos · ${t}</div>`).join('')+'</div>';},
+ notifica_suave:b=>{b.innerHTML='<div class="push ok">🔔 7entidos · A sua Fase 3 está pronta, quando quiser. (porque você pediu)</div>';},
+ ranking:b=>{b.innerHTML='<div class="zp"><ol class="ol rk"><li>🥇 Ana · 98 pts</li><li>🥈 João · 91 pts</li><li>…</li><li>😞 Você · 23º lugar</li></ol></div>';},
+ infinito:b=>{b.innerHTML='<div class="zp inf">'+[...Array(30)].map((_,i)=>`<div>Só mais um sentido… ${i+8}</div>`).join('')+'</div>';},
+ culpa:b=>{b.innerHTML='<div class="zp"><div class="big">😟 O seu progresso vai sumir</div><p>Se sair agora, você perde as suas escolhas.</p></div>';},
+ guardado:b=>{b.innerHTML='<div class="big f">💛 Está tudo guardado.</div><p class="dh">Volte quando quiser. No seu ritmo.</p>';}
+};
+function demo(key,box){box.innerHTML='';box.style.background='';box.onclick=null;try{(DEMOS[key]||DEMOS.sem)(box);}catch(e){box.innerHTML='<p class="dh">(demonstração indisponível)</p>';}}
+
+/* ---------- protótipo automático da Fase 2, montado com as escolhas ---------- */
+let GM=null;
+const ESC=window.DANIEL_ESC;
+const tileDe=(id,n)=>SEN.find(s=>s[0]===id)[5].find(t=>t.n===n);
+function abreJogo(F){para();GM={F,i:-1,ord:{},adv:{},etapa:'intro',revs:[],nome:''};
+ const lista=SEN.map(s=>s[0]);GM.seq=lista;GM.toques=F.toques===3?3:7;
+ document.body.insertAdjacentHTML('beforeend','<div id="jogo" class="jogo"><div id="jg"></div></div>');document.body.style.overflow='hidden';
+ if(F.ambiente===1){try{toca('tigela');}catch(e){}}jr();}
+function fechaJogo(){para();const j=document.getElementById('jogo');j&&j.remove();document.body.style.overflow='';}
+const JG=()=>document.getElementById('jg');
+function progresso(){const F=GM.F,n=Object.keys(GM.ord).filter(k=>GM.ord[k].length>=GM.toques).length;
+ if(F.prog==='barra')return `<div class="bar"><i style="width:${n/7*100}%"></i></div>`;
+ if(F.prog==='album')return `<div class="alb mini">${SEN.map(s=>{const o=GM.ord[s[0]];return `<div class="sl${o&&o.length>=GM.toques?' ok':''}" style="--c:${s[3]}">${o&&o.length>=GM.toques?artOf(s[0],o[0]):''}</div>`;}).join('')}</div>`;
+ if(F.prog===0)return '';
+ return `<div class="rowi">${SEN.map((s,k)=>{const o=GM.ord[s[0]];const ok=o&&o.length>=GM.toques;return `<i style="background:${ok?s[3]:'#18224A'};${ok?'box-shadow:0 0 10px '+s[3]:''}${k===GM.i?';outline:2px solid #fff':''}"></i>`;}).join('')}</div>`;}
+function misterioCard(){return GM.F.misterio?`<div class="mist mini"><div class="bl">O que as suas escolhas dizem sobre você…</div><span>🔒 abre no fim</span></div>`:'';}
+function jr(){const F=GM.F;const b=JG();const cab=`<div class="jtop"><button class="x" data-j="sair">✕</button>${progresso()}</div>`;
+ if(GM.etapa==='intro'){const abre=F.abre==='pergunta'?`<div class="big f">Você sabe qual é o seu som favorito <i>de verdade</i>?</div>`:F.abre==='brisa'?`<div class="brisa"><div class="luzes7">${CORS.map((c,i)=>`<i style="background:${c};animation-delay:${i*.15}s"></i>`).join('')}</div><p>"Agora vamos descobrir o que você mais gosta, entre o que você já gosta."</p></div>`:`<div class="big f">Fase 2</div>`;
+  b.innerHTML=cab+`<div class="jc">${abre}${F.tempo?'<p class="mute">⏱️ Leva 3 minutos.</p>':''}${misterioCard()}<button class="btn pri big" data-j="vai">Começar →</button></div>`;
+  if(F.abre==='jogo'){GM.etapa='sentido';GM.i=0;jr();}return;}
+ if(GM.etapa==='escolhe'){b.innerHTML=cab+`<div class="jc"><h2 class="f">Por qual sentido você quer começar?</h2><div class="chips">${SEN.map(s=>GM.ord[s[0]]&&GM.ord[s[0]].length>=GM.toques?'':`<button class="ch" data-j="sen" data-k="${s[0]}" style="border-color:${s[3]}">${s[2]} ${s[1]}</button>`).join('')}</div></div>`;return;}
+ if(GM.etapa==='sentido'){const [id,sen,ic,cor]=SEN.find(s=>s[0]===GM.seq[GM.i]);const L=ESC[id].slice();
+  b.style.setProperty('--fundo',F.multi==='fundo'||F.multi==='tudo'?cor+'40':'transparent');
+  if(F.desafio==='adivinha'&&!GM.adv[id]){b.innerHTML=cab+`<div class="jc"><div class="k" style="color:${cor}">${ic} ${sen}</div><h2 class="f">Antes: qual você acha que vai ser a sua nº 1?</h2><div class="jg2">${L.map(n=>`<button class="tt" data-j="adv" data-n="${esc(n)}">${artOf(id,n)}<b>${esc(n)}</b></button>`).join('')}</div></div>`;return;}
+  if(F.reviver&&!GM.rev1){GM.rev1=1;}
+  const o=GM.ord[id]||(GM.ord[id]=[]);
+  if(F.desafio==='duelo'){if(!GM.du||GM.du.id!==id){const M=L.slice().sort(()=>Math.random()-.5);GM.du={id,S:[M[0]],P:M.slice(1),lo:0,hi:1};}
+   const d=GM.du;if(!d.P.length){GM.ord[id]=d.S.slice();return depoisSentido();}const m=Math.floor((d.lo+d.hi)/2);const x=d.P[0],y=d.S[m];
+   b.innerHTML=cab+`<div class="jc"><div class="k" style="color:${cor}">${ic} ${sen}</div><h2 class="f">Qual você prefere?</h2><div class="du">${[x,y].map(n=>{const t=tileDe(id,n);return `<button class="dd" data-j="du" data-n="${esc(n)}">${artOf(id,n)}<b>${esc(n)}</b>${t&&t.som?`<span class="pl" data-a="play" data-som="${t.som}">▶</span>`:''}</button>`;}).join('<span>ou</span>')}</div>${quaseMsg()}</div>`;return;}
+  const mix=GM.mix&&GM.mix[id]||((GM.mix=GM.mix||{})[id]=L.slice().sort(()=>Math.random()-.5));
+  b.innerHTML=cab+`<div class="jc"><div class="k" style="color:${cor}">${ic} ${sen}</div><h2 class="f">${GM.toques===3?'Escolha o seu pódio: 1º, 2º e 3º':'Toque na ordem: da que você mais gosta para a que menos gosta'}</h2>${quaseMsg()}
+  <div class="jg2">${mix.map(n=>{const p=o.indexOf(n)+1;const t=tileDe(id,n);return `<button class="tt${p?' on':''}" data-j="toc" data-n="${esc(n)}" style="--c:${cor}"><span class="tn">${p||''}</span>${artOf(id,n)}<b>${esc(n)}</b>${t&&t.som?`<span class="pl" data-a="play" data-som="${t.som}">▶</span>`:''}</button>`;}).join('')}</div>
+  ${F.pular?'<button class="btn" data-j="pula">⏭️ Pular este sentido</button>':''}${F.brisa==='comenta'&&o.length===1?`<div class="dm"><span class="luzes7 mini">${CORS.map(c=>`<i style="background:${c}"></i>`).join('')}</span> "${esc(o[0])} primeiro? Que bonito."</div>`:''}</div>`;return;}
+ if(GM.etapa==='rev'){const [id,sen,ic,cor]=SEN.find(s=>s[0]===GM.seq[GM.i]);const o=GM.ord[id];const R1=revelacao(id,o);let h=`<div class="jc rv"><div class="k" style="color:${cor}">${ic} ${sen} · pronto!</div>`;
+  if(F.desafio==='adivinha'){h+=GM.adv[id]===o[0]?(F.acerto==='calmo'?`<p>Interessante… você sabia: <b>${esc(o[0])}</b>.</p>`:`<p class="big">🎯 Acertou! Você se conhece bem.</p>`):`<p>Você apostou em ${esc(GM.adv[id])}, mas a sua nº 1 é <b>${esc(o[0])}</b>. 👀</p>`;}
+  if(F.reviver&&ESC[id][0]!==o[0])h+=`<p class="mute">Na Fase 1 a sua nº 1 era ${esc(ESC[id][0])}. Mudou!</p>`;
+  if(F.rec!=='final'&&F.rec!=null||F.col)h+=`<div class="carta">${artOf(id,o[0])}<b>${esc(o[0])}</b><small>${F.col==='carta'?'Carta '+(Object.keys(GM.ord).length)+' de 7':'A sua nº 1'}</small></div>`;
+  h+=F.lacuna?`<div class="lac">${R1.a} <span class="blur">${R1.b}</span> <button class="ch" data-j="lac">toque para ver</button></div>`:`<p class="rvt">${R1.a} <b>${R1.b}</b></p>`;
+  if(F.social==='num')h+=`<p>🤝 <b>${(SOC.top[id]||{})[o[0]]||1} de ${SOC.n}</b> pessoas também escolheram ${esc(o[0].toLowerCase())} como nº 1.</p>`;
+  if(F.social==='frase')h+=`<p>🤝 Muita gente também ama ${esc(o[0].toLowerCase())}. Você não está só.</p>`;
+  if(F.raro)h+=`<p>💎 Só você colocou nesta ordem.</p>`;
+  if(F.pico4&&Object.keys(GM.ord).length===4)h+=`<p class="big">✨ Metade do caminho! Presente: o seu cheiro nº 1 vira o perfume do seu app.</p>`;
+  if(F.emo)h+=`<p class="small mute">Como você se sente?</p><div class="chips"><button class="ch">😌</button><button class="ch">😊</button><button class="ch">🤩</button></div>`;
+  if(F.lembra)h+=`<p class="small mute">${esc(o[0])} te lembra…</p><div class="chips"><button class="ch">📍 lugar</button><button class="ch">🧑 pessoa</button><button class="ch">📅 época</button></div>`;
+  h+=`<button class="btn pri big" data-j="seg">${Object.keys(GM.ord).filter(k=>GM.ord[k].length>=GM.toques).length>=7?'Ver o final →':'Próximo sentido →'}</button></div>`;
+  if(F.susp===1||F.susp==='segura'){b.innerHTML=cab+`<div class="jc rv"><div class="k" style="color:${cor}">${ic} ${sen}</div>${F.susp==='segura'?'<button class="hold" data-j="hold">Segure para revelar</button>':'<div class="carregando big">✦ ✦ ✦</div>'}</div>`;
+   if(F.susp===1)setTimeout(()=>{b.innerHTML=cab+h;plim(5,1);celebra(cor);},1100);else{const hb=b.querySelector('.hold');let t,k=0;hb.addEventListener('pointerdown',()=>{t=setInterval(()=>{k+=10;hb.style.setProperty('--p',k+'%');if(k>=100){clearInterval(t);b.innerHTML=cab+h;plim(5,1);celebra(cor);}},90);});['pointerup','pointerleave'].forEach(ev=>hb.addEventListener(ev,()=>{clearInterval(t);k=0;hb.style.setProperty('--p','0%');}));}}
+  else{b.innerHTML=cab+h;celebra(cor);}return;}
+ if(GM.etapa==='respira'){b.innerHTML=cab+`<div class="jc"><div class="resp"><div class="bola"></div><span>Respira…</span></div></div>`;setTimeout(()=>{GM.etapa=GM.F.ctrl==='livre'?'escolhe':'sentido';jr();},3200);return;}
+ if(GM.etapa==='fim')return fim();}
+function quaseMsg(){const n=Object.keys(GM.ord).filter(k=>GM.ord[k].length>=GM.toques).length;return GM.F.quase&&n===6?'<p class="quase">🔥 Falta só 1!</p>':'';}
+function celebra(cor){if(GM.F.rec==='sentido'||GM.F.rec==='toque'){const j=document.getElementById('jogo');confete(j,cor);vib([18,40,18]);plim(6,1);}}
+function revelacao(id,o){const F=GM.F;const a=o[0],z=o[o.length-1];
+ const T={mapa:['Parece que os seus olhos procuram','luz e horizonte.'],aud:['Parece que você se acalma com sons','que se movem, como '+a.toLowerCase()+'.'],tato:['O seu toque prefere','o macio ao firme.'],olf:['O seu nariz guarda','cheiros de casa e de memória.'],pal:['O seu paladar escolhe primeiro','o conforto ('+a.toLowerCase()+').'],equi:['O seu corpo gosta de','balançar no próprio ritmo.'],corpo:['O seu corpo pede','acolhimento.']};
+ if(F.surp==='pessoal')return {a:`Você colocou ${a.toLowerCase()} acima de ${z.toLowerCase()}.`,b:T[id][0].toLowerCase()+' '+T[id][1]};
+ if(F.surp==='varia')return {a:['🎨 A cor deste sentido em você:','🔢 Distância entre a 1ª e a última:','💬 Uma palavra para você:'][GM.i%3],b:['dourada','6 posições','fluir'][GM.i%3]};
+ return {a:'A sua nº 1:',b:a+'.'};}
+function depoisSentido(){GM.etapa='rev';jr();}
+function proximo(){const n=Object.keys(GM.ord).filter(k=>GM.ord[k].length>=GM.toques).length;if(n>=7){GM.etapa='fim';return jr();}
+ GM.du=null;const rest=GM.seq.filter(k=>!(GM.ord[k]&&GM.ord[k].length>=GM.toques));GM.i=GM.seq.indexOf(rest[0]);
+ if(GM.F.pausa===1||(GM.F.pausa==='meio'&&n===3)){GM.etapa='respira';return jr();}GM.etapa=GM.F.ctrl==='livre'?'escolhe':'sentido';jr();}
+function fim(){const F=GM.F;const b=JG();const favs=SEN.map(s=>[s,GM.ord[s[0]][0]]);
+ const pint=`<div class="pint grande${F.final==='calmo'?' lento':''}">${favs.map(([s,n],i)=>`<div class="pc ok" style="--c:${s[3]};left:${4+(i%4)*24}%;top:${8+Math.floor(i/4)*44}%;animation-delay:${F.final==='calmo'?i*.6:i*.12}s">${artOf(s[0],n)}</div>`).join('')}</div>`;
+ let h='';
+ if(F.final==='wrapped'){const T=[['A sua Fase 2',`${F.toques===3?21:49} escolhas em ${F.toques===3?'3':'4'} minutos`],['Som nº 1',favs[1][1]],['Cheiro nº 1',favs[3][1]],['O seu corpo pede',favs[6][1]]];GM.ws=GM.ws||0;const w=T[GM.ws];
+  if(GM.ws<T.length){b.innerHTML=`<div class="story big2" data-j="ws" style="--c:${CORS[GM.ws*2%7]}"><div class="sbar">${T.map((_,i)=>`<i class="${i<=GM.ws?'ok':''}"></i>`).join('')}</div><small>${w[0]}</small><b>${esc(w[1])}</b><span>toque para avançar</span></div>`;return;}}
+ h+=`<div class="jc"><div class="k">Fase 2 completa</div><h2 class="f">${F.nomeia&&GM.nome?esc(GM.nome):'A sua imagem dos 7 sentidos'}</h2>${pint}`;
+ if(F.nomeia&&!GM.nome)h+=`<input class="inp" id="nm" placeholder="Dê um nome à sua imagem" maxlength="30"><button class="btn" data-j="nomeia">Salvar nome</button>`;
+ if(F.misterio)h+=`<div class="mist aberto"><div class="bl">O que as suas escolhas dizem: você é alguém que encontra calma no que se move e conforto no que é de casa.</div></div>`;
+ const cur={porque:'Por que você escolheu isso?',diz:'O que isso diz sobre você?',imagem:'O que vai acontecer com a sua imagem?'}[F.curio]||'O que a sua nº 1 diz sobre você?';
+ if(F.gancho==='pergunta'||F.teaser==='pergunta'||F.curio)h+=`<div class="big f">${cur}</div><p class="mute">Descubra na Fase 3.</p>`;
+ if(F.gancho==='borrado'||F.teaser==='borrado')h+=`<div class="mist"><div class="bl">Fase 3 · As suas lembranças: o ${esc(favs[1][1].toLowerCase())} te leva para…</div><span>🔒 Fase 3</span></div>`;
+ if(F.share)h+=`<button class="btn">📲 Compartilhar nos Stories</button>`;
+ if(F.amigo)h+=`<button class="btn">💬 Mandar para um amigo e ver se combinamos</button>`;
+ if(F.brisa==='fim'||F.brisa==='comenta')h+=`<div class="brisa"><div class="luzes7">${CORS.map((c,i)=>`<i style="background:${c};animation-delay:${i*.15}s"></i>`).join('')}</div><p>"Que imagem linda. Ela é só sua."</p></div>`;
+ h+=`<div class="row"><button class="btn" data-j="denovo">Jogar de novo</button><button class="btn pri" data-j="sair">Voltar à sala</button></div></div>`;
+ b.innerHTML=h;if(F.final==='pico'||F.rec){const j=document.getElementById('jogo');plim(6,1);vib([20,40,20,40,60]);confete(j);setTimeout(()=>confete(j,'#5AB8FF'),500);}}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-j]');if(!b||!GM)return;const a=b.dataset.j;const F=GM.F;
+ if(a==='sair'){fechaJogo();return;}
+ if(a==='denovo'){const f=GM.F;fechaJogo();abreJogo(f);return;}
+ if(a==='vai'){GM.i=0;GM.etapa=F.ctrl==='livre'?'escolhe':'sentido';if(F.ctrl==='fav'){const k=GM.seq.indexOf('aud');GM.seq.splice(k,1);GM.seq.unshift('aud');}jr();return;}
+ if(a==='sen'){GM.i=GM.seq.indexOf(b.dataset.k);GM.etapa='sentido';jr();return;}
+ if(a==='adv'){GM.adv[GM.seq[GM.i]]=b.dataset.n;plim(3);jr();return;}
+ if(a==='toc'){const id=GM.seq[GM.i],n=b.dataset.n,o=GM.ord[id];const p=o.indexOf(n);if(p>=0){o.splice(p,1);return jr();}if(o.length>=GM.toques)return;o.push(n);
+  if(F.fb==='som'||F.fb==null){plim(o.length);vib();}else if(F.fb==='item'){para();const t=tileDe(id,n);t&&t.som&&toca(t.som);vib();setTimeout(para,1500);}
+  jr();const nb=[...document.querySelectorAll('#jg .tt')].find(x=>x.dataset.n===n);F.fb!=='nada'&&nb&&nb.classList.add('pop');if(F.rec==='toque'){}
+  if(o.length>=GM.toques){setTimeout(depoisSentido,450);}return;}
+ if(a==='du'){const d=GM.du,x=d.P[0],m=Math.floor((d.lo+d.hi)/2);plim(3);vib();if(b.dataset.n===x)d.hi=m;else d.lo=m+1;if(d.lo>=d.hi){d.S.splice(d.lo,0,x);d.P.shift();d.lo=0;d.hi=d.S.length;}jr();return;}
+ if(a==='pula'){const id=GM.seq.splice(GM.i,1)[0];GM.seq.push(id);GM.etapa='sentido';jr();return;}
+ if(a==='lac'){const s=document.querySelector('#jg .blur');s&&s.classList.add('vis');b.remove();plim(5,1);return;}
+ if(a==='seg'){proximo();return;}
+ if(a==='ws'){GM.ws++;plim(GM.ws);jr();return;}
+ if(a==='nomeia'){GM.nome=(document.getElementById('nm')||{}).value||'';fim();return;}});
+
+/* ---------- a sala ---------- */
+let RS={},DB=null,ALA=0,ABERTA=null,PRONTO=false;
+try{RS=JSON.parse(localStorage.getItem('salaf2')||'{}');}catch(e){}
+const salvaL=()=>{try{localStorage.setItem('salaf2',JSON.stringify(RS));}catch(e){}};
+async function grava(id){salvaL();if(!DB)return;try{await DB.doc('salaf2/'+id).set(Object.assign({em:new Date().toISOString(),pergunta:PERGS.find(p=>p.id===id).q},RS[id]));}catch(e){aviso('Não consegui salvar agora; fica guardado neste aparelho.');}}
+function aviso(t){const a=document.getElementById('av');if(a){a.textContent=t;a.hidden=false;}}
+const feitas=a=>PERGS.filter(p=>p.a===a&&RS[p.id]&&(RS[p.id].sel!=null||(RS[p.id].nao||[]).length)).length;
+const total=()=>PERGS.filter(p=>RS[p.id]&&(RS[p.id].sel!=null||(RS[p.id].nao||[]).length)).length;
+function topo(){return `<div class="tp7">${ALAS.map((al,k)=>{const f=feitas(k);return `<button class="pb${k===ALA?' at':''}${f>=7?' ok':''}" style="--c:${al.c}" data-a="ala" data-k="${k}"><b>${f>=7?'✓':al.ic}</b><small>${f}/7</small></button>`;}).join('')}<button class="pb${ALA===7?' at':''}" style="--c:#F9CB39" data-a="ala" data-k="7"><b>🎮</b><small>jogar</small></button></div><div class="tot"><i style="width:${total()/49*100}%"></i></div>`;}
+function card(p){const r=RS[p.id]||{};const nao=r.nao||[];
+ return `<div class="pq${r.sel!=null?' feito':''}${p.z?' z':''}" style="--c:${ALAS[p.a].c}"><div class="pqh"><span class="num">${PERGS.indexOf(p)+1}</span><div><b class="qt">${esc(p.q)}</b><p class="por">🧠 ${esc(p.d)}</p></div></div>
+ ${p.o.map((o,i)=>{const sel=r.sel===i,nq=nao.includes(i),ab=ABERTA===p.id+'|'+i;return `<div class="op${sel?' on':''}${nq?' nq':''}"><div class="opr"><button class="opb" data-a="sel" data-p="${p.id}" data-i="${i}"><span class="rd"></span><span><b>${esc(o.t)}</b>${o.por?`<small>${esc(o.por)}</small>`:''}</span></button><button class="tst${ab?' on':''}" data-a="testa" data-p="${p.id}" data-i="${i}">${ab?'■ fechar':'▶ testar'}</button><button class="nqb${nq?' on':''}" data-a="nao" data-p="${p.id}" data-i="${i}" title="Não quero">✕</button></div>${ab?`<div class="demo" id="dm-${p.id}-${i}"></div>`:''}</div>`;}).join('')}
+ <input class="nota" data-p="${p.id}" placeholder="Anotação (opcional)" value="${esc(r.nota||'')}" maxlength="200"></div>`;}
+function tela(){if(ALA===7)return telaJogo();const al=ALAS[ALA];
+ return `<div class="alah" style="--c:${al.c}"><div class="k" style="color:${al.c}">Ala ${ALA+1} de 7 · ${al.ic}</div><h1 class="f">${al.n}</h1><p class="mute">${al.sub}</p>${ALA===6?'<p class="zinfo">Esta ala mostra o que NÃO fazer. Teste para conhecer e escolha "Entendi, descarto" ou a versão suave.</p>':''}</div>
+ ${PERGS.filter(p=>p.a===ALA).map(card).join('')}
+ <div class="row navfix"><button class="btn" data-a="ant" ${ALA===0?'disabled':''}>← Ala anterior</button><button class="btn pri" data-a="prox">${ALA<6?'Próxima ala →':'Montar o meu protótipo 🎮'}</button></div>`;}
+function flags(){const F={};PERGS.forEach(p=>{const r=RS[p.id];if(!r||r.sel==null)return;Object.assign(F,p.o[r.sel].set);});return F;}
+function resumoFlags(F){const L=[];const nm={fb:'Toque',rec:'Recompensa',susp:'Suspense',surp:'Surpresa',desafio:'Desafio',prog:'Progresso',final:'Final',social:'Gente como eu',toques:'Decisões por sentido',gancho:'Gancho',teaser:'Prévia da Fase 3',brisa:'Brisa',abre:'Começo',lacuna:'Meia revelação',misterio:'Mistério',pausa:'Respirar',ritmo:'Ritmo',col:'Coleção'};
+ Object.keys(nm).forEach(k=>{if(F[k]!=null&&F[k]!==0)L.push(`<span class="tg">${nm[k]}: <b>${F[k]===1?'sim':F[k]}</b></span>`);});return L.join('')||'<span class="mute">Responda as alas para montar.</span>';}
+function telaJogo(){const F=flags();const ruins=Object.keys(F).filter(k=>k.startsWith('proibido_'));
+ return `<div class="alah"><div class="k">Protótipo automático</div><h1 class="f">A sua Fase 2, montada com as suas escolhas</h1><p class="mute">${total()} de 49 respondidas. O protótipo usa o que você escolheu e ignora o que marcou com ✕.</p></div>
+ <div class="tags">${resumoFlags(F)}</div>${ruins.length?`<p class="zinfo">⚠️ Você escolheu ${ruins.length} técnica(s) da Zona Proibida. Elas NÃO entram no protótipo: vão contra as regras do 7entidos. Vamos conversar sobre elas.</p>`:''}
+ <button class="btn pri big" data-a="joga">▶ Jogar o meu protótipo</button><p class="small mute">Usa as escolhas da Fase 1 do Daniel como exemplo.</p>`;}
+function render(){const y=scrollY;document.getElementById('app').innerHTML=`<div class="bar0"><b class="f" style="font-size:19px"><span style="color:#F9CB39">7</span>entidos · Sala da Fase 2</b><span class="small mute">${PRONTO?'salvo ✓':'…'}</span></div><p id="av" class="aviso" hidden></p>${topo()}${tela()}`;
+ if(ABERTA){const [pid,i]=ABERTA.split('|');const box=document.getElementById(`dm-${pid}-${i}`);if(box)demo(PERGS.find(p=>p.id===pid).o[+i].demo,box);}return y;}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a;
+ if(a==='play'){e.stopImmediatePropagation();para();if(!b.classList.contains('on')){toca(b.dataset.som);b.classList.add('on');}else b.classList.remove('on');return;}
+ if(a==='ala'){para();ALA=+b.dataset.k;ABERTA=null;render();scrollTo(0,0);return;}
+ if(a==='prox'){para();ALA=Math.min(7,ALA+1);ABERTA=null;render();scrollTo(0,0);return;}
+ if(a==='ant'){para();ALA=Math.max(0,ALA-1);ABERTA=null;render();scrollTo(0,0);return;}
+ if(a==='testa'){para();const k=b.dataset.p+'|'+b.dataset.i;ABERTA=ABERTA===k?null:k;const y=render();scrollTo(0,y);return;}
+ if(a==='sel'){const id=b.dataset.p,i=+b.dataset.i;RS[id]=RS[id]||{nao:[]};RS[id].sel=RS[id].sel===i?null:i;RS[id].nao=(RS[id].nao||[]).filter(x=>x!==i);const p=PERGS.find(x=>x.id===id);RS[id].escolha=RS[id].sel==null?null:p.o[i].t;const y=render();scrollTo(0,y);grava(id);return;}
+ if(a==='nao'){const id=b.dataset.p,i=+b.dataset.i;RS[id]=RS[id]||{nao:[]};const n=new Set(RS[id].nao||[]);n.has(i)?n.delete(i):n.add(i);RS[id].nao=[...n];if(RS[id].sel===i){RS[id].sel=null;RS[id].escolha=null;}const p=PERGS.find(x=>x.id===id);RS[id].naoquero=RS[id].nao.map(k=>p.o[k].t);const y=render();scrollTo(0,y);grava(id);return;}
+ if(a==='joga'){abreJogo(flags());return;}});
+document.addEventListener('change',e=>{const i=e.target.closest('.nota');if(!i)return;const id=i.dataset.p;RS[id]=RS[id]||{nao:[]};RS[id].nota=i.value.slice(0,200);grava(id);});
+render();
+(async()=>{const t=setTimeout(()=>{if(!PRONTO){PRONTO=true;render();}},10000);
+ try{const c=window.claude&&await window.claude.use('db');DB=c;if(!c){clearTimeout(t);PRONTO=true;render();return;}
+  c.collection('salaf2').onSnapshot(s=>{s.docs.forEach(d=>{const x=d.data();RS[d.id]={sel:x.sel??null,nao:x.nao||[],nota:x.nota||'',escolha:x.escolha||null,naoquero:x.naoquero||[]};});salvaL();clearTimeout(t);PRONTO=true;if(!(document.activeElement&&document.activeElement.classList.contains('nota'))){const y=render();scrollTo(0,y);}},()=>{clearTimeout(t);PRONTO=true;render();});}
+ catch(e){clearTimeout(t);PRONTO=true;render();}})();
+</script></body></html>
