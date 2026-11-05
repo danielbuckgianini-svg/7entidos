@@ -271,11 +271,15 @@ function insights(J,P,TAGS){const E=J.esc||{},fav=SEN.map(s=>(E[s[0]]||[])[0]);c
 
 const CONVITE='7s0a4653';const PLANILHA_URL=window.PLANILHA_URL||'';
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-let J=null;try{J=JSON.parse(localStorage.getItem('jornada7')||'null');}catch(e){}
+/* MODO TESTE do Daniel: /jornada/fase2/?c=7s0a4653&teste=1
+   Usa uma Fase 1 de exemplo, guarda separado no celular (não mexe na Jornada de verdade)
+   e manda para a planilha com o nome "🧪 TESTE", para conferir se chega. */
+const TESTE=new URLSearchParams(location.search).get('teste')==='1';const CHAVE=TESTE?'jornada7_teste':'jornada7';
+let J=null;try{J=JSON.parse(localStorage.getItem(CHAVE)||'null');}catch(e){}
 const temConvite=(()=>{try{const q=new URLSearchParams(location.search).get('c');if(q===CONVITE){localStorage.setItem('jornada7c','1');return true;}return localStorage.getItem('jornada7c')==='1';}catch(e){return new URLSearchParams(location.search).get('c')===CONVITE;}})();
 const fase1Ok=()=>J&&J.esc&&SEN.every(s=>(J.esc[s[0]]||[]).length>=7);
-function salvaJ(){try{localStorage.setItem('jornada7',JSON.stringify(J));}catch(e){}}
-function post(tipo,extra){if(!PLANILHA_URL||!J)return;const corpo=Object.assign({c:CONVITE,tipo,id:J.id,nome:J.nome,cel:J.cel,em:new Date().toISOString()},extra||{});try{fetch(PLANILHA_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(corpo),keepalive:true});}catch(e){}}
+function salvaJ(){try{localStorage.setItem(CHAVE,JSON.stringify(J));}catch(e){}}
+function post(tipo,extra){if(!PLANILHA_URL||!J)return;const corpo=Object.assign({c:CONVITE,tipo,id:J.id,teste:TESTE,nome:(TESTE?'🧪 TESTE · ':'')+J.nome,cel:J.cel,em:new Date().toISOString()},extra||{});try{fetch(PLANILHA_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(corpo),keepalive:true});}catch(e){}}
 const topoLogo=()=>`<div class="bar0"><a class="logo" href="/" aria-label="7entidos"><img src="/assets/simbolo-contando-7.svg?v=20261102-novo" alt="" width="30" height="30"><b class="f"><span style="color:#FFD43B">7</span>entidos</b></a></div>`;
 function bloqueio(fase){if(!temConvite)return `<div class="hero"><div class="k">Jornada dos 7entidos</div><h1 class="f">Esta jornada é por convite.</h1><p class="mute">Use o link que você recebeu do 7entidos.</p><a class="btn" href="/">Conhecer o 7entidos</a></div>`;
  if(!fase1Ok())return `<div class="hero"><div class="k">Fase ${fase}</div><h1 class="f">Primeiro, a Fase 1</h1><p class="mute">Não encontramos a sua Fase 1 neste celular. Se você fez em outro aparelho, abra este link nele. Se ainda não fez, comece por ela: leva uns 7 minutos.</p><a class="btn pri big" style="display:block;text-decoration:none" href="/jornada/?c=${CONVITE}">Fazer a Fase 1 →</a></div>`;return '';}
@@ -306,9 +310,12 @@ function v2(){const b=bloqueio(2);if(b)return b;const nome=(J.nome||'').split(' 
  return `<div class="hero"><div class="k">Fase 2 finalizada ✓</div><h1 class="f">Obrigado, ${esc(nome)}!</h1><p class="mute">A sua régua está salva.</p><a class="btn pri big" style="display:block;text-decoration:none" href="/jornada/fase3/?c=${CONVITE}">Ir para a Fase 3 →</a></div>`;}
 function resumo2(){const notas=SEN.map(([id,sen])=>sen+': '+(J.esc[id]||[]).map(n=>n+' '+(F.notas[id+'|'+n]??'-')).join(' | '));const all=Object.values(F.notas);const med=all.length?Math.round(all.reduce((a,b)=>a+b,0)/all.length*10)/10:'';
  return {notas,media:med,dez:dez().map(([,s,n])=>n+' ('+s+')'),experiencias:experiencias(),sensacao:F.sens};}
-function render(){document.getElementById('app').innerHTML=topoLogo()+v2();}
+function preparaTeste(){if(!TESTE)return;if(!J||!fase1Ok()){J={id:'TESTE-'+Date.now().toString(36),nome:'Daniel',cel:'',esc:{}};SEN.forEach(s=>{J.esc[s[0]]=s[5].slice(0,7).map(t=>t.n);});F={i:-1,notas:{},sens:null,quer3:false,fim:false};salvaJ();}}
+const faixaTeste=()=>TESTE?`<div style="background:#F9CB39;color:#0A0F24;font-weight:800;border-radius:12px;padding:8px 12px;margin:6px 0 10px;display:flex;gap:8px;align-items:center;font-size:14px">🧪 Modo teste do Daniel<span style="flex:1"></span><button class="btn" style="min-height:34px;padding:4px 10px;font-size:13px" data-a="zerateste">Recomeçar</button></div>`:'';
+function render(){preparaTeste();document.getElementById('app').innerHTML=topoLogo()+faixaTeste()+v2();}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a;
  if(a==='play'){e.stopPropagation();const on=b.classList.contains('on');para();document.querySelectorAll('.pl2.on').forEach(x=>{x.classList.remove('on');x.textContent='▶';});if(!on){toca(b.dataset.som);b.classList.add('on');b.textContent='■';}return;}
+ if(a==='zerateste'){try{localStorage.removeItem(CHAVE);}catch(e){}J=null;F={i:-1,notas:{},sens:null,quer3:false,fim:false};render();scrollTo(0,0);return;}
  if(a==='ini'){F.i=0;salva2();post('fase2_inicio');render();scrollTo(0,0);return;}
  if(a==='nota'){F.notas[b.dataset.k]=+b.dataset.n;salva2();
   /* só atualiza a linha tocada e o contador, sem redesenhar as imagens */
