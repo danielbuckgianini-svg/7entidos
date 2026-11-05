@@ -868,7 +868,7 @@ function MapaFrame({modo,onPronto,onFechar,k:kk}){
   useEffect(()=>{function f(e){if(e.origin!==location.origin||!e.data||(e.data.tipo!=="7e-mapa"&&e.data.tipo!=="7e-podio"))return;onPronto(e.data.mapa||e.data.podio)}window.addEventListener("message",f);return()=>window.removeEventListener("message",f)},[onPronto]);
   const k=kk||(MAPA_K+(modo==="refazer"?"-r":""));
   return html`<div style=${{position:"fixed",inset:0,zIndex:90,background:"#0A0F24"}} role="dialog" aria-modal="true" aria-label="Mapa dos 7 sentidos">
-    <iframe title="Mapa dos 7 sentidos" src=${"mapa.html?k="+encodeURIComponent(k)+(modo?"&modo="+modo:"")} style=${{border:0,width:"100%",height:"100%",display:"block"}} allow="autoplay"></iframe>
+    <iframe title="Mapa dos 7 sentidos" src=${"mapa.html?k="+encodeURIComponent(k)+(modo?"&modo="+modo:"")} style=${{border:0,width:"100%",height:"100%",display:"block"}} allow="autoplay; accelerometer; gyroscope"></iframe>
     ${onFechar?html`<button type="button" onClick=${onFechar} aria-label="Fechar o mapa" style=${{position:"absolute",top:10,right:10,width:44,height:44,borderRadius:12,border:"1px solid #26315F",background:"#111A3D",color:"#F4F1EA",fontSize:20,cursor:"pointer"}}>✕</button>`:null}
   </div>`;
 }
@@ -883,7 +883,7 @@ function MapaVer({m,onClose}){
 /* Vídeos da Brisa: espaço reservado com o roteiro até o vídeo ficar pronto (assistir até o fim, sem pular) */
 const BRISA_V={
   v1:{t:"Vídeo de apresentação",l:["Oi, eu sou a Brisa.","Aqui no 7entidos, a gente descobre junto o que te faz bem, pelos seus sentidos.","Primeiro, você vai montar o seu mapa: em cada sentido, escolhe 7 de 15 coisas de que gosta.","Sem resposta certa. No seu ritmo. Vamos?"]},
-  v2:{t:"Brisa apresenta a Fase 2",l:["Que mapa lindo você fez!","Agora vem a parte divertida: um torneio!","Suas escolhas vão se enfrentar, duas de cada vez. Você só toca na que prefere.","No fim, a campeã de cada sentido vai para a grande final. Vamos nessa?"]}};
+  v2:{t:"Brisa apresenta a Fase 2",l:["Que mapa lindo você fez!","Agora vêm 7 mini-jogos, um para cada sentido.","Você só escolhe, e a sua ordem aparece sozinha.","A cada sentido, você ganha um pedaço da sua pintura. Vamos nessa?"]}};
 function BrisaVideo({n,onFim}){
   /* Tela do vídeo (Sala "A Brisa e a Fase 1", 04/11): céu noturno com brilhos das 7 cores e 7 pontos flutuando;
      a Brisa aparece como um anel de 7 luzes que pulsa enquanto fala e se completa conforme o vídeo anda;
