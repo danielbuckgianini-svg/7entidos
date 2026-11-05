@@ -3,7 +3,7 @@
 (function(){
   var q=new URLSearchParams(location.search).get('efeito');
   try{if(q==='1')localStorage.setItem('jornada7efeito','1');if(q==='0')localStorage.removeItem('jornada7efeito');}catch(e){}
-  var on=false;try{on=localStorage.getItem('jornada7efeito')==='1';}catch(e){on=q==='1';}
+  var on=false;try{on=localStorage.getItem('jornada7efeito')==='1';}catch(e){on=q==='1';}if(window.EF_SEMPRE)on=true;
   var PAL=[['Calma','#5AB8FF'],['Alegria','#FFD23F'],['Energia','#FF8A5C'],['Leveza','#3FE0D0'],['Curiosidade','#A98BFF'],['Saudade','#FF6FA3'],['Cansaço','#8C93B5']];
   var LEVA=[['🔍','Descobri algo sobre mim'],['🌅','Lembrei de algo bom'],['🌬️','Relaxei'],['🎉','Me diverti'],['➖','Nada de especial']];
   var VW=['<b>Abaixo de quanto</b> o 7entidos completo seria tão barato que você desconfiaria da qualidade?','Por quanto o 7entidos completo seria <b>um bom negócio</b>, uma pechincha?','<b>A partir de quanto</b> ele começaria a ficar caro, mas você ainda pensaria em comprar?','<b>A partir de quanto</b> ele seria caro demais, a ponto de você não comprar?'];

@@ -142,6 +142,7 @@ h1{font-size:23px;line-height:1.25;margin:4px 0 10px}h2{font-size:18px;margin:22
 @keyframes cai{to{top:105%;transform:rotate(720deg) translateX(40px)}}
 @media (prefers-reduced-motion:reduce){.al i.novo,.sqg.respira .sq,.resp i,.rv-espera i,.acorde span,.br .luzes i{animation:none}}
 </style></head><body><div class="w" id="app"></div>
+<script>window.EF_SEMPRE=true;</script><script src="/jornada/config.js"></script><script src="/jornada/efeito.js"></script>
 <script>/* ---------- estímulos sensoriais (sons feitos aqui, sem arquivos) ---------- */
 let AC=null,TOCANDO=null;
 function ac(){try{if(navigator.audioSession)navigator.audioSession.type='playback';}catch(e){}if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;AC=new C();}if(AC.state!=='running')AC.resume();return AC;}
@@ -540,7 +541,7 @@ function vF2Abre(){const p=PD.ordem[0]?senDe(PD.ordem[0]):null;
  <div class="k">Fase 2 · Pódio dos Sentidos</div><h1 class="f">Hora de pôr em ordem!</h1>
  <p class="mute">A cada sentido, você ganha 1 pedaço da sua pintura. Pode pular um sentido e voltar depois.</p>
  ${trancado()}${PD.demo?`<p class="small mute">Prévia: como a Fase 1 não foi feita neste aparelho, usei escolhas de exemplo.</p>`:''}
- <button class="btn pri big" data-a="pdcomeca" style="margin-top:16px">Começar</button><p class="small mute">⏱️ Leva uns 5 minutos.</p></div>`;}
+ ${window.EF?EF.chega((PD.ef||{}).chega)+'<p class="erro" id="efer0" style="color:#FF9AAE"></p>':''}<button class="btn pri big" data-a="pdcomeca" style="margin-top:16px">Começar</button><p class="small mute">⏱️ Leva uns 5 minutos.</p></div>`;}
 function vLembra(){const id=idAtual();const s=senDe(id);const n1=(PD.f1[id]||[])[0];
  return `${cab()}<h1>Na Fase 1, a sua nº 1 em ${esc(s[1])} foi:</h1>
  <div class="lb">${carta(id,n1,'a')}</div><p class="pd-frase" style="text-align:center">Ainda é?</p>
@@ -623,7 +624,7 @@ function vStory(){const F=(PD.final||[]).map(v=>v.split('|'));const N=7;const st
   <div class="sh"><button class="btn" data-a="stories">📲 Baixar cartão para Stories</button><button class="btn" data-a="combina">💞 Mande para alguém e veja se vocês combinam</button><button class="btn" data-a="presente">🎁 Enviar uma boa sensação</button></div>
   ${fr?`<p class="small mute">Exemplo de boa sensação: "${fr}"</p>`:''}<p class="small mute" id="bx"></p>
   <div class="f3"><div class="f3v">${Array.from({length:10},(_,i)=>`<i style="height:${18+i*7}px;background:${C[i%7]}"></i>`).join('')}</div><div class="f3c">🔒</div></div>
-  <button class="btn pri big" data-a="pdfim" style="width:100%">${MODO==='podio-refazer'?'Guardar →':'Continuar para a Fase 3 →'}</button>`;}
+  ${window.EF?(()=>{const f=PD.ef||{};return EF.sai(f.chega,f.sai,f.leva)+EF.preco(f.pr)+EF.sug(f.sug)+'<p class="erro" id="efer1" style="color:#FF9AAE"></p>';})():''}<button class="btn pri big" data-a="pdfim" style="width:100%">${MODO==='podio-refazer'?'Guardar →':'Continuar para a Fase 3 →'}</button>`;}
  return `<div class="story" data-a="stz">${bars}<div class="stc">${c}</div>${st<6?`<div class="row" style="justify-content:space-between">${st>0?`<button class="btn" data-a="stv">←</button>`:'<span></span>'}<button class="btn pri" data-a="sta">Seguir →</button></div>`:''}</div>`;}
 function renderPodio(){pdSalva();const f=PD.fase;
  const v=f==='abre'?vF2Abre():f==='lembra'?vLembra():f==='jogo'?vJogo():f==='revela'?vRevela():f==='pausa'?vPausa():f==='surpresa'?vSurpresa():f==='adiado'?vAdiado():f==='pular'?vPdPular():f==='final'?vJogo():vStory();
@@ -658,6 +659,15 @@ async function pdStories(){const out=document.getElementById('bx');try{const F=(
 async function pdManda(txt){const out=document.getElementById('bx');try{if(navigator.share){await navigator.share({text:txt});return;}}catch(e){if(e&&e.name==='AbortError')return;}
  try{await navigator.clipboard.writeText(txt);if(out)out.textContent='Texto copiado ✓ Agora é só colar no WhatsApp.';}catch(e){window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank');}}
 function pdDescobertas(){const out=[];PD.ordem.forEach(id=>{const s=senDe(id);const L=PD.res[id];if(!L)return;out.push({t:`${s[1][0].toUpperCase()+s[1].slice(1)}: ${L[0]}`,d:`É a sua nº 1 em ${s[1]}. ${L[1]?`${L[1]} ficou em 2º`+(L[2]?` e ${L[2]} em 3º.`:'.'):''}`});});return out.slice(0,7);}
+/* efeito da fase + pesquisa de preço vão para a planilha da Jornada (marcado como prévia do app) */
+function pdEnviaEfeito(){const U=window.PLANILHA_URL;if(!U||!window.EF)return;const f=PD.ef||{};const pr=f.pr||{};const ok=pr.t&&!pr.pular;
+ const corpo={c:'7s0a4653',tipo:'fase2',id:J.id,teste:LSK!=='jornada7',nome:(LSK!=='jornada7'?'🧪 PRÉVIA APP · ':'')+(J.nome||''),cel:'',em:new Date().toISOString(),origem:'app-previa (mini-jogos)',
+  sensacao:EF.texto(f.chega,f.sai,f.leva)+' · '+EF.precoTexto(pr)+(f.sug?' · Sugestão: '+f.sug:''),chega:f.chega||'',sai:f.sai||'',leva:f.leva||'',sugestao:f.sug||'',preco:EF.precoTexto(pr),
+  preco_barato_demais:ok?pr.v[0]:'',preco_bom_negocio:ok?pr.v[1]:'',preco_ficando_caro:ok?pr.v[2]:'',preco_caro_demais:ok?pr.v[3]:'',presente:pr.pular?'':(pr.pres||'')};
+ try{fetch(U,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(corpo),keepalive:true});}catch(e){}}
+document.addEventListener('input',e=>{if(!PD||!window.EF)return;const t=e.target;const f=PD.ef=PD.ef||{};
+ if(t.id==='efsug'){f.sug=t.value.slice(0,500);pdSalva();}
+ if(t.dataset&&t.dataset.vw!=null){f.pr=EF.vw(f.pr||{},+t.dataset.vw,+t.value);pdSalva();document.querySelectorAll('[data-vw]').forEach(r=>{const k=+r.dataset.vw;if(+r.value!==f.pr.v[k])r.value=f.pr.v[k];const l=document.getElementById('efvv'+k);if(l)l.textContent='R$ '+f.pr.v[k];});}});
 function pdEntrega(){padDesliga();para();const svg=PD.pintF||PD.pint||'';
  const F=(PD.final||[]).map(v=>{const [id,n]=v.split('|');return {sen:id,n};});const ordSen=F.map(x=>x.sen).concat(PD.ordem.filter(id=>!F.some(x=>x.sen===id)));
  const podio={id:'P'+Date.now().toString(36),em:new Date().toISOString(),ordem:PD.res,campeas:F,sentidosOrdem:ordSen,completos:SEN.filter(s=>(J.esc[s[0]]||[]).length>=7).map(s=>s[0]),esc:J.esc,tempos:PD.tempos,
@@ -667,8 +677,10 @@ function pdEscolheDuelo(v){const G=PD.G;pdSnap();const id=idAtual();PD.tempos[id
 function pdEscolheSeq(v){const G=PD.G;pdSnap();sEscolhe(G,v);if(!G.resto.length){if(G.tipo==='final'){PD.final=G.esc.slice();pdFimIni();festa();}else pdFechaSentido(G.esc);}}
 document.addEventListener('click',e=>{if(!PD)return;const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a;const id=PD.ordem[PD.si];
  const ok=()=>{renderPodio();e.stopImmediatePropagation();};const topo=()=>{renderPodio();scrollTo(0,0);e.stopImmediatePropagation();};
+ if(e.target.closest('.ef')&&!a.startsWith('ef')){e.stopImmediatePropagation();return;}
+ if(a.startsWith('ef')&&window.EF){const f=PD.ef=PD.ef||{};const v=b.dataset.v;if(a==='efchega')f.chega=v;if(a==='efsai')f.sai=v;if(a==='efleva')f.leva=v;f.pr=f.pr||{};if(a==='efpres')f.pr.pres=v;if(a==='efprpula')f.pr.pular=true;if(a==='efprvolta')f.pr.pular=false;sino(3,.15);return ok();}
  if(a==='play')return;
- if(a==='pdcomeca'){ac();PD.si=0;if(PD.ordem.length)pdComecaSentido();else if(PD.pend.length)PD.fase='pular';return topo();}
+ if(a==='pdcomeca'){if(window.EF&&!(PD.ef||{}).chega){const er=document.getElementById('efer0');if(er)er.textContent='Toque em como você chega.';e.stopImmediatePropagation();return;}ac();PD.si=0;if(PD.ordem.length)pdComecaSentido();else if(PD.pend.length)PD.fase='pular';return topo();}
  if(a==='palpite'){(PD.sent[id]=PD.sent[id]||{}).palpite=b.dataset.v;pdJoga();PD.t0=Date.now();sino(0);return topo();}
  if(a==='pdpula'){pdSnap();PD.adiados.push(id);PD.ordem.splice(PD.si,1);if(PD.si<PD.ordem.length)PD.fase='pausa';else{PD.si=Math.max(0,PD.ordem.length-1);PD.fase=PD.adiados.length?'adiado':'pular';}return topo();}
  if(a==='dv'){if(b.classList.contains('vai'))return;const v=b.dataset.v;b.classList.add('vence');const o=[...document.querySelectorAll('.pd-carta')].find(x=>x!==b);if(o)o.classList.add('perde');toque(id,v,PD.G.ord.length);
@@ -695,7 +707,7 @@ document.addEventListener('click',e=>{if(!PD)return;const b=e.target.closest('[d
  if(a==='stories'){pdStories();e.stopImmediatePropagation();return;}
  if(a==='combina'){const F=(PD.final||[]).map(v=>v.split('|')[1]);pdManda(`Minhas campeãs no 7entidos: ${F.slice(0,3).join(', ')} ${quadradinhos()}\nFaz a sua e vê se a gente combina: https://7entidos.com.br`);e.stopImmediatePropagation();return;}
  if(a==='presente'){const n1=(PD.final||[])[0];const n=n1?n1.split('|')[1].toLowerCase():'uma coisa boa';pdManda(`Hoje, ${n} por 5 minutos. Lembrei de você. 💛\n(7entidos.com.br)`);e.stopImmediatePropagation();return;}
- if(a==='pdfim'){pdEntrega();e.stopImmediatePropagation();return;}
+ if(a==='pdfim'){if(window.EF){const f=PD.ef||{};const fa=EF.falta(f.sai,f.leva);if(fa){const er=document.getElementById('efer1');if(er)er.textContent=fa;e.stopImmediatePropagation();return;}pdEnviaEfeito();}pdEntrega();if(LSK==='jornada7'&&window.parent===window){location.href='/jornada/fase3/?c='+(QS.get('c')||'7s0a4653');}e.stopImmediatePropagation();return;}
 },true);
 /* Volta do "quero tentar": ao terminar as 7 escolhas do sentido pulado na Fase 1, ele entra na Fase 2 */
 document.addEventListener('click',e=>{if(PD||!window.__PD)return;const b=e.target.closest('[data-a="prox"]');if(!b)return;const id=window.__PD.voltar;if(!id||(J.esc[id]||[]).length<7)return;
