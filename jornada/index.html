@@ -351,6 +351,13 @@ async function baixa(){const out=document.getElementById('bx');
  C.forEach((c,k)=>{g.fillStyle=c;g.beginPath();g.arc(W/2-150+k*50,90,12,0,7);g.fill();});
  cv.toBlob(b=>{const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='minha-imagem-7-sentidos.png';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);out.textContent='Imagem salva ✓';},'image/png');}
 function tempo(){if(J.tela==='sen'&&J.t0){J.t=J.t||{};const id=SEN[J.i][0];J.t[id]=(J.t[id]||0)+(Date.now()-J.t0);}J.t0=Date.now();}
+/* Atualiza só o que mudou na tela do sentido (números, contador e botões), sem redesenhar as 15 imagens.
+   Redesenhar tudo a cada toque deixava celulares mais simples lentos ou parados no sentido 1. */
+function atualizaSen(topoMudou){const [id,,,cor]=SEN[J.i];const m=J.esc[id]||[];
+ document.querySelectorAll('.tile[data-a="pick"]').forEach(el=>{const o=m.indexOf(el.dataset.v);const on=o>=0;el.classList.toggle('on',on);el.classList.toggle('dis',!on&&m.length>=7);el.setAttribute('aria-pressed',on);const bx=el.querySelector('.box');if(bx)bx.textContent=on?o+1:'';});
+ const ct=document.querySelector('.cont');if(ct){ct.classList.toggle('ok',m.length>=7);ct.innerHTML=`Escolhidas: <b>${m.length} de 7</b>${m.length<7?` · faltam ${7-m.length}`:' ✓'} <span class="mute small">· a 1ª é a sua favorita</span>`;}
+ const nv=document.querySelector('.navfix');if(nv)nv.innerHTML=`<button class="btn" data-a="volta">← Voltar</button>${m.length?`<button class="btn" data-a="limpa">Limpar</button>`:''}<span class="sp"></span><button class="btn pri" data-a="prox" ${m.length<7?'disabled':''}>${J.i<6?'Próximo sentido →':'Ver meu mapa →'}</button>`;
+ if(topoMudou){const tp=document.querySelector('.topo');if(tp){const d=document.createElement('div');d.innerHTML=topo();tp.replaceWith(d.firstElementChild);}}}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a;
  if(a==='conc'){J.conc=J.conc||{};J.conc[b.dataset.i]=+b.dataset.n;const y=scrollY;render();scrollTo(0,y);return;}
  if(a==='convida'){const t='Fiz a Jornada dos 7entidos e descobri a imagem dos meus 7 sentidos. Faz também, leva uns 7 minutos: https://7entidos.com.br/jornada/?c='+CONVITE;window.open('https://wa.me/?text='+encodeURIComponent(t),'_blank');enviar('convite');return;}
@@ -368,7 +375,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b
  if(a==='nota'){J.nota=+b.dataset.n;salva();render();return;}
  if(a==='verfim'){if(J.nota===null)return;J.tela='fim';salva();enviar('completa');render();scrollTo(0,0);return;}
  if(a==='ir'){para();J.tela='sen';J.i=+b.dataset.k;render();return;}
- if(a==='pick'){const id=SEN[J.i][0];const m=J.esc[id]=J.esc[id]||[];const v=b.dataset.v;const o=m.indexOf(v);if(o>=0)m.splice(o,1);else if(m.length<7)m.push(v);salva();const y=scrollY;render();scrollTo(0,y);return;}
+ if(a==='pick'){const id=SEN[J.i][0];const m=J.esc[id]=J.esc[id]||[];const v=b.dataset.v;const o=m.indexOf(v);const fav0=m[0],ok0=m.length>=7;if(o>=0)m.splice(o,1);else if(m.length<7)m.push(v);salva();atualizaSen(fav0!==m[0]||ok0!==(m.length>=7));return;}
  if(a==='limpa'){J.esc[SEN[J.i][0]]=[];salva();render();return;}
  if(a==='prox'){para();enviar('progresso');if(J.i<6){J.i++;J.tela='sen';}else J.tela=J.nota===null?'nota':'fim';render();scrollTo(0,0);return;}
  if(a==='volta'){para();if(J.i>0)J.i--;else J.tela='abre';salva();render();scrollTo(0,0);return;}
