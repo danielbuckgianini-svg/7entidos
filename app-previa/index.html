@@ -883,7 +883,8 @@ function MapaVer({m,onClose}){
 /* Vídeos da Brisa: espaço reservado com o roteiro até o vídeo ficar pronto (assistir até o fim, sem pular) */
 const BRISA_V={
   v1:{t:"Vídeo de apresentação",l:["Oi, eu sou a Brisa.","Aqui no 7entidos, a gente descobre junto o que te faz bem, pelos seus sentidos.","Primeiro, você vai montar o seu mapa: em cada sentido, escolhe 7 de 15 coisas de que gosta.","Sem resposta certa. No seu ritmo. Vamos?"]},
-  v2:{t:"Brisa apresenta a Fase 2",l:["Que mapa lindo você fez!","Agora vêm 7 mini-jogos, um para cada sentido.","Você só escolhe, e a sua ordem aparece sozinha.","A cada sentido, você ganha um pedaço da sua pintura. Vamos nessa?"]}};
+  v2:{t:"Brisa apresenta a Fase 2",l:["Que mapa lindo você fez!","Agora vêm 7 mini-jogos, um para cada sentido.","Você só escolhe, e a sua ordem aparece sozinha.","A cada sentido, você ganha um pedaço da sua pintura. Vamos nessa?"]},
+  v3:{t:"Brisa apresenta a Fase 3",l:["Agora você já sabe do que gosta.","Na Fase 3, você cria a sua régua: os números de 10 a 1.","Em cada número, você liga uma lembrança sua. Vamos?"]}};
 function BrisaVideo({n,onFim}){
   /* Tela do vídeo (Sala "A Brisa e a Fase 1", 04/11): céu noturno com brilhos das 7 cores e 7 pontos flutuando;
      a Brisa aparece como um anel de 7 luzes que pulsa enquanto fala e se completa conforme o vídeo anda;
@@ -1054,8 +1055,9 @@ function NovoComeco({s,update,inicio}){
   if(passo==="v1")return html`<${BrisaVideo} n="v1" onFim=${()=>{viu("v1");setPasso(0)}}/>`;
   if(passo===0)return html`<${MapaFrame} onPronto=${mapaPronto}/>`;
   if(passo==="c1")return html`<${Constelacao} feitas=${2} onIr=${irFase} titulo="Você desbloqueou a Fase 2" frase="Sua primeira estrela acendeu. Agora vem o Pódio dos Sentidos." onFim=${()=>{viu("c1");setPasso("v2")}}/>`;
-  if(passo==="c2")return html`<${Constelacao} feitas=${3} onIr=${irFase} titulo="Você desbloqueou a Fase 3" frase="Mais uma estrela na sua constelação. Agora é a vez da sua régua." onFim=${()=>{viu("c2");setPasso(1)}}/>`;
+  if(passo==="c2")return html`<${Constelacao} feitas=${3} onIr=${irFase} titulo="Você desbloqueou a Fase 3" frase="Mais uma estrela na sua constelação. Agora é a vez da sua régua." onFim=${()=>{viu("c2");setPasso("v3")}}/>`;
   if(passo==="v2")return html`<${BrisaVideo} n="v2" onFim=${()=>{viu("v2");setPasso("podio")}}/>`;
+  if(passo==="v3")return html`<${BrisaVideo} n="v3" onFim=${()=>{viu("v3");setPasso(1);setEtapa("intro")}}/>`;
   if(passo==="podio"){podioEntrada(MAPA_K+"-p",ultimoMapa(s)||{});return html`<${MapaFrame} k=${MAPA_K+"-p"} modo="podio" onPronto=${podioPronto}/>`;}
   const pi=3;
   return html`<div class="nc-tela" role="dialog" aria-modal="true" aria-label="Novo começo">

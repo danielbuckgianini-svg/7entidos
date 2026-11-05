@@ -141,6 +141,13 @@ h1{font-size:23px;line-height:1.25;margin:4px 0 10px}h2{font-size:18px;margin:22
 .cf{position:fixed;inset:0;pointer-events:none;z-index:50;overflow:hidden}.cf i{position:absolute;top:-12px;width:8px;height:14px;border-radius:2px;animation:cai linear forwards}
 @keyframes cai{to{top:105%;transform:rotate(720deg) translateX(40px)}}
 @media (prefers-reduced-motion:reduce){.al i.novo,.sqg.respira .sq,.resp i,.rv-espera i,.acorde span,.br .luzes i{animation:none}}
+.ad-som{display:grid;place-items:center;gap:6px;width:min(220px,64%);aspect-ratio:1;margin:10px auto;border-radius:24px;background:#070B1C;border:2px solid var(--c);box-shadow:0 0 22px -6px var(--c);text-align:center}
+.ad-som span{font-size:13px;color:var(--mute)}.ad-som.ok{padding:8px}.ad-som.ok svg{width:100%;border-radius:16px}
+.ad-play{font-size:56px;width:120px;height:120px;border-radius:50%;border:none;background:radial-gradient(circle,var(--c),transparent 70%);cursor:pointer;animation:resp 3s ease-in-out infinite}
+.ad-ops{display:grid;gap:8px;margin:8px 0}.ad-ops .btn{width:100%;font-size:17px}.ad-erro{opacity:.4;animation:treme .3s}
+@keyframes treme{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.somp{margin:14px 0 0;padding:10px;border:1px dashed var(--line);border-radius:14px;font-size:13px}.somp div{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:6px}
+.chipp{font:inherit;font-size:13px;font-weight:700;border:1px solid var(--line);background:var(--field);color:var(--ink);border-radius:999px;padding:6px 10px;cursor:pointer}.chipp.on{background:var(--pe);color:#0A0F24;border-color:var(--pe)}
 </style></head><body><div class="w" id="app"></div>
 <script>/* ---------- estímulos sensoriais (sons feitos aqui, sem arquivos) ---------- */
 let AC=null,TOCANDO=null;
@@ -462,7 +469,7 @@ function entrega(){const p=perfil();const L=insights(J,p,TAGS);let svg='';try{sv
 const MODO=QS.get('modo')||'';const EH_PODIO=MODO.indexOf('podio')===0;
 const PDK=LSK+'-podio';let PD=null;
 const JOGO={mapa:'duelo',aud:'ouvir',tato:'balanca',olf:'casa',pal:'prato',equi:'inclina',corpo:'respira'};
-const JOGO_NOME={duelo:'Duelos',ouvir:'Só ouvindo',balanca:'A balança',casa:'Cheiro de casa',prato:'Monte o seu prato',inclina:'Incline o celular',respira:'Respire e escolha'};
+const JOGO_NOME={duelo:'Duelos',ouvir:'Que som é esse?',balanca:'A balança',casa:'Cheiro de casa',prato:'Monte o seu prato',inclina:'Incline o celular',respira:'Respire e escolha'};
 const EMO=['🤩','😊','😌','🤔','😐'];
 const PCT={}; /* {sentido:{opção:%}} só com dados reais da Jornada. Vazio = a frase não aparece. */
 const MOLD=[['Ouro','#D4AF37'],['Madeira','#8A5A3A'],['Luz','#F9CB39']];
@@ -486,7 +493,21 @@ function sino(k,vol){const c=ac();if(!c)return;try{const t=c.currentTime,o=c.cre
  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol||.22,t+.01);g.gain.exponentialRampToValueAtTime(.001,t+.9);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+1);}catch(e){}}
 function vibra(ms){try{navigator.vibrate&&navigator.vibrate(ms||15);}catch(_){}}
 let SOM_T=null;
-function toque(id,n,k){vibra(15);const t=tileDe(id,n);if(t&&t.som){toca(t.som);clearTimeout(SOM_T);SOM_T=setTimeout(para,1600);}else sino(k||0);}
+/* Sons de toque (Daniel, 05/11): nada de melodia a cada clique. Opções para testar, padrão = pisca-alerta */
+const SONS=[['pisca','Pisca-alerta (tic-tac)'],['pisca1','Pisca suave (só o tic)'],['trava','Bip da trava do carro'],['caneta','Clique de caneta'],['madeira','Tique de madeira'],['mudo','Sem som, só vibração']];
+function somAtual(){try{return localStorage.getItem('f2som')||'pisca';}catch(e){return 'pisca';}}
+function rele(c,t,f,v){const n=Math.floor(c.sampleRate*.018),b=c.createBuffer(1,n,c.sampleRate),x=b.getChannelData(0);for(let i=0;i<n;i++)x[i]=(Math.random()*2-1)*Math.pow(1-i/n,4);
+ const s=c.createBufferSource();s.buffer=b;const fl=c.createBiquadFilter();fl.type='bandpass';fl.frequency.value=f;fl.Q.value=2.5;const g=c.createGain();g.gain.value=v;s.connect(fl);fl.connect(g);g.connect(c.destination);s.start(t);
+ const o=c.createOscillator(),g2=c.createGain();o.frequency.value=f/9;g2.gain.setValueAtTime(v*.25,t);g2.gain.exponentialRampToValueAtTime(.0001,t+.03);o.connect(g2);g2.connect(c.destination);o.start(t);o.stop(t+.04);}
+function bipe(c,t,f,d,v,tp){const o=c.createOscillator(),g=c.createGain();o.type=tp||'square';o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.004);g.gain.setValueAtTime(v,t+d-.012);g.gain.linearRampToValueAtTime(0,t+d);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+d+.02);}
+function fbSom(est,forte){const c=ac();if(!c)return;const e=est||somAtual();const t=c.currentTime+.01;try{
+ if(e==='pisca'){rele(c,t,2600,.9);rele(c,t+.16,1700,.6);if(forte){rele(c,t+.42,2600,.9);rele(c,t+.58,1700,.6);}}
+ else if(e==='pisca1'){rele(c,t,2200,.6);if(forte)rele(c,t+.32,2200,.6);}
+ else if(e==='trava'){bipe(c,t,2400,.06,.035);if(forte)bipe(c,t+.11,2400,.06,.035);}
+ else if(e==='caneta'){rele(c,t,4200,.7);rele(c,t+.05,3000,.5);if(forte)rele(c,t+.25,4200,.7);}
+ else if(e==='madeira'){bipe(c,t,880,.05,.12,'sine');rele(c,t,1200,.4);if(forte)bipe(c,t+.14,660,.05,.12,'sine');}
+}catch(_){}}
+function toque(id,n,k){vibra(15);fbSom();}
 let PAD=null;
 function padLiga(){const c=ac();if(!c||PAD)return;try{const g=c.createGain();g.gain.value=0;g.gain.linearRampToValueAtTime(.05,c.currentTime+1.5);g.connect(c.destination);
  const os=[220,277.2,329.6,440].map((f,i)=>{const o=c.createOscillator();o.type=i===3?'triangle':'sine';o.frequency.value=f;const gg=c.createGain();gg.gain.value=i===3?.25:1;o.connect(gg);gg.connect(g);o.start();return o;});PAD={g,os};}catch(e){}}
@@ -494,7 +515,7 @@ function padDesliga(){if(!PAD)return;const c=ac();const p=PAD;PAD=null;try{p.g.g
 function confete(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const box=document.createElement('div');box.className='cf';
  for(let i=0;i<60;i++){const p=document.createElement('i');p.style.left=(Math.random()*100)+'%';p.style.background=C[i%7];p.style.animationDelay=(Math.random()*.4)+'s';p.style.animationDuration=(1.4+Math.random()*1.2)+'s';p.style.transform=`rotate(${Math.random()*360}deg)`;box.appendChild(p);}
  document.body.appendChild(box);setTimeout(()=>box.remove(),3200);}
-function festa(){confete();[0,2,4,6].forEach((k,i)=>setTimeout(()=>sino(k,.18),i*110));vibra([20,40,20]);}
+function festa(){confete();fbSom(null,true);vibra([20,40,20]);}
 
 /* ---------- motores dos mini-jogos ---------- */
 /* Duelos: inserção por busca binária. A ordem sai sozinha, com o mínimo de duelos. */
@@ -511,12 +532,17 @@ function idAtual(){return PD.ordem[PD.si];}
 function faltam(){return PD.ordem.length-Object.keys(PD.res).filter(id=>PD.ordem.includes(id)).length+PD.adiados.length;}
 function pdComecaSentido(){PD.fase='lembra';PD.G=null;}
 function pdJoga(){const id=idAtual();const it=(J.esc[id]||[]).slice();const tp=JOGO[id]||'casa';PD.relT[id]=Date.now();
- if(tp==='duelo'||tp==='inclina'){PD.G=dIni(it);PD.G.tipo=tp;}else if(tp==='balanca'){PD.G={tipo:'balanca'};PD.lista=it;}else PD.G=sIni(it,tp);PD.fase='jogo';}
+ if(tp==='duelo'||tp==='inclina'){PD.G=dIni(it);PD.G.tipo=tp;}else if(tp==='balanca'){PD.G={tipo:'balanca'};PD.lista=it;}else if(tp==='ouvir'){PD.G=adIni(id,it);}else PD.G=sIni(it,tp);PD.fase='jogo';}
+/* Desafio da Audição (Daniel, 05/11): o som toca escondido, 3 sugestões; acertou, segue; errou, ouve de novo. No fim, ordena. */
+function embaralha(a){const x=a.slice();for(let i=x.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[x[i],x[j]]=[x[j],x[i]];}return x;}
+function adIni(id,it){const todos=senDe(id)[5].map(t=>t.n);const fila=embaralha(it);
+ return {tipo:'adivinha',fila,i:0,ops:adOps(todos,fila[0]),todos,erro:null,certo:null,erros:0,itens:it};}
+function adOps(todos,certo){return embaralha([certo].concat(embaralha(todos.filter(n=>n!==certo)).slice(0,2)));}
+function adTocar(){const G=PD.G;if(!G||G.tipo!=='adivinha')return;const t=tileDe(idAtual(),G.fila[G.i]);if(t&&t.som)toca(t.som);}
 function pdFechaSentido(rank){const id=idAtual();PD.res[id]=rank.slice();PD.tempos[id+'_total']=Date.now()-(PD.relT[id]||Date.now());
- const f1=(PD.f1[id]||[])[0];const sv=PD.sent[id]||(PD.sent[id]={});sv.acertou=sv.palpite?((sv.palpite==='sim')===(rank[0]===f1)):false;
  PD.fase='revela';PD.brilho=true;PD.novo=id;para();}
 function pdDepoisSentido(){if(Object.keys(PD.res).length===4&&!PD.surpresa){PD.surpresa=1;PD.fase='surpresa';return;}pdSegue();}
-function pdSegue(){if(PD.si<PD.ordem.length-1){PD.si++;PD.fase='pausa';return;}
+function pdSegue(){if(PD.si<PD.ordem.length-1){PD.si++;if(Object.keys(PD.res).length>=4&&!PD.respirou){PD.respirou=1;PD.fase='pausa';}else PD.fase='lembra';return;}
  if(PD.adiados.length){PD.fase='adiado';return;}if(PD.pend.length){PD.fase='pular';return;}pdVaiFinal();}
 function pdChampions(){return PD.ordem.filter(id=>PD.res[id]).map(id=>id+'|'+PD.res[id][0]);}
 function pdVaiFinal(){const ch=pdChampions();if(ch.length>=2){PD.G=sIni(ch,'final');PD.fase='final';}else{PD.final=ch;pdFimIni();}}
@@ -538,14 +564,16 @@ function bolinha(id,n,k,cls){const s=senDe(id);return `<button class="sq ${cls||
 function vF2Abre(){const p=PD.ordem[0]?senDe(PD.ordem[0]):null;
  return `<div class="hero" style="padding-top:14px">${brisa(`Que bom te ver de novo! Agora são 7 mini-jogos, um por sentido. Você só escolhe, e a sua ordem aparece sozinha.${p?` Vamos começar por ${esc(p[1])}, o sentido em que você se decidiu mais rápido.`:''}`)}
  <div class="k">Fase 2 · Pódio dos Sentidos</div><h1 class="f">Hora de pôr em ordem!</h1>
- <p class="mute">A cada sentido, você ganha 1 pedaço da sua pintura. Pode pular um sentido e voltar depois.</p>
+ <p class="mute">A cada sentido, você ganha 1 pedaço da sua pintura. No meio, uma pausa para respirar. Pode pular um sentido e voltar depois.</p>
  ${trancado()}${PD.demo?`<p class="small mute">Prévia: como a Fase 1 não foi feita neste aparelho, usei escolhas de exemplo.</p>`:''}
+ <div class="somp"><b>Prévia · som dos toques</b><div>${SONS.map(([k,n])=>`<button class="chipp ${somAtual()===k?'on':''}" data-a="som" data-v="${k}">${n}</button>`).join('')}</div></div>
  <button class="btn pri big" data-a="pdcomeca" style="margin-top:16px">Começar</button><p class="small mute">⏱️ Leva uns 5 minutos.</p></div>`;}
-function vLembra(){const id=idAtual();const s=senDe(id);const n1=(PD.f1[id]||[])[0];
- return `${cab()}<h1>Na Fase 1, a sua nº 1 em ${esc(s[1])} foi:</h1>
- <div class="lb">${carta(id,n1,'a')}</div><p class="pd-frase" style="text-align:center">Ainda é?</p>
- <div class="row" style="justify-content:center"><button class="btn pri" data-a="palpite" data-v="sim">Ainda é</button><button class="btn" data-a="palpite" data-v="mudou">Acho que mudou</button></div>
- <p style="text-align:center"><button class="lk" data-a="pdpula">Pular este sentido (volto depois)</button></p>`;}
+const INSTR={duelo:'Duas imagens por vez. Toque na que você prefere; a sua ordem aparece sozinha.',ouvir:'Primeiro, um desafio: ouça cada som e adivinhe o que é. Depois, coloque os sons em ordem.',balanca:'Arraste as texturas: lá em cima fica a que pesa mais no seu coração.',casa:'Toque nos cheiros, do mais "casa" para o menos. Cada toque acende uma janela.',prato:'Monte o seu prato: a 1ª vai no centro, as outras em volta.',inclina:'Incline o celular para o lado que você prefere (ou toque).',respira:'Respire com a bolinha e toque no que o seu corpo pede.'};
+function vLembra(){const id=idAtual();const s=senDe(id);const tp=JOGO[id];
+ return `${cab()}<div class="hero" style="padding-top:8px"><div style="font-size:56px;line-height:1">${s[2]}</div><h1 class="f" style="font-size:30px">${esc(s[1])}</h1>
+ <p class="mute">${INSTR[tp]||''}</p>${faltam()===1?`<p class="falta">Falta só 1!</p>`:''}
+ <button class="btn pri big" data-a="joga">Começar</button>
+ <p><button class="lk" data-a="pdpula">Pular este sentido (volto depois)</button></p></div>`;}
 function vJogo(){const id=idAtual();const s=senDe(id);const G=PD.G;const tp=G.tipo;
  const volta=PD.hist.length?`<button class="btn" data-a="pdvolta">↶ Desfazer</button>`:'';
  if(tp==='duelo'||tp==='inclina'){const p=dPar(G);if(!p)return '';const feitas=G.ord.length;
@@ -553,11 +581,16 @@ function vJogo(){const id=idAtual();const s=senDe(id);const G=PD.G;const tp=G.ti
   ${tp==='inclina'?`<p class="small mute">Incline o celular para a esquerda ou para a direita. Ou toque.${window.DeviceOrientationEvent&&typeof DeviceOrientationEvent.requestPermission==='function'&&!PD.incOk?` <button class="lk" data-a="incliga">Ligar a inclinação</button>`:''}</p>`:''}
   <div class="pd-duelo ${tp==='inclina'?'inc':''}" id="dl">${carta(id,p[0],'a')}<span class="pd-x" aria-hidden="true">${tp==='inclina'?'⚖️':'×'}</span>${carta(id,p[1],'b')}</div>
   <div class="dots7">${Array.from({length:7},(_,i)=>`<i style="${i<feitas?`background:${s[3]}`:''}"></i>`).join('')}</div><div class="row">${volta}</div>`;}
+ if(tp==='adivinha'){const n=G.fila[G.i];
+  return `${cab()}<h1>Que som é esse?</h1><p class="small mute">Som ${G.i+1} de ${G.fila.length}. Ouça e escolha uma das 3 respostas.</p>
+  <div class="ad-som ${G.certo?'ok':''}" style="--c:${s[3]}">${G.certo?`<svg viewBox="0 0 300 300">${artDe(id,n)}</svg><b>${esc(n)}</b>`:`<button class="ad-play" data-a="adplay" aria-label="Ouvir o som">🔊</button><span>Toque para ouvir de novo</span>`}</div>
+  ${G.certo?`<p class="pd-frase" style="text-align:center">Acertou!</p>`:`<div class="ad-ops">${G.ops.map(o=>`<button class="btn ${G.erro===o?'ad-erro':''}" data-a="adop" data-v="${esc(o)}" ${G.erro===o?'disabled':''}>${esc(o)}</button>`).join('')}</div>${G.erro?`<p class="small mute" style="text-align:center">Quase! Ouça de novo e tente outra.</p>`:''}`}
+  <div class="dots7">${G.fila.map((_,i)=>`<i style="${i<G.i||(i===G.i&&G.certo)?`background:${s[3]}`:''}"></i>`).join('')}</div>`;}
  if(tp==='balanca')return `${cab()}<h1>Arraste para a balança</h1><p class="small mute">Segure e arraste. Lá em cima fica a que pesa mais no seu coração.</p>
   <ol class="ar-lista balanca" id="arl">${PD.lista.map((n,i)=>linhaArr(n,i,s[3],n,'',artDe(id,n))).join('')}</ol>
   <div class="row">${volta}<span class="sp"></span><button class="btn pri" data-a="balok">Pronto, essa é a minha ordem →</button></div>`;
  const pos=G.esc.length+1;
- const T={ouvir:['Feche os olhos. Toque para ouvir.','Ouça e escolha a que você mais gosta. Depois a 2ª, e assim por diante.'],
+ const T={ouvir:['Agora, a sua ordem','Toque para ouvir de novo e escolha o som de que você mais gosta. Depois o 2º, e assim por diante.'],
   casa:['Qual destes cheiros é mais "casa" pra você?','Cada toque acende uma janela da sua casa.'],
   prato:['Monte o seu prato','A 1ª vai no centro do prato. As outras em volta.'],
   respira:['Respire… e toque no que o seu corpo pede agora','Sem pressa. Siga a bolinha que respira.'],
@@ -568,7 +601,7 @@ function vJogo(){const id=idAtual();const s=senDe(id);const G=PD.G;const tp=G.ti
  if(tp==='respira')cena=`<div class="resp"><i></i></div>`;
  if(tp==='final')cena=`<div class="podiomini">${G.esc.map((v,i)=>{const [sid,n]=v.split('|');return `<span style="--c:${senDe(sid)[3]}">${i+1}. ${esc(n)}</span>`;}).join('')}</div>`;
  const grade=G.resto.map((v,k)=>{if(tp==='final'){const [sid,n]=v.split('|');const ss=senDe(sid);return `<button class="sq" data-a="sq" data-v="${esc(v)}" style="--c:${ss[3]}"><svg viewBox="0 0 300 300">${artDe(sid,n)}</svg><b>${esc(n)}</b><small>${esc(ss[1])}</small></button>`;}
-  if(tp==='ouvir'){const on=G.ouv===v;return `<button class="sq ouv ${on?'on':''}" data-a="sq" data-v="${esc(v)}" style="--c:${s[3]}"><span class="onda">${on?'🔊':'♪'}</span><b>${on?esc(v):'Som '+(k+1)}</b>${on?`<em data-a="ouvok" data-v="${esc(v)}">Escolher este</em>`:''}</button>`;}
+  if(tp==='ouvir'){const on=G.ouv===v;return `<button class="sq ouv ${on?'on':''}" data-a="sq" data-v="${esc(v)}" style="--c:${s[3]}"><span class="onda">${on?'🔊':'♪'}</span><b>${esc(v)}</b>${on?`<em data-a="ouvok" data-v="${esc(v)}">Escolher este</em>`:''}</button>`;}
   return bolinha(id,v,k);}).join('');
  return `${tp==='final'?`${album()}<div class="k">A grande final</div>`:cab()}<h1>${T[0]}</h1><p class="small mute">${T[1]}</p>${cena}
  <p class="pos">Escolhendo a <b>${pos}ª</b></p><div class="sqg ${tp}">${grade}</div><div class="row">${volta}</div>`;}
@@ -585,13 +618,13 @@ function revelacao(id,k){const L=PD.res[id],f1=PD.f1[id]||[];const s=senDe(id);
 function vRevela(){const id=idAtual();const s=senDe(id);const L=PD.res[id];const sv=PD.sent[id]||{};const f1=(PD.f1[id]||[])[0];
  if(PD.brilho)return `${cab()}<div class="rv-espera" style="--c:${s[3]}"><i></i></div><p class="pd-frase" style="text-align:center">A sua nº 1 é…</p>`;
  const k=Object.keys(PD.res).length-1;
- return `${cab()}<div class="cel" style="--c:${s[3]}">${sv.acertou?`<div class="cel-t">🎉 Você se conhece bem!</div>`:(sv.palpite==='sim'&&L[0]!==f1?`<div class="cel-t">Mudou! Antes era ${esc(f1)}.</div>`:`<div class="cel-t">${s[2]} ${esc(s[1])} completo!</div>`)}
+ return `${cab()}<div class="cel" style="--c:${s[3]}"><div class="cel-t">🎉 ${s[2]} ${esc(s[1])} completo!</div>
  <div class="pd-campea"><svg viewBox="0 0 300 300">${artDe(id,L[0])}</svg><span>Sua nº 1: ${esc(L[0])}</span></div>
- <div class="rv">${revelacao(id,k)}</div><p class="ganhou">🧩 +1 pedaço da sua pintura</p></div>
+ ${tileDe(id,L[0])&&tileDe(id,L[0]).som?`<button class="btn" data-a="ouvir1" data-v="${esc(L[0])}" style="margin-top:8px">▶ Ouvir de novo: ${esc(L[0])}</button>`:''}<div class="rv">${revelacao(id,k)}</div><p class="ganhou">🧩 +1 pedaço da sua pintura</p></div>
  <h2 style="text-align:center">Como você se sentiu?</h2><div class="emo">${EMO.map(e=>`<button data-a="emo" data-v="${e}" aria-label="${e}">${e}</button>`).join('')}</div>
  <p style="text-align:center"><button class="lk" data-a="emo" data-v="">Pular</button></p>`;}
 function vPausa(){const id=idAtual();const s=senDe(id);
- return `${album()}<div class="pausa"><div class="resp grande"><i></i></div><p class="pd-frase">Uma respiração antes do próximo.</p>
+ return `${album()}<div class="pausa"><div class="resp grande"><i></i></div><p class="pd-frase">Metade da fase! Uma respiração antes de seguir.</p>
  <p class="mute">Próximo: ${s[2]} ${esc(s[1])} · ${JOGO_NOME[JOGO[id]]}</p>${faltam()===1?`<p class="falta">Falta só 1!</p>`:''}
  <button class="btn pri" data-a="pausaok">Já respirei →</button></div>`;}
 function vSurpresa(){const ids=Object.keys(PD.res);
@@ -606,7 +639,7 @@ function vPdPular(){const id=PD.pend[0];const s=senDe(id);return `${album()}<div
  <div class="row" style="justify-content:center"><button class="btn" data-a="pdnao">Agora não</button><button class="btn pri" data-a="pdsim">Quero tentar</button></div></div>`;}
 /* ----- o resumo em telas (story) ----- */
 function maiorSubida(){let best=null;PD.ordem.forEach(id=>{const L=PD.res[id];if(!L)return;const f1=PD.f1[id]||[];L.forEach((n,i)=>{const a=f1.indexOf(n);if(a>=0&&(!best||a-i>best.d))best={id,n,d:a-i};});});return best&&best.d>0?best:null;}
-function quadradinhos(){return SEN.map(s=>{const sv=PD.sent[s[0]];return PD.res[s[0]]?(sv&&sv.acertou?'🟩':'🟨'):'⬜';}).join('');}
+function quadradinhos(){return SEN.map(s=>{const sv=PD.sent[s[0]];return PD.res[s[0]]?'🟩':'⬜';}).join('');}
 function topPerfil(){try{const p=perfil();return {a:TAGS[p.top],b:TAGS[p.seg]};}catch(e){return null;}}
 function vStory(){const F=(PD.final||[]).map(v=>v.split('|'));const N=7;const st=PD.st;let c='';
  const bars=`<div class="stb">${Array.from({length:N},(_,i)=>`<i class="${i<st?'ok':i===st?'at':''}"></i>`).join('')}</div>`;
@@ -630,7 +663,7 @@ function renderPodio(){pdSalva();const f=PD.fase;
  document.getElementById('app').innerHTML=`<div class="bar0"><a class="logo" aria-label="7entidos"><img src="/assets/simbolo-contando-7.svg?v=20261102-novo" alt="" width="30" height="30"><b class="f"><span style="color:#FFD43B">7</span>entidos</b></a><span class="sp"></span></div>`+v;
  if(f==='pausa')padLiga();else padDesliga();arLiga();incLiga();
  if(f==='surpresa'&&!PD.acordeTocou){PD.acordeTocou=1;Object.keys(PD.res).forEach((x,i)=>setTimeout(()=>sino(i*2,.2),300+i*260));}
- if(f==='revela'&&PD.brilho){clearTimeout(window.__rv);window.__rv=setTimeout(()=>{if(!PD||PD.fase!=='revela')return;PD.brilho=false;renderPodio();const sv=PD.sent[idAtual()]||{};if(sv.acertou)festa();else{confete();sino(4,.2);vibra(25);}},1000);}}
+ if(f==='revela'&&PD.brilho){clearTimeout(window.__rv);window.__rv=setTimeout(()=>{if(!PD||PD.fase!=='revela')return;PD.brilho=false;renderPodio();festa();},1000);}}
 function linhaArr(v,i,cor,nome,sub,art){return `<li class="ar-li" data-i="${i}" style="--c:${cor}"><span class="ar-n">${i+1}</span><span class="ar-img"><svg viewBox="0 0 300 300">${art}</svg></span><span class="ar-nm">${esc(nome)}${sub?`<small>${esc(sub)}</small>`:''}</span><span class="ar-alca" aria-hidden="true">≡</span></li>`;}
 /* arrastar com o dedo (ou mouse): a linha segue o dedo e troca de lugar com a vizinha */
 function arLiga(){const ol=document.getElementById('arl');if(!ol)return;let li=null,y0=0,h=0,idx=0;
@@ -669,13 +702,19 @@ document.addEventListener('click',e=>{if(!PD)return;const b=e.target.closest('[d
  const ok=()=>{renderPodio();e.stopImmediatePropagation();};const topo=()=>{renderPodio();scrollTo(0,0);e.stopImmediatePropagation();};
  if(a==='play')return;
  if(a==='pdcomeca'){ac();PD.si=0;if(PD.ordem.length)pdComecaSentido();else if(PD.pend.length)PD.fase='pular';return topo();}
- if(a==='palpite'){(PD.sent[id]=PD.sent[id]||{}).palpite=b.dataset.v;pdJoga();PD.t0=Date.now();sino(0);return topo();}
- if(a==='pdpula'){pdSnap();PD.adiados.push(id);PD.ordem.splice(PD.si,1);if(PD.si<PD.ordem.length)PD.fase='pausa';else{PD.si=Math.max(0,PD.ordem.length-1);PD.fase=PD.adiados.length?'adiado':'pular';}return topo();}
+ if(a==='adplay'){adTocar();vibra(10);e.stopImmediatePropagation();return;}
+ if(a==='adop'){const G=PD.G;const v=b.dataset.v;if(G.certo)return;if(v===G.fila[G.i]){para();G.certo=v;G.erro=null;fbSom(null,true);vibra([15,30,15]);renderPodio();
+   setTimeout(()=>{if(!PD||PD.G!==G)return;G.i++;G.certo=null;G.erro=null;if(G.i>=G.fila.length){PD.G=sIni(G.itens,'ouvir');renderPodio();scrollTo(0,0);return;}G.ops=adOps(G.todos,G.fila[G.i]);renderPodio();adTocar();},1100);}
+  else{G.erro=v;G.erros++;vibra(40);renderPodio();adTocar();}e.stopImmediatePropagation();return;}
+ if(a==='ouvir1'){const t=tileDe(id,b.dataset.v);if(t&&t.som)toca(t.som);e.stopImmediatePropagation();return;}
+ if(a==='som'){try{localStorage.setItem('f2som',b.dataset.v);}catch(_){}fbSom(b.dataset.v,true);return ok();}
+ if(a==='joga'){pdJoga();PD.t0=Date.now();fbSom();if(PD.G&&PD.G.tipo==='adivinha')adTocar();return topo();}
+ if(a==='pdpula'){pdSnap();PD.adiados.push(id);PD.ordem.splice(PD.si,1);if(PD.si<PD.ordem.length)PD.fase='lembra';else{PD.si=Math.max(0,PD.ordem.length-1);PD.fase=PD.adiados.length?'adiado':'pular';}return topo();}
  if(a==='dv'){if(b.classList.contains('vai'))return;const v=b.dataset.v;b.classList.add('vence');const o=[...document.querySelectorAll('.pd-carta')].find(x=>x!==b);if(o)o.classList.add('perde');toque(id,v,PD.G.ord.length);
   document.querySelectorAll('.pd-carta').forEach(x=>x.classList.add('vai'));setTimeout(()=>{pdEscolheDuelo(v);renderPodio();},380);e.stopImmediatePropagation();return;}
  if(a==='sq'){const G=PD.G;const v=b.dataset.v;if(G.tipo==='ouvir'){if(e.target.closest('[data-a="ouvok"]'))return;G.ouv=v;vibra(10);const t=tileDe(id,v);if(t&&t.som)toca(t.som);return ok();}
   b.classList.add('pega');if(G.tipo==='final'){const [sid,n]=v.split('|');toque(sid,n,G.esc.length);}else toque(id,v,G.esc.length);setTimeout(()=>{pdEscolheSeq(v);renderPodio();},260);e.stopImmediatePropagation();return;}
- if(a==='ouvok'){para();sino(PD.G.esc.length);vibra(15);pdEscolheSeq(b.dataset.v);return ok();}
+ if(a==='ouvok'){para();fbSom();vibra(15);pdEscolheSeq(b.dataset.v);return ok();}
  if(a==='incliga'){try{DeviceOrientationEvent.requestPermission().then(r=>{PD.incOk=r==='granted';renderPodio();}).catch(()=>{});}catch(_){}e.stopImmediatePropagation();return;}
  if(a==='balok'){pdSnap();pdFechaSentido(PD.lista.slice());return topo();}
  if(a==='pdvolta'){const h=PD.hist.pop();if(h){const hist=PD.hist;PD=JSON.parse(h);PD.hist=hist;}para();return ok();}
@@ -690,7 +729,7 @@ document.addEventListener('click',e=>{if(!PD)return;const b=e.target.closest('[d
  if(a==='stz'){const r=b.getBoundingClientRect();if(e.clientX-r.left<r.width/3){if(PD.st>0)PD.st--;}else if(PD.st<6)PD.st++;return topo();}
  if(a==='sta'){if(PD.st<6)PD.st++;return topo();}
  if(a==='stv'){if(PD.st>0)PD.st--;return topo();}
- if(a==='mold'){PD.moldura=+b.dataset.v;sino(PD.moldura*2);return ok();}
+ if(a==='mold'){PD.moldura=+b.dataset.v;fbSom();return ok();}
  if(a==='abre'){PD.abriu=true;festa();return ok();}
  if(a==='stories'){pdStories();e.stopImmediatePropagation();return;}
  if(a==='combina'){const F=(PD.final||[]).map(v=>v.split('|')[1]);pdManda(`Minhas campeãs no 7entidos: ${F.slice(0,3).join(', ')} ${quadradinhos()}\nFaz a sua e vê se a gente combina: https://7entidos.com.br`);e.stopImmediatePropagation();return;}
