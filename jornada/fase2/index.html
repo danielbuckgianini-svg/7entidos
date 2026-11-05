@@ -54,7 +54,7 @@ h1{font-size:23px;line-height:1.25;margin:4px 0 10px}h2{font-size:18px;margin:22
 .fav3{display:flex;gap:12px;align-items:center;margin:6px 0 10px}.fav3 svg{width:96px;height:96px;border-radius:14px;flex:0 0 96px}
 .lem{display:flex;gap:10px;align-items:center;background:var(--field);border:1px solid var(--line);border-left:4px solid var(--c);padding:8px 10px;margin-bottom:6px}
 </style></head><body><div class="w" id="app"></div><input type="file" id="fotoin" accept="image/*" hidden>
-<script src="../config.js"></script>
+<script src="../efeito.js"></script><script src="../config.js"></script>
 <script>/* ---------- estímulos sensoriais (sons feitos aqui, sem arquivos) ---------- */
 let AC=null,TOCANDO=null;
 function ac(){try{if(navigator.audioSession)navigator.audioSession.type='playback';}catch(e){}if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;AC=new C();}if(AC.state!=='running')AC.resume();return AC;}
@@ -294,7 +294,7 @@ function dez(){const L=[];SEN.forEach(([id,sen])=>(J.esc[id]||[]).forEach(n=>{if
 function experiencias(){const top={};SEN.forEach(([id])=>{const L=(J.esc[id]||[]).map(n=>[n,F.notas[id+'|'+n]??0]).sort((a,b)=>b[1]-a[1]);top[id]=L[0]?L[0][0]:'';});const lo=s=>s.charAt(0).toLowerCase()+s.slice(1);
  return [`Ouça "${top.aud}" por 5 minutos enquanto toca em algo de ${lo(top.tato)}.`,`Prepare algo com sabor ${lo(top.pal)} e sinta o cheiro de ${lo(top.olf)}. Coma devagar, sem tela.`,`Comece com "${top.corpo}", depois faça um movimento de "${lo(top.equi)}". Termine olhando a imagem "${top.mapa}".`];}
 function v2(){const b=bloqueio(2);if(b)return b;const nome=(J.nome||'').split(' ')[0];
- if(F.i<0)return `<div class="hero"><div class="luzes">${C.map(c=>`<i style="background:${c};box-shadow:0 0 10px ${c}"></i>`).join('')}</div><div class="k">Jornada dos 7entidos · Fase 2</div><h1 class="f">A sua régua, ${esc(nome)}.</h1><p class="mute">Na Fase 1 você escolheu do que gosta. Agora, de 0 a 10, diga <b>o quanto</b> cada uma das suas 49 escolhas te faz bem. Um toque em cada. Leva uns 5 minutos.</p><button class="btn pri big" data-a="ini">Começar a Fase 2 →</button><p class="small mute">Sem resposta certa. O 7entidos não é terapia nem tratamento.</p></div>`;
+ if(F.i<0)return `<div class="hero"><div class="luzes">${C.map(c=>`<i style="background:${c};box-shadow:0 0 10px ${c}"></i>`).join('')}</div><div class="k">Jornada dos 7entidos · Fase 2</div><h1 class="f">A sua régua, ${esc(nome)}.</h1><p class="mute">Na Fase 1 você escolheu do que gosta. Agora, de 0 a 10, diga <b>o quanto</b> cada uma das suas 49 escolhas te faz bem. Um toque em cada. Leva uns 5 minutos.</p>${EF.on?EF.chega(F.chega)+'<p class="erro" id="er2i"></p>':''}<button class="btn pri big" data-a="ini">Começar a Fase 2 →</button><p class="small mute">Sem resposta certa. O 7entidos não é terapia nem tratamento.</p></div>`;
  if(F.i<7){const [id,sen,ic,cor]=SEN[F.i];const L=J.esc[id]||[];const n=L.filter(x=>F.notas[id+'|'+x]!=null).length;A=DEF_A.slice();
   return `<div class="topo2"><div class="dots">${SEN.map(([sid,,,c],k)=>`<i style="${feito2(sid)?`background:${c};box-shadow:0 0 8px ${c}`:''}${k===F.i?';outline:2px solid #F4F1EA':''}"></i>`).join('')}</div><div class="small mute">Sentido ${F.i+1} de 7 · ${n} de 7 notas</div></div>
   <div class="k" style="color:${cor}">${ic} ${esc(sen)}</div><h1 style="font-size:22px">${esc(PERG2[id])}</h1><div class="small mute" style="margin-bottom:10px">0 = nada · 10 = êxtase</div>
@@ -304,19 +304,19 @@ function v2(){const b=bloqueio(2);if(b)return b;const nome=(J.nome||'').split(' 
   return `<div class="k">A sua régua dos 7 sentidos</div><h1 class="f" style="font-size:30px">Os seus 10</h1><p class="small mute">O que você marcou como êxtase.</p>
   <div class="dez">${L.length?L.map(([id,sen,n])=>{const t=tileDe(id,n);A=DEF_A.slice();return `<div class="dz"><svg viewBox="0 0 300 300">${t?t.art():''}</svg><b>${esc(n)}</b><small>${esc(sen)}</small></div>`;}).join(''):'<p class="mute">Nenhum 10 ainda. Tudo bem: seus maiores estão no topo da régua.</p>'}</div>
   <h2>✨ 3 experiências de 5 minutos para esta semana</h2>${E.map((t,i)=>`<div class="ins5"><b>${i+1}. ${esc(t)}</b></div>`).join('')}
-  <h2>Depois desta fase, qual é a sua sensação agora?</h2><div class="c11 grande">${[...Array(11)].map((_,k)=>`<button class="${F.sens===k?'on':''}" data-a="sens" data-n="${k}">${k}</button>`).join('')}</div><div class="small mute" style="display:flex;justify-content:space-between"><span>0 = nada bem</span><span>10 = muito bem</span></div>
+  ${EF.on?EF.sai(F.chega,F.esai,F.leva)+EF.sug(F.sug):`<h2>Depois desta fase, qual é a sua sensação agora?</h2><div class="c11 grande">${[...Array(11)].map((_,k)=>`<button class="${F.sens===k?'on':''}" data-a="sens" data-n="${k}">${k}</button>`).join('')}</div><div class="small mute" style="display:flex;justify-content:space-between"><span>0 = nada bem</span><span>10 = muito bem</span></div>`}
   <div class="f2"><b>A Fase 3 traz as suas lembranças.</b><a class="btn pri" style="display:block;margin-top:10px;text-decoration:none" href="/jornada/fase3/?c=${CONVITE}" data-a="quer3">Ir para a Fase 3 →</a></div>
   <p class="erro" id="er2"></p><button class="btn pri big" data-a="fim2">Finalizar a Fase 2 ✓</button>`;}
  return `<div class="hero"><div class="k">Fase 2 finalizada ✓</div><h1 class="f">Obrigado, ${esc(nome)}!</h1><p class="mute">A sua régua está salva.</p><a class="btn pri big" style="display:block;text-decoration:none" href="/jornada/fase3/?c=${CONVITE}">Ir para a Fase 3 →</a></div>`;}
 function resumo2(){const notas=SEN.map(([id,sen])=>sen+': '+(J.esc[id]||[]).map(n=>n+' '+(F.notas[id+'|'+n]??'-')).join(' | '));const all=Object.values(F.notas);const med=all.length?Math.round(all.reduce((a,b)=>a+b,0)/all.length*10)/10:'';
- return {notas,media:med,dez:dez().map(([,s,n])=>n+' ('+s+')'),experiencias:experiencias(),sensacao:F.sens};}
+ return {notas,media:med,dez:dez().map(([,s,n])=>n+' ('+s+')'),experiencias:experiencias(),sensacao:EF.on?EF.texto(F.chega,F.esai,F.leva)+(F.sug?' · Sugestão: '+F.sug:''):F.sens,chega:F.chega||'',sai:F.esai||'',leva:F.leva||'',sugestao:F.sug||''};}
 function preparaTeste(){if(!TESTE)return;if(!J||!fase1Ok()){J={id:'TESTE-'+Date.now().toString(36),nome:'Daniel',cel:'',esc:{}};SEN.forEach(s=>{J.esc[s[0]]=s[5].slice(0,7).map(t=>t.n);});F={i:-1,notas:{},sens:null,quer3:false,fim:false};salvaJ();}}
 const faixaTeste=()=>TESTE?`<div style="background:#F9CB39;color:#0A0F24;font-weight:800;border-radius:12px;padding:8px 12px;margin:6px 0 10px;display:flex;gap:8px;align-items:center;font-size:14px">🧪 Modo teste do Daniel<span style="flex:1"></span><button class="btn" style="min-height:34px;padding:4px 10px;font-size:13px" data-a="zerateste">Recomeçar</button></div>`:'';
 function render(){preparaTeste();document.getElementById('app').innerHTML=topoLogo()+faixaTeste()+v2();}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a;
  if(a==='play'){e.stopPropagation();const on=b.classList.contains('on');para();document.querySelectorAll('.pl2.on').forEach(x=>{x.classList.remove('on');x.textContent='▶';});if(!on){toca(b.dataset.som);b.classList.add('on');b.textContent='■';}return;}
  if(a==='zerateste'){try{localStorage.removeItem(CHAVE);}catch(e){}J=null;F={i:-1,notas:{},sens:null,quer3:false,fim:false};render();scrollTo(0,0);return;}
- if(a==='ini'){F.i=0;salva2();post('fase2_inicio');render();scrollTo(0,0);return;}
+ if(a==='ini'){if(EF.on&&!F.chega){const er=document.getElementById('er2i');if(er)er.textContent='Toque em como você chega.';return;}F.i=0;salva2();post('fase2_inicio',EF.on?{chega:F.chega}:undefined);render();scrollTo(0,0);return;}
  if(a==='nota'){F.notas[b.dataset.k]=+b.dataset.n;salva2();
   /* só atualiza a linha tocada e o contador, sem redesenhar as imagens */
   const lin=b.closest('.c11');if(lin)lin.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
@@ -327,8 +327,12 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b
   return;}
  if(a==='prox'){para();F.i++;salva2();post('fase2_progresso',{feitos:F.i});render();scrollTo(0,0);return;}
  if(a==='volta'){para();F.i=Math.max(-1,F.i-1);salva2();render();scrollTo(0,0);return;}
+ if(a==='efchega'){F.chega=b.dataset.v;salva2();const y=scrollY;render();scrollTo(0,y);return;}
+ if(a==='efsai'){F.esai=b.dataset.v;salva2();const y=scrollY;render();scrollTo(0,y);return;}
+ if(a==='efleva'){F.leva=b.dataset.v;salva2();const y=scrollY;render();scrollTo(0,y);return;}
  if(a==='sens'){F.sens=+b.dataset.n;salva2();const y=scrollY;render();scrollTo(0,y);return;}
  if(a==='quer3'){F.quer3=true;F.fim=true;salva2();post('fase2',resumo2());return;}
- if(a==='fim2'){if(F.sens==null){document.getElementById('er2').textContent='Dê a sua nota de 0 a 10 antes de finalizar.';return;}F.fim=true;salva2();post('fase2',resumo2());render();scrollTo(0,0);return;}});
+ if(a==='fim2'){if(EF.on){const fa=EF.falta(F.esai,F.leva);if(fa){document.getElementById('er2').textContent=fa;return;}}else if(F.sens==null){document.getElementById('er2').textContent='Dê a sua nota de 0 a 10 antes de finalizar.';return;}F.fim=true;salva2();post('fase2',resumo2());render();scrollTo(0,0);return;}});
+document.addEventListener('input',e=>{if(e.target&&e.target.id==='efsug'){F.sug=e.target.value.slice(0,500);salva2();}});
 render();
 </script></body></html>
