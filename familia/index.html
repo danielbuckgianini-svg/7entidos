@@ -1,0 +1,149 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>7entidos · Família</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="/assets/simbolo-contando-7.svg?v=20261102-novo" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..600&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="config.js"></script>
+<style>
+:root{--bg:#0A0F24;--card:#111A3D;--field:#0D1430;--soft:#18224A;--line:#26315F;--ink:#F4F1EA;--mute:#AEB5D6;--pe:#F9CB39;--ok:#7DDB8B;--rev:#FF9AAE;color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0;background:radial-gradient(900px 600px at 80% -10%,#1a2552 0%,#0E1533 40%,#0A0F24 75%) fixed,var(--bg);color:var(--ink);font:17px/1.5 Manrope,system-ui,sans-serif}
+.w{max-width:620px;margin:0 auto;padding:12px max(16px,env(safe-area-inset-right)) 80px max(16px,env(safe-area-inset-left))}
+.f{font-family:Fraunces,Georgia,serif;font-weight:400}.mute{color:var(--mute)}.small{font-size:14px}
+h1{font-size:28px;line-height:1.2;margin:6px 0 4px}h2{font-size:19px;margin:0 0 8px}
+.luzes{display:flex;gap:7px}.luzes i{width:10px;height:10px;border-radius:50%}
+.tabs{position:sticky;top:0;z-index:5;background:rgba(10,15,36,.97);display:flex;gap:6px;padding:10px 0;margin:10px 0 12px;overflow-x:auto}
+.tab{font:inherit;font-weight:800;font-size:15px;border:1px solid var(--line);background:var(--soft);color:var(--ink);border-radius:999px;padding:9px 15px;cursor:pointer;white-space:nowrap;min-height:44px}
+.tab.on{background:var(--pe);color:#0A0F24;border-color:var(--pe)}
+.sec{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;margin-bottom:14px}
+.pq{background:var(--field);border:1px solid var(--line);border-left:4px solid var(--c);border-radius:14px;padding:12px;margin-top:10px}
+.pq.feito{cursor:pointer;padding:9px 12px}
+.qt{font-weight:800;font-size:17px;line-height:1.3;display:block;margin-bottom:4px}
+.op{display:flex;border:1px solid var(--line);border-radius:12px;margin-top:8px;background:var(--card)}
+.op.on{border-color:var(--c);box-shadow:0 0 0 1px var(--c)}.op.nq{opacity:.45}.op.nq b{text-decoration:line-through}
+.opb{flex:1;font:inherit;color:var(--ink);background:none;border:none;text-align:left;padding:11px;cursor:pointer;display:flex;gap:10px;align-items:center;min-height:48px}
+.rd{flex:0 0 18px;height:18px;border-radius:50%;border:2px solid var(--mute)}.op.on .rd{background:var(--c);border-color:var(--c)}
+.nqb{font:inherit;border:none;border-left:1px solid var(--line);background:none;color:var(--mute);width:46px;cursor:pointer;font-size:16px}.nqb.on{background:var(--rev);color:#0A0F24;border-radius:0 11px 11px 0}
+.tag{display:inline-block;font-size:13px;font-weight:800;border-radius:999px;padding:3px 10px;background:var(--pe);color:#0A0F24;margin-top:4px}
+.btn{font:inherit;font-weight:800;border:1px solid var(--line);background:var(--soft);color:var(--ink);border-radius:14px;padding:12px 16px;cursor:pointer;min-height:48px}
+.btn.pri{background:var(--pe);border-color:var(--pe);color:#0A0F24}.btn.ok{background:var(--ok);border-color:var(--ok);color:#0A0F24}
+.hum{display:flex;gap:8px;margin-top:8px}.hum button{font:inherit;font-size:24px;border:1px solid var(--line);background:var(--soft);border-radius:12px;padding:6px 14px;cursor:pointer}.hum button.on{border-color:var(--pe);background:#3a2a12}
+textarea{width:100%;font:inherit;font-size:16px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--field);color:var(--ink);min-height:70px;resize:vertical;margin-top:8px}
+.msg{border-radius:14px;padding:9px 12px;margin-top:8px;max-width:85%;font-size:15.5px}.msg small{display:block;font-size:12px;color:var(--mute);margin-top:2px}
+.msg.eu{background:#3a2f12;margin-left:auto}.msg.ele{background:var(--soft)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.ch{font:inherit;font-size:14.5px;font-weight:700;border:1px solid var(--line);background:var(--field);color:var(--ink);border-radius:999px;padding:8px 13px;cursor:pointer;min-height:40px}.ch.on{background:var(--pe);color:#0A0F24;border-color:var(--pe)}
+.pista{display:grid;grid-template-columns:140px 1fr;gap:8px;align-items:center;font-size:14.5px;margin:7px 0}.pista .bt{height:10px;background:var(--soft);border-radius:9px;overflow:hidden}.pista .bt i{display:block;height:100%;background:var(--pe);border-radius:9px}
+.lado{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}.lado div{background:var(--card);border-radius:10px;padding:7px 9px;font-size:14px}.lado small{display:block;color:var(--mute);font-size:12px}
+.vazio{border:1px dashed var(--line);border-radius:14px;padding:16px;text-align:center;color:var(--mute)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--pe);color:#0A0F24;font-weight:800;padding:10px 18px;border-radius:12px;z-index:9}
+button:focus-visible,textarea:focus-visible{outline:3px solid var(--pe);outline-offset:2px}
+</style></head><body><div class="w" id="app"><p class="mute">Abrindo…</p></div>
+<script>
+/* Página da família do 7entidos. Cada pessoa entra pelo seu próprio link (?t=código).
+   As respostas vão para a planilha "7entidos · Família" pelo robô do Google (FAMILIA_URL em config.js). */
+const URL_ROBO=window.FAMILIA_URL||'';
+const T=new URLSearchParams(location.search).get('t')||'';
+const KIDS={ricardo:{nome:'Ricardo',cor:'#5AB8FF',mae:'Juliana'},joao:{nome:'João',cor:'#7DDB8B',mae:'Paola'},lucas:{nome:'Lucas',cor:'#FF6FA3',mae:'Paola'}};
+const AREAS={dir:'Direito e marca',com:'Comunicação e redes',prod:'Experiência do app',tec:'Tecnologia e IA',neg:'Negócio e números',pes:'Pesquisa sobre pessoas',int:'Internacional',cri:'Criatividade e design'};
+const O=(t,a)=>({t,a:a||[]});
+const PERG=[
+ {id:'c1',eu:'O que mais te anima hoje?',ele:n=>`O que mais anima o ${n} hoje?`,o:[O('Jogos e tecnologia',['tec','prod']),O('Esportes e movimento',['prod']),O('Arte, música ou desenho',['cri']),O('Conversar e estar com gente',['com','pes'])]},
+ {id:'c2',eu:'Num grupo, você costuma ser…',ele:n=>`Num grupo, o ${n} costuma ser…`,o:[O('Quem lidera',['neg']),O('Quem tem as ideias',['cri','prod']),O('Quem organiza',['dir','neg']),O('Quem anima todo mundo',['com'])]},
+ {id:'c3',eu:'Quando algo dá errado, você…',ele:n=>`Quando algo dá errado, o ${n}…`,o:[O('Tenta de novo sozinho',['tec']),O('Procura entender o porquê',['pes','dir']),O('Muda de plano rápido',['neg']),O('Pede ajuda',['com'])]},
+ {id:'c4',eu:'Como você aprende melhor?',ele:n=>`Como o ${n} aprende melhor?`,o:[O('Fazendo na prática',['prod']),O('Vendo vídeos',['com']),O('Lendo',['dir']),O('Conversando com alguém',['pes'])]},
+ {id:'c5',eu:'Qual dos 7 sentidos é o seu mais forte?',ele:n=>`Qual dos 7 sentidos parece mais forte no ${n}?`,o:[O('Visão',['cri']),O('Audição',['cri']),O('Tato',['prod']),O('Olfato',['pes']),O('Paladar',['prod']),O('Equilíbrio',['prod']),O('Noção do corpo',['prod'])]},
+ {id:'c6',eu:'Que superpoder você traria para o 7entidos?',ele:n=>`Que superpoder o ${n} traria para o 7entidos?`,o:[O('Convencer as pessoas',['neg','com']),O('Criar coisas bonitas',['cri']),O('Entender regras e contratos',['dir']),O('Entender gente de outros lugares',['int','pes']),O('Mexer com tecnologia',['tec'])]},
+ {id:'c7',k:{
+  ricardo:{eu:'O que você pode trazer do Japão para o 7entidos?',ele:'O que o Ricardo pode trazer do Japão para o 7entidos?',o:[O('Ideias de apps e jogos de lá',['int','prod']),O('O jeito japonês de cuidar dos sentidos',['int','pes']),O('Contar como é viver lá',['int','com']),O('Testar o app como alguém de fora',['int','prod'])]},
+  joao:{eu:'Do Direito e do trabalho com a Ju, o que mais te interessa?',ele:'Do Direito e do trabalho com a Ju, o que mais interessa ao João?',o:[O('Contratos e sociedade',['dir','neg']),O('Marca e registro no INPI',['dir']),O('Privacidade e dados das pessoas',['dir','tec']),O('Negócio, clientes e vendas',['neg','com'])]},
+  lucas:{eu:'Do que você mais gosta de brincar?',ele:'Do que o Lucas mais gosta de brincar?',o:[O('Videogame',['tec','prod']),O('Desenhar e inventar histórias',['cri']),O('Bola e brincadeira na rua',['prod']),O('Montar coisas (Lego, blocos)',['tec','cri'])]}}},
+ {id:'c8',eu:'Qual rede você mais usa?',ele:n=>`Qual rede o ${n} mais usa?`,o:[O('Instagram',['com']),O('TikTok',['com','cri']),O('YouTube',['com','tec']),O('WhatsApp',['com']),O('Quase nenhuma')]},
+ {id:'c9',eu:'Que missão você toparia na hora?',ele:n=>`Que missão o ${n} toparia na hora?`,o:[O('Testar o app e dar nota',['prod','pes']),O('Criar um post ou vídeo',['com','cri']),O('Pesquisar um assunto',['pes','dir']),O('Ajudar a resolver um problema de verdade',['neg'])]},
+ {id:'c10',eu:'Como você gosta de ser reconhecido?',ele:n=>`Como o ${n} gosta de ser reconhecido?`,o:[O('Elogio na frente de todos'),O('Uma conversa a dois'),O('Um título ou prêmio divertido'),O('Ver o resultado do que fiz')]}];
+const MISSOES=[{id:'m1',t:'Missão 1 · Seguir os canais do 7entidos',links:[['📸 Instagram','https://www.instagram.com/7entidoss/'],['👍 Facebook','https://www.facebook.com/profile.php?id=61596119254628'],['💼 LinkedIn','https://www.linkedin.com/company/145418964/'],['🌐 Site','https://7entidos.com.br']],area:'com'}];
+const PREFS=[{id:'tempo',q:'Tempo por semana',o:['Até 15 minutos','Cerca de 1 hora','Mais de 1 hora']},{id:'tipo',q:'Tipo de participação',o:['Brincadeira e curiosidade','Aprender os bastidores','Pequenas tarefas de verdade']},{id:'expo',q:'Aparecer nas redes do 7entidos',o:['Não','Só o primeiro nome','Com autorização a cada vez']}];
+const HUM=['😊','😐','😕'];
+const pg=(p,k,voz)=>{const b=p.k?p.k[k]:p;return {q:voz==='eu'?b.eu:(typeof b.ele==='function'?b.ele(KIDS[k].nome):b.ele),o:b.o};};
+
+/* ---------- estado ---------- */
+let EU=null,L=[],ABA=null,KID=null,ABERTA=null,ERRO='';
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const toast=t=>{const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2200);};
+const NOMEP={ricardo:'Ricardo',joao:'João',lucas:'Lucas',juliana:'Juliana',paola:'Paola',daniel:'Daniel'};
+/* último valor de cada (quem, menino, tipo, chave) */
+function ult(quem,menino,tipo,chave){for(let i=L.length-1;i>=0;i--){const r=L[i];if(r.quem===quem&&r.menino===menino&&r.tipo===tipo&&r.chave===chave)return r;}return null;}
+function salva(menino,tipo,chave,valor,texto){const r={em:new Date().toISOString(),quem:EU.id,menino,tipo,chave,valor:valor==null?'':String(valor),texto:texto||''};L.push(r);try{localStorage.setItem('fam_'+T,JSON.stringify(L));}catch(e){}render(true);
+ if(!URL_ROBO){toast('Ainda não conectado à planilha.');return;}
+ try{fetch(URL_ROBO,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({t:T},r)),keepalive:true});}catch(e){toast('Não consegui enviar agora.');}}
+
+/* ---------- pistas (só para as mães e o Daniel) ---------- */
+function pistas(k){const P={};Object.keys(AREAS).forEach(a=>P[a]=0);
+ ['eu','mae'].forEach(qm=>{const quem=qm==='eu'?k:KIDS[k].mae.toLowerCase();PERG.forEach(p=>{const r=ult(quem,k,'resp',p.id);if(r&&r.valor!=='')pg(p,k,'eu').o[+r.valor].a.forEach(a=>P[a]+=2);});});
+ MISSOES.forEach(m=>{const r=ult(k,k,'missao',m.id);if(r&&r.valor==='feita'){P[m.area]+=1;const h=ult(k,k,'humor',m.id);if(h&&h.valor==='0')P[m.area]+=2;}});
+ const mx=Math.max(1,...Object.values(P));return Object.entries(P).map(([a,v])=>({n:AREAS[a],v,p:Math.round(v/mx*100)})).sort((x,y)=>y.v-x.v);}
+
+/* ---------- blocos ---------- */
+function perguntas(k,voz){const quem=EU.id;const c=KIDS[k].cor;let n=0;
+ return PERG.map((p,i)=>{const P=pg(p,k,voz);const r=ult(quem,k,'resp',p.id);const sel=r&&r.valor!==''?+r.valor:null;const nr=ult(quem,k,'nao',p.id);const nao=nr&&nr.valor?nr.valor.split(',').map(Number):[];const key=k+p.id;
+  if(sel!=null)n++;
+  if(sel!=null&&ABERTA!==key)return `<div class="pq feito" style="--c:${c}" data-a="abre" data-id="${key}" role="button" tabindex="0"><span class="small mute">${esc(P.q)}</span><br><span class="tag">${esc(P.o[sel].t)}</span></div>`;
+  return `<div class="pq" style="--c:${c}"><b class="qt">${i+1}. ${esc(P.q)}</b>${P.o.map((o,j)=>`<div class="op${sel===j?' on':''}${nao.includes(j)?' nq':''}"><button class="opb" data-a="sel" data-k="${k}" data-p="${p.id}" data-i="${j}"><span class="rd"></span><b>${esc(o.t)}</b></button><button class="nqb${nao.includes(j)?' on':''}" data-a="nao" data-k="${k}" data-p="${p.id}" data-i="${j}" aria-label="Não combina">✕</button></div>`).join('')}</div>`;}).join('');}
+function missoes(k,pode){return MISSOES.map(m=>{const r=ult(k,k,'missao',m.id);const feita=r&&r.valor==='feita';const h=ult(k,k,'humor',m.id);
+ return `<div class="pq" style="--c:${feita?'var(--ok)':KIDS[k].cor}"><b class="qt">${esc(m.t)}</b>${pode?`<div class="chips">${m.links.map(([n,u])=>`<a class="ch" href="${u}" target="_blank" rel="noopener" style="text-decoration:none">${n}</a>`).join('')}</div>`:''}
+ ${pode?`<div style="margin-top:10px"><button class="btn ${feita?'ok':'pri'}" data-a="mis" data-k="${k}" data-m="${m.id}">${feita?'✓ Concluída':'Concluí!'}</button></div>${feita?`<div class="hum">${HUM.map((x,i)=>`<button class="${h&&h.valor===String(i)?'on':''}" data-a="hum" data-k="${k}" data-m="${m.id}" data-i="${i}">${x}</button>`).join('')}</div>`:''}`
+ :`<span class="tag" style="background:${feita?'var(--ok)':'var(--soft)'};color:${feita?'#0A0F24':'var(--ink)'}">${feita?'✓ concluída'+(h?' '+HUM[+h.valor]:''):'ainda não'}</span>`}</div>`;}).join('');}
+function conversa(com){const ids=[EU.id,com];const M=L.filter(r=>r.tipo==='recado'&&ids.includes(r.quem)&&ids.includes(r.chave));
+ return `${M.length?M.map(r=>`<div class="msg ${r.quem===EU.id?'eu':'ele'}">${esc(r.texto)}<small>${esc(NOMEP[r.quem]||r.quem)} · ${esc((r.em||'').slice(8,10)+'/'+(r.em||'').slice(5,7))}</small></div>`).join(''):`<div class="vazio">Nenhuma mensagem ainda.</div>`}
+ <textarea id="tx-${com}" maxlength="800" placeholder="Escreva para ${esc(NOMEP[com]||com)}…"></textarea><div style="margin-top:8px"><button class="btn pri" data-a="rec" data-to="${com}">Enviar</button></div>`;}
+function lado(k){const mae=KIDS[k].mae.toLowerCase();return PERG.map(p=>{const a=ult(k,k,'resp',p.id),b=ult(mae,k,'resp',p.id);const P=pg(p,k,'ele');if(!a&&!b)return '';
+ return `<div class="pq" style="--c:${KIDS[k].cor}"><span class="small mute">${esc(P.q)}</span><div class="lado"><div><small>${KIDS[k].nome}</small>${a&&a.valor!==''?esc(P.o[+a.valor].t):'—'}</div><div><small>${KIDS[k].mae}</small>${b&&b.valor!==''?esc(P.o[+b.valor].t):'—'}</div></div></div>`;}).join('')||`<div class="vazio">Ainda sem respostas.</div>`;}
+function blocoPistas(k){const P=pistas(k);return P.some(x=>x.v)?P.slice(0,4).map(x=>`<div class="pista"><span>${esc(x.n)}</span><span class="bt"><i style="width:${x.p}%"></i></span></div>`).join(''):`<div class="vazio">Aparece quando houver respostas.</div>`;}
+function prefs(k){return PREFS.map(p=>{const r=ult(EU.id,k,'pref',p.id);return `<div style="margin-top:10px"><b class="small">${esc(p.q)}</b><div class="chips">${p.o.map((o,i)=>`<button class="ch${r&&r.valor===String(i)?' on':''}" data-a="pref" data-k="${k}" data-p="${p.id}" data-i="${i}">${esc(o)}</button>`).join('')}</div></div>`;}).join('');}
+
+/* ---------- telas ---------- */
+function telaMenino(){const k=EU.id;const tabs=[['mis','🎯 Missões'],['sobre','🔎 Sobre você'],['ideia','💬 Fale com o Daniel']];ABA=ABA||'mis';
+ return `<h1 class="f">Oi, ${esc(EU.nome)}! 👋</h1><p class="mute" style="margin:0">Seu espaço no 7entidos.</p>
+ <div class="tabs">${tabs.map(([a,t])=>`<button class="tab${ABA===a?' on':''}" data-a="aba" data-v="${a}">${t}</button>`).join('')}</div>
+ ${ABA==='mis'?`<div class="sec"><h2>Suas missões</h2>${missoes(k,true)}</div>`:ABA==='sobre'?`<div class="sec"><h2>Sobre você</h2><p class="small mute" style="margin:0">Toque no que tem a ver com você. ✕ no que não tem.</p>${perguntas(k,'eu')}</div>`:`<div class="sec"><h2>Ideias e recados</h2>${conversa('daniel')}</div>`}`;}
+function telaMae(){const ks=EU.meninos;KID=KID||ks[0];const k=KID;const tabs=[['ev','📈 Evolução'],['voce','🔎 Suas respostas'],['pref','💛 Preferências'],['msg','💬 Daniel']];ABA=ABA||'ev';
+ return `<h1 class="f">Oi, ${esc(EU.nome)}! 💛</h1><p class="mute" style="margin:0">Acompanhe e construa junto com o Daniel.</p>
+ ${ks.length>1?`<div class="chips" style="margin-top:10px">${ks.map(x=>`<button class="ch${x===k?' on':''}" data-a="kid" data-k="${x}">${KIDS[x].nome}</button>`).join('')}</div>`:''}
+ <div class="tabs">${tabs.map(([a,t])=>`<button class="tab${ABA===a?' on':''}" data-a="aba" data-v="${a}">${t}</button>`).join('')}</div>
+ ${ABA==='ev'?`<div class="sec"><h2>🎯 Missões do ${KIDS[k].nome}</h2>${missoes(k,false)}</div><div class="sec"><h2>🧭 Onde ele parece brilhar</h2><p class="small mute" style="margin:0 0 6px">Só pistas. Ainda é cedo.</p>${blocoPistas(k)}</div><div class="sec"><h2>Ele × você</h2>${lado(k)}</div>`
+ :ABA==='voce'?`<div class="sec"><h2>Como você vê o ${KIDS[k].nome}</h2>${perguntas(k,'ele')}</div>`
+ :ABA==='pref'?`<div class="sec"><h2>O que você prefere para o ${KIDS[k].nome}</h2>${prefs(k)}</div>`
+ :`<div class="sec"><h2>Conversa com o Daniel</h2>${conversa('daniel')}</div>`}`;}
+function telaDono(){const ks=Object.keys(KIDS);KID=KID||ks[0];const k=KID;ABA=ABA||'ev';const mae=KIDS[k].mae.toLowerCase();
+ const tabs=[['ev','📈 Evolução'],['msg','💬 '+KIDS[k].nome],['mae','💬 '+KIDS[k].mae]];
+ return `<h1 class="f">Painel da família</h1>
+ <div class="chips" style="margin-top:6px">${ks.map(x=>`<button class="ch${x===k?' on':''}" data-a="kid" data-k="${x}">${KIDS[x].nome}</button>`).join('')}</div>
+ <div class="tabs">${tabs.map(([a,t])=>`<button class="tab${ABA===a?' on':''}" data-a="aba" data-v="${a}">${t}</button>`).join('')}</div>
+ ${ABA==='ev'?`<div class="sec"><h2>🎯 Missões</h2>${missoes(k,false)}</div><div class="sec"><h2>🧭 Pistas de área</h2>${blocoPistas(k)}</div><div class="sec"><h2>Ele × ${KIDS[k].mae}</h2>${lado(k)}</div><div class="sec"><h2>💛 Preferências da ${KIDS[k].mae}</h2>${PREFS.map(p=>{const r=ult(mae,k,'pref',p.id);return `<p class="small" style="margin:6px 0"><b>${esc(p.q)}:</b> ${r?esc(p.o[+r.valor]):'—'}</p>`;}).join('')}</div>`
+ :ABA==='msg'?`<div class="sec"><h2>Conversa com o ${KIDS[k].nome}</h2>${conversa(k)}</div>`:`<div class="sec"><h2>Conversa com a ${KIDS[k].mae}</h2>${conversa(mae)}</div>`}`;}
+function render(keep){const y=scrollY;const app=document.getElementById('app');
+ const topo=`<div style="display:flex;align-items:center;gap:10px"><b class="f" style="font-size:19px"><span style="color:var(--pe)">7</span>entidos</b><span class="luzes">${['#FFD23F','#5AB8FF','#FF8A5C','#7DDB8B','#FF6FA3','#A98BFF','#3FE0D0'].map(c=>`<i style="background:${c}"></i>`).join('')}</span></div>`;
+ if(!EU){app.innerHTML=topo+`<div class="sec" style="margin-top:16px"><h2>${ERRO?'Não consegui abrir':'Abrindo…'}</h2><p class="mute">${ERRO||'Um momento.'}</p></div>`;return;}
+ app.innerHTML=topo+(EU.papel==='menino'?telaMenino():EU.papel==='mae'?telaMae():telaDono());if(keep)scrollTo(0,y);}
+
+/* ---------- ações ---------- */
+document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b||!EU)return;const a=b.dataset.a,k=b.dataset.k;
+ if(a==='aba'){ABA=b.dataset.v;ABERTA=null;render();scrollTo(0,0);return;}
+ if(a==='kid'){KID=k;ABERTA=null;render(true);return;}
+ if(a==='abre'){ABERTA=b.dataset.id;render(true);return;}
+ if(a==='sel'){ABERTA=null;const r=ult(EU.id,k,'resp',b.dataset.p);const i=b.dataset.i;salva(k,'resp',b.dataset.p,r&&r.valor===i?'':i);return;}
+ if(a==='nao'){const r=ult(EU.id,k,'nao',b.dataset.p);const s=new Set(r&&r.valor?r.valor.split(','):[]);const i=b.dataset.i;s.has(i)?s.delete(i):s.add(i);salva(k,'nao',b.dataset.p,[...s].join(','));return;}
+ if(a==='mis'){const r=ult(k,k,'missao',b.dataset.m);salva(k,'missao',b.dataset.m,r&&r.valor==='feita'?'':'feita');if(!(r&&r.valor==='feita'))toast('Boa! 🎉');return;}
+ if(a==='hum'){salva(k,'humor',b.dataset.m,b.dataset.i);return;}
+ if(a==='pref'){const r=ult(EU.id,k,'pref',b.dataset.p);salva(k,'pref',b.dataset.p,r&&r.valor===b.dataset.i?'':b.dataset.i);return;}
+ if(a==='rec'){const to=b.dataset.to;const t=(document.getElementById('tx-'+to).value||'').trim();if(!t)return;salva(EU.papel==='menino'?EU.id:(KIDS[to]?to:''),'recado',to,'',t.slice(0,800));toast('Enviado');return;}});
+document.addEventListener('keydown',e=>{const t=e.target.closest&&e.target.closest('.pq.feito');if(t&&(e.key==='Enter'||e.key===' ')){e.preventDefault();t.click();}});
+
+/* ---------- abrir ---------- */
+(async()=>{render();
+ if(!T){ERRO='Este link está incompleto. Peça ao Daniel o seu link.';render();return;}
+ try{const c=JSON.parse(localStorage.getItem('fam_'+T)||'null');if(Array.isArray(c))L=c;}catch(e){}
+ if(!URL_ROBO){ERRO='O espaço ainda está sendo preparado. Volte em breve.';render();return;}
+ try{const r=await fetch(URL_ROBO+'?t='+encodeURIComponent(T));const j=await r.json();
+  if(!j.ok){ERRO='Link não reconhecido. Peça ao Daniel o seu link.';render();return;}
+  EU=j.eu;L=j.linhas||[];try{localStorage.setItem('fam_'+T,JSON.stringify(L));}catch(e){}render();}
+ catch(e){ERRO='Sem conexão agora. Tente de novo em instantes.';render();}})();
+</script></body></html>
