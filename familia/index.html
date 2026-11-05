@@ -232,13 +232,39 @@ function telaMae(){const ks=EU.meninos;KID=KID||ks[0];const fim1=!!window.LIBERA
  else if(ABA==='pref')c=`${ks.length>1?`<div class="chips">${ks.map(x=>`<button class="ch${x===KID?' on':''}" data-a="kid" data-k="${x}">${KIDS[x].nome}</button>`).join('')}</div>`:''}<h2 style="margin-top:10px">Para o ${KIDS[KID].nome}</h2>${prefs(KID)}`;
  else c=`<h2>Conversa com o Daniel</h2>${conversa('daniel')}`;
  return `<h1 class="f">Oi, ${esc(cfgv('apelido')||EU.nome)}! ${cfgv('simb')||'💛'}</h1>${rever()}${tabsHtml(tabs)}<div class="sec">${c}</div>`;}
-function telaDono(){const ks=['ricardo','joao','lucas','juliana','paola'];KID=KID||'ricardo';ABA=ABA||'ev';const k=KID;const mae=!KIDS[k];
+/* ---------- painel do Daniel ---------- */
+const PESSOAS=['ricardo','joao','lucas','juliana','paola'];
+const menDe=p=>KIDS[p]?p:'';
+const cfgDe=(p,c)=>{const r=ult(p,menDe(p),'eu','cfg_'+c);return r&&r.valor!==''?(c==='apelido'?r.texto:r.valor):null;};
+function resumo(p){const m=menDe(p);const cfg=CFGQ.filter(([c])=>cfgDe(p,c)).length;const vid=!!ult(p,m,'visto','video');
+ const ultima=L.filter(r=>r.quem===p).map(r=>r.em).sort().pop()||'';
+ if(KIDS[p]){const J=p==='lucas'?J1L:J1;const j=feitas(J,'j1_',p,p);const t=p==='lucas'?MUNDOS.filter(([a])=>val(p,p,'t2_'+a)).length:Object.keys(AREAS).filter(a=>val(p,p,'t2_'+a)).length;const tt=p==='lucas'?3:8;
+  const mis=MISSOES.filter(x=>{const r=ult(p,p,'missao',x.id);return r&&r.valor==='feita';}).length;
+  const tot=5+1+J.length+tt+MISSOES.length,f=cfg+(vid?1:0)+j+Math.min(t,tt)+mis;
+  const st=!ultima?'Ainda não entrou':cfg<5?'Montando o espaço':j<J.length?`Jornada 1 · ${j}/${J.length}`:t<tt?`Trilha 2 · ${t}/${tt}`:'✓ Concluiu tudo';
+  return {p:f/tot,st,ultima,cfg};}
+ const a1=feitas(M1,'f1_',p,''),a2=feitas(M2,'f2_',p,''),oj=p==='juliana'?feitas(MJ,'oj_',p,''):0,ojt=p==='juliana'?MJ.length:0;
+ const tot=5+1+M1.length+M2.length+ojt,f=cfg+(vid?1:0)+a1+a2+oj;
+ const st=!ultima?'Ainda não entrou':cfg<5?'Montando o espaço':a1<M1.length?`Fase 1 · ${a1}/${M1.length}`:a2<M2.length?`Fase 2 · ${a2}/${M2.length}`:'✓ Concluiu tudo';
+ return {p:f/tot,st,ultima,cfg};}
+function novasMsgs(){return PESSOAS.map(p=>{const M=L.filter(r=>r.tipo==='recado'&&((r.quem===p&&r.chave==='daniel')||(r.quem==='daniel'&&r.chave===p)));const u=M[M.length-1];return u&&u.quem===p?{p,u}:null;}).filter(Boolean);}
+const dataBR=e=>e?e.slice(8,10)+'/'+e.slice(5,7):'—';
+function painel(){const R=PESSOAS.map(p=>[p,resumo(p)]);const ent=R.filter(([,r])=>r.ultima).length,fim=R.filter(([,r])=>r.st.startsWith('✓')).length;const msgs=novasMsgs();
+ return `<div class="cfgo" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:0">${[['Entraram',ent+'/5'],['Concluíram',fim+'/5'],['Mensagens novas',msgs.length]].map(([t,n])=>`<div class="pq" style="--c:var(--pe);margin:0;text-align:center"><b style="font-size:26px">${n}</b><br><span class="small mute">${t}</span></div>`).join('')}</div>
+ ${msgs.length?`<div class="sec" style="margin-top:12px;border-color:var(--pe)"><h2>💬 Esperando sua resposta</h2>${msgs.map(({p,u})=>`<div class="pq feito" style="--c:var(--pe)" data-a="vai" data-k="${p}" data-v="msg"><b>${esc(NOMEP[p])}</b> · <span class="small mute">${dataBR(u.em)}</span><br><span class="small">${esc(u.texto.slice(0,90))}</span></div>`).join('')}</div>`:''}
+ <div class="sec" style="margin-top:12px"><h2>👥 Cada um</h2>${R.map(([p,r])=>{const s=cfgDe(p,'simb')||'○',ap=cfgDe(p,'apelido');const cor=cfgDe(p,'cor')||'var(--line)';
+  return `<div class="pq feito" style="--c:${cor}" data-a="vai" data-k="${p}" data-v="ev"><div style="display:flex;align-items:center;gap:10px"><span style="font-size:24px">${s}</span><div style="flex:1;min-width:0"><b>${esc(NOMEP[p])}</b>${ap&&ap!==NOMEP[p]?` <span class="small mute">"${esc(ap)}"</span>`:''}<br><span class="small mute">${esc(r.st)} · última vez ${dataBR(r.ultima)}</span></div><b class="small">${Math.round(r.p*100)}%</b></div><div class="prog" style="margin:8px 0 0"><i class="ok" style="flex:none;width:${Math.round(r.p*100)}%"></i></div></div>`;}).join('')}</div>
+ <div class="sec"><h2>🧭 Caminhos que eles amaram</h2>${['ricardo','joao','lucas'].map(k=>{const a=areasDe(k);return `<p class="small" style="margin:6px 0"><b>${KIDS[k].nome}:</b> ${a.length?a.map(esc).join(' · '):'<span class="mute">ainda não</span>'}</p>`;}).join('')}</div>
+ <div class="sec"><h2>💛 O que as mães esperam</h2>${['juliana','paola'].map(m=>{const r1=val(m,'','f2_n2'),r2=val(m,'','f2_n7'),r3=val(m,'','f1_m6');const P=id=>M2.find(x=>x.id===id)||M1.find(x=>x.id===id);
+  return `<p class="small" style="margin:6px 0"><b>${NOMEP[m]}:</b> ${[r3?'quer que aprendam '+P('m6').o[+r3.valor].toLowerCase():'',r1?'papel: '+P('n2').o[+r1.valor].toLowerCase():'',r2?'tempo: '+P('n7').o[+r2.valor].toLowerCase():''].filter(Boolean).map(esc).join(' · ')||'<span class="mute">ainda não</span>'}</p>`;}).join('')}</div>`;}
+function telaDono(){ABA=ABA||'painel';const k=KID||'ricardo';const mae=!KIDS[k];
+ if(ABA==='painel')return `<h1 class="f">Painel da família</h1>${painel()}`;
  const tabs=[['ev',mae?'💛 Respostas':'📈 Evolução'],['msg','💬 Conversa']];
  let c;
  if(ABA==='msg')c=`<h2>Conversa com ${esc(NOMEP[k])}</h2>${conversa(k)}`;
  else if(mae)c=`<h2>Fase 1</h2>${respostas(k,'',M1,'f1_')}<h2 style="margin-top:14px">Fase 2</h2>${respostas(k,'',M2,'f2_')}${k==='juliana'?`<h2 style="margin-top:14px">Olhar sobre o João</h2>${respostas(k,'',MJ,'oj_')}`:''}`;
  else{const m=KIDS[k].mae;c=evolucao(k)+`<div class="sec"><h2>⚙️ Preferências da ${NOMEP[m]}</h2>${PREFS.map(p=>{const r=ult(m,k,'pref',p.id);return `<p class="small" style="margin:6px 0"><b>${esc(p.q)}:</b> ${r&&r.valor!==''?esc(p.o[+r.valor]):'—'}</p>`;}).join('')}</div>`;}
- return `<h1 class="f">Painel da família</h1><div class="chips">${ks.map(x=>`<button class="ch${x===k?' on':''}" data-a="kid" data-k="${x}">${NOMEP[x]}</button>`).join('')}</div>${tabsHtml(tabs)}<div class="sec">${c}</div>`;}
+ return `<p><button class="btn" style="min-height:40px;padding:6px 12px" data-a="aba" data-v="painel">← Painel</button></p><div class="chips">${PESSOAS.map(x=>`<button class="ch${x===k?' on':''}" data-a="kid" data-k="${x}">${NOMEP[x]}</button>`).join('')}</div>${tabsHtml(tabs)}<div class="sec">${c}</div>`;}
 function render(keep){const y=scrollY;const app=document.getElementById('app');aplicaTema();
  const ok=configurado();const ap=cfgv('apelido');
  const topo=!EU?'':EU.papel==='dono'?`<b class="f" style="font-size:19px">👨‍👩‍👦 Família</b>`:ok?`<div style="display:flex;align-items:center;gap:10px"><span style="font-size:30px">${cfgv('simb')}</span><b class="f" style="font-size:19px">Espaço ${EU.papel==='mae'?'da':'do'} ${esc(ap)}</b></div>`:`<b class="f" style="font-size:19px">Oi, ${esc(EU.nome)}! 👋</b>`;
@@ -257,7 +283,8 @@ function video(){if(VID)return;const R=roteiro();const D=7500;let i=0;const el=d
 /* ---------- ações ---------- */
 document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b||!EU)return;const a=b.dataset.a,k=b.dataset.k,c=b.dataset.c;const men=meuMenino();
  if(a==='aba'){ABA=b.dataset.v;render();scrollTo(0,0);return;}
- if(a==='kid'){KID=k;render(true);return;}
+ if(a==='kid'){KID=k;if(ABA==='painel')ABA='ev';render(true);return;}
+ if(a==='vai'){KID=k;ABA=b.dataset.v;render();scrollTo(0,0);return;}
  if(a==='video'){video();return;}
  if(a==='cfg'){salva(men,'eu','cfg_'+c,b.dataset.v);if(configurado())setTimeout(video,300);return;}
  if(a==='cfgapl'){const t=(document.getElementById('apl').value||'').trim()||EU.nome;salva(men,'eu','cfg_apelido','1',t.slice(0,30));if(configurado())setTimeout(video,300);return;}
