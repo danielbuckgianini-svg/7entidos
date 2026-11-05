@@ -119,6 +119,22 @@ h1{font-size:23px;line-height:1.25;margin:4px 0 10px}h2{font-size:18px;margin:22
 .cena-prato .p0{width:70px;height:70px;left:75px;top:75px}.cena-prato .p1{left:87px;top:16px}.cena-prato .p2{left:150px;top:50px}.cena-prato .p3{left:150px;top:122px}.cena-prato .p4{left:87px;top:158px}.cena-prato .p5{left:24px;top:122px}.cena-prato .p6{left:24px;top:50px}
 .resp{display:grid;place-items:center;height:90px}.resp i{width:40px;height:40px;border-radius:50%;background:radial-gradient(circle,#3FE0D0,#5AB8FF 60%,transparent 72%);animation:resp 8s ease-in-out infinite}
 .resp.grande{height:200px}.resp.grande i{width:110px;height:110px}@keyframes resp{0%,100%{transform:scale(.55);opacity:.6}50%{transform:scale(1.25);opacity:1}}
+/* 05/11 (noite): Que som é esse?, Carinho, Esteira de sushi, Corpo que acende */
+.qplay{display:flex;flex-direction:column;align-items:center;gap:8px;width:100%;margin:8px 0;padding:18px 10px;font:inherit;color:var(--ink);background:#070B1C;border:2px solid var(--c);border-radius:18px;cursor:pointer;box-shadow:0 0 18px color-mix(in srgb,var(--c) 40%,transparent)}
+.qplay b{font-size:16px}.qonda{display:flex;gap:6px;align-items:center;height:46px}.qonda i{width:7px;height:10px;border-radius:4px;background:var(--c)}
+.qonda.on i{animation:qdanca .7s ease-in-out infinite alternate}@keyframes qdanca{0%{height:8px}100%{height:44px}}
+.qops{grid-template-columns:repeat(2,minmax(0,1fr))!important}.sq.q-err{opacity:.35;filter:grayscale(1);animation:qtreme .3s}.sq.q-ok{border-color:var(--c);box-shadow:0 0 22px var(--c);animation:pedaco .6s}
+@keyframes qtreme{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.qres{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:10px 0}.qres .sq{padding:4px}.qres .sq b{font-size:11.5px}.qres .sq small{font-size:10.5px}
+.sqg.carinho .sq{touch-action:none;transition:transform .15s,box-shadow .15s}.sq.afaga{transform:scale(.95) rotate(-1deg);box-shadow:0 0 16px var(--c)}
+.esteira{overflow:hidden;margin:8px -16px;padding:14px 0;background:repeating-linear-gradient(90deg,#1A2350 0 18px,#141C44 18px 36px);border-top:3px solid #2B3A8A;border-bottom:3px solid #2B3A8A}
+.trilho{display:flex;gap:10px;width:max-content;animation:esteira var(--d) linear infinite}.trilho .sq{width:104px;flex:none;border-radius:50%/42%;padding:8px}
+@keyframes esteira{from{transform:translateX(0)}to{transform:translateX(calc(-1 * var(--p)))}}
+.cena-prato.mini{transform:scale(.6);margin:-40px auto -44px}
+.cena-corpo{display:grid;place-items:center;margin:4px 0}.cena-corpo svg{width:120px;height:170px}.cena-corpo circle{transition:r .4s,fill .4s}
+.camp7{display:grid;gap:6px;margin:8px 0}.camp7 div{display:flex;align-items:center;gap:10px;border-left:4px solid var(--c);background:var(--field);border-radius:10px;padding:5px 8px}.camp7 svg{width:44px;height:44px;border-radius:8px;flex:none}.camp7 span{display:flex;flex-direction:column;text-align:left}.camp7 small{color:var(--c);font-size:12px}.camp7 b{font-size:15px}
+.pausa.passa{cursor:pointer;animation:pnentra .4s ease}
+@media (prefers-reduced-motion:reduce){.trilho{animation:none;width:auto;flex-wrap:wrap;justify-content:center}.qonda.on i{animation:none;height:30px}}
 .pausa{text-align:center;padding:10px 0}.falta{font-weight:900;color:var(--pe);font-size:20px;margin:6px 0}
 .podiomini{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0}.podiomini span{border:1px solid var(--c);border-left:4px solid var(--c);border-radius:8px;padding:3px 8px;font-size:13px;font-weight:700}
 .rv-espera{display:grid;place-items:center;height:240px}.rv-espera i{width:60px;height:60px;border-radius:50%;background:var(--c);animation:cresce 1s ease-in forwards}
@@ -462,12 +478,13 @@ function entrega(){const p=perfil();const L=insights(J,p,TAGS);let svg='';try{sv
    - Sem ranking, sem sorteio, sem urgência, sem culpa: "está tudo guardado, volte quando quiser". */
 const MODO=QS.get('modo')||'';const EH_PODIO=MODO.indexOf('podio')===0;
 const PDK=LSK+'-podio';let PD=null;
-const JOGO={mapa:'duelo',aud:'ouvir',tato:'balanca',olf:'casa',pal:'prato',equi:'inclina',corpo:'respira'};
-const JOGO_NOME={duelo:'Duelos',ouvir:'Só ouvindo',balanca:'A balança',casa:'Cheiro de casa',prato:'Monte o seu prato',inclina:'Incline o celular',respira:'Respire e escolha'};
+/* 05/11 (noite): saíram balança, prato e respirar. Entraram Carinho (Tato), Esteira de sushi (Paladar) e Corpo que acende (Noção do corpo). */
+const JOGO={mapa:'duelo',aud:'ouvir',tato:'carinho',olf:'casa',pal:'sushi',equi:'inclina',corpo:'acende'};
+const JOGO_NOME={duelo:'Duelos',ouvir:'Só ouvindo',carinho:'Carinho',casa:'Cheiro de casa',sushi:'Esteira de sushi',inclina:'Incline o celular',acende:'Corpo que acende'};
 const EMO=['🤩','😊','😌','🤔','😐'];
 const PCT={}; /* {sentido:{opção:%}} só com dados reais da Jornada. Vazio = a frase não aparece. */
 const MOLD=[['Ouro','#D4AF37'],['Madeira','#8A5A3A'],['Luz','#F9CB39']];
-const PD_V=2;/* progresso salvo de versões antigas da Fase 2 é ignorado (evita tela vazia) */function pdSalva(){try{PD.v=PD_V;localStorage.setItem(PDK,JSON.stringify(PD));}catch(e){}}
+const PD_V=3;/* progresso salvo de versões antigas da Fase 2 é ignorado (evita tela vazia) */function pdSalva(){try{PD.v=PD_V;localStorage.setItem(PDK,JSON.stringify(PD));}catch(e){}}
 function senDe(id){return SEN.find(s=>s[0]===id);}
 function tileDe(id,n){const s=senDe(id);return s?s[5].find(t=>t.n===n):null;}
 function artDe(id,n){const t=tileDe(id,n);return t?t.art():'';}
@@ -517,6 +534,7 @@ function sEscolhe(G,v){G.esc.push(v);G.resto=G.resto.filter(x=>x!==v);G.ouv=null
 /* ---------- fluxo ---------- */
 function idAtual(){return PD.ordem[PD.si];}
 function faltam(){return PD.ordem.length-Object.keys(PD.res).filter(id=>PD.ordem.includes(id)).length+PD.adiados.length;}
+function pdOrdena(){PD.si=0;if(PD.ordem.length)pdComecaSentido();else if(PD.pend.length)PD.fase='pular';else pdVaiFinal();}
 function pdComecaSentido(){PD.G=null;pdJoga();PD.t0=Date.now();}/* 05/11: sem a tela de lembrar a Fase 1 */
 function pdJoga(){const id=idAtual();const it=(J.esc[id]||[]).slice();const tp=JOGO[id]||'casa';PD.relT[id]=Date.now();
  if(tp==='duelo'||tp==='inclina'){PD.G=dIni(it);PD.G.tipo=tp;}else if(tp==='balanca'){PD.G={tipo:'balanca'};PD.lista=it;}else PD.G=sIni(it,tp);PD.fase='jogo';}
@@ -524,6 +542,35 @@ function pdFechaSentido(rank){const id=idAtual();PD.res[id]=rank.slice();PD.temp
  const f1=(PD.f1[id]||[])[0];const sv=PD.sent[id]||(PD.sent[id]={});sv.acertou=sv.palpite?((sv.palpite==='sim')===(rank[0]===f1)):false;
  PD.novo=id;para();confete();sino(4,.2);vibra(25);pdDepoisSentido();}/* 05/11: sem a tela de revelação e sem "Como você se sentiu?" */
 function pdDepoisSentido(){if(Object.keys(PD.res).length===4&&!PD.surpresa){PD.surpresa=1;PD.fase='surpresa';return;}pdSegue();}
+/* "Que som é esse?" (05/11): os 7 sons que a pessoa escolheu na Audição, 4 opções, 7 rodadas, fica mais difícil
+   (o som fica mais curto e as opções erradas passam a ser sons que ela também escolheu). Segue sozinho ao acertar. */
+function embaralha(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function qIni(){const meus=(J.esc.aud||[]).slice(0,7);PD.Q={lista:embaralha(meus),r:0,ops:[],errou:[],res:[],ok:false,fim:false};qRodada();}
+function qRodada(){const Q=PD.Q;const cert=Q.lista[Q.r];const todos=SEN[1][5].map(t=>t.n).filter(n=>n!==cert);
+ const meus=Q.lista.filter(n=>n!==cert);const outros=todos.filter(n=>!Q.lista.includes(n));
+ const nMeus=Q.r<2?0:Q.r<5?1:3;/* rodadas 1–2: erradas de fora; 3–5: 1 parecida; 6–7: todas parecidas */
+ const err=embaralha(meus).slice(0,nMeus).concat(embaralha(outros)).slice(0,3);
+ Q.ops=embaralha([cert].concat(err));Q.errou=[];Q.ok=false;Q.t0=Date.now();}
+function qDur(){return Math.max(1.2,4-PD.Q.r*.45);}/* 4 s na 1ª rodada, 1,3 s na 7ª */
+let Q_T=null;function qToca(n){const t=tileDe('aud',n);if(!t||!t.som)return;toca(t.som);PD.Q.toc=true;const o=document.getElementById('qonda');if(o)o.classList.add('on');
+ clearTimeout(Q_T);Q_T=setTimeout(()=>{para();if(PD&&PD.Q)PD.Q.toc=false;const o2=document.getElementById('qonda');if(o2)o2.classList.remove('on');},qDur()*1000);}
+function vSom(){const Q=PD.Q;const s=senDe('aud');
+ if(Q.fim){const pr=Q.res.filter(x=>x.primeira).length;
+  return `<div class="hero" style="padding-top:8px">${brisa(pr>=5?'Que ouvido! Você conhece bem os seus sons.':'Os seus sons já estão com você. Agora, vamos pôr tudo em ordem.')}
+  <div class="k" style="color:${s[3]}">Que som é esse? · Resultado</div><h1 class="f">Você reconheceu ${pr} de 7 de primeira</h1>
+  <div class="qres">${Q.res.map(x=>`<button class="sq" data-a="qouve" data-v="${esc(x.n)}" style="--c:${s[3]}"><svg viewBox="0 0 300 300">${artDe('aud',x.n)}</svg><b>${esc(x.n)}</b><small>${x.primeira?'✓ de primeira':'✓ em '+x.tent+' tentativas'}</small></button>`).join('')}</div>
+  <p class="small mute">Toque em um som para ouvir de novo.</p>
+  <button class="btn pri big" data-a="qfim" style="margin-top:12px">Continuar →</button></div>`;}
+ const cert=Q.lista[Q.r];
+ return `<div class="k" style="color:${s[3]}">${s[2]} Que som é esse? · Rodada ${Q.r+1} de 7</div>
+ <div class="dots7">${Array.from({length:7},(_,i)=>`<i style="${i<Q.r||(i===Q.r&&Q.ok)?`background:${s[3]}`:''}"></i>`).join('')}</div>
+ <h1>${Q.ok?`Acertou! É ${esc(cert)} 🎉`:'Ouça… e toque no som que você acha que é.'}</h1>
+ <button class="qplay" data-a="qplay" style="--c:${s[3]}"><span class="qonda ${Q.toc?'on':''}" id="qonda">${Array.from({length:7},(_,i)=>`<i style="animation-delay:${(i*.11).toFixed(2)}s"></i>`).join('')}</span><b>${Q.ok?'▶ Ouvir de novo':'▶ Ouvir o som escondido'}</b></button>
+ <p class="small mute" style="text-align:center">${Q.r>=2&&!Q.ok?'Ficou mais difícil: o som agora é mais curto.':'Pode ouvir quantas vezes quiser.'}</p>
+ <div class="sqg qops">${Q.ops.map(n=>{const er=Q.errou.includes(n),ce=Q.ok&&n===cert;return `<button class="sq ${er?'q-err':''} ${ce?'q-ok':''}" data-a="qop" data-v="${esc(n)}" style="--c:${s[3]}" ${er||Q.ok?'disabled':''}><svg viewBox="0 0 300 300">${artDe('aud',n)}</svg><b>${esc(n)}</b></button>`;}).join('')}</div>`;}
+/* Passagem curta entre um sentido e outro (sem respiração). A respiração com música aparece uma vez só. */
+function vRespira(){return `<div class="pausa"><div class="k">Uma pausa</div><div class="resp grande"><i></i></div><p class="pd-frase">Respire fundo com a bolinha. Inspire quando ela cresce, solte quando ela diminui.</p>
+ <p class="mute">Esta é a única pausa da fase.</p><button class="btn pri" data-a="respok">Já respirei →</button></div>`;}
 function pdSegue(){if(PD.si<PD.ordem.length-1){PD.si++;PD.fase='pausa';return;}
  if(PD.adiados.length){PD.fase='adiado';return;}if(PD.pend.length){PD.fase='pular';return;}pdVaiFinal();}
 function pdChampions(){return PD.ordem.filter(id=>PD.res[id]).map(id=>id+'|'+PD.res[id][0]);}
@@ -544,7 +591,7 @@ function bolinha(id,n,k,cls){const s=senDe(id);return `<button class="sq ${cls||
 
 /* ---------- telas ---------- */
 function vF2Abre(){if(window.FCH&&!(PD.ef||{}).chegaOk)return FCH.chega(PD.ef);const p=PD.ordem[0]?senDe(PD.ordem[0]):null;
- return `<div class="hero" style="padding-top:14px">${brisa(`Que bom te ver de novo! Agora são 7 mini-jogos, um por sentido. Você só escolhe, e a sua ordem aparece sozinha.${p?` Vamos começar por ${esc(p[1])}, o sentido em que você se decidiu mais rápido.`:''}`)}
+ return `<div class="hero" style="padding-top:14px">${brisa(`Que bom te ver de novo! Primeiro, um desafio: que som é esse? Depois, 7 mini-jogos, um por sentido. Você só escolhe, e a sua ordem aparece sozinha.${p?` Vamos começar por ${esc(p[1])}, o sentido em que você se decidiu mais rápido.`:''}`)}
  <div class="k">Fase 2 · Pódio dos Sentidos</div><h1 class="f">Hora de pôr em ordem!</h1>
  <p class="mute">A cada sentido, você ganha 1 pedaço da sua pintura. Pode pular um sentido e voltar depois.</p>
  ${trancado()}${PD.demo?`<p class="small mute">Prévia: como a Fase 1 não foi feita neste aparelho, usei escolhas de exemplo.</p>`:''}
@@ -566,19 +613,30 @@ function vJogo(){const id=idAtual();const s=senDe(id);const G=PD.G;const tp=G.ti
   <ol class="ar-lista balanca" id="arl">${PD.lista.map((n,i)=>linhaArr(n,i,s[3],n,'',artDe(id,n))).join('')}</ol>
   <div class="row">${volta}<span class="sp"></span><button class="btn pri" data-a="balok">Pronto, essa é a minha ordem →</button></div>${pulaLk()}`;
  const pos=G.esc.length+1;
- const T={ouvir:['Feche os olhos. Toque para ouvir.','Ouça e escolha a que você mais gosta. Depois a 2ª, e assim por diante.'],
-  casa:['Qual destes cheiros é mais "casa" pra você?','Cada toque acende uma janela da sua casa.'],
-  prato:['Monte o seu prato','A 1ª vai no centro do prato. As outras em volta.'],
-  respira:['Respire… e toque no que o seu corpo pede agora','Sem pressa. Siga a bolinha que respira.'],
+ const T={casa:['Qual destes cheiros é mais "casa" pra você?','Cada toque acende uma janela da sua casa.'],
+  ouvir:['Toque para ouvir. Depois escolha a que você mais gosta.','Toque numa imagem para ouvir o som. Gostou? Toque em "Escolher este". Depois a 2ª, e assim por diante.'],
+  carinho:['Faça carinho em cada textura','Passe o dedo por cima para sentir (o celular vibra e faz um som suave). Depois toque na que você mais gosta, depois a 2ª…'],
+  sushi:['Pegue da esteira!','Toque no sabor que você mais quer. A cada prato que você pega, a esteira fica mais rápida.'],
+  acende:['Acenda o seu corpo','Toque no que o seu corpo mais pede agora. Cada escolha acende uma parte da silhueta.'],
   final:['A grande final','Toque na sua campeã das campeãs. Depois a 2ª, e assim por diante.']}[tp]||['Toque na que você mais gosta',''];
  let cena='';
  if(tp==='casa')cena=`<div class="cena-casa">${Array.from({length:7},(_,i)=>{const v=G.esc[i];return `<i class="${v?'on':''}" style="${v?`--c:${s[3]}`:''}">${v?`<svg viewBox="0 0 300 300">${artDe(id,v)}</svg>`:''}</i>`;}).join('')}</div>`;
  if(tp==='prato')cena=`<div class="cena-prato">${Array.from({length:7},(_,i)=>{const v=G.esc[i];return `<i class="p${i} ${v?'on':''}">${v?`<svg viewBox="0 0 300 300">${artDe(id,v)}</svg>`:''}</i>`;}).join('')}</div>`;
- if(tp==='respira')cena=`<div class="resp"><i></i></div>`;
+ if(tp==='acende'){const P=[[60,16],[60,46],[60,74],[30,66],[90,66],[60,104],[60,146]];/* 7 pontos: cabeça, peito, coração, mão esq., mão dir., barriga, pés */
+  cena=`<div class="cena-corpo"><svg viewBox="0 0 120 170" aria-hidden="true"><g fill="none" stroke="rgba(255,255,255,.28)" stroke-width="6" stroke-linecap="round"><circle cx="60" cy="16" r="11" stroke-width="3"/><path d="M60 30 V100 M60 40 L28 70 M60 40 L92 70 M60 100 L42 160 M60 100 L78 160"/></g>
+  ${P.map((p,i)=>{const on=i<G.esc.length;return `<circle cx="${p[0]}" cy="${p[1]}" r="${on?9:5}" fill="${on?s[3]:'rgba(255,255,255,.18)'}" ${on?`style="filter:drop-shadow(0 0 6px ${s[3]})"`:''}/>`;}).join('')}</svg></div>`;}
  if(tp==='final')cena=`<div class="podiomini">${G.esc.map((v,i)=>{const [sid,n]=v.split('|');return `<span style="--c:${senDe(sid)[3]}">${i+1}. ${esc(n)}</span>`;}).join('')}</div>`;
  const grade=G.resto.map((v,k)=>{if(tp==='final'){const [sid,n]=v.split('|');const ss=senDe(sid);return `<button class="sq" data-a="sq" data-v="${esc(v)}" style="--c:${ss[3]}"><svg viewBox="0 0 300 300">${artDe(sid,n)}</svg><b>${esc(n)}</b><small>${esc(ss[1])}</small></button>`;}
-  if(tp==='ouvir'){const on=G.ouv===v;return `<button class="sq ouv ${on?'on':''}" data-a="sq" data-v="${esc(v)}" style="--c:${s[3]}"><span class="onda">${on?'🔊':'♪'}</span><b>${on?esc(v):'Som '+(k+1)}</b>${on?`<em data-a="ouvok" data-v="${esc(v)}">Escolher este</em>`:''}</button>`;}
+  if(tp==='ouvir'){const on=G.ouv===v;return `<button class="sq ouv ${on?'on':''}" data-a="sq" data-v="${esc(v)}" style="--c:${s[3]}"><svg viewBox="0 0 300 300">${artDe(id,v)}</svg><b>${on?'🔊 ':''}${esc(v)}</b>${on?`<em data-a="ouvok" data-v="${esc(v)}">Escolher este</em>`:''}</button>`;}
   return bolinha(id,v,k);}).join('');
+ if(tp==='sushi'){/* a esteira: os pratos passam da direita para a esquerda; fica mais rápida a cada escolha */
+  const n=G.resto.length||1,rep=Math.ceil(8/n),vel=.35+.12*G.esc.length,dur=(n/vel).toFixed(1);
+  const pratos=G.resto.map(v=>`<button class="sq prato" data-a="sq" data-v="${esc(v)}" style="--c:${s[3]}"><svg viewBox="0 0 300 300">${artDe(id,v)}</svg><b>${esc(v)}</b></button>`).join('');
+  return `${cab()}<h1>${T[0]}</h1><p class="small mute">${T[1]}</p>
+  <div class="cena-prato mini">${Array.from({length:7},(_,i)=>{const v=G.esc[i];return `<i class="p${i} ${v?'on':''}">${v?`<svg viewBox="0 0 300 300">${artDe(id,v)}</svg>`:''}</i>`;}).join('')}</div>
+  <p class="pos">Pegando o <b>${pos}º</b> prato</p>
+  <div class="esteira"><div class="trilho" style="--d:${dur}s;--p:${(100/rep).toFixed(3)}%">${Array.from({length:rep},()=>pratos).join('')}</div></div>
+  <div class="row">${volta}</div>${pulaLk()}`;}
  return `${tp==='final'?`${album()}<div class="k">A grande final</div>`:cab()}<h1>${T[0]}</h1><p class="small mute">${T[1]}</p>${cena}
  <p class="pos">Escolhendo a <b>${pos}ª</b></p><div class="sqg ${tp}">${grade}</div><div class="row">${volta}</div>${tp==='final'?'':pulaLk()}`;}
 function revelacao(id,k){const L=PD.res[id],f1=PD.f1[id]||[];const s=senDe(id);
@@ -600,9 +658,9 @@ function vRevela(){const id=idAtual();const s=senDe(id);const L=PD.res[id];const
  <h2 style="text-align:center">Como você se sentiu?</h2><div class="emo">${EMO.map(e=>`<button data-a="emo" data-v="${e}" aria-label="${e}">${e}</button>`).join('')}</div>
  <p style="text-align:center"><button class="lk" data-a="emo" data-v="">Pular</button></p>`;}
 function vPausa(){const id=idAtual();const s=senDe(id);
- return `${album()}<div class="pausa"><div class="resp grande"><i></i></div><p class="pd-frase">Uma respiração antes do próximo.</p>
- <p class="mute">Próximo: ${s[2]} ${esc(s[1])} · ${JOGO_NOME[JOGO[id]]}</p>${faltam()===1?`<p class="falta">Falta só 1!</p>`:''}
- <button class="btn pri" data-a="pausaok">Já respirei →</button></div>`;}
+ return `${album()}<div class="pausa passa" data-a="pausaok">${brisa(`Agora: ${s[2]} ${esc(s[1])}`)}
+ <p class="mute">${JOGO_NOME[JOGO[id]]}</p>${faltam()===1?`<p class="falta">Falta só 1!</p>`:''}
+ <button class="btn pri" data-a="pausaok">Vamos →</button></div>`;}
 function vSurpresa(){const ids=Object.keys(PD.res);
  return `${album()}<div class="hero" style="padding-top:6px"><div class="k">Surpresa do meio</div><h1 class="f">O som das suas 4 campeãs</h1>
  <p class="mute">Cada campeã virou uma nota. Juntas, elas fazem o seu acorde.</p>
@@ -624,8 +682,10 @@ function vStory(){const F=(PD.final||[]).map(v=>v.split('|'));const N=7;const st
  if(st===2)c=`<div class="k">Seu pódio</div><div class="pd-podio">${[1,0,2].map(i=>{const x=F[i];if(!x)return '<div></div>';const s=senDe(x[0]);return `<div class="pd-deg pd-deg${i+1}" style="--c:${s[3]}"><svg viewBox="0 0 300 300">${artDe(x[0],x[1])}</svg><b>${esc(x[1])}</b><small>${esc(s[1])}</small><span>${i+1}º</span></div>`;}).join('')}</div>`;
  if(st===3){const m=maiorSubida();c=`<div class="k">O que mais mudou</div>${m?`<h1 class="f">${esc(m.n)} subiu ${m.d} ${m.d>1?'posições':'posição'}</h1><p class="mute">Em ${esc(senDe(m.id)[1])}, desde a Fase 1.</p>`:`<h1 class="f">Quase nada mudou</h1><p class="mute">Você manteve a ordem da Fase 1. Isso é saber o que quer.</p>`}
   `;}
- if(st===4){const M=MOLD[PD.moldura||0];c=`<div class="k">Sua pintura</div><div class="mold" style="--m:${M[1]}"><div class="mapa" id="mp">${PD.pintF||PD.pint}</div></div>
-  <p class="mute">Escolha a moldura:</p><div class="chips">${MOLD.map((m,i)=>`<button class="chip ${i===(PD.moldura||0)?'on':''}" data-a="mold" data-v="${i}"><i style="background:${m[1]}"></i>${m[0]}</button>`).join('')}</div>`;}
+ /* 05/11 (noite): a pintura não aparece mais aqui. Ela só se forma depois da Fase 4, antes do Hall da Fama. */
+ if(st===4){const Q=PD.Q;const pr=Q&&Q.fim?Q.res.filter(x=>x.primeira).length:null;
+  c=`<div class="k">Suas 7 campeãs</div><div class="camp7">${SEN.filter(s=>PD.res[s[0]]).map(s=>`<div style="--c:${s[3]}"><svg viewBox="0 0 300 300">${artDe(s[0],PD.res[s[0]][0])}</svg><span><small>${s[2]} ${esc(s[1])}</small><b>${esc(PD.res[s[0]][0])}</b></span></div>`).join('')}</div>
+  ${pr!=null?`<p class="mute">👂 Que som é esse? Você reconheceu <b>${pr} de 7</b> de primeira.</p>`:''}`;}
  if(st===5){const P=topPerfil();c=`<div class="k">O que as suas escolhas dizem</div>${PD.abriu&&P?`<div class="cel" style="--c:#F9CB39"><h1 class="f">Você é do tipo que se sente bem com ${esc(P.a[2])}.</h1><p>${esc(P.a[3])}</p><p class="mute">Em segundo lugar: ${esc(P.b[2])}.</p></div><p class="small mute">É o retrato de hoje. Não é diagnóstico nem avaliação.</p>`:`<button class="tr abrir" data-a="abre"><div class="tr-v"><b>Você é do tipo que…</b><span>████████ ██████ ████</span></div><div class="tr-c">🔓 Toque para ver</div></button>`}`;}
  if(st===6){const n1=F[0];const fr=n1?`Hoje, ${esc(n1[1].toLowerCase())} por 5 minutos. Lembrei de você.`:'';
   c=`${brisa('Está tudo guardado. Volte quando quiser.')}<div class="k">Compartilhar</div><p class="qd">${quadradinhos()}</p>
@@ -635,9 +695,10 @@ function vStory(){const F=(PD.final||[]).map(v=>v.split('|'));const N=7;const st
   <button class="btn pri big" data-a="pdfim" style="width:100%">${MODO==='podio-refazer'?'Guardar →':'Continuar para a Fase 3 →'}</button>`;}
  return `<div class="story" data-a="stz">${bars}<div class="stc">${c}</div>${st<6?`<div class="row" style="justify-content:space-between">${st>0?`<button class="btn" data-a="stv">←</button>`:'<span></span>'}<button class="btn pri" data-a="sta">Seguir →</button></div>`:''}</div>`;}
 function renderPodio(){if(PD.fase==='lembra'){pdJoga();PD.t0=Date.now();}if(PD.fase==='revela'){PD.brilho=false;pdDepoisSentido();if(PD.fase==='lembra'){pdJoga();PD.t0=Date.now();}}pdSalva();const f=PD.fase;
- const v=f==='abre'?vF2Abre():f==='lembra'?vLembra():f==='jogo'?vJogo():f==='revela'?vRevela():f==='pausa'?vPausa():f==='surpresa'?vSurpresa():f==='adiado'?vAdiado():f==='pular'?vPdPular():f==='final'?vJogo():f==='fecha'&&window.FCH?FCH.tela(PD.ef||{}):vStory();
+ const v=f==='abre'?vF2Abre():f==='som'?vSom():f==='respira'?vRespira():f==='lembra'?vLembra():f==='jogo'?vJogo():f==='revela'?vRevela():f==='pausa'?vPausa():f==='surpresa'?vSurpresa():f==='adiado'?vAdiado():f==='pular'?vPdPular():f==='final'?vJogo():f==='fecha'&&window.FCH?FCH.tela(PD.ef||{}):vStory();
  document.getElementById('app').innerHTML=`<div class="bar0"><a class="logo" aria-label="7entidos"><img src="/assets/simbolo-contando-7.svg?v=20261102-novo" alt="" width="30" height="30"><b class="f"><span style="color:#FFD43B">7</span>entidos</b></a><span class="sp"></span></div>`+v;
- if(f==='pausa')padLiga();else padDesliga();arLiga();incLiga();
+ if(f==='respira')padLiga();else padDesliga();arLiga();incLiga();carLiga();
+ clearTimeout(window.__ps);if(f==='pausa'){window.__ps=setTimeout(()=>{if(PD&&PD.fase==='pausa'){pdComecaSentido();renderPodio();scrollTo(0,0);}},1800);}
  if(f==='surpresa'&&!PD.acordeTocou){PD.acordeTocou=1;Object.keys(PD.res).forEach((x,i)=>setTimeout(()=>sino(i*2,.2),300+i*260));}
  if(f==='revela'&&PD.brilho){clearTimeout(window.__rv);window.__rv=setTimeout(()=>{if(!PD||PD.fase!=='revela')return;PD.brilho=false;renderPodio();const sv=PD.sent[idAtual()]||{};if(sv.acertou)festa();else{confete();sino(4,.2);vibra(25);}},1000);}}
 function linhaArr(v,i,cor,nome,sub,art){return `<li class="ar-li" data-i="${i}" style="--c:${cor}"><span class="ar-n">${i+1}</span><span class="ar-img"><svg viewBox="0 0 300 300">${art}</svg></span><span class="ar-nm">${esc(nome)}${sub?`<small>${esc(sub)}</small>`:''}</span><span class="ar-alca" aria-hidden="true">≡</span></li>`;}
@@ -651,13 +712,25 @@ function arLiga(){const ol=document.getElementById('arl');if(!ol)return;let li=n
   li.style.transform=`translateY(${dy}px) scale(1.03)`;linhas().forEach((x,i)=>{x.querySelector('.ar-n').textContent=i+1;});});
  const solta=()=>{if(!li)return;li.style.transform='';li.classList.remove('arrasta');const nova=linhas().map(x=>PD.lista[+x.dataset.i]);if(nova.join('|')!==PD.lista.join('|')){pdSnap();PD.lista=nova;}li=null;renderPodio();};
  ol.addEventListener('pointerup',solta);ol.addEventListener('pointercancel',solta);}
+/* Tato · Carinho: passar o dedo por cima de uma textura faz vibrar e tocar um som suave (diferente para cada textura) */
+const CAR={mov:false,x:0,y:0,t:0};
+function carSom(k){const c=ac();if(!c)return;try{const t=c.currentTime;const d=.18;const b=c.createBuffer(1,c.sampleRate*d,c.sampleRate),x=b.getChannelData(0);for(let i=0;i<x.length;i++)x[i]=Math.random()*2-1;
+ const s=c.createBufferSource();s.buffer=b;const f=c.createBiquadFilter();f.type='bandpass';f.frequency.value=300+((k%15)*130);f.Q.value=1.2;const g=c.createGain();
+ g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.16,t+.05);g.gain.exponentialRampToValueAtTime(.001,t+d);s.connect(f);f.connect(g);g.connect(c.destination);s.start(t);s.stop(t+d);}catch(e){}}
+function carLiga(){const gr=document.querySelector('.sqg.carinho');if(!gr)return;
+ gr.addEventListener('pointerdown',e=>{CAR.mov=false;CAR.x=e.clientX;CAR.y=e.clientY;});
+ gr.addEventListener('pointermove',e=>{if(e.pointerType==='mouse'&&!e.buttons)return;const q=document.elementFromPoint(e.clientX,e.clientY);const b=q&&q.closest('.sq');if(!b)return;
+  if(Math.hypot(e.clientX-CAR.x,e.clientY-CAR.y)>14)CAR.mov=true;if(Date.now()-CAR.t<140)return;CAR.t=Date.now();
+  const k=SEN[2][5].findIndex(t=>t.n===b.dataset.v);carSom(k<0?0:k);vibra(8);b.classList.add('afaga');setTimeout(()=>b.classList.remove('afaga'),300);});}
 /* Equilíbrio: inclinar o celular escolhe o lado (precisa voltar ao meio antes do próximo duelo) */
 let INC_ON=false,INC_NEUTRO=true,INC_T=0;
 function incLiga(){if(INC_ON)return;INC_ON=true;window.addEventListener('deviceorientation',e=>{if(!PD||PD.fase!=='jogo'||!PD.G||PD.G.tipo!=='inclina'||e.gamma==null)return;const g=e.gamma;
  if(Math.abs(g)<10){INC_NEUTRO=true;return;}if(!INC_NEUTRO||Date.now()-INC_T<700)return;if(Math.abs(g)>25){INC_NEUTRO=false;INC_T=Date.now();const el=document.querySelector(`.pd-carta[data-lado="${g<0?'a':'b'}"]`);if(el)el.click();}});}
-async function pdStories(){const out=document.getElementById('bx');try{const F=(PD.final||[]).map(v=>v.split('|'));const svg=PD.pintF||PD.pint;const W=1080,H=1920;const cv=document.createElement('canvas');cv.width=W;cv.height=H;const g=cv.getContext('2d');
- g.fillStyle='#0A0F24';g.fillRect(0,0,W,H);const img=new Image();img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);await img.decode();
- const M=MOLD[PD.moldura||0];g.fillStyle=M[1];g.fillRect(150,330,780,780);g.drawImage(img,180,360,720,720);
+async function pdStories(){const out=document.getElementById('bx');try{const F=(PD.final||[]).map(v=>v.split('|'));const W=1080,H=1920;const cv=document.createElement('canvas');cv.width=W;cv.height=H;const g=cv.getContext('2d');
+ g.fillStyle='#0A0F24';g.fillRect(0,0,W,H);
+ /* sem a pintura (ela só aparece depois da Fase 4): no lugar, as 7 campeãs, uma linha por sentido */
+ const L=SEN.filter(s=>PD.res[s[0]]);L.forEach((s,i)=>{const y=380+i*100;g.fillStyle=s[3];g.globalAlpha=.18;g.fillRect(150,y-60,780,84);g.globalAlpha=1;g.fillRect(150,y-60,12,84);
+  g.textAlign='left';g.fillStyle=s[3];g.font='700 30px system-ui, sans-serif';g.fillText(s[1].toUpperCase(),190,y-22);g.fillStyle='#F4F1EA';g.font='600 38px Georgia, serif';g.fillText(PD.res[s[0]][0],190,y+14);});
  g.textAlign='center';g.fillStyle='#F9CB39';g.font='700 40px system-ui, sans-serif';g.fillText('MEU PÓDIO DOS SENTIDOS',W/2,220);
  C.forEach((c,i)=>{g.fillStyle=c;g.beginPath();g.arc(W/2-150+i*50,270,11,0,7);g.fill();});
  g.fillStyle='#F4F1EA';g.font='600 58px Georgia, serif';F.slice(0,3).forEach((x,i)=>g.fillText((i+1)+'º  '+x[1],W/2,1250+i*90));
@@ -670,14 +743,14 @@ function pdDescobertas(){const out=[];PD.ordem.forEach(id=>{const s=senDe(id);co
 /* efeito da fase + pesquisa de preço vão para a planilha da Jornada (marcado como prévia do app) */
 function pdEnviaEfeito(){const U=window.PLANILHA_URL;if(!U||!window.EF)return;const f=PD.ef||{};const pr=f.pr||{};const ok=pr.t&&!pr.pular;
  const corpo={c:'7s0a4653',tipo:'fase2',id:J.id,teste:LSK!=='jornada7',nome:(LSK!=='jornada7'?'🧪 PRÉVIA APP · ':'')+(J.nome||''),cel:'',em:new Date().toISOString(),origem:'app-previa (mini-jogos)',
-  sensacao:EF.texto(f.chega,f.sai,f.leva)+' · '+EF.precoTexto(pr)+(f.pres?' · Presente: '+f.pres:'')+(f.sug?' · Sugestão: '+f.sug:''),chega:f.chega||'',sai:f.sai||'',leva:f.leva||'',sugestao:f.sug||'',preco:EF.precoTexto(pr),
+  sensacao:EF.texto(f.chega,f.sai,f.leva)+' · '+EF.precoTexto(pr)+(PD.Q&&PD.Q.fim?' · Que som é esse: '+PD.Q.res.filter(x=>x.primeira).length+' de 7 de primeira':'')+(f.pres?' · Presente: '+f.pres:'')+(f.sug?' · Sugestão: '+f.sug:''),chega:f.chega||'',sai:f.sai||'',leva:f.leva||'',sugestao:f.sug||'',preco:EF.precoTexto(pr),som_de_primeira:PD.Q&&PD.Q.fim?PD.Q.res.filter(x=>x.primeira).length+' de 7':'',
   preco_barato_demais:ok?pr.v[0]:'',preco_bom_negocio:ok?pr.v[1]:'',preco_ficando_caro:ok?pr.v[2]:'',preco_caro_demais:ok?pr.v[3]:'',presente:f.pres||''};
  try{fetch(U,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(corpo),keepalive:true});}catch(e){}}
 document.addEventListener('input',e=>{if(!PD||!window.FCH)return;const f=PD.ef=PD.ef||{};if(FCH.arrasta(e,f)){if(+e.target.value%5===0)pisca(.4);pdSalva();}else if(FCH.recado(e,f))pdSalva();});
 function pdEntrega(){padDesliga();para();const svg=PD.pintF||PD.pint||'';
  const F=(PD.final||[]).map(v=>{const [id,n]=v.split('|');return {sen:id,n};});const ordSen=F.map(x=>x.sen).concat(PD.ordem.filter(id=>!F.some(x=>x.sen===id)));
  const podio={id:'P'+Date.now().toString(36),em:new Date().toISOString(),ordem:PD.res,campeas:F,sentidosOrdem:ordSen,completos:SEN.filter(s=>(J.esc[s[0]]||[]).length>=7).map(s=>s[0]),esc:J.esc,tempos:PD.tempos,
-  sentiu:PD.sent,moldura:MOLD[PD.moldura||0][0],descobertas:pdDescobertas(),svg};
+  sentiu:PD.sent,moldura:MOLD[PD.moldura||0][0],descobertas:pdDescobertas(),svg,som:PD.Q&&PD.Q.fim?PD.Q.res:null};
  try{parent.postMessage({tipo:'7e-podio',podio},location.origin);}catch(e){}try{localStorage.removeItem(PDK);}catch(e){}}
 function pdEscolheDuelo(v){const G=PD.G;pdSnap();const id=idAtual();PD.tempos[id+'_'+G.n]=Date.now()-(PD.t0||Date.now());dEscolhe(G,v);PD.t0=Date.now();if(G.cur==null)pdFechaSentido(G.ord);}
 function pdEscolheSeq(v){const G=PD.G;pdSnap();sEscolhe(G,v);if(!G.resto.length){if(G.tipo==='final'){PD.final=G.esc.slice();pdFimIni();festa();}else pdFechaSentido(G.esc);}}
@@ -691,12 +764,22 @@ document.addEventListener('click',e=>{if(!PD)return;const b=e.target.closest('[d
    if(a==='fchpres'){renderPodio();const c=document.getElementById('fchcaixa');if(c)c.classList.add('abre');e.stopImmediatePropagation();return;}
    return (a==='fchvai'||a==='fchpula')?topo():ok();}}
  if(a==='play')return;
- if(a==='pdcomeca'){ac();PD.si=0;if(PD.ordem.length)pdComecaSentido();else if(PD.pend.length)PD.fase='pular';return topo();}
+ if(a==='pdcomeca'){ac();PD.si=0;if(!PD.Q&&(J.esc.aud||[]).length>=4){qIni();PD.fase='som';return topo();}pdOrdena();return topo();}
+ if(a==='qplay'){const Q=PD.Q;qToca(Q.lista[Q.r]);vibra(10);e.stopImmediatePropagation();return;}
+ if(a==='qop'){const Q=PD.Q;if(Q.ok)return;const v=b.dataset.v,cert=Q.lista[Q.r];
+  if(v===cert){Q.ok=true;Q.res.push({n:cert,primeira:!Q.errou.length,tent:Q.errou.length+1});para();sino(Q.r,.22);vibra([15,30,15]);if(!Q.errou.length)confete();renderPodio();
+   clearTimeout(window.__qs);window.__qs=setTimeout(()=>{if(!PD||!PD.Q||PD.fase!=='som')return;Q.r++;if(Q.r>=Q.lista.length){Q.fim=true;festa();}else qRodada();renderPodio();scrollTo(0,0);},1700);}
+  else{Q.errou.push(v);vibra(40);pisca(.6);renderPodio();}e.stopImmediatePropagation();return;}
+ if(a==='qouve'){const t=tileDe('aud',b.dataset.v);if(t&&t.som){toca(t.som);clearTimeout(SOM_T);SOM_T=setTimeout(para,3000);}e.stopImmediatePropagation();return;}
+ if(a==='qfim'){para();PD.tempos.som_total=Date.now()-(PD.ini||Date.now());if(!PD.respirou){PD.respDepois='ordena';PD.fase='respira';}else pdOrdena();return topo();}
+ if(a==='respok'){padDesliga();PD.respirou=true;if(PD.respDepois==='segue')pdSegue();else pdOrdena();return topo();}
  if(a==='palpite'){(PD.sent[id]=PD.sent[id]||{}).palpite=b.dataset.v;pdJoga();PD.t0=Date.now();sino(0);return topo();}
  if(a==='pdpula'){pdSnap();PD.adiados.push(id);PD.ordem.splice(PD.si,1);if(PD.si<PD.ordem.length)PD.fase='pausa';else{PD.si=Math.max(0,PD.ordem.length-1);PD.fase=PD.adiados.length?'adiado':'pular';}return topo();}
  if(a==='dv'){if(b.classList.contains('vai'))return;const v=b.dataset.v;b.classList.add('vence');const o=[...document.querySelectorAll('.pd-carta')].find(x=>x!==b);if(o)o.classList.add('perde');toque(id,v,PD.G.ord.length);
   document.querySelectorAll('.pd-carta').forEach(x=>x.classList.add('vai'));setTimeout(()=>{pdEscolheDuelo(v);renderPodio();},380);e.stopImmediatePropagation();return;}
  if(a==='sq'){const G=PD.G;const v=b.dataset.v;if(G.tipo==='ouvir'){if(e.target.closest('[data-a="ouvok"]'))return;G.ouv=v;vibra(10);const t=tileDe(id,v);if(t&&t.som)toca(t.som);return ok();}
+  if(G.tipo==='carinho'&&CAR.mov){CAR.mov=false;e.stopImmediatePropagation();return;}/* foi carinho (arrastou o dedo), não escolha */
+  if(G.tipo==='sushi'){b.classList.add('pega');const k=SEN[4][5].findIndex(t=>t.n===v);sino(k<0?3:k,.2);vibra(15);setTimeout(()=>{pdEscolheSeq(v);renderPodio();},260);e.stopImmediatePropagation();return;}
   b.classList.add('pega');if(G.tipo==='final'){const [sid,n]=v.split('|');toque(sid,n,G.esc.length);}else toque(id,v,G.esc.length);setTimeout(()=>{pdEscolheSeq(v);renderPodio();},260);e.stopImmediatePropagation();return;}
  if(a==='ouvok'){para();pisca();vibra(15);pdEscolheSeq(b.dataset.v);return ok();}
  if(a==='incliga'){try{DeviceOrientationEvent.requestPermission().then(r=>{PD.incOk=r==='granted';renderPodio();}).catch(()=>{});}catch(_){}e.stopImmediatePropagation();return;}
@@ -704,7 +787,7 @@ document.addEventListener('click',e=>{if(!PD)return;const b=e.target.closest('[d
  if(a==='pdvolta'){const h=PD.hist.pop();if(h){const hist=PD.hist;PD=JSON.parse(h);PD.hist=hist;}para();return ok();}
  if(a==='emo'){(PD.sent[id]=PD.sent[id]||{}).emo=b.dataset.v;pdSnap();pdDepoisSentido();return topo();}
  if(a==='pausaok'){padDesliga();pdComecaSentido();return topo();}
- if(a==='surok'){pdSegue();return topo();}
+ if(a==='surok'){if(!PD.respirou){PD.respDepois='segue';PD.fase='respira';return topo();}pdSegue();return topo();}
  if(a==='acorde'){Object.keys(PD.res).forEach((x,i)=>setTimeout(()=>sino(i*2,.2),i*260));e.stopImmediatePropagation();return;}
  if(a==='adsim'){const x=PD.adiados.shift();PD.ordem.push(x);PD.si=PD.ordem.length-1;pdComecaSentido();return topo();}
  if(a==='adnao'){PD.adiados.shift();if(PD.adiados.length)PD.fase='adiado';else if(PD.pend.length)PD.fase='pular';else pdVaiFinal();return topo();}
