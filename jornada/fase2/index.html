@@ -310,7 +310,14 @@ function render(){document.getElementById('app').innerHTML=topoLogo()+v2();}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a;
  if(a==='play'){e.stopPropagation();const on=b.classList.contains('on');para();document.querySelectorAll('.pl2.on').forEach(x=>{x.classList.remove('on');x.textContent='▶';});if(!on){toca(b.dataset.som);b.classList.add('on');b.textContent='■';}return;}
  if(a==='ini'){F.i=0;salva2();post('fase2_inicio');render();scrollTo(0,0);return;}
- if(a==='nota'){F.notas[b.dataset.k]=+b.dataset.n;salva2();const y=scrollY;render();scrollTo(0,y);return;}
+ if(a==='nota'){F.notas[b.dataset.k]=+b.dataset.n;salva2();
+  /* só atualiza a linha tocada e o contador, sem redesenhar as imagens */
+  const lin=b.closest('.c11');if(lin)lin.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
+  const [id]=SEN[F.i];const n=(J.esc[id]||[]).filter(x=>F.notas[id+'|'+x]!=null).length;
+  const t=document.querySelector('.topo2 .small');if(t)t.textContent=`Sentido ${F.i+1} de 7 · ${n} de 7 notas`;
+  const pb=document.querySelector('[data-a="prox"]');if(pb)pb.disabled=n<7;
+  if(n>=7){const d=document.querySelectorAll('.topo2 .dots i')[F.i];if(d){const c=SEN[F.i][3];d.style.background=c;d.style.boxShadow='0 0 8px '+c;}}
+  return;}
  if(a==='prox'){para();F.i++;salva2();post('fase2_progresso',{feitos:F.i});render();scrollTo(0,0);return;}
  if(a==='volta'){para();F.i=Math.max(-1,F.i-1);salva2();render();scrollTo(0,0);return;}
  if(a==='sens'){F.sens=+b.dataset.n;salva2();const y=scrollY;render();scrollTo(0,y);return;}

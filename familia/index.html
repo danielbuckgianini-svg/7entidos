@@ -19,7 +19,7 @@ h1{font-size:28px;line-height:1.2;margin:6px 0 4px}h2{font-size:19px;margin:0 0 
 .pq.feito{cursor:pointer;padding:9px 12px}
 .qt{font-weight:800;font-size:17px;line-height:1.3;display:block;margin-bottom:4px}
 .op{display:flex;border:1px solid var(--line);border-radius:12px;margin-top:8px;background:var(--card)}
-.op.on{border-color:var(--c);box-shadow:0 0 0 1px var(--c)}.op.nq{opacity:.45}.op.nq b{text-decoration:line-through}
+.op.on{border-color:var(--c);box-shadow:0 0 0 1px var(--c)}.op.nq{opacity:.7}.dica{margin-top:10px;background:color-mix(in srgb,var(--pe) 14%,var(--card));border:1px solid var(--pe);border-radius:12px;padding:10px 12px;font-size:15px;font-weight:700}.op.nq b{text-decoration:line-through}
 .opb{flex:1;font:inherit;color:var(--ink);background:none;border:none;text-align:left;padding:11px;cursor:pointer;display:flex;gap:10px;align-items:center;min-height:48px}
 .rd{flex:0 0 18px;height:18px;border-radius:50%;border:2px solid var(--mute)}.op.on .rd{background:var(--c);border-color:var(--c)}
 .nqb{font:inherit;border:none;border-left:1px solid var(--line);background:none;color:var(--mute);width:46px;cursor:pointer;font-size:16px}.nqb.on{background:var(--rev);color:var(--on);border-radius:0 11px 11px 0}
@@ -169,6 +169,11 @@ function ult(quem,menino,tipo,chave){for(let i=L.length-1;i>=0;i--){const r=L[i]
 const val=(quem,menino,chave)=>{const r=ult(quem,menino,'eu',chave);return r&&r.valor!==''?r:null;};
 function salva(menino,tipo,chave,valor,texto){const r={em:new Date().toISOString(),quem:EU.id,menino,tipo,chave,valor:valor==null?'':String(valor),texto:texto||''};L.push(r);try{localStorage.setItem(window.PREVIA?'fam_prev_'+EU.id:'fam_'+T,JSON.stringify(L));}catch(e){}render(true);
  if(!URL_ROBO||window.PREVIA)return;try{fetch(URL_ROBO,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({t:T},r)),keepalive:true});}catch(e){toast('Não consegui enviar agora.');}}
+/* "não tem a ver": a planilha às vezes transforma "0,2" em número ou data; aqui lemos só os números válidos. */
+const naoDe=(r,max)=>r&&r.valor!==''?[...new Set(String(r.valor).split(/[,|]/).map(x=>x.trim()).filter(x=>/^\d+$/.test(x)&&+x<max))]:[];
+const resp=(p,r)=>!r?'':p.texto?r.texto:r.valor==='x'?'Nenhuma tem a ver':(p.o[+r.valor]||'');
+/* a planilha devolve números e datas; tudo vira texto para o resto da página funcionar igual */
+const norm=a=>(Array.isArray(a)?a:[]).filter(r=>r&&typeof r==='object').map(r=>Object.assign({},r,{quem:String(r.quem??''),menino:String(r.menino??''),tipo:String(r.tipo??''),chave:String(r.chave??''),valor:String(r.valor??''),texto:String(r.texto??'')}));
 const meuMenino=()=>EU.papel==='menino'?EU.id:'';
 const fNome=()=>EU.meninos.map(k=>KIDS[k].nome).join(' e o ');
 const fx=s=>s.replace(/\{f\}/g,fNome());
@@ -177,13 +182,13 @@ const fx=s=>s.replace(/\{f\}/g,fNome());
 function feitas(lista,pre,quem,menino){return lista.filter(p=>val(quem,menino,pre+p.id)).length;}
 function jornada(lista,pre,titulo,cor){const quem=EU.id,men=meuMenino();const n=feitas(lista,pre,quem,men);
  const prog=`<div class="prog">${lista.map((p,i)=>`<i class="${i<n?'ok':''}"></i>`).join('')}</div>`;
- const hist=lista.slice(0,n).slice(-2).map(p=>{const r=val(quem,men,pre+p.id);return `<div class="bal">${esc(fx(p.q))}</div><div class="bal eu">${esc(p.texto?r.texto:p.o[+r.valor])}</div>`;}).join('');
+ const hist=lista.slice(0,n).slice(-2).map(p=>{const r=val(quem,men,pre+p.id);return `<div class="bal">${esc(fx(p.q))}</div><div class="bal eu">${esc(resp(p,r))}</div>`;}).join('');
  if(n>=lista.length)return `<h2>${titulo}</h2>${prog}<div class="fim"><div class="big">✨</div><b>Concluída!</b></div>`;
- const p=lista[n];const nr=ult(quem,men,'nao',pre+p.id);const nao=nr&&nr.valor?nr.valor.split(','):[];
+ const p=lista[n];const nr=ult(quem,men,'nao',pre+p.id);const nao=p.o?naoDe(nr,p.o.length):[];const todos=p.o&&p.o.length>1&&nao.length>=p.o.length;
  let corpo;
  if(p.texto)corpo=`<textarea id="jt" maxlength="300" placeholder="Escreva aqui…"></textarea><div style="margin-top:8px"><button class="btn pri" data-a="jtx" data-c="${pre+p.id}">Enviar</button></div>`;
  else if(p.duelo)corpo=`<div class="duelo"><button class="opb" data-a="jsel" data-c="${pre+p.id}" data-i="0">${esc(p.o[0])}</button><span>ou</span><button class="opb" data-a="jsel" data-c="${pre+p.id}" data-i="1">${esc(p.o[1])}</button></div>`;
- else corpo=`<div class="opts">${p.o.map((o,j)=>`<div class="op${nao.includes(String(j))?' nq':''}" style="--c:${cor}"><button class="opb" data-a="jsel" data-c="${pre+p.id}" data-i="${j}"><span class="rd"></span><b>${esc(o)}</b></button>${p.o.length>1?`<button class="nqb${nao.includes(String(j))?' on':''}" data-a="jnao" data-c="${pre+p.id}" data-i="${j}" aria-label="Não tem a ver">✕</button>`:''}</div>`).join('')}</div>`;
+ else corpo=`<div class="opts">${p.o.map((o,j)=>`<div class="op${nao.includes(String(j))?' nq':''}" style="--c:${cor}"><button class="opb" data-a="jsel" data-c="${pre+p.id}" data-i="${j}"><span class="rd"></span><b>${esc(o)}</b></button>${p.o.length>1?`<button class="nqb${nao.includes(String(j))?' on':''}" data-a="jnao" data-c="${pre+p.id}" data-i="${j}" aria-label="Não tem a ver">✕</button>`:''}</div>`).join('')}</div>${nao.length?`<div class="dica">${todos?'Você marcou ✕ em todas. Tudo bem!':'O ✕ só tira a opção do caminho. Para seguir, toque na resposta que mais combina.'}<br><button class="btn" style="margin-top:8px;min-height:42px;padding:8px 14px" data-a="jpula" data-c="${pre+p.id}">Nenhuma tem a ver · seguir →</button></div>`:''}`;
  return `<h2>${titulo}</h2>${prog}<div class="chat">${hist}<div class="bal">${esc(fx(p.q))}</div></div>${corpo}
  ${n>0?`<p style="margin-top:12px"><button class="btn" style="min-height:40px;padding:6px 12px" data-a="jvolta" data-c="${pre+lista[n-1].id}">← voltar uma</button></p>`:''}`;}
 /* Trilha 2 dos meninos: as 8 áreas */
@@ -205,7 +210,7 @@ function missoes(k,pode){return MISSOES.map(m=>{const r=ult(k,k,'missao',m.id);c
 function conversa(com){const ids=[EU.id,com];const M=L.filter(r=>r.tipo==='recado'&&ids.includes(r.quem)&&ids.includes(r.chave));
  return `${M.length?M.map(r=>`<div class="msg ${r.quem===EU.id?'eu':'ele'}">${esc(r.texto)}<small>${esc(NOMEP[r.quem]||r.quem)} · ${esc((r.em||'').slice(8,10)+'/'+(r.em||'').slice(5,7))}</small></div>`).join(''):`<div class="vazio">Nenhuma mensagem ainda.</div>`}
  <textarea id="tx-${com}" maxlength="800" placeholder="Escreva para ${esc(NOMEP[com]||com)}…"></textarea><div style="margin-top:8px"><button class="btn pri" data-a="rec" data-to="${com}">Enviar</button></div>`;}
-function respostas(quem,men,lista,pre){return lista.map(p=>{const r=val(quem,men,pre+p.id);if(!r)return '';return `<div class="pq" style="--c:var(--pe)"><span class="small mute">${esc(p.q.replace(/\{f\}/g,'filho'))}</span><br><b>${esc(p.texto?r.texto:p.o[+r.valor])}</b></div>`;}).join('')||`<div class="vazio">Ainda sem respostas.</div>`;}
+function respostas(quem,men,lista,pre){return lista.map(p=>{const r=val(quem,men,pre+p.id);if(!r)return '';return `<div class="pq" style="--c:var(--pe)"><span class="small mute">${esc(p.q.replace(/\{f\}/g,'filho'))}</span><br><b>${esc(resp(p,r))}</b></div>`;}).join('')||`<div class="vazio">Ainda sem respostas.</div>`;}
 function areasDe(k){if(k==='lucas')return MUNDOS.filter(([a])=>val('lucas','lucas','t2_'+a)).map(m=>m[1]);return Object.keys(AREAS).filter(a=>{const r=val(k,k,'t2_'+a);return r&&r.valor==='0';}).map(a=>AREAS[a][0]);}
 function evolucao(k){const j=k==='lucas'?J1L:J1;const n=feitas(j,'j1_',k,k);const ar=areasDe(k);
  return `<div class="sec"><h2>🎯 Missões</h2>${missoes(k,false)}</div>
@@ -256,7 +261,7 @@ function painel(){const R=PESSOAS.map(p=>[p,resumo(p)]);const ent=R.filter(([,r]
   return `<div class="pq feito" style="--c:${cor}" data-a="vai" data-k="${p}" data-v="ev"><div style="display:flex;align-items:center;gap:10px"><span style="font-size:24px">${s}</span><div style="flex:1;min-width:0"><b>${esc(NOMEP[p])}</b>${ap&&ap!==NOMEP[p]?` <span class="small mute">"${esc(ap)}"</span>`:''}<br><span class="small mute">${esc(r.st)} · última vez ${dataBR(r.ultima)}</span></div><b class="small">${Math.round(r.p*100)}%</b></div><div class="prog" style="margin:8px 0 0"><i class="ok" style="flex:none;width:${Math.round(r.p*100)}%"></i></div></div>`;}).join('')}</div>
  <div class="sec"><h2>🧭 Caminhos que eles amaram</h2>${['ricardo','joao','lucas'].map(k=>{const a=areasDe(k);return `<p class="small" style="margin:6px 0"><b>${KIDS[k].nome}:</b> ${a.length?a.map(esc).join(' · '):'<span class="mute">ainda não</span>'}</p>`;}).join('')}</div>
  <div class="sec"><h2>💛 O que as mães esperam</h2>${['juliana','paola'].map(m=>{const r1=val(m,'','f2_n2'),r2=val(m,'','f2_n7'),r3=val(m,'','f1_m6');const P=id=>M2.find(x=>x.id===id)||M1.find(x=>x.id===id);
-  return `<p class="small" style="margin:6px 0"><b>${NOMEP[m]}:</b> ${[r3?'quer que aprendam '+P('m6').o[+r3.valor].toLowerCase():'',r1?'papel: '+P('n2').o[+r1.valor].toLowerCase():'',r2?'tempo: '+P('n7').o[+r2.valor].toLowerCase():''].filter(Boolean).map(esc).join(' · ')||'<span class="mute">ainda não</span>'}</p>`;}).join('')}</div>`;}
+  return `<p class="small" style="margin:6px 0"><b>${NOMEP[m]}:</b> ${[r3&&resp(P('m6'),r3)?'quer que aprendam '+resp(P('m6'),r3).toLowerCase():'',r1&&resp(P('n2'),r1)?'papel: '+resp(P('n2'),r1).toLowerCase():'',r2&&resp(P('n7'),r2)?'tempo: '+resp(P('n7'),r2).toLowerCase():''].filter(Boolean).map(esc).join(' · ')||'<span class="mute">ainda não</span>'}</p>`;}).join('')}</div>`;}
 function telaDono(){ABA=ABA||'painel';const k=KID||'ricardo';const mae=!KIDS[k];
  if(ABA==='painel')return `<h1 class="f">Painel da família</h1>${painel()}`;
  const tabs=[['ev',mae?'💛 Respostas':'📈 Evolução'],['msg','💬 Conversa']];
@@ -291,7 +296,8 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b
  if(a==='cfgvolta'){salva(men,'eu','cfg_'+c,'');return;}
  if(a==='jsel'){salva(men,'eu',c,b.dataset.i);return;}
  if(a==='jtx'){const t=(document.getElementById('jt').value||'').trim();if(!t){toast('Escreva algo primeiro.');return;}salva(men,'eu',c,'texto',t.slice(0,300));return;}
- if(a==='jnao'){const r=ult(EU.id,men,'nao',c);const s=new Set(r&&r.valor?r.valor.split(','):[]);const i=b.dataset.i;s.has(i)?s.delete(i):s.add(i);salva(men,'nao',c,[...s].join(','));return;}
+ if(a==='jnao'){const r=ult(EU.id,men,'nao',c);const s=new Set(naoDe(r,99));const i=b.dataset.i;s.has(i)?s.delete(i):s.add(i);salva(men,'nao',c,[...s].join('|'));return;}
+ if(a==='jpula'){salva(men,'eu',c,'x');return;}
  if(a==='jvolta'){salva(men,'eu',c,'');return;}
  if(a==='t2'){const r=val(EU.id,men,c);salva(men,'eu',c,r&&r.valor===b.dataset.i?'':b.dataset.i);return;}
  if(a==='mundo'){const r=val(EU.id,men,c);salva(men,'eu',c,r?'':'1');return;}
@@ -302,13 +308,13 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b
 
 /* ---------- abrir ---------- */
 (async()=>{render();
- if(window.PREVIA){EU=window.PREVIA.eu;try{const c=JSON.parse(localStorage.getItem('fam_prev_'+EU.id)||'null');if(Array.isArray(c))L=c;}catch(e){}render();if(EU.papel!=='dono'&&configurado())video();return;}
+ if(window.PREVIA){EU=window.PREVIA.eu;try{const c=JSON.parse(localStorage.getItem('fam_prev_'+EU.id)||'null');if(Array.isArray(c))L=norm(c);}catch(e){}render();if(EU.papel!=='dono'&&configurado())video();return;}
  if(!T){ERRO='Este link está incompleto. Peça ao Daniel o seu link.';render();return;}
- try{const c=JSON.parse(localStorage.getItem('fam_'+T)||'null');if(Array.isArray(c))L=c;}catch(e){}
+ try{const c=JSON.parse(localStorage.getItem('fam_'+T)||'null');if(Array.isArray(c))L=norm(c);}catch(e){}
  if(!URL_ROBO){ERRO='O espaço ainda está sendo preparado. Volte em breve.';render();return;}
  try{const r=await fetch(URL_ROBO+'?t='+encodeURIComponent(T));const j=await r.json();
   if(!j.ok){ERRO='Link não reconhecido. Peça ao Daniel o seu link.';render();return;}
-  EU=j.eu;L=j.linhas||[];try{localStorage.setItem('fam_'+T,JSON.stringify(L));}catch(e){}render();
+  EU=j.eu;L=norm(j.linhas);try{localStorage.setItem('fam_'+T,JSON.stringify(L));}catch(e){}render();
   let visto=false;try{visto=localStorage.getItem('fam_visto_'+T)==='1';}catch(e){}
   if(!visto&&EU.papel!=='dono'&&configurado()&&!ult(EU.id,meuMenino(),'visto','video'))video();}
  catch(e){ERRO='Sem conexão agora. Tente de novo em instantes.';render();}})();
