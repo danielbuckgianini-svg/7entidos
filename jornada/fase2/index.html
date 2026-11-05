@@ -304,12 +304,12 @@ function v2(){const b=bloqueio(2);if(b)return b;const nome=(J.nome||'').split(' 
   return `<div class="k">A sua régua dos 7 sentidos</div><h1 class="f" style="font-size:30px">Os seus 10</h1><p class="small mute">O que você marcou como êxtase.</p>
   <div class="dez">${L.length?L.map(([id,sen,n])=>{const t=tileDe(id,n);A=DEF_A.slice();return `<div class="dz"><svg viewBox="0 0 300 300">${t?t.art():''}</svg><b>${esc(n)}</b><small>${esc(sen)}</small></div>`;}).join(''):'<p class="mute">Nenhum 10 ainda. Tudo bem: seus maiores estão no topo da régua.</p>'}</div>
   <h2>✨ 3 experiências de 5 minutos para esta semana</h2>${E.map((t,i)=>`<div class="ins5"><b>${i+1}. ${esc(t)}</b></div>`).join('')}
-  ${EF.on?EF.sai(F.chega,F.esai,F.leva)+EF.sug(F.sug):`<h2>Depois desta fase, qual é a sua sensação agora?</h2><div class="c11 grande">${[...Array(11)].map((_,k)=>`<button class="${F.sens===k?'on':''}" data-a="sens" data-n="${k}">${k}</button>`).join('')}</div><div class="small mute" style="display:flex;justify-content:space-between"><span>0 = nada bem</span><span>10 = muito bem</span></div>`}
+  ${EF.on?EF.sai(F.chega,F.esai,F.leva)+EF.preco(F.pr)+EF.sug(F.sug):`<h2>Depois desta fase, qual é a sua sensação agora?</h2><div class="c11 grande">${[...Array(11)].map((_,k)=>`<button class="${F.sens===k?'on':''}" data-a="sens" data-n="${k}">${k}</button>`).join('')}</div><div class="small mute" style="display:flex;justify-content:space-between"><span>0 = nada bem</span><span>10 = muito bem</span></div>`}
   <div class="f2"><b>A Fase 3 traz as suas lembranças.</b><a class="btn pri" style="display:block;margin-top:10px;text-decoration:none" href="/jornada/fase3/?c=${CONVITE}" data-a="quer3">Ir para a Fase 3 →</a></div>
   <p class="erro" id="er2"></p><button class="btn pri big" data-a="fim2">Finalizar a Fase 2 ✓</button>`;}
  return `<div class="hero"><div class="k">Fase 2 finalizada ✓</div><h1 class="f">Obrigado, ${esc(nome)}!</h1><p class="mute">A sua régua está salva.</p><a class="btn pri big" style="display:block;text-decoration:none" href="/jornada/fase3/?c=${CONVITE}">Ir para a Fase 3 →</a></div>`;}
 function resumo2(){const notas=SEN.map(([id,sen])=>sen+': '+(J.esc[id]||[]).map(n=>n+' '+(F.notas[id+'|'+n]??'-')).join(' | '));const all=Object.values(F.notas);const med=all.length?Math.round(all.reduce((a,b)=>a+b,0)/all.length*10)/10:'';
- return {notas,media:med,dez:dez().map(([,s,n])=>n+' ('+s+')'),experiencias:experiencias(),sensacao:EF.on?EF.texto(F.chega,F.esai,F.leva)+(F.sug?' · Sugestão: '+F.sug:''):F.sens,chega:F.chega||'',sai:F.esai||'',leva:F.leva||'',sugestao:F.sug||''};}
+ return {notas,media:med,dez:dez().map(([,s,n])=>n+' ('+s+')'),experiencias:experiencias(),sensacao:EF.on?EF.texto(F.chega,F.esai,F.leva)+' · '+EF.precoTexto(F.pr)+(F.sug?' · Sugestão: '+F.sug:''):F.sens,chega:F.chega||'',sai:F.esai||'',leva:F.leva||'',sugestao:F.sug||'',preco:EF.on?EF.precoTexto(F.pr):'',preco_barato_demais:F.pr&&F.pr.t&&!F.pr.pular?F.pr.v[0]:'',preco_bom_negocio:F.pr&&F.pr.t&&!F.pr.pular?F.pr.v[1]:'',preco_ficando_caro:F.pr&&F.pr.t&&!F.pr.pular?F.pr.v[2]:'',preco_caro_demais:F.pr&&F.pr.t&&!F.pr.pular?F.pr.v[3]:'',presente:F.pr&&!F.pr.pular?(F.pr.pres||''):''};}
 function preparaTeste(){if(!TESTE)return;if(!J||!fase1Ok()){J={id:'TESTE-'+Date.now().toString(36),nome:'Daniel',cel:'',esc:{}};SEN.forEach(s=>{J.esc[s[0]]=s[5].slice(0,7).map(t=>t.n);});F={i:-1,notas:{},sens:null,quer3:false,fim:false};salvaJ();}}
 const faixaTeste=()=>TESTE?`<div style="background:#F9CB39;color:#0A0F24;font-weight:800;border-radius:12px;padding:8px 12px;margin:6px 0 10px;display:flex;gap:8px;align-items:center;font-size:14px">🧪 Modo teste do Daniel<span style="flex:1"></span><button class="btn" style="min-height:34px;padding:4px 10px;font-size:13px" data-a="zerateste">Recomeçar</button></div>`:'';
 function render(){preparaTeste();document.getElementById('app').innerHTML=topoLogo()+faixaTeste()+v2();}
@@ -329,10 +329,14 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b
  if(a==='volta'){para();F.i=Math.max(-1,F.i-1);salva2();render();scrollTo(0,0);return;}
  if(a==='efchega'){F.chega=b.dataset.v;salva2();const y=scrollY;render();scrollTo(0,y);return;}
  if(a==='efsai'){F.esai=b.dataset.v;salva2();const y=scrollY;render();scrollTo(0,y);return;}
+ if(a==='efpres'){F.pr=F.pr||{};F.pr.pres=b.dataset.v;salva2();const y=scrollY;render();scrollTo(0,y);return;}
+ if(a==='efprpula'){F.pr=F.pr||{};F.pr.pular=true;salva2();const y=scrollY;render();scrollTo(0,y);return;}
+ if(a==='efprvolta'){F.pr=F.pr||{};F.pr.pular=false;salva2();const y=scrollY;render();scrollTo(0,y);return;}
  if(a==='efleva'){F.leva=b.dataset.v;salva2();const y=scrollY;render();scrollTo(0,y);return;}
  if(a==='sens'){F.sens=+b.dataset.n;salva2();const y=scrollY;render();scrollTo(0,y);return;}
  if(a==='quer3'){F.quer3=true;F.fim=true;salva2();post('fase2',resumo2());return;}
  if(a==='fim2'){if(EF.on){const fa=EF.falta(F.esai,F.leva);if(fa){document.getElementById('er2').textContent=fa;return;}}else if(F.sens==null){document.getElementById('er2').textContent='Dê a sua nota de 0 a 10 antes de finalizar.';return;}F.fim=true;salva2();post('fase2',resumo2());render();scrollTo(0,0);return;}});
-document.addEventListener('input',e=>{if(e.target&&e.target.id==='efsug'){F.sug=e.target.value.slice(0,500);salva2();}});
+document.addEventListener('input',e=>{if(e.target&&e.target.id==='efsug'){F.sug=e.target.value.slice(0,500);salva2();}
+ if(e.target&&e.target.dataset&&e.target.dataset.vw!=null){F.pr=EF.vw(F.pr||{},+e.target.dataset.vw,+e.target.value);salva2();document.querySelectorAll('[data-vw]').forEach(r=>{const k=+r.dataset.vw;if(+r.value!==F.pr.v[k])r.value=F.pr.v[k];const l=document.getElementById('efvv'+k);if(l)l.textContent='R$ '+F.pr.v[k];});}});
 render();
 </script></body></html>
