@@ -510,12 +510,12 @@ function sEscolhe(G,v){G.esc.push(v);G.resto=G.resto.filter(x=>x!==v);G.ouv=null
 /* ---------- fluxo ---------- */
 function idAtual(){return PD.ordem[PD.si];}
 function faltam(){return PD.ordem.length-Object.keys(PD.res).filter(id=>PD.ordem.includes(id)).length+PD.adiados.length;}
-function pdComecaSentido(){PD.fase='lembra';PD.G=null;}
+function pdComecaSentido(){PD.G=null;pdJoga();PD.t0=Date.now();}/* 05/11: sem a tela de lembrar a Fase 1 */
 function pdJoga(){const id=idAtual();const it=(J.esc[id]||[]).slice();const tp=JOGO[id]||'casa';PD.relT[id]=Date.now();
  if(tp==='duelo'||tp==='inclina'){PD.G=dIni(it);PD.G.tipo=tp;}else if(tp==='balanca'){PD.G={tipo:'balanca'};PD.lista=it;}else PD.G=sIni(it,tp);PD.fase='jogo';}
 function pdFechaSentido(rank){const id=idAtual();PD.res[id]=rank.slice();PD.tempos[id+'_total']=Date.now()-(PD.relT[id]||Date.now());
  const f1=(PD.f1[id]||[])[0];const sv=PD.sent[id]||(PD.sent[id]={});sv.acertou=sv.palpite?((sv.palpite==='sim')===(rank[0]===f1)):false;
- PD.fase='revela';PD.brilho=true;PD.novo=id;para();}
+ PD.novo=id;para();confete();sino(4,.2);vibra(25);pdDepoisSentido();}/* 05/11: sem a tela de revelação e sem "Como você se sentiu?" */
 function pdDepoisSentido(){if(Object.keys(PD.res).length===4&&!PD.surpresa){PD.surpresa=1;PD.fase='surpresa';return;}pdSegue();}
 function pdSegue(){if(PD.si<PD.ordem.length-1){PD.si++;PD.fase='pausa';return;}
  if(PD.adiados.length){PD.fase='adiado';return;}if(PD.pend.length){PD.fase='pular';return;}pdVaiFinal();}
@@ -547,16 +547,17 @@ function vLembra(){const id=idAtual();const s=senDe(id);const n1=(PD.f1[id]||[])
  <div class="lb">${carta(id,n1,'a')}</div><p class="pd-frase" style="text-align:center">Ainda é?</p>
  <div class="row" style="justify-content:center"><button class="btn pri" data-a="palpite" data-v="sim">Ainda é</button><button class="btn" data-a="palpite" data-v="mudou">Acho que mudou</button></div>
  <p style="text-align:center"><button class="lk" data-a="pdpula">Pular este sentido (volto depois)</button></p>`;}
+function pulaLk(){return PD.G&&(PD.G.n||(PD.G.esc&&PD.G.esc.length))?'':`<p style="text-align:center"><button class="lk" data-a="pdpula">Pular este sentido (volto depois)</button></p>`;}
 function vJogo(){const id=idAtual();const s=senDe(id);const G=PD.G;const tp=G.tipo;
  const volta=PD.hist.length?`<button class="btn" data-a="pdvolta">↶ Desfazer</button>`:'';
  if(tp==='duelo'||tp==='inclina'){const p=dPar(G);if(!p)return '';const feitas=G.ord.length;
   return `${cab()}<h1>${tp==='inclina'?'Incline para o lado que você prefere':'Qual você prefere?'}</h1>
   ${tp==='inclina'?`<p class="small mute">Incline o celular para a esquerda ou para a direita. Ou toque.${window.DeviceOrientationEvent&&typeof DeviceOrientationEvent.requestPermission==='function'&&!PD.incOk?` <button class="lk" data-a="incliga">Ligar a inclinação</button>`:''}</p>`:''}
   <div class="pd-duelo ${tp==='inclina'?'inc':''}" id="dl">${carta(id,p[0],'a')}<span class="pd-x" aria-hidden="true">${tp==='inclina'?'⚖️':'×'}</span>${carta(id,p[1],'b')}</div>
-  <div class="dots7">${Array.from({length:7},(_,i)=>`<i style="${i<feitas?`background:${s[3]}`:''}"></i>`).join('')}</div><div class="row">${volta}</div>`;}
+  <div class="dots7">${Array.from({length:7},(_,i)=>`<i style="${i<feitas?`background:${s[3]}`:''}"></i>`).join('')}</div><div class="row">${volta}</div>${pulaLk()}`;}
  if(tp==='balanca')return `${cab()}<h1>Arraste para a balança</h1><p class="small mute">Segure e arraste. Lá em cima fica a que pesa mais no seu coração.</p>
   <ol class="ar-lista balanca" id="arl">${PD.lista.map((n,i)=>linhaArr(n,i,s[3],n,'',artDe(id,n))).join('')}</ol>
-  <div class="row">${volta}<span class="sp"></span><button class="btn pri" data-a="balok">Pronto, essa é a minha ordem →</button></div>`;
+  <div class="row">${volta}<span class="sp"></span><button class="btn pri" data-a="balok">Pronto, essa é a minha ordem →</button></div>${pulaLk()}`;
  const pos=G.esc.length+1;
  const T={ouvir:['Feche os olhos. Toque para ouvir.','Ouça e escolha a que você mais gosta. Depois a 2ª, e assim por diante.'],
   casa:['Qual destes cheiros é mais "casa" pra você?','Cada toque acende uma janela da sua casa.'],
@@ -572,7 +573,7 @@ function vJogo(){const id=idAtual();const s=senDe(id);const G=PD.G;const tp=G.ti
   if(tp==='ouvir'){const on=G.ouv===v;return `<button class="sq ouv ${on?'on':''}" data-a="sq" data-v="${esc(v)}" style="--c:${s[3]}"><span class="onda">${on?'🔊':'♪'}</span><b>${on?esc(v):'Som '+(k+1)}</b>${on?`<em data-a="ouvok" data-v="${esc(v)}">Escolher este</em>`:''}</button>`;}
   return bolinha(id,v,k);}).join('');
  return `${tp==='final'?`${album()}<div class="k">A grande final</div>`:cab()}<h1>${T[0]}</h1><p class="small mute">${T[1]}</p>${cena}
- <p class="pos">Escolhendo a <b>${pos}ª</b></p><div class="sqg ${tp}">${grade}</div><div class="row">${volta}</div>`;}
+ <p class="pos">Escolhendo a <b>${pos}ª</b></p><div class="sqg ${tp}">${grade}</div><div class="row">${volta}</div>${tp==='final'?'':pulaLk()}`;}
 function revelacao(id,k){const L=PD.res[id],f1=PD.f1[id]||[];const s=senDe(id);
  const R=[
   ()=>`🥇🥈🥉 Seu trio: <b>${L.slice(0,3).map(esc).join(' · ')}</b>`,
@@ -607,7 +608,7 @@ function vPdPular(){const id=PD.pend[0];const s=senDe(id);return `${album()}<div
  <div class="row" style="justify-content:center"><button class="btn" data-a="pdnao">Agora não</button><button class="btn pri" data-a="pdsim">Quero tentar</button></div></div>`;}
 /* ----- o resumo em telas (story) ----- */
 function maiorSubida(){let best=null;PD.ordem.forEach(id=>{const L=PD.res[id];if(!L)return;const f1=PD.f1[id]||[];L.forEach((n,i)=>{const a=f1.indexOf(n);if(a>=0&&(!best||a-i>best.d))best={id,n,d:a-i};});});return best&&best.d>0?best:null;}
-function quadradinhos(){return SEN.map(s=>{const sv=PD.sent[s[0]];return PD.res[s[0]]?(sv&&sv.acertou?'🟩':'🟨'):'⬜';}).join('');}
+function quadradinhos(){return SEN.map(s=>{const sv=PD.sent[s[0]];return PD.res[s[0]]?'🟩':'⬜';}).join('');}
 function topPerfil(){try{const p=perfil();return {a:TAGS[p.top],b:TAGS[p.seg]};}catch(e){return null;}}
 function vStory(){const F=(PD.final||[]).map(v=>v.split('|'));const N=7;const st=PD.st;let c='';
  const bars=`<div class="stb">${Array.from({length:N},(_,i)=>`<i class="${i<st?'ok':i===st?'at':''}"></i>`).join('')}</div>`;
@@ -615,7 +616,7 @@ function vStory(){const F=(PD.final||[]).map(v=>v.split('|'));const N=7;const st
  if(st===1&&F[0]){const s=senDe(F[0][0]);c=`<div class="k">Sua campeã das campeãs</div><div class="pd-campea grande" style="--c:${s[3]}"><svg viewBox="0 0 300 300">${artDe(F[0][0],F[0][1])}</svg><span>${s[2]} ${esc(F[0][1])}</span></div><p class="mute">De ${esc(s[1])}. Entre todas as suas escolhas, é a que mais te faz bem hoje.</p>`;}
  if(st===2)c=`<div class="k">Seu pódio</div><div class="pd-podio">${[1,0,2].map(i=>{const x=F[i];if(!x)return '<div></div>';const s=senDe(x[0]);return `<div class="pd-deg pd-deg${i+1}" style="--c:${s[3]}"><svg viewBox="0 0 300 300">${artDe(x[0],x[1])}</svg><b>${esc(x[1])}</b><small>${esc(s[1])}</small><span>${i+1}º</span></div>`;}).join('')}</div>`;
  if(st===3){const m=maiorSubida();c=`<div class="k">O que mais mudou</div>${m?`<h1 class="f">${esc(m.n)} subiu ${m.d} ${m.d>1?'posições':'posição'}</h1><p class="mute">Em ${esc(senDe(m.id)[1])}, desde a Fase 1.</p>`:`<h1 class="f">Quase nada mudou</h1><p class="mute">Você manteve a ordem da Fase 1. Isso é saber o que quer.</p>`}
-  <h2>Como você se sentiu em cada sentido</h2><div class="emos">${PD.ordem.filter(id=>PD.res[id]).map(id=>`<span>${senDe(id)[2]} ${PD.sent[id]&&PD.sent[id].emo||'·'}</span>`).join('')}</div>`;}
+  `;}
  if(st===4){const M=MOLD[PD.moldura||0];c=`<div class="k">Sua pintura</div><div class="mold" style="--m:${M[1]}"><div class="mapa" id="mp">${PD.pintF||PD.pint}</div></div>
   <p class="mute">Escolha a moldura:</p><div class="chips">${MOLD.map((m,i)=>`<button class="chip ${i===(PD.moldura||0)?'on':''}" data-a="mold" data-v="${i}"><i style="background:${m[1]}"></i>${m[0]}</button>`).join('')}</div>`;}
  if(st===5){const P=topPerfil();c=`<div class="k">O que as suas escolhas dizem</div>${PD.abriu&&P?`<div class="cel" style="--c:#F9CB39"><h1 class="f">Você é do tipo que se sente bem com ${esc(P.a[2])}.</h1><p>${esc(P.a[3])}</p><p class="mute">Em segundo lugar: ${esc(P.b[2])}.</p></div><p class="small mute">É o retrato de hoje. Não é diagnóstico nem avaliação.</p>`:`<button class="tr abrir" data-a="abre"><div class="tr-v"><b>Você é do tipo que…</b><span>████████ ██████ ████</span></div><div class="tr-c">🔓 Toque para ver</div></button>`}`;}
@@ -626,7 +627,7 @@ function vStory(){const F=(PD.final||[]).map(v=>v.split('|'));const N=7;const st
   <div class="f3"><div class="f3v">${Array.from({length:10},(_,i)=>`<i style="height:${18+i*7}px;background:${C[i%7]}"></i>`).join('')}</div><div class="f3c">🔒</div></div>
   <button class="btn pri big" data-a="pdfim" style="width:100%">${MODO==='podio-refazer'?'Guardar →':'Continuar para a Fase 3 →'}</button>`;}
  return `<div class="story" data-a="stz">${bars}<div class="stc">${c}</div>${st<6?`<div class="row" style="justify-content:space-between">${st>0?`<button class="btn" data-a="stv">←</button>`:'<span></span>'}<button class="btn pri" data-a="sta">Seguir →</button></div>`:''}</div>`;}
-function renderPodio(){pdSalva();const f=PD.fase;
+function renderPodio(){if(PD.fase==='lembra'){pdJoga();PD.t0=Date.now();}if(PD.fase==='revela'){PD.brilho=false;pdDepoisSentido();if(PD.fase==='lembra'){pdJoga();PD.t0=Date.now();}}pdSalva();const f=PD.fase;
  const v=f==='abre'?vF2Abre():f==='lembra'?vLembra():f==='jogo'?vJogo():f==='revela'?vRevela():f==='pausa'?vPausa():f==='surpresa'?vSurpresa():f==='adiado'?vAdiado():f==='pular'?vPdPular():f==='final'?vJogo():f==='fecha'&&window.FCH?FCH.tela(PD.ef||{}):vStory();
  document.getElementById('app').innerHTML=`<div class="bar0"><a class="logo" aria-label="7entidos"><img src="/assets/simbolo-contando-7.svg?v=20261102-novo" alt="" width="30" height="30"><b class="f"><span style="color:#FFD43B">7</span>entidos</b></a><span class="sp"></span></div>`+v;
  if(f==='pausa')padLiga();else padDesliga();arLiga();incLiga();
