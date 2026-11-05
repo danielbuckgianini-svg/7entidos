@@ -506,7 +506,7 @@ function vibra(ms){try{navigator.vibrate&&navigator.vibrate(ms||15);}catch(_){}}
 let SOM_T=null;
 /* Sons de toque (Daniel, 05/11): nada de melodia a cada clique. Opções para testar, padrão = pisca-alerta */
 const SONS=[['pisca','Pisca-alerta (tic-tac)'],['pisca1','Pisca suave (só o tic)'],['trava','Bip da trava do carro'],['caneta','Clique de caneta'],['madeira','Tique de madeira'],['mudo','Sem som, só vibração']];
-function somAtual(){try{return localStorage.getItem('f2som')||'pisca';}catch(e){return 'pisca';}}
+function somAtual(){return 'caneta';} /* Daniel 05/11: escolheu o clique de caneta */
 function rele(c,t,f,v){const n=Math.floor(c.sampleRate*.018),b=c.createBuffer(1,n,c.sampleRate),x=b.getChannelData(0);for(let i=0;i<n;i++)x[i]=(Math.random()*2-1)*Math.pow(1-i/n,4);
  const s=c.createBufferSource();s.buffer=b;const fl=c.createBiquadFilter();fl.type='bandpass';fl.frequency.value=f;fl.Q.value=2.5;const g=c.createGain();g.gain.value=v;s.connect(fl);fl.connect(g);g.connect(c.destination);s.start(t);
  const o=c.createOscillator(),g2=c.createGain();o.frequency.value=f/9;g2.gain.setValueAtTime(v*.25,t);g2.gain.exponentialRampToValueAtTime(.0001,t+.03);o.connect(g2);g2.connect(c.destination);o.start(t);o.stop(t+.04);}
@@ -587,7 +587,6 @@ function vF2Abre(){const p=PD.ordem[0]?senDe(PD.ordem[0]):null;
  <div class="k">Fase 2 · Pódio dos Sentidos</div><h1 class="f">Hora de pôr em ordem!</h1>
  <p class="mute">A cada sentido, você ganha 1 pedaço da sua pintura. No meio, uma pausa para respirar. Pode pular um sentido e voltar depois.</p>
  ${trancado()}${PD.demo?`<p class="small mute">Prévia: como a Fase 1 não foi feita neste aparelho, usei escolhas de exemplo.</p>`:''}
- <div class="somp"><b>Prévia · som dos toques</b><div>${SONS.map(([k,n])=>`<button class="chipp ${somAtual()===k?'on':''}" data-a="som" data-v="${k}">${n}</button>`).join('')}</div></div>
  <button class="btn pri big" data-a="pdcomeca" style="margin-top:16px">Começar</button><p class="small mute">⏱️ Leva uns 5 minutos.</p></div>`;}
 const INSTR={galeria:'Toque nas imagens, da que você mais gosta para a que menos gosta. Cada uma vai para um quadro da sua galeria.',mexe:'Escolha um movimento e faça com o celular na mão. Do que você mais gosta para o que menos gosta.',duelo:'Duas imagens por vez. Toque na que você prefere; a sua ordem aparece sozinha.',ouvir:'Primeiro, um desafio: ouça cada som e adivinhe o que é. Depois, coloque os sons em ordem.',balanca:'Arraste as texturas: lá em cima fica a que pesa mais no seu coração.',casa:'Toque nos cheiros, do mais "casa" para o menos. Cada toque acende uma janela.',prato:'Monte o seu prato: a 1ª vai no centro, as outras em volta.',inclina:'Incline o celular para o lado que você prefere (ou toque).',respira:'Respire com a bolinha e toque no que o seu corpo pede.'};
 function vLembra(){const id=idAtual();const s=senDe(id);const tp=JOGO[id];
