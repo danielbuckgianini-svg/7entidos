@@ -13,9 +13,11 @@
 - Sem pintor favorito: a pintura final é a junção dos 7 sentidos, cada um no seu pintor.
 - Placa: "Museu do 7entidos". Pintura de amostra feita com as escolhas do Daniel, buscadas na planilha da Jornada.
 
-## Fase "O seu pincel" (validada em 04/11/2026)
-- Acontece depois da Fase 1. Os 7 pincéis finalistas aparecem com nomes neutros (Redemoinho, Fumaça, Estilhaço, Pétala, Mosaico, Derretido, Reflexo), sem citar os pintores.
-- Duelos 2 a 2 (quem vence fica e enfrenta o próximo: 6 duelos). Os pincéis já vêm pintados com as cores das escolhas da pessoa.
-- O pincel campeão muda só o visual do app (fundo, cartões, animações). A pintura final continua com o pintor fixo de cada sentido.
-- Pista escondida (✦) com uma charada sobre a origem, sem dizer o nome. Sem sorteio de recompensa; dá para trocar de pincel quando quiser.
+## Fase "O seu pincel" (validada em 04/11/2026; posição revista na mesma noite)
+- Vem ANTES da Fase 1, logo que a pessoa entra no app (boas-vindas).
+- Primeiro a pessoa escolhe 1 cor favorita (das 7 cores dos sentidos); os pincéis dos duelos aparecem em tons dessa cor.
+- 7 pincéis com nomes neutros (Redemoinho, Fumaça, Estilhaço, Pétala, Mosaico, Derretido, Reflexo), sem citar os pintores. Duelos 2 a 2: quem vence fica (6 duelos).
+- Na Fase 1, o pincel muda a imagem que cresce no topo (pintada com o pincel, ganhando a cor de cada sentido completado).
+- No fim da Fase 1: "Quer manter o seu pincel ou testar outro?".
+- Pista escondida (✦) com uma charada sobre a origem, sem dizer o nome. Sem sorteio.
 - Protótipo: `prototipos/fase-pincel.html`.
