@@ -17,7 +17,7 @@
     window.gtag = function () { window.dataLayer.push(arguments); };
     window.gtag("js", new Date());
     window.gtag("config", ID, { anonymize_ip: true, allow_google_signals: false, allow_ad_personalization_signals: false });
-    /* Página com meta de anúncio (ex.: pré-venda): conta a visita como resultado no Google Ads, só depois do "Aceitar" */
+    /* Página com meta de anúncio (ex.: página do anúncio): conta a visita como resultado no Google Ads, só depois do "Aceitar" */
     if (window.CONVERSAO_ADS) window.gtag("event", window.CONVERSAO_ADS);
     var s = document.createElement("script");
     s.async = true;
