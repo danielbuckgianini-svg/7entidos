@@ -466,7 +466,7 @@ const JOGO_NOME={duelo:'Duelos',ouvir:'Só ouvindo',balanca:'A balança',casa:'C
 const EMO=['🤩','😊','😌','🤔','😐'];
 const PCT={}; /* {sentido:{opção:%}} só com dados reais da Jornada. Vazio = a frase não aparece. */
 const MOLD=[['Ouro','#D4AF37'],['Madeira','#8A5A3A'],['Luz','#F9CB39']];
-function pdSalva(){try{localStorage.setItem(PDK,JSON.stringify(PD));}catch(e){}}
+const PD_V=2;/* progresso salvo de versões antigas da Fase 2 é ignorado (evita tela vazia) */function pdSalva(){try{PD.v=PD_V;localStorage.setItem(PDK,JSON.stringify(PD));}catch(e){}}
 function senDe(id){return SEN.find(s=>s[0]===id);}
 function tileDe(id,n){const s=senDe(id);return s?s[5].find(t=>t.n===n):null;}
 function artDe(id,n){const t=tileDe(id,n);return t?t.art():'';}
@@ -700,7 +700,7 @@ document.addEventListener('click',e=>{if(!PD)return;const b=e.target.closest('[d
 /* Volta do "quero tentar": ao terminar as 7 escolhas do sentido pulado na Fase 1, ele entra na Fase 2 */
 document.addEventListener('click',e=>{if(PD||!window.__PD)return;const b=e.target.closest('[data-a="prox"]');if(!b)return;const id=window.__PD.voltar;if(!id||(J.esc[id]||[]).length<7)return;
  e.stopImmediatePropagation();para();PD=window.__PD;window.__PD=null;PD.voltar=null;PD.f1[id]=(J.esc[id]||[]).slice();PD.ordem.push(id);PD.si=PD.ordem.length-1;pdComecaSentido();renderPodio();scrollTo(0,0);},true);
-if(EH_PODIO){try{const s=JSON.parse(localStorage.getItem(PDK)||'null');if(s&&s.ordem&&s.f1){PD=s;let ent=null;try{ent=JSON.parse(localStorage.getItem(LSK+'-entrada')||'null');}catch(e){}if(ent){J.esc=ent.esc||{};J.t=ent.t||{};}PD.ordem.forEach(id=>{if(PD.res[id]&&PD.fase==='story')J.esc[id]=PD.res[id].slice();});if(PD.fase==='revela')PD.brilho=true;}}catch(e){}if(!PD)pdInicia();}
+if(EH_PODIO){try{const s=JSON.parse(localStorage.getItem(PDK)||'null');if(s&&s.ordem&&s.f1&&s.v===PD_V){PD=s;let ent=null;try{ent=JSON.parse(localStorage.getItem(LSK+'-entrada')||'null');}catch(e){}if(ent){J.esc=ent.esc||{};J.t=ent.t||{};}PD.ordem.forEach(id=>{if(PD.res[id]&&PD.fase==='story')J.esc[id]=PD.res[id].slice();});if(PD.fase==='revela')PD.brilho=true;}}catch(e){}if(!PD)pdInicia();}
 
 /* ================= IMAGEM DOS 7 SENTIDOS (04/11/2026) =================
    Uma imagem nova para cada pessoa, que ela não viu durante as escolhas. Padrão em camadas:
