@@ -159,6 +159,22 @@ h1{font-size:23px;line-height:1.25;margin:4px 0 10px}h2{font-size:18px;margin:22
 .ra{height:5px;border-radius:5px;background:var(--soft);overflow:hidden;margin:14px 0 4px}.ra i{display:block;height:100%;width:100%;background:var(--pe);transform-origin:left;animation:ra 4.2s linear forwards}
 @keyframes ra{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 @media (prefers-reduced-motion:reduce){.mx-card{animation:none}}
+.onda7{display:flex;gap:5px;align-items:center;justify-content:center;animation:none;background:radial-gradient(circle,rgba(90,184,255,.25),transparent 70%)}
+.onda7 i{display:block;width:7px;height:16px;border-radius:5px;background:#5AB8FF}.onda7.on i{animation:onda .55s ease-in-out infinite alternate}
+@keyframes onda{from{height:10px}to{height:62px}}
+.ad-ops.q4{grid-template-columns:repeat(2,minmax(0,1fr))}
+.pad{position:relative;height:230px;border-radius:20px;overflow:hidden;border:2px solid var(--c);touch-action:none;user-select:none;-webkit-user-select:none;margin:8px 0;cursor:grab}
+.pad svg{position:absolute;inset:0;width:100%;height:100%}.pad b{position:absolute;left:12px;bottom:10px;background:rgba(10,15,36,.75);border-radius:10px;padding:3px 10px}
+.pad-dica{position:absolute;right:12px;top:10px;font-size:13px;background:rgba(10,15,36,.7);border-radius:999px;padding:3px 10px}.pad.toca{box-shadow:0 0 30px var(--c)}.pad.toca .pad-dica{opacity:0}
+.ct{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}.ct-i{font:inherit;color:var(--ink);background:var(--field);border:2px solid var(--line);border-radius:10px;padding:3px;cursor:pointer;display:flex;flex-direction:column;gap:2px}
+.ct-i.on{border-color:var(--c)}.ct-i svg{width:100%;border-radius:6px;display:block}.ct-i small{font-size:9.5px;line-height:1.1;min-height:21px}.ct-i i{display:block;height:5px;border-radius:4px;background:var(--soft);overflow:hidden}.ct-i u{display:block;height:100%;background:var(--c)}
+.est{overflow:hidden;border-radius:16px;background:repeating-linear-gradient(90deg,#2B3A8A 0 22px,#26315F 22px 44px);padding:14px 0;margin:10px 0;border-top:6px solid #1a2350;border-bottom:6px solid #1a2350}
+.est-t{display:flex;gap:10px;width:max-content;will-change:transform}.est-i{width:108px;flex:0 0 108px;background:#F4F1EA;border-radius:50%;padding:10px;color:#0A0F24}.est-i svg{border-radius:50%}.est-i b{font-size:11.5px}
+.lab{position:relative;width:min(340px,100%);aspect-ratio:1;margin:8px auto;border-radius:24px;background:radial-gradient(circle,#18224A,#0B1028);border:2px solid var(--c);touch-action:none;user-select:none}
+.lab-b{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;width:74px;text-align:center}.lab-b i{width:46px;height:46px;border-radius:50%;overflow:hidden;border:3px dashed var(--c);box-shadow:inset 0 0 10px #000}
+.lab-b i svg{width:100%;height:100%;display:block}.lab-b small{font-size:10px;line-height:1.1;margin-top:2px}
+.bola{position:absolute;width:24px;height:24px;margin:-12px 0 0 -12px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff,#F9CB39 45%,#b8860b);box-shadow:0 4px 10px rgba(0,0,0,.6);left:50%;top:50%}
+.corpo-w{display:grid;place-items:center;margin:4px 0}.corpo{width:min(230px,62%);height:auto}.corpo .lz{animation:pedaco .6s}
 </style></head><body><div class="w" id="app"></div>
 <script>/* ---------- estímulos sensoriais (sons feitos aqui, sem arquivos) ---------- */
 let AC=null,TOCANDO=null;
@@ -479,8 +495,8 @@ function entrega(){const p=perfil();const L=insights(J,p,TAGS);let svg='';try{sv
    - Sem ranking, sem sorteio, sem urgência, sem culpa: "está tudo guardado, volte quando quiser". */
 const MODO=QS.get('modo')||'';const EH_PODIO=MODO.indexOf('podio')===0;
 const PDK=LSK+'-podio';let PD=null;
-const JOGO={mapa:'galeria',aud:'ouvir',tato:'balanca',olf:'casa',pal:'prato',equi:'mexe',corpo:'respira'};
-const JOGO_NOME={galeria:'A sua galeria',mexe:'Mexa o celular',duelo:'Duelos',ouvir:'Que som é esse?',balanca:'A balança',casa:'Cheiro de casa',prato:'Monte o seu prato',inclina:'Incline o celular',respira:'Respire e escolha'};
+const JOGO={mapa:'galeria',aud:'ouvir',tato:'carinho',olf:'casa',pal:'esteira',equi:'labirinto',corpo:'acende'};
+const JOGO_NOME={carinho:'Carinho',esteira:'Esteira de sushi',labirinto:'Labirinto',acende:'Corpo que acende',adivinha:'Que som é esse?',galeria:'A sua galeria',mexe:'Mexa o celular',duelo:'Duelos',ouvir:'Que som é esse?',balanca:'A balança',casa:'Cheiro de casa',prato:'Monte o seu prato',inclina:'Incline o celular',respira:'Respire e escolha'};
 const EMO=['🤩','😊','😌','🤔','😐'];
 const PCT={}; /* {sentido:{opção:%}} só com dados reais da Jornada. Vazio = a frase não aparece. */
 const MOLD=[['Ouro','#D4AF37'],['Madeira','#8A5A3A'],['Luz','#F9CB39']];
@@ -518,7 +534,7 @@ function fbSom(est,forte){const c=ac();if(!c)return;const e=est||somAtual();cons
  else if(e==='caneta'){rele(c,t,4200,.7);rele(c,t+.05,3000,.5);if(forte)rele(c,t+.25,4200,.7);}
  else if(e==='madeira'){bipe(c,t,880,.05,.12,'sine');rele(c,t,1200,.4);if(forte)bipe(c,t+.14,660,.05,.12,'sine');}
 }catch(_){}}
-function toque(id,n,k){vibra(15);fbSom();}
+function toque(id,n,k){vibra(15);if(typeof PD!=='undefined'&&PD&&PD.G&&PD.G.tipo==='esteira'){comer(k||0);return;}fbSom();}
 let PAD=null;
 function padLiga(){const c=ac();if(!c||PAD)return;try{const g=c.createGain();g.gain.value=0;g.gain.linearRampToValueAtTime(.05,c.currentTime+1.5);g.connect(c.destination);
  const os=[220,277.2,329.6,440].map((f,i)=>{const o=c.createOscillator();o.type=i===3?'triangle':'sine';o.frequency.value=f;const gg=c.createGain();gg.gain.value=i===3?.25:1;o.connect(gg);gg.connect(g);o.start();return o;});PAD={g,os};}catch(e){}}
@@ -543,7 +559,7 @@ function idAtual(){return PD.ordem[PD.si];}
 function faltam(){return PD.ordem.length-Object.keys(PD.res).filter(id=>PD.ordem.includes(id)).length+PD.adiados.length;}
 function pdComecaSentido(){PD.fase='lembra';PD.G=null;}
 function pdJoga(){const id=idAtual();const it=(J.esc[id]||[]).slice();const tp=JOGO[id]||'casa';PD.relT[id]=Date.now();
- if(tp==='duelo'||tp==='inclina'){PD.G=dIni(it);PD.G.tipo=tp;}else if(tp==='balanca'){PD.G={tipo:'balanca'};PD.lista=it;}else if(tp==='ouvir'){PD.G=adIni(id,it);}else PD.G=sIni(it,tp);PD.fase='jogo';}
+ if(tp==='duelo'||tp==='inclina'){PD.G=dIni(it);PD.G.tipo=tp;}else if(tp==='balanca'){PD.G={tipo:'balanca'};PD.lista=it;}else if(tp==='carinho'){PD.G={tipo:'carinho',itens:it,t:{},sel:it[0]};}else PD.G=sIni(it,tp);PD.fase='jogo';}
 /* Desafio da Audição (Daniel, 05/11): o som toca escondido, 3 sugestões; acertou, segue; errou, ouve de novo. No fim, ordena. */
 function embaralha(a){const x=a.slice();for(let i=x.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[x[i],x[j]]=[x[j],x[i]];}return x;}
 function adIni(id,it){const todos=senDe(id)[5].map(t=>t.n);const fila=embaralha(it);
@@ -563,7 +579,7 @@ function adTocar(){const G=PD.G;if(!G||G.tipo!=='adivinha')return;const t=tileDe
 function pdFechaSentido(rank){const id=idAtual();PD.res[id]=rank.slice();PD.tempos[id+'_total']=Date.now()-(PD.relT[id]||Date.now());
  PD.fase='revela';PD.brilho=true;PD.novo=id;para();}
 function pdDepoisSentido(){if(Object.keys(PD.res).length===4&&!PD.surpresa){PD.surpresa=1;PD.fase='surpresa';return;}pdSegue();}
-function pdSegue(){if(PD.si<PD.ordem.length-1){PD.si++;if(Object.keys(PD.res).length>=4&&!PD.respirou){PD.respirou=1;PD.fase='pausa';}else PD.fase='lembra';return;}
+function pdSegue(){if(PD.si<PD.ordem.length-1){PD.si++;PD.fase='lembra';return;}
  if(PD.adiados.length){PD.fase='adiado';return;}if(PD.pend.length){PD.fase='pular';return;}pdVaiFinal();}
 function pdChampions(){return PD.ordem.filter(id=>PD.res[id]).map(id=>id+'|'+PD.res[id][0]);}
 function pdVaiFinal(){const ch=pdChampions();if(ch.length>=2){PD.G=sIni(ch,'final');PD.fase='final';}else{PD.final=ch;pdFimIni();}}
@@ -577,24 +593,25 @@ function album(){const P=inner(PD.pint);const ids=SEN.map(s=>s[0]);const n=Objec
   <div class="al-t"><b>Álbum da sua pintura</b><span>${n} de ${tot} pedaços</span>${tot-n===1&&PD.fase!=='story'?`<em>Falta só 1!</em>`:''}</div></div>`;}
 function trancado(){return `<div class="tr"><div class="tr-v"><b>Você é do tipo que…</b><span>████████ ██████ ████</span></div><div class="tr-c">🔒 O que as suas escolhas dizem sobre você<small>abre no fim da fase</small></div></div>`;}
 function brisa(txt){return `<div class="br"><div class="luzes">${C.map(c=>`<i style="background:${c};box-shadow:0 0 10px ${c}"></i>`).join('')}</div><p class="pd-frase">${txt}</p></div>`;}
-function cab(){const id=idAtual();const s=senDe(id);return `${album()}<div class="k" style="color:${s[3]}">${s[2]} ${esc(s[1])} · ${JOGO_NOME[JOGO[id]]}</div>`;}
+function cab(){if(PD.so)return `<div class="k" style="color:#5AB8FF">Fase 2 · Que som é esse?</div>`;const id=idAtual();const s=senDe(id);return `${album()}<div class="k" style="color:${s[3]}">${s[2]} ${esc(s[1])} · ${JOGO_NOME[JOGO[id]]}</div>`;}
 function carta(id,n,lado,extra){const s=senDe(id);return `<div class="pd-carta" role="button" tabindex="0" data-a="dv" data-v="${esc(n)}" data-lado="${lado}" style="--c:${s[3]}"><svg viewBox="0 0 300 300">${artDe(id,n)}</svg><b>${esc(n)}</b>${extra||''}</div>`;}
 function bolinha(id,n,k,cls){const s=senDe(id);return `<button class="sq ${cls||''}" data-a="sq" data-v="${esc(n)}" style="--c:${s[3]}"><svg viewBox="0 0 300 300">${artDe(id,n)}</svg><b>${esc(n)}</b></button>`;}
 
 /* ---------- telas ---------- */
 function vF2Abre(){const p=PD.ordem[0]?senDe(PD.ordem[0]):null;
  return `<div class="hero" style="padding-top:14px">${brisa(`Que bom te ver de novo! Agora são 7 mini-jogos, um por sentido. Você só escolhe, e a sua ordem aparece sozinha.${p?` Vamos começar por ${esc(p[1])}, o sentido em que você se decidiu mais rápido.`:''}`)}
- <div class="k">Fase 2 · Pódio dos Sentidos</div><h1 class="f">Hora de pôr em ordem!</h1>
- <p class="mute">A cada sentido, você ganha 1 pedaço da sua pintura. No meio, uma pausa para respirar. Pode pular um sentido e voltar depois.</p>
+ <div class="k">Fase 3 · Pódio dos Sentidos</div><h1 class="f">Hora de pôr em ordem!</h1>
+ <p class="mute">A cada sentido, você ganha 1 pedaço da sua pintura. Pode pular um sentido e voltar depois.</p>
  ${trancado()}${PD.demo?`<p class="small mute">Prévia: como a Fase 1 não foi feita neste aparelho, usei escolhas de exemplo.</p>`:''}
  <button class="btn pri big" data-a="pdcomeca" style="margin-top:16px">Começar</button><p class="small mute">⏱️ Leva uns 5 minutos.</p></div>`;}
-const INSTR={galeria:'Toque nas imagens, da que você mais gosta para a que menos gosta. Cada uma vai para um quadro da sua galeria.',mexe:'Escolha um movimento e faça com o celular na mão. Do que você mais gosta para o que menos gosta.',duelo:'Duas imagens por vez. Toque na que você prefere; a sua ordem aparece sozinha.',ouvir:'Primeiro, um desafio: ouça cada som e adivinhe o que é. Depois, coloque os sons em ordem.',balanca:'Arraste as texturas: lá em cima fica a que pesa mais no seu coração.',casa:'Toque nos cheiros, do mais "casa" para o menos. Cada toque acende uma janela.',prato:'Monte o seu prato: a 1ª vai no centro, as outras em volta.',inclina:'Incline o celular para o lado que você prefere (ou toque).',respira:'Respire com a bolinha e toque no que o seu corpo pede.'};
+const INSTR={carinho:'Passe o dedo nas texturas. Quanto mais carinho, mais alto ela fica.',esteira:'Os sabores passam numa esteira. Pegue primeiro o que você mais quer.',labirinto:'Leve a bolinha até o movimento de que você mais gosta.',acende:'Toque nas sensações e veja o seu corpo acender.',galeria:'Toque nas imagens, da que você mais gosta para a que menos gosta. Cada uma vai para um quadro da sua galeria.',mexe:'Escolha um movimento e faça com o celular na mão. Do que você mais gosta para o que menos gosta.',duelo:'Duas imagens por vez. Toque na que você prefere; a sua ordem aparece sozinha.',ouvir:'Toque para ouvir e escolha o som de que você mais gosta. Depois o 2º, e assim por diante.',balanca:'Arraste as texturas: lá em cima fica a que pesa mais no seu coração.',casa:'Toque nos cheiros, do mais "casa" para o menos. Cada toque acende uma janela.',prato:'Monte o seu prato: a 1ª vai no centro, as outras em volta.',inclina:'Incline o celular para o lado que você prefere (ou toque).',respira:'Respire com a bolinha e toque no que o seu corpo pede.'};
 function vLembra(){const id=idAtual();const s=senDe(id);const tp=JOGO[id];
  return `${cab()}<div class="hero" style="padding-top:8px"><div style="font-size:56px;line-height:1">${s[2]}</div><h1 class="f" style="font-size:30px">${esc(s[1])}</h1>
  <p class="mute">${INSTR[tp]||''}</p>${faltam()===1?`<p class="falta">Falta só 1!</p>`:''}
  <button class="btn pri big" data-a="joga">Começar</button>
  <p><button class="lk" data-a="pdpula">Pular este sentido (volto depois)</button></p></div>`;}
 function vJogo(){const id=idAtual();const s=senDe(id);const G=PD.G;const tp=G.tipo;
+ if(tp==='carinho')return vCarinho();if(tp==='esteira')return vEsteira();if(tp==='labirinto')return vLabirinto();if(tp==='acende')return vAcende();
  const volta=PD.hist.length?`<button class="btn" data-a="pdvolta">↶ Desfazer</button>`:'';
  if(tp==='duelo'||tp==='inclina'){const p=dPar(G);if(!p)return '';const feitas=G.ord.length;
   return `${cab()}<h1>${tp==='inclina'?'Incline para o lado que você prefere':'Qual você prefere?'}</h1>
@@ -607,9 +624,9 @@ function vJogo(){const id=idAtual();const s=senDe(id);const G=PD.G;const tp=G.ti
   <p class="small mute" style="text-align:center" id="mxt">${sem?'Neste aparelho não dá para sentir o movimento. Toque abaixo para seguir.':(movDe(n)[0]==='parado'?'Fique paradinho até a barra encher.':'Mexa até a barra encher.')}</p>
   <div class="row" style="justify-content:center"><button class="btn" data-a="mxvolta">↶ Trocar</button><button class="btn ${sem?'pri':''}" data-a="mxok">${sem?'Seguir →':'Pular o movimento'}</button></div></div>`;}
  if(tp==='adivinha'){const n=G.fila[G.i];
-  return `${cab()}<h1>Que som é esse?</h1><p class="small mute">Som ${G.i+1} de ${G.fila.length}. Ouça e escolha uma das 3 respostas.</p>
-  <div class="ad-som ${G.certo?'ok':''}" style="--c:${s[3]}">${G.certo?`<svg viewBox="0 0 300 300">${artDe(id,n)}</svg><b>${esc(n)}</b>`:`<button class="ad-play" data-a="adplay" aria-label="Ouvir o som">🔊</button><span>Toque para ouvir de novo</span>`}</div>
-  ${G.certo?`<p class="pd-frase" style="text-align:center">Acertou!</p>`:`<div class="sqg ad-ops">${G.ops.map(o=>`<button class="sq ${G.erro===o?'ad-erro':''}" style="--c:${s[3]}" data-a="adop" data-v="${esc(o)}" ${G.erro===o?'disabled':''}><svg viewBox="0 0 300 300">${artDe(id,o)}</svg><b>${esc(o)}</b></button>`).join('')}</div>${G.erro?`<p class="small mute" style="text-align:center">Quase! Ouça de novo e tente outra.</p>`:''}`}
+  return `${cab()}<h1>Que som é esse?</h1><p class="small mute">Som ${G.i+1} de ${G.fila.length}. Ouça e escolha uma das ${G.ops.length} respostas.</p>
+  <div class="ad-som ${G.certo?'ok':''}" style="--c:${s[3]}">${G.certo?`<svg viewBox="0 0 300 300">${artDe(id,n)}</svg><b>${esc(n)}</b>`:`<button class="ad-play onda7" data-a="adplay" aria-label="Ouvir o som">${Array.from({length:9},(_,i)=>`<i style="animation-delay:${(i*.11).toFixed(2)}s"></i>`).join('')}</button><span>Toque para ouvir de novo</span>`}</div>
+  ${G.certo?`<p class="pd-frase" style="text-align:center">Acertou!</p>`:`<div class="sqg ad-ops ${G.ops.length===4?'q4':''}">${G.ops.map(o=>`<button class="sq ${G.erro===o?'ad-erro':''}" style="--c:${s[3]}" data-a="adop" data-v="${esc(o)}" ${G.erro===o?'disabled':''}><svg viewBox="0 0 300 300">${artDe(id,o)}</svg><b>${esc(o)}</b></button>`).join('')}</div>${G.erro?`<p class="small mute" style="text-align:center">Quase! Ouça de novo e tente outra.</p>`:''}`}
   <div class="dots7">${G.fila.map((_,i)=>`<i style="${i<G.i||(i===G.i&&G.certo)?`background:${s[3]}`:''}"></i>`).join('')}</div>`;}
  if(tp==='balanca')return `${cab()}<h1>Arraste para a balança</h1><p class="small mute">Segure e arraste. Lá em cima fica a que pesa mais no seu coração.</p>
   <ol class="ar-lista balanca" id="arl">${PD.lista.map((n,i)=>linhaArr(n,i,s[3],n,'',artDe(id,n))).join('')}</ol>
@@ -670,7 +687,7 @@ function quadradinhos(){return SEN.map(s=>{const sv=PD.sent[s[0]];return PD.res[
 function topPerfil(){try{const p=perfil();return {a:TAGS[p.top],b:TAGS[p.seg]};}catch(e){return null;}}
 function vStory(){const F=(PD.final||[]).map(v=>v.split('|'));const N=6;const st=PD.st;let c='';
  const bars=`<div class="stb">${Array.from({length:N},(_,i)=>`<i class="${i<st?'ok':i===st?'at':''}"></i>`).join('')}</div>`;
- if(st===0)c=`${brisa('Você terminou a Fase 2! Aqui está o seu resumo.')}<h1 class="f">Sua Fase 2 em 6 telas</h1><p class="mute">Toque em "Seguir" ou na tela para ver a próxima.</p>`;
+ if(st===0)c=`${brisa('Você terminou a Fase 3! Aqui está o seu resumo.')}<h1 class="f">Sua Fase 3 em 6 telas</h1><p class="mute">Toque em "Seguir" ou na tela para ver a próxima.</p>`;
  if(st===1&&F[0]){const s=senDe(F[0][0]);c=`<div class="k">Sua campeã das campeãs</div><div class="pd-campea grande" style="--c:${s[3]}"><svg viewBox="0 0 300 300">${artDe(F[0][0],F[0][1])}</svg><span>${s[2]} ${esc(F[0][1])}</span></div><p class="mute">De ${esc(s[1])}. Entre todas as suas escolhas, é a que mais te faz bem hoje.</p>`;}
  if(st===2)c=`<div class="k">Seu pódio</div><div class="pd-podio">${[1,0,2].map(i=>{const x=F[i];if(!x)return '<div></div>';const s=senDe(x[0]);return `<div class="pd-deg pd-deg${i+1}" style="--c:${s[3]}"><svg viewBox="0 0 300 300">${artDe(x[0],x[1])}</svg><b>${esc(x[1])}</b><small>${esc(s[1])}</small><span>${i+1}º</span></div>`;}).join('')}</div>`;
  if(st===3){const m=maiorSubida();c=`<div class="k">O que mais mudou</div>${m?`<h1 class="f">${esc(m.n)} subiu ${m.d} ${m.d>1?'posições':'posição'}</h1><p class="mute">Em ${esc(senDe(m.id)[1])}, desde a Fase 1.</p>`:`<h1 class="f">Quase nada mudou</h1><p class="mute">Você manteve a ordem da Fase 1. Isso é saber o que quer.</p>`}`;}
@@ -680,12 +697,12 @@ function vStory(){const F=(PD.final||[]).map(v=>v.split('|'));const N=6;const st
   <div class="sh"><button class="btn" data-a="stories">📲 Baixar cartão para Stories</button><button class="btn" data-a="combina">💞 Mande para alguém e veja se vocês combinam</button><button class="btn" data-a="presente">🎁 Enviar uma boa sensação</button></div>
   ${fr?`<p class="small mute">Exemplo de boa sensação: "${fr}"</p>`:''}<p class="small mute" id="bx"></p>
   <div class="f3"><div class="f3v">${Array.from({length:10},(_,i)=>`<i style="height:${18+i*7}px;background:${C[i%7]}"></i>`).join('')}</div><div class="f3c">🔒</div></div>
-  <button class="btn pri big" data-a="pdfim" style="width:100%">${MODO==='podio-refazer'?'Guardar →':'Continuar para a Fase 3 →'}</button>`;}
+  <button class="btn pri big" data-a="pdfim" style="width:100%">${MODO==='podio-refazer'?'Guardar →':'Continuar para a Fase 4 →'}</button>`;}
  return `<div class="story" data-a="stz">${bars}<div class="stc">${c}</div>${st<5?`<div class="row" style="justify-content:space-between">${st>0?`<button class="btn" data-a="stv">←</button>`:'<span></span>'}<button class="btn pri" data-a="sta">Seguir →</button></div>`:''}</div>`;}
 function renderPodio(){pdSalva();const f=PD.fase;
- const v=f==='abre'?vF2Abre():f==='lembra'?vLembra():f==='jogo'?vJogo():f==='revela'?vRevela():f==='pausa'?vPausa():f==='surpresa'?vSurpresa():f==='adiado'?vAdiado():f==='pular'?vPdPular():f==='final'?vJogo():vStory();
+ const v=f==='sabre'?vSAbre():f==='sfim'?vSFim():f==='abre'?vF2Abre():f==='lembra'?vLembra():f==='jogo'?vJogo():f==='revela'?vRevela():f==='pausa'?vPausa():f==='surpresa'?vSurpresa():f==='adiado'?vAdiado():f==='pular'?vPdPular():f==='final'?vJogo():vStory();
  document.getElementById('app').innerHTML=`<div class="bar0"><a class="logo" aria-label="7entidos"><img src="/assets/simbolo-contando-7.svg?v=20261102-novo" alt="" width="30" height="30"><b class="f"><span style="color:#FFD43B">7</span>entidos</b></a><span class="sp"></span></div>`+v;
- if(f==='pausa')padLiga();else padDesliga();arLiga();incLiga();
+ if(f==='pausa')padLiga();else padDesliga();arLiga();incLiga();jogosLiga();
  if(f==='surpresa'&&!PD.acordeTocou){PD.acordeTocou=1;Object.keys(PD.res).forEach((x,i)=>setTimeout(()=>sino(i*2,.2),300+i*260));}
  if(f==='revela'&&PD.brilho){clearTimeout(window.__rv);window.__rv=setTimeout(()=>{if(!PD||PD.fase!=='revela')return;PD.brilho=false;renderPodio();festa();},1000);}
  if(f==='revela'&&!PD.brilho){clearTimeout(window.__ra);const ok=tileDe(idAtual(),PD.res[idAtual()][0]);const ms=ok&&ok.som?6000:4200;const el=document.querySelector('.ra i');if(el)el.style.animationDuration=ms+'ms';window.__ra=setTimeout(()=>{if(!PD||PD.fase!=='revela'||PD.brilho)return;pdSnap();pdDepoisSentido();renderPodio();scrollTo(0,0);},ms);}else clearTimeout(window.__ra);}
@@ -734,10 +751,10 @@ document.addEventListener('click',e=>{if(!PD)return;const b=e.target.closest('[d
  if(a==='mxok'){mxConfirma();e.stopImmediatePropagation();return;}
  if(a==='revsegue'){clearTimeout(window.__ra);pdSnap();pdDepoisSentido();return topo();}
  if(a==='revvolta'){clearTimeout(window.__ra);const h=PD.hist.pop();if(h){const hist=PD.hist;PD=JSON.parse(h);PD.hist=hist;}para();return topo();}
- if(a==='adplay'){adTocar();vibra(10);e.stopImmediatePropagation();return;}
- if(a==='adop'){const G=PD.G;const v=b.dataset.v;if(G.certo)return;if(v===G.fila[G.i]){para();G.certo=v;G.erro=null;fbSom(null,true);vibra([15,30,15]);renderPodio();
-   setTimeout(()=>{if(!PD||PD.G!==G)return;G.i++;G.certo=null;G.erro=null;if(G.i>=G.fila.length){PD.G=sIni(G.itens,'ouvir');renderPodio();scrollTo(0,0);return;}G.ops=adOps(G.todos,G.fila[G.i]);renderPodio();adTocar();},1100);}
-  else{G.erro=v;G.erros++;vibra(40);renderPodio();adTocar();}e.stopImmediatePropagation();return;}
+ if(a==='adplay'){adTocar();ondaLiga();vibra(10);e.stopImmediatePropagation();return;}
+ if(a==='adop'){const G=PD.G;const v=b.dataset.v;if(G.certo)return;if(v===G.fila[G.i]){para();if(!G.errouAgora)G.primeira=(G.primeira||0)+1;G.errouAgora=false;G.certo=v;G.erro=null;fbSom(null,true);vibra([15,30,15]);renderPodio();
+   setTimeout(()=>{if(!PD||PD.G!==G)return;G.i++;G.certo=null;G.erro=null;if(G.i>=G.fila.length){if(PD.so){PD.fase='sfim';renderPodio();scrollTo(0,0);return;}PD.G=sIni(G.itens,'ouvir');renderPodio();scrollTo(0,0);return;}G.ops=PD.so?adOps4(G,G.fila[G.i]):adOps(G.todos,G.fila[G.i]);renderPodio();adTocar();ondaLiga();},1100);}
+  else{G.erro=v;G.erros++;G.errouAgora=true;vibra(40);renderPodio();adTocar();ondaLiga();}e.stopImmediatePropagation();return;}
  if(a==='ouvir1'){const t=tileDe(id,b.dataset.v);if(t&&t.som)toca(t.som);e.stopImmediatePropagation();return;}
  if(a==='som'){try{localStorage.setItem('f2som',b.dataset.v);}catch(_){}fbSom(b.dataset.v,true);return ok();}
  if(a==='joga'){pdJoga();PD.t0=Date.now();fbSom();if(PD.G&&PD.G.tipo==='adivinha')adTocar();return topo();}
@@ -771,7 +788,123 @@ document.addEventListener('click',e=>{if(!PD)return;const b=e.target.closest('[d
 /* Volta do "quero tentar": ao terminar as 7 escolhas do sentido pulado na Fase 1, ele entra na Fase 2 */
 document.addEventListener('click',e=>{if(PD||!window.__PD)return;const b=e.target.closest('[data-a="prox"]');if(!b)return;const id=window.__PD.voltar;if(!id||(J.esc[id]||[]).length<7)return;
  e.stopImmediatePropagation();para();PD=window.__PD;window.__PD=null;PD.voltar=null;PD.f1[id]=(J.esc[id]||[]).slice();PD.ordem.push(id);PD.si=PD.ordem.length-1;pdComecaSentido();renderPodio();scrollTo(0,0);},true);
-if(EH_PODIO){try{const s=JSON.parse(localStorage.getItem(PDK)||'null');if(s&&s.ordem&&s.f1){PD=s;let ent=null;try{ent=JSON.parse(localStorage.getItem(LSK+'-entrada')||'null');}catch(e){}if(ent){J.esc=ent.esc||{};J.t=ent.t||{};}PD.ordem.forEach(id=>{if(PD.res[id]&&PD.fase==='story')J.esc[id]=PD.res[id].slice();});if(PD.fase==='revela')PD.brilho=true;}}catch(e){}if(!PD)pdInicia();}
+/* ================= Sala das Fases 2 e 3 (05/11/2026, 27 respostas do Daniel) =================
+   Fase 2 = só "Que som é esse?" (os 7 sons dela, 4 opções, 7 rodadas, fica mais difícil, onda que dança,
+   no fim "Você reconheceu X de 7 de primeira"). Fase 3 = pôr em ordem os 7 sentidos, com jogos novos:
+   Tato = Carinho (tempo de carinho decide, vibração e som por textura) · Paladar = Esteira de sushi
+   (devagar e mais rápida no fim, som curtinho por sabor) · Equilíbrio = Labirinto (teste A/B: inclinar × arrastar)
+   · Noção do corpo = Corpo que acende (silhueta neutra de luz). */
+const EH_SONS=MODO==='sons';
+/* ---------- Fase 2 · Que som é esse? ---------- */
+function snInicia(){PD.so=1;PD.fase='sabre';const it=(J.esc.aud||[]).slice();const todos=senDe('aud')[5].map(t=>t.n);
+ while(it.length<7){const x=todos.find(n=>!it.includes(n));if(!x)break;it.push(x);}PD.snItens=it;pdSalva();}
+function adOps4(G,certo){const meus=G.itens.filter(n=>n!==certo),fora=G.todos.filter(n=>!G.itens.includes(n));
+ const facil=G.i<3;let pool=facil?embaralha(fora).concat(embaralha(meus)):embaralha(meus).concat(embaralha(fora));
+ const d=[];for(const n of pool){if(d.length>=3)break;if(n!==certo&&!d.includes(n))d.push(n);}return embaralha([certo].concat(d));}
+function vSAbre(){return `<div class="hero" style="padding-top:14px">${brisa('Feche os olhos se quiser. Ouça cada som e adivinhe o que é.')}
+ <div class="k" style="color:#5AB8FF">Fase 2</div><h1 class="f">Que som é esse?</h1><p class="mute">7 sons, 4 respostas em cada um. Começa fácil e vai ficando difícil. Errou? É só ouvir de novo.</p>
+ ${PD.demo?`<p class="small mute">Prévia: como a Fase 1 não foi feita neste aparelho, usei sons de exemplo.</p>`:''}
+ <button class="btn pri big" data-a="sjoga">Começar</button><p class="small mute">⏱️ Uns 2 minutos.</p></div>`;}
+function vSFim(){const G=PD.G;const n=G.primeira||0;
+ return `<div class="hero" style="padding-top:14px"><div style="font-size:54px">👂</div><div class="k" style="color:#5AB8FF">Fase 2 completa</div>
+ <h1 class="f">Você reconheceu ${n} de 7 sons de primeira</h1><p class="mute">${n>=6?'Que ouvido!':n>=4?'Bom ouvido!':'Agora você conhece cada um deles.'} Na Fase 3, você coloca os sons (e os outros sentidos) em ordem.</p>
+ <button class="btn pri big" data-a="sfim">Continuar →</button></div>`;}
+function snEntrega(){const G=PD.G;const sons={id:'S'+Date.now().toString(36),em:new Date().toISOString(),itens:G.itens,primeira:G.primeira||0,erros:G.erros||0};
+ try{parent.postMessage({tipo:'7e-sons',sons},location.origin);}catch(e){}try{localStorage.removeItem(PDK);}catch(e){}}
+/* onda que dança enquanto o som toca */
+let ONDA_T=null;function ondaLiga(){const o=document.querySelector('.onda7');if(!o)return;o.classList.add('on');clearTimeout(ONDA_T);ONDA_T=setTimeout(()=>{const x=document.querySelector('.onda7');if(x)x.classList.remove('on');},5000);}
+/* ---------- Tato · Carinho ---------- */
+const VIBS=[[70,8],[220,22],[45,5],[130,14],[95,10],[260,26],[60,6],[160,18],[110,12],[300,30],[80,9],[190,16],[50,7],[140,15],[240,24]];
+const FREQ=[900,3800,2400,700,1600,3000,5200,1200,2000,4400,1000,2800,600,3400,1800];
+function tatoK(n){const i=senDe('tato')[5].findIndex(t=>t.n===n);return i<0?0:i;}
+function vCarinho(){const id=idAtual();const s=senDe(id);const G=PD.G;const MAX=6000;const ok=G.itens.every(n=>(G.t[n]||0)>=800);
+ return `${cab()}<h1>Faça carinho</h1><p class="small mute">Passe o dedo devagar na textura. Quanto mais carinho, mais alto ela fica na sua ordem. Toque nas de baixo para trocar.</p>
+ <div class="pad" id="pad" style="--c:${s[3]}"><svg viewBox="0 0 300 300" preserveAspectRatio="xMidYMid slice">${artDe(id,G.sel)}</svg><b>${esc(G.sel)}</b><span class="pad-dica">☝️ passe o dedo aqui</span></div>
+ <div class="ct">${G.itens.map(n=>`<button class="ct-i ${n===G.sel?'on':''}" data-a="csel" data-v="${esc(n)}" style="--c:${s[3]}"><svg viewBox="0 0 300 300">${artDe(id,n)}</svg><small>${esc(n)}</small><i><u data-ct="${esc(n)}" style="width:${Math.min(100,Math.round((G.t[n]||0)/MAX*100))}%"></u></i></button>`).join('')}</div>
+ <div class="row">${PD.hist.length?`<button class="btn" data-a="pdvolta">↶ Desfazer</button>`:''}<span class="sp"></span><button class="btn pri" id="ctok" data-a="ctok" ${ok?'':'disabled'}>Pronto, ver a minha ordem →</button></div>
+ <p class="small mute" id="ctfalta">${ok?'':'Faça um pouquinho de carinho em todas as 7.'}</p>`;}
+let NZ=null;function nzLiga(){const c=ac();if(!c)return null;if(NZ)return NZ;const n=c.sampleRate,b=c.createBuffer(1,n,n),x=b.getChannelData(0);for(let i=0;i<n;i++)x[i]=Math.random()*2-1;
+ const s=c.createBufferSource();s.buffer=b;s.loop=true;const f=c.createBiquadFilter();f.type='bandpass';f.Q.value=1.4;const g=c.createGain();g.gain.value=0;s.connect(f);f.connect(g);g.connect(c.destination);s.start();NZ={f,g};return NZ;}
+function carinhoLiga(){const pad=document.getElementById('pad');if(!pad||pad._ok)return;pad._ok=1;let on=false,lx=0,ly=0,lt=0,lv=0;
+ const G=()=>PD.G;
+ pad.addEventListener('pointerdown',e=>{e.preventDefault();on=true;lx=e.clientX;ly=e.clientY;lt=performance.now();try{pad.setPointerCapture(e.pointerId);}catch(_){}nzLiga();pad.classList.add('toca');});
+ pad.addEventListener('pointermove',e=>{if(!on)return;e.preventDefault();const g=G();if(!g||g.tipo!=='carinho')return;const now=performance.now(),dt=Math.min(100,now-lt);lt=now;
+  const d=Math.hypot(e.clientX-lx,e.clientY-ly);lx=e.clientX;ly=e.clientY;if(d<1.5)return;const k=tatoK(g.sel);g.t[g.sel]=(g.t[g.sel]||0)+dt;
+  const v=Math.min(1,d/12);const z=NZ;if(z){const c=ac();z.f.frequency.setTargetAtTime(FREQ[k%15],c.currentTime,.02);z.g.gain.setTargetAtTime(.05*v,c.currentTime,.03);}
+  if(now-lv>VIBS[k%15][0]){lv=now;vibra(VIBS[k%15][1]);}
+  const u=document.querySelector(`[data-ct="${CSS.escape(g.sel)}"]`);if(u)u.style.width=Math.min(100,Math.round(g.t[g.sel]/6000*100))+'%';
+  const ok=g.itens.every(n=>(g.t[n]||0)>=800);const bt=document.getElementById('ctok');if(bt)bt.disabled=!ok;const fl=document.getElementById('ctfalta');if(fl&&ok)fl.textContent='';});
+ const fim=()=>{if(!on)return;on=false;pad.classList.remove('toca');if(NZ){const c=ac();NZ.g.gain.setTargetAtTime(0,c.currentTime,.05);}pdSalva();};
+ pad.addEventListener('pointerup',fim);pad.addEventListener('pointercancel',fim);pad.addEventListener('pointerleave',fim);}
+/* ---------- Paladar · Esteira de sushi ---------- */
+function comer(k){const c=ac();if(!c)return;const t=c.currentTime+.01;try{const tp=k%4;
+ if(tp===0){rele(c,t,1800,.8);rele(c,t+.06,1300,.7);rele(c,t+.12,2100,.6);} /* crocante */
+ else if(tp===1){const o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.setValueAtTime(600,t);o.frequency.exponentialRampToValueAtTime(180,t+.18);g.gain.setValueAtTime(.18,t);g.gain.exponentialRampToValueAtTime(.001,t+.2);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+.22);} /* bloop */
+ else if(tp===2){const n=Math.floor(c.sampleRate*.25),b=c.createBuffer(1,n,c.sampleRate),x=b.getChannelData(0);for(let i=0;i<n;i++)x[i]=(Math.random()*2-1)*(1-i/n)*.5;const s=c.createBufferSource();s.buffer=b;const f=c.createBiquadFilter();f.type='highpass';f.frequency.value=5000;s.connect(f);f.connect(c.destination);s.start(t);} /* borbulha */
+ else {bipe(c,t,520,.07,.08,'triangle');bipe(c,t+.1,660,.07,.08,'triangle');} /* nham */
+}catch(_){}}
+let EST_OFF=0,EST_ON=false,EST_LT=0;
+function vEsteira(){const id=idAtual();const s=senDe(id);const G=PD.G;const rep=G.resto.concat(G.resto,G.resto,G.resto);
+ return `${cab()}<h1>Pegue o que você mais quer!</h1><p class="small mute">Os sabores passam na esteira. Toque no que você mais quer antes que ele vá embora. Ela vai ficando mais rápida.</p>
+ <div class="est" style="--c:${s[3]}"><div class="est-t" id="estt">${rep.map(v=>`<button class="sq est-i" data-a="sq" data-v="${esc(v)}" style="--c:${s[3]}"><svg viewBox="0 0 300 300">${artDe(id,v)}</svg><b>${esc(v)}</b></button>`).join('')}</div></div>
+ <div class="podiomini">${G.esc.map((v,i)=>`<span style="--c:${s[3]}">${i+1}. ${esc(v)}</span>`).join('')}</div>
+ <p class="pos">Pegando o <b>${G.esc.length+1}º</b></p><div class="row">${PD.hist.length?`<button class="btn" data-a="pdvolta">↶ Desfazer</button>`:''}</div>`;}
+function esteiraLiga(){if(EST_ON)return;EST_ON=true;const loop=now=>{const t=document.getElementById('estt');const G=PD&&PD.G;
+ if(t&&G&&G.tipo==='esteira'&&PD.fase==='jogo'){const dt=Math.min(.05,(now-(EST_LT||now))/1000);const v=34+G.esc.length*16;EST_OFF+=v*dt;
+  const it=t.children[0];const w=it?(it.getBoundingClientRect().width+10)*G.resto.length:1;if(w>0)EST_OFF%=w;t.style.transform=`translateX(${-EST_OFF}px)`;}
+ EST_LT=now;requestAnimationFrame(loop);};requestAnimationFrame(loop);}
+/* ---------- Equilíbrio · Labirinto (teste A/B) ---------- */
+function labGrupo(){try{let g=localStorage.getItem('labAB');if(!g){g=Math.random()<.5?'A':'B';localStorage.setItem('labAB',g);}return g;}catch(e){return 'A';}}
+function vLabirinto(){const id=idAtual();const s=senDe(id);const G=PD.G;const gr=labGrupo();const n=G.resto.length;
+ return `${cab()}<h1>${gr==='A'?'Incline o celular':'Arraste a bolinha'}</h1><p class="small mute">${gr==='A'?'Segure o celular como uma bandeja e incline a mão para levar a bolinha até o movimento de que você mais gosta.':'Arraste a bolinha com o dedo até o movimento de que você mais gosta.'}</p>
+ <div class="lab" id="lab" style="--c:${s[3]}">${G.resto.map((v,i)=>{const a=-Math.PI/2+i*2*Math.PI/n;return `<div class="lab-b" data-v="${esc(v)}" style="left:${(50+38*Math.cos(a)).toFixed(1)}%;top:${(50+38*Math.sin(a)).toFixed(1)}%"><i><svg viewBox="0 0 300 300">${artDe(id,v)}</svg></i><small>${esc(v)}</small></div>`;}).join('')}<div class="bola" id="bola"></div></div>
+ <p class="pos">Escolhendo o <b>${G.esc.length+1}º</b></p>
+ <div class="somp"><b>Prévia · teste A/B</b><div><button class="chipp ${gr==='A'?'on':''}" data-a="labab" data-v="A">A · inclinar</button><button class="chipp ${gr==='B'?'on':''}" data-a="labab" data-v="B">B · arrastar com o dedo</button></div><span id="labinfo" class="small mute"></span></div>
+ <div class="row">${PD.hist.length?`<button class="btn" data-a="pdvolta">↶ Desfazer</button>`:''}</div>`;}
+let LB={on:false,x:.5,y:.5,vx:0,vy:0,b0:null,g:0,bt:0,ori:false,drag:false,lt:0};
+window.addEventListener('deviceorientation',e=>{if(e.gamma==null)return;LB.ori=true;LB.g=e.gamma;LB.bt=e.beta;if(LB.b0==null)LB.b0=e.beta;});
+function labLiga(){const lab=document.getElementById('lab');if(!lab||lab._ok)return;lab._ok=1;LB.x=.5;LB.y=.5;LB.vx=0;LB.vy=0;LB.b0=null;
+ const gr=labGrupo();
+ const pos=e=>{const r=lab.getBoundingClientRect();LB.x=Math.max(.04,Math.min(.96,(e.clientX-r.left)/r.width));LB.y=Math.max(.04,Math.min(.96,(e.clientY-r.top)/r.height));LB.vx=LB.vy=0;};
+ lab.addEventListener('pointerdown',e=>{if(gr==='A'&&LB.ori)return;e.preventDefault();LB.drag=true;try{lab.setPointerCapture(e.pointerId);}catch(_){}pos(e);});
+ lab.addEventListener('pointermove',e=>{if(!LB.drag)return;e.preventDefault();pos(e);});
+ const solta=()=>{LB.drag=false;};lab.addEventListener('pointerup',solta);lab.addEventListener('pointercancel',solta);
+ setTimeout(()=>{const i=document.getElementById('labinfo');if(i&&gr==='A'&&!LB.ori)i.textContent=' Este aparelho não sente a inclinação: arraste com o dedo.';},1500);
+ if(LB.on)return;LB.on=true;const loop=now=>{const G=PD&&PD.G;const l=document.getElementById('lab'),b=document.getElementById('bola');
+  if(l&&b&&G&&G.tipo==='labirinto'&&PD.fase==='jogo'){const dt=Math.min(.05,(now-(LB.lt||now))/1000);
+   if(labGrupo()==='A'&&LB.ori&&!LB.drag){const ax=Math.max(-1,Math.min(1,LB.g/30)),ay=Math.max(-1,Math.min(1,(LB.bt-(LB.b0==null?LB.bt:LB.b0))/30));LB.vx=(LB.vx+ax*dt*1.6)*.97;LB.vy=(LB.vy+ay*dt*1.6)*.97;LB.x+=LB.vx*dt;LB.y+=LB.vy*dt;
+    if(LB.x<.04||LB.x>.96){LB.vx*=-.4;LB.x=Math.max(.04,Math.min(.96,LB.x));}if(LB.y<.04||LB.y>.96){LB.vy*=-.4;LB.y=Math.max(.04,Math.min(.96,LB.y));}}
+   b.style.left=(LB.x*100)+'%';b.style.top=(LB.y*100)+'%';
+   const n=G.resto.length;for(let i=0;i<n;i++){const a=-Math.PI/2+i*2*Math.PI/n,hx=.5+.38*Math.cos(a),hy=.5+.38*Math.sin(a);if(Math.hypot(LB.x-hx,LB.y-hy)<.075){const v=G.resto[i];LB.x=.5;LB.y=.5;LB.vx=LB.vy=0;LB.drag=false;LB.b0=LB.bt;fbSom(null,true);vibra([15,30,15]);pdEscolheSeq(v);renderPodio();break;}}}
+  LB.lt=now;requestAnimationFrame(loop);};requestAnimationFrame(loop);}
+/* ---------- Noção do corpo · Corpo que acende ---------- */
+const PARTE=[[/cochilo|dormir|cabe|pensar/,[100,38]],[/cantar|garganta/,[100,64]],[/pesco/,[100,70]],[/ombro|banho/,[72,86]],[/cora|abra|respirar|peito/,[100,104]],[/barriga|rir/,[100,140]],[/costas|deitar|ch[aã]o/,[100,122]],[/dan|quadril|rebol/,[100,166]],[/massagem|m[aã]o/,[42,170]],[/espregui|bra[cç]o|nadar|alongar/,[46,112]],[/perna|correr|pedalar|caminhar/,[88,228]],[/p[eé]s|grama|descal/,[86,288]]];
+function parteDe(n,usados){const s=n.toLowerCase();let p=null;for(const [re,xy] of PARTE)if(re.test(s)){p=xy.slice();break;}
+ if(!p){const lista=[[100,104],[100,150],[154,112],[46,112],[112,228],[88,228],[100,64]];p=lista[usados.length%lista.length].slice();}
+ let k=0;while(usados.some(u=>Math.hypot(u[0]-p[0],u[1]-p[1])<14)&&k<8){p[0]+=k%2?-16:16;p=p.map(Math.round);k++;}return p;}
+function corpoSVG(id,G){const usados=[];const pts=G.esc.map((v,i)=>{const p=parteDe(v,usados);usados.push(p);return [p,i,v];});
+ return `<svg viewBox="0 0 200 310" class="corpo" aria-label="Corpo de luz"><defs><filter id="cl" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+ <g fill="none" stroke="#9DB4FF" stroke-width="3" stroke-linecap="round" opacity="${.35+G.esc.length*.09}" filter="url(#cl)">
+ <circle cx="100" cy="38" r="22"/><path d="M100 60v8M70 84q30-14 60 0l-6 76q-24 10-48 0z"/><path d="M70 86q-22 30-28 84M130 86q22 30 28 84"/><path d="M80 162l6 66 0 60M120 162l-6 66 0 60"/></g>
+ ${pts.map(([p,i,v])=>`<g class="lz" style="--c:${C[i%7]}"><circle cx="${p[0]}" cy="${p[1]}" r="${14-i}" fill="${C[i%7]}" opacity=".35" filter="url(#cl)"/><circle cx="${p[0]}" cy="${p[1]}" r="7" fill="${C[i%7]}"/><text x="${p[0]}" y="${p[1]+3.5}" text-anchor="middle" font-size="9" font-weight="900" fill="#0A0F24">${i+1}</text></g>`).join('')}</svg>`;}
+function vAcende(){const id=idAtual();const s=senDe(id);const G=PD.G;
+ return `${cab()}<h1>Acenda o seu corpo</h1><p class="small mute">Toque na sensação de que você mais gosta. Ela acende no lugar do corpo onde você sente. Depois a 2ª, e assim por diante.</p>
+ <div class="corpo-w">${corpoSVG(id,G)}</div><p class="pos">Acendendo a <b>${G.esc.length+1}ª</b></p>
+ <div class="sqg">${G.resto.map(v=>`<button class="sq" data-a="sq" data-v="${esc(v)}" style="--c:${s[3]}"><svg viewBox="0 0 300 300">${artDe(id,v)}</svg><b>${esc(v)}</b></button>`).join('')}</div>
+ <div class="row">${PD.hist.length?`<button class="btn" data-a="pdvolta">↶ Desfazer</button>`:''}</div>`;}
+function jogosLiga(){carinhoLiga();esteiraLiga();labLiga();}
+/* cliques dos jogos novos (antes do clique geral da fase) */
+document.addEventListener('click',e=>{if(!PD)return;const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a;
+ if(a==='sjoga'){ac();PD.G=adIni('aud',PD.snItens);PD.G.itens=PD.snItens;PD.G.ops=adOps4(PD.G,PD.G.fila[0]);PD.G.primeira=0;PD.G.errouAgora=false;PD.fase='jogo';PD.si=0;PD.ordem=['aud'];renderPodio();scrollTo(0,0);adTocar();ondaLiga();e.stopImmediatePropagation();return;}
+ if(a==='sfim'){snEntrega();e.stopImmediatePropagation();return;}
+ if(a==='csel'){PD.G.sel=b.dataset.v;fbSom();renderPodio();e.stopImmediatePropagation();return;}
+ if(a==='ctok'){const G=PD.G;pdSnap();const r=G.itens.slice().sort((x,y)=>(G.t[y]||0)-(G.t[x]||0));pdFechaSentido(r);renderPodio();scrollTo(0,0);e.stopImmediatePropagation();return;}
+ if(a==='labab'){try{localStorage.setItem('labAB',b.dataset.v);}catch(_){}LB.b0=null;renderPodio();e.stopImmediatePropagation();return;}
+ if(a==='sq'&&PD.G&&PD.G.tipo==='esteira'){const v=b.dataset.v;comer(PD.G.esc.length);vibra(15);b.classList.add('pega');setTimeout(()=>{pdEscolheSeq(v);renderPodio();},200);e.stopImmediatePropagation();return;}
+ if(a==='adplay'){setTimeout(ondaLiga,0);}
+},true);
+
+if(EH_PODIO||EH_SONS){try{const s=JSON.parse(localStorage.getItem(PDK)||'null');if(s&&s.ordem&&s.f1){PD=s;let ent=null;try{ent=JSON.parse(localStorage.getItem(LSK+'-entrada')||'null');}catch(e){}if(ent){J.esc=ent.esc||{};J.t=ent.t||{};}PD.ordem.forEach(id=>{if(PD.res[id]&&PD.fase==='story')J.esc[id]=PD.res[id].slice();});if(PD.fase==='revela')PD.brilho=true;}}catch(e){}if(!PD){pdInicia();if(EH_SONS)snInicia();}}
 
 /* ================= IMAGEM DOS 7 SENTIDOS (04/11/2026) =================
    Uma imagem nova para cada pessoa, que ela não viu durante as escolhas. Padrão em camadas:

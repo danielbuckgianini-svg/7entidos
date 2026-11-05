@@ -104,6 +104,7 @@ button.nc-linha{cursor:pointer}button.nc-linha:hover{border-color:#5a5a5a}
 .nc-chip.on{background:#262626;border-color:var(--sc,#ffd43b)}
 .nc-link{font:inherit;font-weight:700;font-size:15px;border:0;background:transparent;color:#f4f4f4;padding:12px;cursor:pointer;text-decoration:underline;width:100%}
 .nc-edit-nivel{border:1px solid var(--line);border-radius:12px;padding:10px;display:grid;gap:6px}
+.rp-bola{width:120px;height:120px;margin:22px auto;border-radius:50%;background:radial-gradient(circle,#3FE0D0,#5AB8FF 60%,transparent 72%);animation:rpb 8s ease-in-out infinite}@keyframes rpb{0%,100%{transform:scale(.55);opacity:.6}50%{transform:scale(1.25);opacity:1}}
 </style></head><body>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -865,7 +866,7 @@ const sentidosDoMapa=m=>((m&&m.completos)||[]).map(id=>MAPA_SENT[id]).filter(Boo
 const ultimoMapa=s=>(Array.isArray(s.mapas)&&s.mapas.length)?s.mapas[s.mapas.length-1]:null;
 function guardaMapa(st,m){if(!Array.isArray(st.mapas))st.mapas=[];st.mapas.push(m);}
 function MapaFrame({modo,onPronto,onFechar,k:kk}){
-  useEffect(()=>{function f(e){if(e.origin!==location.origin||!e.data||(e.data.tipo!=="7e-mapa"&&e.data.tipo!=="7e-podio"))return;onPronto(e.data.mapa||e.data.podio)}window.addEventListener("message",f);return()=>window.removeEventListener("message",f)},[onPronto]);
+  useEffect(()=>{function f(e){if(e.origin!==location.origin||!e.data||(e.data.tipo!=="7e-mapa"&&e.data.tipo!=="7e-podio"&&e.data.tipo!=="7e-sons"))return;onPronto(e.data.mapa||e.data.podio||e.data.sons)}window.addEventListener("message",f);return()=>window.removeEventListener("message",f)},[onPronto]);
   const k=kk||(MAPA_K+(modo==="refazer"?"-r":""));
   return html`<div style=${{position:"fixed",inset:0,zIndex:90,background:"#0A0F24"}} role="dialog" aria-modal="true" aria-label="Mapa dos 7 sentidos">
     <iframe title="Mapa dos 7 sentidos" src=${"mapa.html?k="+encodeURIComponent(k)+(modo?"&modo="+modo:"")} style=${{border:0,width:"100%",height:"100%",display:"block"}} allow="autoplay; accelerometer; gyroscope"></iframe>
@@ -883,8 +884,19 @@ function MapaVer({m,onClose}){
 /* Vídeos da Brisa: espaço reservado com o roteiro até o vídeo ficar pronto (assistir até o fim, sem pular) */
 const BRISA_V={
   v1:{t:"Vídeo de apresentação",l:["Oi, eu sou a Brisa.","Aqui no 7entidos, a gente descobre junto o que te faz bem, pelos seus sentidos.","Primeiro, você vai montar o seu mapa: em cada sentido, escolhe 7 de 15 coisas de que gosta.","Sem resposta certa. No seu ritmo. Vamos?"]},
-  v2:{t:"Brisa apresenta a Fase 2",l:["Que mapa lindo você fez!","Agora vêm 7 mini-jogos, um para cada sentido.","Você só escolhe, e a sua ordem aparece sozinha.","A cada sentido, você ganha um pedaço da sua pintura. Vamos nessa?"]},
-  v3:{t:"Brisa apresenta a Fase 3",l:["Agora você já sabe do que gosta.","Na Fase 3, você cria a sua régua: os números de 10 a 1.","Em cada número, você liga uma lembrança sua. Vamos?"]}};
+  v2:{t:"Brisa apresenta a Fase 2",l:["Fase 2: ouça cada som e adivinhe o que é."]},
+  v3:{t:"Brisa apresenta a Fase 3",l:["Fase 3: coloque as suas escolhas em ordem, com um jogo para cada sentido."]},
+  v4:{t:"Brisa apresenta a Fase 4",l:["Fase 4: crie a sua régua, do 10 ao 1, com uma lembrança em cada número."]}};
+/* Respiração com música (Sala das Fases 2 e 3, 05/11): uma vez, na passagem da Fase 2 para a 3 */
+function RespiraPassagem({onFim}){
+  const [pronto,setPronto]=useState(false);
+  useEffect(()=>{let ctx=null,g=null,os=[];try{const A=window.AudioContext||window.webkitAudioContext;ctx=new A();g=ctx.createGain();g.gain.value=0;g.gain.linearRampToValueAtTime(.05,ctx.currentTime+1.5);g.connect(ctx.destination);os=[220,277.2,329.6].map(f=>{const o=ctx.createOscillator();o.frequency.value=f;o.connect(g);o.start();return o})}catch(e){}
+    const t=setTimeout(()=>setPronto(true),8000);return()=>{clearTimeout(t);try{g.gain.setTargetAtTime(0,ctx.currentTime,.3);setTimeout(()=>{os.forEach(o=>{try{o.stop()}catch(e){}});ctx.close()},1200)}catch(e){}}},[]);
+  return html`<div class="nc-tela bv-tela" role="dialog" aria-modal="true" aria-label="Respiração"><div class="nc-caixa fade" style=${{textAlign:"center"}}>
+    <div class="nc-eyebrow">Uma pausa</div><h1 class="nc-h1">Respire comigo</h1>
+    <div class="rp-bola" aria-hidden="true"></div><p class="nc-p">Puxe o ar enquanto a luz cresce. Solte enquanto ela diminui.</p>
+    <button class="nc-btn" onClick=${onFim}>${pronto?"Seguir para a Fase 3":"Pular"}</button></div></div>`;
+}
 function BrisaVideo({n,onFim}){
   /* Tela do vídeo (Sala "A Brisa e a Fase 1", 04/11): céu noturno com brilhos das 7 cores e 7 pontos flutuando;
      a Brisa aparece como um anel de 7 luzes que pulsa enquanto fala e se completa conforme o vídeo anda;
@@ -906,18 +918,18 @@ function BrisaVideo({n,onFim}){
 }
 /* Constelação das fases (Sala "O caminho do app", 04/11): estrelas ligadas por linhas, mostrada entre uma fase e outra.
    Fases bloqueadas aparecem borradas (Sala "A Brisa e a Fase 1"). */
-const FASES7=[["Vídeo de apresentação","v"],["Fase 1 · Mapa dos 7 sentidos","f1"],["Fase 2 · Pódio dos Sentidos","f2"],["Fase 3 · Minha régua","f3"],["Fase 4","f4"],["Hall da Fama","hall"]];
-const GH_PECAS=["SU","PER","SÔ","NI","CO"]; /* senha secreta do portão = SUPERSÔNICO (superpoder do Theo); 1 pedaço por etapa: Vídeo, Fase 1, 2, 3 e 4 */
+const FASES7=[["Vídeo de apresentação","v"],["Fase 1 · Mapa dos 7 sentidos","f1"],["Fase 2 · Que som é esse?","f2"],["Fase 3 · Pódio dos Sentidos","f3"],["Fase 4 · Minha régua","f4"],["Fase 5","f5"],["Hall da Fama","hall"]];
+const GH_PECAS=["S","E","N","T","I","R"]; /* Sala das Fases 2 e 3 (05/11): senha nova, 1 letra por etapa (Vídeo, Fases 1 a 5) = SENTIR (sugestão do Claude, a confirmar) */
 function Constelacao({feitas,titulo,frase,onFim,onIr}){
-  const P=[[22,26],[86,96],[28,166],[92,236],[30,306],[70,386]];const C7=["#FFD23F","#5AB8FF","#FF8A5C","#7DDB8B","#FF6FA3","#A98BFF","#3FE0D0"];
+  const P=[[22,26],[86,92],[28,158],[92,224],[30,290],[90,356],[56,426]];const C7=["#FFD23F","#5AB8FF","#FF8A5C","#7DDB8B","#FF6FA3","#A98BFF","#3FE0D0"];
   const PV_LIVRE=true; /* prévia: todas as fases liberadas (pedido do Daniel, 04/11) */
-  const est=k=>k<feitas?"feita":k===feitas?"agora":(PV_LIVRE&&FASES7[k][1]!=="f4")?"livre":"breve";
+  const est=k=>k<feitas?"feita":k===feitas?"agora":(PV_LIVRE&&FASES7[k][1]!=="f5")?"livre":"breve";
   return html`<div class="nc-tela bv-tela" role="dialog" aria-modal="true" aria-label="Minha jornada"><div class="nc-caixa fade">
     <div class="nc-eyebrow">Minha jornada</div><h1 class="nc-h1">${titulo}</h1><p class="nc-p">${frase}</p>
-    <div class="cj"><svg aria-hidden="true" style=${{zIndex:1}} viewBox="0 0 120 410" width="120" height="410">
+    <div class="cj"><svg aria-hidden="true" style=${{zIndex:1}} viewBox="0 0 120 450" width="120" height="450">
       ${P.slice(1).map((q,k)=>html`<line key=${"l"+k} x1=${P[k][0]} y1=${P[k][1]} x2=${q[0]} y2=${q[1]} stroke=${k+1<=feitas?"#F9CB39":"#3A4680"} stroke-width=${k+1<=feitas?2.5:1.5} stroke-dasharray=${k+1<=feitas?"":"4 5"}/>`)}
       ${P.map((q,k)=>{const e=est(k);const pode=onIr&&e!=="breve";return html`<g key=${k} class=${"cj-"+e} style=${pode?{cursor:"pointer"}:null} onClick=${pode?()=>onIr(FASES7[k][1]):null}><circle cx=${q[0]} cy=${q[1]} r="22" fill="transparent" stroke="none" style=${{pointerEvents:pode?"all":"none"}}/><circle cx=${q[0]} cy=${q[1]} r=${e==="agora"?13:10} fill=${e==="breve"?"#18224A":C7[k]} stroke=${e==="breve"?"#5A6492":"#0A0F24"} stroke-width="2"/>${e==="feita"?html`<text x=${q[0]} y=${q[1]+4} text-anchor="middle" font-size="12" font-weight="900" fill="#0A0F24">✓</text>`:null}</g>`})}
-    </svg>${P.map((q,k)=>{const e=est(k);const pode=onIr&&e!=="breve";return html`<span key=${k} class=${"cj-nome cj-"+e+(pode?" cj-ir":"")} role=${pode?"button":null} tabIndex=${pode?0:null} onClick=${pode?()=>onIr(FASES7[k][1]):null} onKeyDown=${pode?ev=>{if(ev.key==="Enter")onIr(FASES7[k][1])}:null} style=${{left:q[0]+20,top:q[1]-10,width:"calc(100% - "+(q[0]+20)+"px)"}}>${FASES7[k][0]}${e==="agora"?html`<small>Agora</small>`:e==="livre"?html`<small>Liberada · toque para ir</small>`:e==="breve"?html`<small>${k===5?"Um guardião espera aqui":k>=4?"Em breve":"Bloqueada"}</small>`:null}${k===5&&e!=="feita"?html`<span class="cj-guard"><${TheoGibi} sombra=${true}/></span>`:null}</span>`})}</div>
+    </svg>${P.map((q,k)=>{const e=est(k);const pode=onIr&&e!=="breve";return html`<span key=${k} class=${"cj-nome cj-"+e+(pode?" cj-ir":"")} role=${pode?"button":null} tabIndex=${pode?0:null} onClick=${pode?()=>onIr(FASES7[k][1]):null} onKeyDown=${pode?ev=>{if(ev.key==="Enter")onIr(FASES7[k][1])}:null} style=${{left:q[0]+20,top:q[1]-10,width:"calc(100% - "+(q[0]+20)+"px)"}}>${FASES7[k][0]}${e==="agora"?html`<small>Agora</small>`:e==="livre"?html`<small>Liberada · toque para ir</small>`:e==="breve"?html`<small>${k===6?"Um guardião espera aqui":k>=5?"Em breve":"Bloqueada"}</small>`:null}${k===6&&e!=="feita"?html`<span class="cj-guard"><${TheoGibi} sombra=${true}/></span>`:null}</span>`})}</div>
     <p class="nc-apoio">Peças da senha secreta do Hall: <b style=${{color:"#F9CB39",letterSpacing:".06em"}}>${GH_PECAS.map((x,i)=>i<feitas?x:"?").join(" · ")}</b></p>
     <button class="nc-btn" onClick=${onFim}>Continuar</button>
   </div></div>`;
@@ -970,7 +982,7 @@ function TheoFigura({sombra,revela}){
   return html`<div class=${"gh-fig"+(revela?" revela":"")}>${sombra||semImg?html`<${TheoGibi} sombra=${sombra}/>`:html`<img src="theo/guardiao.png" alt="Theo, Guardião dos Campeões" onError=${()=>setSemImg(true)}/>`}</div>`;
 }
 function TrofeuSVG(){return html`<svg class="gh-trofeu" viewBox="0 0 120 130" aria-hidden="true"><path d="M30 10h60v30c0 22-14 36-30 36S30 62 30 40z" fill="#F9CB39" stroke="#0A0F24" stroke-width="3"/><path d="M30 18H12c0 18 8 28 20 30M90 18h18c0 18-8 28-20 30" fill="none" stroke="#0A0F24" stroke-width="3"/><path d="M52 76h16v18H52z" fill="#F2B632" stroke="#0A0F24" stroke-width="3"/><path d="M34 94h52v14H34z" fill="#5AB8FF" stroke="#0A0F24" stroke-width="3"/><path d="M26 108h68v12H26z" fill="#F2B632" stroke="#0A0F24" stroke-width="3"/><path d="M60 24l5 10 11 1-8 8 2 11-10-5-10 5 2-11-8-8 11-1z" fill="#fff" opacity=".85"/></svg>`;}
-const ghFeitas=s=>{const v=s.videos||{};let n=0;if(v.v1)n=1;if(ultimoMapa(s))n=2;if(s.podio)n=3;if(s.novoComeco&&s.novoComeco.concluidoEm)n=4;return n};
+const ghFeitas=s=>{const v=s.videos||{};let n=0;if(v.v1)n=1;if(ultimoMapa(s))n=2;if(s.sons)n=3;if(s.podio)n=4;if(s.novoComeco&&s.novoComeco.concluidoEm)n=5;return n};
 async function ghBaixar(downloads,filename,data,type){
   if(downloads){try{await downloads.save({filename,data});return true}catch(e){if(e&&e.code==="declined")return false}}
   try{const url=URL.createObjectURL(new Blob([data],{type}));const a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);return true}catch(e){return false}
@@ -997,7 +1009,7 @@ function GuardiaoHall({s,downloads,toast,onClose,onIr}){
     ${passo==="senha"?html`<p class="nc-apoio" style=${{marginTop:0}}>Cada fase te deu um pedaço da senha. Toque nos pedaços na ordem em que você ganhou.</p>
       <div style=${{fontSize:26,fontWeight:900,letterSpacing:".08em",color:"#F9CB39",minHeight:36,marginBottom:8}}>${GH_PECAS.map((x,i)=>i<seq.length?x:"_").join(" ")}</div>
       <div class="gh-senha">${embaralhadas.map(i=>html`<button key=${i} disabled=${seq.includes(i)} style=${{opacity:seq.includes(i)?.35:1}} onClick=${()=>{const n=[...seq,i];if(i!==n.length-1){setSeq([]);setFala("quase");return}setSeq(n);if(n.length===GH_PECAS.length)setTimeout(()=>ir("medalhas"),500)}}>${GH_PECAS[i]}</button>`)}</div>`:null}
-    ${passo==="medalhas"?html`<div class="gh-medalhas">${FASES7.slice(0,FASES7.length-1).map((f,k)=>{const on=k<feitas;const ir=onIr&&f[1]!=="f4";return html`<div key=${k} class=${"gh-med"+(on||ir?"":" off")} role=${ir?"button":null} tabIndex=${ir?0:null} style=${ir?{cursor:"pointer"}:null} onClick=${ir?()=>onIr(f[1]):null}><i style=${{background:["#FFD23F","#5AB8FF","#FF8A5C","#7DDB8B","#FF6FA3"][k]}}>${on?"★":k+1}</i><span>${f[0]}<br/><small style=${{fontWeight:600,color:"#AEB5D6"}}>${on?"Conquistada":k>=4?"Em breve":"Ainda não"}${onIr&&f[1]!=="f4"?" · toque para ir":""}</small></span></div>`})}</div>
+    ${passo==="medalhas"?html`<div class="gh-medalhas">${FASES7.slice(0,FASES7.length-1).map((f,k)=>{const on=k<feitas;const ir=onIr&&f[1]!=="f5";return html`<div key=${k} class=${"gh-med"+(on||ir?"":" off")} role=${ir?"button":null} tabIndex=${ir?0:null} style=${ir?{cursor:"pointer"}:null} onClick=${ir?()=>onIr(f[1]):null}><i style=${{background:["#FFD23F","#5AB8FF","#FF8A5C","#7DDB8B","#FF6FA3","#A98BFF"][k]}}>${on?"★":k+1}</i><span>${f[0]}<br/><small style=${{fontWeight:600,color:"#AEB5D6"}}>${on?"Conquistada":k>=4?"Em breve":"Ainda não"}${onIr&&f[1]!=="f4"?" · toque para ir":""}</small></span></div>`})}</div>
       <button class="nc-btn" onClick=${()=>ir("trofeu")}>Receber meu troféu</button>`:null}
     ${passo==="trofeu"?html`<button class="nc-btn" onClick=${()=>ir("bau")}>Abrir o baú</button>`:null}
     ${passo==="bau"?html`<p class="nc-apoio" style=${{marginTop:0}}>O baú guarda todo o seu histórico. Só você tem a chave: o arquivo fica no seu celular.</p>
@@ -1031,11 +1043,11 @@ function PodioVer({p,onClose}){
 const podioEntrada=(k,base)=>{try{localStorage.setItem(k+"-entrada",JSON.stringify({esc:base.esc||{},pul:base.pul||[],t:base.t||{}}))}catch(e){}};
 const sentidosDoPodio=p=>((p&&p.sentidosOrdem)||[]).filter(id=>(p.completos||[]).includes(id)).map(id=>MAPA_SENT[id]).filter(Boolean);
 function NovoComeco({s,update,inicio}){
-  const [passo,setPasso]=useState(()=>{if(inicio!==undefined&&inicio!==null)return inicio;const v=s.videos||{};if(!v.v1)return "v1";if(!ultimoMapa(s))return 0;if(!v.c1)return "c1";if(!v.v2)return "v2";if(!s.podio)return "podio";if(!v.c2)return "c2";return 1;});
+  const [passo,setPasso]=useState(()=>{if(inicio!==undefined&&inicio!==null)return inicio;const v=s.videos||{};if(!v.v1)return "v1";if(!ultimoMapa(s))return 0;if(!v.c1)return "c1";if(!v.v2)return "v2";if(!s.sons)return "sons";if(!v.c2)return "c2";if(!v.r2)return "resp";if(!v.v3)return "v3";if(!s.podio)return "podio";if(!v.c3)return "c3";if(!v.v4)return "v4";return 1;});
   const [sent,setSent]=useState(()=>(s.novoComeco&&s.novoComeco.sentidos&&s.novoComeco.sentidos.length)?s.novoComeco.sentidos:sentidosDoMapa(ultimoMapa(s)));
   const mapaPronto=useCallback(m=>{update(st=>{guardaMapa(st,m)},"mapa");setSent(sentidosDoMapa(m));setPasso("c1");gaEvent("mapa_feito")},[update]);
   const viu=n=>update(st=>{st.videos=Object.assign({},st.videos||{},{[n]:true})},"video");
-  const podioPronto=useCallback(p=>{const so=sentidosDoPodio(p);update(st=>{st.podio=p;st.novoComeco=Object.assign({},st.novoComeco||{},{sentidos:so})},"podio");setSent(so);setPasso("c2");gaEvent("podio_feito")},[update]);
+  const podioPronto=useCallback(p=>{const so=sentidosDoPodio(p);update(st=>{st.podio=p;st.novoComeco=Object.assign({},st.novoComeco||{},{sentidos:so})},"podio");setSent(so);setPasso("c3");gaEvent("podio_feito")},[update]);
   /* Régua: "intro" → 0..9 (números 10 a 1) → "pronta" */
   const rasc=s.novoComeco&&Array.isArray(s.novoComeco.rascunho)&&s.novoComeco.rascunho.length===10?s.novoComeco.rascunho:null;
   const [regua,setRegua]=useState(()=>(rasc||NC_ESCALA_PADRAO).map(x=>Object.assign({},x)));
@@ -1050,21 +1062,26 @@ function NovoComeco({s,update,inicio}){
   function proximo(){guardar(regua);if(revisando||etapa===9){setRevisando(false);setEtapa("pronta")}else setEtapa(etapa+1)}
   function anterior(){if(revisando){setRevisando(false);setEtapa("pronta")}else setEtapa(etapa===0?"intro":etapa-1)}
   function comecar(){const esc=regua.map(x=>({v:x.v,t:x.t,m:(x.m||"").trim(),s:x.s||null}));update(st=>{const ant=st.novoComeco||{};const n=Object.assign({},ant,{versao:2,escala:esc,escalaVersao:ant.escalaVersao||1,sentidos:sent.slice(),inicio:ant.inicio||nowISO(),concluidoEm:nowISO()});delete n.rascunho;st.novoComeco=n},"novo-comeco");gaEvent("jornada_iniciada");}
-  const irFase=f=>({v:()=>setPasso("v1"),f1:()=>setPasso(0),f2:()=>setPasso("podio"),f3:()=>{setPasso(1);setEtapa("intro")},hall:()=>setPasso("hall")}[f]||(()=>{}))();
+  const sonsPronto=useCallback(x=>{update(st=>{st.sons=x},"sons");setPasso("c2");gaEvent("sons_feito")},[update]);
+  const irFase=f=>({v:()=>setPasso("v1"),f1:()=>setPasso(0),f2:()=>setPasso("sons"),f3:()=>setPasso("podio"),f4:()=>{setPasso(1);setEtapa("intro")},hall:()=>setPasso("hall")}[f]||(()=>{}))();
   if(passo==="hall")return html`<${GuardiaoHall} s=${s} downloads=${null} toast=${null} onIr=${irFase} onClose=${()=>setPasso("c2")}/>`;
   if(passo==="v1")return html`<${BrisaVideo} n="v1" onFim=${()=>{viu("v1");setPasso(0)}}/>`;
   if(passo===0)return html`<${MapaFrame} onPronto=${mapaPronto}/>`;
-  if(passo==="c1")return html`<${Constelacao} feitas=${2} onIr=${irFase} titulo="Você desbloqueou a Fase 2" frase="Sua primeira estrela acendeu. Agora vem o Pódio dos Sentidos." onFim=${()=>{viu("c1");setPasso("v2")}}/>`;
-  if(passo==="c2")return html`<${Constelacao} feitas=${3} onIr=${irFase} titulo="Você desbloqueou a Fase 3" frase="Mais uma estrela na sua constelação. Agora é a vez da sua régua." onFim=${()=>{viu("c2");setPasso("v3")}}/>`;
-  if(passo==="v2")return html`<${BrisaVideo} n="v2" onFim=${()=>{viu("v2");setPasso("podio")}}/>`;
-  if(passo==="v3")return html`<${BrisaVideo} n="v3" onFim=${()=>{viu("v3");setPasso(1);setEtapa("intro")}}/>`;
+  if(passo==="c1")return html`<${Constelacao} feitas=${2} onIr=${irFase} titulo="Você desbloqueou a Fase 2" frase="Sua primeira estrela acendeu. Agora: que som é esse?" onFim=${()=>{viu("c1");setPasso("v2")}}/>`;
+  if(passo==="c2")return html`<${Constelacao} feitas=${3} onIr=${irFase} titulo="Você desbloqueou a Fase 3" frase="Mais uma estrela acendeu. Antes de seguir, uma respiração." onFim=${()=>{viu("c2");setPasso("resp")}}/>`;
+  if(passo==="resp")return html`<${RespiraPassagem} onFim=${()=>{viu("r2");setPasso("v3")}}/>`;
+  if(passo==="c3")return html`<${Constelacao} feitas=${4} onIr=${irFase} titulo="Você desbloqueou a Fase 4" frase="Mais uma estrela na sua constelação. Agora é a vez da sua régua." onFim=${()=>{viu("c3");setPasso("v4")}}/>`;
+  if(passo==="sons"){podioEntrada(MAPA_K+"-s",ultimoMapa(s)||{});return html`<${MapaFrame} k=${MAPA_K+"-s"} modo="sons" onPronto=${sonsPronto}/>`;}
+  if(passo==="v2")return html`<${BrisaVideo} n="v2" onFim=${()=>{viu("v2");setPasso("sons")}}/>`;
+  if(passo==="v3")return html`<${BrisaVideo} n="v3" onFim=${()=>{viu("v3");setPasso("podio")}}/>`;
+  if(passo==="v4")return html`<${BrisaVideo} n="v4" onFim=${()=>{viu("v4");setPasso(1);setEtapa("intro")}}/>`;
   if(passo==="podio"){podioEntrada(MAPA_K+"-p",ultimoMapa(s)||{});return html`<${MapaFrame} k=${MAPA_K+"-p"} modo="podio" onPronto=${podioPronto}/>`;}
   const pi=3;
   return html`<div class="nc-tela" role="dialog" aria-modal="true" aria-label="Novo começo">
     <div class="nc-caixa fade" key=${passo+"-"+etapa}>
       ${passo===1&&typeof etapa==="number"?html`<div class="nc-topo"><span style=${{fontSize:13,fontWeight:700,color:"#a8a8a8"}}>${etapa+1} de 10</span><span class="nc-barra" aria-hidden="true" style=${{marginLeft:12}}>${ORDEM.map((v,i)=>html`<i key=${v} class=${i<=etapa?"on":""}></i>`)}</span></div>`:html`<div class="nc-topo"><${LogoMark} size=${30} variant="dark"/><span class="nc-passos" aria-label=${"Etapa "+pi+" de 3"}>${[1,2,3].map(i=>html`<i key=${i} class=${i<=pi?"on":""}></i>`)}</span></div>`}
       ${passo===1&&etapa==="intro"?html`
-        <div class="nc-eyebrow">Fase 3 · Minha escala pessoal</div>
+        <div class="nc-eyebrow">Fase 4 · Minha escala pessoal</div>
         <h1 class="nc-h1">Crie a sua régua de sensações.</h1>
         <p class="nc-p">Cada número vai ganhar um significado só seu. Para cada um, você liga uma lembrança real que represente aquele nível.</p>
         <div class="nc-regua">${ORDEM.map(v=>{const x=regua.find(z=>z.v===v);return html`<div key=${v} class="nc-linha"><span class="nc-num" style=${ncNumBg(v)}>${v}</span><span style=${{flex:1,fontWeight:600}}>${x.t}</span><span class="vazio">${(x.m||"").trim()?"✓":"a definir"}</span></div>`})}</div>
@@ -2196,11 +2213,11 @@ function App(){
 /* ===== Atalhos da prévia (pedido do Daniel, 04/11): pular para qualquer fase sem refazer as anteriores. Só existe na prévia. ===== */
 function pularTudo(update){update(st=>{const agora=nowISO();
   if(!(st.consent&&st.consent.accepted))st.consent={accepted:true,at:agora,version:CONSENT_VERSION,social:false,analytics:false};
-  st.videos=Object.assign({},st.videos||{},{v1:true,c1:true,v2:true,c2:true});
+  st.videos=Object.assign({},st.videos||{},{v1:true,c1:true,v2:true,c2:true,r2:true,v3:true,c3:true,v4:true});
   if(!(st.novoComeco&&st.novoComeco.concluidoEm)){const ant=st.novoComeco||{};st.novoComeco=Object.assign({},ant,{versao:2,escala:NC_ESCALA_PADRAO.map(x=>({v:x.v,t:x.t,m:"(teste da prévia)",s:null})),escalaVersao:ant.escalaVersao||1,sentidos:ant.sentidos||[],inicio:ant.inicio||agora,concluidoEm:agora});delete st.novoComeco.rascunho}
 },"previa-pular")}
 function AtalhosPrevia({aberto,setAberto,ir}){
-  const op=[["Ver o caminho com tudo liberado","c2"],["Vídeo da Brisa","v1"],["Fase 1 · Mapa dos 7 sentidos",0],["Fase 2 · Pódio dos Sentidos","podio"],["Fase 3 · Minha régua",1],["Hall da Fama · Theo","hall"],["Pular tudo e ir para o app","app"]];
+  const op=[["Ver o caminho com tudo liberado","c3"],["Vídeo da Brisa","v1"],["Fase 1 · Mapa dos 7 sentidos",0],["Fase 2 · Que som é esse?","sons"],["Fase 3 · Pódio dos Sentidos","podio"],["Fase 4 · Minha régua",1],["Hall da Fama · Theo","hall"],["Pular tudo e ir para o app","app"]];
   return html`${aberto?html`<div class="pv-menu" role="menu"><b>Atalhos da prévia</b>${op.map(([t,f])=>html`<button key=${t} role="menuitem" onClick=${()=>ir(f)}>${t}</button>`)}<small>Não precisa refazer as fases anteriores.</small></div>`:null}
     <button class="pv-btn" aria-expanded=${aberto} onClick=${()=>setAberto(!aberto)}>${aberto?"✕ Fechar":"🔓 Fases livres"}</button>`;
 }
