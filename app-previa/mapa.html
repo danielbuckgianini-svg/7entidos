@@ -123,7 +123,7 @@ h1{font-size:23px;line-height:1.25;margin:4px 0 10px}h2{font-size:18px;margin:22
 .qplay{display:flex;flex-direction:column;align-items:center;gap:8px;width:100%;margin:8px 0;padding:18px 10px;font:inherit;color:var(--ink);background:#070B1C;border:2px solid var(--c);border-radius:18px;cursor:pointer;box-shadow:0 0 18px color-mix(in srgb,var(--c) 40%,transparent)}
 .qplay b{font-size:16px}.qonda{display:flex;gap:6px;align-items:center;height:46px}.qonda i{width:7px;height:10px;border-radius:4px;background:var(--c)}
 .qonda.on i{animation:qdanca .7s ease-in-out infinite alternate}@keyframes qdanca{0%{height:8px}100%{height:44px}}
-.qops{grid-template-columns:repeat(2,minmax(0,1fr))!important}.sq.q-err{opacity:.35;filter:grayscale(1);animation:qtreme .3s}.sq.q-ok{border-color:var(--c);box-shadow:0 0 22px var(--c);animation:pedaco .6s}
+.qops{grid-template-columns:repeat(3,minmax(0,1fr))!important}.sq.q-err{opacity:.35;filter:grayscale(1);animation:qtreme .3s}.sq.q-ok{border-color:var(--c);box-shadow:0 0 22px var(--c);animation:pedaco .6s}
 @keyframes qtreme{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 .qres{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:10px 0}.qres .sq{padding:4px}.qres .sq b{font-size:11.5px}.qres .sq small{font-size:10.5px}
 .sqg.carinho .sq{touch-action:none;transition:transform .15s,box-shadow .15s}.sq.afaga{transform:scale(.95) rotate(-1deg);box-shadow:0 0 16px var(--c)}
@@ -542,14 +542,14 @@ function pdFechaSentido(rank){const id=idAtual();PD.res[id]=rank.slice();PD.temp
  const f1=(PD.f1[id]||[])[0];const sv=PD.sent[id]||(PD.sent[id]={});sv.acertou=sv.palpite?((sv.palpite==='sim')===(rank[0]===f1)):false;
  PD.novo=id;para();confete();sino(4,.2);vibra(25);pdDepoisSentido();}/* 05/11: sem a tela de revelação e sem "Como você se sentiu?" */
 function pdDepoisSentido(){if(Object.keys(PD.res).length===4&&!PD.surpresa){PD.surpresa=1;PD.fase='surpresa';return;}pdSegue();}
-/* "Que som é esse?" (05/11): os 7 sons que a pessoa escolheu na Audição, 4 opções, 7 rodadas, fica mais difícil
+/* "Que som é esse?" (05/11): os 7 sons que a pessoa escolheu na Audição, 6 opções, 7 rodadas, fica mais difícil
    (o som fica mais curto e as opções erradas passam a ser sons que ela também escolheu). Segue sozinho ao acertar. */
 function embaralha(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 function qIni(){const meus=(J.esc.aud||[]).slice(0,7);PD.Q={lista:embaralha(meus),r:0,ops:[],errou:[],res:[],ok:false,fim:false};qRodada();}
 function qRodada(){const Q=PD.Q;const cert=Q.lista[Q.r];const todos=SEN[1][5].map(t=>t.n).filter(n=>n!==cert);
  const meus=Q.lista.filter(n=>n!==cert);const outros=todos.filter(n=>!Q.lista.includes(n));
- const nMeus=Q.r<2?0:Q.r<5?1:3;/* rodadas 1–2: erradas de fora; 3–5: 1 parecida; 6–7: todas parecidas */
- const err=embaralha(meus).slice(0,nMeus).concat(embaralha(outros)).slice(0,3);
+ const nMeus=Q.r<2?0:Q.r<5?2:4;/* 6 opções (05/11 noite). Rodadas 1–2: erradas de fora; 3–5: 2 parecidas; 6–7: 4 parecidas */
+ const err=embaralha(meus).slice(0,nMeus).concat(embaralha(outros)).slice(0,5);
  Q.ops=embaralha([cert].concat(err));Q.errou=[];Q.ok=false;Q.t0=Date.now();}
 function qDur(){return Math.max(1.2,4-PD.Q.r*.45);}/* 4 s na 1ª rodada, 1,3 s na 7ª */
 let Q_T=null;function qToca(n){const t=tileDe('aud',n);if(!t||!t.som)return;toca(t.som);PD.Q.toc=true;const o=document.getElementById('qonda');if(o)o.classList.add('on');
