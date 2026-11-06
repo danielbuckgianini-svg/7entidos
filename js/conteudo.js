@@ -8,6 +8,20 @@
 window.SITE = {
 
   /* ---------------------------------------------------------------
+     RECLAME AQUI, WHATSAPP E EMPRESA (rodapé e Contato, em todas as páginas)
+     - reclameAqui.url: endereço da página da empresa no Reclame Aqui.
+     - reclameAqui.seloId: número do selo oficial, que aparece no código
+       do selo no painel do Reclame Aqui (data-id="..."). Com ele, o site
+       mostra o selo oficial com a nota real; sem ele, mostra o selo simples.
+     - whatsapp.numero: só números, com DDI e DDD (ex.: 5513999999999).
+       Vazio = o botão de dúvidas não aparece.
+     --------------------------------------------------------------- */
+  reclameAqui: { url: "", seloId: "" },
+  whatsapp: { numero: "", mensagem: "Oi! Tenho uma dúvida sobre o 7entidos." },
+  empresa: "DBGIANINI MARKETING LTDA",
+  tiktok: "https://www.tiktok.com/@7entidos",
+
+  /* ---------------------------------------------------------------
      FOTOS 10×10
      Para colocar uma foto: salve o arquivo na pasta "fotos/" e
      escreva o nome dele em "arquivo". Em "descricao", descreva o

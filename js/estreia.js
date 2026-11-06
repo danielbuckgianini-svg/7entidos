@@ -105,3 +105,10 @@
   try { visto = localStorage.getItem(CHAVE) === '1' || /[?&]sem-popup/.test(location.search); } catch (e) {}
   if (!visto) abre();
 })();
+
+/* vídeo da seção do reality: se o arquivo ainda não existe, mostra o aviso */
+document.querySelectorAll('.reality-video video').forEach(function (v) {
+  function tira() { v.remove(); }
+  if (v.error || v.networkState === 3) tira(); else v.addEventListener('error', tira);
+  if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { es.forEach(function (e) { if (!v.isConnected) return; if (e.isIntersecting) { var p = v.play(); if (p && p.catch) p.catch(function(){}); } else v.pause(); }); }, { threshold: .4 }).observe(v);
+});

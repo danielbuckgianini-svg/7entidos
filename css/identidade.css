@@ -1,0 +1,61 @@
+/* Identidade nova (06/11): noite escura, amarelo, anel de 7 luzes, Linha de luz. */
+:root{--s1:#FFD23F;--s2:#5AB8FF;--s3:#FF8A5C;--s4:#7DDB8B;--s5:#FF6FA3;--s6:#A98BFF;--s7:#3FE0D0}
+
+/* anel de 7 luzes: os números dos sentidos ganham a cor de cada luz */
+.indice.luzes7 li:nth-child(1) b{color:var(--s1)}.indice.luzes7 li:nth-child(2) b{color:var(--s2)}.indice.luzes7 li:nth-child(3) b{color:var(--s3)}.indice.luzes7 li:nth-child(4) b{color:var(--s4)}.indice.luzes7 li:nth-child(5) b{color:var(--s5)}.indice.luzes7 li:nth-child(6) b{color:var(--s6)}.indice.luzes7 li:nth-child(7) b{color:var(--s7)}
+.indice.luzes7 b{text-shadow:0 0 12px currentColor}
+.selo i{box-shadow:0 0 10px var(--dourado)}
+.topo{border-image:linear-gradient(90deg,var(--s1),var(--s2),var(--s3),var(--s4),var(--s5),var(--s6),var(--s7)) 1;border-bottom-width:1px}
+
+/* sentidos em Linha de luz (traço dourado no escuro) */
+.sentidos .marcas.luz{color:var(--dourado);filter:drop-shadow(0 0 6px rgba(244,197,31,.55));display:flex;align-items:center}
+.sentidos li{align-items:center}
+
+/* fases do app */
+.fases-app{list-style:none;margin:28px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,1fr);gap:16px;counter-reset:f}
+.fases-app li{position:relative;display:grid;grid-template-columns:64px 1fr;gap:16px;align-items:start;padding:22px;border:1px solid var(--linha);border-radius:20px;background:linear-gradient(165deg,#1a1524,#0f0d14)}
+.fases-app svg{width:56px;height:56px;fill:none;stroke:var(--dourado);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 6px rgba(244,197,31,.5))}
+.fases-app .n{position:absolute;top:-11px;left:18px;width:26px;height:26px;border-radius:50%;background:var(--dourado);color:#0B0B0D;font:800 13px var(--corpo,Manrope),sans-serif;display:grid;place-items:center}
+.fases-app li:nth-child(1) .n{background:var(--s1)}.fases-app li:nth-child(2) .n{background:var(--s2)}.fases-app li:nth-child(3) .n{background:var(--s3)}.fases-app li:nth-child(4) .n{background:var(--s4)}
+.fases-app h3{font-size:22px;margin:0}.fases-app p{margin:8px 0 0;color:var(--texto-suave);font-size:15.5px}
+@media(max-width:700px){.fases-app{grid-template-columns:1fr}}
+
+/* reality */
+.reality{padding:72px 0;background:radial-gradient(700px 400px at 85% 20%,rgba(169,139,255,.14),transparent 70%),radial-gradient(600px 400px at 0% 100%,rgba(244,197,31,.08),transparent 70%)}
+.reality .wrap{display:grid;grid-template-columns:1.2fr .8fr;gap:44px;align-items:center}
+.reality h2{font-size:clamp(34px,5vw,54px);line-height:1.05;margin:8px 0 14px}
+.reality-data{color:var(--texto)}.reality-data b{color:var(--dourado)}
+.reality-acoes{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:18px}
+.reality-acoes .mute{color:var(--texto-suave);font-size:14.5px}.reality-acoes .mute a{color:var(--texto)}
+.reality-video{position:relative;aspect-ratio:9/16;max-height:620px;border-radius:24px;overflow:hidden;background:#000;border:1px solid rgba(244,197,31,.35);box-shadow:0 30px 70px rgba(0,0,0,.5)}
+.reality-video:before{content:"";position:absolute;inset:0;border-radius:24px;padding:2px;background:linear-gradient(160deg,var(--s1),var(--s2),var(--s3),var(--s4),var(--s5),var(--s6),var(--s7));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;z-index:2}
+.reality-video video{width:100%;height:100%;object-fit:cover;display:block;position:relative;z-index:1}
+.reality-video .sem-video{position:absolute;inset:0;display:grid;place-items:center;color:var(--texto-suave);background:radial-gradient(circle at 50% 35%,#2c2343,#0B0B0D 75%);padding:20px;text-align:center}
+@media(max-width:820px){.reality .wrap{grid-template-columns:1fr}.reality-video{max-width:360px;margin:0 auto;width:100%}}
+
+/* formulário de bastidores */
+.bastidores{margin-top:26px;padding:22px;border:1px solid rgba(244,197,31,.4);border-radius:20px;background:linear-gradient(165deg,rgba(244,197,31,.07),rgba(11,11,13,.6));display:grid;gap:12px}
+.bastidores h3{margin:0;font-size:22px}.bastidores p{margin:0;color:var(--texto-suave);font-size:15px}
+.bastidores label{display:grid;gap:6px;font-size:14px;font-weight:700}
+.bastidores input[type=text],.bastidores input[type=tel],.bastidores input[type=email]{font:inherit;font-size:16px;padding:12px 14px;border-radius:12px;border:1px solid var(--linha);background:#0B0B0D;color:var(--texto)}
+.bastidores input:focus{outline:2px solid var(--dourado);outline-offset:1px}
+.bastidores .ok-check{display:flex;gap:10px;align-items:flex-start;font-weight:500;color:var(--texto-suave);font-size:13.5px}
+.bastidores .ok-check input{margin-top:3px;accent-color:#F4C51F;width:18px;height:18px}
+.bastidores button{font:inherit;font-weight:800;font-size:16px;border:0;border-radius:999px;padding:13px 20px;background:var(--dourado);color:#0B0B0D;cursor:pointer;justify-self:start}
+.bastidores button[disabled]{opacity:.6;cursor:default}
+.bastidores .msg{font-weight:700;color:var(--dourado)}
+.bastidores .msg.erro{color:#FF8A5C}
+.bastidores .opcoes{display:flex;flex-wrap:wrap;gap:8px}
+.bastidores .opcoes label{display:inline-flex;align-items:center;gap:7px;font-weight:600;border:1px solid var(--linha);border-radius:999px;padding:8px 13px;cursor:pointer}
+.bastidores .opcoes input{accent-color:#F4C51F}
+
+/* confiança: Reclame Aqui, WhatsApp, empresa */
+.rodape-extra{display:flex;flex-wrap:wrap;gap:14px;align-items:center;width:100%}
+.rodape .empresa{width:100%;margin:0;font-size:13px;opacity:.75}
+.selo-ra-simples{display:inline-flex;align-items:center;gap:10px;padding:8px 14px 8px 9px;border-radius:14px;border:1px solid rgba(125,219,139,.45);background:#15121C;color:#F5F1E8;text-decoration:none}
+.selo-ra-simples small{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#BFB8C8}
+.selo-ra-simples b{display:block;font-size:15px;color:#7DDB8B;letter-spacing:.02em}
+a.selo-ra-simples:hover{border-color:#7DDB8B}
+.botao-wa{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;background:#1E3B2A;color:#C9F5D3!important;font-weight:800;text-decoration:none;border:1px solid #2E6B45}
+.botao-wa.grande{font-size:16px;padding:13px 20px}
+.contato-confianca{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:18px;grid-column:1/-1}
