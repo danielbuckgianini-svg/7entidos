@@ -272,7 +272,7 @@ function insights(J,P,TAGS){const E=J.esc||{},fav=SEN.map(s=>(E[s[0]]||[])[0]);c
 const CONVITE='7s0a4653';const PLANILHA_URL=window.PLANILHA_URL||'';
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let J=null;try{J=JSON.parse(localStorage.getItem('jornada7')||'null');}catch(e){}
-const temConvite=(()=>{try{const q=new URLSearchParams(location.search).get('c');if(q===CONVITE){localStorage.setItem('jornada7c','1');return true;}return localStorage.getItem('jornada7c')==='1';}catch(e){return new URLSearchParams(location.search).get('c')===CONVITE;}})();
+const temConvite=true;/* 05/11 (noite): o Daniel tirou a senha (código de convite). Qualquer pessoa com o link entra. */
 const fase1Ok=()=>J&&J.esc&&SEN.every(s=>(J.esc[s[0]]||[]).length>=7);
 function salvaJ(){try{localStorage.setItem('jornada7',JSON.stringify(J));}catch(e){}}
 function post(tipo,extra){if(!PLANILHA_URL||!J)return;const corpo=Object.assign({c:CONVITE,tipo,id:J.id,nome:J.nome,cel:J.cel,em:new Date().toISOString()},extra||{});try{fetch(PLANILHA_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(corpo),keepalive:true});}catch(e){}}
