@@ -5,7 +5,7 @@
 <script>
 /* A Fase 2 antiga (notas de 0 a 10) foi apagada em 05/11/2026. Este endereço leva para a Fase 2 nova, dos mini-jogos,
    usando as escolhas que a pessoa fez na Fase 1 neste aparelho (k=jornada7). */
-(function(){var q=new URLSearchParams(location.search);var d=new URLSearchParams();d.set('modo','podio');d.set('k','jornada7');d.set('c',q.get('c')||'7s0a4653');
+(function(){var q=new URLSearchParams(location.search);var d=new URLSearchParams();d.set('modo','podio');d.set('k','jornada7');d.set('c',q.get('c')||'7s0a4653');if(q.get('vem'))d.set('vem',q.get('vem'));
  location.replace('/app-previa/mapa.html?'+d.toString());})();
 </script></head>
 <body><p>Abrindo a Fase 2… <a href="/app-previa/mapa.html?modo=podio&amp;k=jornada7">toque aqui se não abrir</a></p></body></html>

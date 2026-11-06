@@ -64,9 +64,16 @@ h1{font-size:23px;line-height:1.25;margin:4px 0 10px}h2{font-size:18px;margin:22
 .slot.on i{position:absolute;top:-5px;left:-5px;width:19px;height:19px;border-radius:50%;background:#F5C542;color:#0A0F24;font-size:11px;display:grid;place-items:center;box-shadow:0 0 8px #F5C542}
 .bandt{margin-top:6px;text-align:center}
 .tile.foi{display:none}.tile.sai{animation:sai .26s ease-in forwards;pointer-events:none}.tile.volta{animation:entra .32s ease-out}
+/* 06/11: card com mais contraste em relação ao fundo + teste do card sumindo ao ser escolhido */
+.tile{background:#1C2858;border-color:#3D4F94;box-shadow:0 3px 14px rgba(0,0,0,.5)}.tile b{color:#fff}.tile:hover{border-color:#6B7FCC}
+.tile .ord{display:none}
+body.sumir-fica .tile.foi{display:flex;opacity:.38;border-color:var(--c)}body.sumir-fica .tile.foi .ord{display:grid;position:absolute;top:8px;left:8px;width:26px;height:26px;border-radius:50%;background:#F5C542;color:#0A0F24;font-style:normal;font-weight:900;font-size:13px;place-items:center;z-index:2}
+.voo{position:fixed;z-index:50;border-radius:10px;overflow:hidden;pointer-events:none;transition:all .45s cubic-bezier(.5,0,.2,1);box-shadow:0 0 18px rgba(245,197,66,.6)}.voo svg{width:100%;height:100%;display:block}
+.cmp{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:14px}.cmpl{display:grid;grid-template-columns:auto 1fr auto;gap:4px 10px;align-items:center;font-size:14px;padding:6px 0;border-top:1px solid var(--line)}.cmpl:first-of-type{border-top:0}.cmpl i{width:10px;height:10px;border-radius:50%}
+.aj{text-align:center}.aj .q{font-family:Fraunces,Georgia,serif;font-size:24px;line-height:1.25;margin:10px 0 14px;animation:entra .35s ease-out}.aj .avo{justify-content:center;gap:8px}.aj .avo button{font-size:16px;padding:12px 16px;min-height:48px;background:#1C2858;border-color:#3D4F94}
 @media (prefers-reduced-motion:reduce){.fotobig,.mini.semf,.num.at,.num.glow,.slot.prox,.slot.on,.tile.sai,.tile.volta{animation:none}}
 </style></head><body><div class="w" id="app"></div><input type="file" id="fotoin" accept="image/*" hidden>
-<script src="config.js"></script><script src="arte-sentidos.js"></script>
+<script src="config.js"></script><script src="arte-sentidos.js"></script><script src="passagem.js"></script>
 <script>/* ---------- estímulos sensoriais (sons feitos aqui, sem arquivos) ---------- */
 let AC=null,TOCANDO=null;
 function ac(){try{if(navigator.audioSession)navigator.audioSession.type='playback';}catch(e){}if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;AC=new C();}if(AC.state!=='running')AC.resume();return AC;}
@@ -288,8 +295,26 @@ let J={tela:'abre',i:0,esc:{},id:'',nome:'',cel:'',ok:false,nota:null};let saveT
 try{const s=JSON.parse(localStorage.getItem('jornada7')||'null');if(s&&s.id)J=Object.assign(J,s);}catch(e){}
 if(!J.id)J.id='J'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const temConvite=true;/* 05/11 (noite): o Daniel tirou a senha (código de convite). Qualquer pessoa com o link entra. */
-function enviar(tipo){if(!PLANILHA_URL)return;const p=perfil();const n=SEN.filter(s=>feito(s[0])).length;const corpo={c:CONVITE,tipo,id:J.id,nome:J.nome,cel:J.cel,em:new Date().toISOString(),feitos:n,nota:J.nota,perfil:n===7?TAGS[p.top][0]+' + '+TAGS[p.seg][0]:'',forcas:TAGS.map((t,k)=>t[0]+' '+p.sc[k]).join(' · '),escolhas:SEN.map(s=>s[1]+': '+(J.esc[s[0]]||[]).map((x,i)=>(i+1)+'. '+x).join(' | ')),tempos:SEN.map(s=>Math.round(((J.t||{})[s[0]]||0)/1000)),pede:J.pede||null,avaliacao:AV.map((x,i)=>(J.av||{})[i]||''),insights:(n===7?cinco():[]).map((t,i)=>t+' → '+(((J.conc||{})[i]??'-'))),comentario:J.avTxt||'',descobertas:n===7?cinco():[]};
+/* 06/11: porta de entrada, Céus de luz, cartas douradas e "Ajude a melhorar" numa etapa separada (passagem.js). */
+const QP=new URLSearchParams(location.search);const SS={g:k=>{try{return sessionStorage.getItem(k);}catch(e){return null;}},s:(k,v)=>{try{sessionStorage.setItem(k,v);}catch(e){}}};
+const NOVOJ=()=>({tela:'abre',i:0,esc:{},id:'J'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),nome:'',cel:'',ok:false,nota:null});
+function fase1Completa(){return SEN.every(s=>(J.esc[s[0]]||[]).length>=7);}
+/* guarda a Fase 1 anterior para comparar e começa de novo, mantendo a imagem que representa a pessoa */
+function guardaERefaz(){if(fase1Completa())J.ant={esc:JSON.parse(JSON.stringify(J.esc)),cartas:J.cartas||{},ceu0:J.ceu0,ceu1:J.ceu1,em:J.emFim||''};
+ J.refez=(J.refez||0)+1;J.av={};J.avOk=false;J.avTxt='';J.conc={};J.fim=false;J.t={};J.pede=null;J.esc={};J.nota=null;J.notaIni=null;J.ceu0=null;J.ceu1=null;J.cartas={};J.aj=0;J.i=0;J.tela=J.ok?'ceu0':'abre';J.t0=Date.now();}
+if(QP.get('seguir'))J.seguir=+QP.get('seguir')||2;
+if(QP.get('refaz')==='1'&&!SS.g('j7refaz')){SS.s('j7refaz','1');SS.s('j7porta1','1');P7.registra({fase:1,fez1:'sim',escolha:'refazer a Fase 1 (veio da Fase '+(J.seguir||2)+')'});guardaERefaz();}
+if(QP.get('seguir')&&!QP.get('refaz'))SS.s('j7porta1','1');
+const noMeio=J.ok&&!fase1Completa()&&Object.keys(J.esc||{}).length>0;
+if(!SS.g('j7porta1')&&!noMeio){J.portaVolta=J.tela;J.tela='porta';J.porta='p1';}
+function vPorta(){const luz=`<div class="luzes">${C.map(c=>`<i style="background:${c};box-shadow:0 0 10px ${c}"></i>`).join('')}</div>`;const p=J.porta;
+ if(p==='p2')return `<div class="hero">${luz}<div class="k">Jornada dos 7entidos</div><h1 class="f" style="font-size:30px">Quer refazer a Fase 1 ou ir direto para a Fase 2?</h1><div style="display:grid;gap:10px;margin-top:20px"><button class="btn big" style="margin:0" data-a="pt_refaz">↺ Refazer a Fase 1<div class="small mute" style="font-weight:600">No fim, a gente compara as suas respostas de antes e de agora.</div></button><button class="btn pri big" style="margin:0" data-a="pt_f2">Ir para a Fase 2 →</button></div></div>`;
+ if(p==='sem')return `<div class="hero"><div class="k">Jornada dos 7entidos</div><h1 class="f" style="font-size:28px">Não encontramos a sua Fase 1 neste aparelho</h1><p class="mute">As respostas ficam guardadas só no celular onde você jogou. Se foi em outro, abra este link nele.</p><div style="display:grid;gap:10px;margin-top:16px"><button class="btn pri big" style="margin:0" data-a="pt_aqui">Fazer a Fase 1 aqui</button><button class="btn big" style="margin:0" data-a="pt_outro">Vou abrir no outro aparelho</button></div></div>`;
+ return `<div class="hero">${luz}<div class="k">Jornada dos 7entidos</div><h1 class="f">Você já fez a Fase 1?</h1><p class="mute">A Fase 1 é o mapa dos 7 sentidos: escolher 7 de 15 em cada um.</p><div style="display:grid;gap:10px;margin-top:20px"><button class="btn pri big" style="margin:0" data-a="pt_sim">Sim, já fiz</button><button class="btn big" style="margin:0" data-a="pt_nao">Ainda não</button></div>${fase1Completa()?'<p class="small mute">Encontramos uma Fase 1 completa neste aparelho.</p>':''}</div>`;}
+function urlF2(vem){return '/jornada/fase2/?c='+CONVITE+'&vem='+vem;}
+function enviar(tipo){if(!PLANILHA_URL||P7.PREVIA)return;const p=perfil();const n=SEN.filter(s=>feito(s[0])).length;const corpo={c:CONVITE,tipo,id:J.id,nome:J.nome,cel:J.cel,em:new Date().toISOString(),feitos:n,nota:J.nota,perfil:n===7?TAGS[p.top][0]+' + '+TAGS[p.seg][0]:'',forcas:TAGS.map((t,k)=>t[0]+' '+p.sc[k]).join(' · '),escolhas:SEN.map(s=>s[1]+': '+(J.esc[s[0]]||[]).map((x,i)=>(i+1)+'. '+x).join(' | ')),tempos:SEN.map(s=>Math.round(((J.t||{})[s[0]]||0)/1000)),pede:J.pede||null,avaliacao:AV.map((x,i)=>(J.av||{})[i]||''),insights:cartasTxt(true),comentario:J.avTxt||'',descobertas:cartasTxt(false),notaInicio:J.notaIni??null,ceuInicio:J.ceu0!=null?P7.CEUS[J.ceu0]:'',ceuFim:J.ceu1!=null?P7.CEUS[J.ceu1]:'',comparacao:comparaTxt(),refez:J.refez||0,seguir:J.seguir||'',porta:(()=>{try{return JSON.parse(localStorage.getItem('jornada7porta')||'[]').slice(-3).map(r=>'F'+r.fase+': '+r.fez1+' · '+r.escolha+(r.validacao?' · '+r.validacao:'')).join(' | ');}catch(e){return '';}})()};
  try{fetch(PLANILHA_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(corpo),keepalive:true});}catch(e){}}
+function cartasTxt(comResp){const C0=J.cartas||{};return SEN.filter(x=>C0[x[0]]).map(x=>{const c=C0[x[0]];return x[1]+': '+c.t+(comResp?' → '+({tem:'Tem',parte:'Em parte',nao:'Não'}[c.r]||'-'):'');});}
 const ESC=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function relHTML(J,p,ed){const L=insights(J,p,TAGS);const a=L.filter(x=>!x.s),b=L.filter(x=>x.s);const it=(x,i)=>`<div class="ins ${x.s?'sur':''}"><span class="insn">${i}</span><div><b>${ESC(x.t)}</b><div class="small" style="opacity:.85;margin-top:2px">${ESC(x.d)}</div></div></div>`;
  const pd=J.pede;return `<h2>Seu relatório: 10 descobertas</h2><div class="small muted" style="margin:-4px 0 8px">Leituras das suas escolhas de hoje. São hipóteses, não verdades: você é quem confirma.</div>
@@ -321,18 +346,24 @@ const AV=[['Como foi fazer a Jornada?',['Muito gostoso','Gostoso','Normal','Cans
  ['As opções tinham a ver com você?',['Quase todas','Muitas','Poucas','Quase nenhuma']],
  ['Qual sentido foi mais gostoso de escolher?',['Visão','Audição','Tato','Olfato','Paladar','Equilíbrio','Noção do corpo']],
  ['A imagem do seu mapa tem a sua cara?',['Muito','Um pouco','Não muito','Nada']],
- ['As 5 coisas que você talvez não tenha percebido…',['Me surpreenderam','Confirmaram o que eu já sabia','Algumas não fizeram sentido','Não li direito']],
+ ['As cartas douradas…',['Me surpreenderam','Confirmaram o que eu já sabia','Algumas não fizeram sentido','Não li direito']],
  ['Você indicaria a Jornada para um amigo?',['Com certeza','Talvez','Não']]];
-function vAval(){const R=J.av||{};const n=Object.keys(R).length;
- return `<div class="aval"><h2 style="margin-top:0">Ajude a melhorar a Jornada</h2><div class="small mute" style="margin:-4px 0 10px">7 perguntas rápidas, um toque em cada. ${n} de 7.</div>
- ${AV.map(([q,o],i)=>`<div class="avq"><b>${i+1}. ${esc(q)}</b><div class="avo">${o.map(x=>`<button class="${R[i]===x?'on':''}" data-a="av" data-i="${i}" data-v="${esc(x)}">${esc(x)}</button>`).join('')}</div></div>`).join('')}
- <label class="avq"><b>Quer dizer mais alguma coisa? (opcional)</b><textarea id="avtxt" maxlength="500" rows="3">${esc(J.avTxt||'')}</textarea></label></div>`;}
-function vNota(){return `<div class="hero" style="padding-top:20px"><div class="k">Antes de ver o seu mapa</div><h1 class="f" style="font-size:30px">Depois dessa fase, qual é a sua sensação agora?</h1><p class="mute">De 0 a 10. Um toque.</p>
- <div class="nota">${[...Array(11)].map((_,n)=>`<button class="${J.nota===n?'on':''}" data-a="nota" data-n="${n}">${n}</button>`).join('')}</div><div class="small mute" style="display:flex;justify-content:space-between;margin-top:6px"><span>0 = nada bem</span><span>10 = muito bem</span></div>
- <button class="btn pri big" data-a="verfim" ${J.nota===null?'disabled':''}>Ver a imagem dos meus 7 sentidos →</button></div>`;}
+function vizTipo(){return P7.opc().viz||'casa';}
+function vAjude(){const R=J.av||{};const n=AV.filter((_,i)=>R[i]).length;const k=AV.findIndex((_,i)=>!R[i]);const tp=vizTipo();const V=P7.VIZ[tp];
+ const topo=`<div class="k">Etapa final · Ajude a melhorar a Jornada</div><div class="p7viz">${P7.viz(tp,n,J.ajNovo)}</div><div class="small mute">${V.frase} ${n} de 7.</div>`;
+ if(k>=0){const [q,o]=AV[k];return `<div class="aj">${topo}<div class="q">${esc(q)}</div><div class="avo">${o.map(x=>`<button data-a="av" data-i="${k}" data-v="${esc(x)}">${esc(x)}</button>`).join('')}</div>${k>0?`<p><button class="lnk" data-a="avvolta">← voltar uma</button></p>`:''}</div>`;}
+ return `<div class="aj">${topo}<div class="q">${tp==='casa'?'A casa está toda acesa!':tp==='constelacao'?'A sua constelação está completa!':tp==='jardim'?'O jardim floresceu!':'O fio ganhou as 7 cores!'}</div>
+ <label class="avq" style="text-align:left"><b>Quer dizer mais alguma coisa? (opcional)</b><textarea id="avtxt" maxlength="500" rows="3" style="font:inherit;width:100%;margin-top:6px;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--field);color:var(--ink)">${esc(J.avTxt||'')}</textarea></label>
+ <button class="btn pri big" data-a="finaliza">Enviar e seguir para a Fase 2 →</button><p><button class="lnk" data-a="avvolta">← voltar uma</button></p></div>`;}
+function vCeu(fim){const sel=fim?J.ceu1:J.ceu0;
+ if(!fim)return `<div class="hero" style="padding-top:20px"><div class="k">Antes de começar</div><h1 class="f" style="font-size:30px">Como está o seu céu agora?</h1><p class="mute">Escolha o céu que mais parece com você neste momento. Um toque.</p>${P7.ceus(sel,'ceu')}</div>`;
+ const c0=J.ceu0!=null?P7.CEUS[J.ceu0]:null;
+ return `<div class="hero" style="padding-top:20px"><div class="k">Fim da Fase 1</div><h1 class="f" style="font-size:30px">E agora, como está o seu céu?</h1><p class="mute">${c0?'Você chegou com <b style="color:#F5C542">'+c0.toLowerCase()+'</b>.':'Um toque.'}</p>${P7.ceus(sel,'ceu')}
+ ${sel!=null&&c0?`<p style="font-size:19px">Você chegou com <b style="color:#F5C542">${c0.toLowerCase()}</b> e sai com <b style="color:#F5C542">${P7.CEUS[sel].toLowerCase()}</b>.</p>`:''}
+ <button class="btn pri big" data-a="verfim" ${sel==null?'disabled':''}>Ver a imagem dos meus 7 sentidos →</button></div>`;}
 function vSen(){const [id,sen,ic,cor,,tiles]=SEN[J.i];const m=J.esc[id]||[];
  return topo()+`<div class="k" style="color:${cor}">${ic} Sentido ${J.i+1} de 7 · ${esc(sen)}</div><h1>${esc(PERG[id])}</h1>
- <div class="grid">${(A=['#E9B10E','#2F7FD1','#E8643A','#3E9E5E','#D9487E','#7457C9','#17A99B'],tiles).map((t,k)=>{const o=m.indexOf(t.n);const on=o>=0;const dis=!on&&m.length>=7;return `<div class="tile ${on?'foi':''} ${dis?'dis':''}" role="button" tabindex="0" data-a="pick" data-v="${esc(t.n)}" aria-pressed="${on}" style="--c:${cor}">${t.som?`<button class="pl" data-a="play" data-som="${t.som}" aria-label="Ouvir ${esc(t.n)}">▶</button>`:''}<svg viewBox="0 0 300 300">${t.art()}</svg><b>${esc(t.n)}</b></div>`;}).join('')}</div>
+ <div class="grid">${(A=['#E9B10E','#2F7FD1','#E8643A','#3E9E5E','#D9487E','#7457C9','#17A99B'],tiles).map((t,k)=>{const o=m.indexOf(t.n);const on=o>=0;const dis=!on&&m.length>=7;return `<div class="tile ${on?'foi':''} ${dis?'dis':''}" role="button" tabindex="0" data-a="pick" data-v="${esc(t.n)}" aria-pressed="${on}" style="--c:${cor}">${t.som?`<button class="pl" data-a="play" data-som="${t.som}" aria-label="Ouvir ${esc(t.n)}">▶</button>`:''}<i class="ord">${on?o+1:''}</i><svg viewBox="0 0 300 300">${t.art()}</svg><b>${esc(t.n)}</b></div>`;}).join('')}</div>
  <div class="row navfix"><button class="btn" data-a="volta">← Voltar</button>${m.length?`<button class="btn" data-a="limpa">Limpar</button>`:''}<span class="sp"></span><button class="btn pri" data-a="prox" ${m.length<7?'disabled':''}>${J.i<6?'Próximo sentido →':'Ver meu mapa →'}</button></div>`;}
 const TEMA_FRASE={'água':'A água aparece em vários dos seus sentidos.','cozinha e mesa':'A cozinha e a mesa aparecem em vários dos seus sentidos.','infância':'Coisas de infância aparecem em vários dos seus sentidos.','noite':'A noite aparece em vários dos seus sentidos.','calor e aconchego':'O calor e o aconchego aparecem em vários dos seus sentidos.','natureza':'A natureza aparece em vários dos seus sentidos.'};
 const FORTE=['Você se sente bem perto da natureza.','Você se sente bem no aconchego.','Você se sente bem em movimento.','Você se sente bem na calma.','Você se sente bem com energia e intensidade.','Você se sente bem com leveza e frescor.','Você se sente bem com gente por perto.'];
@@ -347,22 +378,21 @@ function cinco(){const p=perfil(),E=J.esc||{},out=[];
  const tt=J.t||{},tk=Object.keys(tt).filter(k=>tt[k]>1500);if(out.length<5&&tk.length>=4){tk.sort((a,b)=>tt[a]-tt[b]);out.push('Você decide mais rápido no '+SEN_NOME[tk[0]]+' do que no '+SEN_NOME[tk[tk.length-1]]+'.');}
  if(out.length<5)out.push(FORTE[p.seg].replace('Você se sente bem','Você também se sente bem'));
  return out.slice(0,5);}
-function vFim(){const p=perfil();const [tn,ti,tk,td]=TAGS[p.top],[sn]=TAGS[p.seg];const L=cinco();const C5=J.conc||{};
- if(J.fim)return `<div class="hero" style="padding-top:20px"><div class="luzes">${C.map(c=>`<i style="background:${c};box-shadow:0 0 10px ${c}"></i>`).join('')}</div><div class="k">Pesquisa finalizada ✓</div><h1 class="f" style="font-size:32px">Obrigado!</h1>
- <div class="mapa" id="mp" style="max-width:320px;margin:12px auto">${mapaSVG()}</div><p class="mute">Perfil ${tn} + ${sn}</p>
- <a class="btn pri" style="display:block;text-decoration:none;margin:8px 0" href="/jornada/fase2/?c=${CONVITE}">Começar a Fase 2 →</a>
- <div style="display:grid;gap:10px;margin-top:10px"><button class="btn pri" data-a="baixa">Baixar minha imagem</button><button class="btn" data-a="convida">📲 Convidar alguém pelo WhatsApp</button></div><p class="small mute" id="bx"></p></div>`;
+function comparaTxt(){const A0=J.ant;if(!A0||!A0.esc)return '';let ig=0;const L=SEN.map(([id,sen])=>{const a=A0.esc[id]||[],b=J.esc[id]||[];const n=b.filter(x=>a.includes(x)).length;ig+=n;return sen+': '+(a[0]||'-')+' → '+(b[0]||'-')+' ('+n+'/7 iguais)';});return 'Manteve '+ig+' de 49 · céu antes '+(A0.ceu1!=null?P7.CEUS[A0.ceu1]:'-')+' → agora '+(J.ceu1!=null?P7.CEUS[J.ceu1]:'-')+' · '+L.join(' | ');}
+function vCompara(){const A0=J.ant;if(!A0||!A0.esc)return '';let ig=0;
+ const L=SEN.map(([id,sen,ic,cor])=>{const a=A0.esc[id]||[],b=J.esc[id]||[];const n=b.filter(x=>a.includes(x)).length;ig+=n;const mesma=a[0]===b[0];
+  return `<div class="cmpl"><i style="background:${cor}"></i><div><b>${esc(sen)}</b><div class="small mute">${mesma?'A mesma favorita: '+esc(b[0]):'Antes '+esc(a[0]||'—')+' · agora '+esc(b[0]||'—')}</div></div><b style="color:#F5C542">${n}/7</b></div>`;}).join('');
+ return `<div class="cmp"><h2 style="margin-top:0">Antes × agora</h2><p class="mute" style="margin:-4px 0 8px">Você manteve <b style="color:#F5C542">${ig} de 49</b> escolhas da outra vez.${A0.ceu1!=null&&J.ceu1!=null?` Da outra vez você saiu com ${P7.CEUS[A0.ceu1].toLowerCase()}; hoje, com ${P7.CEUS[J.ceu1].toLowerCase()}.`:''}</p>${L}<div class="small mute" style="margin-top:6px">Número da direita: quantas das 7 escolhas se repetiram em cada sentido.</div></div>`;}
+function vFim(){const p=perfil();const [tn]=TAGS[p.top],[sn]=TAGS[p.seg];const nC=Object.keys(J.cartas||{}).length;
  return `<div class="k">Minha imagem dos 7 sentidos</div><div style="display:flex;gap:12px;align-items:center">${J.foto?`<img src="${J.foto}" alt="" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid #F9CB39">`:''}<h1 class="f" style="font-size:30px;margin:0">Perfil ${tn} + ${sn}</h1></div>
  <div class="mapa" id="mp">${mapaSVG()}</div>
- <div class="row" style="margin-top:0"><button class="btn" data-a="baixa">Baixar minha imagem</button></div><p class="small mute" id="bx"></p>
- <h2>✨ 5 coisas que você talvez não tenha percebido</h2><div class="small mute" style="margin:-4px 0 10px">Para cada uma: de 0 a 10, quanto você concorda?</div>
- ${L.map((t,i)=>`<div class="ins5"><b>${i+1}. ${esc(t)}</b><div class="c10">${[...Array(11)].map((_,n)=>`<button class="${C5[i]===n?'on':''}" data-a="conc" data-i="${i}" data-n="${n}" aria-label="${n}">${n}</button>`).join('')}</div><div class="small mute" style="display:flex;justify-content:space-between"><span>0 = discordo</span><span>10 = concordo total</span></div></div>`).join('')}
- <div class="f2"><b>Gostou? A Fase 2 vai mais fundo.</b>${J.pede?`<div style="color:#7DDB8B;font-weight:800;margin-top:6px">Pedido recebido ✓</div><a class="btn pri" style="display:block;margin-top:10px;text-decoration:none" href="/jornada/fase2/?c=${CONVITE}">Começar a Fase 2 agora →</a>`:`<button class="btn pri" style="width:100%;margin-top:10px" data-a="pede">Quero ir para a Fase 2 →</button>`}
- <button class="btn" style="width:100%;margin-top:8px" data-a="convida">📲 Convidar alguém pelo WhatsApp</button></div>
- ${vAval()}
- <p class="erro" id="fimerro" role="alert"></p><button class="btn pri big" data-a="finaliza">Finalizar a pesquisa ✓</button>
- <p class="small mute">O perfil mostra só as suas escolhas de hoje. Não é diagnóstico nem avaliação. <button class="lnk" data-a="refaz">Refazer a Jornada</button></p>`;}
-function render(){salva();document.getElementById('app').innerHTML=`<div class="bar0"><a class="logo" href="/" aria-label="7entidos"><img src="/assets/simbolo-contando-7.svg?v=20261102-novo" alt="" width="30" height="30"><b class="f"><span style="color:#FFD43B">7</span>entidos</b></a><span class="sp"></span><span class="small mute" id="sv">${esc(saveTxt)}</span></div>`+(J.tela==='abre'||!J.ok?vAbre():J.tela==='sen'?vSen():J.tela==='nota'?vNota():vFim());}
+ <div class="row" style="margin-top:0"><button class="btn" data-a="baixa">Baixar minha imagem</button><button class="btn" data-a="convida">📲 Convidar alguém</button></div><p class="small mute" id="bx"></p>
+ <h2>✨ Suas cartas douradas</h2><div class="small mute" style="margin:-4px 0 4px">${nC} de 7 na coleção. Toque numa carta para ler de novo.</div>${P7.colecao(J.cartas,'cver')}
+ ${vCompara()}
+ <button class="btn pri big" data-a="ajude">Continuar →</button>
+ <p class="small mute">O perfil mostra só as suas escolhas de hoje. Não é diagnóstico nem avaliação. <button class="lnk" data-a="refaz">Refazer a Fase 1</button></p>`;}
+function vTchau(){return `<div class="hero" style="padding-top:30px"><div class="luzes">${C.map(c=>`<i style="background:${c};box-shadow:0 0 10px ${c}"></i>`).join('')}</div><div class="k">Fase 1 completa ✓</div><h1 class="f" style="font-size:32px">Obrigado!</h1><p class="mute">Agora, a Fase 2.</p><a class="btn pri big" style="display:block;text-decoration:none" href="${urlF2(1)}" data-a="irf2">Começar a Fase 2 →</a></div>`;}
+function render(){salva();document.getElementById('app').innerHTML=`<div class="bar0"><a class="logo" href="/" aria-label="7entidos"><img src="/assets/simbolo-contando-7.svg?v=20261102-novo" alt="" width="30" height="30"><b class="f"><span style="color:#FFD43B">7</span>entidos</b></a><span class="sp"></span><span class="small mute" id="sv">${esc(saveTxt)}</span></div>`+(J.tela==='porta'?vPorta():J.tela==='abre'||!J.ok?vAbre():J.tela==='ceu0'?vCeu(false):J.tela==='sen'?vSen():J.tela==='nota'||J.tela==='ceu1'?vCeu(true):J.tela==='ajude'?vAjude():J.tela==='tchau'?vTchau():vFim());}
 function setSave(t){saveTxt=t;const e=document.getElementById('sv');if(e)e.textContent=t;}
 function salva(){try{const c=Object.assign({},J);localStorage.setItem('jornada7',JSON.stringify(c));}catch(e){}}
 async function baixa(){const out=document.getElementById('bx');
@@ -375,36 +405,71 @@ function tempo(){if(J.tela==='sen'&&J.t0){J.t=J.t||{};const id=SEN[J.i][0];J.t[i
 /* Atualiza só o que mudou na tela do sentido (números, contador e botões), sem redesenhar as 15 imagens.
    Redesenhar tudo a cada toque deixava celulares mais simples lentos ou parados no sentido 1. */
 function atualizaSen(topoMudou){const [id,,,cor]=SEN[J.i];const m=J.esc[id]||[];
- document.querySelectorAll('.tile[data-a="pick"]').forEach(el=>{const o=m.indexOf(el.dataset.v);const on=o>=0;el.classList.toggle('foi',on);el.classList.toggle('dis',!on&&m.length>=7);el.setAttribute('aria-pressed',on);});
+ document.querySelectorAll('.tile[data-a="pick"]').forEach(el=>{const o=m.indexOf(el.dataset.v);const on=o>=0;el.classList.toggle('foi',on);el.classList.toggle('dis',!on&&m.length>=7);el.setAttribute('aria-pressed',on);const oi=el.querySelector('.ord');if(oi)oi.textContent=on?o+1:'';});
  const bw=document.querySelector('.bandw');if(bw&&!topoMudou)bw.innerHTML=bandeja();
  const nv=document.querySelector('.navfix');if(nv)nv.innerHTML=`<button class="btn" data-a="volta">← Voltar</button>${m.length?`<button class="btn" data-a="limpa">Limpar</button>`:''}<span class="sp"></span><button class="btn pri" data-a="prox" ${m.length<7?'disabled':''}>${J.i<6?'Próximo sentido →':'Ver meu mapa →'}</button>`;
  if(topoMudou){const tp=document.querySelector('.topo');if(tp){const d=document.createElement('div');d.innerHTML=topo();tp.replaceWith(d.firstElementChild);}}}
+/* ---------- carta dourada ao terminar cada sentido ---------- */
+let CARTA=null;
+function abreCarta(id,modo){const c=J.cartas[id];if(!c)return;fechaCarta();const sozinha=P7.opc().cartaVira!=='toque';const ult=modo==='seq'&&J.i>=6;
+ const d=document.createElement('div');d.innerHTML=P7.cartaHTML(c,c.r,{sozinha:sozinha&&modo==='seq',virada:modo!=='seq',semPergunta:P7.opc().cartaPergunta==='nao',botao:modo==='seq'?`<button class="btn pri" data-a="p7seg" style="min-width:220px">${ult?'Ver como está o seu céu →':'Próximo sentido →'}</button>`:`<button class="btn" data-a="p7fecha" style="min-width:160px">Fechar</button>`});
+ CARTA={el:d.firstElementChild,id,modo};document.body.appendChild(CARTA.el);document.documentElement.style.overflow='hidden';
+ if(modo==='seq'&&sozinha)setTimeout(()=>{if(CARTA&&CARTA.id===id){const k=CARTA.el.querySelector('.p7carta');if(k)k.classList.add('virou');}},750);
+ const f=CARTA.el.querySelector('.p7carta');if(f)f.focus&&f.setAttribute('tabindex','0');}
+function fechaCarta(){if(CARTA){CARTA.el.remove();CARTA=null;document.documentElement.style.overflow='';}}
+function seguePosCarta(){if(J.i<6){J.i++;J.tela='sen';}else J.tela=J.ceu1==null?'ceu1':'fim';J.t0=Date.now();salva();render();scrollTo(0,0);}
+/* card escolhido sumindo: voa para a bandeja (padrão), encolhe, ou fica apagado na grade */
+function sumir(){return P7.opc().sumir||'voa';}
+function aplicaSumir(){document.body.classList.toggle('sumir-fica',sumir()==='fica');}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a;
+ if(a==='pt_sim'){J.porta=fase1Completa()?'p2':'sem';render();scrollTo(0,0);return;}
+ if(a==='pt_nao'){SS.s('j7porta1','1');P7.registra({fase:1,fez1:'nao',escolha:'fazer a Fase 1'});if(fase1Completa())J=NOVOJ();J.seguir=J.seguir||2;J.tela=J.ok?'ceu0':'abre';salva();render();scrollTo(0,0);return;}
+ if(a==='pt_refaz'){SS.s('j7porta1','1');P7.registra({fase:1,fez1:'sim',escolha:'refazer a Fase 1'});guardaERefaz();J.seguir=2;salva();render();scrollTo(0,0);return;}
+ if(a==='pt_f2'){SS.s('j7porta1','1');P7.registra({fase:1,fez1:'sim',escolha:'ir para a Fase 2'});J.tela=fase1Completa()?'fim':'abre';salva();if(!P7.vai(urlF2('valida'),'a Fase 2 (com o Espelho na entrada)'))render();return;}
+ if(a==='pt_aqui'){SS.s('j7porta1','1');P7.registra({fase:1,fez1:'sim',escolha:'fazer a Fase 1 aqui (sem dados no aparelho)'});J.seguir=2;J.tela=J.ok?'ceu0':'abre';salva();render();scrollTo(0,0);return;}
+ if(a==='pt_outro'){P7.registra({fase:1,fez1:'sim',escolha:'abrir no outro aparelho'});try{navigator.clipboard.writeText(location.origin+location.pathname+'?c='+CONVITE);}catch(x){}P7.aviso('Link copiado. Abra no outro aparelho.');return;}
+ if(a==='ceu'){const i=+b.dataset.i;if(J.tela==='ceu0'){J.ceu0=i;J.notaIni=P7.NOTAS[i];salva();render();setTimeout(()=>{if(J.tela!=='ceu0')return;J.tela='sen';J.i=0;J.t0=Date.now();salva();render();scrollTo(0,0);},550);}else{J.ceu1=i;J.nota=P7.NOTAS[i];salva();const y=scrollY;render();scrollTo(0,y);}return;}
+ if(a==='p7vira'){if(CARTA&&CARTA.modo==='seq')b.classList.add('virou');else b.classList.toggle('virou');return;}
+ if(a==='p7resp'){const c=J.cartas[CARTA&&CARTA.id];if(c){c.r=b.dataset.v;salva();CARTA.el.querySelectorAll('[data-a="p7resp"]').forEach(x=>x.classList.toggle('on',x===b));}return;}
+ if(a==='p7seg'){fechaCarta();enviar('progresso');seguePosCarta();return;}
+ if(a==='p7fecha'){fechaCarta();const y=scrollY;render();scrollTo(0,y);return;}
+ if(a==='cver'){abreCarta(b.dataset.id,'ver');return;}
+ if(a==='ajude'){J.tela='ajude';salva();render();scrollTo(0,0);return;}
+ if(a==='avvolta'){const R=J.av||{};const ks=AV.map((_,i)=>i).filter(i=>R[i]);if(ks.length){delete R[ks[ks.length-1]];}J.ajNovo=-1;salva();render();return;}
+ if(a==='irf2'){e.preventDefault();P7.vai(urlF2(1),'a Fase 2');return;}
  if(a==='conc'){J.conc=J.conc||{};J.conc[b.dataset.i]=+b.dataset.n;const y=scrollY;render();scrollTo(0,y);return;}
  if(a==='convida'){const t='Fiz a Jornada dos 7entidos e descobri a imagem dos meus 7 sentidos. Faz também, leva uns 7 minutos: https://7entidos.com.br/jornada/?c='+CONVITE;window.open('https://wa.me/?text='+encodeURIComponent(t),'_blank');enviar('convite');return;}
- if(a==='finaliza'){const t=document.getElementById('avtxt');J.avTxt=t?t.value.trim():'';const fc=cinco().length-Object.keys(J.conc||{}).length,fa=7-Object.keys(J.av||{}).length;const er=document.getElementById('fimerro');
-  if(fc>0){er.textContent='Falta dar nota de 0 a 10 em '+fc+(fc>1?' das 5 coisas.':' das 5 coisas.');return;}if(fa>0){er.textContent='Falta'+(fa>1?'m ':' ')+fa+(fa>1?' perguntas':' pergunta')+' em "Ajude a melhorar".';return;}
-  J.fim=true;J.avOk=true;enviar('avaliacao');render();scrollTo(0,0);return;}
+ if(a==='finaliza'){const t=document.getElementById('avtxt');J.avTxt=t?t.value.trim():'';if(AV.some((_,i)=>!(J.av||{})[i]))return;
+  J.fim=true;J.avOk=true;J.emFim=new Date().toISOString();enviar('avaliacao');J.tela='tchau';salva();render();scrollTo(0,0);setTimeout(()=>{if(J.tela==='tchau')P7.vai(urlF2(1),'a Fase 2 (direto, sem perguntar de novo)');},2200);return;}
  if(a==='pede'){J.pede={em:new Date().toISOString(),contato:''};salva();enviar('pedido');const y=scrollY;render();scrollTo(0,y);return;}
  if(['comeca','ir','prox','volta'].includes(a))tempo();
  if(a==='play'){e.stopPropagation();const on=b.classList.contains('on');para();document.querySelectorAll('.pl.on').forEach(x=>{x.classList.remove('on');x.textContent='▶';});if(!on){toca(b.dataset.som);b.classList.add('on');b.textContent='■';}return;}
  if(a==='avat'){J.avatar=b.dataset.v;salva();const y=scrollY;render();scrollTo(0,y);return;}
  if(a==='comeca'){const ok=document.getElementById('cok'),er=document.getElementById('cerro');if(ok){if(!J.avatar){er.textContent='Escolha uma imagem para representar você.';return;}if(!ok.checked){er.textContent='Marque o "concordo" para continuar.';return;}const novo=!J.ok;const av=AVAT.find(x=>x[1]===J.avatar);J.nome=av[0]+' '+av[1]+' · '+J.id.slice(-4);J.cel='';J.anon=true;J.ok=true;if(novo)enviar('inicio');}
-  J.tela='sen';J.i=0;J.t0=Date.now();salva();render();scrollTo(0,0);return;}
+  J.tela=J.ceu0==null?'ceu0':'sen';J.i=0;J.t0=Date.now();salva();render();scrollTo(0,0);return;}
  if(a==='foto'){const i=document.getElementById('fotoin');i.value='';i.click();return;}
- if(a==='av'){J.av=J.av||{};J.av[b.dataset.i]=b.dataset.v;const y=scrollY;render();scrollTo(0,y);return;}
+ if(a==='av'){J.av=J.av||{};J.av[b.dataset.i]=b.dataset.v;J.ajNovo=AV.filter((_,i)=>J.av[i]).length-1;salva();render();return;}
  if(a==='avenvia'){const t=document.getElementById('avtxt');J.avTxt=t?t.value.trim():'';const f=7-Object.keys(J.av||{}).length;if(f>0){document.getElementById('averro').textContent='Falta'+(f>1?'m ':' ')+f+(f>1?' perguntas.':' pergunta.');return;}J.avOk=true;enviar('avaliacao');const y=scrollY;render();scrollTo(0,y);return;}
  if(a==='nota'){J.nota=+b.dataset.n;salva();render();return;}
- if(a==='verfim'){if(J.nota===null)return;J.tela='fim';salva();enviar('completa');render();scrollTo(0,0);return;}
+ if(a==='verfim'){if(J.ceu1==null)return;J.tela='fim';salva();enviar('completa');render();scrollTo(0,0);return;}
  if(a==='ir'){para();J.tela='sen';J.i=+b.dataset.k;render();return;}
- if(a==='pick'){const id=SEN[J.i][0];const m=J.esc[id]=J.esc[id]||[];const v=b.dataset.v;if(m.includes(v)||m.length>=7||b.classList.contains('sai'))return;const fav0=m[0],ok0=m.length>=7;m.push(v);salva();const mud=fav0!==m[0]||ok0!==(m.length>=7);b.classList.add('sai');setTimeout(()=>{b.classList.remove('sai');atualizaSen(mud);},240);return;}
+ if(a==='pick'){const id=SEN[J.i][0];const m=J.esc[id]=J.esc[id]||[];const v=b.dataset.v;if(m.includes(v)&&sumir()==='fica'){const fav0=m[0],ok0=m.length>=7;m.splice(m.indexOf(v),1);salva();atualizaSen(fav0!==m[0]||ok0!==(m.length>=7));return;}
+  if(m.includes(v)||m.length>=7||b.classList.contains('sai'))return;const fav0=m[0],ok0=m.length>=7;const alvo=document.querySelector('.slot.prox');m.push(v);salva();const mud=fav0!==m[0]||ok0!==(m.length>=7);const md=sumir();
+  if(md==='fica'){atualizaSen(mud);return;}
+  if(md==='voa'&&alvo&&!matchMedia('(prefers-reduced-motion: reduce)').matches){const r0=b.querySelector('svg').getBoundingClientRect(),r1=alvo.getBoundingClientRect();const f=document.createElement('div');f.className='voo';f.innerHTML=b.querySelector('svg').outerHTML;Object.assign(f.style,{left:r0.left+'px',top:r0.top+'px',width:r0.width+'px',height:r0.height+'px'});document.body.appendChild(f);
+   requestAnimationFrame(()=>requestAnimationFrame(()=>Object.assign(f.style,{left:r1.left+'px',top:r1.top+'px',width:r1.width+'px',height:r1.height+'px',borderRadius:'50%',opacity:.9})));b.style.visibility='hidden';
+   setTimeout(()=>{b.style.visibility='';atualizaSen(mud);},300);setTimeout(()=>f.remove(),470);return;}
+  b.classList.add('sai');setTimeout(()=>{b.classList.remove('sai');atualizaSen(mud);},240);return;}
  if(a==='tira'){const id=SEN[J.i][0];const m=J.esc[id]=J.esc[id]||[];const v=b.dataset.v;const o=m.indexOf(v);if(o<0)return;const fav0=m[0],ok0=m.length>=7;m.splice(o,1);salva();atualizaSen(fav0!==m[0]||ok0!==(m.length>=7));const t=[...document.querySelectorAll('.tile[data-a="pick"]')].find(x=>x.dataset.v===v);if(t){t.classList.add('volta');setTimeout(()=>t.classList.remove('volta'),400);}return;}
  if(a==='limpa'){J.esc[SEN[J.i][0]]=[];salva();render();return;}
- if(a==='prox'){para();enviar('progresso');if(J.i<6){J.i++;J.tela='sen';}else J.tela=J.nota===null?'nota':'fim';render();scrollTo(0,0);return;}
+ if(a==='prox'){para();const id=SEN[J.i][0];const m=J.esc[id]||[];if(m.length<7)return;J.cartas=J.cartas||{};const sig=m.join('|');
+  if(!J.cartas[id]||J.cartas[id].sig!==sig){const c=P7.carta(id,m,(J.t||{})[id]);if(c){c.sig=sig;c.r=null;J.cartas[id]=c;}}salva();
+  if(J.cartas[id]){abreCarta(id,'seq');return;}enviar('progresso');seguePosCarta();return;}
  if(a==='volta'){para();if(J.i>0)J.i--;else J.tela='abre';salva();render();scrollTo(0,0);return;}
- if(a==='refaz'){J.av={};J.avOk=false;J.avTxt='';J.conc={};J.fim=false;J.t={};J.pede=null;J.esc={};J.nota=null;J.i=0;J.tela='sen';J.t0=Date.now();salva();render();scrollTo(0,0);return;}
+ if(a==='refaz'){P7.registra({fase:1,fez1:'sim',escolha:'refazer a Fase 1 (pelo mapa final)'});guardaERefaz();salva();render();scrollTo(0,0);return;}
  if(a==='baixa'){baixa();return;}});
 document.getElementById('fotoin').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f)return;const nm=document.getElementById('cnome'),ce=document.getElementById('ccel');if(nm){J.nome=nm.value;J.cel=ce.value;}const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const S=240,cv=document.createElement('canvas');cv.width=cv.height=S;const g=cv.getContext('2d');const m=Math.min(im.width,im.height);g.drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,S,S);J.foto=cv.toDataURL('image/jpeg',.8);const y=scrollY;render();scrollTo(0,y);};im.src=r.result;};r.readAsDataURL(f);});
-document.addEventListener('keydown',e=>{const t=e.target.closest&&e.target.closest('.tile');if(t&&(e.key==='Enter'||e.key===' ')){e.preventDefault();t.click();}});
-render();
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&CARTA&&CARTA.modo!=='seq'){fechaCarta();return;}const k=e.target.closest&&e.target.closest('.p7carta');if(k&&(e.key==='Enter'||e.key===' ')&&e.target===k){e.preventDefault();k.classList.toggle('virou');return;}const t=e.target.closest&&e.target.closest('.tile');if(t&&(e.key==='Enter'||e.key===' ')){e.preventDefault();t.click();}});
+aplicaSumir();render();
+if(P7.PREVIA){const sp=document.createElement('script');sp.src='sala-previa.js';document.body.appendChild(sp);}
 </script></body></html>

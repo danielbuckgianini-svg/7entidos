@@ -54,7 +54,7 @@ h1{font-size:23px;line-height:1.25;margin:4px 0 10px}h2{font-size:18px;margin:22
 .fav3{display:flex;gap:12px;align-items:center;margin:6px 0 10px}.fav3 svg{width:96px;height:96px;border-radius:14px;flex:0 0 96px}
 .lem{display:flex;gap:10px;align-items:center;background:var(--field);border:1px solid var(--line);border-left:4px solid var(--c);padding:8px 10px;margin-bottom:6px}
 </style></head><body><div class="w" id="app"></div><input type="file" id="fotoin" accept="image/*" hidden>
-<script src="../config.js"></script><script src="../arte-sentidos.js"></script>
+<script src="../config.js"></script><script src="../arte-sentidos.js"></script><script src="../passagem.js"></script>
 <script>/* ---------- estímulos sensoriais (sons feitos aqui, sem arquivos) ---------- */
 let AC=null,TOCANDO=null;
 function ac(){try{if(navigator.audioSession)navigator.audioSession.type='playback';}catch(e){}if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;AC=new C();}if(AC.state!=='running')AC.resume();return AC;}
@@ -276,7 +276,7 @@ let J=null;try{J=JSON.parse(localStorage.getItem('jornada7')||'null');}catch(e){
 const temConvite=true;/* 05/11 (noite): o Daniel tirou a senha (código de convite). Qualquer pessoa com o link entra. */
 const fase1Ok=()=>J&&J.esc&&SEN.every(s=>(J.esc[s[0]]||[]).length>=7);
 function salvaJ(){try{localStorage.setItem('jornada7',JSON.stringify(J));}catch(e){}}
-function post(tipo,extra){if(!PLANILHA_URL||!J)return;const corpo=Object.assign({c:CONVITE,tipo,id:J.id,nome:J.nome,cel:J.cel,em:new Date().toISOString()},extra||{});try{fetch(PLANILHA_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(corpo),keepalive:true});}catch(e){}}
+function post(tipo,extra){if(!PLANILHA_URL||!J||(window.P7&&P7.PREVIA))return;const corpo=Object.assign({c:CONVITE,tipo,id:J.id,nome:J.nome,cel:J.cel,em:new Date().toISOString()},extra||{});try{fetch(PLANILHA_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(corpo),keepalive:true});}catch(e){}}
 const topoLogo=()=>`<div class="bar0"><a class="logo" href="/" aria-label="7entidos"><img src="/assets/simbolo-contando-7.svg?v=20261102-novo" alt="" width="30" height="30"><b class="f"><span style="color:#FFD43B">7</span>entidos</b></a></div>`;
 function bloqueio(fase){if(!temConvite)return `<div class="hero"><div class="k">Jornada dos 7entidos</div><h1 class="f">Esta jornada é por convite.</h1><p class="mute">Use o link que você recebeu do 7entidos.</p><a class="btn" href="/">Conhecer o 7entidos</a></div>`;
  if(!fase1Ok())return `<div class="hero"><div class="k">Fase ${fase}</div><h1 class="f">Primeiro, a Fase 1</h1><p class="mute">Não encontramos a sua Fase 1 neste celular. Se você fez em outro aparelho, abra este link nele. Se ainda não fez, comece por ela: leva uns 7 minutos.</p><a class="btn pri big" style="display:block;text-decoration:none" href="/jornada/?c=${CONVITE}">Fazer a Fase 1 →</a></div>`;return '';}
@@ -288,7 +288,7 @@ const salva3=()=>{if(J){J.f3=G;salvaJ();}};
 function itens(){const out=[];SEN.forEach(([id,sen,ic,cor])=>{const L=(J.esc[id]||[]).slice();const N=(J.f2&&J.f2.notas)||{};L.sort((a,b)=>(N[id+'|'+b]??(7-L.indexOf(b)))-(N[id+'|'+a]??(7-L.indexOf(a))));out.push([id,sen,ic,cor,L[0]]);});return out;}
 function padroes(){const c={};Object.values(G.ass).forEach(a=>{if(a&&a.v)c[a.v]=(c[a.v]||0)+1;});return Object.entries(c).sort((a,b)=>b[1]-a[1]).filter(x=>x[1]>=2).slice(0,3).map(([v,n])=>`"${v}" aparece em ${n} das suas 7 lembranças.`);}
 function v3(){const b=bloqueio(3);if(b)return b;const nome=(J.nome||'').split(' ')[0];const I=itens();
- if(G.i<0)return `<div class="hero"><div class="luzes">${C.map(c=>`<i style="background:${c};box-shadow:0 0 10px ${c}"></i>`).join('')}</div><div class="k">Jornada dos 7entidos · Fase 3</div><h1 class="f">As suas lembranças.</h1><p class="mute">Vamos olhar para a sua escolha favorita de cada sentido e descobrir o que ela te lembra: um lugar, uma pessoa, uma época ou um momento do dia. São 7 toques, e uma palavra é opcional.</p><button class="btn pri big" data-a="ini">Começar a Fase 3 →</button></div>`;
+ if(G.i<0)return `<div class="hero"><div class="luzes">${C.map(c=>`<i style="background:${c};box-shadow:0 0 10px ${c}"></i>`).join('')}</div><div class="k">Jornada dos 7entidos · Fase 3</div><h1 class="f">As suas lembranças.</h1><p class="mute">Vamos olhar para a sua escolha favorita de cada sentido e descobrir o que ela te lembra: um lugar, uma pessoa, uma época ou um momento do dia. São 7 toques, e uma palavra é opcional.</p><h2 style="margin-top:18px">Antes de começar: como está o seu céu agora?</h2>${P7.ceus(G.ceu0,'ceu3')}<button class="btn pri big" data-a="ini" ${G.ceu0==null?'disabled':''}>Começar a Fase 3 →</button></div>`;
  if(G.i<7){const [id,sen,ic,cor,n]=I[G.i];const t=SEN.find(s=>s[0]===id)[5].find(x=>x.n===n);const a=G.ass[id]||{};A=DEF_A.slice();
   return `<div class="topo2"><div class="dots">${I.map(([sid,,,c],k)=>`<i style="${G.ass[sid]&&G.ass[sid].v?`background:${c};box-shadow:0 0 8px ${c}`:''}${k===G.i?';outline:2px solid #F4F1EA':''}"></i>`).join('')}</div><div class="small mute">Lembrança ${G.i+1} de 7</div></div>
   <div class="k" style="color:${cor}">${ic} ${esc(sen)}</div><div class="fav3"><svg viewBox="0 0 300 300">${t?t.art():''}</svg><div><h1 style="font-size:24px;margin:0">${esc(n)}</h1><p class="mute" style="margin:4px 0 0">Isso te lembra…</p></div></div>
@@ -299,7 +299,7 @@ function v3(){const b=bloqueio(3);if(b)return b;const nome=(J.nome||'').split(' 
   return `<div class="k">As suas lembranças</div><h1 class="f" style="font-size:30px">O que te faz bem tem história</h1>
   ${I.map(([id,sen,ic,cor,n])=>{const a=G.ass[id]||{};return `<div class="lem" style="--c:${cor}"><span>${ic}</span><div><b>${esc(n)}</b><div class="small mute">${esc(a.v||'—')}${a.p?' · “'+esc(a.p)+'”':''}</div></div></div>`;}).join('')}
   ${Pd.length?`<h2>✨ O que se repete</h2>${Pd.map(t=>`<div class="ins5"><b>${esc(t)}</b></div>`).join('')}`:''}
-  <h2>Depois desta fase, qual é a sua sensação agora?</h2><div class="c11 grande">${[...Array(11)].map((_,k)=>`<button class="${G.sens===k?'on':''}" data-a="sens" data-n="${k}">${k}</button>`).join('')}</div><div class="small mute" style="display:flex;justify-content:space-between"><span>0 = nada bem</span><span>10 = muito bem</span></div>
+  <h2>E agora, como está o seu céu?</h2>${P7.ceus(G.ceu1,'ceu3')}${G.ceu0!=null&&G.ceu1!=null?`<p>Você chegou com <b style="color:#F5C542">${P7.CEUS[G.ceu0].toLowerCase()}</b> e sai com <b style="color:#F5C542">${P7.CEUS[G.ceu1].toLowerCase()}</b>.</p>`:''}
   <p class="erro" id="er3"></p><button class="btn pri big" data-a="fim3">Finalizar a Fase 3 ✓</button>`;}
  return `<div class="hero"><div class="k">Fase 3 finalizada ✓</div><h1 class="f">Obrigado!</h1><p class="mute">Na Fase 4, tudo se junta numa imagem completa sua. Vamos te avisar quando ela abrir.</p><button class="btn" data-a="convida">📲 Convidar alguém pelo WhatsApp</button></div>`;}
 function render(){document.getElementById('app').innerHTML=topoLogo()+v3();}
@@ -309,8 +309,12 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b
  if(a==='prox'){const id=itens()[G.i][0];const p=document.getElementById('pal');if(G.ass[id])G.ass[id].p=p?p.value.trim():'';G.i++;salva3();render();scrollTo(0,0);return;}
  if(a==='volta'){G.i=Math.max(-1,G.i-1);salva3();render();scrollTo(0,0);return;}
  if(a==='sens'){G.sens=+b.dataset.n;salva3();const y=scrollY;render();scrollTo(0,y);return;}
+ /* 06/11: Céus de luz no começo e no fim (a nota fica guardada por trás, na mesma régua de 0 a 10) */
+ if(a==='ceu3'){const i=+b.dataset.i;if(G.i<0){G.ceu0=i;G.notaIni=P7.NOTAS[i];}else{G.ceu1=i;G.sens=P7.NOTAS[i];}salva3();const y=scrollY;render();scrollTo(0,y);return;}
  if(a==='convida'){const t='Fiz a Jornada dos 7entidos e descobri a imagem dos meus 7 sentidos. Faz também: https://7entidos.com.br/jornada/?c='+CONVITE;window.open('https://wa.me/?text='+encodeURIComponent(t),'_blank');post('convite');return;}
- if(a==='fim3'){if(G.sens==null){document.getElementById('er3').textContent='Dê a sua nota de 0 a 10 antes de finalizar.';return;}G.fim=true;salva3();
-  post('fase3',{lembrancas:itens().map(([id,sen,,,n])=>{const x=G.ass[id]||{};return sen+': '+n+' → '+(x.v||'-')+(x.p?' ("'+x.p+'")':'');}),padroes:padroes(),sensacao:G.sens});render();scrollTo(0,0);return;}});
+ if(a==='fim3'){if(G.sens==null){document.getElementById('er3').textContent='Escolha como está o seu céu antes de finalizar.';return;}G.fim=true;salva3();
+  post('fase3',{lembrancas:itens().map(([id,sen,,,n])=>{const x=G.ass[id]||{};return sen+': '+n+' → '+(x.v||'-')+(x.p?' ("'+x.p+'")':'');}),padroes:padroes(),sensacao:G.sens,notaInicio:G.notaIni??null,ceuInicio:G.ceu0!=null?P7.CEUS[G.ceu0]:'',ceuFim:G.ceu1!=null?P7.CEUS[G.ceu1]:''});render();scrollTo(0,0);return;}});
 render();
+/* 06/11: porta de entrada da Fase 3 (já fez a Fase 1? · Aconteceu?) */
+if(window.P7)P7.portaDaPagina(3);
 </script></body></html>
