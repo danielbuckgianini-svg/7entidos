@@ -31,3 +31,11 @@
 .estreia-fechar{position:absolute;top:10px;right:10px;width:38px;height:38px;border-radius:50%;border:1px solid #38313F;background:#15131B;color:#F5F1E8;font-size:18px;cursor:pointer;z-index:2}
 .estreia-pop a:focus-visible,.estreia-pop button:focus-visible{outline:3px solid #F4C51F;outline-offset:3px}
 @media (prefers-reduced-motion:reduce){.estreia-veu.aberto{animation:none}}
+/* piscando: a faixa acende e apaga devagar, o botão de play pulsa */
+.estreia-faixa{animation:estreiaPisca 1.6s ease-in-out infinite}
+@keyframes estreiaPisca{0%,100%{background:linear-gradient(90deg,#1a1430,#241C32 45%,#1a1430);box-shadow:none}50%{background:linear-gradient(90deg,#2a2050,#3a2d55 45%,#2a2050);box-shadow:0 0 22px rgba(244,197,31,.35)}}
+.estreia-faixa .play{animation:estreiaPlay 1.6s ease-in-out infinite}
+@keyframes estreiaPlay{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(244,197,31,.7)}50%{transform:scale(1.12);box-shadow:0 0 0 9px rgba(244,197,31,0)}}
+.estreia-faixa b{animation:estreiaTexto 1.6s ease-in-out infinite}
+@keyframes estreiaTexto{50%{color:#FFE27A;text-shadow:0 0 10px rgba(244,197,31,.8)}}
+@media (prefers-reduced-motion:reduce){.estreia-faixa,.estreia-faixa .play,.estreia-faixa b{animation:none}}
