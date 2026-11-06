@@ -81,7 +81,7 @@
           v.slice(0,fim?4:pi).map(function(x,i){return '<div class="fch-pino" style="left:'+x+'%"><small>'+(i+1)+'</small></div>';}).join('')+
           (fim?'':'<div class="fch-etq" id="fchetq" style="left:'+v[pi]+'%">R$ '+v[pi]+'</div><input type="range" min="'+min+'" max="100" step="1" value="'+v[pi]+'" id="fchrg" aria-label="'+esc(p[1])+'">')+'</div>'+
           (fim?'<div class="fch-leg">'+PRECO.map(function(q,i){return '<span>'+(i+1)+'. '+q[2]+': <b>R$ '+v[i]+'</b></span>';}).join('')+'</div>':'<p class="fch-mute">'+(pi===0?'O 7entidos completo: as 7 fases, a sua pintura, o Museu dos 7 pintores e o Hall da Fama.<br>':'')+'Arraste a etiqueta amarela · de R$ 0 a R$ 100</p>')+
-          '<div class="fch-acoes">'+(fim?'<button type="button" class="fch-btn" data-a="fchvai">Seguir →</button>':'<button type="button" class="fch-btn" data-a="fchpreco">'+(pi<3?'Próxima →':'Ver o meu preço justo →')+'</button><button type="button" class="fch-pular" data-a="fchpula">Agora não</button>')+'</div>';}
+          '<div class="fch-acoes">'+(fim?'<button type="button" class="fch-btn" data-a="fchvai">Seguir →</button><button type="button" class="fch-pular" data-a="fchprvolta">← Voltar e mudar a resposta 4</button>':'<button type="button" class="fch-btn" data-a="fchpreco">'+(pi<3?'Próxima →':'Ver o meu preço justo →')+'</button><button type="button" class="fch-pular" data-a="fchprvolta">← Voltar'+(pi>0?' para a pergunta '+pi:'')+'</button><button type="button" class="fch-pular" data-a="fchpula">Agora não</button>')+'</div>';}
       if(k===3){h+='<p class="fch-fala">Para quem você daria o 7entidos de presente?</p><div class="fch-caixa" id="fchcaixa">🎁</div><div class="fch-pessoas">'+
         PES.map(function(p){return '<button type="button" class="fch-ps '+(f.pres===p[1]?'on':'')+'" data-a="fchpres" data-v="'+p[1]+'"><span>'+p[0]+'</span>'+p[1]+'</button>';}).join('')+'</div>'+
         '<div class="fch-acoes"><button type="button" class="fch-btn" data-a="fchvai" '+(f.pres?'':'disabled')+'>Seguir →</button><button type="button" class="fch-pular" data-a="fchvai">Pular</button></div>';}
@@ -99,6 +99,7 @@
       if(a==='fchleva'){f.leva=v;return true;}
       if(a==='fchpres'){f.pres=v;return true;}
       if(a==='fchvai'){f.k=Math.min(5,(f.k||0)+1);return true;}
+      if(a==='fchprvolta'){var pv=f.pr;pv.i=pv.i||0;if(pv.i>0)pv.i--;else f.k=Math.max(0,(f.k||0)-1);return true;}
       if(a==='fchpula'){f.pr.pular=true;f.pr.t=false;f.k=3;return true;}
       if(a==='fchpreco'){var pr=f.pr;pr.v=(pr.v||[10,20,35,50]).slice();pr.i=pr.i||0;pr.t=true;pr.pular=false;
         if(pr.i<3){pr.i++;for(var j=pr.i;j<4;j++)if(pr.v[j]<pr.v[j-1])pr.v[j]=pr.v[j-1];}else pr.i=4;return true;}
