@@ -718,7 +718,7 @@ document.addEventListener('click',e=>{if(PD||!window.__PD)return;const b=e.targe
  e.stopImmediatePropagation();para();PD=window.__PD;window.__PD=null;PD.voltar=null;PD.f1[id]=(J.esc[id]||[]).slice();PD.ordem.push(id);PD.si=PD.ordem.length-1;pdComecaSentido();renderPodio();scrollTo(0,0);},true);
 if(EH_PODIO){try{const s=JSON.parse(localStorage.getItem(PDK)||'null');if(s&&s.ordem&&s.f1&&s.v===PD_V){PD=s;let ent=null;try{ent=JSON.parse(localStorage.getItem(LSK+'-entrada')||'null');}catch(e){}if(ent){J.esc=ent.esc||{};J.t=ent.t||{};}PD.ordem.forEach(id=>{if(PD.res[id]&&PD.fase==='story')J.esc[id]=PD.res[id].slice();});if(PD.fase==='revela')PD.brilho=true;}}catch(e){}if(!PD)pdInicia();
  /* atalho para o Daniel ver o fim da Fase 2 (pesquisa de preço) sem jogar tudo: ?modo=podio&ir=fim */
- if(QS.get('ir')==='fim'&&LSK!=='jornada7'){try{PD.ordem.forEach(id=>{if(!PD.res[id])PD.res[id]=(J.esc[id]||[]).slice();});PD.final=PD.ordem.filter(id=>PD.res[id]).map(id=>id+'|'+PD.res[id][0]);pdFimIni();PD.ef={chega:'Calma',chegaOk:true,k:0};PD.fase='fecha';}catch(e){}}}
+ if((QS.get('ir')==='fim'||QS.get('ir')==='preco')&&LSK!=='jornada7'){try{PD.ordem.forEach(id=>{if(!PD.res[id])PD.res[id]=(J.esc[id]||[]).slice();});PD.final=PD.ordem.filter(id=>PD.res[id]).map(id=>id+'|'+PD.res[id][0]);pdFimIni();PD.ef=QS.get('ir')==='preco'?{chega:'Calma',chegaOk:true,sai:'Leveza',leva:'Uma lembrança boa',k:2}:{chega:'Calma',chegaOk:true,k:0};PD.fase='fecha';}catch(e){}}}
 
 /* ================= IMAGEM DOS 7 SENTIDOS (04/11/2026) =================
    Uma imagem nova para cada pessoa, que ela não viu durante as escolhas. Padrão em camadas:
