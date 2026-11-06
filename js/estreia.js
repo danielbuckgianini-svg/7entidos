@@ -112,3 +112,34 @@ document.querySelectorAll('.reality-video video').forEach(function (v) {
   if (v.error || v.networkState === 3) tira(); else v.addEventListener('error', tira);
   if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { es.forEach(function (e) { if (!v.isConnected) return; if (e.isIntersecting) { var p = v.play(); if (p && p.catch) p.catch(function(){}); } else v.pause(); }); }, { threshold: .4 }).observe(v);
 });
+
+/* contador grande até a estreia (topo da página inicial) */
+(function () {
+  var ESTREIA = new Date('2026-11-08T16:00:00-03:00').getTime();
+  var main = document.getElementById('conteudo');
+  if (!main) return;
+  var COR = ['#FFD23F', '#5AB8FF', '#FF8A5C', '#7DDB8B', '#FF6FA3', '#A98BFF', '#3FE0D0'];
+  var box = document.createElement('section');
+  box.className = 'contador-estreia';
+  box.setAttribute('aria-label', 'Contagem para a estreia do reality');
+  main.insertBefore(box, main.firstChild);
+  function dois(n) { return (n < 10 ? '0' : '') + n; }
+  function pinta() {
+    var ms = ESTREIA - Date.now();
+    var luzes = '<div class="luzes" aria-hidden="true">' + COR.map(function (c) { return '<i style="color:' + c + '"></i>'; }).join('') + '</div>';
+    if (ms <= 0) {
+      box.innerHTML = luzes + '<p class="chamada">Já estreou</p><h2>A Casa dos 7 Sentidos está no ar!</h2><a class="ir" href="#reality">Assistir agora</a>';
+      clearInterval(t); return;
+    }
+    var s = Math.floor(ms / 1000), d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60), se = s % 60;
+    box.innerHTML = luzes + '<p class="chamada">Contagem para a estreia</p><h2>A Casa dos 7 Sentidos</h2>' +
+      '<div class="blocos" role="timer" aria-live="off">' +
+      '<div class="bl"><b>' + dois(d) + '</b><small>' + (d === 1 ? 'dia' : 'dias') + '</small></div>' +
+      '<div class="bl"><b>' + dois(h) + '</b><small>horas</small></div>' +
+      '<div class="bl"><b>' + dois(m) + '</b><small>min</small></div>' +
+      '<div class="bl seg"><b>' + dois(se) + '</b><small>seg</small></div></div>' +
+      '<p class="quando"><b>Domingo, 08/11, às 16h</b> no Instagram, no Facebook e no TikTok</p>' +
+      '<a class="ir" href="#reality">Ver o vídeo e entrar nos bastidores</a>';
+  }
+  var t = setInterval(pinta, 1000); pinta();
+})();
