@@ -136,6 +136,7 @@ h1{font-size:23px;line-height:1.25;margin:4px 0 10px}h2{font-size:18px;margin:22
 .pausa.passa{cursor:pointer;animation:pnentra .4s ease}
 @media (prefers-reduced-motion:reduce){.trilho{animation:none;width:auto;flex-wrap:wrap;justify-content:center}.qonda.on i{animation:none;height:30px}}
 .pausa{text-align:center;padding:10px 0}.falta{font-weight:900;color:var(--pe);font-size:20px;margin:6px 0}
+.eu-chip{display:inline-flex;align-items:center;gap:6px;border:1px solid #ffffff33;border-radius:99px;padding:3px 10px 3px 3px;font-size:13px;background:#ffffff0d}.eu-chip img,.eu-chip>span{width:26px;height:26px;border-radius:50%;object-fit:cover;display:grid;place-items:center;font-size:16px;background:#1C2563}
 .podiomini{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0}.podiomini span{border:1px solid var(--c);border-left:4px solid var(--c);border-radius:8px;padding:3px 8px;font-size:13px;font-weight:700}
 .rv-espera{display:grid;place-items:center;height:240px}.rv-espera i{width:60px;height:60px;border-radius:50%;background:var(--c);animation:cresce 1s ease-in forwards}
 @keyframes cresce{0%{transform:scale(.2);box-shadow:0 0 0 0 var(--c)}100%{transform:scale(2.2);box-shadow:0 0 60px 20px var(--c)}}
@@ -695,9 +696,12 @@ function vStory(){const F=(PD.final||[]).map(v=>v.split('|'));const N=7;const st
   <div class="f3"><div class="f3v">${Array.from({length:10},(_,i)=>`<i style="height:${18+i*7}px;background:${C[i%7]}"></i>`).join('')}</div><div class="f3c">🔒</div></div>
   <button class="btn pri big" data-a="pdfim" style="width:100%">${MODO==='podio-refazer'?'Guardar →':'Continuar para a Fase 3 →'}</button>`;}
  return `<div class="story" data-a="stz">${bars}<div class="stc">${c}</div>${st<6?`<div class="row" style="justify-content:space-between">${st>0?`<button class="btn" data-a="stv">←</button>`:'<span></span>'}<button class="btn pri" data-a="sta">Seguir →</button></div>`:''}</div>`;}
+/* 06/11: a pessoa chega da Fase 1 com a imagem que a representa (e a foto, se colocou). Mostra no topo, sem pedir identificação de novo. */
+function quemChip(){const nm=String(J.nome||'').split(' · ')[0];if(!nm&&!J.foto)return '';const p=nm.split(' ');const e=p.shift()||'';
+ return `<span class="eu-chip" title="Você">${J.foto?`<img src="${J.foto}" alt="">`:`<span>${esc(e)}</span>`}<b>${esc(p.join(' ')||'Você')}</b></span>`;}
 function renderPodio(){if(PD.fase==='lembra'){pdJoga();PD.t0=Date.now();}if(PD.fase==='revela'){PD.brilho=false;pdDepoisSentido();if(PD.fase==='lembra'){pdJoga();PD.t0=Date.now();}}pdSalva();const f=PD.fase;
  const v=f==='abre'?vF2Abre():f==='som'?vSom():f==='respira'?vRespira():f==='lembra'?vLembra():f==='jogo'?vJogo():f==='revela'?vRevela():f==='pausa'?vPausa():f==='surpresa'?vSurpresa():f==='adiado'?vAdiado():f==='pular'?vPdPular():f==='final'?vJogo():f==='fecha'&&window.FCH?FCH.tela(PD.ef||{}):vStory();
- document.getElementById('app').innerHTML=`<div class="bar0"><a class="logo" aria-label="7entidos"><img src="/assets/simbolo-contando-7.svg?v=20261102-novo" alt="" width="30" height="30"><b class="f"><span style="color:#FFD43B">7</span>entidos</b></a><span class="sp"></span></div>`+v;
+ document.getElementById('app').innerHTML=`<div class="bar0"><a class="logo" aria-label="7entidos"><img src="/assets/simbolo-contando-7.svg?v=20261102-novo" alt="" width="30" height="30"><b class="f"><span style="color:#FFD43B">7</span>entidos</b></a><span class="sp"></span>${quemChip()}</div>`+v;
  if(f==='respira')padLiga();else padDesliga();arLiga();incLiga();carLiga();
  clearTimeout(window.__ps);if(f==='pausa'){window.__ps=setTimeout(()=>{if(PD&&PD.fase==='pausa'){pdComecaSentido();renderPodio();scrollTo(0,0);}},1800);}
  if(f==='surpresa'&&!PD.acordeTocou){PD.acordeTocou=1;Object.keys(PD.res).forEach((x,i)=>setTimeout(()=>sino(i*2,.2),300+i*260));}
