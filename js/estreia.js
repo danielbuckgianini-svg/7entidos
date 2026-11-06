@@ -61,7 +61,7 @@
   var quando = veu.querySelector('.quando');
   var voltaFoco = null;
 
-  video.src = VIDEO;
+  video.src = VIDEO; video.poster = 'video/estreia-capa.jpg';
   video.addEventListener('error', function () {
     som.remove();
     video.remove();
