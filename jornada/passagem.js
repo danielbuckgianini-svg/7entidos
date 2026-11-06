@@ -152,6 +152,7 @@
   function favsHTML(J){return '<div class="p7favs">'+IDS.map(function(id,k){var n=(J.esc[id]||[])[0];var t=null;if(typeof SEN!=='undefined'){var s=SEN.find(function(x){return x[0]===id;});t=s&&s[5].find(function(x){return x.n===n;});}
       if(typeof A!=='undefined')try{A=['#E9B10E','#2F7FD1','#E8643A','#3E9E5E','#D9487E','#7457C9','#17A99B'];}catch(e){}
       return '<div class="p7fav" style="--c:'+COR[k]+'">'+(t?'<svg viewBox="0 0 300 300">'+t.art()+'</svg>':'')+esc(n||'—')+'</div>';}).join('')+'<div class="p7fav" style="--c:'+OURO+';display:grid;place-items:center;font-size:13px">Seu mapa<br>da Fase 1</div></div>';}
+  function quadroHTML(J,w){if(!window.Q7||!J||!J.esc)return '';var o=opc();return '<div style="max-width:'+(w||260)+'px;margin:14px auto 6px;border-radius:16px;overflow:hidden;border:2px solid '+OURO+';box-shadow:0 0 28px rgba(245,197,66,.35)">'+window.Q7.quadro(window.Q7.estiloDe(J,o),J,{assina:o.quadroAssina!=='nao',semCor:o.quadroCores==='nao'}).replace('<svg ','<svg style="display:block;width:100%;height:auto" ')+'</div>';}
   function cartaAntiga(J){var c=J.cartas||{};var ids=IDS.filter(function(id){return c[id];});var pref=ids.filter(function(id){return c[id].r==='tem';});var id=(pref[0]||ids[0]);
     if(id)return c[id];var k=0;for(;k<7;k++){var x=carta(IDS[k],(J.esc||{})[IDS[k]]);if(x)return x;}return null;}
   function porta(o){
@@ -166,11 +167,13 @@
         '<div class="p7op"><button class="p7b pri" data-a="aqui">Fazer a Fase 1 aqui</button><button class="p7b" data-a="outro">Vou abrir no outro aparelho</button></div>';
       if(passo==='p2')h=luzes+'<div class="p7k">Fase '+fase+'</div><h1 class="p7h">Quer refazer a Fase 1 ou ir direto para a Fase '+fase+'?</h1>'+
         '<div class="p7op"><button class="p7b" data-a="refaz">↺ Refazer a Fase 1<small>Depois a gente compara as suas respostas de antes e de agora.</small></button><button class="p7b pri" data-a="segue">Ir para a Fase '+fase+' →</button></div>';
-      if(passo==='valida'&&fase===2)h='<div class="p7k">Espelho</div><h1 class="p7h">Este ainda é você?</h1><p class="p7m">As suas favoritas de cada sentido na Fase 1.</p>'+favsHTML(J)+
+      if(passo==='valida'&&fase===2)h='<div class="p7k">Espelho</div><h1 class="p7h">Este ainda é você?</h1><p class="p7m">O quadro e as favoritas de cada sentido que você fez na Fase 1.</p>'+(opc().quadroEspelho!=='nao'?quadroHTML(J,220):'')+favsHTML(J)+
         '<div class="p7op"><button class="p7b" data-a="v" data-v="Ainda sou eu">🪞 Ainda sou eu</button><button class="p7b" data-a="v" data-v="Mudou um pouco">🌗 Mudou um pouco</button><button class="p7b" data-a="v" data-v="Mudou muito">🌀 Mudou muito</button></div>';
       if(passo==='valida'&&fase===3){var c=cartaAntiga(J);if(!c){fecha();return;}r.mostrado=c.t;
         h='<div class="p7k">Aconteceu?</div><h1 class="p7h">Uma das suas cartas douradas disse:</h1><div class="p7frente" style="position:relative;transform:none;border-radius:20px;margin:14px 0;text-align:left;padding:18px"><div class="p7k" style="color:'+COR[c.k]+'">✨ '+NOMES[c.k]+'</div><h3>'+esc(c.t)+'</h3><p>'+esc(c.d)+'</p></div>'+
         '<p class="p7m">Desde a Fase 1, isso apareceu na sua vida?</p><div class="p7op"><button class="p7b" data-a="v" data-v="Aconteceu">✨ Aconteceu</button><button class="p7b" data-a="v" data-v="Às vezes">🌗 Às vezes</button><button class="p7b" data-a="v" data-v="Não">○ Não</button></div>';}
+      if(passo==='chega'){var nm=(J.nome||'').split(' ')[0];h=luzes+'<div class="p7k">Fase 2 · Pódio dos Sentidos</div><h1 class="p7h">'+(nm?esc(nm)+', o seu quadro veio com você':'O seu quadro veio com você')+'</h1>'+quadroHTML(J,240)+
+        '<p class="p7m">As suas 7 escolhas de cada sentido já estão aqui. Não precisa se identificar de novo.</p><div class="p7op"><button class="p7b pri" data-a="fecha">Começar a Fase 2 →</button></div>';}
       if(passo==='obg')h=luzes+'<h1 class="p7h">Anotado ✓</h1><p class="p7m">'+(fase===2?'Vamos para a Fase 2.':'Vamos para a Fase 3.')+'</p><div class="p7op"><button class="p7b pri" data-a="fecha">Começar a Fase '+fase+' →</button></div>';
       raiz.innerHTML='<div class="p7w">'+h+'</div>';raiz.scrollTop=0;var f=raiz.querySelector('button');if(f)f.focus({preventScroll:true});}
     raiz.addEventListener('click',function(e){var b=e.target.closest('[data-a]');if(!b)return;e.stopPropagation();var a=b.dataset.a,J=lerJ();
@@ -185,7 +188,7 @@
     document.documentElement.style.overflow='hidden';document.body.appendChild(raiz);tela();}
 
   /* liga a porta numa página de fase: ?vem=1 (veio direto da Fase 1) pula tudo; ?vem=valida mostra só a validação */
-  function portaDaPagina(fase){if(window.parent!==window)return;var v=new URLSearchParams(location.search).get('vem');if(v==='1')return;
+  function portaDaPagina(fase){if(window.parent!==window)return;var v=new URLSearchParams(location.search).get('vem');if(v==='1'){if(fase===2&&fase1Ok()&&window.Q7){var g1=function(){porta({fase:2,inicio:'chega'});};if(document.body)g1();else document.addEventListener('DOMContentLoaded',g1);}return;}
     var go=function(){porta({fase:fase,inicio:v==='valida'?'valida':'p1'});};if(document.body)go();else document.addEventListener('DOMContentLoaded',go);}
   window.P7={portaDaPagina:portaDaPagina,PREVIA:PREVIA,IDS:IDS,NOMES:NOMES,COR:COR,CEUS:CEUS,NOTAS:NOTAS,ceus:ceus,ceuSVG:ceuSVG,carta:carta,cartaHTML:cartaHTML,colecao:colecao,VIZ:VIZ,viz:viz,porta:porta,registra:registra,fase1Ok:fase1Ok,aviso:aviso,vai:vai,opc:opc,esc:esc,lerJ:lerJ};
 })();

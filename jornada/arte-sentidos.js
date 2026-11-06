@@ -160,6 +160,11 @@ const A={corpo:{}};
 CORPO.forEach(([id,n,p])=>{A.corpo[n]=luz('c_'+id,p);});
 Object.entries(OUTROS).forEach(([k,S])=>{A[k]={};S.ops.forEach(([id,n,p])=>{A[k][n]=pintor(S.pintor,k+'_'+id,p);});});
 window.ARTE7=A;
+/* traços puros (viewBox 0 0 100 100) de cada opção, para montar o quadro dos 7 sentidos (quadro7.js) */
+const PT={corpo:{}};CORPO.forEach(([id,n,p])=>{PT.corpo[n]=p;});
+Object.entries(OUTROS).forEach(([k,S])=>{PT[k]={};S.ops.forEach(([id,n,p])=>{PT[k][n]=p;});});
+window.ARTE7_PATHS=PT;
+window.ARTE7_VISAO_ID={};OUTROS.mapa.ops.forEach(([id,n])=>{window.ARTE7_VISAO_ID[n]=id;});
 /* troca a arte das opções de uma lista SEN = [[id, nome, ícone, cor, texto, opções], ...] */
 window.aplicarArte7=function(SEN){SEN.forEach(s=>{const M=A[s[0]];if(!M)return;s[5].forEach(t=>{if(M[t.n]){const svg=M[t.n];t.art=()=>svg;t.arte7=true;}});});};
 })();

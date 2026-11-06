@@ -54,7 +54,7 @@ h1{font-size:23px;line-height:1.25;margin:4px 0 10px}h2{font-size:18px;margin:22
 .fav3{display:flex;gap:12px;align-items:center;margin:6px 0 10px}.fav3 svg{width:96px;height:96px;border-radius:14px;flex:0 0 96px}
 .lem{display:flex;gap:10px;align-items:center;background:var(--field);border:1px solid var(--line);border-left:4px solid var(--c);padding:8px 10px;margin-bottom:6px}
 </style></head><body><div class="w" id="app"></div><input type="file" id="fotoin" accept="image/*" hidden>
-<script src="../config.js"></script><script src="../arte-sentidos.js"></script><script src="../passagem.js"></script>
+<script src="../config.js"></script><script src="../arte-sentidos.js"></script><script src="../passagem.js"></script><script src="../quadro7.js"></script>
 <script>/* ---------- estímulos sensoriais (sons feitos aqui, sem arquivos) ---------- */
 let AC=null,TOCANDO=null;
 function ac(){try{if(navigator.audioSession)navigator.audioSession.type='playback';}catch(e){}if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;AC=new C();}if(AC.state!=='running')AC.resume();return AC;}
