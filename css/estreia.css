@@ -1,0 +1,33 @@
+/* Faixa + pop-up da estreia do reality "A Casa dos 7 Sentidos" (só na página inicial) */
+.estreia-faixa{position:sticky;top:0;z-index:60;display:flex;align-items:center;justify-content:center;gap:10px;min-height:42px;padding:7px 46px 7px 14px;background:linear-gradient(90deg,#1a1430,#241C32 45%,#1a1430);border-bottom:1px solid rgba(244,197,31,.45);color:#F5F1E8;font:600 14px/1.3 Manrope,system-ui,sans-serif;text-align:center;cursor:pointer}
+.estreia-faixa:before{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:linear-gradient(90deg,#FFD23F,#5AB8FF,#FF8A5C,#7DDB8B,#FF6FA3,#A98BFF,#3FE0D0)}
+.estreia-faixa b{color:#F4C51F;font-weight:800}
+.estreia-faixa .play{flex:none;width:26px;height:26px;border-radius:50%;background:#F4C51F;color:#0B0B0D;display:grid;place-items:center;font-size:11px;box-shadow:0 0 14px rgba(244,197,31,.55)}
+.estreia-faixa .conta{color:#BFB8C8;font-weight:600;white-space:nowrap}
+.estreia-faixa .ver{text-decoration:underline;text-underline-offset:3px;color:#F4C51F;font-weight:800;white-space:nowrap}
+.estreia-faixa:focus-visible{outline:3px solid #F4C51F;outline-offset:-3px}
+
+@media(max-width:600px){.estreia-faixa{font-size:13px;padding-right:12px}.estreia-faixa .conta{display:block}.estreia-faixa .txt{display:grid}}
+
+.estreia-veu{position:fixed;inset:0;z-index:200;background:rgba(5,4,10,.82);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:16px}
+.estreia-veu.aberto{display:flex;animation:estreiaEntra .35s ease}
+@keyframes estreiaEntra{from{opacity:0}to{opacity:1}}
+.estreia-pop{position:relative;width:min(420px,100%);max-height:calc(100vh - 32px);overflow:auto;background:linear-gradient(170deg,#241C32,#0B0B0D 70%);border:1px solid rgba(244,197,31,.4);border-radius:22px;box-shadow:0 30px 80px rgba(0,0,0,.6);color:#F5F1E8;font-family:Manrope,system-ui,sans-serif;text-align:center}
+.estreia-pop .luzes{display:flex;gap:8px;justify-content:center;padding-top:18px}
+.estreia-pop .luzes i{width:9px;height:9px;border-radius:50%;background:currentColor;box-shadow:0 0 10px currentColor}
+.estreia-pop .estreia-rotulo{margin:10px 0 2px;font-size:11.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#F4C51F}
+.estreia-pop h2{font-family:Fraunces,Georgia,serif;font-weight:400;font-size:clamp(24px,6vw,30px);line-height:1.1;margin:0 18px 6px}
+.estreia-pop .quando{margin:0 18px 12px;color:#BFB8C8;font-size:14.5px}
+.estreia-pop .quando b{color:#F5F1E8}
+.estreia-video{position:relative;margin:0 16px;border-radius:16px;overflow:hidden;background:#000;aspect-ratio:9/16;max-height:52vh;margin-inline:auto;width:calc(100% - 32px)}
+.estreia-video video{width:100%;height:100%;object-fit:contain;display:block;background:#000}
+.estreia-video .sem-video{position:absolute;inset:0;display:grid;place-items:center;padding:20px;color:#BFB8C8;font-size:14px;background:radial-gradient(circle at 50% 35%,#2c2343,#0B0B0D 75%)}
+.estreia-som{position:absolute;right:10px;bottom:10px;border:0;border-radius:999px;padding:8px 12px;background:rgba(11,11,13,.8);color:#F5F1E8;font:800 13px Manrope,system-ui,sans-serif;cursor:pointer}
+.estreia-acoes{display:grid;gap:10px;padding:16px 18px 20px}
+.estreia-seguir{display:flex;align-items:center;justify-content:center;gap:9px;background:#F4C51F;color:#0B0B0D;border-radius:999px;padding:13px 18px;font-weight:800;font-size:15.5px;text-decoration:none}
+.estreia-seguir:hover{filter:brightness(1.06)}
+.estreia-outras{font-size:13.5px;color:#BFB8C8}
+.estreia-outras a{color:#F5F1E8;font-weight:700}
+.estreia-fechar{position:absolute;top:10px;right:10px;width:38px;height:38px;border-radius:50%;border:1px solid #38313F;background:#15131B;color:#F5F1E8;font-size:18px;cursor:pointer;z-index:2}
+.estreia-pop a:focus-visible,.estreia-pop button:focus-visible{outline:3px solid #F4C51F;outline-offset:3px}
+@media (prefers-reduced-motion:reduce){.estreia-veu.aberto{animation:none}}
