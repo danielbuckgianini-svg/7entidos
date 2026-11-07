@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>7entidos · Jornada da Pesquisa</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="Você é um convidado especial. Uma pesquisa divertida, anônima, para construir um app que pode ajudar muita gente.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--noite:#0A0F24;--card:#141c40;--linha:#2a3570;--txt:#F4F1EA;--suave:#b4bbdf;--ouro:#F5C542;--ok:#5fd39a;
+ --c1:#4dabf7;--c2:#9775fa;--c3:#69db7c;--c4:#ff5f6d;--c5:#ffa94d;--c6:#ffd43b;--c7:#f783ac}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--noite);color:var(--txt);font:19px/1.45 Manrope,system-ui,sans-serif;min-height:100%}
+body{background:radial-gradient(900px 500px at 85% -10%,#26326e 0%,transparent 60%),radial-gradient(800px 500px at -10% 110%,#2b1f58 0%,transparent 55%),var(--noite);min-height:100vh}
+#stars{position:fixed;inset:0;pointer-events:none;z-index:0}
+#stars i{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;opacity:.5;animation:tw 3s ease-in-out infinite}
+@keyframes tw{50%{opacity:.1}}
+.wrap{position:relative;z-index:1;max-width:620px;margin:0 auto;padding:14px 16px 120px}
+header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.ring{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font:700 20px Fraunces,serif;color:var(--ouro);background:conic-gradient(var(--c1),var(--c2),var(--c3),var(--c4),var(--c5),var(--c6),var(--c7),var(--c1));padding:3px;flex:none}
+.ring>div{width:100%;height:100%;border-radius:50%;background:var(--noite);display:grid;place-items:center}
+header b{font:600 20px Fraunces,serif}header small{display:block;font-size:13px;color:var(--suave)}
+.anon{margin-left:auto;font-size:13px;color:var(--ok);border:1.5px solid #5fd39a66;border-radius:99px;padding:4px 10px;white-space:nowrap}
+/* trilha dos blocos */
+.trail{display:flex;gap:6px;margin:4px 0 14px}
+.trail div{flex:1;text-align:center;font-size:12px;color:var(--suave)}
+.trail i{display:block;height:8px;border-radius:9px;background:#232c5c;margin-bottom:4px;overflow:hidden}
+.trail i b{display:block;height:100%;background:var(--ouro);transition:width .5s}
+.trail div.done i b{background:var(--ok)}
+.trail div.cur{color:var(--txt);font-weight:800}
+/* cartão */
+.card{background:linear-gradient(180deg,#18214a,#121a3d);border:1px solid var(--linha);border-radius:24px;padding:20px 18px;box-shadow:0 18px 50px #0007;animation:in .35s ease}
+@keyframes in{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+.qn{display:inline-block;font-size:14px;font-weight:800;color:var(--noite);background:var(--ouro);border-radius:99px;padding:3px 12px;margin-bottom:10px}
+.bk{font-size:14px;color:var(--suave);margin-left:6px}
+h1,h2{font-family:Fraunces,serif;font-weight:600;line-height:1.2;margin:0 0 10px}
+h1{font-size:32px}h2{font-size:27px}
+p{margin:0 0 12px}.sv{color:var(--suave)}
+.ctx{background:#0d1433;border:1.5px dashed #4a57a0;border-radius:18px;padding:14px 16px;margin:0 0 14px;font-size:18px}
+.ctx b{color:var(--ouro)}
+/* opções */
+.opts{display:grid;gap:10px;margin-top:6px}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#1b2554;border:2px solid #34408a;color:var(--txt);border-radius:18px;padding:14px 16px;font:700 19px Manrope,sans-serif;cursor:pointer;transition:transform .12s,border-color .2s,background .2s}
+.opt:active{transform:scale(.98)}
+.opt .em{font-size:28px;flex:none;width:36px;text-align:center}
+.opt small{display:block;font-weight:600;font-size:15px;color:var(--suave)}
+.opt.on{border-color:var(--ouro);background:#2a2a4f;box-shadow:0 0 0 3px #f5c54233}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.tile{background:#1b2554;border:2px solid #34408a;color:var(--txt);border-radius:16px;padding:12px 6px;font:700 16px Manrope,sans-serif;cursor:pointer;text-align:center;line-height:1.2}
+.tile .em{display:block;font-size:30px;margin-bottom:4px}
+.tile.on{border-color:var(--ouro);background:#2a2a4f}
+.row{margin:12px 0}.row>b{display:block;font-size:16px;margin-bottom:6px}
+.row .rn{color:var(--ouro);margin-right:6px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:#1b2554;border:2px solid #34408a;color:var(--txt);border-radius:99px;padding:10px 14px;font:700 16px Manrope,sans-serif;cursor:pointer}
+.chip.on{border-color:var(--ouro);background:var(--ouro);color:var(--noite)}
+.go{display:block;width:100%;margin-top:16px;background:var(--ouro);color:var(--noite);border:0;border-radius:18px;padding:16px;font:800 20px Manrope,sans-serif;cursor:pointer;box-shadow:0 10px 30px #f5c54233}
+.go:disabled{opacity:.4;box-shadow:none}
+.go.ghost{background:transparent;color:var(--txt);border:2px solid #3a4685;box-shadow:none}
+.back{background:none;border:0;color:var(--suave);font:700 15px Manrope,sans-serif;padding:8px 0;cursor:pointer;margin-top:6px}
+.err{color:#ff8fa3;font-size:15px;margin-top:8px;min-height:1px}
+/* apresentadores */
+.apres{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}
+.ap{background:#1b2554;border:2px solid #34408a;border-radius:20px;padding:10px 6px;text-align:center;cursor:pointer;color:var(--txt);font:800 16px Manrope,sans-serif}
+.ap svg,.ap img{width:100%;max-width:120px;aspect-ratio:1;border-radius:50%;object-fit:cover;display:block;margin:0 auto 6px}
+.ap.on{border-color:var(--ouro);box-shadow:0 0 0 3px #f5c54233}
+.apstrip{display:flex;justify-content:center;gap:-10px;margin:6px 0 14px}
+.apstrip svg,.apstrip img{width:86px;height:86px;border-radius:50%;margin:0 -8px;border:3px solid var(--noite);object-fit:cover}
+/* blocos com presentes */
+.blocks{display:grid;gap:10px;margin:10px 0}
+.blkx{display:flex;align-items:center;gap:12px;background:#1b2554;border:2px solid #34408a;border-radius:18px;padding:12px 14px}
+.blkx .gift{font-size:32px;flex:none;transition:transform .4s}
+.blkx b{font-size:18px}.blkx small{display:block;color:var(--suave);font-size:14px}
+.blkx.done{border-color:var(--ok)}.blkx.cur{border-color:var(--ouro)}
+.blkx.done .gift{transform:rotate(-8deg)}
+/* céu */
+.sky{height:150px;border-radius:20px;margin:10px 0;position:relative;overflow:hidden;transition:background .5s;border:1px solid var(--linha)}
+.sky .sun{position:absolute;left:50%;width:56px;height:56px;margin-left:-28px;border-radius:50%;background:#ffd43b;box-shadow:0 0 40px #ffd43b;transition:all .6s}
+.scale{display:grid;grid-template-columns:repeat(11,1fr);gap:4px}
+.scale button{aspect-ratio:1;border-radius:10px;border:2px solid #34408a;background:#1b2554;color:var(--txt);font:800 16px Manrope,sans-serif;cursor:pointer;padding:0}
+.scale button.on{background:var(--ouro);color:var(--noite);border-color:var(--ouro)}
+.sl{display:flex;justify-content:space-between;font-size:14px;color:var(--suave);margin-top:4px}
+/* personagem */
+.pers{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+.pers svg{width:96px;height:96px;flex:none;border-radius:50%}
+.pers b{font:600 26px Fraunces,serif;display:block}
+.tag{display:inline-block;font-size:14px;font-weight:800;border-radius:99px;padding:3px 10px;margin:2px 4px 0 0;background:color-mix(in srgb,var(--c) 22%,#141c40);color:var(--c);border:1.5px solid var(--c)}
+/* presente aberto */
+.prize{text-align:center}
+.prize .big{font-size:90px;animation:pop .7s cubic-bezier(.2,1.6,.4,1)}
+@keyframes pop{from{transform:scale(.2) rotate(-30deg);opacity:0}to{transform:none;opacity:1}}
+.code{display:inline-block;font:800 22px Manrope,monospace;letter-spacing:.06em;background:#0d1433;border:2px dashed var(--ouro);border-radius:14px;padding:8px 14px;margin:8px 0}
+.conf{position:fixed;top:-10px;width:9px;height:14px;z-index:50;pointer-events:none;animation:fall 2.4s linear forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(720deg)}}
+/* vídeo */
+.vid{aspect-ratio:9/12;max-height:52vh;margin:0 auto 12px;border-radius:20px;background:#0d1433;border:1px solid var(--linha);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px;text-align:center;position:relative;overflow:hidden}
+.vid svg{width:110px;height:110px;border-radius:50%;margin-bottom:10px}
+.vid .leg{font:600 21px Fraunces,serif;min-height:3.6em}
+.vid video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+/* trocar jeito de responder */
+#modo{position:fixed;right:14px;bottom:16px;z-index:20;background:#1b2554;border:2px solid #3a4685;color:var(--txt);border-radius:99px;padding:6px 10px;font:800 13px Manrope,sans-serif;cursor:pointer;transition:transform .18s,padding .18s;box-shadow:0 8px 22px #0008}
+#modo:hover,#modo:active,#modo:focus-visible{transform:scale(1.35);padding:8px 14px}
+.mic{display:inline-flex;align-items:center;gap:6px;margin-top:8px;background:#ff6b8b22;border:2px solid #ff6b8b;color:var(--txt);border-radius:99px;padding:10px 16px;font:800 16px Manrope,sans-serif;cursor:pointer}
+.mic.rec{background:#ff6b8b;color:#fff;animation:pul 1s infinite}
+@keyframes pul{50%{transform:scale(1.05)}}
+input[type=text],input[type=tel],textarea{width:100%;background:#0d1433;border:2px solid #3a4685;color:var(--txt);border-radius:14px;padding:12px 14px;font:600 18px Manrope,sans-serif}
+.zap{display:flex;align-items:center;justify-content:center;gap:10px;background:#25D366;color:#06290f;text-decoration:none;border-radius:18px;padding:16px;font:800 20px Manrope,sans-serif;margin-top:14px}
+.small{font-size:15px}
+a{color:var(--ouro)}
+@media (max-width:420px){h1{font-size:28px}h2{font-size:24px}.opt{font-size:18px}.scale button{font-size:14px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="stars"></div>
+<div class="wrap">
+ <header><div class="ring"><div>7</div></div><div><b>7entidos</b><small>Jornada da Pesquisa</small></div><span class="anon">🔒 tudo anônimo</span></header>
+ <div class="trail" id="trail"></div>
+ <main id="app"></main>
+</div>
+<button id="modo" type="button" hidden></button>
+<script src="/jornada/config.js"></script>
+<script>
+/* ============================================================
+   JORNADA DA PESQUISA · 7entidos · primeira liberação (07/11/2026)
+   Anônima: nenhum nome ou telefone vai junto das respostas.
+   Respostas: robô da planilha "Jornada dos 7entidos" → aba "Pesquisa" (uma linha por pessoa)
+   Contatos da comunidade (opcional) → aba "Comunidade", SEM ligação com as respostas.
+   ============================================================ */
+const SITE=/7entidos\.com\.br$/.test(location.hostname)?'':'https://7entidos.com.br';
+const PLANILHA_URL=window.PLANILHA_URL||'';
+const LINK_PESQUISA='https://7entidos.com.br/pesquisa/';
+const PRECOS=['R$ 14,90','R$ 24,90','R$ 39,90'];
+/* Os 3 apresentadores em teste. Para colocar as fotos: foto:'/pesquisa/fotos/brisa.jpg' (e o vídeo em video:'...mp4'). */
+const APRES=[
+ {k:'a',rot:'Ela',cor:'#f783ac',nomes:['Brisa','Luz','Aurora'],foto:'',video:''},
+ {k:'b',rot:'Ele',cor:'#4dabf7',nomes:['Gianini','Buck','Dani'],foto:'',video:''},
+ {k:'c',rot:'Surpresa',cor:'#69db7c',nomes:['Sol','Rio','Mar'],foto:'',video:''}
+];
+const SEN=[['👁️','Visão','#4dabf7'],['👂','Audição','#9775fa'],['👃','Olfato','#69db7c'],['👅','Paladar','#ff5f6d'],['✋','Tato','#ffa94d'],['⚖️','Equilíbrio','#ffd43b'],['🧍','Noção do corpo','#f783ac']];
+const CAST=[
+ {k:'luzia',n:'Luzia',sen:'Visão',cor:'#4dabf7',arq:'Heroína',
+  cab:['Black power','Tranças longas','Curtinho raspado'],ros:['Olhar doce','Olhar firme','Sorriso largo'],cor2:['Alta e elegante','Baixinha e forte','Curvilínea'],nom:['Luzia','Clara','Aurora'],
+  aq:[['A Luzia é uma heroína que…',['Perdoa','Busca justiça','Dá a volta por cima com classe']],['A maior força dela é…',['Coragem','Doçura','Inteligência']],['Diante de uma injustiça, ela…',['Chora escondida','Enfrenta na hora','Planeja em silêncio']]],
+  est:['Clássica e elegante','Colorida e alegre','Simples e natural'],dor:['Não consegue mais ver beleza nas coisas','Não confia em mais ninguém','Vive no automático']},
+ {k:'rafa',n:'Rafa',sen:'Audição',cor:'#9775fa',arq:'Galã',
+  cab:['Cacheado','Liso jogado para trás','Raspado'],ros:['Barba por fazer','Rosto liso','Bigode charmoso'],cor2:['Atlético','Magro e alto','Fortão'],nom:['Rafa','Davi','Caio'],
+  aq:[['Que tipo de galã é o Rafa?',['Romântico de serenata','Charmoso e misterioso','Engraçado e carinhoso']],['Como ele se apaixona?',['À primeira vista','Devagarzinho','Sem perceber']],['O que ele mais gosta de ouvir?',['Música','As pessoas','O silêncio']]],
+  est:['Músico de jaqueta','Social arrumado','Esportivo'],dor:['Não consegue mais ouvir o próprio coração','Medo de se apaixonar de novo','Barulho demais na cabeça']},
+ {k:'yara',n:'Yara',sen:'Olfato',cor:'#69db7c',arq:'Sábia',
+  cab:['Grisalho e longo','Coque com lenço','Curtinho e branco'],ros:['Rugas de quem sorri','Olhar misterioso','Óculos redondos'],cor2:['Alta e esguia','Pequena e ágil','Forte e acolhedora'],nom:['Yara','Íris','Helena'],
+  aq:[['Que tipo de sábia é a Yara?',['Conselheira calma','Mística','Direta e engraçada']],['De onde vem a sabedoria dela?',['Das viagens pelo mundo','Dos livros','De uma dor que virou cuidado']],['Como ela ajuda os outros?',['Contando uma história','Com um chá e um cheiro bom','Com a pergunta certa']]],
+  est:['Bata e colares','Elegante de linho','Roupas do país dela'],dor:['Saudade de casa','Solidão','Carrega a dor de muita gente']},
+ {k:'beto',n:'Beto',sen:'Paladar',cor:'#ff5f6d',arq:'Bobo da corte',
+  cab:['Careca brilhando','Careca de boné','Careca de bigodão'],ros:['Bochechas grandes','Sobrancelha expressiva','Covinhas'],cor2:['Gordinho fofo','Baixinho','Grandão'],nom:['Beto','Juca','Tião'],
+  aq:[['Que tipo de humor tem o Beto?',['Piadista','Trapalhão','Irônico']],['Por trás da piada tem…',['Uma tristeza escondida','Um coração enorme','Medo de não ser levado a sério']],['O sonho do Beto é…',['Ter um restaurante','Cozinhar para quem tem fome','Ter um programa de culinária']]],
+  est:['Avental de chef','Camisa florida','Moletom confortável'],dor:['Esconde a tristeza na piada','Medo de faltar comida','Não se acha bom o bastante']},
+ {k:'tonho',n:'Tonho',sen:'Tato',cor:'#ffa94d',arq:'Rebelde',
+  cab:['Dreads','Degradê navalhado','Black curtinho'],ros:['Cicatriz na sobrancelha','Barba cheia','Sorriso de canto'],cor2:['Atlético e tatuado','Magro e alto','Forte de trabalho'],nom:['Tonho','Zé','Dante'],
+  aq:[['O Tonho é um rebelde…',['Maldoso','Sem causa','Com causa']],['Contra o que ele luta?',['Injustiça','Regras sem sentido','O próprio passado']],['Como ele lidera?',['No grito','Pelo exemplo','No improviso']]],
+  est:['Jaqueta de couro','Camiseta e boné','Macacão de trabalho'],dor:['Uma raiva que não passa','Não deixa ninguém chegar perto','Cansaço de lutar sozinho']},
+ {k:'duda',n:'Duda',sen:'Equilíbrio',cor:'#ffd43b',arq:'Vilã',
+  cab:['Chanel reto','Coque de bailarina','Franjinha marcada'],ros:['Olhar gelado','Sorriso perfeito (e falso)','Maquiagem marcante'],cor2:['Bailarina esguia','Pequena e elegante','Alta e imponente'],nom:['Duda','Mina','Vivi'],
+  aq:[['Que tipo de vilã é a Duda?',['Fria e elegante','Engraçada e cínica','Sedutora']],['Por que ela faz o mal?',['Inveja','Medo de perder','Um segredo']],['Ela merece perdão no final?',['Sim','Não','Só se pagar pelo que fez']]],
+  est:['Toda de preto','Tons pastel impecáveis','Roupa de balé com casaco'],dor:['Precisa controlar tudo','Medo de cair (e de perder)','Uma culpa escondida']},
+ {k:'leo',n:'Léo',sen:'Noção do corpo',cor:'#f783ac',arq:'Inocente',sombra:1,
+  cab:['Cacheadinho','Topete','Boné virado'],ros:['Só a sombra (mistério)','Óculos grandes','Sardas'],cor2:['Pulando','Na ponta dos pés','Devagar, observando'],corLabel:'Jeito de andar',nom:['Léo','Nino','Gui'],
+  aq:[['Que tipo de criança é o Léo?',['Gênio quietinho','Curioso e falante','Brincalhão']],['O mistério do Léo é que ele…',['Está procurando alguém','Sabe de um segredo','Não é o que parece']],['Como o público conhece o Léo?',['Só pela sombra, até o fim','Aos pouquinhos','De uma vez']]],
+  est:['Moletom com capuz','Camisa social de menininho','Fantasia de super-herói'],dor:['Sente falta de alguém','Não sabe onde se encaixa','Guarda um segredo grande demais']}
+];
+const BLOCOS=[
+ {k:'entrada',n:'Entrada',pr:'🏅',prT:'Selo de Convidado Especial do 7entidos'},
+ {k:'f1',n:'Fase 1',pr:'📜',prT:'Seu relatório com 10 descobertas sobre você'},
+ {k:'f2',n:'Fase 2',pr:'📱',prT:'3 meses de acesso ao app 7entidos'},
+ {k:'reality',n:'Reality',pr:'🎬',prT:'A 2ª temporada do reality de graça, antes de todo mundo'},
+ {k:'dinheiro',n:'Dinheiro',pr:'💝',prT:'1 mês grátis do app para presentear um amigo'}
+];
+
+/* ---------- estado (fica só neste aparelho) ---------- */
+let P={};try{P=JSON.parse(localStorage.getItem('pesquisa7')||'{}')||{}}catch(e){P={}}
+if(!P.id){P.id='P'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);P.a={};P.done={};P.i=0;P.inicio=new Date().toISOString();P.modo='botoes';P.preco=PRECOS[Math.floor(Math.random()*PRECOS.length)];}
+P.a=P.a||{};P.done=P.done||{};
+const codigo=s=>'7E-'+s+'-'+P.id.slice(-5).toUpperCase();
+function guarda(){try{localStorage.setItem('pesquisa7',JSON.stringify(P))}catch(e){}}
+
+/* ---------- envio para a planilha (sem nome, sem telefone) ---------- */
+function colunas(){const A=P.a,c=[];const add=(h,v)=>{if(v!==undefined&&v!==null&&v!=='')c.push([h,Array.isArray(v)?v.join(' | '):String(v)])};
+ const ap=APRES.find(x=>x.k===A.apres);
+ const br=d=>new Date(d).toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo'});add('Data',br(P.inicio));add('Última atualização',br(Date.now()));add('Blocos feitos',BLOCOS.filter(b=>P.done[b.k]).map(b=>b.n).concat(P.done.final?['Final']:[]));
+ add('Apresentador',ap&&ap.rot);add('Nome do apresentador',A.apnome);add('Idade',A.idade);add('Gênero',A.genero);add('Conhecia o Flow',A.flow);add('Vídeo',A.video);add('Jeito de responder',P.modo==='audio'?'Áudio':'Botões');
+ add('Cor favorita',A.cor);add('Pincel',A.pincel);add('Céu inicial',A.ceu0);
+ add('Fase 1: mapa dos sentidos',A.f1_mapa);add('Fase 1: o que mais gostou',A.f1_gostou);add('Fase 1: o que não gostou',A.f1_nao);add('Fase 1: como saiu',A.f1_sai);
+ F2DIN.forEach(d=>add('Fase 2: '+d[1],A['f2_'+d[0]]));add('Fase 2: queria no celular todo dia',A.f2_app);add('Fase 2: o que não gostou',A.f2_nao);add('Céu final',A.ceu1);
+ add('Reality: personagens montados',A.r_quais);
+ CAST.forEach(p=>{['cab','ros','cor2','nom','aq0','aq1','aq2','est','dor'].forEach((f,j)=>add('Reality '+p.n+': '+['cabelo','rosto',p.corLabel?'jeito':'corpo','nome','arquétipo 1','arquétipo 2','arquétipo 3','estilo','dor'][j],A['r_'+p.k+'_'+f]))});
+ add('Reality: cômodo da casa',A.r_casa);add('Reality: prova',A.r_prova);add('Reality: prêmio final',A.r_premio);add('Reality: faria voltar',A.r_volta);add('Reality: ganchos favoritos',A.r_ganchos);
+ add('Assistiu o reality',A.r_viu);add('Tempo do episódio',A.r_tempo);add('Pagaria 2ª temporada',A.r_paga);add('Quanto pagaria',A.r_quanto);
+ add('Preço mostrado',A.d_compra?P.preco:'');add('Compraria',A.d_compra);add('Daria de presente',A.d_presente);add('Preço justo',A.d_justo);add('Quanto paga por apps',A.d_paga);add('Usa apps de bem-estar',A.d_bem);
+ add('Entendeu o propósito',A.z_prop);add('Renda',A.z_renda);add('Cidade',A.z_cidade);add('Ocupação',A.z_ocup);add('Como chegou',A.z_chegou);add('Quer a comunidade',A.z_com);add('Compartilhou',P.compartilhou?'Sim':'');
+ return c}
+function enviar(){if(!PLANILHA_URL)return;const corpo={tipo:'pesquisa',aba:'Pesquisa',id:P.id,cols:colunas(),em:new Date().toISOString()};
+ try{fetch(PLANILHA_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(corpo),keepalive:true})}catch(e){}}
+function enviarComunidade(nome,tel){if(!PLANILHA_URL)return;const corpo={tipo:'pesquisa_comunidade',aba:'Comunidade',cols:[['Data',new Date().toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo'})],['Nome',nome],['Telefone',tel]]};
+ try{fetch(PLANILHA_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(corpo),keepalive:true})}catch(e){}}
+
+/* ---------- sons leves (pisca grave, só depois de um toque) ---------- */
+let AC=null;function bip(f=330,d=.07,v=.05){try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain();o.type='triangle';o.frequency.value=f;g.gain.setValueAtTime(v,AC.currentTime);g.gain.exponentialRampToValueAtTime(.0001,AC.currentTime+d);o.connect(g);g.connect(AC.destination);o.start();o.stop(AC.currentTime+d)}catch(e){}}
+function festa(){for(let i=0;i<46;i++){const c=document.createElement('i');c.className='conf';c.style.left=Math.random()*100+'vw';c.style.background=SEN[i%7][2];c.style.animationDelay=(Math.random()*.6)+'s';c.style.borderRadius=i%3?'2px':'50%';document.body.appendChild(c);setTimeout(()=>c.remove(),3200)}[523,659,784].forEach((f,i)=>setTimeout(()=>bip(f,.18,.06),i*120))}
+
+/* ---------- desenhos ---------- */
+function rosto(cor,sombra){return `<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="50" fill="${cor}33"/><circle cx="50" cy="40" r="17" fill="${sombra?'#05081a':cor}" stroke="${cor}" stroke-width="${sombra?2:0}"/><path d="M18 94c4-20 17-30 32-30s28 10 32 30" fill="${sombra?'#05081a':cor}" stroke="${cor}" stroke-width="${sombra?2:0}"/></svg>`}
+function fotoAp(a){return a.foto?`<img src="${a.foto}" alt="${esc(a.rot)}">`:rosto(a.cor)}
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- roteiro das telas ---------- */
+const F1DIN=[['mapa','Mapa dos 7 sentidos']];
+const F2DIN=[['som','Que som é esse?'],['carinho','Carinho (tato)'],['sushi','Esteira de sushi'],['corpo','Corpo que acende'],['resp','Respiração']];
+const S=[];/* cada tela: {b:bloco, id, t, ...} */
+const add=o=>S.push(o);
+/* ENTRADA */
+add({b:'entrada',k:'boasvindas',tipo:'boas'});
+add({b:'entrada',k:'mapa',tipo:'blocos'});
+add({b:'entrada',id:'apres',q:1,tipo:'apres'});
+add({b:'entrada',id:'apnome',q:2,tipo:'apnome'});
+add({b:'entrada',id:'idade',q:3,t:'Qual a sua idade?',tipo:'tiles',o:[['🌱','até 17'],['✨','18 a 24'],['🔥','25 a 34'],['🌟','35 a 44'],['🌊','45 a 54'],['🌳','55 a 64'],['👑','65 ou mais']]});
+add({b:'entrada',id:'genero',q:4,t:'Com qual gênero você se identifica?',tipo:'tiles',o:[['','Mulher'],['','Homem'],['','Não binário'],['','Prefiro não dizer']]});
+add({b:'entrada',id:'flow',q:5,tipo:'flow'});
+add({b:'entrada',id:'video',q:6,tipo:'video'});
+add({b:'entrada',id:'modo',q:7,tipo:'modo'});
+add({b:'entrada',id:'cor',q:8,tipo:'cor'});
+add({b:'entrada',id:'pincel',q:9,tipo:'pincel'});
+add({b:'entrada',id:'ceu0',q:10,tipo:'ceu',t:'Como você está agora?',sub:'Toque num número. O céu muda com você.'});
+add({b:'entrada',k:'premio',tipo:'premio'});
+/* FASE 1 */
+add({b:'f1',k:'ir',tipo:'ir',fase:'f1'});
+add({b:'f1',id:'f1_mapa',q:1,t:'Como foi o Mapa dos 7 sentidos?',tipo:'react'});
+add({b:'f1',id:'f1_gostou',q:2,t:'O que você mais gostou na Fase 1?',tipo:'multi',o:['As imagens','Os sons','Escolher do meu jeito','As 10 descobertas','A minha imagem final','Ser rápido'],aberto:1});
+add({b:'f1',id:'f1_nao',q:3,t:'E o que não gostou?',tipo:'multi',o:['Achei longo','Alguma opção confusa','Imagens','Sons','Nada, gostei de tudo'],aberto:1});
+add({b:'f1',id:'f1_sai',q:4,t:'Como você saiu da Fase 1?',tipo:'multi',o:['Leve','Em paz','Curioso','Animado','Igual','Cansado']});
+add({b:'f1',k:'premio',tipo:'premio'});
+/* FASE 2 */
+add({b:'f2',k:'ir',tipo:'ir',fase:'f2'});
+F2DIN.forEach((d,i)=>add({b:'f2',id:'f2_'+d[0],q:i+1,t:'Como foi: '+d[1]+'?',tipo:'react'}));
+add({b:'f2',id:'f2_app',q:6,t:'Qual você queria no celular todo dia?',tipo:'tiles',o:[['🔊','Que som é esse?'],['✋','Carinho'],['🍣','Esteira de sushi'],['🧍','Corpo que acende'],['🌬️','Respiração'],['🤷','Nenhum']]});
+add({b:'f2',id:'f2_nao',q:7,t:'Alguma coisa atrapalhou na Fase 2?',tipo:'multi',o:['Achei longo','Não entendi um jogo','Som baixo ou estranho','Travou','Nada, foi ótimo'],aberto:1});
+add({b:'f2',id:'ceu1',q:8,tipo:'ceu',t:'E agora, como você está?',sub:'Compare com o céu da chegada.'});
+add({b:'f2',k:'premio',tipo:'premio'});
+/* REALITY */
+add({b:'reality',k:'ctx',tipo:'ctx',titulo:'🎬 A Casa dos 7 Sentidos',txt:'Agora você é <b>diretor de casting</b> e vai ajudar a construir os personagens do reality. Use as suas preferências: não existe resposta certa.',bt:'Bora montar o elenco!'});
+add({b:'reality',id:'r_quais',q:1,tipo:'quais'});
+CAST.forEach(p=>{add({b:'reality',tipo:'monta',p,id:'r_'+p.k+'_m'});add({b:'reality',tipo:'arq',p,id:'r_'+p.k+'_a'});add({b:'reality',tipo:'estilo',p,id:'r_'+p.k+'_e'})});
+add({b:'reality',id:'r_casa',q:2,tipo:'tiles',t:'Qual cômodo da casa você quer muito ver?',o:[['🍳','A cozinha do Beto'],['🌿','O jardim'],['🎵','O estúdio de música'],['🩰','A sala de balé'],['🕯️','O sótão escuro'],['🛋️','A sala da TV']]});
+add({b:'reality',id:'r_prova',q:3,tipo:'tiles',t:'Qual prova do 7entidos você quer ver na casa?',o:[['🔊','Que som é esse? de olhos vendados'],['🍣','Esteira de sushi em dupla'],['🌀','Labirinto no celular'],['🗺️','Mapa dos sentidos às cegas']]});
+add({b:'reality',id:'r_premio',q:4,tipo:'tiles',t:'Qual deveria ser o prêmio final?',o:[['⭐','Virar o rosto do app em 2027'],['💰','Dinheiro'],['✈️','Uma viagem'],['💛','Realizar o sonho de alguém da família']]});
+add({b:'reality',id:'r_volta',q:5,tipo:'tiles',t:'O que faria você voltar para assistir o próximo episódio?',o:[['❓','Um mistério'],['💘','Um romance'],['⚡','Briga e virada'],['😂','Humor'],['🤫','Segredos revelados']]});
+add({b:'reality',id:'r_ganchos',q:6,tipo:'multi',t:'Responda sobre a história: quais destas surpresas você quer ver?',sub:'Pode marcar várias.',o:['📷 Uma foto antiga escondida','🐶 Um cachorro perdido que muda tudo','🚪 Uma visita surpresa','⏪ Como cada um chegou na casa','🕵️ Um cliente misterioso','📦 Um segredo guardado no sótão']});
+add({b:'reality',id:'r_viu',q:7,tipo:'tiles',t:'Você já assistiu algum episódio?',o:[['✅','Sim'],['⏳','Ainda não, vou ver'],['🤷','Não sabia do reality']]});
+add({b:'reality',id:'r_tempo',q:8,tipo:'tiles',t:'Quanto tempo você assistiria por episódio?',o:[['⚡','30 segundos'],['⏱️','45 segundos'],['🎞️','60 segundos']]});
+add({b:'reality',id:'r_paga',q:9,tipo:'tiles',t:'Você pagaria para assistir a 2ª temporada?',o:[['🙌','Sim'],['🤔','Talvez'],['🙅','Não']]});
+add({b:'reality',id:'r_quanto',q:10,tipo:'tiles',t:'Quanto você pagaria pela temporada inteira?',quando:A=>A.r_paga&&A.r_paga!=='Não',o:[['','R$ 5'],['','R$ 10'],['','R$ 20'],['','Mais de R$ 20']]});
+add({b:'reality',k:'premio',tipo:'premio'});
+/* DINHEIRO */
+add({b:'dinheiro',k:'ctx',tipo:'ctx',titulo:'💰 Dinheiro',txt:'Agora você é o <b>dono da loja</b> por um minuto. Ajude a descobrir o preço justo do 7entidos. Seja sincero: isso vale ouro.',bt:'Vamos lá'});
+add({b:'dinheiro',id:'d_compra',q:1,tipo:'preco'});
+add({b:'dinheiro',id:'d_presente',q:2,tipo:'tiles',t:'E daria de presente para alguém por esse preço?',o:[['🎁','Sim'],['🤔','Talvez'],['🙅','Não']]});
+add({b:'dinheiro',id:'d_justo',q:3,tipo:'tiles',t:'Para 3 meses de app, qual preço você acha justo?',o:[['','Até R$ 10'],['','R$ 10 a 20'],['','R$ 20 a 30'],['','R$ 30 a 50'],['','Mais de R$ 50']]});
+add({b:'dinheiro',id:'d_paga',q:4,tipo:'tiles',t:'Quanto você já paga por apps por mês (todos somados)?',o:[['','Nada'],['','Até R$ 10'],['','R$ 10 a 30'],['','R$ 30 a 60'],['','Mais de R$ 60']]});
+add({b:'dinheiro',id:'d_bem',q:5,tipo:'tiles',t:'Você já usa algum app de bem-estar (meditação, sono, hábitos)?',o:[['✅','Sim, uso'],['🕰️','Já usei'],['🙅','Nunca usei']]});
+add({b:'dinheiro',k:'premio',tipo:'premio'});
+/* FINAL */
+add({b:'final',id:'z_prop',q:1,tipo:'tiles',t:'Em uma frase: o que o 7entidos quer fazer?',o:[['🌈','Ajudar a descobrir o que te faz bem, pelos sentidos'],['🎮','Ser um joguinho de passatempo'],['🛋️','Ser uma terapia'],['🤷','Não entendi']]});
+add({b:'final',id:'z_renda',q:2,tipo:'tiles',t:'Faixa de renda da sua casa por mês',o:[['','Até R$ 2 mil'],['','R$ 2 a 5 mil'],['','R$ 5 a 10 mil'],['','Mais de R$ 10 mil'],['','Prefiro não dizer']]});
+add({b:'final',id:'z_cidade',q:3,tipo:'cidade'});
+add({b:'final',id:'z_ocup',q:4,tipo:'tiles',t:'O que você faz hoje?',o:[['📚','Estudo'],['🏢','Trabalho registrado'],['🧰','Trabalho por conta'],['🚀','Tenho empresa'],['🌴','Aposentado'],['🔎','Procurando trabalho'],['✳️','Outro']]});
+add({b:'final',id:'z_chegou',q:5,tipo:'tiles',t:'Como você chegou nesta pesquisa?',o:[['💬','WhatsApp de um amigo'],['📸','Instagram'],['📣','Anúncio'],['🎬','Pelo reality'],['✳️','Outro']]});
+add({b:'final',id:'z_com',q:6,tipo:'comunidade'});
+add({b:'final',k:'fim',tipo:'fim'});
+
+/* ---------- navegação ---------- */
+function visivel(i){const s=S[i];return s&&(!s.quando||s.quando(P.a))&&!(s.p&&P.a.r_quais&&P.a.r_quais!=='todos'&&!(P.a.r_sel||[]).includes(s.p.k))}
+function prox(){let i=P.i+1;while(i<S.length&&!visivel(i))i++;P.i=Math.min(i,S.length-1);guarda();render();scrollTo({top:0,behavior:'smooth'})}
+function ant(){let i=P.i-1;while(i>0&&!visivel(i))i--;P.i=Math.max(0,i);guarda();render();scrollTo({top:0,behavior:'smooth'})}
+function resp(id,v,auto=true){P.a[id]=v;guarda();bip(300,.06);if(auto)setTimeout(prox,320)}
+const blk=k=>BLOCOS.find(b=>b.k===k);
+function trail(){const cur=S[P.i].b;document.getElementById('trail').innerHTML=BLOCOS.concat([{k:'final',n:'Final'}]).map(b=>{const tot=S.filter(s=>s.b===b.k).length,feitas=S.filter((s,i)=>s.b===b.k&&i<P.i).length;const pc=P.done[b.k]?100:b.k===cur?Math.round(feitas/tot*100):0;
+  return `<div class="${P.done[b.k]?'done':''} ${b.k===cur?'cur':''}"><i><b style="width:${pc}%"></b></i>${b.n}</div>`}).join('')}
+function head(s,t,sub){const bn=s.b==='final'?'Final':blk(s.b).n;return `${s.q?`<span class="qn">Pergunta ${s.q}</span><span class="bk">${bn}</span>`:''}<h2>${t}</h2>${sub?`<p class="sv">${sub}</p>`:''}`}
+const voltar=()=>P.i>0?`<button class="back" onclick="ant()">← voltar</button>`:'';
+
+/* ---------- desenho de cada tipo de tela ---------- */
+const R={};
+R.boas=()=>`<div class="card" style="text-align:center"><div class="apstrip">${APRES.map(fotoAp).join('')}</div>
+ <h1>Você é um convidado especial ✦</h1><p style="font-size:20px">Você vai participar de uma pesquisa que vai construir um app que pode ajudar muita gente.</p>
+ <p class="sv">🔒 É tudo anônimo: sem nome, sem telefone. Ninguém vai saber quem respondeu o quê.</p>
+ <p class="sv">🎯 Meta: <b style="color:var(--txt)">100 pessoas</b>. Cada resposta sua vale ouro.</p>
+ <p style="font:600 22px Fraunces,serif;color:var(--ouro);margin-top:14px">A partir de agora, a sua jornada começa.</p>
+ <button class="go" onclick="bip(440);prox()">Começar minha jornada</button></div>`;
+R.blocos=()=>`<div class="card"><h2>Sua jornada tem 5 blocos</h2><p class="sv">Cada bloco que você termina abre um <b style="color:var(--txt)">presente surpresa</b> 🎁. Você só descobre o que é quando terminar.</p>
+ <div class="blocks">${BLOCOS.map((b,i)=>`<div class="blkx ${P.done[b.k]?'done':''}"><span class="gift">${P.done[b.k]?b.pr:'🎁'}</span><div><b>${i+1}. ${b.n}</b><small>${P.done[b.k]?esc(b.prT):'presente fechado'}</small></div></div>`).join('')}</div>
+ <p class="sv small">Você pode parar depois de qualquer bloco e voltar depois: este aparelho guarda onde você parou.</p>
+ <button class="go" onclick="prox()">Bora! 🎁</button>${voltar()}</div>`;
+R.apres=s=>`<div class="card">${head(s,'Escolha seu companheiro de jornada','Quem você quer que te acompanhe?')}
+ <div class="apres">${APRES.map(a=>`<button class="ap ${P.a.apres===a.k?'on':''}" onclick="resp('apres','${a.k}')">${fotoAp(a)}${esc(a.rot)}</button>`).join('')}</div>${voltar()}</div>`;
+R.apnome=s=>{const a=APRES.find(x=>x.k===P.a.apres)||APRES[0];return `<div class="card">${head(s,'Que nome combina com seu companheiro?')}
+ <div style="text-align:center;margin:6px 0 10px"><div style="width:120px;margin:0 auto">${fotoAp(a)}</div></div>
+ <div class="opts">${a.nomes.map(n=>`<button class="opt ${P.a.apnome===n?'on':''}" onclick="resp('apnome','${n}')"><span class="em">✦</span>${n}</button>`).join('')}</div>${voltar()}</div>`};
+R.tiles=s=>{const cols=s.o.length<=3?'grid3':'grid2';const nome=s.t;return `<div class="card">${head(s,nome,s.sub)}
+ <div class="${s.o.length>4&&s.o[0][0]===''?'opts':cols}">${s.o.map(([e,t])=>s.o[0][0]===''&&s.o.length>4?`<button class="opt ${P.a[s.id]===t?'on':''}" data-v="${esc(t)}">${t}</button>`:`<button class="tile ${P.a[s.id]===t?'on':''}" data-v="${esc(t)}">${e?`<span class="em">${e}</span>`:''}${t}</button>`).join('')}</div>${voltar()}</div>`};
+R.multi=s=>{const cur=P.a[s.id]||[];return `<div class="card">${head(s,s.t,s.sub||'Pode marcar várias.')}
+ <div class="chips">${s.o.map(t=>`<button class="chip ${cur.includes(t)?'on':''}" data-m="${esc(t)}">${t}</button>`).join('')}</div>
+ ${s.aberto?`<div style="margin-top:12px"><input type="text" id="aberto" placeholder="Quer contar mais? (opcional)" value="${esc(P.a[s.id+'_txt']||'')}">${P.modo==='audio'?'<button class="mic" id="mic">🎙 Falar</button>':''}</div>`:''}
+ <button class="go" id="okm">Continuar</button><div class="err" id="err"></div>${voltar()}</div>`};
+R.react=s=>`<div class="card">${head(s,s.t,'1 toque')}
+ <div class="grid3">${[['😍','Amei'],['🙂','Gostei'],['😕','Não curti']].map(([e,t])=>`<button class="tile ${P.a[s.id]===t?'on':''}" data-v="${t}"><span class="em" style="font-size:44px">${e}</span>${t}</button>`).join('')}</div>
+ <button class="back" onclick="resp('${s.id}','Não fiz')">Não fiz essa</button>${voltar()}</div>`;
+R.flow=s=>`<div class="card">${head(s,'Você já conhecia o Flow?')}
+ <div class="ctx">🌊 <b>Flow</b> é aquele estado em que você se envolve tanto numa coisa boa que o tempo voa. Tudo aqui é baseado na teoria do Flow, do psicólogo <b>Mihaly Csikszentmihalyi</b>. <a href="https://pt.wikipedia.org/wiki/Fluxo_(psicologia)" target="_blank" rel="noopener">Saber mais</a></div>
+ <div class="opts">${['Conheço bem','Já ouvi falar','Nunca ouvi falar'].map(t=>`<button class="opt ${P.a.flow===t?'on':''}" data-v="${t}">${t}</button>`).join('')}</div>${voltar()}</div>`;
+const FALA=['Esta pesquisa tem base científica.','Não queremos a sua opinião.','Queremos a sua sensação.','Mesmo gostando de quem te mandou o link, não diga o que ele quer ouvir: diga o que você sentiu.','Cada resposta ajuda a construir um app que pode fazer bem para muita gente.','E quando terminar, passe para mais pessoas. A meta é 100!'];
+R.video=s=>{const a=APRES.find(x=>x.k===P.a.apres)||APRES[0];return `<div class="card">${head(s,(P.a.apnome||a.nomes[0])+' tem um recado para você')}
+ <div class="vid">${a.video?`<video src="${a.video}" playsinline controls></video>`:`${fotoAp(a)}<div class="leg" id="leg"></div>`}</div>
+ <button class="go" onclick="resp('video','Viu')">Já vi ✓</button><button class="back" id="pular">Pular o vídeo</button><div class="err" id="err"></div>${voltar()}</div>`};
+R.modo=s=>`<div class="card">${head(s,'Como você prefere responder?','Dá para trocar a qualquer momento no botãozinho do canto.')}
+ <div class="grid2"><button class="tile ${P.modo==='botoes'?'on':''}" data-md="botoes"><span class="em">👆</span>Tocando nos botões</button><button class="tile ${P.modo==='audio'?'on':''}" data-md="audio"><span class="em">🎙️</span>Falando (áudio)</button></div>
+ <p class="sv small" style="margin-top:10px">No modo áudio, as perguntas abertas ganham um botão de microfone que escreve o que você fala.</p>${voltar()}</div>`;
+R.cor=s=>`<div class="card">${head(s,'O seu pincel: qual é a sua cor favorita?')}
+ <div class="grid3" style="grid-template-columns:repeat(4,1fr)">${SEN.map(x=>x[2]).concat(['#ffffff']).map((c,i)=>`<button class="tile ${P.a.cor===c?'on':''}" data-v="${c}" aria-label="cor ${i+1}" style="height:74px;background:${c}33;border-color:${P.a.cor===c?'var(--ouro)':c}"><span style="display:block;width:36px;height:36px;border-radius:50%;margin:auto;background:${c}"></span></button>`).join('')}</div>${voltar()}</div>`;
+const PINC=[['Pincel Redemoinho','🌀'],['Pincel Pétala','🌸'],['Pincel Faísca','✨'],['Pincel Onda','🌊']];
+R.pincel=s=>{const d=P.pd||(P.pd={r:0,v:[]});const cor=P.a.cor||'#F5C542';const par=d.r===0?[PINC[0],PINC[1]]:d.r===1?[PINC[2],PINC[3]]:d.v.map(n=>PINC.find(p=>p[0]===n));
+ return `<div class="card">${head(s,'Duelo de pincéis',`Rodada ${d.r+1} de 3 · qual pincel tem mais a ver com você?`)}
+ <div class="grid2">${par.map(p=>`<button class="tile" data-pc="${p[0]}" style="padding:18px 6px"><span class="em" style="font-size:46px;filter:drop-shadow(0 0 10px ${cor})">${p[1]}</span>${p[0]}<span style="display:block;height:8px;border-radius:9px;margin:8px 12px 0;background:${cor}"></span></button>`).join('')}</div>${voltar()}</div>`};
+R.ceu=s=>{const v=P.a[s.id];return `<div class="card">${head(s,s.t,s.sub)}
+ <div class="sky" id="sky"><div class="sun" id="sun"></div></div>
+ <div class="scale">${[...Array(11).keys()].map(n=>`<button class="${v===n?'on':''}" data-n="${n}">${n}</button>`).join('')}</div><div class="sl"><span>0 · nada bem</span><span>10 · muito bem</span></div>
+ ${s.id==='ceu1'&&P.a.ceu0!=null?`<p class="sv small" style="margin-top:8px">Na chegada você deu <b style="color:var(--txt)">${P.a.ceu0}</b>.</p>`:''}
+ <button class="go" id="okc" ${v==null?'disabled':''}>Continuar</button>${voltar()}</div>`};
+R.premio=s=>{const b=blk(s.b);if(!P.done[b.k]){P.done[b.k]=1;guarda();enviar();setTimeout(festa,200)}
+ const cod=b.k==='f2'?codigo('3M'):b.k==='reality'?codigo('T2'):b.k==='dinheiro'?codigo('AMIGO'):'';
+ const prox2=BLOCOS[BLOCOS.indexOf(b)+1];
+ return `<div class="card prize"><p class="sv">Você terminou o bloco <b style="color:var(--txt)">${b.n}</b>!</p><div class="big">${b.pr}</div><h2>${b.prT}</h2>
+ ${cod?`<p class="sv small">Guarde este código (tire um print). Ele é seu e continua anônimo:</p><div class="code">${cod}</div><p class="sv small">Vale a partir do lançamento do app, em 1º de dezembro.</p>`:''}
+ ${b.k==='f1'?'<p class="sv small">Suas 10 descobertas ficam no fim da Fase 1, neste aparelho.</p>':''}
+ ${b.k==='dinheiro'?`<a class="zap" href="https://wa.me/?text=${encodeURIComponent('Ganhei um presente para você: 1 mês grátis do app 7entidos, que sai em 1º/12. Seu código: '+cod+' ✦ Conheça: @7entidoss no Instagram')}" target="_blank" rel="noopener">💝 Mandar o presente no WhatsApp</a>`:''}
+ <button class="go" onclick="prox()">${prox2?'Seguir para '+prox2.n+' →':'Seguir para o final →'}</button>
+ <button class="go ghost" onclick="pausa()">Parar por aqui (volto depois)</button></div>`};
+R.ir=s=>{const f1=s.fase==='f1';const pronto=f1?fase1Pronta():P.a.f2_volta;return `<div class="card"><span class="qn">${f1?'Fase 1':'Fase 2'}</span>
+ <h2>${f1?'🗺️ O mapa dos seus 7 sentidos':'🎮 Os mini jogos dos sentidos'}</h2>
+ <p>${f1?'Em cada um dos 7 sentidos, escolha o que você mais gosta. No fim, você ganha a sua imagem e 10 descobertas sobre você.':'Que som é esse?, Carinho, Esteira de sushi, Corpo que acende e uma respiração para fechar.'}</p>
+ <p class="sv small">A fase abre nesta mesma tela. Quando terminar, toque em <b style="color:var(--txt)">“↩ Voltar para a pesquisa”</b>, que fica embaixo.</p>
+ <a class="go" style="text-align:center;text-decoration:none" href="${SITE}${f1?'/jornada/?c=7s0a4653':'/jornada/fase2/?c=7s0a4653'}" onclick="P.fase='${s.fase}';guarda()">Abrir a ${f1?'Fase 1':'Fase 2'} →</a>
+ ${pronto||P.fase===s.fase?`<button class="go ghost" onclick="${f1?'':"P.a.f2_volta=1;"}P.fase=null;guarda();prox()">Já terminei a ${f1?'Fase 1':'Fase 2'} ✓</button>`:''}${voltar()}</div>`};
+R.ctx=s=>`<div class="card" style="text-align:center"><h1>${s.titulo}</h1><div class="ctx" style="text-align:left">${s.txt}</div><button class="go" onclick="festa();prox()">${s.bt}</button>${voltar()}</div>`;
+R.quais=s=>{const sel=P.a.r_sel||[];return `<div class="card">${head(s,'Quantos personagens você quer montar?','São 7 moradores, um por sentido.')}
+ <div class="opts"><button class="opt ${P.a.r_quais==='todos'?'on':''}" data-q="todos"><span class="em">🎬</span><span>Todos os 7<small>Uns 6 minutos</small></span></button>
+ <button class="opt ${P.a.r_quais==='tres'?'on':''}" data-q="tres"><span class="em">⭐</span><span>Só os meus 3 favoritos<small>Uns 3 minutos</small></span></button></div>
+ <div id="pick" ${P.a.r_quais==='tres'?'':'hidden'}><p class="sv" style="margin:12px 0 6px">Escolha 3:</p><div class="grid3">${CAST.map(p=>`<button class="tile ${sel.includes(p.k)?'on':''}" data-pk="${p.k}" style="--c:${p.cor}"><div style="width:58px;margin:0 auto 4px">${rosto(p.cor,p.sombra)}</div>${p.n}<small style="display:block;color:${p.cor};font-size:13px">${p.sen}</small></button>`).join('')}</div>
+ <button class="go" id="ok3" ${sel.length===3?'':'disabled'}>Montar esses 3</button></div>${voltar()}</div>`};
+const persHead=p=>`<div class="pers">${rosto(p.cor,p.sombra)}<div><b>${p.n}</b><span class="tag" style="--c:${p.cor}">${SEN.find(x=>x[1]===p.sen)[0]} ${p.sen}</span><span class="tag" style="--c:#F5C542">${p.arq}</span></div></div>`;
+function linhas(rows,pfx){return rows.map(([lab,ops,f],i)=>`<div class="row"><b><span class="rn">${i+1}.</span>${lab}</b><div class="chips">${ops.map(o=>`<button class="chip ${P.a[pfx+f]===o?'on':''}" data-f="${f}" data-v="${esc(o)}">${o}</button>`).join('')}</div></div>`).join('')}
+R.monta=s=>{const p=s.p;return `<div class="card"><span class="qn">Monte o personagem</span>${persHead(p)}
+ ${linhas([['Cabelo',p.cab,'cab'],['Rosto',p.ros,'ros'],[p.corLabel||'Corpo',p.cor2,'cor2'],['Nome',p.nom,'nom']],'r_'+p.k+'_')}
+ <button class="go" id="okr">Próximo →</button><div class="err" id="err"></div>${voltar()}</div>`};
+R.arq=s=>{const p=s.p;return `<div class="card"><span class="qn">Quem é ${p.n} por dentro?</span>${persHead(p)}
+ ${linhas(p.aq.map((x,i)=>[x[0],x[1],'aq'+i]),'r_'+p.k+'_')}
+ <button class="go" id="okr">Próximo →</button><div class="err" id="err"></div>${voltar()}</div>`};
+R.estilo=s=>{const p=s.p;return `<div class="card"><span class="qn">Estilo e dor</span>${persHead(p)}
+ ${linhas([['Qual o estilo de '+p.n+'?',p.est,'est'],['Qual a dor de '+p.n+'? (o app vai ajudar nela)',p.dor,'dor']],'r_'+p.k+'_')}
+ <button class="go" id="okr">${p.k==='leo'||(P.a.r_quais==='tres'&&(P.a.r_sel||[]).slice(-1)[0]===p.k)?'Elenco pronto! →':'Próximo personagem →'}</button><div class="err" id="err"></div>${voltar()}</div>`};
+R.preco=s=>`<div class="card">${head(s,'Você compraria hoje?')}
+ <div style="background:#0d1433;border:2px solid var(--ouro);border-radius:20px;padding:18px;text-align:center;margin:8px 0 14px">
+  <div class="ring" style="margin:0 auto 8px;width:54px;height:54px"><div>7</div></div><b style="font:600 22px Fraunces,serif">App 7entidos</b>
+  <div class="sv small">3 meses de acesso · pagamento único · sem assinatura</div>
+  <div style="font:800 40px Manrope,sans-serif;color:var(--ouro);margin-top:6px">${P.preco}</div></div>
+ <div class="grid3">${[['🛒','Sim'],['🤔','Talvez'],['🙅','Não']].map(([e,t])=>`<button class="tile ${P.a.d_compra===t?'on':''}" data-v="${t}"><span class="em">${e}</span>${t}</button>`).join('')}</div>${voltar()}</div>`;
+R.cidade=s=>`<div class="card">${head(s,'Em que cidade você mora?')}
+ <div class="chips" style="margin-bottom:10px">${['Santos','São Vicente','Guarujá','Praia Grande','São Paulo'].map(c=>`<button class="chip ${P.a.z_cidade===c?'on':''}" data-c="${c}">${c}</button>`).join('')}</div>
+ <input type="text" id="cid" placeholder="Outra cidade (opcional)" value="${esc(['Santos','São Vicente','Guarujá','Praia Grande','São Paulo'].includes(P.a.z_cidade)?'':P.a.z_cidade||'')}">${P.modo==='audio'?'<button class="mic" id="mic">🎙 Falar</button>':''}
+ <button class="go" id="okcid">Continuar</button><button class="back" onclick="resp('z_cidade','Prefiro não dizer')">Prefiro não dizer</button>${voltar()}</div>`;
+R.comunidade=s=>`<div class="card">${head(s,'Quer entrar na comunidade do 7entidos?','Novidades, testes antes de todo mundo e o aviso do lançamento.')}
+ <div class="opts"><button class="opt ${P.a.z_com==='Sim'?'on':''}" data-cm="Sim"><span class="em">🙋</span>Quero entrar</button><button class="opt ${P.a.z_com==='Não'?'on':''}" data-cm="Não"><span class="em">👋</span>Agora não</button></div>
+ <div id="cform" ${P.a.z_com==='Sim'?'':'hidden'} style="margin-top:12px"><p class="sv small">Nome e telefone são opcionais e ficam numa lista separada, <b style="color:var(--txt)">sem ligação com as suas respostas</b>. A pesquisa continua anônima.</p>
+  <input type="text" id="cnome" placeholder="Seu nome (opcional)" style="margin-bottom:8px"><input type="tel" id="ctel" placeholder="WhatsApp com DDD (opcional)">
+  <button class="go" id="okcm">Entrar e continuar</button></div>${voltar()}</div>`;
+R.fim=s=>{if(!P.done.final){P.done.final=1;guarda();enviar();setTimeout(festa,200)}
+ const msg='Tá chovendo, tá frio, todo mundo parado em casa... então me ajuda! 🌧️ Fiz uma pesquisa diferente, sobre sensações, que vai construir um app que pode ajudar muita gente. É anônima, divertida e tem presente no final 🎁 A meta é 100 pessoas: '+LINK_PESQUISA+' ✦ E segue o @7entidoss no Instagram!';
+ const pr=BLOCOS.filter(b=>P.done[b.k]);
+ return `<div class="card prize"><div class="big">🌟</div><h1>Obrigado por sentir com a gente!</h1>
+ <p>Você ajudou a construir o 7entidos. Seus presentes:</p>
+ <div class="blocks" style="text-align:left">${pr.map(b=>`<div class="blkx done"><span class="gift">${b.pr}</span><div><b>${b.prT}</b>${b.k==='f2'?`<small>${codigo('3M')}</small>`:b.k==='reality'?`<small>${codigo('T2')}</small>`:b.k==='dinheiro'?`<small>${codigo('AMIGO')}</small>`:''}</div></div>`).join('')||'<p class="sv">Faça os blocos para ganhar os presentes.</p>'}</div>
+ <p style="font:600 21px Fraunces,serif;margin-top:14px">Falta pouco para 100 pessoas. Chama mais gente?</p>
+ <a class="zap" id="zap" href="https://wa.me/?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">📲 Mandar no WhatsApp</a>
+ <a class="go ghost" style="display:block;text-align:center;text-decoration:none;margin-top:10px" href="https://www.instagram.com/7entidoss/" target="_blank" rel="noopener">📸 Seguir o @7entidoss</a>
+ ${BLOCOS.some(b=>!P.done[b.k])?`<button class="go ghost" onclick="irPara(BLOCOS.find(b=>!P.done[b.k]).k)">Fazer o bloco que falta</button>`:''}</div>`};
+function pausa(){document.getElementById('app').innerHTML=`<div class="card" style="text-align:center"><div style="font-size:60px">🌙</div><h2>Tudo guardado!</h2><p class="sv">Quando quiser continuar, abra o mesmo link neste aparelho e você volta exatamente daqui.</p><button class="go" onclick="render()">Continuar agora</button></div>`}
+function irPara(b){const i=S.findIndex(s=>s.b===b);if(i>=0){P.i=i;guarda();render()}}
+function fase1Pronta(){try{const j=JSON.parse(localStorage.getItem('jornada7')||'null');return j&&j.esc&&Object.keys(j.esc).filter(k=>(j.esc[k]||[]).length).length>=7}catch(e){return false}}
+
+/* ---------- ligar os toques ---------- */
+function bind(s){const app=document.getElementById('app');
+ app.querySelectorAll('[data-v]').forEach(b=>{if(b.closest('.row'))return;b.onclick=()=>{if(s.tipo==='cor'){P.a.cor=b.dataset.v;resp('cor',b.dataset.v)}else resp(s.id,b.dataset.v)}});
+ app.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{const cur=P.a[s.id]||[];const v=b.dataset.m;P.a[s.id]=cur.includes(v)?cur.filter(x=>x!==v):cur.concat([v]);b.classList.toggle('on');guarda();bip(280,.05)});
+ const okm=document.getElementById('okm');if(okm)okm.onclick=()=>{const t=document.getElementById('aberto');if(t)P.a[s.id+'_txt']=t.value.trim();if(!(P.a[s.id]||[]).length&&!(t&&t.value.trim())){document.getElementById('err').textContent='Marque pelo menos uma opção.';return}if(t&&t.value.trim())P.a[s.id]=(P.a[s.id]||[]).filter(x=>!x.startsWith('✍️')).concat(['✍️ '+t.value.trim()]);guarda();prox()};
+ app.querySelectorAll('[data-md]').forEach(b=>b.onclick=()=>{P.modo=b.dataset.md;P.a.modo=P.modo;guarda();modoBtn();resp('modo',P.modo)});
+ app.querySelectorAll('[data-pc]').forEach(b=>b.onclick=()=>{const d=P.pd;bip(360);if(d.r<2){d.v.push(b.dataset.pc);d.r++;guarda();render()}else{P.a.pincel=b.dataset.pc;guarda();festa();setTimeout(prox,500)}});
+ app.querySelectorAll('[data-n]').forEach(b=>b.onclick=()=>{const n=+b.dataset.n;P.a[s.id]=n;guarda();bip(260+n*40);app.querySelectorAll('[data-n]').forEach(x=>x.classList.toggle('on',x===b));ceuPinta(n);document.getElementById('okc').disabled=false});
+ const okc=document.getElementById('okc');if(okc){okc.onclick=prox;if(P.a[s.id]!=null)ceuPinta(P.a[s.id]);else ceuPinta(5)}
+ app.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{P.a.r_quais=b.dataset.q;guarda();bip();if(b.dataset.q==='todos'){P.a.r_sel=CAST.map(p=>p.k);prox()}else{P.a.r_sel=[];render()}});
+ app.querySelectorAll('[data-pk]').forEach(b=>b.onclick=()=>{let sel=P.a.r_sel||[];const k=b.dataset.pk;sel=sel.includes(k)?sel.filter(x=>x!==k):sel.length<3?sel.concat([k]):sel;P.a.r_sel=CAST.map(p=>p.k).filter(k2=>sel.includes(k2));guarda();bip();render()});
+ const ok3=document.getElementById('ok3');if(ok3)ok3.onclick=prox;
+ app.querySelectorAll('.row [data-f]').forEach(b=>b.onclick=()=>{const k='r_'+s.p.k+'_'+b.dataset.f;P.a[k]=b.dataset.v;guarda();bip(300,.05);b.parentNode.querySelectorAll('.chip').forEach(x=>x.classList.toggle('on',x===b))});
+ const okr=document.getElementById('okr');if(okr)okr.onclick=()=>{const fs=[...new Set([...app.querySelectorAll('.row [data-f]')].map(x=>x.dataset.f))];const falta=fs.filter(f=>!P.a['r_'+s.p.k+'_'+f]);if(falta.length){document.getElementById('err').textContent='Escolha uma opção em cada linha ('+falta.length+' faltando).';return}prox()};
+ app.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>resp('z_cidade',b.dataset.c));
+ const okcid=document.getElementById('okcid');if(okcid)okcid.onclick=()=>{const v=document.getElementById('cid').value.trim();if(v)resp('z_cidade',v,false);prox()};
+ app.querySelectorAll('[data-cm]').forEach(b=>b.onclick=()=>{P.a.z_com=b.dataset.cm;guarda();bip();if(b.dataset.cm==='Não')prox();else render()});
+ const okcm=document.getElementById('okcm');if(okcm)okcm.onclick=()=>{const n=document.getElementById('cnome').value.trim(),t=document.getElementById('ctel').value.trim();if(n||t)enviarComunidade(n,t);prox()};
+ const pular=document.getElementById('pular');if(pular)pular.onclick=()=>{const e=document.getElementById('err');if(!pular.dataset.arm){pular.dataset.arm=1;e.textContent='Tem certeza? Sem o recado, algumas partes podem ficar confusas. Toque de novo para pular.';return}resp('video','Pulou')};
+ const leg=document.getElementById('leg');if(leg){let i=0;const go=()=>{if(!document.body.contains(leg))return;leg.style.opacity=0;setTimeout(()=>{leg.textContent=FALA[i%FALA.length];leg.style.opacity=1;i++},250);setTimeout(go,3200)};leg.style.transition='opacity .25s';go()}
+ const zap=document.getElementById('zap');if(zap)zap.addEventListener('click',()=>{P.compartilhou=1;guarda();enviar()});
+ const mic=document.getElementById('mic');if(mic)mic.onclick=()=>ouvir(mic,document.getElementById('aberto')||document.getElementById('cid'));
+}
+function ceuPinta(n){const sky=document.getElementById('sky'),sun=document.getElementById('sun');if(!sky)return;const t=n/10;
+ sky.style.background=`linear-gradient(180deg, hsl(${215-t*20} ${30+t*40}% ${10+t*45}%), hsl(${30+t*15} ${40+t*50}% ${15+t*45}%))`;sun.style.top=(110-t*80)+'px';sun.style.opacity=.25+t*.75}
+let REC=null;function ouvir(btn,campo){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){campo.focus();campo.placeholder='Use o 🎤 do teclado do celular';return}
+ if(REC){REC.stop();return}try{REC=new SR();REC.lang='pt-BR';REC.interimResults=true;const base=campo.value?campo.value+' ':'';REC.onresult=e=>{let t='';for(const r of e.results)t+=r[0].transcript;campo.value=base+t};
+  REC.onend=()=>{btn.classList.remove('rec');btn.textContent='🎙 Falar';REC=null};REC.start();btn.classList.add('rec');btn.textContent='● Ouvindo… toque para parar'}catch(e){campo.focus()}}
+function modoBtn(){const b=document.getElementById('modo');if(!P.a.modo){b.hidden=true;return}b.hidden=false;b.textContent=P.modo==='audio'?'🎙️ áudio · trocar':'👆 botões · trocar';
+ b.onclick=()=>{P.modo=P.modo==='audio'?'botoes':'audio';guarda();modoBtn();render()}}
+function render(){if(!visivel(P.i)){let i=P.i;while(i<S.length-1&&!visivel(i))i++;P.i=i}
+ const s=S[P.i];trail();document.getElementById('app').innerHTML=R[s.tipo](s);bind(s);modoBtn()}
+
+/* voltou de uma fase? */
+(function(){const q=new URLSearchParams(location.search);const v=q.get('volta');if(v){const i=S.findIndex(s=>s.tipo==='ir'&&s.fase===v);if(i>=0){P.i=i;if(v==='f2')P.a.f2_volta=1;guarda()}try{history.replaceState(null,'',location.pathname)}catch(e){}}})();
+(function(){const st=document.getElementById('stars');for(let i=0;i<60;i++){const s=document.createElement('i');s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.animationDelay=Math.random()*3+'s';st.appendChild(s)}})();
+render();
+</script>
+</body>
+</html>

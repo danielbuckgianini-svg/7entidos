@@ -813,4 +813,5 @@ function palavra7(x){const t=x.t;if(t.indexOf(':')>0){let w=t.split(':').pop().t
 function rotulo7(x){const t=x.t;if(t.indexOf('O fio invisível')===0)return 'o fio que liga as suas escolhas';if(t.indexOf('O que quase não apareceu')===0)return 'o que quase não apareceu';if(t.indexOf('Onde você é mais decidido')===0)return 'onde você é mais decidido';if(t.indexOf('Sua paleta')===0)return 'a sua paleta';if(t==='Não foi acaso')return 'não foi acaso';if(t==='Uma criança no mapa')return 'uma criança no mapa';return '';}
 
 render();
-</script></body></html>
+</script><script>/* 07/11: volta para a Jornada da Pesquisa (só aparece para quem veio de /pesquisa/) */(function(){try{var p=JSON.parse(localStorage.getItem('pesquisa7')||'null');if(!p||!p.fase)return;var a=document.createElement('a');a.href='/pesquisa/?volta='+p.fase;a.textContent='\u21a9 Voltar para a pesquisa';a.style.cssText='position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:99999;background:#F5C542;color:#0A0F24;font:800 16px system-ui,sans-serif;padding:12px 20px;border-radius:99px;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.5)';document.body.appendChild(a)}catch(e){}})();</script>
+</body></html>
