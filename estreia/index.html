@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A Casa dos 7 Sentidos · Capítulo 1</title>
+<meta name="description" content="Assista ao Capítulo 1 de A Casa dos 7 Sentidos. Você decide a vida deles.">
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#050a1f;--gold:#f2c14e;--txt:#f1f3fc;--mut:#b3b9dc;
+--visao:#f5c542;--audicao:#4aa8ff;--tato:#ff8a3d;--paladar:#ff5a6e;--olfato:#5ccf8a;--equilibrio:#b48cff;--corpo:#3fd6d0}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--txt);font-family:Poppins,system-ui,sans-serif;font-size:18px;line-height:1.5;background:var(--navy);overflow-x:hidden;padding-bottom:96px}
+/* fundo em camadas: casa da capa + luzes dos 7 sentidos + chão de palco */
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg .casa{position:absolute;inset:-4%;background:url(capa.jpg) center 30%/cover;filter:blur(6px) brightness(.45) saturate(1.2);transform:scale(1.08)}
+.bg .veu{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 20%,rgba(29,44,110,.25),rgba(5,10,31,.85) 70%)}
+.bg i{position:absolute;width:44vmax;height:44vmax;border-radius:50%;filter:blur(90px);opacity:.18;animation:fl 26s ease-in-out infinite}
+.bg i:nth-of-type(1){background:var(--visao);left:-15%;top:5%}
+.bg i:nth-of-type(2){background:var(--audicao);right:-15%;top:20%;animation-delay:-6s}
+.bg i:nth-of-type(3){background:var(--equilibrio);left:20%;bottom:-20%;animation-delay:-12s}
+.bg i:nth-of-type(4){background:var(--olfato);right:-10%;bottom:0;animation-delay:-18s}
+.bg .chao{position:absolute;left:-50%;right:-50%;bottom:-28vh;height:62vh;background:repeating-linear-gradient(90deg,rgba(242,193,78,.12) 0 1px,transparent 1px 80px),repeating-linear-gradient(0deg,rgba(242,193,78,.12) 0 1px,transparent 1px 80px);transform:perspective(500px) rotateX(70deg);-webkit-mask-image:linear-gradient(to top,#000 5%,transparent 75%);mask-image:linear-gradient(to top,#000 5%,transparent 75%)}
+.holo{position:absolute;top:-10vh;width:22vw;min-width:120px;height:95vh;transform-origin:50% 0;background:linear-gradient(rgba(255,240,200,.32),rgba(255,240,200,.05) 70%,transparent);clip-path:polygon(42% 0,58% 0,100% 100%,0 100%);mix-blend-mode:screen;animation:var(--a) 7s ease-in-out infinite}
+.holo.h1{left:6%;--a:varre1}.holo.h2{left:39%;--a:varre2;background:linear-gradient(rgba(150,200,255,.3),transparent 70%)}.holo.h3{right:6%;--a:varre3}
+@keyframes varre1{0%,100%{transform:rotate(-18deg)}50%{transform:rotate(8deg)}}
+@keyframes varre2{0%,100%{transform:rotate(10deg)}50%{transform:rotate(-10deg)}}
+@keyframes varre3{0%,100%{transform:rotate(18deg)}50%{transform:rotate(-8deg)}}
+.plateia{position:relative;height:70px;margin:-30px -16px 0;background:radial-gradient(circle at 20px 70px,#02040f 18px,transparent 19px) 0 0/40px 70px repeat-x,radial-gradient(circle at 20px 78px,#060a1c 20px,transparent 21px) 20px 8px/40px 70px repeat-x;z-index:2}
+.telao{box-shadow:0 0 0 2px rgba(242,193,78,.55),0 0 0 10px rgba(10,14,40,.9),0 0 70px rgba(74,168,255,.55),0 40px 80px rgba(0,0,0,.75)!important}
+@keyframes fl{50%{transform:translate3d(5vw,4vh,0) scale(1.1)}}
+main{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:18px 16px 30px}
+/* topo */
+.top{display:flex;justify-content:center;align-items:center;gap:8px;font-weight:800;letter-spacing:.06em;font-size:15px;color:var(--mut)}
+.top b{color:var(--gold)}
+.live{display:inline-flex;align-items:center;gap:6px;background:#d0021b;color:#fff;border-radius:8px;padding:3px 10px;font-size:13px;letter-spacing:.08em}
+.live::before{content:"";width:8px;height:8px;border-radius:50%;background:#fff;animation:bl 1.2s infinite}
+@keyframes bl{50%{opacity:.2}}
+/* título dourado com brilho passando */
+h1{position:relative;overflow:hidden;font-family:"Abril Fatface",serif;font-weight:400;text-align:center;color:var(--gold);font-size:clamp(40px,11vw,74px);line-height:.98;margin:12px 0 4px;text-shadow:0 2px 0 #a8751a,0 4px 0 #7a5208,0 6px 0 #4d3305,0 16px 34px rgba(242,193,78,.45)}
+h1::after{content:"";position:absolute;top:0;bottom:0;width:40%;left:-60%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-20deg);animation:brilho 4.5s ease-in-out infinite}
+@keyframes brilho{0%,60%{left:-60%}100%{left:130%}}
+.cap{text-align:center;font-family:"Abril Fatface",serif;color:var(--gold);letter-spacing:.3em;font-size:18px;margin:0 0 18px}
+.cap::before,.cap::after{content:"—";margin:0 10px;opacity:.6}
+/* celular flutuando em 3D */
+.palco{perspective:1400px;display:flex;justify-content:center;margin:6px 0 10px}
+.cel{position:relative;width:min(88vw,400px);aspect-ratio:9/16;max-height:82vh;border-radius:42px;padding:10px;background:linear-gradient(145deg,#3a3f5c,#0e1124 60%,#2a2f4a);box-shadow:0 0 0 2px rgba(242,193,78,.55),0 40px 80px rgba(0,0,0,.75),0 0 90px rgba(242,193,78,.25);transform:rotateY(-10deg) rotateX(6deg);transition:transform .8s cubic-bezier(.2,.8,.2,1);animation:flutua 6s ease-in-out infinite}
+.cel.on{transform:none;animation:none}
+@keyframes flutua{50%{translate:0 -10px}}
+.cel video{width:100%;height:100%;object-fit:cover;border-radius:33px;background:#000;display:block}
+.reflexo{width:min(80vw,360px);height:60px;margin:-6px auto 0;background:radial-gradient(ellipse at center,rgba(242,193,78,.35),transparent 70%);filter:blur(8px)}
+.som{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;font:inherit;font-weight:800;font-size:22px;color:#1d1300;border:0;border-radius:22px;padding:18px 26px;cursor:pointer;background:linear-gradient(#ffe08a,#e0a52c);box-shadow:0 7px 0 #7a5208,0 16px 30px rgba(0,0,0,.6);animation:pulsa 1.5s ease-in-out infinite;white-space:nowrap}
+.som.hide{display:none}
+@keyframes pulsa{50%{transform:translate(-50%,-50%) scale(1.07);box-shadow:0 7px 0 #7a5208,0 0 40px rgba(242,193,78,.8)}}
+/* botão da pesquisa: dourado em relevo 3D pulsando */
+.cta{display:block;width:min(100%,460px);margin:20px auto;text-align:center;text-decoration:none;font-weight:800;font-size:23px;color:#1d1300;border-radius:22px;padding:20px 24px;background:linear-gradient(#ffe08a,#d9981f);box-shadow:0 8px 0 #7a5208,0 18px 34px rgba(0,0,0,.6),inset 0 2px 0 rgba(255,255,255,.6);animation:pulsaC 1.8s ease-in-out infinite}
+.cta small{display:block;font-weight:600;font-size:15px;opacity:.8}
+.cta:active{transform:translateY(6px);box-shadow:0 2px 0 #7a5208}
+@keyframes pulsaC{50%{box-shadow:0 8px 0 #7a5208,0 0 46px rgba(242,193,78,.75),inset 0 2px 0 rgba(255,255,255,.6)}}
+.fixo{position:fixed;left:0;right:0;bottom:0;z-index:5;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:linear-gradient(to top,rgba(5,10,31,.96),rgba(5,10,31,.7) 70%,transparent);transform:translateY(120%);transition:transform .4s}
+.fixo.show{transform:none}
+.fixo .cta{margin:0 auto;padding:15px 20px;font-size:20px}
+/* seções */
+.sec{margin:46px 0 0}
+.sec h2{font-family:"Abril Fatface",serif;font-weight:400;color:var(--gold);text-align:center;font-size:clamp(30px,8vw,44px);line-height:1.05;margin:0 0 8px;text-shadow:0 3px 0 #6d4a08,0 10px 24px rgba(0,0,0,.6)}
+.sec .lead{text-align:center;color:var(--mut);margin:0 auto 18px;max-width:560px}
+/* mistério da campainha */
+.misterio{position:relative;max-width:560px;margin:0 auto;padding:28px 22px;border-radius:26px;text-align:center;background:linear-gradient(160deg,rgba(255,255,255,.12),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.16);box-shadow:0 30px 60px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.2);backdrop-filter:blur(6px)}
+.sino{font-size:58px;display:inline-block;animation:toca 2.4s ease-in-out infinite;filter:drop-shadow(0 8px 14px rgba(242,193,78,.5))}
+@keyframes toca{0%,70%,100%{transform:rotate(0)}75%{transform:rotate(18deg)}80%{transform:rotate(-16deg)}85%{transform:rotate(12deg)}90%{transform:rotate(-8deg)}}
+.anel{width:90px;height:90px;margin:0 auto;border-radius:50%;background:conic-gradient(var(--visao),var(--audicao),var(--tato),var(--paladar),var(--olfato),var(--equilibrio),var(--corpo),var(--visao));-webkit-mask:radial-gradient(circle,transparent 52%,#000 54%);mask:radial-gradient(circle,transparent 52%,#000 54%);animation:gira 6s linear infinite;filter:drop-shadow(0 0 14px rgba(242,193,78,.6))}
+@keyframes gira{to{transform:rotate(360deg)}}
+.misterio p{font-size:22px;margin:6px 0 0}
+.misterio b{color:var(--gold)}
+/* moradores: cards 3D que viram */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px;perspective:1200px}
+.grid::-webkit-scrollbar{display:none}
+.corredor{position:relative}
+.corredor::before{content:"";position:absolute;left:-16px;right:-16px;top:0;height:30px;background:linear-gradient(rgba(255,236,190,.18),transparent);pointer-events:none}
+.mor{perspective:900px;aspect-ratio:3/4.4;cursor:pointer;-webkit-tap-highlight-color:transparent;position:relative;transition:transform .5s}
+
+.mor .in{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.2,.8,.2,1)}
+.mor.v .in{transform:rotateY(180deg)}
+.mor .f,.mor .b{position:absolute;inset:0;border-radius:20px;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:0 18px 34px rgba(0,0,0,.6),0 0 0 2px var(--c),0 0 26px color-mix(in srgb,var(--c) 50%,transparent)}
+.mor .f img{width:100%;height:100%;object-fit:cover;display:block}
+.mor .f .nm{position:absolute;left:0;right:0;bottom:0;padding:26px 10px 10px;background:linear-gradient(transparent,rgba(0,0,0,.85));font-weight:800;font-size:19px}
+.mor .f .nm span{display:block;font-size:13px;font-weight:600;color:var(--c)}
+.mor .b{transform:rotateY(180deg);background:linear-gradient(160deg,color-mix(in srgb,var(--c) 35%,#0a0f2c),#0a0f2c 70%);display:flex;flex-direction:column;justify-content:center;padding:16px;text-align:center}
+.mor .b .chip{align-self:center;background:var(--c);color:#0b1030;font-weight:800;font-size:13px;border-radius:99px;padding:3px 12px}
+.mor .b h3{font-family:"Abril Fatface",serif;font-weight:400;font-size:28px;margin:10px 0 4px}
+.mor .b q{font-size:16px;line-height:1.35}
+.mor .b small{display:block;margin-top:10px;color:var(--mut);font-size:12px}
+.dica{text-align:center;color:var(--mut);font-size:15px;margin-top:10px}
+/* convite + capa */
+.row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.vidro{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:var(--txt);font-weight:600;padding:14px 18px;border-radius:18px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);box-shadow:0 14px 26px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.2);backdrop-filter:blur(6px)}
+.vidro .ic{font-size:24px}
+.vidro.zap{background:linear-gradient(#2fe27a,#1fae55);border-color:#25d366;color:#04230f;font-weight:800;box-shadow:0 6px 0 #127a3a,0 14px 26px rgba(0,0,0,.45)}
+.row{flex-direction:column;align-items:center}.row .vidro{width:min(100%,380px);justify-content:center;font-size:19px}
+.poster{display:block;width:min(78vw,340px);margin:0 auto;border-radius:20px;box-shadow:0 0 0 2px rgba(242,193,78,.5),0 34px 70px rgba(0,0,0,.7);transform:perspective(900px) rotateX(8deg);transition:transform .6s}
+.poster:hover{transform:none}
+/* rodapé */
+footer{position:relative;z-index:1;margin-top:56px;padding:26px 16px 30px;text-align:center;border-top:1px solid rgba(255,255,255,.1);background:rgba(5,10,31,.55)}
+.faixa{height:4px;max-width:420px;margin:0 auto 20px;border-radius:4px;background:linear-gradient(90deg,var(--visao),var(--audicao),var(--tato),var(--paladar),var(--olfato),var(--equilibrio),var(--corpo))}
+.redes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;max-width:520px;margin:0 auto}
+.rede{display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:var(--txt);font-size:13px;font-weight:600}
+.rede .ic{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);box-shadow:0 12px 22px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.25);backdrop-filter:blur(6px)}
+.rede svg{width:26px;height:26px;fill:#fff}
+.rede small{color:var(--mut);font-weight:400}
+.slogan{margin:22px 0 0;color:var(--mut);font-size:14px}
+.slogan b{color:var(--gold)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="bg"><div class="casa"></div><div class="veu"></div><i></i><i></i><i></i><i></i><div class="chao"></div><div class="holo h1"></div><div class="holo h2"></div><div class="holo h3"></div></div>
+<main>
+  <div class="top"><span><b>7</b>entidos apresenta</span></div>
+  <h1>A Casa dos<br>7 Sentidos</h1>
+  <p class="cap">Capítulo 1</p>
+
+  <div class="palco">
+    <div class="cel telao" id="cel">
+      <video id="v" src="estreia.mp4" poster="capa.jpg" playsinline preload="metadata" controls></video>
+      <button class="som" id="som">🔊 Toque para ouvir</button>
+    </div>
+  </div>
+  <div class="reflexo"></div>
+  <div class="plateia" aria-hidden="true"></div>
+
+  <a class="cta" id="cta1" href="/pesquisa" target="_blank" rel="noopener">Você decide a vida deles ▸<small>Responda a pesquisa e construa o Capítulo 2</small></a>
+
+
+  <section class="sec">
+    <h2>Os 7 moradores</h2>
+    <p class="lead">Cada um é um sentido. Cada um foi pintado no estilo de um grande pintor. Toque para conhecer.</p>
+    <div class="corredor"><div class="grid" id="grid"></div></div>
+    <p class="dica">Toque no card para virar ↻</p>
+  </section>
+
+
+  <section class="sec">
+    <div class="row">
+      <a class="vidro zap" id="wa" target="_blank" rel="noopener"><span class="ic">💬</span>Mandar no WhatsApp</a>
+      <a class="vidro" href="https://www.instagram.com/7entidoss/" target="_blank" rel="noopener"><span class="ic">📸</span>Seguir @7entidoss</a>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>Capítulo 1</h2>
+    <img class="poster" src="capa.jpg" alt="Capa de A Casa dos 7 Sentidos, Capítulo 1">
+  </section>
+</main>
+
+<footer>
+  <div class="faixa"></div>
+  <div class="redes">
+    <a class="rede" href="https://www.instagram.com/7entidoss/" target="_blank" rel="noopener"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 8.2A3.2 3.2 0 1 1 12 8.8a3.2 3.2 0 0 1 0 6.4zM17.3 5.5a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4zM12 2c-2.7 0-3 0-4.1.1C4.3 2.3 2.3 4.3 2.1 7.9 2 9 2 9.3 2 12s0 3 .1 4.1c.2 3.6 2.2 5.6 5.8 5.8 1.1.1 1.4.1 4.1.1s3 0 4.1-.1c3.6-.2 5.6-2.2 5.8-5.8.1-1.1.1-1.4.1-4.1s0-3-.1-4.1c-.2-3.6-2.2-5.6-5.8-5.8C15 2 14.7 2 12 2zm0 1.8c2.7 0 3 0 4 .1 2.6.1 3.9 1.4 4 4 .1 1 .1 1.3.1 4s0 3-.1 4c-.1 2.6-1.4 3.9-4 4-1 .1-1.3.1-4 .1s-3 0-4-.1c-2.6-.1-3.9-1.4-4-4-.1-1-.1-1.3-.1-4s0-3 .1-4c.1-2.6 1.4-3.9 4-4 1-.1 1.3-.1 4-.1z"/></svg></span>Instagram<small>@7entidoss</small></a>
+    <a class="rede" href="https://www.tiktok.com/@7entidos" target="_blank" rel="noopener"><span class="ic"><svg viewBox="0 0 24 24"><path d="M16.6 2h-3.3v13.3a2.9 2.9 0 1 1-2.9-2.9c.3 0 .6 0 .9.1V9.1a6.3 6.3 0 1 0 5.3 6.2V8.7a8 8 0 0 0 4.4 1.3V6.7a4.6 4.6 0 0 1-4.4-4.7z"/></svg></span>TikTok<small>@7entidos</small></a>
+    <a class="rede" href="https://www.facebook.com/7entidos" target="_blank" rel="noopener"><span class="ic"><svg viewBox="0 0 24 24"><path d="M14 8V6.2c0-.8.2-1.2 1.4-1.2H17V2h-2.6C11.3 2 10.3 3.5 10.3 6v2H8v3h2.3v11H14V11h2.6l.4-3z"/></svg></span>Facebook<small>7entidos</small></a>
+    <a class="rede" href="https://www.linkedin.com/company/7entidos" target="_blank" rel="noopener"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.6 4.8 6V21h-4v-5.2c0-1.2 0-2.8-1.7-2.8s-2 1.3-2 2.7V21h-4z"/></svg></span>LinkedIn<small>7entidos</small></a>
+  </div>
+  <p class="slogan"><b>7entidos</b> · A felicidade não acontece por acaso, a gente constrói.</p>
+</footer>
+
+<div class="fixo" id="fixo"><a class="cta" href="/pesquisa" target="_blank" rel="noopener">Você decide a vida deles ▸</a></div>
+
+<script>
+const MOR=[
+ {n:"Luzia",s:"Visão",c:"var(--visao)",p:"Van Gogh",img:"luzia.jpg",f:"Eu quero voltar a sentir."},
+ {n:"Duda",s:"Equilíbrio",c:"var(--equilibrio)",p:"Dalí",img:"duda.jpg",f:"Prazer, sou a Duda do Equilíbrio."},
+ {n:"Yara",s:"Olfato",c:"var(--olfato)",p:"Frida Kahlo",img:"yara.jpg",f:"Todo cheiro guarda uma memória."},
+ {n:"Rafa",s:"Audição",c:"var(--audicao)",p:"Klimt",img:"rafa.jpg",f:"Eu escuto tudo."},
+ {n:"Tonho",s:"Tato",c:"var(--tato)",p:"Picasso",img:"tonho.jpg",f:"Vim pra mexer nas coisas."},
+ {n:"Beto",s:"Paladar",c:"var(--paladar)",p:"Monet",img:"beto.jpg",f:"Eu provo tudo."},
+ {n:"Lucas",s:"Noção de corpo",c:"var(--corpo)",p:"Da Vinci",img:"lucas.jpg",f:"Ah, agora eu apareci."}
+];
+document.getElementById('grid').innerHTML=MOR.map(m=>`<div class="mor" style="--c:${m.c}" role="button" tabindex="0" aria-label="${m.n}, ${m.s}">
+ <div class="in"><div class="f"><img src="${m.img}" alt="${m.n}" loading="lazy"><div class="nm">${m.n}<span>${m.s}</span></div></div>
+ <div class="b"><span class="chip">${m.s}</span><h3>${m.n}</h3><q>${m.f}</q><small>pintado no estilo ${m.p}</small></div></div></div>`).join('');
+document.querySelectorAll('.mor').forEach(el=>{const t=()=>el.classList.toggle('v');el.onclick=t;el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();t()}}});
+const v=document.getElementById('v'),som=document.getElementById('som'),cel=document.getElementById('cel');
+function tocar(){v.muted=false;const p=v.play();if(p&&p.catch)p.catch(()=>{});som.classList.add('hide');cel.classList.add('on')}
+som.onclick=tocar;v.addEventListener('play',()=>{som.classList.add('hide');cel.classList.add('on')});
+const msg="Assisti o Capítulo 1 de A Casa dos 7 Sentidos. Vem decidir a vida deles comigo: "+location.href;
+document.getElementById('wa').href="https://wa.me/?text="+encodeURIComponent(msg);
+const fixo=document.getElementById('fixo'),cta1=document.getElementById('cta1');
+const casa=document.querySelector('.bg .casa');addEventListener('scroll',()=>{casa.style.transform='scale(1.12) translateY('+(scrollY*-0.08)+'px)'},{passive:true});
+const grid=document.getElementById('grid');function giro(){const r=grid.getBoundingClientRect(),cx=r.left+r.width/2;grid.querySelectorAll('.mor').forEach(m=>{const b=m.getBoundingClientRect(),d=(b.left+b.width/2-cx)/r.width;m.style.transform='rotateY('+(-d*40)+'deg) scale('+(1-Math.min(Math.abs(d),.6)*.25)+')'})}
+try{new IntersectionObserver(es=>es.forEach(e=>fixo.classList.toggle('show',!e.isIntersecting&&e.boundingClientRect.top<0))).observe(cta1)}catch(e){fixo.classList.add('show')}
+</script>
+</body>
+</html>
