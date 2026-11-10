@@ -117,6 +117,9 @@ h2{font-family:"Bebas Neue";font-weight:400;font-size:clamp(38px,8vw,52px);line-
 .err{min-height:24px;color:#ffd5cf;font-size:17px;margin-top:8px}
 .center{text-align:center}
 .stack{display:grid;gap:12px;margin-top:18px}
+/* botão de confirmar sempre à vista */
+.stack.fixa{position:sticky;bottom:0;z-index:30;padding:12px 0 calc(12px + env(safe-area-inset-bottom));background:linear-gradient(to bottom,rgba(11,22,64,0),rgba(11,22,64,.92) 30%,rgba(11,22,64,.97))}
+.nota10 button:active,.op:active,.lin:active{filter:brightness(1.35)}
 /* final */
 .estrela{width:120px;height:120px;margin:10px auto;border-radius:50%;background:radial-gradient(circle,#fff 0 18%,var(--y) 30%,rgba(255,207,58,0) 70%);animation:brilho 1.6s ease-in-out infinite}
 @keyframes brilho{50%{transform:scale(1.15);filter:brightness(1.3)}}
@@ -214,7 +217,23 @@ const PASSOS=[{t:"capa",nome:"Briefing da Luzia"},...LINHAS.map((l,i)=>({t:"linh
 let idx=0, R={}, extra=null, t0=Date.now();
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
-let AC; function som(f,d=.12,v=.12){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain();o.frequency.value=f;g.gain.setValueAtTime(v,AC.currentTime);g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+d);o.connect(g).connect(AC.destination);o.start();o.stop(AC.currentTime+d+.02)}catch(e){}}
+/* SOM NO CELULAR: o navegador (principalmente o iPhone) deixa o som "pausado" até um toque.
+   somPronto() cria o som uma vez, pede para tocar mesmo no silencioso do iPhone e manda voltar a tocar (resume). */
+let AC;
+function somPronto(){
+  try{ if(navigator.audioSession && navigator.audioSession.type!=="playback") navigator.audioSession.type="playback"; }catch(e){}
+  if(!AC){ AC=new (window.AudioContext||window.webkitAudioContext)(); try{ const b=AC.createBuffer(1,1,22050), x=AC.createBufferSource(); x.buffer=b; x.connect(AC.destination); x.start(0); }catch(e){} }
+  if(AC.state!=="running"){ try{ return AC.resume().then(()=>AC,()=>AC); }catch(e){} }
+  return Promise.resolve(AC);
+}
+function som(f,d=.12,v=.12){try{somPronto().then(c=>{try{const o=c.createOscillator(),g=c.createGain();o.frequency.value=f;g.gain.setValueAtTime(v,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+d);o.connect(g).connect(c.destination);o.start();o.stop(c.currentTime+d+.02)}catch(e){}})}catch(e){}}
+/* CLIQUE DE CONFIRMAÇÃO: "tic" curto e grave, como a seta de carro novo (não incomoda) */
+function pisca(){try{somPronto().then(c=>{try{const t=c.currentTime,o=c.createOscillator(),f=c.createBiquadFilter(),g=c.createGain();o.type="square";o.frequency.setValueAtTime(150,t);f.type="lowpass";f.frequency.value=900;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.2,t+.004);g.gain.exponentialRampToValueAtTime(.0001,t+.07);o.connect(f).connect(g).connect(c.destination);o.start(t);o.stop(t+.08)}catch(e){}})}catch(e){}}
+/* PASSA SOZINHO: depois do toque, espera 1 segundo e vai para a próxima; agenda uma vez só por pergunta */
+let _passaT=null, _trocouEm=0;
+function passaSozinho(){ if(_passaT) return; const alvo=idx; _passaT=setTimeout(()=>{ _passaT=null; if(idx===alvo && !extra) ir(idx+1); },1000); }
+/* dois toques rápidos: o 2º toque logo depois de trocar de tela é ignorado */
+document.addEventListener("click", e=>{ if(Date.now()-_trocouEm<450){ e.stopPropagation(); e.preventDefault(); } }, true);
 
 function trilha(){
   const p=PASSOS[idx], fim=p.t==="fim";
@@ -253,7 +272,7 @@ function render(){
     h=`<div class="qn">Pergunta ${p.i+1} de 8</div><div class="linha-nome"><span>${L.em}</span><h2>Linha ${L.nome}</h2></div><p class="sub">Dê uma nota de 0 a 10 para cada look. ${L.frase}</p>
     <div class="looks ${L.looks.length===1?"um":""}">${L.looks.map(l=>{const v=R[l.id];return `<div class="look ${v!=null&&v!=="pulou"?"ok":""}"><div class="foto" style="background:${l.bg}">${fotoLook(l)}</div><b>${esc(l.nome)}</b>
       <div class="nota10">${Array.from({length:11},(_,n)=>`<button class="${v===n?"sel":""}" onclick="nota('${l.id}',${n})" aria-label="nota ${n}">${n}</button>`).join("")}</div><div class="legenda"><span>0 · não gostei</span><span>10 · amei</span></div></div>`;}).join("")}</div>
-    <div class="err" id="err"></div><div class="stack"><button class="btn full" onclick="seguirLinha(${p.i})">Próximo →</button></div>${nav(true)}`;
+    <div class="err" id="err"></div><div class="stack fixa"><button class="btn full" onclick="seguirLinha(${p.i})">Próximo →</button></div>${nav(true)}`;
   }
   else if(p.t==="favorita"){
     h=`<div class="qn">Pergunta 4 de 8</div><h2>De qual linha você mais gosta?</h2><p class="sub">A linha vencedora vira a base de todos os looks da Luzia.</p>
@@ -280,16 +299,16 @@ function render(){
 function travada(){ if(window.TEMA) TEMA.set("M","#F5C542","s25","Sala trancada (100 vagas)"); trilha(); $("tela").innerHTML=`<div class="cena trava"><h2>As 100 vagas acabaram!</h2><p>Obrigado pelo interesse. A pesquisa da Luzia já fechou.</p><p class="sub">Acompanhe A Casa dos 7 Sentidos no @7entidoss.</p><a class="btn" href="https://www.instagram.com/7entidoss/" target="_blank" rel="noopener">Seguir o @7entidoss</a></div>`; barra(); }
 
 /* ===== AÇÕES ===== */
-function ir(i){ idx=Math.max(0,Math.min(PASSOS.length-1,i)); extra=null; render(); window.scrollTo({top:0,behavior:"smooth"}); if(PASSOS[idx].t==="fim") terminar(); }
+function ir(i){ if(_passaT){ clearTimeout(_passaT); _passaT=null; } const antes=idx; idx=Math.max(0,Math.min(PASSOS.length-1,i)); extra=null; render(); if(idx!==antes) _trocouEm=Date.now(); window.scrollTo(0,0); if(PASSOS[idx].t==="fim") terminar(); }
 function voltar(){ if(extra){extra=null;return render();} ir(idx-1); }
 function pular(){ const p=PASSOS[idx];
   if(p.t==="linha") LINHAS[p.i].looks.forEach(l=>{ if(R[l.id]==null) R[l.id]="pulou"; });
   if(p.t==="favorita"&&R.linha_favorita==null) R.linha_favorita="pulou";
   if(p.t==="pers"&&R[PERS[p.i].id]==null) R[PERS[p.i].id]="pulou";
-  som(300); ir(idx+1); }
-function nota(id,n){ R[id]=n; som(500+n*40); const y=window.scrollY; render(); window.scrollTo({top:y}); }
+  pisca(); ir(idx+1); }
+function nota(id,n){ R[id]=n; pisca(); const y=window.scrollY; render(); window.scrollTo({top:y}); const p=PASSOS[idx]; if(p&&p.t==="linha"&&LINHAS[p.i].looks.every(l=>R[l.id]!=null)) passaSozinho(); }
 function seguirLinha(i){ const falta=LINHAS[i].looks.filter(l=>R[l.id]==null); if(falta.length){ $("err").textContent=LINHAS[i].looks.length===1?"Dê nota para o look, ou toque em pular.":"Dê nota para os dois looks, ou toque em pular."; return; } ir(idx+1); }
-function escolhe(k,v){ R[k]=v; som(700); render(); setTimeout(()=>ir(idx+1),330); }
+function escolhe(k,v){ R[k]=v; pisca(); render(); passaSozinho(); }
 function terminar(){
   if(R._enviado) return; R._enviado=true;
   const dados={aba:ABA,pesquisa:"luzia",quando:new Date().toISOString(),tempo_seg:Math.round((Date.now()-t0)/1000)};

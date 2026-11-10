@@ -75,12 +75,21 @@ h3{font-family:"Bebas Neue";font-weight:400;font-size:30px;margin:22px 0 8px;let
 .btn:focus-visible{outline:3px solid #fff}
 .err{color:#ff8a80;font-size:17px;margin-top:10px;min-height:22px}
 .nav{display:flex;justify-content:space-between;align-items:center;margin-top:22px;gap:12px}
+/* botão de confirmar sempre à vista (perguntas de várias opções / jogos) */
+.nav.fixa{position:sticky;bottom:0;z-index:30;padding:14px 0 calc(14px + env(safe-area-inset-bottom));background:linear-gradient(to bottom,rgba(16,14,18,0),rgba(16,14,18,.92) 28%,rgba(16,14,18,.97))}
+/* o botão acende na hora do toque */
+.opt:active,.scale .opt:active{filter:brightness(1.35)}
 .back{all:unset;cursor:pointer;color:var(--muted);font-size:17px;padding:8px}
 .back:hover,.skip:hover{color:#fff}
 .skip{all:unset;cursor:pointer;color:var(--muted);font-size:17px;text-decoration:underline;padding:8px}
 .center{text-align:center}
 .big-emoji{font-size:0;width:78px;height:78px;margin:6px auto 10px;border-radius:50%;position:relative;background:conic-gradient(#f5c542,#4aa8ff,#ff8a3d,#ff5a6e,#5ccf8a,#b48cff,#3fd6d0,#f5c542);-webkit-mask:radial-gradient(circle,transparent 54%,#000 56%);mask:radial-gradient(circle,transparent 54%,#000 56%);filter:drop-shadow(0 0 14px rgba(245,197,66,.55));animation:anel 7s linear infinite}
 @keyframes anel{to{transform:rotate(360deg)}}
+/* logo oficial junto dos vídeos de explicação: anel de sete luzes + 7ENTIDOS, fora da imagem (não cobre o rosto) */
+.vlogo{display:flex;align-items:center;justify-content:center;gap:10px;margin:10px auto 6px}
+.vlogo .anel7{width:34px;height:34px;border-radius:50%;flex:none;background:conic-gradient(#f5c542,#4aa8ff,#ff8a3d,#ff5a6e,#5ccf8a,#b48cff,#3fd6d0,#f5c542);-webkit-mask:radial-gradient(circle,transparent 52%,#000 55%);mask:radial-gradient(circle,transparent 52%,#000 55%);box-shadow:0 0 14px rgba(245,197,66,.45)}
+.vlogo b{font-family:"Bebas Neue",sans-serif;font-size:28px;letter-spacing:3px;line-height:1;color:#f4f1f6}
+.vlogo b i{font-style:normal;color:#f5c542}
 .card-dark{background:var(--panel);border:2px solid var(--line);border-radius:14px;padding:18px}
 .stack{display:grid;gap:12px;margin:18px 0}
 .seal{display:flex;gap:12px;align-items:center;background:#000;color:var(--accent);border:2px solid var(--accent);border-radius:14px;padding:8px 14px;flex:1}
@@ -173,6 +182,15 @@ input.txt:focus{border-color:var(--accent)}
 .gcard{font-size:30px}
 .ggrid.g3{max-width:250px}
 .olfwrap{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start}
+/* pergunta 13: imagens grandes, uma de cada referência */
+.refimgs{display:grid;gap:22px}
+.refimg{display:grid;gap:10px;justify-items:center}
+.refq-n{font-weight:800;font-size:18px;color:var(--muted)}
+.refpic{width:min(300px,82vw);aspect-ratio:1;border-radius:16px;overflow:hidden;border:3px solid #f3ead7;box-shadow:inset 0 0 0 4px #231f1a,0 10px 30px rgba(0,0,0,.35)}
+.refpic svg{width:100%;height:100%;display:block}
+.refpic.gcard{display:block;cursor:default}
+.refops{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.refops .opt{font-size:17px;padding:10px 14px}
 .olfwrap .refq{flex:1;min-width:200px}
 .refq h3{font-family:Inter;font-size:18px;font-weight:800;letter-spacing:0;margin:0 0 8px}
 .chip.pisca{animation:chipPisca 1s steps(1,end) infinite}
@@ -328,7 +346,7 @@ const FASE2 = [
   {id:"audicao", s:"Audição", cor:"#4aa8ff", nome:"Qual som é mais fino?", img:"👂"},
   {id:"tato", s:"Tato", cor:"#ff8a3d", nome:"Segure firme", img:"✋"},
   {id:"paladar", s:"Paladar", cor:"#ff5a6e", nome:"Monte o seu prato", img:"🍽️"},
-  {id:"olfato", s:"Olfato", cor:"#5ccf8a", nome:"Pares de cheiros", img:"👃"},
+  {id:"olfato", s:"Olfato", cor:"#5ccf8a", nome:"De quem é a referência dessas imagens?", img:"👃"},
   {id:"equilibrio", s:"Equilíbrio", cor:"#b48cff", nome:"No meio certinho", img:"🩰"},
   {id:"corpo", s:"Noção de corpo", cor:"#3fd6d0", nome:"Siga a ordem", img:"🧘"}
 ];
@@ -336,6 +354,10 @@ const FASE2 = [
 const F2PAGINAS = [["visao"],["audicao","tato"],["paladar","olfato"],["equilibrio","corpo"]];
 const G2 = id => FASE2.find(g=>g.id===id);
 const REFS = ["Pintores","Arquitetos","Escritores"];
+const REF_SVG = {
+  arquiteto:`<svg viewBox="0 0 200 200" role="img" aria-label="imagem de um prédio de curvas"><defs><linearGradient id="ceuA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9a5a"/><stop offset="1" stop-color="#2b4a8a"/></linearGradient></defs><rect width="200" height="200" fill="url(#ceuA)"/><rect y="150" width="200" height="50" fill="#1b2a44"/><path d="M38 150 Q100 40 162 150 Z" fill="#f3ead7"/><path d="M58 150 Q100 80 142 150" fill="none" stroke="#c9bfa8" stroke-width="3"/><rect x="92" y="96" width="16" height="54" fill="#2b4a8a" opacity=".5"/><path d="M10 172 C60 150 140 150 190 172" stroke="#f3ead7" stroke-width="6" fill="none"/><circle cx="160" cy="45" r="14" fill="#ffd36b"/></svg>`,
+  escritor:`<svg viewBox="0 0 200 200" role="img" aria-label="imagem de um livro aberto com uma pena"><rect width="200" height="200" fill="#3a2a1e"/><path d="M20 70 Q60 55 100 72 L100 165 Q60 148 20 162 Z" fill="#f3ead7"/><path d="M180 70 Q140 55 100 72 L100 165 Q140 148 180 162 Z" fill="#e8dcc0"/><g stroke="#8a7b62" stroke-width="2.5"><path d="M32 88 H88"/><path d="M32 102 H88"/><path d="M32 116 H82"/><path d="M112 88 H168"/><path d="M112 102 H160"/></g><path d="M150 28 C176 40 170 92 128 130 L122 136 L124 126 C140 96 150 60 150 28 Z" fill="#f5c542" stroke="#6b5420" stroke-width="2"/><path d="M124 128 L112 150" stroke="#231f1a" stroke-width="3"/></svg>`
+};
 /* tempo da pesquisa do app: a última faixa é 10 minutos ou mais */
 const TEMPOS_APP = ["Menos de 3 minutos","De 3 a 6 minutos","De 6 a 10 minutos","10 minutos ou mais"];
 const TEMPO_LIM_APP = [3,6,10,Infinity];
@@ -425,9 +447,10 @@ function enterStep(){ const s=S[idx]; if((s.type==="f1"||s.type==="f1one"||s.typ
 function leaveStep(){ if(stepId){ answers[stepId+"_tempo_seg"]=(answers[stepId+"_tempo_seg"]||0)+Math.round((Date.now()-stepT0)/1000); stepId=null; } }
 
 /* ============ VÍDEOS ============ */
+const vLogo = () => `<div class="vlogo" aria-label="7entidos"><span class="anel7"></span><b><i>7</i>ENTIDOS</b></div>`;
 function videoBox(i, auto){
   const h=HOSTS[i];
-  if(h.video) return `<video id="vid${i}" src="${h.video}" ${auto?"autoplay":""} controls playsinline style="width:min(340px,100%);max-height:70vh;border-radius:14px;margin:12px auto;display:block"></video>`;
+  if(h.video) return vLogo()+`<video id="vid${i}" src="${h.video}" ${auto?"autoplay":""} controls playsinline style="width:min(340px,100%);max-height:70vh;border-radius:14px;margin:12px auto;display:block"></video>`;
   return `<div class="video"><div class="vplay">▶</div><div><b>Vídeo de ${esc(h.nome)}</b><small>em breve${h.drive?` · <a href="${h.drive}" target="_blank" rel="noopener">assistir no Drive</a>`:""}</small>${h.fala?`<div class="fala">“${esc(h.fala)}”</div>`:""}</div></div>`;
 }
 
@@ -439,7 +462,7 @@ function abertura(){
   stage.innerHTML=`<div class="popup-bg" onclick="if(event.target===this)sairAbertura()"><div class="popup">
     <button class="popup-x" onclick="sairAbertura()" aria-label="Fechar">✕</button>
     ${a.video
-      ?`<video id="vab" class="abert-video" src="${a.video}" autoplay playsinline controls onended="sairAbertura()" aria-label="${esc(a.titulo)}"></video>`
+      ?vLogo()+`<video id="vab" class="abert-video" src="${a.video}" autoplay playsinline controls onended="sairAbertura()" aria-label="${esc(a.titulo)}"></video>`
       :`<a class="abert-ph" href="${a.drive}" target="_blank" rel="noopener"><div><div class="vplay">▶</div><b style="font-size:20px">Toque para assistir</b></div></a>`}
     <button class="btn" style="margin-top:14px;width:100%" onclick="sairAbertura()">Continuar →</button></div></div>`;
   const v=document.getElementById("vab"); if(v){ const p=v.play(); if(p&&p.catch) p.catch(()=>{}); }
@@ -721,14 +744,14 @@ function render(){
     s.gs.forEach((g,gi)=>{ const fimv=answers["f2_"+g.id+"_fim"], pis=(g.id==="audicao"||g.id==="tato")?" pisca":"";
       const jogo = `<div id="gw_${g.id}">${!fimv?`<div class="gamebox" id="game_${g.id}"></div><button class="back" onclick="gameDone('${g.id}','pulou')">pular este jogo →</button>`
           :`<div class="done-tag">${fimv==="completou"?"✓ Jogo completo!":"Jogo pulado"}</div>`}</div>`;
-      const ref = g.id==="olfato" ? `<div class="refq card-dark"><h3>De quem é a referência dessas imagens?</h3><div class="chips mini" id="refopts">${REFS.map((o,i)=>`<button class="opt ${answers.f2_olfato_referencia===o?"sel":""}" onclick="setRef(${i})">${L(i)}) ${esc(o)}</button>`).join("")}</div></div>` : "";
+      const ref = "";
       h += `<div class="gsec"><div class="qnum">Pergunta ${s.num+gi}</div><div style="margin-bottom:6px"><span class="chip${pis}" style="--c:${g.cor};background:${g.cor}">${esc(g.s)}</span></div><h2 class="f2h">${esc(g.nome)}</h2>
         ${ref?`<div class="olfwrap"><div>${jogo}</div>${ref}</div>`:jogo}</div>`; });
     if(allFim){
       h += `<div class="feed"><h3>Quanto você gostou dessa atividade?</h3>${s.gs.map(g=>`<div class="notarow"><div class="gimg" style="border-color:${g.cor};background:${g.cor}22" aria-hidden="true">${g.img}</div>
         <div><b>${esc(g.nome)}</b>${scale("f2_"+g.id+"_nota", answers["f2_"+g.id+"_nota"], ["0 · não gostei nada","10 · amei"])}</div></div>`).join("")}</div>${redoBox(s)}`;
     }
-    needNext = true;
+    needNext = false; /* jogos: a nota de 0 a 10 já passa sozinha; sem "Próximo" colado na régua */
   }
   else if(s.type==="multi"){
     const sel=Array.isArray(answers[s.id])?answers[s.id]:[];
@@ -893,7 +916,7 @@ function render(){
     h += `<div class="opts">`+s.opts.map((o,i)=>`<button class="opt ${answers[s.id]===o?"sel":""}" onclick="pickI('${s.id}',S[idx].opts,${i})"><span class="k">${L(i)}</span><span>${esc(o)}</span></button>`).join("")+`</div>`;
   }
   if(!ownNav){
-    h += `<div class="err" id="err"></div><div class="nav"><button class="back" onclick="prev()">← voltar</button>${s.num?'<button class="skip" onclick="pular()">pular</button>':""}${needNext?`<button class="btn" onclick="tryNext()">Próximo →</button>`:""}</div>`;
+    h += `<div class="err" id="err"></div><div class="nav${needNext?" fixa":""}"><button class="back" onclick="prev()">← voltar</button>${s.num?'<button class="skip" onclick="pular()">pular</button>':""}${needNext?`<button class="btn" onclick="tryNext()">Próximo →</button>`:""}</div>`;
   }
   stage.innerHTML = `<div class="scene${cur==="app"?" um":""}">${h}</div>`;
   if(s.type==="f2") s.gs.forEach(g=>{ if(answers["f2_"+g.id+"_fim"]==null) GAMES[g.id](document.getElementById("game_"+g.id), ()=>gameDone(g.id,"completou")); });
@@ -912,15 +935,15 @@ function toggleMulti(i){ const s=S[idx], o=s.opts[i], a=(Array.isArray(answers[s
 function toggleF1p(fi,oi){ const k="f1_"+FASE1[fi].id, o=FASE1[fi].o[oi], a=(Array.isArray(answers[k])?answers[k]:[]).slice(), p=a.indexOf(o); p>=0?a.splice(p,1):a.push(o); answers[k]=a; click(); rr(); }
 function rr(){ const y=window.scrollY; render(); window.scrollTo({top:y}); }
 function setA(k,v){ answers[k]=v; click(); rr(); }
-function setN(k,v){ answers[k]=v; click(); rr(); const t=S[idx]; if(t.type==="nota" || (cur==="app" && t.type==="f2" && isDone(t))) setTimeout(next,320); }
-function pickI(id,arr,i){ answers[id]=arr[i]; click(); rr(); setTimeout(next,320); }
+function setN(k,v){ answers[k]=v; click(); rr(); const t=S[idx]; if(t.type==="nota" || (cur==="app" && t.type==="f2" && isDone(t))) passaSozinho(); }
+function pickI(id,arr,i){ answers[id]=arr[i]; click(); rr(); passaSozinho(); }
 function toggleF1(i){ const s=S[idx], o=s.f.o[i], a=(Array.isArray(answers[s.id])?answers[s.id]:[]).slice(), p=a.indexOf(o); p>=0?a.splice(p,1):a.push(o); answers[s.id]=a; click(); rr(); }
 
 /* casting: a pergunta some e entra a próxima, no mesmo slide */
 function castSet(k,v,fim){
   answers[k]=v; click();
   const s=S[idx];
-  if(s.type==="cast" && isDone(s)){ rr(); setTimeout(next,350); }
+  if(s.type==="cast" && isDone(s)){ rr(); passaSozinho(); }
   else { render(); window.scrollTo({top:0}); }
 }
 function castBack(id){
@@ -950,12 +973,12 @@ function vilaoBack(){
 }
 function setEl(k,o){
   answers["elenco__"+k]=o; click();
-  if(ELENCO.every(e=>answers["elenco__"+e.k])){ answers.elenco=ELENCO.map(e=>e.nome+": "+answers["elenco__"+e.k]).join(" · "); rr(); setTimeout(next,450); }
+  if(ELENCO.every(e=>answers["elenco__"+e.k])){ answers.elenco=ELENCO.map(e=>e.nome+": "+answers["elenco__"+e.k]).join(" · "); rr(); passaSozinho(); }
   else rr();
 }
 const _temas={};
 function temasDo(ri){ if(!_temas[ri]){ const t=[...TEMAS].sort(()=>Math.random()-.5); _temas[ri]=t.slice(0,4); } return _temas[ri]; }
-function pickRoom(id,v){ answers[id]=v; click(); rr(); setTimeout(next,300); }
+function pickRoom(id,v){ answers[id]=v; click(); rr(); passaSozinho(); }
 function reverVideo(i){ const el=document.getElementById("rever"); el.innerHTML=`<div class="card-dark fade" style="margin-top:14px"><div class="qnum">${esc(HOSTS[i].nome)}</div>${videoBox(i,true)}<button class="back" onclick="document.getElementById('rever').innerHTML=''">fechar</button></div>`; el.scrollIntoView({behavior:"smooth"}); }
 function tentarDeNovo(){
   tentativa++; answers.reality_tentativas=tentativa;
@@ -976,8 +999,15 @@ function tryNext(){
   next();
 }
 function pular(){ const s=S[idx]; if(!isDone(s)) answers[s.id]="pulou"; click(); next(); }
-function next(){ if(idx<S.length-1){ leaveStep(); refazAsk=null; travaConvite=false; idx++; render(); window.scrollTo({top:0,behavior:"smooth"}); } }
-function prev(){ leaveStep(); refazAsk=null; travaConvite=false; revelaFase=0; if(idx>0){ idx--; render(); window.scrollTo({top:0}); } else goEscolha(); }
+/* PASSA SOZINHO: depois do toque, espera 1 segundo (o botão aceso + o clique) e vai para a próxima.
+   Agenda uma vez só por pergunta: tocar de novo não pula duas. */
+let _passaT=null, _trocouEm=0;
+function passaSozinho(ms){ if(_passaT) return; const alvo=idx, fl=cur; _passaT=setTimeout(()=>{ _passaT=null; if(idx===alvo && cur===fl && view==="flow") next(); }, ms||1000); }
+function trocouTela(){ if(_passaT){ clearTimeout(_passaT); _passaT=null; } _trocouEm=Date.now(); window.scrollTo(0,0); }
+/* dois toques rápidos: o 2º toque logo depois de trocar de tela é ignorado */
+document.addEventListener("click", e=>{ if(Date.now()-_trocouEm<450 && e.target.closest && e.target.closest("#stage")){ e.stopPropagation(); e.preventDefault(); } }, true);
+function next(){ if(idx<S.length-1){ leaveStep(); refazAsk=null; travaConvite=false; idx++; render(); trocouTela(); } }
+function prev(){ leaveStep(); refazAsk=null; travaConvite=false; revelaFase=0; if(idx>0){ idx--; render(); trocouTela(); } else goEscolha(); }
 function goEscolha(){ leaveStep(); view="escolha"; render(); window.scrollTo({top:0}); }
 
 /* ============ ENVIO (respostas e contato sempre separados) ============ */
@@ -1026,7 +1056,21 @@ function abrirLuzia(direto){
 
 /* ============ MINI JOGOS ============ */
 let ac;
-function tone(f,delay){ try{ ac=ac||new (window.AudioContext||window.webkitAudioContext)(); const t=ac.currentTime+delay, o=ac.createOscillator(), g=ac.createGain(); o.type="sine"; o.frequency.value=f; g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.25,t+.03); g.gain.exponentialRampToValueAtTime(.0001,t+.45); o.connect(g).connect(ac.destination); o.start(t); o.stop(t+.5);}catch(e){} }
+/* SOM NO CELULAR: o navegador (principalmente o iPhone) deixa o som "pausado" até um toque.
+   somPronto() cria o som uma vez só, pede para tocar mesmo no modo silencioso do iPhone
+   e manda o som voltar a tocar (resume) a cada toque. Deve ser chamada dentro do toque. */
+function somPronto(){
+  try{ if(navigator.audioSession && navigator.audioSession.type!=="playback") navigator.audioSession.type="playback"; }catch(e){}
+  if(!ac){
+    ac=new (window.AudioContext||window.webkitAudioContext)();
+    try{ const b=ac.createBuffer(1,1,22050), s=ac.createBufferSource(); s.buffer=b; s.connect(ac.destination); s.start(0); }catch(e){}
+  }
+  if(ac.state!=="running"){ try{ return ac.resume().then(()=>ac,()=>ac); }catch(e){} }
+  return Promise.resolve(ac);
+}
+let tonsTocando=[];
+function pararTons(){ tonsTocando.forEach(o=>{ try{ o.stop(); }catch(e){} }); tonsTocando=[]; }
+function tone(f,delay){ try{ somPronto().then(c=>{ try{ const t=c.currentTime+delay, o=c.createOscillator(), g=c.createGain(); o.type="sine"; o.frequency.value=f; g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.25,t+.03); g.gain.exponentialRampToValueAtTime(.0001,t+.45); o.connect(g).connect(c.destination); o.start(t); o.stop(t+.5); tonsTocando.push(o); o.onended=()=>{ tonsTocando=tonsTocando.filter(x=>x!==o); }; }catch(e){} }); }catch(e){} }
 const GAMES = {
   /* as 3 rodadas ficam juntas; acertando ou não, a rodada fecha e conta */
   visao(el,win){ const R=[0,1,2].map(r=>({hu:Math.floor(Math.random()*360), k:Math.floor(Math.random()*16), d:18-r*4, feito:false, ok:false}));
@@ -1041,7 +1085,7 @@ const GAMES = {
     el.innerHTML=`<p class="gtip">Ouça os dois sons de cada rodada e diga qual é mais fino.</p>`+R.map((x,r)=>`<div class="round sround chips mini" data-r="${r}"><span class="rlab">Rodada ${r+1}</span><button class="opt" data-a="ouvir">▶ Ouvir</button><button class="opt" data-a="1">1º mais fino</button><button class="opt" data-a="2">2º mais fino</button><span class="rres"></span></div>`).join("");
     el.querySelectorAll(".round").forEach(rd=>{ const x=R[+rd.dataset.r];
       rd.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ const a=b.dataset.a;
-        if(a==="ouvir"){ tone(x.a,0); tone(x.b,.6); return; }
+        if(a==="ouvir"){ pararTons(); tone(x.a,0); tone(x.b,.6); return; }
         if(x.feito) return; x.feito=true; x.ok=(a==="2")===x.up; click(); b.classList.add("sel");
         rd.querySelector(".rres").innerHTML=x.ok?'<span style="color:#9be7b0">✓ Acertou!</span>':`<span style="color:#ff8a80">Era o ${x.up?"2º":"1º"}.</span>`;
         if(R.every(y=>y.feito)){ answers.f2_audicao_acertos=R.filter(y=>y.ok).length; setTimeout(win,700); } }); }); },
@@ -1056,10 +1100,16 @@ const GAMES = {
     const draw=()=>{ el.innerHTML=`<p class="gtip">Monte o seu prato: escolha 3 ingredientes (${sel.length}/3)</p><div class="chips mini">${I.map((x,i)=>`<button class="opt ${sel.includes(i)?"sel":""}" data-i="${i}">${x[0]} ${x[1]}</button>`).join("")}</div>`;
       el.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ const i=+b.dataset.i, p=sel.indexOf(i); if(p>=0) sel.splice(p,1); else if(sel.length<3) sel.push(i); click();
         if(sel.length===3){ answers[S[idx].id+"_prato"]=sel.map(i=>I[i][1]); win(); } else draw(); }); }; draw(); },
-  olfato(el,win){ const E=["🌸","☕","🍋","🌸","☕","🍋"].sort(()=>Math.random()-.5), open=[], okk=[]; let lock=false;
-    const draw=()=>{ el.innerHTML=`<p class="gtip">Ache os pares de cheiros iguais</p><div class="ggrid g3">${E.map((e,i)=>open.includes(i)||okk.includes(i)?`<button class="gcard" data-i="${i}">${e}</button>`:`<button class="gcard pint p${i%3}" data-i="${i}" aria-label="carta ${i+1}"></button>`).join("")}</div>`;
-      el.querySelectorAll(".gcard").forEach(b=>b.onclick=()=>{ const i=+b.dataset.i; if(lock||open.includes(i)||okk.includes(i)) return; open.push(i); click(); draw();
-        if(open.length===2){ lock=true; setTimeout(()=>{ if(E[open[0]]===E[open[1]]) okk.push(...open); open.length=0; lock=false; if(okk.length===E.length) win(); else draw(); },700); } }); }; draw(); },
+  /* pergunta 13: um quadro de cada referência (sem repetir), grande; a pessoa diz de quem é cada um */
+  olfato(el,win){ const IM=[{id:"pintor",cls:"p0"},{id:"arquiteto",svg:REF_SVG.arquiteto},{id:"escritor",svg:REF_SVG.escritor}].sort(()=>Math.random()-.5);
+    const OP=[["pintor","🎨 Um pintor"],["arquiteto","🏛️ Um arquiteto"],["escritor","✒️ Um escritor"]], resp={};
+    const draw=()=>{ el.innerHTML=`<p class="gtip">Toque em quem você acha que é a referência de cada imagem.</p><div class="refimgs">${IM.map((m,k)=>`<div class="refimg"><div class="refq-n">Imagem ${k+1}</div>
+        ${m.svg?`<div class="refpic">${m.svg}</div>`:`<div class="refpic gcard pint ${m.cls}" aria-label="imagem ${k+1}"></div>`}
+        <div class="refops">${OP.map(o=>`<button class="opt ${resp[m.id]===o[0]?"sel":""}" data-m="${m.id}" data-v="${o[0]}">${o[1]}</button>`).join("")}</div></div>`).join("")}</div>`;
+      el.querySelectorAll(".refops .opt").forEach(b=>b.onclick=()=>{ resp[b.dataset.m]=b.dataset.v; click(); const y=window.scrollY; draw(); window.scrollTo({top:y});
+        if(IM.every(m=>resp[m.id])){ IM.forEach(m=>answers["f2_olfato_ref_"+m.id]=resp[m.id]);
+          answers.f2_olfato_referencia=IM.map(m=>m.id+": "+resp[m.id]).join(" · ");
+          answers.f2_olfato_acertos=IM.filter(m=>resp[m.id]===m.id).length; setTimeout(win,500); } }); }; draw(); },
   equilibrio(el,win){ let hits=0,x=0,dir=1,raf;
     el.innerHTML=`<p class="gtip">Toque em “Agora!” quando a bolinha estiver na faixa do meio (<span id="eh">0</span>/3)</p><div class="bal"><div class="zone"></div><div class="dot" id="dot"></div></div>
       <button class="btn" id="eb" style="margin-top:14px">Agora!</button><div class="err" id="gerr"></div>`;
@@ -1112,7 +1162,7 @@ function linhas(){
       else if(s.type==="tempo") out.push("Tempo que achou: "+(answers[s.id]||"-")+" / tempo real: "+tmin(answers[f+"_tempo_real_seg"]));
       else out.push(s.title+": "+(answers[s.id]??"-"));
     });
-    if(f==="app"){ out.push("Referência das cartas: "+(answers.f2_olfato_referencia||"-")); out.push("Flow: "+(answers.app_flow||"-")); out.push("Como você saiu (0 a 10): "+(answers.app_saida??"-")); }
+    if(f==="app"){ out.push("Referência das imagens: "+(answers.f2_olfato_referencia||"-")); out.push("Flow: "+(answers.app_flow||"-")); out.push("Como você saiu (0 a 10): "+(answers.app_saida??"-")); }
     if(f==="app"){ const c=campeas(); out.push("Jogo campeão pelo que você falou: "+(c.pelo_que_falou?c.pelo_que_falou.nome:"-")+" / pelo que você fez: "+(c.pelo_que_fez?c.pelo_que_fez.nome:"-")); }
   });
   return out;
@@ -1146,7 +1196,8 @@ async function baixarPDF(){
   }catch(e){ err.style.color=""; err.textContent = e && e.code==="declined" ? "Tudo bem, o PDF não foi salvo." : "Não deu para gerar o PDF aqui. Tente de novo."; }
 }
 function copiar(btn){ try{ navigator.clipboard.writeText(linhas().join("\n")).then(()=>btn.textContent="Copiado ✓",()=>btn.textContent="Não deu para copiar"); }catch(e){ btn.textContent="Não deu para copiar"; } }
-function click(){ try{ ac=ac||new (window.AudioContext||window.webkitAudioContext)(); const o=ac.createOscillator(),g=ac.createGain(); o.type="sine";o.frequency.value=180; g.gain.setValueAtTime(.18,ac.currentTime); g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.12); o.connect(g).connect(ac.destination); o.start(); o.stop(ac.currentTime+.13);}catch(e){} }
+/* CLIQUE DE CONFIRMAÇÃO: "tic" curto e grave, como a seta de carro novo (não incomoda) */
+function click(){ try{ somPronto().then(c=>{ try{ const t=c.currentTime, o=c.createOscillator(), f=c.createBiquadFilter(), g=c.createGain(); o.type="square"; o.frequency.setValueAtTime(150,t); f.type="lowpass"; f.frequency.value=900; g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.2,t+.004); g.gain.exponentialRampToValueAtTime(.0001,t+.07); o.connect(f).connect(g).connect(c.destination); o.start(t); o.stop(t+.08); }catch(e){} }); }catch(e){} }
 
 if(location.hash==="#app"){ startFlow("app"); } else render();
 </script>
