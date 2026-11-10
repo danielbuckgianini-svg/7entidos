@@ -269,6 +269,7 @@ body.tela-inicio .logo-top{visibility:hidden}
 .fcard .fsem{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:38px;opacity:.55}
 .fcard .fnome{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 9px;font-weight:700;font-size:15px;line-height:1.2;background:linear-gradient(transparent,rgba(5,8,20,.88))}
 .fcard.sel{border-color:#F5C542;box-shadow:0 0 0 3px #F5C54266}
+.pad.fcard{aspect-ratio:4/3}.pad.fcard.sel{border-color:#F5C542;box-shadow:0 0 0 4px #F5C542,0 0 26px #F5C542;transform:scale(1.03)}
 .fcard .ouvir{position:absolute;top:8px;right:8px;border:0;border-radius:999px;padding:7px 11px;font:700 13px Inter,system-ui,sans-serif;background:rgba(5,8,20,.78);color:#fff;cursor:pointer;z-index:2}
 .fcard .ouvir.tocando{background:#F5C542;color:#0a1128}
 </style>
@@ -806,7 +807,7 @@ function render(){
       h += `<div class="feed"><h3>Quanto você gostou dessa atividade?</h3>${s.gs.map(g=>`<div class="notarow"><div class="gimg" style="border-color:${g.cor};background:${g.cor}22" aria-hidden="true">${g.img}</div>
         <div><b>${esc(g.nome)}</b>${scale("f2_"+g.id+"_nota", answers["f2_"+g.id+"_nota"], ["0 · não gostei nada","10 · amei"])}</div></div>`).join("")}</div>${redoBox(s)}`;
     }
-    needNext = true;
+    needNext = (cur!=="app");
   }
   else if(s.type==="multi"){
     const sel=Array.isArray(answers[s.id])?answers[s.id]:[];
@@ -1206,7 +1207,7 @@ const GAMES = {
     const step=()=>{ if(!document.body.contains(dot)) return; x+=dir*1.1; if(x>=100){x=100;dir=-1} if(x<=0){x=0;dir=1} dot.style.left=x+"%"; raf=requestAnimationFrame(step); }; step();
     el.querySelector("#eb").onclick=()=>{ if(Math.abs(x-50)<9){ hits++; click(); el.querySelector("#eh").textContent=hits; el.querySelector("#gerr").textContent=""; if(hits>=3){ cancelAnimationFrame(raf); win(); } } else el.querySelector("#gerr").textContent="Passou do ponto! Tente de novo."; }; },
   corpo(el,win){ const P=["✋ Mão","🦶 Pé","👂 Orelha","👃 Nariz"], seq=[0,1,2].map(()=>Math.floor(Math.random()*4)); let got=[], showing=true, timers=[];
-    el.innerHTML=`<p class="gtip" id="ct">Preste atenção na ordem em que as partes do corpo acendem…</p><div class="ggrid g2">${P.map((p,i)=>`<button class="opt pad" data-i="${i}" style="justify-content:center">${p}</button>`).join("")}</div>
+    el.innerHTML=`<p class="gtip" id="ct">Preste atenção na ordem em que as partes do corpo acendem…</p><div class="ggrid g2">${P.map((p,i)=>`<button class="pad fcard" data-i="${i}" style="--fc:#3fd6d0" aria-label="${p.split(" ")[1]}"><span class="fsem" aria-hidden="true">${p.split(" ")[0]}</span><img src="opcoes/jogo-corpo-${["mao","pe","orelha","nariz"][i]}.jpg" alt="" onerror="this.remove()"><span class="fnome">${p.split(" ")[1]}</span></button>`).join("")}</div>
       <div class="err" id="gerr"></div><button class="back" id="rv">↺ ver a ordem de novo</button>`;
     const pads=el.querySelectorAll(".pad"), ct=el.querySelector("#ct");
     const play=()=>{ timers.forEach(clearTimeout); timers=[]; pads.forEach(p=>p.classList.remove("sel")); showing=true; got=[]; ct.textContent="Preste atenção na ordem em que as partes do corpo acendem…";
