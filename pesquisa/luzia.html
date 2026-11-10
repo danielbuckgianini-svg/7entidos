@@ -238,7 +238,7 @@ document.addEventListener("click", e=>{ if(Date.now()-_trocouEm<450){ e.stopProp
 function trilha(){
   const p=PASSOS[idx], fim=p.t==="fim";
   $("trilha").innerHTML=`<div class="trilha">${MORADORES.map((m,i)=>{const on=i===0;const foto=m.f?`<img src="${m.f}" alt="">`:`<svg viewBox="0 0 60 60"><circle cx="30" cy="24" r="12" fill="#8c8495"/><path d="M8 60c0-14 10-22 22-22s22 8 22 22z" fill="#8c8495"/></svg>`;
-    return `<div class="mor ${on?"on":"off"}"><div class="f">${foto}</div>${on?(fim?'<span class="cad">✅</span>':""):'<span class="cad">🔒</span>'}<small>${m.n}</small>${m.n==="Duda"&&falta()>0?`<span class="cd" data-cd>${relogio()}</span>`:""}</div>`;}).join("")}</div>
+    return `<div class="mor ${on?"on":"off"}"><div class="f">${foto}</div>${on?(fim?'<span class="cad">✅</span>':""):'<span class="cad">🔒</span>'}<small>${m.n}</small></div>`;}).join("")}</div>
   ${p.t!=="capa"&&p.t!=="fim"?`<div class="passos">${PASSOS.slice(1,-1).map((x,i)=>`<i class="${i+1<idx?"ok":i+1===idx?"agora":""}"></i>`).join("")}</div>`:""}`;
 }
 function vagas(){ return RESPOSTAS_JA>=MOSTRA_CONTADOR&&RESPOSTAS_JA<LIMITE?`<div class="vagas">⏳ Faltam ${LIMITE-RESPOSTAS_JA} das 100 vagas</div>`:""; }
@@ -289,7 +289,7 @@ function render(){
   else if(p.t==="fim"){
     h=`<div class="center"><div class="foto-fim"><img src="livia.jpg" alt="Luzia"></div><h1 style="font-size:clamp(44px,10vw,70px)">Parabéns!</h1><p class="sub" style="font-size:24px">Você terminou a sala da Luzia!</p>
     <p style="color:var(--muted);font-size:18px;margin:0">Os looks mais votados entram no episódio 2.</p></div>
-    <div class="stack">${falta()>0?`<button class="btn full travado" disabled aria-disabled="true">🔒 Seguir para o próximo morador: Duda<small>abre em <span data-cd>${relogio()}</span></small></button>`:`<button class="btn full ghost" onclick="extra='duda';render()">Seguir para o próximo morador: Duda →</button>`}
+    <div class="stack"><button class="btn full travado" disabled aria-disabled="true">🔒 Em breve: Duda</button>
       <a class="btn full zap" href="https://wa.me/?text=${encodeURIComponent(ZAP)}" target="_blank" rel="noopener">💬 Convidar alguém no WhatsApp</a></div>
     <div class="nav"><button class="link" onclick="voltar()">← voltar</button></div>`;
   }
