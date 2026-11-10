@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pesquisa 7entidos · A Casa dos 7 Sentidos</title>
+<title>Pesquisa 7entidos · A Casa dos 7 Sentidos (v5 · prévia)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Special+Elite&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -235,9 +235,9 @@ input.txt:focus{border-color:var(--accent)}
 <script src="config.js"></script>
 <script>
 /* ===== CONFIGURAÇÃO ===== */
-const ENDPOINT = (window.PESQUISA_URL||"");  /* script da planilha do Google (só funciona no site 7entidos.com.br) */
+const ENDPOINT = (window.PESQUISA_URL||"");  /* robô da planilha (endereço fica em config.js) */
 const VERSAO = "v5";
-const LINK = "https://7entidos.com.br/pesquisa";
+const LINK = "https://7entidos.com.br";
 const SHARE_MSG = "Respondi a pesquisa do reality A Casa dos 7 Sentidos, do 7entidos, um app santista (013). É anônima, é só tocar nas respostas. Quem responde ganha a temporada 2 de graça, mas são só 100 vagas. Responde por esse link e nós dois garantimos o acesso: " + LINK;
 
 /* Tela 1: vídeo de abertura. Quando o arquivo .mp4 for enviado junto com a página, o nome dele vai em video (ex.: "abertura.mp4"). */
@@ -307,7 +307,7 @@ const PREMIOS = ["Virar o garoto-propaganda do app 7entidos (as vendas começam 
 const TEMPOS = ["Menos de 3 minutos","De 3 a 6 minutos","De 6 a 10 minutos","De 10 a 15 minutos","Mais de 15 minutos"];
 const TEMPO_LIM = [3,6,10,15,Infinity];
 /* Blocos da trilha (o bonequinho anda um bloco por vez até o Hall da Fama) */
-const BLOCOS = ["Casting 1","Casting 2","Elenco","Cômodos","Momentos"];
+const BLOCOS = ["Casting 1","Casting 2","Elenco","Cômodos","Momentos","Apresentador"];
 
 /* ===== DADOS DO APP (segunda pesquisa) ===== */
 const FASE1 = [
@@ -351,7 +351,7 @@ function buildReality(){
   const S=[]; let n=0;
   const q=(o,count=1)=>{o.num=n+1; n+=count; S.push(o)};
   CAST.forEach((c,i)=>{
-    if(i===3) S.push({type:"trava", t:1, bloco:0, msg:"Seus 3 primeiros personagens já estão na casa.", prox:"os próximos perfis"});
+    if(i===3) S.push({type:"trava", t:1, bloco:0, v:1, msg:"Seus 3 primeiros personagens já estão na casa.", prox:"os próximos perfis"});
     q({type:"cast", id:c.id, c, i, bloco:i<3?0:1, block:"Casting · perfil "+(i+1)+" de 7"},c.fixo?1:3);
   });
   q({type:"vilao", id:"vilao", bloco:1, block:"Casting · perfil 7 de 7 · o vilão"},3);
@@ -365,7 +365,8 @@ function buildReality(){
   q({id:"premio_vencedor", bloco:4, block:"Momentos", title:"Qual prêmio o vencedor do reality deveria ganhar?", opts:PREMIOS});
   q({id:"reality_tempo_chute", type:"tempo", bloco:4, block:"Momentos · última pergunta", title:"Tempo que achou"});
   S.push({type:"revela", bloco:4, block:"Momentos"});
-  S.push({type:"trava", t:5, bloco:4, msg:"Você chegou ao fim da pesquisa do reality.", prox:"os Guardiões dos Sentidos"});
+  S.push({type:"trava", t:5, bloco:4, v:2, msg:"Você chegou ao fim da pesquisa do reality.", prox:"escolher o apresentador"});
+  q({type:"favorito", id:"apresentador_favorito", bloco:5, block:"Apresentador", title:"Apresentador favorito"});
   q({type:"guardiao", id:"guardiao_vencedor", bloco:5, block:"Guardiões dos Sentidos"});
   S.push({type:"hall", bloco:6, block:"Hall da Fama"});
   S.push({type:"fase2", bloco:6, block:"Próxima fase"});
@@ -437,7 +438,7 @@ function abertura(){
     <button class="btn" style="margin-top:14px;width:100%" onclick="sairAbertura()">Continuar →</button></div></div>`;
   const v=document.getElementById("vab"); if(v){ const p=v.play(); if(p&&p.catch) p.catch(()=>{}); }
 }
-function sairAbertura(){ const v=document.getElementById("vab"); if(v) v.pause(); view="escolha"; render(); window.scrollTo({top:0}); }
+function sairAbertura(){ const v=document.getElementById("vab"); if(v) v.pause(); startFlow("app"); }
 function verAbertura(){ view="abertura"; render(); window.scrollTo({top:0}); }
 
 /* ============ ESCOLHA UMA PESQUISA ============ */
@@ -796,11 +797,11 @@ function render(){
     ownNav=true;
   }
   else if(s.type==="portaoFinal"){
-    h = `<div class="center"><div class="big-emoji">🚪</div><h1>Você chegou ao portão.</h1>
-      <p class="sub">Pode parar por aqui. Obrigado! Suas escolhas vão construir o 7entidos de verdade.</p></div>
-      <div class="stack"><button class="btn ghost" onclick="view='fim';render()">Quero sair</button>
-        <button class="btn" onclick="view='escolhas';render()">Quero ver minhas escolhas</button></div>`;
+    h = `<div class="center"><div class="big-emoji">🎬</div><h1>Agora, o reality!</h1>
+      <p class="sub">Obrigado! Suas escolhas vão construir o 7entidos de verdade. Agora conheça a primeira moradora de A Casa dos 7 Sentidos.</p></div>
+      <div class="stack"><a class="btn" href="luzia/index.html">Ir para a Pesquisa 1 de 7 · Luzia →</a></div>`;
     ownNav=true;
+    clearTimeout(window._vaiLuzia); window._vaiLuzia=setTimeout(()=>{ location.href="luzia/index.html"; },2500);
   }
   else if(s.type==="revela"){
     const chute = answers[cur+"_tempo_chute"];
@@ -934,10 +935,10 @@ function tryNext(){
 function pular(){ const s=S[idx]; if(!isDone(s)) answers[s.id]="pulou"; click(); next(); }
 function next(){ if(idx<S.length-1){ leaveStep(); refazAsk=null; travaConvite=false; idx++; render(); window.scrollTo({top:0,behavior:"smooth"}); } }
 function prev(){ leaveStep(); refazAsk=null; travaConvite=false; revelaFase=0; if(idx>0){ idx--; render(); window.scrollTo({top:0}); } else goEscolha(); }
-function goEscolha(){ leaveStep(); view="escolha"; render(); window.scrollTo({top:0}); }
+function goEscolha(){ leaveStep(); view="abertura"; render(); window.scrollTo({top:0}); }
 
 /* ============ ENVIO (respostas e contato sempre separados) ============ */
-function enviar(p){ if(ENDPOINT){ try{ fetch(ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(p)}).catch(()=>{}); }catch(e){} } }
+function enviar(p){ if(ENDPOINT){ try{ fetch(ENDPOINT,{method:"POST",mode:"no-cors",keepalive:true,headers:{"Content-Type":"text/plain"},body:JSON.stringify(p)}).catch(()=>{}); }catch(e){} } }
 function sair(t){ travaSaiu=t; enviar({pesquisa:cur, versao:VERSAO, parcial:true, parou_na_trava:t, quando:new Date().toISOString(), respostas:answers}); click(); rr(); }
 function hallOk(sim){
   const v=(document.getElementById("hallName").value||"").trim();
@@ -1094,6 +1095,56 @@ function copiar(btn){ try{ navigator.clipboard.writeText(linhas().join("\n")).th
 function click(){ try{ ac=ac||new (window.AudioContext||window.webkitAudioContext)(); const o=ac.createOscillator(),g=ac.createGain(); o.type="sine";o.frequency.value=180; g.gain.setValueAtTime(.18,ac.currentTime); g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.12); o.connect(g).connect(ac.destination); o.start(); o.stop(ac.currentTime+.13);}catch(e){} }
 
 if(location.hash==="#app"){ startFlow("app"); } else render();
+</script>
+
+<!-- ===== TELA DE ESPERA (temporária) ===== -->
+<style>
+#espera{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:34px 20px 40px;text-align:center;overflow:hidden;
+background:radial-gradient(ellipse 80% 60% at 50% 45%,#1b2a5c 0%,#0d1636 55%,#060a1c 100%);color:#f6e7b8;font-family:Inter,system-ui,sans-serif}
+#espera .brilho{position:absolute;border-radius:50%;background:#ffd977;box-shadow:0 0 8px 2px rgba(255,210,110,.8);animation:esp-pisca 3s ease-in-out infinite;pointer-events:none}
+@keyframes esp-pisca{0%,100%{opacity:.15;transform:scale(.6)}50%{opacity:1;transform:scale(1.2)}}
+#espera .esp-logo{position:relative;font-family:"Bebas Neue",sans-serif;font-size:clamp(30px,7vw,52px);letter-spacing:3px;line-height:1;
+background:linear-gradient(180deg,#fff1c2 0%,#f5c542 45%,#b9821c 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 12px rgba(245,197,66,.45))}
+#espera .esp-meio{position:relative;display:flex;flex-direction:column;align-items:center;gap:18px}
+#espera .esp-frase{font-family:"Bebas Neue",sans-serif;font-size:clamp(40px,10vw,84px);line-height:1;letter-spacing:1.5px;color:#fff6dc;text-shadow:0 0 22px rgba(245,197,66,.35)}
+#espera .esp-relogio{font-family:"Bebas Neue",sans-serif;font-size:clamp(96px,26vw,200px);line-height:.9;letter-spacing:4px;font-variant-numeric:tabular-nums;
+background:linear-gradient(180deg,#fff3c4 0%,#f5c542 50%,#c38a1f 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 22px rgba(245,197,66,.55))}
+#espera .esp-rodape{position:relative;font-size:clamp(17px,4.2vw,22px);color:#e9dcb4;max-width:520px}
+#espera .esp-rodape b{color:#f5c542}
+</style>
+<div id="espera" role="dialog" aria-label="A votação abre em instantes">
+  <div class="esp-logo">A Casa dos 7 Sentidos</div>
+  <div class="esp-meio">
+    <div class="esp-frase">A votação abre em instantes</div>
+    <div class="esp-relogio" id="esp-relogio">20:00</div>
+  </div>
+  <div class="esp-rodape">Enquanto isso, assista ao episódio no <b>@7entidoss</b>.</div>
+</div>
+<script>
+(function(){
+  /* FIM: horário em que a tela some. null = 20 minutos a partir de quando a pessoa abre a página */
+  var FIM = "2026-11-10T00:09:23Z";
+  var fim = FIM ? new Date(FIM).getTime() : Date.now() + 20*60*1000;
+  var tela = document.getElementById("espera"), rel = document.getElementById("esp-relogio");
+  for (var i=0;i<46;i++){ var b=document.createElement("span"); b.className="brilho"; var t=2+Math.random()*4;
+    b.style.cssText="left:"+(Math.random()*100)+"%;top:"+(Math.random()*100)+"%;width:"+t+"px;height:"+t+"px;animation-delay:"+(Math.random()*3)+"s;animation-duration:"+(2+Math.random()*3)+"s";
+    tela.insertBefore(b, tela.firstChild); }
+  var pausados = [];
+  function pausarVideos(){ document.querySelectorAll("video").forEach(function(v){ if(!v.paused){ v.pause(); if(pausados.indexOf(v)<0) pausados.push(v); } }); }
+  function liberar(){
+    clearInterval(timer); tela.remove(); document.body.style.overflow="";
+    var v=document.getElementById("vab"); if(v){ try{ v.currentTime=0; var p=v.play(); if(p&&p.catch) p.catch(function(){}); }catch(e){} }
+  }
+  function tick(){
+    var r = Math.max(0, Math.round((fim - Date.now())/1000));
+    var m = Math.floor(r/60), s = r%60;
+    rel.textContent = (m<10?"0":"")+m+":"+(s<10?"0":"")+s;
+    pausarVideos();
+    if (r<=0) liberar();
+  }
+  document.body.style.overflow="hidden";
+  var timer = setInterval(tick, 250); tick();
+})();
 </script>
 </body>
 </html>
