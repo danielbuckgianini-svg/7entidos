@@ -502,7 +502,7 @@ function redoBox(s){
     <button class="back" onclick="refazAsk=null;rr()">cancelar</button></div>`;
 }
 function refazer(i){
-  const s=S[idx];
+  cancelaAuto(); const s=S[idx];
   const ids = s.type==="f2" ? s.gs.map(g=>"f2_"+g.id) : [s.id];
   ids.forEach(id=>{ (answers[id+"_refez"]=answers[id+"_refez"]||[]).push(MOTIVOS[i]);
     ["","_gostou","_nota","_fim","_prato","_acertos"].forEach(k=>{ if(k!==""||s.type==="f1") delete answers[id+k]; }); });
@@ -573,20 +573,20 @@ function render(){
         <div><span class="chip" style="background:${c.cor}">${esc(c.sentido)}</span><div class="logo" style="font-size:46px;margin-top:6px">${esc(c.fixo.nome)}</div>${c.fixo.apelido?`<div style="color:var(--muted);font-size:18px">${esc(c.fixo.apelido)}</div>`:""}</div></div>
         <div class="ficha"><p>${esc(c.brief)}</p></div>
         <h2>Qual é o jeito ${c.fixo.nome==="Luzia"||c.fixo.nome==="Duda"||c.fixo.nome==="Yara"?"dela":"dele"}?</h2>
-        <div class="opts fade">${c.tipo.map((o,i)=>`<button class="opt ${answers[tk]===o?"sel":""}" onclick="castSet('${tk}',${JSON.stringify(o).replace(/"/g,"&quot;")},true)"><span class="k">${L(i)}</span>${esc(o)}</button>`).join("")}</div>`;
+        <div class="opts fade">${c.tipo.map((o,i)=>`<button class="opt ${answers[tk]===o?"sel":""}" onclick="castSet('${tk}',${JSON.stringify(o).replace(/"/g,"&quot;")},true,this)"><span class="k">${L(i)}</span>${esc(o)}</button>`).join("")}</div>`;
     } else if(fase===0){
       const used=usedPhotos(c.id), left=FOTOS.filter(f=>!used.includes(f.id));
       h=`<div class="qnum">Pergunta ${qn} · perfil ${s.i+1} de 7</div><h2>Qual foto combina com esse perfil?</h2>
         <div class="ficha"><span class="chip" style="background:${c.cor}">${esc(c.sentido)}</span><p>${esc(c.brief)}</p></div>
-        <div class="photos fade">${left.map(f=>`<button class="ph" onclick="castSet('${fk}','${f.id}')"><div class="img">${fotoHTML(f.id)}</div><span>${f.id}</span></button>`).join("")}</div>`;
+        <div class="photos fade">${left.map(f=>`<button class="ph" onclick="castSet('${fk}','${f.id}',false,this)"><div class="img">${fotoHTML(f.id)}</div><span>${f.id}</span></button>`).join("")}</div>`;
     } else if(fase===1){
       const nomes=nomesPara(c, answers[fk]);
       h=`<div class="qnum">Pergunta ${qn} · perfil ${s.i+1} de 7</div>${pickCard(answers[fk],c.cor,c.sentido)}<h2>E qual nome você escolhe?</h2>
-        <div class="opts fade">${nomes.map((o,i)=>`<button class="opt" onclick="castSet('${nk}',${JSON.stringify(o).replace(/"/g,"&quot;")})"><span class="k">${L(i)}</span>${esc(o)}</button>`).join("")}</div>`;
+        <div class="opts fade">${nomes.map((o,i)=>`<button class="opt" onclick="castSet('${nk}',${JSON.stringify(o).replace(/"/g,"&quot;")},false,this)"><span class="k">${L(i)}</span>${esc(o)}</button>`).join("")}</div>`;
     } else {
       const nm=answers[nk];
       h=`<div class="qnum">Pergunta ${qn} · perfil ${s.i+1} de 7</div>${pickCard(answers[fk],c.cor,c.sentido,nm)}<h2>Qual é o jeito ${ok(nm)?"de "+esc(nm):"desse personagem"}?</h2>
-        <div class="opts fade">${c.tipo.map((o,i)=>`<button class="opt ${answers[tk]===o?"sel":""}" onclick="castSet('${tk}',${JSON.stringify(o).replace(/"/g,"&quot;")},true)"><span class="k">${L(i)}</span>${esc(o)}</button>`).join("")}</div>`;
+        <div class="opts fade">${c.tipo.map((o,i)=>`<button class="opt ${answers[tk]===o?"sel":""}" onclick="castSet('${tk}',${JSON.stringify(o).replace(/"/g,"&quot;")},true,this)"><span class="k">${L(i)}</span>${esc(o)}</button>`).join("")}</div>`;
     }
     h+=`<div class="err" id="err"></div><div class="nav"><button class="back" onclick="castBack('${c.id}')">← voltar</button><button class="skip" onclick="castPular('${c.id}')">pular</button></div>`;
     ownNav=true;
@@ -604,10 +604,10 @@ function render(){
       h=`<div class="qnum">Pergunta ${s.num+1} · o vilão</div>${pickCard(answers.vilao_foto,VILAO.cor,"Vilão")}
         <p style="margin:0 0 14px">Ninguém escolheu essa pessoa. Ela ficou de lado, viu tudo e guardou cada detalhe.</p>
         <h2>E que nome você escolhe?</h2>
-        <div class="opts fade">${nomesPara(VILAO,answers.vilao_foto).map((o,i)=>`<button class="opt" onclick="castSet('vilao_nome',${JSON.stringify(o).replace(/"/g,"&quot;")})"><span class="k">${L(i)}</span>${esc(o)}</button>`).join("")}</div>`;
+        <div class="opts fade">${nomesPara(VILAO,answers.vilao_foto).map((o,i)=>`<button class="opt" onclick="castSet('vilao_nome',${JSON.stringify(o).replace(/"/g,"&quot;")},false,this)"><span class="k">${L(i)}</span>${esc(o)}</button>`).join("")}</div>`;
     } else if(fase===2){
       h=`<div class="qnum">Pergunta ${s.num+2} · o vilão</div>${pickCard(answers.vilao_foto,VILAO.cor,"Vilão",answers.vilao_nome)}<h2>Qual é o jeito do vilão?</h2>
-        <div class="opts fade">${VILAO.tipo.map((o,i)=>`<button class="opt" onclick="castSet('vilao_tipo',${JSON.stringify(o).replace(/"/g,"&quot;")})"><span class="k">${L(i)}</span>${esc(o)}</button>`).join("")}</div>`;
+        <div class="opts fade">${VILAO.tipo.map((o,i)=>`<button class="opt" onclick="castSet('vilao_tipo',${JSON.stringify(o).replace(/"/g,"&quot;")},false,this)"><span class="k">${L(i)}</span>${esc(o)}</button>`).join("")}</div>`;
     } else {
       h=`<div class="center"><div class="big-emoji">🎉</div><h1>Parabéns!</h1>
         <p class="sub">${ok(answers.vilao_nome)?esc(answers.vilao_nome)+" é":"Esse é"} o seu vilão. Se muita gente escolher parecido, ele vira o vilão do reality.</p>
@@ -623,7 +623,6 @@ function render(){
         const nm=e.from==="vilao"?answers.vilao_nome:e.from?answers[e.from+"_nome"]:null;
         return `<div class="elrow"><div class="ph"><div class="img">${fotoHTML(fid,!e.from)}</div></div><div><b>${esc(e.nome)}</b>${ok(nm)?` <span style="color:var(--muted);font-size:16px">· ${esc(nm)}</span>`:""}
           <div class="row2" style="margin-top:8px">${["Hétero","LGBTQIA+"].map(o=>`<button class="opt ${v===o?"sel":""}" onclick="setEl('${e.k}','${o}')">${o}</button>`).join("")}</div></div></div>`}).join("")}</div>`;
-    needNext=true;
   }
   else if(s.type==="comodo"){
     const r=s.r, temas=temasDo(s.ri);
@@ -661,7 +660,6 @@ function render(){
       <h2>Quem você acha que vai vencer?</h2><p class="sub">Seu voto fica em segredo.</p>
       <div class="opts fade">${pers.map((p,i)=>`<button class="opt ${answers[s.id]===p.n?"sel":""}" onclick="setA('${s.id}',${JSON.stringify(p.n).replace(/"/g,"&quot;")})"><span class="k">${L(i)}</span>${esc(p.n)} <span class="chip" style="background:${p.cor};margin-left:8px">${esc(p.s)}</span></button>`).join("")}</div>
       ${answers[s.id]!=null?`<div class="guard center fade"><b style="font-size:24px">Será que os Guardiões têm razão?</b><br>O Brasil é quem vai dizer.</div>`:""}`;
-    needNext=true;
   }
   else if(s.type==="hall"){
     h=`<div class="center"><div class="big-emoji">🏆</div><h1>Você chegou ao Hall da Fama!</h1>
@@ -728,7 +726,6 @@ function render(){
       h += `<div class="feed"><h3>Quanto você gostou dessa atividade?</h3>${s.gs.map(g=>`<div class="notarow"><div class="gimg" style="border-color:${g.cor};background:${g.cor}22" aria-hidden="true">${g.img}</div>
         <div><b>${esc(g.nome)}</b>${scale("f2_"+g.id+"_nota", answers["f2_"+g.id+"_nota"], ["0 · não gostei nada","10 · amei"])}</div></div>`).join("")}</div>${redoBox(s)}`;
     }
-    needNext = true;
   }
   else if(s.type==="multi"){
     const sel=Array.isArray(answers[s.id])?answers[s.id]:[];
@@ -911,19 +908,25 @@ function toggleCombo(i){ const m=S[idx].mt, o=m.opts[i], a=(Array.isArray(answer
 function toggleMulti(i){ const s=S[idx], o=s.opts[i], a=(Array.isArray(answers[s.id])?answers[s.id]:[]).slice(), p=a.indexOf(o); p>=0?a.splice(p,1):a.push(o); answers[s.id]=a; click(); rr(); }
 function toggleF1p(fi,oi){ const k="f1_"+FASE1[fi].id, o=FASE1[fi].o[oi], a=(Array.isArray(answers[k])?answers[k]:[]).slice(), p=a.indexOf(o); p>=0?a.splice(p,1):a.push(o); answers[k]=a; click(); rr(); }
 function rr(){ const y=window.scrollY; render(); window.scrollTo({top:y}); }
-function setA(k,v){ answers[k]=v; click(); rr(); }
-function setN(k,v){ answers[k]=v; click(); rr(); const t=S[idx]; if(t.type==="nota" || (cur==="app" && t.type==="f2" && isDone(t))) setTimeout(next,320); }
-function pickI(id,arr,i){ answers[id]=arr[i]; click(); rr(); setTimeout(next,320); }
+/* passa sozinho: 1 segundo depois do último toque; dois toques rápidos só passam uma pergunta */
+let _auto=null;
+function autoPasso(fn){ cancelaAuto(); const m={cur,idx,view}; _auto=setTimeout(()=>{ _auto=null; if(m.cur===cur&&m.idx===idx&&m.view===view) fn(); },1000); }
+function cancelaAuto(){ if(_auto){ clearTimeout(_auto); _auto=null; } }
+function acende(el){ if(!el||!el.parentNode) return; el.parentNode.querySelectorAll(".sel").forEach(b=>b.classList.remove("sel")); el.classList.add("sel"); }
+function setA(k,v){ answers[k]=v; click(); rr(); if(S[idx]&&S[idx].type==="guardiao"&&view==="flow") autoPasso(next); }
+function setN(k,v){ answers[k]=v; click(); rr(); const t=S[idx]; if(t.type==="nota" || (t.type==="f2" && isDone(t))) autoPasso(next); }
+function pickI(id,arr,i){ answers[id]=arr[i]; click(); rr(); autoPasso(next); }
 function toggleF1(i){ const s=S[idx], o=s.f.o[i], a=(Array.isArray(answers[s.id])?answers[s.id]:[]).slice(), p=a.indexOf(o); p>=0?a.splice(p,1):a.push(o); answers[s.id]=a; click(); rr(); }
 
 /* casting: a pergunta some e entra a próxima, no mesmo slide */
-function castSet(k,v,fim){
-  answers[k]=v; click();
+function castSet(k,v,fim,el){
+  answers[k]=v; click(); acende(el);
   const s=S[idx];
-  if(s.type==="cast" && isDone(s)){ rr(); setTimeout(next,350); }
-  else { render(); window.scrollTo({top:0}); }
+  if(s.type==="cast" && isDone(s)) autoPasso(next);
+  else autoPasso(()=>{ render(); window.scrollTo({top:0}); });
 }
 function castBack(id){
+  cancelaAuto();
   const cc=CAST.find(x=>x.id===id);
   if(cc&&cc.fixo){ if(answers[id+"_tipo"]!=null){ delete answers[id+"_tipo"]; render(); return; } return prev(); }
   if(answers[id+"_tipo"]!=null){ delete answers[id+"_tipo"]; delete answers[id+"_nome"]; }
@@ -933,6 +936,7 @@ function castBack(id){
   render();
 }
 function castPular(id){
+  cancelaAuto();
   const ks=[id+"_foto",id+"_nome",id+"_tipo"];
   if(id==="vilao"){ ks.shift(); }
   const k=ks.find(x=>answers[x]==null);
@@ -942,6 +946,7 @@ function castPular(id){
   if(isDone(s)){ if(s.type==="vilao") rr(); else next(); } else render();
 }
 function vilaoBack(){
+  cancelaAuto();
   if(answers.vilao_tipo!=null) delete answers.vilao_tipo;
   else if(answers.vilao_nome!=null) delete answers.vilao_nome;
   else if(answers.vilao_visto){ delete answers.vilao_visto; }
@@ -950,12 +955,12 @@ function vilaoBack(){
 }
 function setEl(k,o){
   answers["elenco__"+k]=o; click();
-  if(ELENCO.every(e=>answers["elenco__"+e.k])){ answers.elenco=ELENCO.map(e=>e.nome+": "+answers["elenco__"+e.k]).join(" · "); rr(); setTimeout(next,450); }
+  if(ELENCO.every(e=>answers["elenco__"+e.k])){ answers.elenco=ELENCO.map(e=>e.nome+": "+answers["elenco__"+e.k]).join(" · "); rr(); autoPasso(next); }
   else rr();
 }
 const _temas={};
 function temasDo(ri){ if(!_temas[ri]){ const t=[...TEMAS].sort(()=>Math.random()-.5); _temas[ri]=t.slice(0,4); } return _temas[ri]; }
-function pickRoom(id,v){ answers[id]=v; click(); rr(); setTimeout(next,300); }
+function pickRoom(id,v){ answers[id]=v; click(); rr(); autoPasso(next); }
 function reverVideo(i){ const el=document.getElementById("rever"); el.innerHTML=`<div class="card-dark fade" style="margin-top:14px"><div class="qnum">${esc(HOSTS[i].nome)}</div>${videoBox(i,true)}<button class="back" onclick="document.getElementById('rever').innerHTML=''">fechar</button></div>`; el.scrollIntoView({behavior:"smooth"}); }
 function tentarDeNovo(){
   tentativa++; answers.reality_tentativas=tentativa;
@@ -975,10 +980,10 @@ function tryNext(){
   }
   next();
 }
-function pular(){ const s=S[idx]; if(!isDone(s)) answers[s.id]="pulou"; click(); next(); }
-function next(){ if(idx<S.length-1){ leaveStep(); refazAsk=null; travaConvite=false; idx++; render(); window.scrollTo({top:0,behavior:"smooth"}); } }
-function prev(){ leaveStep(); refazAsk=null; travaConvite=false; revelaFase=0; if(idx>0){ idx--; render(); window.scrollTo({top:0}); } else goEscolha(); }
-function goEscolha(){ leaveStep(); view="escolha"; render(); window.scrollTo({top:0}); }
+function pular(){ cancelaAuto(); const s=S[idx]; if(!isDone(s)) answers[s.id]="pulou"; click(); next(); }
+function next(){ cancelaAuto(); if(idx<S.length-1){ leaveStep(); refazAsk=null; travaConvite=false; idx++; render(); window.scrollTo({top:0,behavior:"smooth"}); } }
+function prev(){ cancelaAuto(); leaveStep(); refazAsk=null; travaConvite=false; revelaFase=0; if(idx>0){ idx--; render(); window.scrollTo({top:0}); } else goEscolha(); }
+function goEscolha(){ cancelaAuto(); leaveStep(); view="escolha"; render(); window.scrollTo({top:0}); }
 
 /* ============ ENVIO (respostas e contato sempre separados) ============ */
 const PID=(function(){ try{ let v=localStorage.getItem("7e_pessoa"); if(!v){ v=Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4); localStorage.setItem("7e_pessoa",v); } return v; }catch(e){ return Math.random().toString(36).slice(2,12); } })();

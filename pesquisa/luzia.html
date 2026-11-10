@@ -253,7 +253,7 @@ function render(){
     h=`<div class="qn">Pergunta ${p.i+1} de 8</div><div class="linha-nome"><span>${L.em}</span><h2>Linha ${L.nome}</h2></div><p class="sub">Dê uma nota de 0 a 10 para cada look. ${L.frase}</p>
     <div class="looks ${L.looks.length===1?"um":""}">${L.looks.map(l=>{const v=R[l.id];return `<div class="look ${v!=null&&v!=="pulou"?"ok":""}"><div class="foto" style="background:${l.bg}">${fotoLook(l)}</div><b>${esc(l.nome)}</b>
       <div class="nota10">${Array.from({length:11},(_,n)=>`<button class="${v===n?"sel":""}" onclick="nota('${l.id}',${n})" aria-label="nota ${n}">${n}</button>`).join("")}</div><div class="legenda"><span>0 · não gostei</span><span>10 · amei</span></div></div>`;}).join("")}</div>
-    <div class="err" id="err"></div><div class="stack"><button class="btn full" onclick="seguirLinha(${p.i})">Próximo →</button></div>${nav(true)}`;
+    <div class="err" id="err"></div>${nav(true)}`;
   }
   else if(p.t==="favorita"){
     h=`<div class="qn">Pergunta 4 de 8</div><h2>De qual linha você mais gosta?</h2><p class="sub">A linha vencedora vira a base de todos os looks da Luzia.</p>
@@ -280,16 +280,21 @@ function render(){
 function travada(){ if(window.TEMA) TEMA.set("M","#F5C542","s25","Sala trancada (100 vagas)"); trilha(); $("tela").innerHTML=`<div class="cena trava"><h2>As 100 vagas acabaram!</h2><p>Obrigado pelo interesse. A pesquisa da Luzia já fechou.</p><p class="sub">Acompanhe A Casa dos 7 Sentidos no @7entidoss.</p><a class="btn" href="https://www.instagram.com/7entidoss/" target="_blank" rel="noopener">Seguir o @7entidoss</a></div>`; barra(); }
 
 /* ===== AÇÕES ===== */
-function ir(i){ idx=Math.max(0,Math.min(PASSOS.length-1,i)); extra=null; render(); window.scrollTo({top:0,behavior:"smooth"}); if(PASSOS[idx].t==="fim") terminar(); }
+/* passa sozinho: 1 segundo depois do último toque; dois toques rápidos só passam uma pergunta */
+let _auto=null;
+function autoPasso(){ cancelaAuto(); const de=idx; _auto=setTimeout(()=>{ _auto=null; if(idx===de&&!extra) ir(idx+1); },1000); }
+function cancelaAuto(){ if(_auto){ clearTimeout(_auto); _auto=null; } }
+function ir(i){ cancelaAuto(); idx=Math.max(0,Math.min(PASSOS.length-1,i)); extra=null; render(); window.scrollTo({top:0,behavior:"smooth"}); if(PASSOS[idx].t==="fim") terminar(); }
 function voltar(){ if(extra){extra=null;return render();} ir(idx-1); }
 function pular(){ const p=PASSOS[idx];
   if(p.t==="linha") LINHAS[p.i].looks.forEach(l=>{ if(R[l.id]==null) R[l.id]="pulou"; });
   if(p.t==="favorita"&&R.linha_favorita==null) R.linha_favorita="pulou";
   if(p.t==="pers"&&R[PERS[p.i].id]==null) R[PERS[p.i].id]="pulou";
   som(300); ir(idx+1); }
-function nota(id,n){ R[id]=n; som(500+n*40); const y=window.scrollY; render(); window.scrollTo({top:y}); }
+function nota(id,n){ R[id]=n; som(500+n*40); const y=window.scrollY; render(); window.scrollTo({top:y});
+  const p=PASSOS[idx]; if(p.t==="linha" && LINHAS[p.i].looks.every(l=>R[l.id]!=null)) autoPasso(); }
 function seguirLinha(i){ const falta=LINHAS[i].looks.filter(l=>R[l.id]==null); if(falta.length){ $("err").textContent=LINHAS[i].looks.length===1?"Dê nota para o look, ou toque em pular.":"Dê nota para os dois looks, ou toque em pular."; return; } ir(idx+1); }
-function escolhe(k,v){ R[k]=v; som(700); render(); setTimeout(()=>ir(idx+1),330); }
+function escolhe(k,v){ R[k]=v; som(700); render(); autoPasso(); }
 function terminar(){
   if(R._enviado) return; R._enviado=true;
   const dados={aba:ABA,pesquisa:"luzia",quando:new Date().toISOString(),tempo_seg:Math.round((Date.now()-t0)/1000)};
