@@ -937,7 +937,8 @@ function prev(){ leaveStep(); refazAsk=null; travaConvite=false; revelaFase=0; i
 function goEscolha(){ leaveStep(); view="escolha"; render(); window.scrollTo({top:0}); }
 
 /* ============ ENVIO (respostas e contato sempre separados) ============ */
-function enviar(p){ if(ENDPOINT){ try{ fetch(ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(p)}).catch(()=>{}); }catch(e){} } }
+const PID=(function(){ try{ let v=localStorage.getItem("7e_pessoa"); if(!v){ v=Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4); localStorage.setItem("7e_pessoa",v); } return v; }catch(e){ return Math.random().toString(36).slice(2,12); } })();
+function enviar(p){ if(!p.evento){ p.pessoa=PID; if(!p.parcial){ try{ localStorage.setItem("7e_respondeu","1"); }catch(e){} } } if(ENDPOINT){ try{ fetch(ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(p)}).catch(()=>{}); }catch(e){} } }
 function sair(t){ travaSaiu=t; enviar({pesquisa:cur, versao:VERSAO, parcial:true, parou_na_trava:t, quando:new Date().toISOString(), respostas:answers}); click(); rr(); }
 function hallOk(sim){
   const v=(document.getElementById("hallName").value||"").trim();
@@ -1094,6 +1095,53 @@ function copiar(btn){ try{ navigator.clipboard.writeText(linhas().join("\n")).th
 function click(){ try{ ac=ac||new (window.AudioContext||window.webkitAudioContext)(); const o=ac.createOscillator(),g=ac.createGain(); o.type="sine";o.frequency.value=180; g.gain.setValueAtTime(.18,ac.currentTime); g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.12); o.connect(g).connect(ac.destination); o.start(); o.stop(ac.currentTime+.13);}catch(e){} }
 
 if(location.hash==="#app"){ startFlow("app"); } else render();
+</script>
+
+<!-- ===== SALA TRANCADA NAS 100 PESSOAS + LISTA DE ESPERA ===== -->
+<style>
+#tranca{position:fixed;inset:0;z-index:9998;display:none;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:28px 20px;text-align:center;overflow:auto;
+background:radial-gradient(ellipse 80% 60% at 50% 40%,#1b2a5c 0%,#0d1636 55%,#060a1c 100%);color:#f6e7b8;font-family:Inter,system-ui,sans-serif}
+#tranca .t-logo{font-family:"Bebas Neue",sans-serif;font-size:clamp(30px,7vw,48px);letter-spacing:3px;background:linear-gradient(180deg,#fff1c2,#f5c542 45%,#b9821c);-webkit-background-clip:text;background-clip:text;color:transparent}
+#tranca .t-tit{font-family:"Bebas Neue",sans-serif;font-size:clamp(36px,9vw,64px);line-height:1;color:#fff6dc;animation:t-pisca 1.6s ease-in-out infinite}
+@keyframes t-pisca{0%,100%{opacity:1}50%{opacity:.45}}
+#tranca p{max-width:460px;margin:0;font-size:19px;color:#e9dcb4}
+#tranca form{width:min(420px,100%);display:flex;flex-direction:column;gap:12px;text-align:left}
+#tranca input[type=text],#tranca input[type=email]{width:100%;padding:14px 16px;border-radius:12px;border:2px solid #f5c542;background:#0b1430;color:#fff;font-size:18px;box-sizing:border-box}
+#tranca label.lg{display:flex;gap:10px;align-items:flex-start;font-size:15px;color:#d9cfae;line-height:1.35}
+#tranca label.lg input{width:22px;height:22px;flex:none;margin-top:2px;accent-color:#f5c542}
+#tranca button{padding:16px;border:0;border-radius:14px;background:linear-gradient(180deg,#ffe08a,#f5c542);color:#1a1405;font-weight:800;font-size:20px;cursor:pointer}
+#tranca .t-err{color:#ff9a8a;font-size:15px;min-height:18px}
+</style>
+<div id="tranca" role="dialog" aria-label="As 100 vagas acabaram">
+  <div class="t-logo">A Casa dos 7 Sentidos</div>
+  <div class="t-tit">As 100 vagas desta sala acabaram</div>
+  <p>Deixe seu nome e e-mail e seja avisado quando abrirem as próximas salas.</p>
+  <form id="t-form" novalidate>
+    <input type="text" id="t-nome" placeholder="Seu nome" autocomplete="name">
+    <input type="email" id="t-email" placeholder="Seu e-mail" autocomplete="email">
+    <label class="lg"><input type="checkbox" id="t-lgpd"> Estou ciente de que meu nome e e-mail serão usados só para me avisar sobre as próximas salas do 7entidos (LGPD).</label>
+    <div class="t-err" id="t-err"></div>
+    <button type="submit">Quero ser avisado</button>
+  </form>
+</div>
+<script>
+(function(){
+  var URL=(window.PESQUISA_URL||""); if(!URL) return;
+  try{ if(localStorage.getItem("7e_respondeu")==="1") return; }catch(e){}
+  var tela=document.getElementById("tranca");
+  function trancar(){ tela.style.display="flex"; document.body.style.overflow="hidden";
+    document.querySelectorAll("video").forEach(function(v){ try{v.pause();}catch(e){} }); }
+  fetch(URL+"?acao=vagas",{cache:"no-store"}).then(function(r){return r.json();}).then(function(d){ if(d&&d.trancada) trancar(); }).catch(function(){});
+  document.getElementById("t-form").addEventListener("submit",function(ev){
+    ev.preventDefault();
+    var n=document.getElementById("t-nome").value.trim(), m=document.getElementById("t-email").value.trim(), ok=document.getElementById("t-lgpd").checked, er=document.getElementById("t-err");
+    if(!n){ er.textContent="Escreva seu nome."; return; }
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(m)){ er.textContent="Confira o e-mail."; return; }
+    if(!ok){ er.textContent="Marque a caixinha de ciência para continuar."; return; }
+    try{ fetch(URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify({evento:"espera",nome:n,email:m,lgpd:true})}).catch(function(){}); }catch(e){}
+    this.outerHTML='<p style="font-size:22px;color:#f5c542;font-weight:800">Pronto! Você está na lista. ✨</p><p>Assim que a próxima sala abrir, a gente te avisa por e-mail.</p>';
+  });
+})();
 </script>
 </body>
 </html>
