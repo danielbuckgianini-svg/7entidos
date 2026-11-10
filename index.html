@@ -2,6 +2,15 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
+<script>
+/* VOTAÇÃO DO REALITY (temporário): até sexta 13/11/2026 às 23h59 (Brasília), a página inicial leva direto para a pesquisa.
+   Para ver a página inicial normal nesse período, abra 7entidos.com.br/?site */
+(function(){try{
+  if(Date.now() < Date.parse("2026-11-14T02:59:59Z") && location.search.indexOf("site")<0){
+    location.replace("/pesquisa/" + location.search + location.hash);
+  }
+}catch(e){}})();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>7ENTIDOS — A vida é feita de boas sensações</title>
 <meta name="description" content="7ENTIDOS é um aplicativo em desenvolvimento para explorar sentidos, memórias positivas e experiências que fazem bem a você.">
