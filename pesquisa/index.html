@@ -343,8 +343,9 @@ const TEMPO_LIM_APP = [3,6,10,Infinity];
 const REDES = [
   {nome:"7entidos.com.br", url:"https://7entidos.com.br", ic:"🌐"},
   {nome:"@7entidoss no Instagram", url:"https://www.instagram.com/7entidoss/", ic:"📸"},
-  {nome:"7entidos no Facebook", url:"", ic:"📘"},
-  {nome:"7entidos no LinkedIn", url:"", ic:"💼"}
+  {nome:"@7entidos no TikTok", url:"https://www.tiktok.com/@7entidos", ic:"🎵"},
+  {nome:"7entidos no Facebook", url:"https://www.facebook.com/profile.php?id=61596119254628", ic:"📘"},
+  {nome:"7entidos no LinkedIn", url:"https://www.linkedin.com/company/145418964/", ic:"💼"}
 ];
 /* blocos de preço da pergunta "Até quanto você pagaria?" */
 const PLANOS = []; /* sem preço em nenhuma tela */
@@ -385,7 +386,7 @@ function buildApp(){
   let jg=0;
   F2PAGINAS.flat().forEach(gid=>{ const g=G2(gid); jg++;
     q({type:"f2", id:"f2_"+g.id, gs:[g], block:"Fase 2 · jogo "+jg+" de 7"}); });
-  q({id:"proposito", block:"Empresa", title:"Na sua opinião, pra que serve o 7entidos?", sub:"Escolha a frase que mais combina com o que você viu.", opts:["Descobrir o que te faz bem através dos sete sentidos","Jogar mini jogos para passar o tempo","Fazer terapia pelo celular","Ainda não entendi"]});
+  q({id:"proposito", block:"Empresa", title:"Na sua opinião, pra que serve o 7entidos?", sub:"Escolha a frase que mais combina com o que você viu.", opts:["Descobrir o que te faz bem através dos sete sentidos","Jogar mini jogos para passar o tempo","Um app de meditação","Ainda não entendi"]});
   q({id:"confianca", block:"Empresa", type:"nota", title:"Quanto você confiaria no 7entidos?", legend:["0 · não confiaria nada","10 · confiaria totalmente"]});
   q({type:"multi", id:"motivos_nao_comprar", block:"Montar o app · últimas perguntas", title:"Quais seriam os motivos para você não comprar um app?", sub:"Escolha quantos quiser.", opts:["É caro","Já tenho apps demais","Não confio em app pago","Não sei se vou usar sempre"]});
   q({type:"tempo", id:"app_tempo_chute", semFlow:true, block:"Montar o app · última pergunta", title:"Tempo que achou"});
