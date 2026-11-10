@@ -137,6 +137,20 @@ input.txt:focus{border-color:var(--accent)}
 .bal{position:relative;height:40px;background:var(--panel);border-radius:99px;border:2px solid var(--line)}
 .bal .zone{position:absolute;left:41%;width:18%;top:0;bottom:0;background:rgba(245,197,66,.25);border-left:2px solid var(--accent);border-right:2px solid var(--accent)}
 .bal .dot{position:absolute;top:6px;width:24px;height:24px;margin-left:-12px;border-radius:50%;background:#b48cff}
+.bal:has(.gira){height:60px}.bal .dot.gira{top:3px;width:54px;height:54px;margin-left:-27px;background:none;border-radius:0}.bal .dot.gira img{width:100%;height:100%;display:block;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
+.prato{position:relative;width:min(300px,82%);aspect-ratio:1;margin:6px auto 14px}
+.prato .pvazio{position:absolute;inset:0;width:100%;height:100%;filter:drop-shadow(0 10px 18px rgba(0,0,0,.45))}
+.prato .ping{position:absolute;width:48%;height:48%;animation:cai .35s ease-out}
+.prato .ping img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 4px 6px rgba(0,0,0,.35))}
+.prato .ping .pem{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:54px}
+.prato .ping img+.pem,.prato .ping .pem:has(+img){visibility:hidden}
+@keyframes cai{from{transform:translateY(-30px) scale(1.2);opacity:0}to{transform:none;opacity:1}}
+.ggrid.ingr{grid-template-columns:repeat(4,1fr);max-width:none;gap:8px}
+.fcard.ing{aspect-ratio:1;background:radial-gradient(circle at 50% 40%,#3a2340,#141a3a 80%)}
+.fcard.ing img{object-fit:contain;padding:8px 8px 22px}
+.fcard.ing .fnome{font-size:13px}
+.fcard.ing.sel{border-color:#F5C542;box-shadow:0 0 0 3px #F5C542}
+.fcard.sompic.sel{border-color:#F5C542;box-shadow:0 0 0 4px #F5C542}
 .chips{display:flex;flex-wrap:wrap;gap:10px}
 .chips .opt{padding:12px 16px;font-size:19px}
 .chips.mini{gap:8px}
@@ -382,7 +396,7 @@ const F1SOM = ["mar","musica","chuva","silencio"];
 const f1foto = (fid,oi) => "opcoes/"+fid+"-"+(oi+1)+".jpg";
 const FASE2 = [
   {id:"visao", s:"Visão", cor:"#f5c542", nome:"Olho de águia", img:"👁️"},
-  {id:"audicao", s:"Audição", cor:"#4aa8ff", nome:"Qual som é mais fino?", img:"👂"},
+  {id:"audicao", s:"Audição", cor:"#4aa8ff", nome:"Qual som é mais agudo?", img:"👂"},
   {id:"tato", s:"Tato", cor:"#ff8a3d", nome:"Segure firme", img:"✋"},
   {id:"paladar", s:"Paladar", cor:"#ff5a6e", nome:"Monte o seu prato", img:"🍽️"},
   {id:"olfato", s:"Olfato", cor:"#5ccf8a", nome:"Pares de cheiros", img:"👃"},
@@ -1200,14 +1214,17 @@ const GAMES = {
         rd.querySelectorAll(".gcell").forEach(c=>{ if(+c.dataset.i===x.k) c.classList.add("ok"); else if(c===b) c.classList.add("bad"); });
         rd.querySelector(".rres").innerHTML=x.ok?'<span style="color:#9be7b0">✓ Achou!</span>':'<span style="color:#ff8a80">Era o quadrado marcado de verde.</span>';
         if(R.every(y=>y.feito)){ answers.f2_visao_acertos=R.filter(y=>y.ok).length; setTimeout(win,700); } }); }); },
-  audicao(el,win){ const R=[0,1,2].map(()=>{ const a=300+Math.random()*200, up=Math.random()<.5; return {a, b:up?a*1.3:a/1.3, up, feito:false, ok:false}; });
-    el.innerHTML=`<p class="gtip">Ouça os dois sons de cada rodada e diga qual é mais fino.</p>`+R.map((x,r)=>`<div class="round sround chips mini" data-r="${r}"><span class="rlab">Rodada ${r+1}</span><button class="opt" data-a="ouvir">▶ Ouvir</button><button class="opt" data-a="1">1º mais fino</button><button class="opt" data-a="2">2º mais fino</button><span class="rres"></span></div>`).join("");
-    el.querySelectorAll(".round").forEach(rd=>{ const x=R[+rd.dataset.r];
-      rd.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ const a=b.dataset.a;
-        if(a==="ouvir"){ tone(x.a,0); tone(x.b,.6); return; }
-        if(x.feito) return; x.feito=true; x.ok=(a==="2")===x.up; click(); b.classList.add("sel");
-        rd.querySelector(".rres").innerHTML=x.ok?'<span style="color:#9be7b0">✓ Acertou!</span>':`<span style="color:#ff8a80">Era o ${x.up?"2º":"1º"}.</span>`;
-        if(R.every(y=>y.feito)){ answers.f2_audicao_acertos=R.filter(y=>y.ok).length; setTimeout(win,700); } }); }); },
+  audicao(el,win){ const R=[0,1,2].map(()=>{ const ag=Math.random()<.5; return {ag, f: ag?700+Math.random()*300:110+Math.random()*70, feito:false, ok:false}; }); let r=0;
+    const draw=()=>{ const x=R[r];
+      el.innerHTML=`<p class="gtip">Toque em “Ouvir” e diga: o som é <b>agudo</b> (fino, como o passarinho) ou <b>grave</b> (grosso, como o tambor)?</p>
+        <div class="round" data-r="${r}"><span class="rlab">Rodada ${r+1} de 3</span> <button class="opt" type="button" id="aouv" style="display:inline-flex;padding:8px 14px">▶ Ouvir</button>
+        <div class="ggrid g2" style="margin-top:10px">${[["agudo","Agudo","🐦"],["grave","Grave","🥁"]].map(([k,nm,em])=>`<button class="fcard sompic" data-k="${k}" style="--fc:#4aa8ff" aria-label="${nm}"><span class="fsem" aria-hidden="true">${em}</span><img src="opcoes/jogo-som-${k}.jpg" alt="" onerror="this.remove()"><span class="fnome">${nm}</span></button>`).join("")}</div>
+        <div class="rres"></div></div>`;
+      el.querySelector("#aouv").onclick=()=>tone(x.f,0);
+      el.querySelectorAll(".sompic").forEach(b=>b.onclick=()=>{ if(x.feito) return; x.feito=true; x.ok=(b.dataset.k==="agudo")===x.ag; click(); b.classList.add("sel");
+        el.querySelector(".rres").innerHTML=x.ok?'<span style="color:#9be7b0">✓ Acertou!</span>':`<span style="color:#ff8a80">Era ${x.ag?"agudo":"grave"}.</span>`;
+        setTimeout(()=>{ if(r<R.length-1){ r++; draw(); } else { answers.f2_audicao_acertos=R.filter(y=>y.ok).length; win(); } },800); }); };
+    draw(); },
   tato(el,win){ el.innerHTML=`<p class="gtip">Segure o botão apertado até a barra encher</p><div class="progress" style="height:16px"><i id="hb"></i></div>
       <button class="btn" id="hold" style="margin-top:10px;padding:12px 20px;font-size:18px;touch-action:none;user-select:none;-webkit-user-select:none">Segure aqui ✋</button><div class="err" id="gerr"></div>`;
     let t=null,p=0; const bar=el.querySelector("#hb"), b=el.querySelector("#hold");
@@ -1215,16 +1232,19 @@ const GAMES = {
     b.oncontextmenu=e=>e.preventDefault();
     b.onpointerdown=e=>{ e.preventDefault(); if(t) return; el.querySelector("#gerr").textContent=""; t=setInterval(()=>{ p+=5; bar.style.width=p+"%"; if(p>=100){ clearInterval(t); t=null; win(); } },100); };
     b.onpointerup=b.onpointerleave=b.onpointercancel=stop; },
-  paladar(el,win){ const I=[["🍅","Tomate"],["🧀","Queijo"],["🌶️","Pimenta"],["🍯","Mel"],["🍋","Limão"],["🌿","Manjericão"],["🥥","Coco"],["🍫","Chocolate"]]; const sel=[];
-    const draw=()=>{ el.innerHTML=`<p class="gtip">Monte o seu prato: escolha 3 ingredientes (${sel.length}/3)</p><div class="chips mini">${I.map((x,i)=>`<button class="opt ${sel.includes(i)?"sel":""}" data-i="${i}">${x[0]} ${x[1]}</button>`).join("")}</div>`;
-      el.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ const i=+b.dataset.i, p=sel.indexOf(i); if(p>=0) sel.splice(p,1); else if(sel.length<3) sel.push(i); click();
-        if(sel.length===3){ answers[S[idx].id+"_prato"]=sel.map(i=>I[i][1]); win(); } else draw(); }); }; draw(); },
+  paladar(el,win){ const I=[["🍅","Tomate","tomate"],["🧀","Queijo","queijo"],["🌶️","Pimenta","pimenta"],["🍯","Mel","mel"],["🍋","Limão","limao"],["🌿","Manjericão","manjericao"],["🥥","Coco","coco"],["🍫","Chocolate","chocolate"]]; const sel=[];
+    const POS=[["8%","10%"],["44%","16%"],["24%","46%"]];
+    const draw=()=>{ el.innerHTML=`<p class="gtip">Monte o seu prato: escolha 3 ingredientes (${sel.length}/3)</p>
+      <div class="prato"><img class="pvazio" src="opcoes/jogo-prato-vazio.png" alt="" onerror="this.remove()">${sel.map((k,j)=>`<span class="ping" style="left:${POS[j][0]};top:${POS[j][1]}"><span class="pem" aria-hidden="true">${I[k][0]}</span><img src="opcoes/jogo-prato-${I[k][2]}.png" alt="" onerror="this.remove()"></span>`).join("")}</div>
+      <div class="ggrid ingr">${I.map((x,i)=>`<button class="fcard ing ${sel.includes(i)?"sel":""}" data-i="${i}" style="--fc:#ff5a6e" aria-label="${x[1]}"><span class="fsem" aria-hidden="true">${x[0]}</span><img src="opcoes/jogo-prato-${x[2]}.png" alt="" onerror="this.remove()"><span class="fnome">${x[1]}</span></button>`).join("")}</div>`;
+      el.querySelectorAll(".ing").forEach(b=>b.onclick=()=>{ const i=+b.dataset.i, p=sel.indexOf(i); if(p>=0) sel.splice(p,1); else if(sel.length<3) sel.push(i); click(); draw();
+        if(sel.length===3){ answers[S[idx].id+"_prato"]=sel.map(i=>I[i][1]); el.querySelectorAll(".ing").forEach(x=>x.disabled=true); setTimeout(win,1200); } }); }; draw(); },
   olfato(el,win){ const E=["🌸","☕","🍋","🌸","☕","🍋"].sort(()=>Math.random()-.5), open=[], okk=[]; let lock=false;
     const draw=()=>{ el.innerHTML=`<p class="gtip">Ache os pares de cheiros iguais</p><div class="ggrid g3">${E.map((e,i)=>open.includes(i)||okk.includes(i)?`<button class="gcard" data-i="${i}">${e}</button>`:`<button class="gcard pint p${i%3}" data-i="${i}" aria-label="carta ${i+1}"></button>`).join("")}</div>`;
       el.querySelectorAll(".gcard").forEach(b=>b.onclick=()=>{ const i=+b.dataset.i; if(lock||open.includes(i)||okk.includes(i)) return; open.push(i); click(); draw();
         if(open.length===2){ lock=true; setTimeout(()=>{ if(E[open[0]]===E[open[1]]) okk.push(...open); open.length=0; lock=false; if(okk.length===E.length) win(); else draw(); },700); } }); }; draw(); },
   equilibrio(el,win){ let hits=0,x=0,dir=1,raf;
-    el.innerHTML=`<p class="gtip">Toque em “Agora!” quando a bolinha estiver na faixa do meio (<span id="eh">0</span>/3)</p><div class="bal"><div class="zone"></div><div class="dot" id="dot"></div></div>
+    el.innerHTML=`<p class="gtip">Toque em “Agora!” quando o girassol estiver na faixa do meio (<span id="eh">0</span>/3)</p><div class="bal"><div class="zone"></div><div class="dot gira" id="dot"><img src="opcoes/jogo-meio-girassol.png" alt="" onerror="this.parentNode.classList.remove('gira');this.remove()"></div></div>
       <button class="btn" id="eb" style="margin-top:14px">Agora!</button><div class="err" id="gerr"></div>`;
     const dot=el.querySelector("#dot");
     const step=()=>{ if(!document.body.contains(dot)) return; x+=dir*1.1; if(x>=100){x=100;dir=-1} if(x<=0){x=0;dir=1} dot.style.left=x+"%"; raf=requestAnimationFrame(step); }; step();
