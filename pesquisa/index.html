@@ -247,6 +247,28 @@ input.txt:focus{border-color:var(--accent)}
 .vl-big img{width:78%;max-width:320px;height:auto}
 .vl-big b{font:800 22px/1.1 system-ui,sans-serif;color:#f5c542;letter-spacing:.5px}
 .vl-big small{color:#e9e6f2;font-size:13px;opacity:.85}
+/* ===== Gestalt (Sala da Gestalt, 10/11) ===== */
+/* Fase 1: 3 grupos de 5, com espaço entre eles (proximidade) */
+.chips.g5{padding:10px 0;margin:0}
+.chips.g5+.chips.g5{margin-top:14px;border-top:1px dashed color-mix(in srgb,var(--c) 45%,transparent)}
+.chips.g5 .opt.sel{border-color:var(--c);box-shadow:0 0 0 2px var(--c) inset}
+/* constelação do 7 na trilha */
+.sete{display:flex;align-items:center;gap:10px;margin:2px 0 4px}
+.sete svg{width:62px;height:74px;flex:none;overflow:visible}
+.sete .st{transition:all .5s}
+.sete small{font-size:12px;color:var(--muted);font-weight:800;line-height:1.25}
+.sete small b{color:var(--accent)}
+/* peças do museu: o quadro inteiro em sombra; cada fase revela uma marca branca */
+.museu{display:flex;align-items:center;gap:12px;margin:0 0 12px;padding:8px 10px;border-radius:12px;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.08)}
+.museu svg{width:84px;height:64px;flex:none;border-radius:6px;background:#070b22}
+.museu small{font-size:12.5px;color:var(--muted);font-weight:700;line-height:1.3}
+.museu small b{color:#fff}
+/* teste do vaso */
+.vaso{display:block;width:min(300px,100%);margin:10px auto;border-radius:14px}
+/* caminho de luz até o Hall da Fama */
+.luz svg{width:100%;max-width:360px;display:block;margin:0 auto}
+.luz .trilho{stroke-dasharray:6 10;animation:luzanda 1.6s linear infinite}
+@keyframes luzanda{to{stroke-dashoffset:-32}}
 </style>
 <link rel="stylesheet" href="tema.css?v=v6">
 <script src="tema.js?v=v6"></script>
@@ -299,17 +321,17 @@ const SIL_KID = '<svg viewBox="0 0 60 70" aria-hidden="true"><circle cx="30" cy=
 
 /* ===== DADOS DO REALITY ===== */
 const CAST = [
-  {id:"p1", fixo:{nome:"Luzia", foto:"livia.jpg"}, sentido:"Visão", cor:"#f5c542", brief:"Sofreu uma injustiça e perdeu o brilho. É forte, mas anda desconfiando de todo mundo. Sonha voltar a enxergar a beleza das coisas.",
+  {id:"p1", fixo:{nome:"Luzia", foto:"livia.jpg"}, sentido:"Visão", cor:"#FFD23F", brief:"Sofreu uma injustiça e perdeu o brilho. É forte, mas anda desconfiando de todo mundo. Sonha voltar a enxergar a beleza das coisas.",
    F:["Luzia","Lúcia","Luana"], M:["Luiz","Lino","Leandro"], tipo:["Perdoa quem errou","Dá o troco na hora certa","Se reconstrói em silêncio"]},
-  {id:"p2", fixo:{nome:"Duda", apelido:"mais conhecida como Luca", foto:"duda.jpg"}, sentido:"Equilíbrio", cor:"#b48cff", brief:"Dança. Estética delicada, parece perfeita, doce e sempre calma. Nunca perde a pose, nem quando tudo desaba.",
+  {id:"p2", fixo:{nome:"Duda", apelido:"mais conhecida como Luca", foto:"duda.jpg"}, sentido:"Equilíbrio", cor:"#A98BFF", brief:"Dança. Estética delicada, parece perfeita, doce e sempre calma. Nunca perde a pose, nem quando tudo desaba.",
    F:["Duda","Dora","Mei"], M:["Dudu","Bento","Kenji"], tipo:["Doce e gentil","Fria e distante","Sedutora"]},
-  {id:"p3", fixo:{nome:"Yara", foto:"yara.jpg" /* foto da coroa */}, sentido:"Olfato", cor:"#5ccf8a", brief:"Estrangeira. Calma, guarda muitas memórias e acolhe quem chega. Percebe as coisas antes de todo mundo e tem um segredo.",
+  {id:"p3", fixo:{nome:"Yara", foto:"yara.jpg" /* foto da coroa */}, sentido:"Olfato", cor:"#7DDB8B", brief:"Estrangeira. Calma, guarda muitas memórias e acolhe quem chega. Percebe as coisas antes de todo mundo e tem um segredo.",
    F:["Yara","Ingrid","Selma"], M:["Yuri","Ivan","Sven"], tipo:["Conselheira de todos","Misteriosa: sabe tudo e fala pouco","Divertida, ensina rindo"]},
-  {id:"p4", sentido:"Audição", cor:"#4aa8ff", brief:"Veio do interior e vive de música. Coração grande, se apaixona fácil e sofre do mesmo jeito.",
+  {id:"p4", sentido:"Audição", cor:"#5AB8FF", brief:"Veio do interior e vive de música. Coração grande, se apaixona fácil e sofre do mesmo jeito.",
    F:["Rafaela","Cacá","Diana"], M:["Rafa","Caio","Davi"], tipo:["Romântico sonhador","Sedutor confiante","Apaixonado que sofre calado"]},
-  {id:"p5", sentido:"Tato", cor:"#ff8a3d", brief:"Inteligente, admirado ou admirada por todos. Não aceita injustiça e, quando fala, a casa escuta.",
+  {id:"p5", sentido:"Tato", cor:"#FF8A5C", brief:"Inteligente, admirado ou admirada por todos. Não aceita injustiça e, quando fala, a casa escuta.",
    F:["Toninha","Tati","Dina"], M:["Tonho","Tião","Dinho"], tipo:["Rebelde com causa","Rebelde sem causa","Bate de frente com todos"]},
-  {id:"p6", sentido:"Paladar", cor:"#ff5a6e", brief:"Faz todo mundo rir. Já passou fome; hoje cozinha, ajuda quem precisa e sonha ter um restaurante.",
+  {id:"p6", sentido:"Paladar", cor:"#FF6FA3", brief:"Faz todo mundo rir. Já passou fome; hoje cozinha, ajuda quem precisa e sonha ter um restaurante.",
    F:["Bete","Zezé","Juju"], M:["Beto","Zeca","Juca"], tipo:["Palhaço que esconde a tristeza","Piadista sem filtro","Desastrado fofo"]}
 ];
 const VILAO = {id:"vilao", sentido:"Vilão", cor:"#e2483d", F:["Vera","Val","Vânia"], M:["Vítor","Val","Vicente"],
@@ -324,13 +346,13 @@ const ELENCO = [
   {k:"inocente", nome:"Inocente", from:null}
 ];
 const ROOMS = [
-  {nome:"Sala de estar", s:"Visão", cor:"#f5c542", emoji:"🛋️"},
-  {nome:"Estúdio", s:"Audição", cor:"#4aa8ff", emoji:"🎙️"},
-  {nome:"Ateliê", s:"Tato", cor:"#ff8a3d", emoji:"🎨"},
-  {nome:"Cozinha", s:"Paladar", cor:"#ff5a6e", emoji:"🍳"},
-  {nome:"Jardim", s:"Olfato", cor:"#5ccf8a", emoji:"🌿"},
-  {nome:"Estúdio de dança", s:"Equilíbrio", cor:"#b48cff", emoji:"🩰"},
-  {nome:"Sótão", s:"Noção de corpo", cor:"#3fd6d0", emoji:"🕯️"}
+  {nome:"Sala de estar", s:"Visão", cor:"#FFD23F", emoji:"🛋️"},
+  {nome:"Estúdio", s:"Audição", cor:"#5AB8FF", emoji:"🎙️"},
+  {nome:"Ateliê", s:"Tato", cor:"#FF8A5C", emoji:"🎨"},
+  {nome:"Cozinha", s:"Paladar", cor:"#FF6FA3", emoji:"🍳"},
+  {nome:"Jardim", s:"Olfato", cor:"#7DDB8B", emoji:"🌿"},
+  {nome:"Estúdio de dança", s:"Equilíbrio", cor:"#A98BFF", emoji:"🩰"},
+  {nome:"Sótão", s:"Noção do corpo", cor:"#3FE0D0", emoji:"🕯️"}
 ];
 const TEMAS = ["Astronauta 🚀","Faroeste 🤠","Fundo do mar 🐙","Floresta encantada 🍄","Anos 80 📼","Castelo medieval 🏰","Circo 🎪","Cidade do futuro 🤖","Praia tropical 🌴","Neve e montanha 🏔️","Cinema antigo 🎞️","Selva 🐆"];
 const GANCHOS = ["Uma moradora diz: “Eu conheço ela. Ela só não lembrou ainda.”","Uma foto antiga aparece escondida num quarto","A criança some e é achada no sótão com uma caixa de cartas","A casa racha em dois lados"];
@@ -341,23 +363,24 @@ const TEMPO_LIM = [3,6,10,15,Infinity];
 const BLOCOS = ["Casting 1","Casting 2","Elenco","Cômodos","Momentos"];
 
 /* ===== DADOS DO APP (segunda pesquisa) ===== */
+/* Fase 1: as mesmas 15 opções do app, em 3 grupos de 5 (Sala da Gestalt, 10/11) */
 const FASE1 = [
-  {id:"visao", s:"Visão", cor:"#f5c542", q:"O que te faz bem de olhar?", o:["Pôr do sol na praia","Céu estrelado","Um mural colorido de grafite","Fotos antigas de família"]},
-  {id:"audicao", s:"Audição", cor:"#4aa8ff", q:"O que te faz bem ouvir?", o:["Som do mar","Música ao vivo","Chuva no telhado","Silêncio total"]},
-  {id:"tato", s:"Tato", cor:"#ff8a3d", q:"O que te faz bem de sentir na pele?", o:["Areia nos pés","Cobertor macio","Água gelada","Abraço apertado"]},
-  {id:"paladar", s:"Paladar", cor:"#ff5a6e", q:"Que sabor te faz bem?", o:["Comida de vó","Doce de padaria","Fruta fresca","Café passado na hora"]},
-  {id:"olfato", s:"Olfato", cor:"#5ccf8a", q:"Que cheiro te faz bem?", o:["Terra molhada","Pão saindo do forno","Perfume de alguém querido","Cheiro de café"]},
-  {id:"equilibrio", s:"Equilíbrio", cor:"#b48cff", q:"Que movimento te faz bem?", o:["Dançar","Balançar numa rede","Andar de bicicleta","Ficar de pé numa prancha"]},
-  {id:"corpo", s:"Noção de corpo", cor:"#3fd6d0", q:"O que te faz bem no corpo?", o:["Alongar","Correr","Nadar","Deitar e respirar fundo"]}
+  {id:"visao", s:"Visão", cor:"#FFD23F", q:"O que te faz bem de olhar?", o:["O Esboço da Alma", "Céu em Redemoinho", "Retrato em Facetas", "Nascer das Sensações", "O Tempo que Derrete", "Luz no Escuro", "Jardim de Coragem", "Mosaico Dourado", "Bandeirinhas de festa junina", "Céu estrelado", "Pôr do sol na praia", "Fogos de Ano Novo", "Arco-íris depois da chuva", "Fundo do mar", "Luzes da cidade à noite"]},
+  {id:"audicao", s:"Audição", cor:"#5AB8FF", q:"O que te faz bem ouvir?", o:["Chuva", "Mar", "Pássaros", "Violão", "Café passando", "Panela no fogo", "Coração", "Vento nas árvores", "Fogueira estalando", "Sino de meditação", "Grilos à noite", "Riacho correndo", "Sininho de vento na varanda", "Gato ronronando", "Trovão ao longe"]},
+  {id:"tato", s:"Tato", cor:"#FF8A5C", q:"O que te faz bem de sentir na pele?", o:["Veludo", "Areia", "Água", "Madeira", "Lã de tricô", "Seda", "Grama", "Pelo de bichinho", "Massinha de modelar", "Pedrinhas de rio", "Papel amassado", "Espuma de banho", "Mármore gelado", "Toalha felpuda", "Plástico bolha"]},
+  {id:"paladar", s:"Paladar", cor:"#FF6FA3", q:"Que sabor te faz bem?", o:["Doce (mel)", "Salgado", "Azedinho (limão)", "Amargo (chocolate)", "Picante", "Fresco (hortelã)", "Caldo quentinho", "Café", "Gelado (sorvete)", "Pão de queijo", "Chá quentinho", "Brigadeiro", "Água de coco", "Pastel de feira", "Pipoca doce"]},
+  {id:"olfato", s:"Olfato", cor:"#7DDB8B", q:"Que cheiro te faz bem?", o:["Café coado", "Chuva na terra", "Bolo no forno", "Maresia", "Roupa limpa", "Grama cortada", "Flor de laranjeira", "Canela", "Pão quentinho", "Eucalipto", "Pipoca de cinema", "Laranja descascada", "Livro novo", "Protetor solar", "Cheirinho de bebê"]},
+  {id:"equilibrio", s:"Equilíbrio", cor:"#A98BFF", q:"Que movimento te faz bem?", o:["Balanço de rede", "Ir e vir de onda", "Girar devagar", "Gangorra", "Pedalar", "Dança lenta", "Pular", "Balanço de parquinho", "Cavalinho de balanço", "Barquinho no mar", "Carrossel", "Ficar num pé só", "Cambalhota", "Andar no meio-fio", "Montanha-russa"]},
+  {id:"corpo", s:"Noção do corpo", cor:"#3FE0D0", q:"O que te faz bem no corpo?", o:["Espreguiçar", "Alongar o pescoço", "Abraço apertado", "Deitar no chão", "Respirar fundo", "Massagem nas mãos", "Pés descalços na grama", "Banho quente", "Rir até doer a barriga", "Cochilo depois do almoço", "Cantar no chuveiro", "Ficar na ponta dos pés", "Bocejar e esticar", "Cafuné", "Tirar o sapato no fim do dia"]}
 ];
 const FASE2 = [
-  {id:"visao", s:"Visão", cor:"#f5c542", nome:"Olho de águia", img:"👁️"},
-  {id:"audicao", s:"Audição", cor:"#4aa8ff", nome:"Qual som é mais fino?", img:"👂"},
-  {id:"tato", s:"Tato", cor:"#ff8a3d", nome:"Segure firme", img:"✋"},
-  {id:"paladar", s:"Paladar", cor:"#ff5a6e", nome:"Monte o seu prato", img:"🍽️"},
-  {id:"olfato", s:"Olfato", cor:"#5ccf8a", nome:"De quem é a referência dessas imagens?", img:"👃"},
-  {id:"equilibrio", s:"Equilíbrio", cor:"#b48cff", nome:"No meio certinho", img:"🩰"},
-  {id:"corpo", s:"Noção de corpo", cor:"#3fd6d0", nome:"Siga a ordem", img:"🧘"}
+  {id:"visao", s:"Visão", cor:"#FFD23F", nome:"Olho de águia", img:"👁️"},
+  {id:"audicao", s:"Audição", cor:"#5AB8FF", nome:"Qual som é mais fino?", img:"👂"},
+  {id:"tato", s:"Tato", cor:"#FF8A5C", nome:"Segure firme", img:"✋"},
+  {id:"paladar", s:"Paladar", cor:"#FF6FA3", nome:"Monte o seu prato", img:"🍽️"},
+  {id:"olfato", s:"Olfato", cor:"#7DDB8B", nome:"De quem é a referência dessas imagens?", img:"👃"},
+  {id:"equilibrio", s:"Equilíbrio", cor:"#A98BFF", nome:"No meio certinho", img:"🩰"},
+  {id:"corpo", s:"Noção do corpo", cor:"#3FE0D0", nome:"Siga a ordem", img:"🧘"}
 ];
 /* jogos que ficam juntos na mesma página */
 const F2PAGINAS = [["visao"],["audicao","tato"],["paladar","olfato"],["equilibrio","corpo"]];
@@ -421,6 +444,7 @@ function buildApp(){
   q({type:"multi", id:"motivos_nao_comprar", block:"Montar o app · últimas perguntas", title:"Quais seriam os motivos para você não comprar um app?", sub:"Escolha quantos quiser.", opts:["É caro","Já tenho apps demais","Não confio em app pago","Não sei se vou usar sempre"]});
   q({type:"tempo", id:"app_tempo_chute", semFlow:true, block:"Montar o app · última pergunta", title:"Tempo que achou"});
   S.push({type:"revela", block:"Montar o app"});
+  S.push({type:"luz", block:"Caminho de luz"});
   S.push({type:"hall2", block:"Os 100 primeiros"});
   S.push({type:"portaoFinal"});
   S.total=n; return S;
@@ -576,6 +600,7 @@ function aplicaTema(){
     if(s.id==="motivos_nao_comprar"||s.type==="combo") return TEMA.set("M","#ff8a3d","s20","Motivos para não comprar");
     if(s.id==="app_tempo_chute") return TEMA.set("M","#ff5a6e","s21","Quanto tempo passou");
     if(s.type==="revela") return TEMA.set("M","#5ccf8a","s22","Tela do tempo e do Flow");
+    if(s.type==="luz") return TEMA.set("M","#FFD23F","s22b","Caminho de luz até o Hall da Fama");
     if(s.type==="hall2") return TEMA.set("M","#b48cff","s23","Hall da Fama · 100 primeiros");
     if(s.type==="portaoFinal") return TEMA.set("M","#3fd6d0","s24","Portão");
   }
@@ -591,7 +616,7 @@ function render(){
   document.getElementById("anon").style.display="none";
   const prog=document.getElementById("prog");
   if(cur==="reality"){ prog.style.display="block"; drawTrail(s); document.getElementById("blockName").textContent = s.block || ""; }
-  else { prog.style.display="block"; document.getElementById("trail").innerHTML=""; document.getElementById("blockName").textContent = s.block || "Montar um app"; }
+  else { prog.style.display="block"; drawSete(); document.getElementById("blockName").textContent = s.block || "Montar um app"; }
   let h = "", needNext = false, ownNav = false;
 
   if(s.type==="cast"){
@@ -687,7 +712,7 @@ function render(){
   }
   else if(s.type==="guardiao"){
     const pers=[...CAST.map(c=>({n:ok(answers[c.id+"_nome"])?answers[c.id+"_nome"]:c.sentido, s:c.sentido, cor:c.cor})),
-      {n:ok(answers.vilao_nome)?answers.vilao_nome:"O vilão", s:"Vilão", cor:VILAO.cor},{n:"Lucas", s:"Noção de corpo", cor:"#3fd6d0"}];
+      {n:ok(answers.vilao_nome)?answers.vilao_nome:"O vilão", s:"Vilão", cor:VILAO.cor},{n:"Lucas", s:"Noção do corpo", cor:"#3FE0D0"}];
     h=`<div class="center"><div class="big-emoji">🛡️</div><div class="qnum">Pergunta ${s.num}</div><h1>Guardiões dos Sentidos</h1>
       <p class="sub">As 200 primeiras pessoas que responderem viram Guardiões dos Sentidos e escolhem, em segredo, quem vai vencer o reality.</p></div>
       <h2>Quem você acha que vai vencer?</h2><p class="sub">Seu voto fica em segredo.</p>
@@ -736,7 +761,7 @@ function render(){
     const f=s.f, sel=Array.isArray(answers[s.id])?answers[s.id]:[];
     h = `<div class="f1q"><div class="qnum">Pergunta ${s.num}</div><span class="chip" style="background:${f.cor}">${esc(f.s)}</span>
       <h2>${esc(f.q)}</h2><p class="sub">Escolha quantos quiser. Sem pressa.</p>
-      <div class="chips">${f.o.map((o,oi)=>`<button class="opt ${sel.includes(o)?"sel":""}" onclick="toggleF1p(${s.fi},${oi})">${sel.includes(o)?"✓ ":""}${esc(o)}</button>`).join("")}</div></div>`;
+      ${[0,1,2].map(g=>`<div class="chips g5" style="--c:${f.cor}">${f.o.slice(g*5,g*5+5).map((o,j)=>{const oi=g*5+j;return `<button class="opt ${sel.includes(o)?"sel":""}" onclick="toggleF1p(${s.fi},${oi})">${sel.includes(o)?"✓ ":""}${esc(o)}</button>`;}).join("")}</div>`).join("")}</div>`;
     needNext = true;
   }
   else if(s.type==="f1page"){
@@ -749,7 +774,7 @@ function render(){
   }
   else if(s.type==="f2"){
     const allFim = s.gs.every(g=>answers["f2_"+g.id+"_fim"]!=null);
-    h = "";
+    h = museuBox();
     s.gs.forEach((g,gi)=>{ const fimv=answers["f2_"+g.id+"_fim"], pis=(g.id==="audicao"||g.id==="tato")?" pisca":"";
       const jogo = `<div id="gw_${g.id}">${!fimv?`<div class="gamebox" id="game_${g.id}"></div><button class="back" onclick="gameDone('${g.id}','pulou')">pular este jogo →</button>`
           :`<div class="done-tag">${fimv==="completou"?"✓ Jogo completo!":"Jogo pulado"}</div>`}</div>`;
@@ -853,6 +878,23 @@ function render(){
     h = `<div class="center"><div class="big-emoji">📊</div><h1>O seu gráfico dos sentidos</h1><p class="sub">As notas que você deu para cada jogo, de 0 a 10.</p></div>
       <div class="card-dark"><div class="grafico">${notas.map(({g,v})=>`<div class="gbar"><span>${g.img} ${esc(g.s)}</span><div class="tr"><i style="width:${typeof v==="number"?v*10:0}%;background:${g.cor}"></i></div><b>${typeof v==="number"?v:"–"}</b></div>`).join("")}</div></div>
       <div class="center"><button class="btn" style="margin-top:16px" onclick="next()">Continuar →</button></div>
+      <div class="nav"><button class="back" onclick="prev()">← voltar</button></div>`;
+    ownNav=true;
+  }
+  else if(s.type==="luz"){
+    const est=seteEstado(), pts=SETE_P.map(p=>[p[0]*2+30,p[1]*2+20]);
+    const fim=pts[6];
+    h = `<div class="center luz"><h1>Siga a luz</h1><p class="sub">Você acendeu a sua constelação. Agora o caminho leva ao Hall da Fama.</p>
+      <svg viewBox="0 0 340 260" aria-hidden="true">
+        ${pts.slice(0,6).map((a,k)=>`<line x1="${a[0]}" y1="${a[1]}" x2="${pts[k+1][0]}" y2="${pts[k+1][1]}" stroke="#f5c542" stroke-width="2" opacity="${est[k]&&est[k+1]?.9:.25}"/>`).join("")}
+        ${pts.map((a,k)=>`<circle cx="${a[0]}" cy="${a[1]}" r="${est[k]===2?9:6}" fill="${est[k]?FASE1[k].cor:"#2a3160"}" style="filter:drop-shadow(0 0 6px ${FASE1[k].cor})"/>`).join("")}
+        <path class="trilho" d="M${fim[0]} ${fim[1]} C ${fim[0]+40} ${fim[1]+60}, 230 250, 288 200" fill="none" stroke="#fff3c4" stroke-width="5" stroke-linecap="round" style="filter:drop-shadow(0 0 8px #f5c542)"/>
+        <text x="288" y="190" font-size="40" text-anchor="middle">🏆</text>
+        <text x="288" y="232" font-size="14" font-weight="800" fill="#f5c542" text-anchor="middle">Hall da Fama</text>
+      </svg></div>
+      <div class="card-dark" style="text-align:center"><p style="margin:0 0 10px;font-size:17px">Antes de entrar, venha com a gente no Instagram.</p>
+        <a class="btn" href="https://www.instagram.com/7entidoss/" target="_blank" rel="noopener" onclick="answers.seguiu_instagram=true">Seguir o @7entidoss</a></div>
+      <div class="stack"><button class="btn ghost" onclick="click();next()">Seguir para o Hall da Fama →</button></div>
       <div class="nav"><button class="back" onclick="prev()">← voltar</button></div>`;
     ownNav=true;
   }
@@ -1063,6 +1105,50 @@ function abrirLuzia(direto){
   document.body.style.overflow="hidden"; window.scrollTo({top:0});
 }
 
+
+/* ============ GESTALT: constelação do 7, peças do museu, vaso, caminho de luz ============ */
+const SETE_P=[[6,8],[30,8],[56,8],[46,26],[36,44],[27,62],[18,80]]; /* sete estrelas desenhando o número 7 */
+function seteSVG(est){ /* est[k]: 0 apagada, 1 Fase 1 feita, 2 Fase 2 feita */
+  let h="";
+  for(let k=0;k<6;k++){ const a=SETE_P[k], b=SETE_P[k+1], on=est[k]&&est[k+1];
+    h+=`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="${on?"#f5c542":"#2a3160"}" stroke-width="${on?2:1.2}" opacity="${on?.9:.7}"/>`; }
+  SETE_P.forEach((pt,k)=>{ const c=FASE1[k].cor, e=est[k]||0;
+    h+=`<circle class="st" cx="${pt[0]}" cy="${pt[1]}" r="${e===2?6:e===1?4.5:3.5}" fill="${e?c:"#2a3160"}" opacity="${e===1?.6:1}" ${e===2?`style="filter:drop-shadow(0 0 5px ${c})"`:""}/>`; });
+  return `<svg viewBox="0 0 64 88" aria-hidden="true">${h}</svg>`;
+}
+function seteEstado(){ return FASE1.map(f=>{ const g2=answers["f2_"+f.id+"_fim"]; if(g2!=null) return 2; const a1=answers["f1_"+f.id]; return (a1!=null)?1:0; }); }
+function drawSete(){
+  const est=seteEstado(), n=est.filter(x=>x===2).length, m=est.filter(x=>x>=1).length;
+  document.getElementById("trail").innerHTML=`<div class="sete">${seteSVG(est)}<small>${n===7?"<b>Constelação completa!</b><br>Siga a luz até o Hall da Fama.":m===0?"Cada sentido acende uma estrela.<br>Juntas, elas formam o <b>7</b>.":`<b>${n?n:m} de 7</b> estrelas ${n?"brilhando":"acesas"}<br>${n?"Cada jogo faz uma brilhar.":"Na Fase 2 elas brilham."}</small>`}</div>`;
+}
+/* marcas brancas dos 7 pintores (inspiradas, sem copiar obras): uma por sentido */
+const MARCAS=[
+  /* Visão · Van Gogh: redemoinho */ '<path d="M18 20c6-8 18-6 18 2s-10 9-12 3 6-6 7-1" fill="none" stroke-width="2.4" stroke-linecap="round"/>',
+  /* Audição · Klimt: quadradinhos dourados */ '<g stroke-width="1.6" fill="none"><rect x="44" y="8" width="7" height="7"/><rect x="53" y="8" width="7" height="7"/><rect x="48.5" y="17" width="7" height="7"/></g>',
+  /* Tato · Picasso: facetas */ '<path d="M66 10l12 4-4 12-12-2z M70 14l4 8" fill="none" stroke-width="1.8"/>',
+  /* Olfato · Frida: flor */ '<g fill="none" stroke-width="1.8"><circle cx="16" cy="44" r="3"/><circle cx="16" cy="38" r="3.2"/><circle cx="21.5" cy="43" r="3.2"/><circle cx="10.5" cy="43" r="3.2"/><circle cx="16" cy="49" r="3.2"/></g>',
+  /* Paladar · Monet: pinceladas de água */ '<g stroke-width="2.4" stroke-linecap="round"><path d="M32 42h8M36 47h10M30 52h7"/></g>',
+  /* Equilíbrio · Dalí: relógio que derrete */ '<path d="M54 38a9 9 0 0 1 16 2c1 6-3 8-5 13-1 3-4 3-4 0 0-4-8-6-7-15z M61 40v4l3 2" fill="none" stroke-width="1.8"/>',
+  /* Noção do corpo · Da Vinci: círculo e quadrado */ '<g fill="none" stroke-width="1.6"><circle cx="76" cy="47" r="8.5"/><rect x="70" y="41" width="12" height="12"/></g>'
+];
+function museuSVG(est){
+  let h='<rect width="88" height="64" fill="#070b22"/>';
+  MARCAS.forEach((m,k)=>{ const on=est[k]===2; h+=`<g stroke="${on?"#ffffff":"#1c2452"}" fill="${on?"#ffffff":"#1c2452"}" opacity="${on?1:.95}">${m.replace(/fill="none"/g,'fill="none"')}</g>`; });
+  return `<svg viewBox="0 0 88 64" aria-hidden="true">${h}</svg>`;
+}
+function museuBox(){
+  const est=seteEstado(), n=est.filter(x=>x===2).length;
+  return `<div class="museu">${museuSVG(est)}<small><b>Peças do Museu · ${n} de 7</b><br>${n===7?"Seu quadro apareceu inteiro.":"O quadro está na sombra. Cada jogo revela uma peça."}</small></div>`;
+}
+/* teste do vaso: vaso ou dois rostos? (pintado no estilo da Visão, sem copiar quadro) */
+const VASO_SVG=`<svg class="vaso" viewBox="0 0 300 220" role="img" aria-label="Figura: um vaso ou dois rostos">
+  <defs><pattern id="vg" width="18" height="18" patternUnits="userSpaceOnUse"><path d="M2 9c4-7 10-7 14 0" fill="none" stroke="#2b4fa8" stroke-width="2.2" stroke-linecap="round"/></pattern></defs>
+  <rect width="300" height="220" fill="#0e1f5c"/><rect width="300" height="220" fill="url(#vg)" opacity=".6"/>
+  <path d="M0 0h112c-6 14-18 22-18 36 0 12 14 14 14 24 0 6-10 8-10 14 0 8 12 6 12 16 0 8-12 10-12 18 0 14 22 18 22 38 0 22-26 30-26 56v18H0z" fill="#16163a"/>
+  <path d="M300 0H188c6 14 18 22 18 36 0 12-14 14-14 24 0 6 10 8 10 14 0 8-12 6-12 16 0 8 12 10 12 18 0 14-22 18-22 38 0 22 26 30 26 56v18h96z" fill="#16163a"/>
+  <path d="M112 0h76c-6 14-18 22-18 36 0 12 14 14 14 24 0 6-10 8-10 14 0 8 12 6 12 16 0 8-12 10-12 18 0 14 22 18 22 38 0 22-26 30-26 56v18h-40v-18c0-26-26-34-26-56 0-20 22-24 22-38 0-8-12-10-12-18 0-10 12-8 12-16 0-6-10-8-10-14 0-10 14-12 14-24 0-14-12-22-18-36z" fill="#FFD23F"/>
+  <g fill="none" stroke="#f08c1a" stroke-width="2" stroke-linecap="round" opacity=".75"><path d="M130 60c8-4 16-4 24 0M126 120c10-5 20-5 30 0M134 170c8-3 16-3 22 0"/></g>
+</svg>`;
 /* ============ MINI JOGOS ============ */
 let ac;
 /* SOM NO CELULAR: o navegador (principalmente o iPhone) deixa o som "pausado" até um toque.
@@ -1089,7 +1175,11 @@ const GAMES = {
       rd.querySelectorAll(".gcell").forEach(b=>b.onclick=()=>{ if(x.feito) return; x.feito=true; x.ok=+b.dataset.i===x.k; click();
         rd.querySelectorAll(".gcell").forEach(c=>{ if(+c.dataset.i===x.k) c.classList.add("ok"); else if(c===b) c.classList.add("bad"); });
         rd.querySelector(".rres").innerHTML=x.ok?'<span style="color:#9be7b0">✓ Achou!</span>':'<span style="color:#ff8a80">Era o quadrado marcado de verde.</span>';
-        if(R.every(y=>y.feito)){ answers.f2_visao_acertos=R.filter(y=>y.ok).length; setTimeout(win,700); } }); }); },
+        if(R.every(y=>y.feito)){ answers.f2_visao_acertos=R.filter(y=>y.ok).length; setTimeout(()=>{
+          el.innerHTML=`<p class="gtip">Última rodada: olhe a imagem rapidinho.</p>${VASO_SVG}<h3 style="text-align:center;margin:6px 0 10px">O que você viu primeiro?</h3>
+            <div class="chips" style="justify-content:center">${["Um vaso","Dois rostos","Os dois juntos"].map(o=>`<button class="opt" data-v="${o}">${o}</button>`).join("")}</div>`;
+          el.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ answers.f2_visao_vaso=b.dataset.v; click(); b.classList.add("sel"); setTimeout(win,500); });
+        },700); } }); }); },
   audicao(el,win){ const R=[0,1,2].map(()=>{ const a=300+Math.random()*200, up=Math.random()<.5; return {a, b:up?a*1.3:a/1.3, up, feito:false, ok:false}; });
     el.innerHTML=`<p class="gtip">Ouça os dois sons de cada rodada e diga qual é mais fino.</p>`+R.map((x,r)=>`<div class="round sround chips mini" data-r="${r}"><span class="rlab">Rodada ${r+1}</span><button class="opt" data-a="ouvir">▶ Ouvir</button><button class="opt" data-a="1">1º mais fino</button><button class="opt" data-a="2">2º mais fino</button><span class="rres"></span></div>`).join("");
     el.querySelectorAll(".round").forEach(rd=>{ const x=R[+rd.dataset.r];
