@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pesquisa 1 de 7 · Luzia · A Casa dos 7 Sentidos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Caveat:wght@600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--y:#ffcf3a;--y2:#f5a623;--b:#1d3b8a;--b2:#0b1640;--b3:#2f5bd1;--ink:#fff;--muted:#c9d4f5}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:Inter,system-ui,sans-serif;font-size:21px;line-height:1.4;color:var(--ink);min-height:100vh;
+background:radial-gradient(circle at 88% 5%,rgba(255,207,58,.28) 0 30px,rgba(255,207,58,.07) 31px 120px,transparent 121px),
+radial-gradient(ellipse at 50% -10%,rgba(47,91,209,.28),transparent 60%),
+linear-gradient(180deg,#0b1640,#132a66 55%,#10245a);background-attachment:fixed}
+/* redemoinho Van Gogh: mantido, mas so no canto e bem suave */
+body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+background:repeating-radial-gradient(circle at 10% 6%,rgba(150,180,255,.55) 0 1px,transparent 1px 30px);opacity:.16;
+-webkit-mask-image:radial-gradient(circle at 10% 6%,#000 0,transparent 38%);mask-image:radial-gradient(circle at 10% 6%,#000 0,transparent 38%)}
+body:after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+background:radial-gradient(circle at 22% 18%,rgba(255,255,255,.55) 0 1px,transparent 2px),radial-gradient(circle at 76% 30%,rgba(255,207,58,.5) 0 1.5px,transparent 2.5px),radial-gradient(circle at 92% 62%,rgba(255,255,255,.4) 0 1px,transparent 2px)}
+.wrap{max-width:760px;margin:0 auto;padding:14px 16px 40px}
+/* topo */
+.topo{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.cont{font-family:"Bebas Neue";font-size:24px;letter-spacing:1.5px;background:var(--y);color:#0b1640;padding:4px 12px;border-radius:10px;box-shadow:0 4px 0 #b88a12}
+.logo{margin-left:auto;font-family:"Bebas Neue";font-size:28px;letter-spacing:2px}
+.logo i{font-style:normal;color:var(--y)}
+.anon{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;color:#0b1640;background:var(--y);border-radius:12px;padding:6px 12px;margin:6px 0 10px;animation:anon 1.4s steps(1) infinite}
+@keyframes anon{50%{background:#0b1640;color:var(--y)}}
+/* trilha */
+.trilha{display:flex;gap:6px;align-items:flex-end;margin:4px 0 12px;overflow-x:auto;padding:4px 2px 2px}
+.mor{flex:1;min-width:60px;text-align:center;position:relative}
+.mor .f{width:58px;height:58px;margin:0 auto;border-radius:50%;overflow:hidden;border:3px solid rgba(255,255,255,.25);background:#2a3560;position:relative}
+.mor .f img{width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+.mor.off .f img,.mor.off .f svg{filter:grayscale(1) brightness(.55)}
+.mor.on .f{border-color:var(--y);box-shadow:0 0 0 4px rgba(255,207,58,.3),0 0 22px rgba(255,207,58,.7);transform:scale(1.1)}
+.mor .cad{position:absolute;right:calc(50% - 34px);top:34px;font-size:18px;filter:drop-shadow(0 2px 2px #000)}
+.mor small{display:block;font-size:13px;font-weight:800;margin-top:4px;color:var(--muted)}
+.mor.on small{color:var(--y)}
+.passos{display:flex;gap:5px;margin:0 0 14px}
+.passos i{flex:1;height:7px;border-radius:99px;background:rgba(255,255,255,.18)}
+.passos i.ok{background:var(--y)}
+.passos i.agora{background:repeating-linear-gradient(90deg,var(--y) 0 6px,rgba(255,255,255,.2) 6px 11px)}
+.vagas{display:inline-block;margin:0 0 10px;font-weight:800;font-size:17px;padding:6px 14px;border-radius:99px;background:#fff;color:#0b1640}
+/* cena */
+.cena{animation:in .45s ease}
+@keyframes in{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.qn{font-family:"Bebas Neue";font-size:24px;letter-spacing:2px;color:var(--y)}
+h1{font-family:"Bebas Neue";font-weight:400;font-size:clamp(54px,12vw,86px);line-height:.9;margin:4px 0 4px;letter-spacing:1px;text-shadow:0 6px 24px rgba(0,0,0,.5)}
+h2{font-family:"Bebas Neue";font-weight:400;font-size:clamp(38px,8vw,52px);line-height:1;margin:2px 0 8px;letter-spacing:1px}
+.sub{color:var(--y);font-weight:700;font-size:20px;margin:0 0 14px}
+/* briefing */
+.brief{display:grid;grid-template-columns:1fr 1.05fr;gap:18px;align-items:center}
+@media(max-width:600px){.brief{grid-template-columns:1fr}}
+.retrato{position:relative;border-radius:22px;overflow:hidden;border:5px solid var(--y);box-shadow:0 26px 50px rgba(0,0,0,.55),0 0 40px rgba(255,207,58,.35);transform:rotate(-2deg);aspect-ratio:3/4}
+.retrato img{width:100%;height:100%;object-fit:cover;object-position:50% 25%;display:block}
+.sentido{display:inline-flex;align-items:center;gap:8px;background:var(--y);color:#0b1640;font-weight:800;font-size:17px;padding:5px 14px;border-radius:99px}
+.apelido{font-family:Caveat;font-size:30px;color:#fff;margin:4px 0 8px}
+.ficha{background:rgba(11,22,64,.75);border:2px solid rgba(255,207,58,.5);border-radius:18px;padding:14px 16px;font-size:20px}
+.ficha p{margin:0}
+/* looks */
+.looks{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:520px){.looks{gap:10px}}
+.look{background:rgba(11,22,64,.7);border:3px solid rgba(255,255,255,.15);border-radius:20px;padding:10px;box-shadow:0 18px 36px rgba(0,0,0,.45)}
+.look.ok{border-color:var(--y)}
+.foto{aspect-ratio:3/4;border-radius:14px;overflow:hidden;position:relative;display:grid;place-items:center;text-align:center}
+.foto img{width:100%;height:100%;object-fit:cover}
+.foto .ph{padding:10px;font-weight:800;font-size:16px;color:#0b1640;background:rgba(255,255,255,.85);border-radius:12px;margin:10px}
+.look b{display:block;font-size:19px;margin:8px 2px 6px;line-height:1.15}
+.nota10{display:grid;grid-template-columns:repeat(6,1fr);gap:5px}
+.nota10 button{all:unset;cursor:pointer;text-align:center;font-family:"Bebas Neue";font-size:24px;padding:6px 0;border-radius:9px;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.18);transition:transform .1s}
+.nota10 button:hover{transform:translateY(-2px);border-color:var(--y)}
+.nota10 button.sel{background:var(--y);color:#0b1640;border-color:var(--y);transform:scale(1.08)}
+.legenda{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-top:4px}
+.linha-nome{display:flex;align-items:center;gap:10px;margin:0 0 4px}
+.linha-nome span{font-size:30px}
+/* opções */
+.opts{display:grid;gap:12px}
+.op{all:unset;cursor:pointer;display:flex;align-items:center;gap:14px;background:rgba(11,22,64,.75);border:3px solid rgba(255,255,255,.18);border-radius:18px;padding:16px 18px;font-size:22px;font-weight:800;box-shadow:0 8px 0 rgba(0,0,0,.35);transition:transform .12s,border-color .12s}
+.op:hover,.op:focus-visible{border-color:var(--y);transform:translateY(-2px)}
+.op.sel{background:var(--y);color:#0b1640;border-color:var(--y)}
+.op .k{flex:none;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-family:"Bebas Neue";font-size:28px;background:var(--y);color:#0b1640}
+.op.sel .k{background:#0b1640;color:var(--y)}
+.op small{display:block;font-weight:600;font-size:16px;opacity:.85}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.duo .op{flex-direction:column;justify-content:center;text-align:center;min-height:120px;font-size:24px}
+.duo .op .em{font-size:40px}
+.duo .op .em svg{width:54px;height:54px;color:var(--y);display:block;margin:0 auto 4px}
+.duo .op.sel .em svg{color:#0b1640}
+.vs{font-family:"Bebas Neue";text-align:center;color:var(--y);font-size:22px;margin:-4px 0}
+.linhas{display:grid;gap:12px}
+.lin{all:unset;cursor:pointer;display:grid;grid-template-columns:110px 1fr;gap:14px;align-items:center;background:rgba(11,22,64,.75);border:3px solid rgba(255,255,255,.18);border-radius:18px;padding:10px;box-shadow:0 8px 0 rgba(0,0,0,.35)}
+.lin.sel{border-color:var(--y);background:#2b3a10}
+.lin .mini{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.lin .mini div{aspect-ratio:3/4;border-radius:8px;overflow:hidden}
+.lin .mini img{width:100%;height:100%;object-fit:cover}
+.lin b{font-family:"Bebas Neue";font-size:34px;font-weight:400;letter-spacing:1px;display:block;line-height:1}
+.lin span{font-size:16px;color:var(--muted)}
+.lin .media{font-size:15px;color:var(--y);font-weight:800}
+/* balão */
+.fala{display:flex;gap:12px;align-items:flex-start;margin:4px 0 16px}
+.fala .av{flex:none;width:70px;height:70px;border-radius:50%;overflow:hidden;border:3px solid var(--y)}
+.fala .av img{width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+.balao{position:relative;background:#fff;color:#0b1640;border-radius:18px;padding:12px 16px;font-family:Caveat;font-size:28px;line-height:1.1;box-shadow:0 10px 24px rgba(0,0,0,.4)}
+.balao:before{content:"";position:absolute;left:-10px;top:22px;border:10px solid transparent;border-right-color:#fff;border-left:0}
+/* botões */
+.btn{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;justify-content:center;align-items:center;gap:8px;background:var(--y);color:#0b1640;font-weight:800;font-size:22px;padding:16px 26px;border-radius:16px;box-shadow:0 7px 0 #b88a12,0 14px 24px rgba(0,0,0,.35);text-align:center}
+.btn:active{transform:translateY(4px);box-shadow:0 3px 0 #b88a12}
+.btn.full{width:100%}
+.btn.ghost{background:rgba(255,255,255,.1);color:#fff;border:2px solid rgba(255,255,255,.3);box-shadow:none}
+.btn.zap{background:#25d366;color:#04230f;box-shadow:0 7px 0 #128c45}
+.btn:focus-visible,.op:focus-visible,.lin:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:20px}
+.link{all:unset;cursor:pointer;color:var(--muted);font-size:18px;padding:8px;text-decoration:underline}
+.link:hover{color:#fff}
+.err{min-height:24px;color:#ffd5cf;font-size:17px;margin-top:8px}
+.center{text-align:center}
+.stack{display:grid;gap:12px;margin-top:18px}
+/* final */
+.estrela{width:120px;height:120px;margin:10px auto;border-radius:50%;background:radial-gradient(circle,#fff 0 18%,var(--y) 30%,rgba(255,207,58,0) 70%);animation:brilho 1.6s ease-in-out infinite}
+@keyframes brilho{50%{transform:scale(1.15);filter:brightness(1.3)}}
+.confete{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:20}
+.confete i{position:absolute;top:-20px;width:10px;height:16px;border-radius:2px;animation:cai 2.6s ease-in forwards}
+@keyframes cai{to{transform:translateY(110vh) rotate(720deg)}}
+.porta{width:160px;height:230px;margin:10px auto;border-radius:12px 12px 0 0;background:linear-gradient(90deg,#16306f,#2f5bd1,#16306f);border:6px solid #d9b56a;position:relative;box-shadow:0 0 40px rgba(255,207,58,.4)}
+.porta:after{content:"🔒";position:absolute;left:50%;top:45%;transform:translate(-50%,-50%);font-size:56px}
+.trava{background:rgba(11,22,64,.85);border:3px solid var(--y);border-radius:22px;padding:22px;text-align:center}
+/* miniaturas modernas da pergunta 4 */
+.lin{grid-template-columns:150px 1fr}
+.lin .mini{position:relative;height:118px;display:block}
+.lin .mini div{position:absolute;top:4px;width:80px;height:106px;aspect-ratio:auto;border-radius:14px;overflow:hidden;border:2px solid rgba(255,255,255,.85);box-shadow:0 10px 22px rgba(0,0,0,.5)}
+.lin .mini div:first-child{left:4px;transform:rotate(-6deg);z-index:1}
+.lin .mini div:last-child{left:62px;transform:rotate(5deg);z-index:2}
+.lin .mini div:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(11,22,64,.45))}
+.lin.sel .mini div{border-color:var(--y)}
+.lin .mini div:only-child{left:30px;transform:rotate(-3deg)}
+.looks.um{grid-template-columns:minmax(0,340px);justify-content:center}
+@media(max-width:420px){.lin{grid-template-columns:128px 1fr}.lin .mini div{width:68px;height:92px}.lin .mini div:last-child{left:52px}}
+/* rostos da Luzia */
+.duo .op .em svg.rosto{width:118px;height:118px;color:inherit;margin:0 auto 6px;border-radius:50%;background:radial-gradient(circle at 50% 40%,#2f5bd1,#0b1640 72%);box-shadow:inset 0 0 0 3px rgba(255,207,58,.55)}
+.duo .op.sel .em svg.rosto{box-shadow:inset 0 0 0 4px #0b1640}
+.duo .op.face{min-height:190px}
+/* foto da Luzia no Parabéns */
+.foto-fim{width:150px;height:150px;margin:6px auto 4px;border-radius:50%;overflow:hidden;border:5px solid var(--y);box-shadow:0 0 0 8px rgba(255,207,58,.22),0 0 46px rgba(255,207,58,.65);animation:brilho 2s ease-in-out infinite}
+.foto-fim img{width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+/* botão travado da Duda */
+.btn.travado{background:rgba(255,255,255,.08);color:#c9d4f5;border:2px dashed rgba(255,255,255,.35);box-shadow:none;cursor:not-allowed;flex-direction:column;gap:2px}
+.btn.travado small{font-size:16px;font-weight:700;color:var(--y)}
+.mor .cd{display:block;font-size:11px;font-weight:800;color:var(--y);margin-top:1px;font-variant-numeric:tabular-nums}
+/* barra de validação (só na prévia) */
+.val{position:fixed;left:0;right:0;bottom:0;z-index:30;background:#111018;border-top:3px solid #ff8a3d;padding:10px 14px;font-size:16px;color:#fff;box-shadow:0 -10px 30px rgba(0,0,0,.6)}
+.val .row{max-width:760px;margin:0 auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.val b{color:#ff8a3d}
+.val button{all:unset;cursor:pointer;font-weight:800;font-size:15px;padding:8px 12px;border-radius:10px;background:#2a2533}
+.val .v{background:#3fae6a;color:#04230f}.val .r{background:#ff8a3d;color:#1a0d02}
+.val .t{background:transparent;text-decoration:underline;color:#cfc8d8;font-weight:600}
+.val .chips{display:flex;flex-wrap:wrap;gap:6px;max-width:760px;margin:8px auto 0}
+.val .chips button{background:#2a2533;border:1px solid #555}
+.val .chips button.on{background:#ff8a3d;color:#1a0d02}
+.val .st{margin-left:auto;font-weight:800}
+.resumo{max-width:760px;margin:10px auto 0;max-height:46vh;overflow:auto;background:#1b1824;border-radius:12px;padding:12px}
+.resumo li{margin:4px 0}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="confete" id="confete"></div>
+<div class="wrap">
+  <div class="topo"><span class="cont">Pesquisa 1 de 7</span><div class="logo"><i>7</i>ENTIDOS</div></div>
+  <div id="trilha"></div>
+  <main id="tela"></main>
+</div>
+<script src="config.js?v=robo100"></script>
+<script>
+/* ===== CONFIGURAÇÃO ===== */
+const ENDPOINT=(window.PESQUISA_URL||"");   /* robô da planilha "Jornada dos 7entidos" (config.js) */
+const VERSAO="luzia-1";
+/* contagem até a pesquisa da Duda abrir: 10/11/2026, meio-dia de Brasília */
+const DUDA_ABRE=new Date("2026-11-10T12:00:00-03:00").getTime();
+/* mesmo código anônimo da pesquisa principal (conta 1 pessoa só nas 100 vagas) */
+const PID=(function(){ try{ let v=localStorage.getItem("7e_pessoa"); if(!v){ v=Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4); localStorage.setItem("7e_pessoa",v); } return v; }catch(e){ return Math.random().toString(36).slice(2,12); } })();
+const ABA="Luzia";
+const LIMITE=100, MOSTRA_CONTADOR=60;
+let RESPOSTAS_JA=0;         /* vem do robô da planilha */
+const ZAP="Respondi a pesquisa da Luzia, do reality A Casa dos 7 Sentidos (7entidos, app santista 013). É anônima e leva 2 minutos. Só 100 vagas: https://7entidos.com.br";
+
+const MORADORES=[
+  {n:"Luzia",f:"livia.jpg"},{n:"Duda",f:"duda.jpg"},{n:"Yara",f:"yara.jpg"},{n:"Rafa",f:"rafa.jpg"},
+  {n:"Tonho",f:"tonho.jpg"},{n:"Beto",f:"beto.jpg"},{n:"Lucas",f:""}];
+/* fotos dos looks (pasta "LUZIA ROUPAS CAMARIM" no Drive). Sem foto: fica a pintura de reserva */
+const LINHAS=[
+  {id:"aconchego",nome:"Aconchego",em:"🌻",frase:"Para as madrugadas de estudo.",looks:[
+    {id:"cardiga_girassol",nome:"Cardigã girassol",f:"luzia-cardiga-girassol.jpg",bg:"linear-gradient(160deg,#ffcf3a,#f5a623 55%,#6b4a12)"},
+    {id:"moletom_noite_estrelada",nome:"Moletom “Noite Estrelada”",f:"luzia-moletom-noite-estrelada.jpg",bg:"repeating-radial-gradient(circle at 30% 30%,#2f5bd1 0 8px,#0b1640 8px 16px),#0b1640"}]},
+  {id:"trabalho",nome:"Trabalho",em:"🎨",frase:"Para o dia a dia, de mão na massa.",looks:[
+    {id:"jaqueta_campo_trigo",nome:"Jaqueta “Campo de trigo”",f:"luzia-jaqueta-campo-de-trigo.jpg",bg:"repeating-linear-gradient(70deg,#e8b923 0 6px,#c98a12 6px 10px,#7fa36a 10px 13px)"}]},
+  {id:"elegante",nome:"Elegante",em:"✨",frase:"Para a noite de festa na casa.",looks:[
+    {id:"vestido_terraco_cafe",nome:"Vestido “Terraço do café à noite”",f:"luzia-vestido-terraco-do-cafe.jpg",bg:"linear-gradient(180deg,#0b1640 0 40%,#ffcf3a 40% 70%,#f5a623 70%)"},
+    {id:"camisa_quarto_arles",nome:"Camisa “Quarto em Arles”",f:"luzia-camisa-quarto-em-arles.jpg",bg:"linear-gradient(90deg,#2f5bd1 0 33%,#ffcf3a 33% 66%,#ff8a3d 66%)"}]}
+];
+const PERS=[
+  {id:"perdoa_ou_troco",q:"Você acha que a Luzia é mais...",a:["Perdoa","🤍"],b:["Dá o troco","⚡"]},
+  {id:"chora",q:"Quando dói, a Luzia...",a:["Chora escondido","",  "chora_esc"],b:["Chora na frente","","chora_frente"]},
+  {id:"confia",q:"Com as pessoas, a Luzia...",a:["Confia em todo mundo","","confia"],b:["Desconfia","","desconfia"]},
+  {id:"sonha",q:"Sobre o futuro, a Luzia...",a:["Sonha alto","","sonha"],b:["Pé no chão","","pe_no_chao"]}
+];
+/* roteiro: cada tela é um passo */
+const PASSOS=[{t:"capa",nome:"Briefing da Luzia"},...LINHAS.map((l,i)=>({t:"linha",i,nome:"Looks · linha "+l.nome})),{t:"favorita",nome:"Linha favorita"},...PERS.map((p,i)=>({t:"pers",i,nome:"Personalidade "+(i+1)})),{t:"fim",nome:"Parabéns / sala liberada"}];
+
+/* ===== ESTADO ===== */
+let idx=0, R={}, extra=null, t0=Date.now();
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+let AC; function som(f,d=.12,v=.12){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain();o.frequency.value=f;g.gain.setValueAtTime(v,AC.currentTime);g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+d);o.connect(g).connect(AC.destination);o.start();o.stop(AC.currentTime+d+.02)}catch(e){}}
+
+function trilha(){
+  const p=PASSOS[idx], fim=p.t==="fim";
+  $("trilha").innerHTML=`<div class="trilha">${MORADORES.map((m,i)=>{const on=i===0;const foto=m.f?`<img src="${m.f}" alt="">`:`<svg viewBox="0 0 60 60"><circle cx="30" cy="24" r="12" fill="#8c8495"/><path d="M8 60c0-14 10-22 22-22s22 8 22 22z" fill="#8c8495"/></svg>`;
+    return `<div class="mor ${on?"on":"off"}"><div class="f">${foto}</div>${on?(fim?'<span class="cad">✅</span>':""):'<span class="cad">🔒</span>'}<small>${m.n}</small>${m.n==="Duda"&&falta()>0?`<span class="cd" data-cd>${relogio()}</span>`:""}</div>`;}).join("")}</div>
+  ${p.t!=="capa"&&p.t!=="fim"?`<div class="passos">${PASSOS.slice(1,-1).map((x,i)=>`<i class="${i+1<idx?"ok":i+1===idx?"agora":""}"></i>`).join("")}</div>`:""}`;
+}
+function vagas(){ return RESPOSTAS_JA>=MOSTRA_CONTADOR&&RESPOSTAS_JA<LIMITE?`<div class="vagas">⏳ Faltam ${LIMITE-RESPOSTAS_JA} das 100 vagas</div>`:""; }
+function fotoLook(l){ const ph=`<div class="ph">📷 foto do look<br>${esc(l.nome)}</div>`; return l.f?`<img src="${l.f}" alt="${esc(l.nome)}" onerror="this.outerHTML=this.dataset.ph" data-ph="${esc(ph)}">`:ph; }
+function nav(pulavel){ return `<div class="nav"><button class="link" onclick="voltar()">← voltar</button>${pulavel?`<button class="link" onclick="pular()">pular</button>`:""}</div>`; }
+
+function render(){
+  if(RESPOSTAS_JA>=LIMITE && idx===0 && !R._comecou){ return travada(); }
+  trilha(); const p=PASSOS[idx]; let h="";
+  if(extra==="sala") h=`<div class="center"><h2>A sala da Luzia</h2><div class="porta"></div><p class="sub">Em breve! A porta abre no episódio 2.</p><button class="btn ghost" onclick="extra=null;render()">← voltar</button></div>`;
+  else if(extra==="duda") h=`<div class="center"><h2>Próximo morador: Duda</h2><div class="porta" style="background:linear-gradient(90deg,#3a2a6a,#b48cff,#3a2a6a)"></div><p class="sub">(Prévia) A pesquisa 2 de 7, da Duda, é a próxima que vamos montar.</p><button class="btn ghost" onclick="extra=null;render()">← voltar</button></div>`;
+  else if(p.t==="capa"){
+    h=`<div class="anon">🛡️ Pesquisa 100% anônima · ninguém vai saber quem respondeu</div>${vagas()}
+    <div class="brief"><div class="retrato"><img src="livia.jpg" alt="Luzia"></div>
+      <div><span class="sentido">👁️ Visão</span><h1>Luzia</h1><div class="apelido">“Mas todo mundo me chama de Ju.”</div>
+        <div class="ficha"><p>A heroína da casa. Rala de madrugada estudando e trabalhando, usa um terço no peito e quer voltar a sentir.</p></div>
+        <p style="font-size:18px;color:var(--muted);margin:12px 0 0">Você vai escolher os looks e o jeito dela. Leva uns 2 minutos.</p></div></div>
+    <div class="stack"><button class="btn full" onclick="R._comecou=true;ir(1)">Começar →</button></div>`;
+  }
+  else if(p.t==="linha"){
+    const L=LINHAS[p.i];
+    h=`<div class="qn">Pergunta ${p.i+1} de 8</div><div class="linha-nome"><span>${L.em}</span><h2>Linha ${L.nome}</h2></div><p class="sub">Dê uma nota de 0 a 10 para cada look. ${L.frase}</p>
+    <div class="looks ${L.looks.length===1?"um":""}">${L.looks.map(l=>{const v=R[l.id];return `<div class="look ${v!=null&&v!=="pulou"?"ok":""}"><div class="foto" style="background:${l.bg}">${fotoLook(l)}</div><b>${esc(l.nome)}</b>
+      <div class="nota10">${Array.from({length:11},(_,n)=>`<button class="${v===n?"sel":""}" onclick="nota('${l.id}',${n})" aria-label="nota ${n}">${n}</button>`).join("")}</div><div class="legenda"><span>0 · não gostei</span><span>10 · amei</span></div></div>`;}).join("")}</div>
+    <div class="err" id="err"></div><div class="stack"><button class="btn full" onclick="seguirLinha(${p.i})">Próximo →</button></div>${nav(true)}`;
+  }
+  else if(p.t==="favorita"){
+    h=`<div class="qn">Pergunta 4 de 8</div><h2>De qual linha você mais gosta?</h2><p class="sub">A linha vencedora vira a base de todos os looks da Luzia.</p>
+    <div class="linhas">${LINHAS.map((L,i)=>{const ns=L.looks.map(l=>R[l.id]).filter(v=>typeof v==="number");const m=ns.length?(ns.reduce((a,b)=>a+b,0)/ns.length).toFixed(1).replace(".",","):null;
+      return `<button class="lin ${R.linha_favorita===L.id?"sel":""}" onclick="escolhe('linha_favorita','${L.id}')"><div class="mini">${L.looks.map(l=>`<div style="background:${l.bg}">${l.f?`<img src="${l.f}" alt="" onerror="this.remove()">`:""}</div>`).join("")}</div><div><b>${L.em} ${L.nome}</b><span>${L.looks.map(l=>esc(l.nome)).join(" · ")}</span>${m?`<div class="media">Sua média: ${m}</div>`:""}</div></button>`;}).join("")}</div>${nav(true)}`;
+  }
+  else if(p.t==="pers"){
+    const P=PERS[p.i], v=R[P.id];
+    h=`<div class="qn">Pergunta ${5+p.i} de 8 · o jeito da Luzia</div>
+    ${p.i===0?`<div class="fala"><div class="av"><img src="livia.jpg" alt=""></div><div class="balao">“Três da manhã e eu aqui, com café e marca-texto...”</div></div>`:""}
+    <h2>${P.q}</h2>
+    <div class="duo">${[P.a,P.b].map(o=>`<button class="op ${o[2]?"face":""} ${v===o[0]?"sel":""}" onclick="escolhe('${P.id}','${esc(o[0])}')"><span class="em">${o[2]?rosto(o[2]):o[1]}</span>${o[0]}</button>`).join("")}</div>${nav(true)}`;
+  }
+  else if(p.t==="fim"){
+    h=`<div class="center"><div class="foto-fim"><img src="livia.jpg" alt="Luzia"></div><h1 style="font-size:clamp(44px,10vw,70px)">Parabéns!</h1><p class="sub" style="font-size:24px">Você terminou a sala da Luzia!</p>
+    <p style="color:var(--muted);font-size:18px;margin:0">Os looks mais votados entram no episódio 2.</p></div>
+    <div class="stack">${falta()>0?`<button class="btn full travado" disabled aria-disabled="true">🔒 Seguir para o próximo morador: Duda<small>abre em <span data-cd>${relogio()}</span></small></button>`:`<button class="btn full ghost" onclick="extra='duda';render()">Seguir para o próximo morador: Duda →</button>`}
+      <a class="btn full zap" href="https://wa.me/?text=${encodeURIComponent(ZAP)}" target="_blank" rel="noopener">💬 Convidar alguém no WhatsApp</a></div>
+    <div class="nav"><button class="link" onclick="voltar()">← voltar</button></div>`;
+  }
+  $("tela").innerHTML=`<div class="cena">${h}</div>`;
+  barra();
+}
+function travada(){ trilha(); $("tela").innerHTML=`<div class="cena trava"><h2>As 100 vagas acabaram!</h2><p>Obrigado pelo interesse. A pesquisa da Luzia já fechou.</p><p class="sub">Acompanhe A Casa dos 7 Sentidos no @7entidoss.</p><a class="btn" href="https://www.instagram.com/7entidoss/" target="_blank" rel="noopener">Seguir o @7entidoss</a></div>`; barra(); }
+
+/* ===== AÇÕES ===== */
+function ir(i){ idx=Math.max(0,Math.min(PASSOS.length-1,i)); extra=null; render(); window.scrollTo({top:0,behavior:"smooth"}); if(PASSOS[idx].t==="fim") terminar(); }
+function voltar(){ if(extra){extra=null;return render();} ir(idx-1); }
+function pular(){ const p=PASSOS[idx];
+  if(p.t==="linha") LINHAS[p.i].looks.forEach(l=>{ if(R[l.id]==null) R[l.id]="pulou"; });
+  if(p.t==="favorita"&&R.linha_favorita==null) R.linha_favorita="pulou";
+  if(p.t==="pers"&&R[PERS[p.i].id]==null) R[PERS[p.i].id]="pulou";
+  som(300); ir(idx+1); }
+function nota(id,n){ R[id]=n; som(500+n*40); const y=window.scrollY; render(); window.scrollTo({top:y}); }
+function seguirLinha(i){ const falta=LINHAS[i].looks.filter(l=>R[l.id]==null); if(falta.length){ $("err").textContent=LINHAS[i].looks.length===1?"Dê nota para o look, ou toque em pular.":"Dê nota para os dois looks, ou toque em pular."; return; } ir(idx+1); }
+function escolhe(k,v){ R[k]=v; som(700); render(); setTimeout(()=>ir(idx+1),330); }
+function terminar(){
+  if(R._enviado) return; R._enviado=true;
+  const dados={aba:ABA,pesquisa:"luzia",quando:new Date().toISOString(),tempo_seg:Math.round((Date.now()-t0)/1000)};
+  LINHAS.forEach(L=>L.looks.forEach(l=>dados["nota_"+l.id]=R[l.id]??"")); dados.linha_favorita=R.linha_favorita??""; PERS.forEach(p=>dados[p.id]=R[p.id]??"");
+  const pacote={pesquisa:"luzia",versao:VERSAO,quando:dados.quando,pessoa:PID,respostas:dados};
+  try{ localStorage.setItem("7e_respondeu","1"); }catch(e){}
+  if(ENDPOINT){ try{ fetch(ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(pacote)}).catch(()=>{}); }catch(e){} }
+  window._ultimoEnvio=dados;
+  const c=$("confete"); c.innerHTML=Array.from({length:40},(_,i)=>`<i style="left:${Math.random()*100}%;background:${["#ffcf3a","#2f5bd1","#fff","#f5a623"][i%4]};animation-delay:${Math.random()*.6}s"></i>`).join("");
+  [523,659,784,1046].forEach((f,i)=>setTimeout(()=>som(f,.3,.1),i*110)); setTimeout(()=>c.innerHTML="",3500);
+}
+
+/* ===== ROSTOS DA LUZIA (desenho, uma expressão por opção) ===== */
+function rosto(ex){
+  const PELE="#a06a47", PELE2="#8a5737", CAB="#1b110c", LINHA="#24160f", CARD="#f5c542";
+  const up = ex==="sonha" ? -5 : ex==="chora_esc" ? 4 : 0;   /* cabeça para cima / para baixo */
+  /* cabelo cacheado: nuvem de cachos */
+  const cachos=[[60,30,20],[38,36,16],[82,36,16],[28,54,15],[92,54,15],[30,74,14],[90,74,14],[46,22,13],[74,22,13],[60,18,12],[24,92,11],[96,92,11]]
+    .map(([x,y,r])=>`<circle cx="${x}" cy="${y+up}" r="${r}"/>`).join("");
+  const frente=[[42,34,9],[52,30,9],[62,30,9],[72,32,9],[80,38,8],[36,42,7]]
+    .map(([x,y,r])=>`<circle cx="${x}" cy="${y+up}" r="${r}"/>`).join("");
+  const Y=58+up; /* linha dos olhos */
+  let olhos="", sob="", boca="", extra="", bochecha="", bracos="";
+  const pupila=(x,y,r=3.4)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${LINHA}"/>`;
+  const brilho=(x,y,r=1.3)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="#fff"/>`;
+  const olhoAberto=(x,dx=0,dy=0,r=3.4)=>`<ellipse cx="${x}" cy="${Y}" rx="5.4" ry="4.6" fill="#fff"/>${pupila(x+dx,Y+dy,r)}${brilho(x+dx+1.2,Y+dy-1.3)}`;
+  if(ex==="chora_esc"){
+    olhos=`<path d="M45 ${Y} q5 4 10 0 M65 ${Y} q5 4 10 0" stroke="${LINHA}" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
+    sob=`<path d="M44 ${Y-9} l10 3 M76 ${Y-9} l-10 3" stroke="${LINHA}" stroke-width="2.6" stroke-linecap="round"/>`;
+    extra=`<path d="M71 ${Y+5} q-3 6 0 9 q3-3 0-9z" fill="#8fd3ff"/>`;
+    /* mão escondendo a boca */
+    boca=[46,53,60,67].map((x,i)=>`<rect x="${x}" y="${Y+11-(i===1||i===2?2:0)}" width="7" height="19" rx="3.5" fill="${PELE2}" stroke="${LINHA}" stroke-width=".8"/>`).join("")+`<rect x="45" y="${Y+22}" width="30" height="12" rx="6" fill="${PELE2}"/>`;
+  } else if(ex==="chora_frente"){
+    olhos=olhoAberto(50,0,1,3.8)+olhoAberto(70,0,1,3.8)+`<path d="M45 ${Y+4} q5 2 10 0 M65 ${Y+4} q5 2 10 0" stroke="#8fd3ff" stroke-width="2"/>`;
+    sob=`<path d="M44 ${Y-8} l10 -4 M76 ${Y-8} l-10 -4" stroke="${LINHA}" stroke-width="2.6" stroke-linecap="round"/>`;
+    extra=`<path d="M47 ${Y+5} q-2 10 1 18 M73 ${Y+5} q2 10 -1 18" stroke="#8fd3ff" stroke-width="3.2" fill="none" stroke-linecap="round"/>`;
+    boca=`<path d="M51 ${Y+22} q9 -9 18 0 q-9 -3 -18 0z" fill="${LINHA}"/>`;
+  } else if(ex==="confia"){
+    olhos=`<path d="M45 ${Y+1} q5 -6 10 0 M65 ${Y+1} q5 -6 10 0" stroke="${LINHA}" stroke-width="2.6" fill="none" stroke-linecap="round"/>`;
+    sob=`<path d="M44 ${Y-9} q5 -3 10 0 M66 ${Y-9} q5 -3 10 0" stroke="${LINHA}" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
+    boca=`<path d="M48 ${Y+13} q12 16 24 0z" fill="${LINHA}"/><path d="M50 ${Y+14} h20 v2.6 q-10 2 -20 0z" fill="#fff"/>`;
+    bochecha=`<circle cx="44" cy="${Y+11}" r="4.5" fill="#e0785a" opacity=".45"/><circle cx="76" cy="${Y+11}" r="4.5" fill="#e0785a" opacity=".45"/>`;
+  } else if(ex==="desconfia"){
+    olhos=`<ellipse cx="50" cy="${Y}" rx="5.4" ry="3" fill="#fff"/>${pupila(53,Y,2.8)}<ellipse cx="70" cy="${Y}" rx="5.4" ry="3" fill="#fff"/>${pupila(73,Y,2.8)}
+      <path d="M44 ${Y-3} h12 M64 ${Y-3} h12" stroke="${PELE2}" stroke-width="3"/>`;
+    sob=`<path d="M44 ${Y-7} l11 1 M65 ${Y-12} q5 -4 11 -1" stroke="${LINHA}" stroke-width="2.6" fill="none" stroke-linecap="round"/>`;
+    boca=`<path d="M53 ${Y+17} q7 -2 13 -4" stroke="${LINHA}" stroke-width="2.6" fill="none" stroke-linecap="round"/>`;
+  } else if(ex==="sonha"){
+    olhos=olhoAberto(50,0,-2.4,3.6)+olhoAberto(70,0,-2.4,3.6)+brilho(48.5,Y-0.5,1)+brilho(68.5,Y-0.5,1);
+    sob=`<path d="M44 ${Y-11} q5 -5 11 -1 M65 ${Y-12} q5 -4 11 1" stroke="${LINHA}" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
+    boca=`<path d="M47 ${Y+12} q13 18 26 0z" fill="${LINHA}"/><path d="M49 ${Y+13} h22 v2.6 q-11 2 -22 0z" fill="#fff"/>`;
+    bochecha=`<circle cx="44" cy="${Y+10}" r="4.5" fill="#e0785a" opacity=".4"/><circle cx="76" cy="${Y+10}" r="4.5" fill="#e0785a" opacity=".4"/>`;
+    const est=(x,y,s)=>`<path d="M${x} ${y-s} L${x+s*.3} ${y-s*.3} L${x+s} ${y} L${x+s*.3} ${y+s*.3} L${x} ${y+s} L${x-s*.3} ${y+s*.3} L${x-s} ${y} L${x-s*.3} ${y-s*.3}Z" fill="${CARD}"/>`;
+    extra=est(14,14,7)+est(106,10,6)+est(100,30,4)+est(20,34,3.5);
+  } else if(ex==="pe_no_chao"){
+    olhos=`<ellipse cx="50" cy="${Y}" rx="5.4" ry="3.6" fill="#fff"/>${pupila(50,Y,3.2)}<ellipse cx="70" cy="${Y}" rx="5.4" ry="3.6" fill="#fff"/>${pupila(70,Y,3.2)}
+      <path d="M44 ${Y-3} h12 M64 ${Y-3} h12" stroke="${PELE2}" stroke-width="2.4"/>`;
+    sob=`<path d="M43 ${Y-10} l12 3 M77 ${Y-10} l-12 3" stroke="${LINHA}" stroke-width="3.2" stroke-linecap="round"/>`;
+    boca=`<path d="M52 ${Y+16} h16" stroke="${LINHA}" stroke-width="3" stroke-linecap="round"/>`;
+    /* braços cruzados */
+    bracos=`<path d="M30 102 q12 -12 36 -9 q8 2 10 8 l-6 6 q-15 -6 -38 2z" fill="#e3b236" stroke="#b88a12" stroke-width="1.5"/>
+      <path d="M90 102 q-12 -12 -36 -9 q-8 2 -10 8 l6 6 q15 -6 38 2z" fill="${CARD}" stroke="#b88a12" stroke-width="1.5"/>
+      <ellipse cx="38" cy="99" rx="6" ry="4.5" fill="${PELE}"/><ellipse cx="82" cy="99" rx="6" ry="4.5" fill="${PELE}"/>`;
+  }
+  return `<svg class="rosto" viewBox="0 0 120 120" role="img" aria-hidden="true">
+    <g fill="${CAB}">${cachos}</g>
+    <path d="M14 120 q4 -26 30 -30 h32 q26 4 30 30z" fill="${CARD}"/>
+    <path d="M52 86 h16 l-2 10 h-12z" fill="${PELE2}"/><path d="M60 92 v10" stroke="#f3e3b0" stroke-width="1.4"/><circle cx="60" cy="104" r="2.6" fill="#f3e3b0"/>
+    <ellipse cx="60" cy="${62+up}" rx="24" ry="28" fill="${PELE}"/>
+    <g fill="${CAB}">${frente}</g>
+    ${bochecha}${olhos}${sob}
+    <g fill="none" stroke="${LINHA}" stroke-width="1.6" opacity=".85"><circle cx="50" cy="${Y}" r="8.6"/><circle cx="70" cy="${Y}" r="8.6"/><path d="M58.6 ${Y} h2.8"/></g>
+    ${boca}${extra}${bracos}
+  </svg>`;
+}
+
+/* ===== CONTAGEM ATÉ A DUDA ===== */
+function falta(){ return Math.max(0, DUDA_ABRE-Date.now()); }
+function relogio(){ const s=Math.floor(falta()/1000), p=n=>String(n).padStart(2,"0"); return p(Math.floor(s/3600))+":"+p(Math.floor(s%3600/60))+":"+p(s%60); }
+setInterval(()=>{ if(falta()<=0){ if(document.querySelector("[data-cd]")) render(); return; } document.querySelectorAll("[data-cd]").forEach(e=>e.textContent=relogio()); },1000);
+function barra(){}
+
+/* ===== VAGAS (robô) e entrada direta na pergunta 1 ===== */
+if(ENDPOINT){ fetch(ENDPOINT+"?acao=vagas",{cache:"no-store"}).then(r=>r.json()).then(d=>{ if(d&&typeof d.pessoas==="number"){ RESPOSTAS_JA=d.pessoas; if(idx===0||PASSOS[idx].t==="linha") render(); } }).catch(()=>{}); }
+if(new URLSearchParams(location.search).get("ir")==="1"){ R._comecou=true; idx=1; }
+render();
+</script>
+</body>
+</html>
