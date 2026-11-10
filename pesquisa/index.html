@@ -378,6 +378,7 @@ function buildReality(){
 function buildApp(){
   const S=[]; let n=0; const q=(o,count=1)=>{o.num=n+1; n+=count; S.push(o)};
   /* uma pergunta por tela: cada sentido da Fase 1 e cada jogo da Fase 2 em sua própria tela */
+  q({type:"nota", id:"app_chegada", block:"Antes de começar", title:"De 0 a 10, como você está se sentindo agora?", legend:null, semSub:true});
   FASE1.forEach((f,fi)=> q({type:"f1one", id:"f1_"+f.id, f, fi, block:"Fase 1 · "+f.s}));
   let jg=0;
   F2PAGINAS.flat().forEach(gid=>{ const g=G2(gid); jg++;
@@ -484,7 +485,7 @@ function shared(onde,canal){ (answers.compartilhou=answers.compartilhou||[]).pus
 function copyLink(btn,onde){ try{ navigator.clipboard.writeText(SHARE_MSG).then(()=>{btn.textContent="Copiado ✓"; shared(onde,"copiou");},()=>btn.textContent="Não deu para copiar"); }catch(e){ btn.textContent="Não deu para copiar"; } }
 function scale(key, val, legend){
   return `<div class="scale">${Array.from({length:11},(_,v)=>`<button class="opt ${val===v?"sel":""}" onclick="setN('${key}',${v})">${v}</button>`).join("")}</div>
-    <div class="scale-legend"><span>${esc(legend[0])}</span><span>${esc(legend[1])}</span></div>`;
+    ${legend?`<div class="scale-legend"><span>${esc(legend[0])}</span><span>${esc(legend[1])}</span></div>`:""}`;
 }
 function thumbs(key){
   const v=answers[key];
@@ -720,7 +721,7 @@ function render(){
     needNext = true;
   }
   else if(s.type==="nota"){
-    h = `<div class="qnum">Pergunta ${s.num}</div><h2>${esc(s.title)}</h2><p class="sub">Toque numa nota de 0 a 10.</p>${scale(s.id, answers[s.id], s.legend)}`;
+    h = `<div class="qnum">Pergunta ${s.num}</div><h2>${esc(s.title)}</h2>${s.semSub?"":'<p class="sub">Toque numa nota de 0 a 10.</p>'}${scale(s.id, answers[s.id], s.legend)}`;
   }
   else if(s.type==="tempo"){
     const T = cur==="app"?"TEMPOS_APP":"TEMPOS", TT = cur==="app"?TEMPOS_APP:TEMPOS;
@@ -748,6 +749,7 @@ function render(){
     h = `<div class="center"><div class="big-emoji">${emo}</div><h1>Na verdade, se passaram ${real}.</h1>
       <p class="sub">Você achou: ${esc(chute&&chute!=="pulou"?chute:"-")}</p>
       <div class="flowtxt center" style="font-size:24px;font-weight:800">${esc(msg)}</div>
+      <div class="card-dark" style="text-align:left;margin-top:12px"><h3 style="margin:0 0 10px">De 0 a 10, como você está se sentindo agora?</h3>${scale("app_saida", answers.app_saida, null)}</div>
       ${!verGraf?`<button class="btn" style="margin-top:12px" onclick="verGraf=true;rr()">Ver meu gráfico →</button>`:""}</div>
       ${verGraf?`<div class="lado fade">
         <div class="card-dark"><b style="font-size:20px">O seu gráfico dos sentidos</b><p style="margin:4px 0 10px;color:var(--muted);font-size:15px">As notas que você deu para cada jogo, de 0 a 10.</p>
@@ -757,11 +759,18 @@ function render(){
           <button class="btn ghost" onclick="answers.eagora_compartilhar=!answers.eagora_compartilhar;window.click();rr()">Quero compartilhar com alguém</button></div>
           ${answers.eagora_compartilhar?shareBox("eagora"):""}</div>
       </div>
-      <div class="card-dark flowvid fade"><b style="font-size:20px">O que é Flow?</b>
-        ${FLOW_VIDEO?`<video src="${FLOW_VIDEO}" controls playsinline style="width:100%;border-radius:12px;margin-top:10px"></video>`:`<div class="vidph"><div class="vplay">▶</div><span>Vídeo explicativo sobre o Flow · em breve</span></div>`}
-        <p class="fontes"><b>Fontes</b><br>Csikszentmihalyi, M. (1990). <i>Flow: The Psychology of Optimal Experience</i>. Harper &amp; Row.<br>
-        Csikszentmihalyi, M. e LeFevre, J. (1989). Optimal experience in work and leisure. <i>Journal of Personality and Social Psychology</i>, 56(5).<br>
-        Nakamura, J. e Csikszentmihalyi, M. (2002). The concept of flow. <i>Handbook of Positive Psychology</i>. Oxford University Press.</p></div>`:""}
+      <div class="card-dark flowvid fade"><p class="fontes" style="margin:0"><b>Fontes</b><br>Maslow, A. H. (1943). A theory of human motivation. <i>Psychological Review</i>, 50(4), 370–396.<br>
+        Csikszentmihalyi, M. (1975). <i>Beyond Boredom and Anxiety</i>. Jossey-Bass.<br>
+        Getzels, J. W. e Csikszentmihalyi, M. (1976). <i>The Creative Vision: A Longitudinal Study of Problem Finding in Art</i>. Wiley.<br>
+        Larson, R. e Csikszentmihalyi, M. (1983). The experience sampling method. <i>New Directions for Methodology of Social and Behavioral Science</i>, 15, 41–56.<br>
+        Csikszentmihalyi, M. e LeFevre, J. (1989). Optimal experience in work and leisure. <i>Journal of Personality and Social Psychology</i>, 56(5), 815–822.<br>
+        Csikszentmihalyi, M. (1990). <i>Flow: The Psychology of Optimal Experience</i>. Harper &amp; Row.<br>
+        Csikszentmihalyi, M. (1993). <i>The Evolving Self: A Psychology for the Third Millennium</i>. HarperCollins.<br>
+        Csikszentmihalyi, M., Rathunde, K. e Whalen, S. (1993). <i>Talented Teenagers: The Roots of Success and Failure</i>. Cambridge University Press.<br>
+        Csikszentmihalyi, M. (1997). <i>Finding Flow: The Psychology of Engagement with Everyday Life</i>. Basic Books.<br>
+        Seligman, M. E. P. e Csikszentmihalyi, M. (2000). Positive psychology: An introduction. <i>American Psychologist</i>, 55(1), 5–14.<br>
+        Nakamura, J. e Csikszentmihalyi, M. (2002). The concept of flow. In C. R. Snyder e S. J. Lopez (orgs.), <i>Handbook of Positive Psychology</i>. Oxford University Press.<br>
+        Harari, Y. N. (2015). <i>Sapiens: Uma breve história da humanidade</i>. L&amp;PM.</p></div>`:""}
       <div class="nav"><button class="back" onclick="verGraf=false;prev()">← voltar</button></div>`;
     ownNav=true;
   }
@@ -1078,7 +1087,7 @@ function linhas(){
       else if(s.type==="tempo") out.push("Tempo que achou: "+(answers[s.id]||"-")+" / tempo real: "+tmin(answers[f+"_tempo_real_seg"]));
       else out.push(s.title+": "+(answers[s.id]??"-"));
     });
-    if(f==="app"){ out.push("Referência das cartas: "+(answers.f2_olfato_referencia||"-")); out.push("Flow: "+(answers.app_flow||"-")); }
+    if(f==="app"){ out.push("Referência das cartas: "+(answers.f2_olfato_referencia||"-")); out.push("Flow: "+(answers.app_flow||"-")); out.push("Como você saiu (0 a 10): "+(answers.app_saida??"-")); }
     if(f==="app"){ const c=campeas(); out.push("Jogo campeão pelo que você falou: "+(c.pelo_que_falou?c.pelo_que_falou.nome:"-")+" / pelo que você fez: "+(c.pelo_que_fez?c.pelo_que_fez.nome:"-")); }
   });
   return out;
