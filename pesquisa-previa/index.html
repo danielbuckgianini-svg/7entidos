@@ -33,6 +33,8 @@ body{background:radial-gradient(ellipse 70% 55% at 50% 0%,rgba(255,236,190,.14),
 .tend small{display:block;font-size:10px;color:var(--accent);font-weight:800}
 .meta{color:var(--muted);font-size:15px;margin:6px 0 18px}
 .scene{animation:in .45s ease}
+/* Monte o App: uma pergunta por vez, no meio da tela */
+.scene.um{min-height:calc(100svh - 200px);display:flex;flex-direction:column;justify-content:center}
 @keyframes in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 .fade{animation:fd .35s ease}
 @keyframes fd{from{opacity:0}to{opacity:1}}
@@ -375,14 +377,15 @@ function buildReality(){
 }
 function buildApp(){
   const S=[]; let n=0; const q=(o,count=1)=>{o.num=n+1; n+=count; S.push(o)};
-  q({type:"f1page", id:"f1page", block:"Fase 1 · os sete sentidos"}, FASE1.length);
+  /* uma pergunta por tela: cada sentido da Fase 1 e cada jogo da Fase 2 em sua própria tela */
+  FASE1.forEach((f,fi)=> q({type:"f1one", id:"f1_"+f.id, f, fi, block:"Fase 1 · "+f.s}));
   let jg=0;
-  F2PAGINAS.forEach(p=>{ const gs=p.map(G2); const a=jg+1; jg+=gs.length;
-    q({type:"f2", id:"f2_"+gs[0].id, gs, block:"Fase 2 · "+(gs.length>1?"jogos "+a+" e "+jg:"jogo "+a)+" de 7"}, gs.length); });
+  F2PAGINAS.flat().forEach(gid=>{ const g=G2(gid); jg++;
+    q({type:"f2", id:"f2_"+g.id, gs:[g], block:"Fase 2 · jogo "+jg+" de 7"}); });
   q({id:"proposito", block:"Empresa", title:"Na sua opinião, pra que serve o 7entidos?", sub:"Escolha a frase que mais combina com o que você viu.", opts:["Descobrir o que te faz bem através dos sete sentidos","Jogar mini jogos para passar o tempo","Fazer terapia pelo celular","Ainda não entendi"]});
   q({id:"confianca", block:"Empresa", type:"nota", title:"Quanto você confiaria no 7entidos?", legend:["0 · não confiaria nada","10 · confiaria totalmente"]});
-  q({type:"combo", id:"combo_fim", block:"Montar o app · últimas perguntas", title:"Motivos e tempo",
-    mt:{id:"motivos_nao_comprar", title:"Quais seriam os motivos para você não comprar um app?", sub:"Escolha quantos quiser.", opts:["É caro","Já tenho apps demais","Não confio em app pago","Não sei se vou usar sempre"]}}, 2);
+  q({type:"multi", id:"motivos_nao_comprar", block:"Montar o app · últimas perguntas", title:"Quais seriam os motivos para você não comprar um app?", sub:"Escolha quantos quiser.", opts:["É caro","Já tenho apps demais","Não confio em app pago","Não sei se vou usar sempre"]});
+  q({type:"tempo", id:"app_tempo_chute", semFlow:true, block:"Montar o app · última pergunta", title:"Tempo que achou"});
   S.push({type:"revela", block:"Montar o app"});
   S.push({type:"hall2", block:"Os 100 primeiros"});
   S.push({type:"portaoFinal"});
@@ -407,6 +410,7 @@ function isDone(s){
   if(answers[s.id]==="pulou") return true;
   if(s.type==="combo") return Array.isArray(answers.motivos_nao_comprar) && answers.motivos_nao_comprar.length>0 && answers.app_tempo_chute!=null;
   if(s.type==="multi") return Array.isArray(answers[s.id]) && answers[s.id].length>0;
+  if(s.type==="f1one") return Array.isArray(answers[s.id]) && answers[s.id].length>0;
   if(s.type==="f1page") return FASE1.some(f=>Array.isArray(answers["f1_"+f.id]) && answers["f1_"+f.id].length>0);
   if(s.type==="f1") return Array.isArray(answers[s.id]) && answers[s.id].length>0 && answers[s.id+"_gostou"]!=null;
   if(s.type==="f2") return s.gs.every(g=>answers["f2_"+g.id+"_fim"]!=null && answers["f2_"+g.id+"_nota"]!=null);
@@ -414,7 +418,7 @@ function isDone(s){
 }
 function usedPhotos(except){ return [...CAST.map(c=>c.id)].filter(id=>id!==except).map(id=>answers[id+"_foto"]).filter(v=>ok(v)&&!String(v).startsWith("fixo")); }
 function nomesPara(c, fotoId){ const f=foto(fotoId); if(!f) return [...c.F.slice(0,2),...c.M.slice(0,2)]; return f.genero==="M"?c.M:c.F; }
-function enterStep(){ const s=S[idx]; if((s.type==="f1"||s.type==="f1page"||s.type==="f2") && stepId!==s.id){ leaveStep(); stepId=s.id; stepT0=Date.now(); } }
+function enterStep(){ const s=S[idx]; if((s.type==="f1"||s.type==="f1one"||s.type==="f1page"||s.type==="f2") && stepId!==s.id){ leaveStep(); stepId=s.id; stepT0=Date.now(); } }
 function leaveStep(){ if(stepId){ answers[stepId+"_tempo_seg"]=(answers[stepId+"_tempo_seg"]||0)+Math.round((Date.now()-stepT0)/1000); stepId=null; } }
 
 /* ============ VÍDEOS ============ */
@@ -670,6 +674,13 @@ function render(){
       <div class="feed"><h3>Gostou desta parte?</h3>${thumbs(s.id+"_gostou")}</div>${redoBox(s)}`;
     needNext = true;
   }
+  else if(s.type==="f1one"){
+    const f=s.f, sel=Array.isArray(answers[s.id])?answers[s.id]:[];
+    h = `<div class="f1q"><div class="qnum">Pergunta ${s.num}</div><span class="chip" style="background:${f.cor}">${esc(f.s)}</span>
+      <h2>${esc(f.q)}</h2><p class="sub">Escolha quantos quiser. Sem pressa.</p>
+      <div class="chips">${f.o.map((o,oi)=>`<button class="opt ${sel.includes(o)?"sel":""}" onclick="toggleF1p(${s.fi},${oi})">${sel.includes(o)?"✓ ":""}${esc(o)}</button>`).join("")}</div></div>`;
+    needNext = true;
+  }
   else if(s.type==="f1page"){
     h = `<div class="qnum">Perguntas ${s.num} a ${s.num+FASE1.length-1}</div><h2>O que te faz bem?</h2><p class="sub">Escolha quantos quiser. Sem pressa.</p>`;
     FASE1.forEach((f,fi)=>{ const k="f1_"+f.id, sel=Array.isArray(answers[k])?answers[k]:[];
@@ -716,7 +727,7 @@ function render(){
     h = `<div class="qnum">Pergunta ${s.num}</div><h2>Quanto tempo você acha que passou?</h2>
       <p class="sub">Desde que você começou esta pesquisa até agora. Não olhe o relógio!</p>
       <div class="opts">${TT.map((o,i)=>`<button class="opt ${answers[s.id]===o?"sel":""}" onclick="pickI('${s.id}',${T},${i})"><span class="k">${L(i)}</span>${o}</button>`).join("")}</div>`;
-    if(cur==="app") h += `<div class="flowtxt" style="margin-top:18px">🌀 <b>Montar o app</b><br>O <b>Flow</b> é quando a gente se envolve tanto que nem percebe o tempo passar.<br><br><span style="color:var(--muted);font-size:17px">Quem descobriu isso foi o psicólogo Mihaly Csikszentmihalyi (1934–2021), estudando bailarinos, pintores e jogadores de xadrez. Os jogos do 7entidos foram feitos pra te levar até lá, pelos sete sentidos.</span></div>
+    if(cur==="app" && !s.semFlow) h += `<div class="flowtxt" style="margin-top:18px">🌀 <b>Montar o app</b><br>O <b>Flow</b> é quando a gente se envolve tanto que nem percebe o tempo passar.<br><br><span style="color:var(--muted);font-size:17px">Quem descobriu isso foi o psicólogo Mihaly Csikszentmihalyi (1934–2021), estudando bailarinos, pintores e jogadores de xadrez. Os jogos do 7entidos foram feitos pra te levar até lá, pelos sete sentidos.</span></div>
       ${FLOW_AUDIO?`<audio controls src="${FLOW_AUDIO}" style="width:100%;margin-bottom:12px"></audio>`:""}`;
   }
   else if(s.type==="revela" && cur==="app"){
@@ -850,7 +861,7 @@ function render(){
   if(!ownNav){
     h += `<div class="err" id="err"></div><div class="nav"><button class="back" onclick="prev()">← voltar</button>${s.num?'<button class="skip" onclick="pular()">pular</button>':""}${needNext?`<button class="btn" onclick="tryNext()">Próximo →</button>`:""}</div>`;
   }
-  stage.innerHTML = `<div class="scene">${h}</div>`;
+  stage.innerHTML = `<div class="scene${cur==="app"?" um":""}">${h}</div>`;
   if(s.type==="f2") s.gs.forEach(g=>{ if(answers["f2_"+g.id+"_fim"]==null) GAMES[g.id](document.getElementById("game_"+g.id), ()=>gameDone(g.id,"completou")); });
 }
 /* fim de um jogo: se ainda tem outro jogo rodando na página, não redesenha (para não reiniciar o outro) */
@@ -867,7 +878,7 @@ function toggleMulti(i){ const s=S[idx], o=s.opts[i], a=(Array.isArray(answers[s
 function toggleF1p(fi,oi){ const k="f1_"+FASE1[fi].id, o=FASE1[fi].o[oi], a=(Array.isArray(answers[k])?answers[k]:[]).slice(), p=a.indexOf(o); p>=0?a.splice(p,1):a.push(o); answers[k]=a; click(); rr(); }
 function rr(){ const y=window.scrollY; render(); window.scrollTo({top:y}); }
 function setA(k,v){ answers[k]=v; click(); rr(); }
-function setN(k,v){ answers[k]=v; click(); rr(); if(S[idx].type==="nota") setTimeout(next,320); }
+function setN(k,v){ answers[k]=v; click(); rr(); const t=S[idx]; if(t.type==="nota" || (cur==="app" && t.type==="f2" && isDone(t))) setTimeout(next,320); }
 function pickI(id,arr,i){ answers[id]=arr[i]; click(); rr(); setTimeout(next,320); }
 function toggleF1(i){ const s=S[idx], o=s.f.o[i], a=(Array.isArray(answers[s.id])?answers[s.id]:[]).slice(), p=a.indexOf(o); p>=0?a.splice(p,1):a.push(o); answers[s.id]=a; click(); rr(); }
 
@@ -922,7 +933,7 @@ function tryNext(){
   const s=S[idx];
   if(!isDone(s)){
     const m = s.type==="elenco"?"Escolha uma opção para cada personagem, ou toque em pular."
-      : s.type==="f1page"?"Escolha pelo menos uma opção, ou toque em pular."
+      : s.type==="f1page"||s.type==="f1one"?"Escolha pelo menos uma opção, ou toque em pular."
       : s.type==="f1"?"Escolha pelo menos uma opção e diga se gostou desta parte."
       : s.type==="f2"?(s.gs.every(g=>answers["f2_"+g.id+"_fim"]!=null)?"Dê uma nota de 0 a 10 para seguir.":"Jogue (ou pule) o jogo para seguir.")
       : "Responda para seguir, ou toque em pular.";
@@ -1060,6 +1071,7 @@ function linhas(){
       else if(s.type==="elenco") out.push("Elenco: "+(answers.elenco||"-"));
       else if(s.type==="comodo") out.push("Cômodo "+s.r.nome+": "+(answers[s.id]||"-"));
       else if(s.type==="f1") out.push(s.num+". Fase 1 - "+s.f.s+": "+((Array.isArray(answers[s.id])?answers[s.id]:[]).join(", ")||"-")+" / "+(answers[s.id+"_gostou"]||"-"));
+      else if(s.type==="f1one") out.push(s.num+". Fase 1 - "+s.f.s+": "+((Array.isArray(answers[s.id])?answers[s.id]:[]).join(", ")||"-"));
       else if(s.type==="f1page") FASE1.forEach((x,i)=>out.push((s.num+i)+". Fase 1 - "+x.s+": "+((Array.isArray(answers["f1_"+x.id])?answers["f1_"+x.id]:[]).join(", ")||"-")));
       else if(s.type==="f2") s.gs.forEach((g,i)=>{ const id="f2_"+g.id; out.push((s.num+i)+". Fase 2 - "+g.nome+": "+(answers[id+"_fim"]||"-")+(answers[id+"_acertos"]!=null?" ("+answers[id+"_acertos"]+"/3 acertos)":"")+" / nota "+(answers[id+"_nota"]??"-")+" / tempo "+tmin(answers[id+"_tempo_seg"])); });
       else if(s.type==="combo"){ out.push(s.num+". "+s.mt.title+": "+((answers.motivos_nao_comprar||[]).join(", ")||"-")); out.push("Tempo que achou: "+(answers.app_tempo_chute||"-")+" / tempo real: "+tmin(answers.app_tempo_real_seg)); }

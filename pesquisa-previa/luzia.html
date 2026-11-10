@@ -134,6 +134,8 @@ h2{font-family:"Bebas Neue";font-weight:400;font-size:clamp(38px,8vw,52px);line-
 .lin .mini div:last-child{left:62px;transform:rotate(5deg);z-index:2}
 .lin .mini div:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(11,22,64,.45))}
 .lin.sel .mini div{border-color:var(--y)}
+.lin .mini div:only-child{left:30px;transform:rotate(-3deg)}
+.looks.um{grid-template-columns:minmax(0,340px);justify-content:center}
 @media(max-width:420px){.lin{grid-template-columns:128px 1fr}.lin .mini div{width:68px;height:92px}.lin .mini div:last-child{left:52px}}
 /* rostos da Luzia */
 .duo .op .em svg.rosto{width:118px;height:118px;color:inherit;margin:0 auto 6px;border-radius:50%;background:radial-gradient(circle at 50% 40%,#2f5bd1,#0b1640 72%);box-shadow:inset 0 0 0 3px rgba(255,207,58,.55)}
@@ -192,7 +194,6 @@ const LINHAS=[
     {id:"cardiga_girassol",nome:"Cardigã girassol",f:"luzia-cardiga-girassol.jpg",bg:"linear-gradient(160deg,#ffcf3a,#f5a623 55%,#6b4a12)"},
     {id:"moletom_noite_estrelada",nome:"Moletom “Noite Estrelada”",f:"luzia-moletom-noite-estrelada.jpg",bg:"repeating-radial-gradient(circle at 30% 30%,#2f5bd1 0 8px,#0b1640 8px 16px),#0b1640"}]},
   {id:"trabalho",nome:"Trabalho",em:"🎨",frase:"Para o dia a dia, de mão na massa.",looks:[
-    {id:"macacao_tinta",nome:"Macacão com manchas de tinta",f:"",bg:"radial-gradient(circle at 30% 30%,#ffcf3a 0 10%,transparent 11%),radial-gradient(circle at 70% 60%,#ff5a6e 0 8%,transparent 9%),radial-gradient(circle at 40% 80%,#2f5bd1 0 9%,transparent 10%),#c9b89a"},
     {id:"jaqueta_campo_trigo",nome:"Jaqueta “Campo de trigo”",f:"luzia-jaqueta-campo-de-trigo.jpg",bg:"repeating-linear-gradient(70deg,#e8b923 0 6px,#c98a12 6px 10px,#7fa36a 10px 13px)"}]},
   {id:"elegante",nome:"Elegante",em:"✨",frase:"Para a noite de festa na casa.",looks:[
     {id:"vestido_terraco_cafe",nome:"Vestido “Terraço do café à noite”",f:"luzia-vestido-terraco-do-cafe.jpg",bg:"linear-gradient(180deg,#0b1640 0 40%,#ffcf3a 40% 70%,#f5a623 70%)"},
@@ -239,7 +240,7 @@ function render(){
   else if(p.t==="linha"){
     const L=LINHAS[p.i];
     h=`<div class="qn">Pergunta ${p.i+1} de 8</div><div class="linha-nome"><span>${L.em}</span><h2>Linha ${L.nome}</h2></div><p class="sub">Dê uma nota de 0 a 10 para cada look. ${L.frase}</p>
-    <div class="looks">${L.looks.map(l=>{const v=R[l.id];return `<div class="look ${v!=null&&v!=="pulou"?"ok":""}"><div class="foto" style="background:${l.bg}">${fotoLook(l)}</div><b>${esc(l.nome)}</b>
+    <div class="looks ${L.looks.length===1?"um":""}">${L.looks.map(l=>{const v=R[l.id];return `<div class="look ${v!=null&&v!=="pulou"?"ok":""}"><div class="foto" style="background:${l.bg}">${fotoLook(l)}</div><b>${esc(l.nome)}</b>
       <div class="nota10">${Array.from({length:11},(_,n)=>`<button class="${v===n?"sel":""}" onclick="nota('${l.id}',${n})" aria-label="nota ${n}">${n}</button>`).join("")}</div><div class="legenda"><span>0 · não gostei</span><span>10 · amei</span></div></div>`;}).join("")}</div>
     <div class="err" id="err"></div><div class="stack"><button class="btn full" onclick="seguirLinha(${p.i})">Próximo →</button></div>${nav(true)}`;
   }
@@ -276,7 +277,7 @@ function pular(){ const p=PASSOS[idx];
   if(p.t==="pers"&&R[PERS[p.i].id]==null) R[PERS[p.i].id]="pulou";
   som(300); ir(idx+1); }
 function nota(id,n){ R[id]=n; som(500+n*40); const y=window.scrollY; render(); window.scrollTo({top:y}); }
-function seguirLinha(i){ const falta=LINHAS[i].looks.filter(l=>R[l.id]==null); if(falta.length){ $("err").textContent="Dê nota para os dois looks, ou toque em pular."; return; } ir(idx+1); }
+function seguirLinha(i){ const falta=LINHAS[i].looks.filter(l=>R[l.id]==null); if(falta.length){ $("err").textContent=LINHAS[i].looks.length===1?"Dê nota para o look, ou toque em pular.":"Dê nota para os dois looks, ou toque em pular."; return; } ir(idx+1); }
 function escolhe(k,v){ R[k]=v; som(700); render(); setTimeout(()=>ir(idx+1),330); }
 function terminar(){
   if(R._enviado) return; R._enviado=true;
