@@ -505,7 +505,27 @@ function abertura(){
     <button class="btn" style="margin-top:14px;width:100%" onclick="sairAbertura()">Continuar →</button></div></div>`;
   const v=document.getElementById("vab"); if(v){ const p=v.play(); if(p&&p.catch) p.catch(()=>{}); }
 }
-function sairAbertura(){ const v=document.getElementById("vab"); if(v) v.pause(); view="escolha"; render(); window.scrollTo({top:0}); }
+function sairAbertura(){ const v=document.getElementById("vab"); if(v) v.pause();
+  if(p1Feito()) return irPesquisa2();   /* o aparelho já sabe que terminou a pesquisa 1: pula a pergunta */
+  view="pergunta1"; render(); window.scrollTo({top:0}); }
+/* pesquisa 1 terminada neste aparelho? (marca gravada no fim do "Monte o seu app") */
+function p1Feito(){ if(done.app) return true; try{ return localStorage.getItem("7e_p1_feito")==="1"; }catch(e){ return false; } }
+/* vai direto para a pesquisa 2 (A Casa dos 7 Sentidos / Luzia), com a tela das pesquisas por trás */
+function irPesquisa2(){ view="escolha"; render(); abrirLuzia(false); }
+/* ============ PERGUNTA: VOCÊ JÁ RESPONDEU A PESQUISA 1? ============ */
+function pergunta1(){
+  document.getElementById("prog").style.display="none";
+  document.getElementById("anon").style.display="flex";
+  stage.innerHTML=`<div class="scene inicio">
+    <div class="logo-ini"><img src="logo-7entidos.png" alt="7entidos · A vida é feita de boas sensações"></div>
+    <div class="f1q center" style="padding:26px 20px">
+      <h2 style="margin:0 0 18px">Você já respondeu a pesquisa 1?</h2>
+      <div class="stack" style="grid-template-columns:1fr 1fr">
+        <button class="btn" onclick="click();irPesquisa2()">Sim</button>
+        <button class="btn ghost" onclick="click();view='escolha';render();window.scrollTo({top:0})">Não</button>
+      </div>
+    </div></div>`;
+}
 function verAbertura(){ view="abertura"; render(); window.scrollTo({top:0}); }
 
 /* ============ ESCOLHA UMA PESQUISA ============ */
@@ -597,10 +617,11 @@ function drawTrail(s){
 /* ============ TELAS ============ */
 /* visual novo (Sala do Visual, 10/11): estilo escolhido para cada tela */
 function aplicaTema(){
-  document.body.classList.toggle("tela-inicio", view==="escolha");
+  document.body.classList.toggle("tela-inicio", view==="escolha"||view==="pergunta1");
   if(!window.TEMA) return;
   if(view==="abertura") return TEMA.set("C","#F5C542","s01","Vídeo de abertura");
   if(view==="escolha") return TEMA.set("C","#4aa8ff","s02","Escolha da pesquisa");
+  if(view==="pergunta1") return TEMA.set("C","#4aa8ff","s02b","Já respondeu a pesquisa 1?");
   if(view==="escolhas"||view==="fim") return TEMA.set("M","#3fd6d0","s24b","Minhas escolhas / fim");
   const s=S[idx]||{};
   if(cur==="app"){
@@ -623,6 +644,7 @@ function render(){
   aplicaTema();
   if(view==="abertura") return abertura();
   if(view==="escolha") return escolha();
+  if(view==="pergunta1") return pergunta1();
   if(view==="escolhas") return escolhas();
   if(view==="fim") return fim();
   const s = S[idx]; enterStep();
@@ -1150,6 +1172,7 @@ function telOk(sim){
 }
 function finish(){
   done[cur]=true; leaveStep();
+  if(cur==="app"){ try{ localStorage.setItem("7e_p1_feito","1"); }catch(e){} }
   enviar({pesquisa:cur, versao:VERSAO, quando:new Date().toISOString(), respostas:answers, campea: cur==="app"?campeas():null});
   if(contato.nome||contato.tel||contato.email) enviar({evento:"contato", pesquisa:cur, nome:contato.nome||"", telefone:contato.tel||"", email:contato.email||""});
   if(cur==="app") return abrirLuzia(true);   /* terminou o Monte o App: vai direto para a pergunta 1 da Luzia */
