@@ -303,7 +303,7 @@ const ROOMS = [
   {nome:"Cozinha", s:"Paladar", cor:"#ff5a6e", emoji:"🍳"},
   {nome:"Jardim", s:"Olfato", cor:"#5ccf8a", emoji:"🌿"},
   {nome:"Estúdio de dança", s:"Equilíbrio", cor:"#b48cff", emoji:"🩰"},
-  {nome:"Sótão", s:"Noção de corpo", cor:"#3fd6d0", emoji:"🕯️"}
+  {nome:"Sótão", s:"Noção do corpo", cor:"#3fd6d0", emoji:"🕯️"}
 ];
 const TEMAS = ["Astronauta 🚀","Faroeste 🤠","Fundo do mar 🐙","Floresta encantada 🍄","Anos 80 📼","Castelo medieval 🏰","Circo 🎪","Cidade do futuro 🤖","Praia tropical 🌴","Neve e montanha 🏔️","Cinema antigo 🎞️","Selva 🐆"];
 const GANCHOS = ["Uma moradora diz: “Eu conheço ela. Ela só não lembrou ainda.”","Uma foto antiga aparece escondida num quarto","A criança some e é achada no sótão com uma caixa de cartas","A casa racha em dois lados"];
@@ -321,7 +321,7 @@ const FASE1 = [
   {id:"paladar", s:"Paladar", cor:"#ff5a6e", q:"Que sabor te faz bem?", o:["Comida de vó","Doce de padaria","Fruta fresca","Café passado na hora"]},
   {id:"olfato", s:"Olfato", cor:"#5ccf8a", q:"Que cheiro te faz bem?", o:["Terra molhada","Pão saindo do forno","Perfume de alguém querido","Cheiro de café"]},
   {id:"equilibrio", s:"Equilíbrio", cor:"#b48cff", q:"Que movimento te faz bem?", o:["Dançar","Balançar numa rede","Andar de bicicleta","Ficar de pé numa prancha"]},
-  {id:"corpo", s:"Noção de corpo", cor:"#3fd6d0", q:"O que te faz bem no corpo?", o:["Alongar","Correr","Nadar","Deitar e respirar fundo"]}
+  {id:"corpo", s:"Noção do corpo", cor:"#3fd6d0", q:"O que te faz bem no corpo?", o:["Alongar","Correr","Nadar","Deitar e respirar fundo"]}
 ];
 const FASE2 = [
   {id:"visao", s:"Visão", cor:"#f5c542", nome:"Olho de águia", img:"👁️"},
@@ -330,7 +330,7 @@ const FASE2 = [
   {id:"paladar", s:"Paladar", cor:"#ff5a6e", nome:"Monte o seu prato", img:"🍽️"},
   {id:"olfato", s:"Olfato", cor:"#5ccf8a", nome:"Pares de cheiros", img:"👃"},
   {id:"equilibrio", s:"Equilíbrio", cor:"#b48cff", nome:"No meio certinho", img:"🩰"},
-  {id:"corpo", s:"Noção de corpo", cor:"#3fd6d0", nome:"Siga a ordem", img:"🧘"}
+  {id:"corpo", s:"Noção do corpo", cor:"#3fd6d0", nome:"Siga a ordem", img:"🧘"}
 ];
 /* jogos que ficam juntos na mesma página */
 const F2PAGINAS = [["visao"],["audicao","tato"],["paladar","olfato"],["equilibrio","corpo"]];
@@ -464,7 +464,7 @@ function escolha(){
       <div class="passo">
         <div class="pnum">2</div>
         <button class="pesq" onclick="abrirLuzia(false)"><span class="tag">🔴 ESTREIA</span><b>Participe do reality</b>
-          <p>Monte o elenco de A Casa dos 7 Sentidos, descubra quem é o seu vilão e decore a casa do seu jeito.</p>
+          <p>Escolha os looks e o jeito da Luzia, a heroína de A Casa dos 7 Sentidos.</p>
           ${done.reality?'<p style="color:#9be7b0;font-weight:800">você já participou ✓</p>':""}</button>
       </div>
     </div></div>`;
@@ -655,7 +655,7 @@ function render(){
   }
   else if(s.type==="guardiao"){
     const pers=[...CAST.map(c=>({n:ok(answers[c.id+"_nome"])?answers[c.id+"_nome"]:c.sentido, s:c.sentido, cor:c.cor})),
-      {n:ok(answers.vilao_nome)?answers.vilao_nome:"O vilão", s:"Vilão", cor:VILAO.cor},{n:"Lucas", s:"Noção de corpo", cor:"#3fd6d0"}];
+      {n:ok(answers.vilao_nome)?answers.vilao_nome:"O vilão", s:"Vilão", cor:VILAO.cor},{n:"Lucas", s:"Noção do corpo", cor:"#3fd6d0"}];
     h=`<div class="center"><div class="big-emoji">🛡️</div><div class="qnum">Pergunta ${s.num}</div><h1>Guardiões dos Sentidos</h1>
       <p class="sub">As 200 primeiras pessoas que responderem viram Guardiões dos Sentidos e escolhem, em segredo, quem vai vencer o reality.</p></div>
       <h2>Quem você acha que vai vencer?</h2><p class="sub">Seu voto fica em segredo.</p>
