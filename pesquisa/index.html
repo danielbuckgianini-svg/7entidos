@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Pesquisa 7entidos · A Casa dos 7 Sentidos</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Special+Elite&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Special+Elite&family=Inter:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500;1,9..144,700&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&family=Syne:wght@600;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root{--bg:#100e12;--panel:#1c1920;--paper:#f3ead7;--ink:#231f1a;--tape:#e9d48a;--red:#e2483d;--muted:#a69fae;--line:#2e2a33;--accent:#f5c542}
@@ -221,6 +221,8 @@ input.txt:focus{border-color:var(--accent)}
 .passo .pesq{width:100%}
 .guard{background:linear-gradient(135deg,#2b2410,#1c1920);border:2px solid var(--accent);border-radius:16px;padding:16px;margin:14px 0}
 </style>
+<link rel="stylesheet" href="tema.css?v=v6">
+<script src="tema.js?v=v6"></script>
 </head>
 <body>
 <div class="wrap" id="wrap">
@@ -525,7 +527,30 @@ function drawTrail(s){
 }
 
 /* ============ TELAS ============ */
+/* visual novo (Sala do Visual, 10/11): estilo escolhido para cada tela */
+function aplicaTema(){
+  if(!window.TEMA) return;
+  if(view==="abertura") return TEMA.set("C","#F5C542","s01","Vídeo de abertura");
+  if(view==="escolha") return TEMA.set("C","#4aa8ff","s02","Escolha da pesquisa");
+  if(view==="escolhas"||view==="fim") return TEMA.set("M","#3fd6d0","s24b","Minhas escolhas / fim");
+  const s=S[idx]||{};
+  if(cur==="app"){
+    if(s.id==="app_chegada") return TEMA.set("C","#ff8a3d","s03","Como você está agora");
+    if(s.type==="f1one") return TEMA.set("C",s.f.cor,"f1_"+s.f.id,"Fase 1 · "+s.f.s);
+    if(s.type==="f1page") return TEMA.set("C","#F5C542","f1page","Fase 1");
+    if(s.type==="f2") return TEMA.set("X",s.gs[0].cor,"f2_"+s.gs[0].id,"Jogo · "+s.gs.map(g=>g.nome).join(" + "));
+    if(s.id==="proposito") return TEMA.set("X","#F5C542","s18","Pra que serve o 7entidos");
+    if(s.id==="confianca") return TEMA.set("X","#4aa8ff","s19","Confiança");
+    if(s.id==="motivos_nao_comprar"||s.type==="combo") return TEMA.set("M","#ff8a3d","s20","Motivos para não comprar");
+    if(s.id==="app_tempo_chute") return TEMA.set("M","#ff5a6e","s21","Quanto tempo passou");
+    if(s.type==="revela") return TEMA.set("M","#5ccf8a","s22","Tela do tempo e do Flow");
+    if(s.type==="hall2") return TEMA.set("M","#b48cff","s23","Hall da Fama · 100 primeiros");
+    if(s.type==="portaoFinal") return TEMA.set("M","#3fd6d0","s24","Portão");
+  }
+  return TEMA.set("C","#F5C542","r_"+(s.id||s.type||idx),"Reality · "+(s.block||s.type||""));
+}
 function render(){
+  aplicaTema();
   if(view==="abertura") return abertura();
   if(view==="escolha") return escolha();
   if(view==="escolhas") return escolhas();

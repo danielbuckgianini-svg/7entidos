@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Pesquisa 1 de 7 · Luzia · A Casa dos 7 Sentidos</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Caveat:wght@600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Caveat:wght@600;700&family=Inter:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500;1,9..144,700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{--y:#ffcf3a;--y2:#f5a623;--b:#1d3b8a;--b2:#0b1640;--b3:#2f5bd1;--ink:#fff;--muted:#c9d4f5}
 *{box-sizing:border-box}
@@ -163,6 +163,8 @@ h2{font-family:"Bebas Neue";font-weight:400;font-size:clamp(38px,8vw,52px);line-
 .resumo li{margin:4px 0}
 @media(prefers-reduced-motion:reduce){*{animation:none!important}}
 </style>
+<link rel="stylesheet" href="tema.css?v=v6">
+<script src="tema.js?v=v6"></script>
 </head>
 <body>
 <div class="confete" id="confete"></div>
@@ -224,9 +226,18 @@ function vagas(){ return RESPOSTAS_JA>=MOSTRA_CONTADOR&&RESPOSTAS_JA<LIMITE?`<di
 function fotoLook(l){ const ph=`<div class="ph">📷 foto do look<br>${esc(l.nome)}</div>`; return l.f?`<img src="${l.f}" alt="${esc(l.nome)}" onerror="this.outerHTML=this.dataset.ph" data-ph="${esc(ph)}">`:ph; }
 function nav(pulavel){ return `<div class="nav"><button class="link" onclick="voltar()">← voltar</button>${pulavel?`<button class="link" onclick="pular()">pular</button>`:""}</div>`; }
 
+function aplicaTema(){
+  if(!window.TEMA) return; const p=PASSOS[idx];
+  if(extra) return TEMA.set("C","#b48cff","l_extra","Luzia · porta da próxima sala");
+  if(p.t==="capa") return TEMA.set("M","#F5C542","s26","Luzia · Capa");
+  if(p.t==="linha") return TEMA.set("M","#F5C542","s"+(27+p.i),"Luzia · Linha "+LINHAS[p.i].nome);
+  if(p.t==="favorita") return TEMA.set("M","#F5C542","s30","Luzia · Linha favorita");
+  if(p.t==="pers") return TEMA.set("C","#F5C542","s"+(31+p.i),"Luzia · Jeito "+(p.i+1));
+  return TEMA.set("C","#F5C542","s35","Luzia · Parabéns");
+}
 function render(){
   if(RESPOSTAS_JA>=LIMITE && idx===0 && !R._comecou){ return travada(); }
-  trilha(); const p=PASSOS[idx]; let h="";
+  aplicaTema(); trilha(); const p=PASSOS[idx]; let h="";
   if(extra==="sala") h=`<div class="center"><h2>A sala da Luzia</h2><div class="porta"></div><p class="sub">Em breve! A porta abre no episódio 2.</p><button class="btn ghost" onclick="extra=null;render()">← voltar</button></div>`;
   else if(extra==="duda") h=`<div class="center"><h2>Próximo morador: Duda</h2><div class="porta" style="background:linear-gradient(90deg,#3a2a6a,#b48cff,#3a2a6a)"></div><p class="sub">(Prévia) A pesquisa 2 de 7, da Duda, é a próxima que vamos montar.</p><button class="btn ghost" onclick="extra=null;render()">← voltar</button></div>`;
   else if(p.t==="capa"){
@@ -266,7 +277,7 @@ function render(){
   $("tela").innerHTML=`<div class="cena">${h}</div>`;
   barra();
 }
-function travada(){ trilha(); $("tela").innerHTML=`<div class="cena trava"><h2>As 100 vagas acabaram!</h2><p>Obrigado pelo interesse. A pesquisa da Luzia já fechou.</p><p class="sub">Acompanhe A Casa dos 7 Sentidos no @7entidoss.</p><a class="btn" href="https://www.instagram.com/7entidoss/" target="_blank" rel="noopener">Seguir o @7entidoss</a></div>`; barra(); }
+function travada(){ if(window.TEMA) TEMA.set("M","#F5C542","s25","Sala trancada (100 vagas)"); trilha(); $("tela").innerHTML=`<div class="cena trava"><h2>As 100 vagas acabaram!</h2><p>Obrigado pelo interesse. A pesquisa da Luzia já fechou.</p><p class="sub">Acompanhe A Casa dos 7 Sentidos no @7entidoss.</p><a class="btn" href="https://www.instagram.com/7entidoss/" target="_blank" rel="noopener">Seguir o @7entidoss</a></div>`; barra(); }
 
 /* ===== AÇÕES ===== */
 function ir(i){ idx=Math.max(0,Math.min(PASSOS.length-1,i)); extra=null; render(); window.scrollTo({top:0,behavior:"smooth"}); if(PASSOS[idx].t==="fim") terminar(); }
