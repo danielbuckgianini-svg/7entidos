@@ -244,6 +244,33 @@ body.tela-inicio .logo-top{visibility:hidden}
 .rostos img:nth-child(2){left:0;top:22px}.rostos img:nth-child(3){left:46px;top:22px}
 .rostos img:nth-child(4){left:4px;top:46px}.rostos img:nth-child(5){left:42px;top:46px}.rostos img:nth-child(6){left:23px;top:50px;z-index:0;opacity:.85}
 .guard{background:linear-gradient(135deg,#2b2410,#1c1920);border:2px solid var(--accent);border-radius:16px;padding:16px;margin:14px 0}
+
+/* ===== Régua de luz (escala 0 a 10) ===== */
+.scale.regua{display:grid;grid-template-columns:repeat(11,1fr);gap:6px}
+.scale.regua .opt{aspect-ratio:1;padding:0!important;border-radius:50%!important;justify-content:center;font-family:"Bebas Neue",sans-serif!important;font-size:22px!important;font-weight:400!important;background:rgba(255,255,255,.06)!important;color:rgba(255,255,255,.75)!important;border:1px solid rgba(255,255,255,.18)!important;box-shadow:none!important;transition:transform .2s,background .25s,box-shadow .25s,color .2s}
+.scale.regua .opt.on{background:var(--rc)!important;color:#0a1128!important;border-color:var(--rc)!important;box-shadow:0 0 14px var(--rc)!important}
+.scale.regua .opt.sel{transform:scale(1.22)}
+@media (max-width:520px){.scale.regua{grid-template-columns:repeat(11,1fr);gap:3px}.scale.regua .opt{font-size:16px!important}}
+.notarow .scale.regua{grid-template-columns:repeat(11,1fr)}
+/* ===== Duas perguntas por tela ===== */
+.par{display:flex;flex-direction:column;gap:18px}
+.psub{transition:opacity .35s,transform .35s}
+.psub.espera{opacity:.38;pointer-events:none;filter:saturate(.6)}
+.psub.sai{opacity:0;transform:translateY(-40px)}
+.psub.sobe{animation:sobe .5s cubic-bezier(.2,.8,.2,1)}
+@keyframes sobe{from{transform:translateY(90px);opacity:.4}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.psub,.psub.sobe{animation:none;transition:none}}
+/* ===== Cartões com foto ===== */
+.fotos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+.fcard{position:relative;border:2px solid rgba(255,255,255,.14);border-radius:16px;overflow:hidden;aspect-ratio:4/3;padding:0;cursor:pointer;background:linear-gradient(150deg,var(--fc) 0%,#141a3a 85%);color:#fff;text-align:left;transition:transform .15s,border-color .2s}
+.fcard:hover{transform:translateY(-2px)}
+.fcard:focus-visible{outline:3px solid #F5C542;outline-offset:3px}
+.fcard img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.fcard .fsem{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:38px;opacity:.55}
+.fcard .fnome{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 9px;font-weight:700;font-size:15px;line-height:1.2;background:linear-gradient(transparent,rgba(5,8,20,.88))}
+.fcard.sel{border-color:#F5C542;box-shadow:0 0 0 3px #F5C54266}
+.fcard .ouvir{position:absolute;top:8px;right:8px;border:0;border-radius:999px;padding:7px 11px;font:700 13px Inter,system-ui,sans-serif;background:rgba(5,8,20,.78);color:#fff;cursor:pointer;z-index:2}
+.fcard .ouvir.tocando{background:#F5C542;color:#0a1128}
 </style>
 <link rel="stylesheet" href="tema.css?v=v6">
 <script src="tema.js?v=v6"></script>
@@ -347,6 +374,11 @@ const FASE1 = [
   {id:"equilibrio", s:"Equilíbrio", cor:"#b48cff", q:"Que movimento te faz bem?", o:["Dançar","Balançar numa rede","Andar de bicicleta","Ficar de pé numa prancha"]},
   {id:"corpo", s:"Noção de corpo", cor:"#3fd6d0", q:"O que te faz bem no corpo?", o:["Alongar","Correr","Nadar","Deitar e respirar fundo"]}
 ];
+
+/* fotos das opções (pasta pesquisa/opcoes, nomes sentido-1.jpg a sentido-4.jpg) e ícone de reserva */
+const F1ICO = {visao:["🌅","🌌","🎨","📷"],audicao:["🌊","🎸","🌧️","🤫"],tato:["🏖️","🛋️","💧","🤗"],paladar:["🍲","🥐","🍓","☕"],olfato:["🌱","🍞","🌸","☕"],equilibrio:["💃","🏝️","🚲","🏄"],corpo:["🙆","🏃","🏊","🫁"]};
+const F1SOM = ["mar","musica","chuva","silencio"];
+const f1foto = (fid,oi) => "opcoes/"+fid+"-"+(oi+1)+".jpg";
 const FASE2 = [
   {id:"visao", s:"Visão", cor:"#f5c542", nome:"Olho de águia", img:"👁️"},
   {id:"audicao", s:"Audição", cor:"#4aa8ff", nome:"Qual som é mais fino?", img:"👂"},
@@ -403,14 +435,17 @@ function buildReality(){
 }
 function buildApp(){
   const S=[]; let n=0; const q=(o,count=1)=>{o.num=n+1; n+=count; S.push(o)};
-  /* uma pergunta por tela: cada sentido da Fase 1 e cada jogo da Fase 2 em sua própria tela */
-  q({type:"nota", id:"app_chegada", block:"Antes de começar", title:"Escolha um número de 0 a 10", legend:null, semSub:true});
-  FASE1.forEach((f,fi)=> q({type:"f1one", id:"f1_"+f.id, f, fi, block:"Fase 1 · "+f.s}));
+  /* duas perguntas por tela: respondeu a primeira, ela some e a segunda sobe */
+  const par=(a,b,block)=>{ a.num=n+1; b.num=n+2; n+=2; S.push({type:"par", id:"par_"+a.id, itens:[a,b], block}); };
+  const f1=fi=>({type:"f1one", id:"f1_"+FASE1[fi].id, f:FASE1[fi], fi});
+  par({type:"nota", id:"app_chegada", title:"Escolha um número de 0 a 10", legend:null, semSub:true}, f1(0), "Antes de começar · Visão");
+  par(f1(1), f1(2), "Fase 1 · Audição e Tato");
+  par(f1(3), f1(4), "Fase 1 · Paladar e Olfato");
+  par(f1(5), f1(6), "Fase 1 · Equilíbrio e Noção de corpo");
   let jg=0;
   F2PAGINAS.flat().forEach(gid=>{ const g=G2(gid); jg++;
     q({type:"f2", id:"f2_"+g.id, gs:[g], block:"Fase 2 · jogo "+jg+" de 7"}); });
-  q({id:"proposito", block:"Empresa", title:"Na sua opinião, pra que serve o 7entidos?", sub:"Escolha a frase que mais combina com o que você viu.", opts:["Descobrir o que te faz bem através dos sete sentidos","Jogar mini jogos para passar o tempo","Fazer terapia pelo celular","Ainda não entendi"]});
-  q({id:"confianca", block:"Empresa", type:"nota", title:"Quanto você confiaria no 7entidos?", legend:["0 · não confiaria nada","10 · confiaria totalmente"]});
+  par({id:"proposito", block:"Empresa", title:"Na sua opinião, pra que serve o 7entidos?", sub:"Escolha a frase que mais combina com o que você viu.", opts:["Descobrir o que te faz bem através dos sete sentidos","Jogar mini jogos para passar o tempo","Fazer terapia pelo celular","Ainda não entendi"]}, {id:"confianca", block:"Empresa", type:"nota", title:"Quanto você confiaria no 7entidos?", legend:["0 · não confiaria nada","10 · confiaria totalmente"]}, "Empresa");
   q({type:"multi", id:"motivos_nao_comprar", block:"Montar o app · últimas perguntas", title:"Quais seriam os motivos para você não comprar um app?", sub:"Escolha quantos quiser.", opts:["É caro","Já tenho apps demais","Não confio em app pago","Não sei se vou usar sempre"]});
   q({type:"tempo", id:"app_tempo_chute", semFlow:true, block:"Montar o app · última pergunta", title:"Tempo que achou"});
   S.push({type:"revela", block:"Montar o app"});
@@ -431,6 +466,7 @@ const foto = id => FOTOS.find(f=>f.id===id);
 const fotoHTML = (id,kid) => { if(typeof id==="string"&&id.startsWith("fixo:")){const c=CAST.find(x=>x.id===id.slice(5));if(c&&c.fixo.foto)return `<img src="${c.fixo.foto}" alt="">`;} const f=foto(id); return f&&f.src?`<img src="${f.src}" alt="">`:(kid?SIL_KID:SIL); };
 
 function isDone(s){
+  if(s.type==="par") return s.itens.every(isDone);
   if(s.type==="cast") return answers[s.id+"_foto"]!=null && answers[s.id+"_nome"]!=null && answers[s.id+"_tipo"]!=null;
   if(s.type==="vilao") return answers.vilao_nome!=null && answers.vilao_tipo!=null;
   if(s.type==="elenco") return answers.elenco!=null;
@@ -445,7 +481,7 @@ function isDone(s){
 }
 function usedPhotos(except){ return [...CAST.map(c=>c.id)].filter(id=>id!==except).map(id=>answers[id+"_foto"]).filter(v=>ok(v)&&!String(v).startsWith("fixo")); }
 function nomesPara(c, fotoId){ const f=foto(fotoId); if(!f) return [...c.F.slice(0,2),...c.M.slice(0,2)]; return f.genero==="M"?c.M:c.F; }
-function enterStep(){ const s=S[idx]; if((s.type==="f1"||s.type==="f1one"||s.type==="f1page"||s.type==="f2") && stepId!==s.id){ leaveStep(); stepId=s.id; stepT0=Date.now(); } }
+function enterStep(){ const s=S[idx]; if((s.type==="f1"||s.type==="f1one"||s.type==="f1page"||s.type==="f2"||s.type==="par") && stepId!==s.id){ leaveStep(); stepId=s.id; stepT0=Date.now(); } }
 function leaveStep(){ if(stepId){ answers[stepId+"_tempo_seg"]=(answers[stepId+"_tempo_seg"]||0)+Math.round((Date.now()-stepT0)/1000); stepId=null; } }
 
 /* ============ VÍDEOS ============ */
@@ -514,8 +550,10 @@ function shareBox(onde){
 }
 function shared(onde,canal){ (answers.compartilhou=answers.compartilhou||[]).push({pesquisa:cur,onde,canal,quando:new Date().toISOString()}); enviar({evento:"compartilhou",pesquisa:cur,onde,canal}); }
 function copyLink(btn,onde){ try{ navigator.clipboard.writeText(SHARE_MSG).then(()=>{btn.textContent="Copiado ✓"; shared(onde,"copiou");},()=>btn.textContent="Não deu para copiar"); }catch(e){ btn.textContent="Não deu para copiar"; } }
-function scale(key, val, legend){
-  return `<div class="scale">${Array.from({length:11},(_,v)=>`<button class="opt ${val===v?"sel":""}" onclick="setN('${key}',${v})">${v}</button>`).join("")}</div>
+const RCOR=["#f5c542","#f5c542","#ff8a3d","#ff8a3d","#ff5a6e","#ff5a6e","#b48cff","#4aa8ff","#3fd6d0","#5ccf8a","#5ccf8a"];
+function scale(key, val, legend, fn){
+  const f=fn||"setN";
+  return `<div class="scale regua">${Array.from({length:11},(_,v)=>`<button class="opt ${val===v?"sel":""} ${val!=null&&val!=="pulou"&&v<=val?"on":""}" style="--rc:${RCOR[v]}" aria-label="Nota ${v}" onclick="${f}('${key}',${v})">${v}</button>`).join("")}</div>
     ${legend?`<div class="scale-legend"><span>${esc(legend[0])}</span><span>${esc(legend[1])}</span></div>`:""}`;
 }
 function thumbs(key){
@@ -565,6 +603,7 @@ function aplicaTema(){
   if(view==="escolhas"||view==="fim") return TEMA.set("M","#3fd6d0","s24b","Minhas escolhas / fim");
   const s=S[idx]||{};
   if(cur==="app"){
+    if(s.type==="par"){ const a=parAtivo(s)||s.itens[1]; if(a.id==="proposito") return TEMA.set("X","#F5C542","s18","Pra que serve o 7entidos"); if(a.id==="confianca") return TEMA.set("X","#4aa8ff","s19","Confiança"); if(a.type==="f1one") return TEMA.set("C",a.f.cor,"f1_"+a.f.id,"Fase 1 · "+a.f.s); return TEMA.set("C","#ff8a3d","s03","Como você está agora"); }
     if(s.id==="app_chegada") return TEMA.set("C","#ff8a3d","s03","Como você está agora");
     if(s.type==="f1one") return TEMA.set("C",s.f.cor,"f1_"+s.f.id,"Fase 1 · "+s.f.s);
     if(s.type==="f1page") return TEMA.set("C","#F5C542","f1page","Fase 1");
@@ -736,6 +775,15 @@ function render(){
       <h2>${esc(f.q)}</h2><p class="sub">Escolha quantos quiser. Sem pressa.</p>
       <div class="chips">${f.o.map((o,oi)=>`<button class="opt ${sel.includes(o)?"sel":""}" onclick="toggleF1p(${s.fi},${oi})">${sel.includes(o)?"✓ ":""}${esc(o)}</button>`).join("")}</div></div>`;
     needNext = true;
+  }
+  else if(s.type==="par"){
+    const ativo=parAtivo(s);
+    h = `<div class="par">`+s.itens.map(it=>{
+      if(isDone(it)) return "";
+      const cls = it===ativo ? "ativa"+(parSubiu===it.id?" sobe":"") : "espera";
+      return `<div class="psub ${cls}" data-pid="${it.id}">${parItem(it, it===ativo)}</div>`;
+    }).join("")+`</div>`;
+    parSubiu=null;
   }
   else if(s.type==="f1page"){
     h = `<div class="qnum">Perguntas ${s.num} a ${s.num+FASE1.length-1}</div><h2>O que te faz bem?</h2><p class="sub">Escolha quantos quiser. Sem pressa.</p>`;
@@ -923,7 +971,7 @@ function render(){
     h += `<div class="opts">`+s.opts.map((o,i)=>`<button class="opt ${answers[s.id]===o?"sel":""}" onclick="pickI('${s.id}',S[idx].opts,${i})"><span class="k">${L(i)}</span><span>${esc(o)}</span></button>`).join("")+`</div>`;
   }
   if(!ownNav){
-    h += `<div class="err" id="err"></div><div class="nav"><button class="back" onclick="prev()">← voltar</button>${s.num?'<button class="skip" onclick="pular()">pular</button>':""}${needNext?`<button class="btn" onclick="tryNext()">Próximo →</button>`:""}</div>`;
+    h += `<div class="err" id="err"></div><div class="nav"><button class="back" onclick="prev()">← voltar</button>${(s.num||s.type==="par")?'<button class="skip" onclick="pular()">pular</button>':""}${needNext?`<button class="btn" onclick="tryNext()">Próximo →</button>`:""}</div>`;
   }
   stage.innerHTML = `<div class="scene${cur==="app"?" um":""}">${h}</div>`;
   if(s.type==="f2") s.gs.forEach(g=>{ if(answers["f2_"+g.id+"_fim"]==null) GAMES[g.id](document.getElementById("game_"+g.id), ()=>gameDone(g.id,"completou")); });
@@ -940,6 +988,67 @@ function setRef(i){ answers.f2_olfato_referencia=REFS[i]; click(); document.quer
 function toggleCombo(i){ const m=S[idx].mt, o=m.opts[i], a=(Array.isArray(answers[m.id])?answers[m.id]:[]).slice(), p=a.indexOf(o); p>=0?a.splice(p,1):a.push(o); answers[m.id]=a; click(); rr(); }
 function toggleMulti(i){ const s=S[idx], o=s.opts[i], a=(Array.isArray(answers[s.id])?answers[s.id]:[]).slice(), p=a.indexOf(o); p>=0?a.splice(p,1):a.push(o); answers[s.id]=a; click(); rr(); }
 function toggleF1p(fi,oi){ const k="f1_"+FASE1[fi].id, o=FASE1[fi].o[oi], a=(Array.isArray(answers[k])?answers[k]:[]).slice(), p=a.indexOf(o); p>=0?a.splice(p,1):a.push(o); answers[k]=a; click(); rr(); }
+/* ===== telas em par: duas perguntas, sem botão Próximo ===== */
+let parSubiu=null;
+function parAtivo(s){ return s.itens.find(it=>!isDone(it))||null; }
+function parItem(it, ativa){
+  if(it.type==="nota") return `<div class="qnum">Pergunta ${it.num}</div><h2>${esc(it.title)}</h2>${scale(it.id, answers[it.id], it.legend, ativa?"parNota":"void")}`;
+  if(it.opts) return `<div class="qnum">Pergunta ${it.num}</div><h2>${esc(it.title)}</h2>${it.sub?`<p class="sub">${esc(it.sub)}</p>`:""}
+    <div class="opts">${it.opts.map((o,i)=>`<button class="opt ${answers[it.id]===o?"sel":""}" ${ativa?`onclick="parOpt(${i})"`:'tabindex="-1"'}><span class="k">${L(i)}</span><span>${esc(o)}</span></button>`).join("")}</div>`;
+  const f=it.f, sel=Array.isArray(answers[it.id])?answers[it.id]:[];
+  return `<div class="f1q"><div class="qnum">Pergunta ${it.num}</div><span class="chip" style="background:${f.cor}">${esc(f.s)}</span>
+    <h2>${esc(f.q)}</h2><p class="sub">Escolha a que mais combina com você.</p>
+    <div class="fotos">${f.o.map((o,oi)=>`<div class="fcard ${sel.includes(o)?"sel":""}" role="button" tabindex="${ativa?0:-1}" style="--fc:${f.cor}" aria-label="${esc(o)}"
+       onclick="${ativa?`parF1(${it.fi},${oi})`:""}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}">
+       <span class="fsem" aria-hidden="true">${F1ICO[f.id][oi]}</span>
+       <img src="${f1foto(f.id,oi)}" alt="" loading="lazy" onerror="this.remove()">
+       ${f.id==="audicao"?`<button class="ouvir" type="button" onclick="event.stopPropagation();tocarSom('${F1SOM[oi]}',this)">▶ ouvir</button>`:""}
+       <span class="fnome">${esc(o)}</span></div>`).join("")}</div></div>`;
+}
+function parResp(k,v){
+  answers[k]=v; click(); pararSom();
+  const s=S[idx], el=document.querySelector(".psub.ativa");
+  if(el) el.classList.add("sai");
+  const prox=parAtivo(s);
+  if(prox){ salvaParcial(); parSubiu=prox.id; }
+  setTimeout(()=>{ if(isDone(s)) next(); else { render(); window.scrollTo({top:0,behavior:"smooth"}); } }, 360);
+}
+function parNota(k,v){ parResp(k,v); }
+function parOpt(i){ const a=parAtivo(S[idx]); if(a&&a.opts) parResp(a.id,a.opts[i]); }
+function parF1(fi,oi){ parResp("f1_"+FASE1[fi].id, [FASE1[fi].o[oi]]); }
+
+/* salva a cada pergunta respondida: a planilha mostra até onde a pessoa chegou, mesmo se ela parar no meio */
+function salvaParcial(){ if(cur!=="app"&&cur!=="reality") return; const s=S[idx]||{}; if(!s.id&&!s.type) return;
+  const a=s.type==="par"?parAtivo(s):null;
+  const onde="tela "+(idx+1)+" de "+S.length+" · "+(a?("pergunta "+a.num):(s.title||s.block||s.id||s.type));
+  enviar({pesquisa:cur, versao:VERSAO, parcial:true, parou_na_trava:onde, parou_em:onde, quando:new Date().toISOString(), respostas:answers}); }
+
+/* ===== sons criados no próprio site (mar, música ao vivo, chuva, silêncio) ===== */
+let somAtual=null;
+function pararSom(){ if(!somAtual) return; try{ somAtual.parar(); }catch(e){} somAtual=null; document.querySelectorAll(".ouvir.tocando").forEach(b=>{b.classList.remove("tocando");b.textContent="▶ ouvir";}); }
+function ruido(ctx,seg,tipo){ const n=ctx.sampleRate*seg, b=ctx.createBuffer(1,n,ctx.sampleRate), d=b.getChannelData(0); let ult=0;
+  for(let i=0;i<n;i++){ const w=Math.random()*2-1; if(tipo==="marrom"){ ult=(ult+0.02*w)/1.02; d[i]=ult*3.5; } else d[i]=w; } return b; }
+function cordaViolao(ctx,freq,quando,dest){ const sr=ctx.sampleRate, n=Math.floor(sr*2.2), b=ctx.createBuffer(1,n,sr), d=b.getChannelData(0), p=Math.round(sr/freq);
+  for(let i=0;i<p;i++) d[i]=Math.random()*2-1; for(let i=p;i<n;i++) d[i]=0.996*0.5*(d[i-p]+d[i-p+1]);
+  const src=ctx.createBufferSource(); src.buffer=b; const g=ctx.createGain(); g.gain.value=.35; src.connect(g).connect(dest); src.start(quando); return src; }
+function tocarSom(qual,btn){
+  const era=btn.classList.contains("tocando"); pararSom(); if(era) return;
+  let ctx; try{ ac=ac||new (window.AudioContext||window.webkitAudioContext)(); ctx=ac; if(ctx.state==="suspended") ctx.resume(); }catch(e){ return; }
+  const t0=ctx.currentTime, dur=5, mestre=ctx.createGain(); mestre.gain.setValueAtTime(0,t0); mestre.gain.linearRampToValueAtTime(.9,t0+.4); mestre.gain.setValueAtTime(.9,t0+dur-.6); mestre.gain.linearRampToValueAtTime(0,t0+dur); mestre.connect(ctx.destination);
+  const fontes=[];
+  if(qual==="mar"){ const s=ctx.createBufferSource(); s.buffer=ruido(ctx,dur,"marrom"); const lp=ctx.createBiquadFilter(); lp.type="lowpass"; lp.frequency.value=700; const g=ctx.createGain();
+    g.gain.setValueAtTime(.15,t0); [0,2.4].forEach(o=>{ g.gain.linearRampToValueAtTime(1,t0+o+1.1); g.gain.linearRampToValueAtTime(.18,t0+o+2.4); });
+    s.connect(lp).connect(g).connect(mestre); s.start(t0); fontes.push(s); }
+  if(qual==="chuva"){ const s=ctx.createBufferSource(); s.buffer=ruido(ctx,dur,"branco"); const hp=ctx.createBiquadFilter(); hp.type="bandpass"; hp.frequency.value=2600; hp.Q.value=.5; const g=ctx.createGain(); g.gain.value=.35;
+    s.connect(hp).connect(g).connect(mestre); s.start(t0); fontes.push(s);
+    for(let i=0;i<70;i++){ const o=ctx.createOscillator(), gg=ctx.createGain(), q=t0+Math.random()*dur; o.frequency.value=1800+Math.random()*2600; gg.gain.setValueAtTime(0,q); gg.gain.linearRampToValueAtTime(.06,q+.003); gg.gain.exponentialRampToValueAtTime(.0001,q+.05); o.connect(gg).connect(mestre); o.start(q); o.stop(q+.06); fontes.push(o); } }
+  if(qual==="musica"){ const pub=ctx.createBufferSource(); pub.buffer=ruido(ctx,dur,"marrom"); const bp=ctx.createBiquadFilter(); bp.type="bandpass"; bp.frequency.value=500; const gp=ctx.createGain(); gp.gain.value=.25; pub.connect(bp).connect(gp).connect(mestre); pub.start(t0); fontes.push(pub);
+    const acordes=[[196,247,294,392],[220,262,330,440],[175,220,262,349],[196,247,294,392]];
+    acordes.forEach((ac2,ai)=>ac2.forEach((f,ni)=>fontes.push(cordaViolao(ctx,f,t0+.3+ai*1.1+ni*.05,mestre)))); }
+  btn.classList.add("tocando"); btn.textContent = qual==="silencio" ? "🤫 silêncio…" : "■ parar";
+  const tm=setTimeout(pararSom,dur*1000);
+  somAtual={parar(){ clearTimeout(tm); fontes.forEach(f=>{try{f.stop();}catch(e){}}); try{ mestre.disconnect(); }catch(e){} }};
+}
 function rr(){ const y=window.scrollY; render(); window.scrollTo({top:y}); }
 function setA(k,v){ answers[k]=v; click(); rr(); }
 function setN(k,v){ answers[k]=v; click(); rr(); const t=S[idx]; if(t.type==="nota" || (cur==="app" && t.type==="f2" && isDone(t))) setTimeout(next,320); }
@@ -1005,9 +1114,9 @@ function tryNext(){
   }
   next();
 }
-function pular(){ const s=S[idx]; if(!isDone(s)) answers[s.id]="pulou"; click(); next(); }
-function next(){ if(idx<S.length-1){ leaveStep(); refazAsk=null; travaConvite=false; idx++; render(); window.scrollTo({top:0,behavior:"smooth"}); } }
-function prev(){ leaveStep(); refazAsk=null; travaConvite=false; revelaFase=0; if(idx>0){ idx--; render(); window.scrollTo({top:0}); } else goEscolha(); }
+function pular(){ const s=S[idx]; if(s.type==="par"){ const a=parAtivo(s); if(a) return parResp(a.id,"pulou"); return next(); } if(!isDone(s)) answers[s.id]="pulou"; click(); next(); }
+function next(){ if(idx<S.length-1){ leaveStep(); salvaParcial(); refazAsk=null; travaConvite=false; idx++; render(); window.scrollTo({top:0,behavior:"smooth"}); } }
+function prev(){ const sp=S[idx]; if(view!=="escolha"&&sp&&sp.type==="par"){ const feitos=sp.itens.filter(isDone); if(feitos.length){ delete answers[feitos[feitos.length-1].id]; render(); return; } } leaveStep(); refazAsk=null; travaConvite=false; revelaFase=0; if(idx>0){ idx--; render(); window.scrollTo({top:0}); } else goEscolha(); }
 function goEscolha(){ leaveStep(); view="escolha"; render(); window.scrollTo({top:0}); }
 
 /* ============ ENVIO (respostas e contato sempre separados) ============ */
@@ -1127,9 +1236,9 @@ const tmin = s => s==null?"-":Math.floor(s/60)+" min "+(s%60)+" s";
 function linhas(){
   const out=[];
   ["reality","app"].forEach(f=>{
-    if(!done[f] && !FLOWS[f].some(s=>s.num && isDone(s))) return;
+    if(!done[f] && !FLOWS[f].flatMap(s=>s.type==="par"?s.itens:[s]).some(s=>s.num && isDone(s))) return;
     out.push(""); out.push(f==="reality"?"PESQUISA DO REALITY":"PESQUISA DO APP");
-    FLOWS[f].filter(s=>s.num).forEach(s=>{
+    FLOWS[f].flatMap(s=>s.type==="par"?s.itens:[s]).filter(s=>s.num).forEach(s=>{
       if(s.type==="cast") out.push("Perfil "+(s.i+1)+" ("+s.c.sentido+"): "+(answers[s.id+"_foto"]||"-")+" / "+(answers[s.id+"_nome"]||"-")+" / "+(answers[s.id+"_tipo"]||"-"));
       else if(s.type==="vilao") out.push("Vilão: "+(answers.vilao_foto||"-")+" / "+(answers.vilao_nome||"-")+" / "+(answers.vilao_tipo||"-"));
       else if(s.type==="elenco") out.push("Elenco: "+(answers.elenco||"-"));
