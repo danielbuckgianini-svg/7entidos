@@ -976,7 +976,11 @@ function tryNext(){
   next();
 }
 function pular(){ const s=S[idx]; if(!isDone(s)) answers[s.id]="pulou"; click(); next(); }
-function next(){ if(idx<S.length-1){ leaveStep(); refazAsk=null; travaConvite=false; idx++; render(); window.scrollTo({top:0,behavior:"smooth"}); } }
+/* salva a cada pergunta respondida: mostra na planilha até onde a pessoa chegou, mesmo se ela parar no meio */
+function salvaParcial(){ if(cur!=="app"&&cur!=="reality") return; const s=S[idx]||{}; if(!s.id&&!s.type) return;
+  const onde="tela "+(idx+1)+" de "+S.length+" · "+(s.title||s.block||s.id||s.type);
+  enviar({pesquisa:cur, versao:VERSAO, parcial:true, parou_na_trava:onde, parou_em:onde, quando:new Date().toISOString(), respostas:answers}); }
+function next(){ if(idx<S.length-1){ leaveStep(); salvaParcial(); refazAsk=null; travaConvite=false; idx++; render(); window.scrollTo({top:0,behavior:"smooth"}); } }
 function prev(){ leaveStep(); refazAsk=null; travaConvite=false; revelaFase=0; if(idx>0){ idx--; render(); window.scrollTo({top:0}); } else goEscolha(); }
 function goEscolha(){ leaveStep(); view="escolha"; render(); window.scrollTo({top:0}); }
 
