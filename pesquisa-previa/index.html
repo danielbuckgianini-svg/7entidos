@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pesquisa 7entidos · A Casa dos 7 Sentidos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Special+Elite&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{--bg:#100e12;--panel:#1c1920;--paper:#f3ead7;--ink:#231f1a;--tape:#e9d48a;--red:#e2483d;--muted:#a69fae;--line:#2e2a33;--accent:#f5c542}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:radial-gradient(ellipse 70% 55% at 50% 0%,rgba(255,236,190,.14),transparent 70%),var(--bg);color:#f4f1f6;font-family:Inter,system-ui,sans-serif;font-size:21px;line-height:1.45;min-height:100vh}
+.wrap{max-width:760px;margin:0 auto;padding:18px 18px 60px}
+.top{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.logo-top{font-family:"Bebas Neue";font-size:34px;letter-spacing:2px;margin-left:auto;line-height:1}
+.logo-top i,.logo i{font-style:normal;color:var(--accent)}
+.progress{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin:6px 0 4px}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--red),var(--accent));transition:width .4s}
+/* trilha por blocos */
+.trail{display:flex;align-items:flex-end;gap:4px;margin:4px 0 2px;padding-top:30px;position:relative}
+.tb{flex:1;position:relative;text-align:center}
+.tb .bar{height:10px;border-radius:99px;background:#3a3540}
+.tb.done .bar{background:linear-gradient(90deg,var(--red),var(--accent))}
+.tb.now .bar{background:repeating-linear-gradient(90deg,var(--accent) 0 8px,#3a3540 8px 14px)}
+.tb small{display:block;font-size:11px;color:var(--muted);font-weight:800;margin-top:4px;line-height:1.1}
+.tb.now small{color:var(--accent)}
+.tlock{font-size:13px;flex:none;margin-bottom:16px;opacity:.85}
+.tlock.open{opacity:.35}
+.walker{position:absolute;top:-30px;font-size:26px;left:50%;transform:translateX(-50%)}
+.tend{flex:none;text-align:center;font-size:28px;line-height:1;margin-left:4px}
+.tend small{display:block;font-size:10px;color:var(--accent);font-weight:800}
+.meta{color:var(--muted);font-size:15px;margin:6px 0 18px}
+.scene{animation:in .45s ease}
+@keyframes in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.fade{animation:fd .35s ease}
+@keyframes fd{from{opacity:0}to{opacity:1}}
+.qnum{font-family:"Bebas Neue";font-size:22px;letter-spacing:2px;color:var(--accent)}
+h1{font-family:"Bebas Neue";font-weight:400;font-size:54px;line-height:.95;margin:4px 0 10px;letter-spacing:1px}
+h2{font-family:"Bebas Neue";font-weight:400;font-size:42px;line-height:1;margin:2px 0 10px;letter-spacing:1px}
+h3{font-family:"Bebas Neue";font-weight:400;font-size:30px;margin:22px 0 8px;letter-spacing:1px}
+.sub{color:var(--accent);font-size:20px;font-weight:600;margin:0 0 18px}
+.opts{display:grid;gap:12px}
+.opt{all:unset;cursor:pointer;display:flex;align-items:center;gap:14px;background:var(--panel);border:2px solid var(--line);border-radius:14px;padding:16px 18px;font-size:21px;font-weight:600;transition:transform .15s,border-color .15s,background .15s}
+.opt:hover,.opt:focus-visible{border-color:var(--accent);transform:translateY(-2px)}
+.opt.sel{border-color:var(--accent);background:#2b2410}
+.opt .k{font-family:"Bebas Neue";font-size:26px;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#2a2630;color:var(--accent);flex:none}
+.opt small{display:block;font-weight:400;color:var(--muted);font-size:16px;margin-top:2px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row2 .opt{justify-content:center;text-align:center;padding:14px 8px}
+.ficha{background:var(--paper);color:var(--ink);border-radius:6px;padding:22px 20px 20px;margin:8px 0 18px;font-family:"Special Elite",monospace;position:relative;transform:rotate(-.5deg);box-shadow:0 18px 40px rgba(0,0,0,.45)}
+.ficha:before,.ficha:after{content:"";position:absolute;top:-12px;width:90px;height:26px;background:var(--tape);opacity:.85}
+.ficha:before{left:22px;transform:rotate(-6deg)}.ficha:after{right:22px;transform:rotate(5deg)}
+.ficha .nm{font-family:"Bebas Neue";font-size:40px;line-height:1;letter-spacing:1px}
+.ficha p{margin:10px 0 0;font-size:18px;line-height:1.5}
+.stamp{position:absolute;right:14px;bottom:10px;font-family:"Bebas Neue";color:var(--red);border:3px solid var(--red);padding:0 8px;font-size:22px;transform:rotate(-8deg);opacity:.85}
+.chip{display:inline-block;font-size:15px;padding:3px 10px;border-radius:99px;font-weight:800;color:#141216;margin-right:6px;font-family:Inter}
+.photos{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:460px;margin:0 auto}
+.photos .ph:last-child:nth-child(3n+1){grid-column:2}
+.ph{all:unset;cursor:pointer;background:#fff;padding:6px 6px 22px;border-radius:3px;box-shadow:0 4px 10px rgba(0,0,0,.4);position:relative;transition:transform .15s}
+.photos .ph:nth-child(odd){transform:rotate(-2deg)}.photos .ph:nth-child(even){transform:rotate(2deg)}
+.photos .ph:hover{transform:rotate(0) scale(1.04)}
+.ph.sel{outline:4px solid var(--accent)}
+.ph .img{aspect-ratio:3/4;display:grid;place-items:center;background:#3a3540;overflow:hidden}
+.ph .img svg{width:60%;height:60%}
+.ph .img img{width:100%;height:100%;object-fit:cover}
+.ph span{position:absolute;left:0;right:0;bottom:3px;text-align:center;font-family:"Special Elite";font-size:13px;color:#333}
+.pick{display:flex;gap:16px;align-items:center;margin:4px 0 18px}
+.pick .ph{width:110px;flex:none;cursor:default}
+.btn{all:unset;cursor:pointer;display:inline-block;background:var(--accent);color:#141216;font-weight:800;padding:16px 26px;border-radius:12px;font-size:21px;text-align:center}
+.btn.ghost{background:transparent;color:#fff;border:2px solid var(--line)}
+.btn:focus-visible{outline:3px solid #fff}
+.err{color:#ff8a80;font-size:17px;margin-top:10px;min-height:22px}
+.nav{display:flex;justify-content:space-between;align-items:center;margin-top:22px;gap:12px}
+.back{all:unset;cursor:pointer;color:var(--muted);font-size:17px;padding:8px}
+.back:hover,.skip:hover{color:#fff}
+.skip{all:unset;cursor:pointer;color:var(--muted);font-size:17px;text-decoration:underline;padding:8px}
+.center{text-align:center}
+.big-emoji{font-size:0;width:78px;height:78px;margin:6px auto 10px;border-radius:50%;position:relative;background:conic-gradient(#f5c542,#4aa8ff,#ff8a3d,#ff5a6e,#5ccf8a,#b48cff,#3fd6d0,#f5c542);-webkit-mask:radial-gradient(circle,transparent 54%,#000 56%);mask:radial-gradient(circle,transparent 54%,#000 56%);filter:drop-shadow(0 0 14px rgba(245,197,66,.55));animation:anel 7s linear infinite}
+@keyframes anel{to{transform:rotate(360deg)}}
+.card-dark{background:var(--panel);border:2px solid var(--line);border-radius:14px;padding:18px}
+.stack{display:grid;gap:12px;margin:18px 0}
+.seal{display:flex;gap:12px;align-items:center;background:#000;color:var(--accent);border:2px solid var(--accent);border-radius:14px;padding:8px 14px;flex:1}
+.seal b{font-size:17px}
+/* selo anônimo piscando em preto e amarelo */
+.seal-pisca{animation:selo 1.2s steps(1,end) infinite}
+@keyframes selo{0%{background:#000;color:var(--accent);border-color:var(--accent)}50%{background:var(--accent);color:#000;border-color:#000}100%{background:#000;color:var(--accent);border-color:var(--accent)}}
+.blink{animation:blink 1.6s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.55}}
+.host{display:flex;gap:14px;align-items:center;background:var(--panel);border:2px solid var(--line);border-radius:16px;padding:10px;overflow-wrap:anywhere}
+.host.sel{border-color:var(--accent);background:#2b2410}
+.hosts{display:grid;gap:14px}
+.logo{font-family:"Bebas Neue";font-size:56px;letter-spacing:3px;line-height:1}
+a{color:var(--accent)}
+.flowtxt{background:#141216;border-radius:12px;padding:16px;margin:10px 0 14px;font-size:19px;text-align:left}
+.video{display:flex;gap:14px;align-items:center;background:#000;border:2px solid var(--line);border-radius:14px;padding:16px;margin:16px 0 6px;text-align:left}
+.vplay{width:56px;height:56px;border-radius:50%;background:var(--accent);color:#141216;display:grid;place-items:center;font-size:24px;flex:none}
+.video small{display:block;color:var(--muted);font-size:15px}
+.fala{font-style:italic;color:#fff;font-size:18px;margin-top:8px}
+.share{margin:18px 0}
+.share p{margin:6px 0 14px;font-size:18px;color:var(--muted)}
+.share .row2 .btn{padding:14px 10px;font-size:19px}
+.abert-video{width:min(380px,100%);max-height:74vh;border-radius:16px;display:block;margin:0 auto;background:#000}
+.abert-ph{text-decoration:none;color:#fff;display:grid;place-items:center;width:min(340px,88vw);aspect-ratio:9/16;max-height:70vh;margin:0 auto;border-radius:16px;background:radial-gradient(circle at 50% 40%,#2b2410,#000);border:2px solid var(--line)}
+.abert-ph .vplay{margin:0 auto 14px;width:84px;height:84px;font-size:36px}
+.pesq{all:unset;cursor:pointer;display:block;border-radius:18px;padding:20px;border:2px solid var(--line);background:linear-gradient(135deg,#2b2410,#1c1920);transition:transform .15s,border-color .15s}
+.pesq:hover,.pesq:focus-visible{transform:translateY(-3px);border-color:var(--accent)}
+.pesq .tag{display:inline-block;background:var(--red);color:#fff;font-weight:800;font-size:14px;padding:4px 10px;border-radius:99px;margin-bottom:8px;letter-spacing:.5px}
+.pesq b{display:block;font-family:"Bebas Neue";font-weight:400;font-size:38px;line-height:1;letter-spacing:1px}
+.pesq p{margin:8px 0 0;font-size:18px;color:#d9d3df}
+.pesq.lock{background:var(--panel);opacity:.75}
+.elenco{display:grid;gap:12px}
+.elrow{display:grid;grid-template-columns:70px 1fr;gap:12px;align-items:center;background:var(--panel);border:2px solid var(--line);border-radius:14px;padding:10px}
+.elrow .ph{width:70px;padding:4px 4px 4px;cursor:default}
+.elrow .row2 .opt{font-size:17px;padding:10px 6px}
+.elrow b{font-size:19px}
+.room{border-radius:20px;padding:22px;border:3px solid;margin-bottom:16px;text-align:center}
+.room .rn{font-family:"Bebas Neue";font-size:44px;line-height:1;letter-spacing:1px}
+.etapa{display:inline-block;font-size:14px;font-weight:800;color:var(--muted);letter-spacing:1px}
+.redo{margin-top:16px;padding-top:12px;border-top:1px dashed var(--line)}
+.done-tag{display:inline-block;background:#16251b;border:2px solid #3fae6a;color:#9be7b0;font-weight:800;padding:8px 14px;border-radius:10px}
+input.txt{all:unset;box-sizing:border-box;width:100%;background:var(--panel);border:2px solid var(--line);border-radius:12px;padding:16px;font-size:21px}
+input.txt:focus{border-color:var(--accent)}
+.scale{display:grid;grid-template-columns:repeat(11,1fr);gap:6px}
+.scale .opt{justify-content:center;padding:14px 0;font-family:"Bebas Neue";font-size:28px}
+.scale-legend{display:flex;justify-content:space-between;color:var(--muted);font-size:14px;margin-top:6px}
+.gamebox{background:#141216;border:2px solid var(--line);border-radius:16px;padding:16px;margin:10px 0}
+.gtip{margin:0 0 12px;font-weight:600}
+.ggrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:360px}
+.ggrid.g3{grid-template-columns:repeat(3,1fr)}
+.ggrid.g2{grid-template-columns:repeat(2,1fr);max-width:none}
+.gcell{all:unset;cursor:pointer;aspect-ratio:1;border-radius:10px}
+.gcard{all:unset;cursor:pointer;aspect-ratio:1;border-radius:12px;background:var(--panel);border:2px solid var(--line);display:grid;place-items:center;font-size:38px}
+.bal{position:relative;height:40px;background:var(--panel);border-radius:99px;border:2px solid var(--line)}
+.bal .zone{position:absolute;left:41%;width:18%;top:0;bottom:0;background:rgba(245,197,66,.25);border-left:2px solid var(--accent);border-right:2px solid var(--accent)}
+.bal .dot{position:absolute;top:6px;width:24px;height:24px;margin-left:-12px;border-radius:50%;background:#b48cff}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chips .opt{padding:12px 16px;font-size:19px}
+.chips.mini{gap:8px}
+.chips.mini .opt{padding:8px 12px;font-size:16px;border-radius:10px;gap:6px}
+.f1q{margin:0 0 18px;padding-bottom:14px;border-bottom:1px dashed var(--line)}
+.f1q h3{margin:6px 0 2px;font-family:Inter;font-size:20px;font-weight:800;letter-spacing:0}
+.f1q small{display:block;color:var(--muted);font-size:14px;margin-bottom:8px}
+.gsec{margin:0 0 20px}
+.round{margin-bottom:16px}
+.round .gtip{margin-bottom:8px}
+.gcell.ok{outline:4px solid #3fae6a;outline-offset:-4px}
+.gcell.bad{opacity:.3}
+.rres{font-size:15px;font-weight:800;margin-top:6px;min-height:20px}
+.notarow{display:grid;grid-template-columns:84px 1fr;gap:14px;align-items:center;margin:14px 0;background:var(--panel);border:2px solid var(--line);border-radius:14px;padding:12px}
+.notarow .scale{grid-template-columns:repeat(6,1fr)}
+.gimg{width:84px;height:84px;border-radius:16px;display:grid;place-items:center;font-size:42px;border:3px solid}
+/* versos das cartas, estilo pintura (provisório até entrarem as cartas do Museu) */
+.gcard.pint{border:3px solid #f3ead7;box-shadow:inset 0 0 0 4px #231f1a}
+.gcard.p0{background:radial-gradient(circle at 70% 25%,#f5c542 0 10%,transparent 11%),repeating-radial-gradient(circle at 35% 70%,#1d3b8a 0 5px,#3a6fd8 5px 9px,#7fa6ff 9px 11px)}
+.gcard.p1{background:radial-gradient(#ff8a3d 28%,transparent 31%) 0 0/9px 9px,radial-gradient(#e2483d 22%,transparent 25%) 4px 4px/9px 9px,#5ccf8a}
+.gcard.p2{background:linear-gradient(#231f1a,#231f1a) 0 58%/100% 5px no-repeat,linear-gradient(#231f1a,#231f1a) 55% 0/5px 100% no-repeat,conic-gradient(from 90deg at 55% 58%,#f3ead7 0 25%,#4aa8ff 0 50%,#f5c542 0 75%,#e2483d 0)}
+/* mini jogos compactos: nenhuma tela precisa rolar */
+.f2h{font-size:30px!important;margin:0 0 6px!important}
+.gamebox{padding:12px}
+.rounds3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.rounds3 .round{margin:0}
+.rounds3 .ggrid{gap:3px;max-width:none}
+.rounds3 .gcell{border-radius:4px}
+.rounds3 .rlab{font-family:"Bebas Neue";font-size:18px;letter-spacing:1px;color:var(--accent);margin-bottom:4px}
+.rounds3 .rres{font-size:13px}
+.sround{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:8px}
+.sround .rlab{font-weight:800;font-size:15px;min-width:74px}
+.sround .rres{margin:0;font-size:14px}
+.gcard{font-size:30px}
+.ggrid.g3{max-width:250px}
+.olfwrap{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start}
+.olfwrap .refq{flex:1;min-width:200px}
+.refq h3{font-family:Inter;font-size:18px;font-weight:800;letter-spacing:0;margin:0 0 8px}
+.chip.pisca{animation:chipPisca 1s steps(1,end) infinite}
+@keyframes chipPisca{0%{background:var(--c);color:#141216}50%{background:#000;color:var(--c)}100%{background:var(--c);color:#141216}}
+/* blocos de preço */
+.planos{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;align-items:stretch}
+.plano{background:var(--panel);border:2px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.plano.dest{border-color:var(--accent);background:linear-gradient(180deg,#2b2410,#1c1920)}
+.plano .pn{font-family:"Bebas Neue";font-size:26px;letter-spacing:1px;color:var(--muted)}
+.plano .pp{font-family:"Bebas Neue";font-size:40px;line-height:1}
+.plano .pp small{font-family:Inter;font-size:15px;color:var(--muted)}
+.plano ul{margin:0;padding-left:18px;font-size:16px;color:#d9d3df;flex:1}
+.plano .opt{font-size:16px;padding:10px 12px;justify-content:center;text-align:center}
+.grafico{display:grid;gap:10px;margin:14px 0}
+.gbar{display:grid;grid-template-columns:150px 1fr 34px;gap:10px;align-items:center;font-size:16px}
+.gbar .tr{height:22px;background:#2a2630;border-radius:99px;overflow:hidden}
+.gbar .tr i{display:block;height:100%;border-radius:99px}
+.gbar b{font-family:"Bebas Neue";font-size:24px;text-align:right}
+@media (max-width:620px){.planos{grid-template-columns:1fr}.gbar{grid-template-columns:110px 1fr 30px;font-size:14px}}
+@media (prefers-reduced-motion:reduce){.chip.pisca{animation:none}}
+.feed{margin-top:20px}
+.opt.zap{background:linear-gradient(#2fe27a,#1fae55);border-color:#25d366;color:#04230f;font-weight:800}
+.opt.ciente{width:100%;justify-content:flex-start}
+.lado{display:grid;grid-template-columns:1.3fr 1fr;gap:14px;margin:18px 0}
+@media (max-width:620px){.lado{grid-template-columns:1fr}}
+.eagora{display:flex;flex-direction:column;justify-content:center}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;font-style:normal}
+.flowvid{margin-top:4px}.vidph{margin-top:10px;aspect-ratio:16/9;border-radius:12px;display:grid;place-items:center;text-align:center;color:var(--muted);background:linear-gradient(135deg,#2a1d55,#0f2d5c)}
+.fontes{font-size:14px;color:var(--muted);margin:12px 0 0;line-height:1.5}.fontes b{color:#f4f1f6}
+.feed h3{margin:16px 0 8px}
+@media (prefers-reduced-motion:reduce){.blink,.scene,.fade{animation:none}}
+@media (max-width:520px){h1{font-size:44px}h2{font-size:34px}.scale{grid-template-columns:repeat(6,1fr)}.seal b{font-size:15px}.tb small{font-size:9px}}
+.popup-bg{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.82);display:flex;align-items:center;justify-content:center;padding:16px}
+.popup{position:relative;width:min(380px,100%);background:var(--panel);border:2px solid var(--accent);border-radius:20px;padding:14px;box-shadow:0 30px 80px rgba(0,0,0,.7)}
+.popup .abert-video{width:100%;max-height:72vh;border-radius:14px;display:block;background:#000}
+.popup-x{position:absolute;top:-14px;right:-14px;width:40px;height:40px;border-radius:50%;border:2px solid var(--accent);background:#000;color:var(--accent);font-size:18px;cursor:pointer;z-index:2}
+.anon-exp{display:flex;gap:14px;align-items:center;margin:0 0 22px;padding:16px 18px;border-radius:18px;background:linear-gradient(135deg,rgba(245,197,66,.16),rgba(28,25,32,.9) 55%);border:1px solid rgba(245,197,66,.45);box-shadow:0 18px 36px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.12);font-size:18px}
+.anon-exp .anon-ic{flex:0 0 52px;height:52px;border-radius:16px;display:grid;place-items:center;font-size:24px;background:radial-gradient(circle at 35% 30%,#ffe08a,#c8901e 70%);box-shadow:0 8px 18px rgba(0,0,0,.5)}
+.anon-exp b{display:block;color:var(--accent);font-size:19px}.anon-exp span{color:#d9d3df;font-size:16px}
+.fluxo{display:grid;gap:0;margin:8px 0 18px}
+.passo{position:relative;padding-left:62px}
+.pnum{position:absolute;left:0;top:18px;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-family:"Bebas Neue";font-size:30px;color:#141216;background:linear-gradient(135deg,var(--accent),#e2483d);box-shadow:0 0 0 4px rgba(245,197,66,.18),0 10px 20px rgba(0,0,0,.5)}
+.fio{position:relative;height:54px;padding-left:62px;display:flex;align-items:center}
+.fio i{position:absolute;left:21px;top:-6px;bottom:-6px;width:4px;border-radius:4px;background:linear-gradient(var(--accent),#e2483d);box-shadow:0 0 12px rgba(245,197,66,.6)}
+.fio span{font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.passo .pesq{width:100%}
+.guard{background:linear-gradient(135deg,#2b2410,#1c1920);border:2px solid var(--accent);border-radius:16px;padding:16px;margin:14px 0}
+</style>
+</head>
+<body>
+<div class="wrap" id="wrap">
+  <div class="top">
+    <div class="seal seal-pisca" id="anon"><div style="font-size:24px">🛡️</div><b>Pesquisa 100% anônima, ninguém vai saber quem respondeu</b></div>
+    <div class="logo-top"><i>7</i>ENTIDOS</div>
+  </div>
+  <div id="prog" style="display:none">
+    <div class="trail" id="trail" aria-hidden="true"></div>
+    <div class="meta" id="blockName"></div>
+  </div>
+  <main id="stage"></main>
+</div>
+<script src="config.js?v=robo100"></script>
+<script>
+/* ===== CONFIGURAÇÃO ===== */
+const ENDPOINT = (window.PESQUISA_URL||"");  /* script da planilha do Google (só funciona no site 7entidos.com.br) */
+const VERSAO = "v5";
+const LINK = "https://7entidos.com.br/pesquisa";
+const SHARE_MSG = "Respondi a pesquisa do reality A Casa dos 7 Sentidos, do 7entidos, um app santista (013). É anônima, é só tocar nas respostas. Quem responde ganha a temporada 2 de graça, mas são só 100 vagas. Responde por esse link e nós dois garantimos o acesso: " + LINK;
+
+/* Tela 1: vídeo de abertura. Quando o arquivo .mp4 for enviado junto com a página, o nome dele vai em video (ex.: "abertura.mp4"). */
+const ABERTURA = {titulo:"Abertura 7entidos — Pesquisa 013", video:"abertura.mp4", drive:"https://drive.google.com/file/d/1pyuRO69teyrTLF0yEOoUmLl2-u3UdiQx/view"};
+
+/* Vídeos: coloque o nome do arquivo (ex.: "abertura.mp4") quando ele for enviado junto com a página. */
+const HOSTS = [
+  {nome:"Apresentador 1", foto:"", video:"abertura.mp4", drive:"https://drive.google.com/file/d/1pyuRO69teyrTLF0yEOoUmLl2-u3UdiQx/view", fala:""},
+  {nome:"Brisa", foto:"", video:"", drive:"", fala:"Esperamos que você esteja gostando e sem dúvidas. Eu sou a Brisa, uma das concorrentes para você escolher. Escolha o seu parceiro."},
+  {nome:"Apresentador 3", foto:"", video:"", drive:"", fala:"Chame quem você gosta para montar essa casa com a gente."}
+];
+const FLOW_AUDIO = "";
+const FLOW_VIDEO = ""; /* vídeo explicativo sobre o Flow: coloque o nome do arquivo quando ficar pronto */
+let verGraf=false; /* áudio curto sobre o Mihaly */
+
+/* 7 fotos do casting. genero: "F" ou "M" (decide os nomes oferecidos). src: arquivo da foto. */
+const FOTOS = [
+  {id:"Foto 1", genero:"F", src:""},
+  {id:"Foto 2", genero:"M", src:"rafa.jpg"},
+  {id:"Foto 3", genero:"F", src:""},
+  {id:"Foto 4", genero:"M", src:"tonho.jpg"},
+  {id:"Foto 5", genero:"F", src:""},
+  {id:"Foto 6", genero:"M", src:"beto.jpg"},
+  {id:"Foto 7", genero:"F", src:""}
+];
+const SIL = '<svg viewBox="0 0 60 70" aria-hidden="true"><circle cx="30" cy="22" r="13" fill="#8c8495"/><path d="M6 70c0-15 11-25 24-25s24 10 24 25z" fill="#8c8495"/></svg>';
+const SIL_KID = '<svg viewBox="0 0 60 70" aria-hidden="true"><circle cx="30" cy="30" r="11" fill="#8c8495"/><path d="M12 70c0-12 8-20 18-20s18 8 18 20z" fill="#8c8495"/></svg>';
+
+/* ===== DADOS DO REALITY ===== */
+const CAST = [
+  {id:"p1", fixo:{nome:"Luzia", foto:"livia.jpg"}, sentido:"Visão", cor:"#f5c542", brief:"Sofreu uma injustiça e perdeu o brilho. É forte, mas anda desconfiando de todo mundo. Sonha voltar a enxergar a beleza das coisas.",
+   F:["Luzia","Lúcia","Luana"], M:["Luiz","Lino","Leandro"], tipo:["Perdoa quem errou","Dá o troco na hora certa","Se reconstrói em silêncio"]},
+  {id:"p2", fixo:{nome:"Duda", apelido:"mais conhecida como Luca", foto:"duda.jpg"}, sentido:"Equilíbrio", cor:"#b48cff", brief:"Dança. Estética delicada, parece perfeita, doce e sempre calma. Nunca perde a pose, nem quando tudo desaba.",
+   F:["Duda","Dora","Mei"], M:["Dudu","Bento","Kenji"], tipo:["Doce e gentil","Fria e distante","Sedutora"]},
+  {id:"p3", fixo:{nome:"Yara", foto:"yara.jpg" /* foto da coroa */}, sentido:"Olfato", cor:"#5ccf8a", brief:"Estrangeira. Calma, guarda muitas memórias e acolhe quem chega. Percebe as coisas antes de todo mundo e tem um segredo.",
+   F:["Yara","Ingrid","Selma"], M:["Yuri","Ivan","Sven"], tipo:["Conselheira de todos","Misteriosa: sabe tudo e fala pouco","Divertida, ensina rindo"]},
+  {id:"p4", sentido:"Audição", cor:"#4aa8ff", brief:"Veio do interior e vive de música. Coração grande, se apaixona fácil e sofre do mesmo jeito.",
+   F:["Rafaela","Cacá","Diana"], M:["Rafa","Caio","Davi"], tipo:["Romântico sonhador","Sedutor confiante","Apaixonado que sofre calado"]},
+  {id:"p5", sentido:"Tato", cor:"#ff8a3d", brief:"Inteligente, admirado ou admirada por todos. Não aceita injustiça e, quando fala, a casa escuta.",
+   F:["Toninha","Tati","Dina"], M:["Tonho","Tião","Dinho"], tipo:["Rebelde com causa","Rebelde sem causa","Bate de frente com todos"]},
+  {id:"p6", sentido:"Paladar", cor:"#ff5a6e", brief:"Faz todo mundo rir. Já passou fome; hoje cozinha, ajuda quem precisa e sonha ter um restaurante.",
+   F:["Bete","Zezé","Juju"], M:["Beto","Zeca","Juca"], tipo:["Palhaço que esconde a tristeza","Piadista sem filtro","Desastrado fofo"]}
+];
+const VILAO = {id:"vilao", sentido:"Vilão", cor:"#e2483d", F:["Vera","Val","Vânia"], M:["Vítor","Val","Vicente"],
+  tipo:["Elegante, como Odete Roitman","Fria, como Fátima (Vale Tudo)","Debochada, como Nazaré","Engraçada, como Chayene","Parece mocinha, como Flora e Donatela"]};
+/* Elenco: quem é quem (foto vem do casting) */
+const ELENCO = [
+  {k:"heroi", nome:"Herói", from:"p1"},
+  {k:"vilao", nome:"Vilão", from:"vilao"},
+  {k:"sabio", nome:"Sábio", from:"p3"},
+  {k:"gala", nome:"Galã", from:"p4"},
+  {k:"bobo", nome:"Engraçado", from:"p6"},
+  {k:"inocente", nome:"Inocente", from:null}
+];
+const ROOMS = [
+  {nome:"Sala de estar", s:"Visão", cor:"#f5c542", emoji:"🛋️"},
+  {nome:"Estúdio", s:"Audição", cor:"#4aa8ff", emoji:"🎙️"},
+  {nome:"Ateliê", s:"Tato", cor:"#ff8a3d", emoji:"🎨"},
+  {nome:"Cozinha", s:"Paladar", cor:"#ff5a6e", emoji:"🍳"},
+  {nome:"Jardim", s:"Olfato", cor:"#5ccf8a", emoji:"🌿"},
+  {nome:"Estúdio de dança", s:"Equilíbrio", cor:"#b48cff", emoji:"🩰"},
+  {nome:"Sótão", s:"Noção de corpo", cor:"#3fd6d0", emoji:"🕯️"}
+];
+const TEMAS = ["Astronauta 🚀","Faroeste 🤠","Fundo do mar 🐙","Floresta encantada 🍄","Anos 80 📼","Castelo medieval 🏰","Circo 🎪","Cidade do futuro 🤖","Praia tropical 🌴","Neve e montanha 🏔️","Cinema antigo 🎞️","Selva 🐆"];
+const GANCHOS = ["Uma moradora diz: “Eu conheço ela. Ela só não lembrou ainda.”","Uma foto antiga aparece escondida num quarto","A criança some e é achada no sótão com uma caixa de cartas","A casa racha em dois lados"];
+const PREMIOS = ["Virar o garoto-propaganda do app 7entidos (as vendas começam em 1º de dezembro)","Participar da temporada 2","Virar apresentador da próxima temporada"];
+const TEMPOS = ["Menos de 3 minutos","De 3 a 6 minutos","De 6 a 10 minutos","De 10 a 15 minutos","Mais de 15 minutos"];
+const TEMPO_LIM = [3,6,10,15,Infinity];
+/* Blocos da trilha (o bonequinho anda um bloco por vez até o Hall da Fama) */
+const BLOCOS = ["Casting 1","Casting 2","Elenco","Cômodos","Momentos"];
+
+/* ===== DADOS DO APP (segunda pesquisa) ===== */
+const FASE1 = [
+  {id:"visao", s:"Visão", cor:"#f5c542", q:"O que te faz bem de olhar?", o:["Pôr do sol na praia","Céu estrelado","Um mural colorido de grafite","Fotos antigas de família"]},
+  {id:"audicao", s:"Audição", cor:"#4aa8ff", q:"O que te faz bem ouvir?", o:["Som do mar","Música ao vivo","Chuva no telhado","Silêncio total"]},
+  {id:"tato", s:"Tato", cor:"#ff8a3d", q:"O que te faz bem de sentir na pele?", o:["Areia nos pés","Cobertor macio","Água gelada","Abraço apertado"]},
+  {id:"paladar", s:"Paladar", cor:"#ff5a6e", q:"Que sabor te faz bem?", o:["Comida de vó","Doce de padaria","Fruta fresca","Café passado na hora"]},
+  {id:"olfato", s:"Olfato", cor:"#5ccf8a", q:"Que cheiro te faz bem?", o:["Terra molhada","Pão saindo do forno","Perfume de alguém querido","Cheiro de café"]},
+  {id:"equilibrio", s:"Equilíbrio", cor:"#b48cff", q:"Que movimento te faz bem?", o:["Dançar","Balançar numa rede","Andar de bicicleta","Ficar de pé numa prancha"]},
+  {id:"corpo", s:"Noção de corpo", cor:"#3fd6d0", q:"O que te faz bem no corpo?", o:["Alongar","Correr","Nadar","Deitar e respirar fundo"]}
+];
+const FASE2 = [
+  {id:"visao", s:"Visão", cor:"#f5c542", nome:"Olho de águia", img:"👁️"},
+  {id:"audicao", s:"Audição", cor:"#4aa8ff", nome:"Qual som é mais fino?", img:"👂"},
+  {id:"tato", s:"Tato", cor:"#ff8a3d", nome:"Segure firme", img:"✋"},
+  {id:"paladar", s:"Paladar", cor:"#ff5a6e", nome:"Monte o seu prato", img:"🍽️"},
+  {id:"olfato", s:"Olfato", cor:"#5ccf8a", nome:"Pares de cheiros", img:"👃"},
+  {id:"equilibrio", s:"Equilíbrio", cor:"#b48cff", nome:"No meio certinho", img:"🩰"},
+  {id:"corpo", s:"Noção de corpo", cor:"#3fd6d0", nome:"Siga a ordem", img:"🧘"}
+];
+/* jogos que ficam juntos na mesma página */
+const F2PAGINAS = [["visao"],["audicao","tato"],["paladar","olfato"],["equilibrio","corpo"]];
+const G2 = id => FASE2.find(g=>g.id===id);
+const REFS = ["Pintores","Arquitetos","Escritores"];
+/* tempo da pesquisa do app: a última faixa é 10 minutos ou mais */
+const TEMPOS_APP = ["Menos de 3 minutos","De 3 a 6 minutos","De 6 a 10 minutos","10 minutos ou mais"];
+const TEMPO_LIM_APP = [3,6,10,Infinity];
+/* links da tela "Ver minhas escolhas" (Facebook e LinkedIn aparecem quando o endereço for preenchido) */
+const REDES = [
+  {nome:"7entidos.com.br", url:"https://7entidos.com.br", ic:"🌐"},
+  {nome:"@7entidoss no Instagram", url:"https://www.instagram.com/7entidoss/", ic:"📸"},
+  {nome:"7entidos no Facebook", url:"", ic:"📘"},
+  {nome:"7entidos no LinkedIn", url:"", ic:"💼"}
+];
+/* blocos de preço da pergunta "Até quanto você pagaria?" */
+const PLANOS = []; /* sem preço em nenhuma tela */
+const MOTIVOS = ["Esqueci como era","Não entendi","Gostei e quis de novo"];
+
+/* ============ ROTEIROS ============ */
+function buildReality(){
+  const S=[]; let n=0;
+  const q=(o,count=1)=>{o.num=n+1; n+=count; S.push(o)};
+  CAST.forEach((c,i)=>{
+    if(i===3) S.push({type:"trava", t:1, bloco:0, msg:"Seus 3 primeiros personagens já estão na casa.", prox:"os próximos perfis"});
+    q({type:"cast", id:c.id, c, i, bloco:i<3?0:1, block:"Casting · perfil "+(i+1)+" de 7"},c.fixo?1:3);
+  });
+  q({type:"vilao", id:"vilao", bloco:1, block:"Casting · perfil 7 de 7 · o vilão"},3);
+  S.push({type:"trava", t:2, bloco:1, msg:"Seu vilão já está escondido na casa.", prox:"o elenco"});
+  q({type:"elenco", id:"elenco", bloco:2, block:"Elenco"});
+  S.push({type:"trava", t:3, bloco:2, msg:"Seu elenco já entrou na casa.", prox:"os cômodos da casa"});
+  ROOMS.forEach((r,i)=> q({type:"comodo", id:"comodo_"+i, r, ri:i, bloco:3, etapa:i<4?1:2, block:"Cômodos · etapa "+(i<4?1:2)+" de 2"}));
+  S.push({type:"trava", t:4, bloco:3, titulo:"Parabéns, a casa já está com a sua cara!", msg:"", prox:"os momentos"});
+  q({id:"gancho", bloco:4, block:"Momentos", title:"Qual desses momentos mexe mais com você?", sub:"Escolha só um.", opts:GANCHOS});
+  q({id:"tempo_episodio", bloco:4, block:"Momentos", title:"Quanto tempo você assistiria por episódio?", opts:["30 segundos","45 segundos","60 segundos","90 segundos"]});
+  q({id:"premio_vencedor", bloco:4, block:"Momentos", title:"Qual prêmio o vencedor do reality deveria ganhar?", opts:PREMIOS});
+  q({id:"reality_tempo_chute", type:"tempo", bloco:4, block:"Momentos · última pergunta", title:"Tempo que achou"});
+  S.push({type:"revela", bloco:4, block:"Momentos"});
+  S.push({type:"trava", t:5, bloco:4, msg:"Você chegou ao fim da pesquisa do reality.", prox:"os Guardiões dos Sentidos"});
+  q({type:"guardiao", id:"guardiao_vencedor", bloco:5, block:"Guardiões dos Sentidos"});
+  S.push({type:"hall", bloco:6, block:"Hall da Fama"});
+  S.push({type:"fase2", bloco:6, block:"Próxima fase"});
+  S.push({type:"prize", bloco:6, block:"Prêmio"});
+  S.push({type:"portao", bloco:6});
+  S.total=n; return S;
+}
+function buildApp(){
+  const S=[]; let n=0; const q=(o,count=1)=>{o.num=n+1; n+=count; S.push(o)};
+  q({type:"f1page", id:"f1page", block:"Fase 1 · os sete sentidos"}, FASE1.length);
+  let jg=0;
+  F2PAGINAS.forEach(p=>{ const gs=p.map(G2); const a=jg+1; jg+=gs.length;
+    q({type:"f2", id:"f2_"+gs[0].id, gs, block:"Fase 2 · "+(gs.length>1?"jogos "+a+" e "+jg:"jogo "+a)+" de 7"}, gs.length); });
+  q({id:"proposito", block:"Empresa", title:"Na sua opinião, pra que serve o 7entidos?", sub:"Escolha a frase que mais combina com o que você viu.", opts:["Descobrir o que te faz bem através dos sete sentidos","Jogar mini jogos para passar o tempo","Fazer terapia pelo celular","Ainda não entendi"]});
+  q({id:"confianca", block:"Empresa", type:"nota", title:"Quanto você confiaria no 7entidos?", legend:["0 · não confiaria nada","10 · confiaria totalmente"]});
+  q({type:"combo", id:"combo_fim", block:"Montar o app · últimas perguntas", title:"Motivos e tempo",
+    mt:{id:"motivos_nao_comprar", title:"Quais seriam os motivos para você não comprar um app?", sub:"Escolha quantos quiser.", opts:["É caro","Já tenho apps demais","Não confio em app pago","Não sei se vou usar sempre"]}}, 2);
+  S.push({type:"revela", block:"Montar o app"});
+  S.push({type:"hall2", block:"Os 100 primeiros"});
+  S.push({type:"portaoFinal"});
+  S.total=n; return S;
+}
+const FLOWS = {reality:buildReality(), app:buildApp()};
+
+/* ============ ESTADO ============ */
+let cur="reality", S=FLOWS.reality, answers={}, idx=0, view="abertura", done={}, refazAsk=null;
+let stepId=null, stepT0=0, travaSaiu=null, travaConvite=false, contato={}, revelaFase=0, tentativa=1;
+const stage = document.getElementById("stage");
+const esc = t => String(t).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+const L = i => "ABCDEFGHIJK"[i];
+const ok = v => v!=null && v!=="pulou";
+const foto = id => FOTOS.find(f=>f.id===id);
+const fotoHTML = (id,kid) => { if(typeof id==="string"&&id.startsWith("fixo:")){const c=CAST.find(x=>x.id===id.slice(5));if(c&&c.fixo.foto)return `<img src="${c.fixo.foto}" alt="">`;} const f=foto(id); return f&&f.src?`<img src="${f.src}" alt="">`:(kid?SIL_KID:SIL); };
+
+function isDone(s){
+  if(s.type==="cast") return answers[s.id+"_foto"]!=null && answers[s.id+"_nome"]!=null && answers[s.id+"_tipo"]!=null;
+  if(s.type==="vilao") return answers.vilao_nome!=null && answers.vilao_tipo!=null;
+  if(s.type==="elenco") return answers.elenco!=null;
+  if(answers[s.id]==="pulou") return true;
+  if(s.type==="combo") return Array.isArray(answers.motivos_nao_comprar) && answers.motivos_nao_comprar.length>0 && answers.app_tempo_chute!=null;
+  if(s.type==="multi") return Array.isArray(answers[s.id]) && answers[s.id].length>0;
+  if(s.type==="f1page") return FASE1.some(f=>Array.isArray(answers["f1_"+f.id]) && answers["f1_"+f.id].length>0);
+  if(s.type==="f1") return Array.isArray(answers[s.id]) && answers[s.id].length>0 && answers[s.id+"_gostou"]!=null;
+  if(s.type==="f2") return s.gs.every(g=>answers["f2_"+g.id+"_fim"]!=null && answers["f2_"+g.id+"_nota"]!=null);
+  return answers[s.id]!=null;
+}
+function usedPhotos(except){ return [...CAST.map(c=>c.id)].filter(id=>id!==except).map(id=>answers[id+"_foto"]).filter(v=>ok(v)&&!String(v).startsWith("fixo")); }
+function nomesPara(c, fotoId){ const f=foto(fotoId); if(!f) return [...c.F.slice(0,2),...c.M.slice(0,2)]; return f.genero==="M"?c.M:c.F; }
+function enterStep(){ const s=S[idx]; if((s.type==="f1"||s.type==="f1page"||s.type==="f2") && stepId!==s.id){ leaveStep(); stepId=s.id; stepT0=Date.now(); } }
+function leaveStep(){ if(stepId){ answers[stepId+"_tempo_seg"]=(answers[stepId+"_tempo_seg"]||0)+Math.round((Date.now()-stepT0)/1000); stepId=null; } }
+
+/* ============ VÍDEOS ============ */
+function videoBox(i, auto){
+  const h=HOSTS[i];
+  if(h.video) return `<video id="vid${i}" src="${h.video}" ${auto?"autoplay":""} controls playsinline style="width:min(340px,100%);max-height:70vh;border-radius:14px;margin:12px auto;display:block"></video>`;
+  return `<div class="video"><div class="vplay">▶</div><div><b>Vídeo de ${esc(h.nome)}</b><small>em breve${h.drive?` · <a href="${h.drive}" target="_blank" rel="noopener">assistir no Drive</a>`:""}</small>${h.fala?`<div class="fala">“${esc(h.fala)}”</div>`:""}</div></div>`;
+}
+
+/* ============ TELA 1: VÍDEO DE ABERTURA ============ */
+function abertura(){
+  document.getElementById("prog").style.display="none";
+  document.getElementById("anon").style.display="none";
+  const a=ABERTURA;
+  stage.innerHTML=`<div class="popup-bg" onclick="if(event.target===this)sairAbertura()"><div class="popup">
+    <button class="popup-x" onclick="sairAbertura()" aria-label="Fechar">✕</button>
+    ${a.video
+      ?`<video id="vab" class="abert-video" src="${a.video}" autoplay playsinline controls onended="sairAbertura()" aria-label="${esc(a.titulo)}"></video>`
+      :`<a class="abert-ph" href="${a.drive}" target="_blank" rel="noopener"><div><div class="vplay">▶</div><b style="font-size:20px">Toque para assistir</b></div></a>`}
+    <button class="btn" style="margin-top:14px;width:100%" onclick="sairAbertura()">Continuar →</button></div></div>`;
+  const v=document.getElementById("vab"); if(v){ const p=v.play(); if(p&&p.catch) p.catch(()=>{}); }
+}
+function sairAbertura(){ const v=document.getElementById("vab"); if(v) v.pause(); view="escolha"; render(); window.scrollTo({top:0}); }
+function verAbertura(){ view="abertura"; render(); window.scrollTo({top:0}); }
+
+/* ============ ESCOLHA UMA PESQUISA ============ */
+function escolha(){
+  document.getElementById("prog").style.display="none";
+  document.getElementById("anon").style.display="flex";
+  stage.innerHTML=`<div class="scene">
+    <div class="center" style="margin:14px 0 14px"><h1>Escolha uma pesquisa</h1></div>
+    <div class="fluxo">
+      <div class="passo">
+        <div class="pnum">1</div>
+        <button class="pesq" onclick="startFlow('app')"><span class="tag" style="background:#1f6b45">PRIMEIRO</span><b>Monte o app dos 7 sentidos</b>
+          <p>Descubra o que te faz bem em cada sentido e jogue os mini jogos.</p>
+          ${done.app?'<p style="color:#9be7b0;font-weight:800">você já participou ✓</p>':""}</button>
+      </div>
+      <div class="fio" aria-hidden="true"><i></i><span>depois</span></div>
+      <div class="passo">
+        <div class="pnum">2</div>
+        <button class="pesq" onclick="abrirLuzia(false)"><span class="tag">🔴 ESTREIA</span><b>Participe do reality</b>
+          <p>Monte o elenco de A Casa dos 7 Sentidos, descubra quem é o seu vilão e decore a casa do seu jeito.</p>
+          ${done.reality?'<p style="color:#9be7b0;font-weight:800">você já participou ✓</p>':""}</button>
+      </div>
+    </div></div>`;
+}
+function startFlow(f){
+  cur=f; S=FLOWS[f]; view="flow"; idx=0; travaSaiu=null; revelaFase=0;
+  if(!answers[f+"_inicio"]) answers[f+"_inicio"]=Date.now();
+  render(); window.scrollTo({top:0});
+}
+
+/* ============ PEÇAS ============ */
+function shareBox(onde){
+  const wa = "https://wa.me/?text="+encodeURIComponent(SHARE_MSG);
+  return `<div class="card-dark share fade"><b style="font-size:22px">📣 Convide alguém</b>
+    <p>Quem você convidar também ganha a temporada 2 de graça, enquanto tiver vaga.</p>
+    <div class="row2"><a class="btn" href="${wa}" target="_blank" rel="noopener" onclick="shared('${onde}','whatsapp')">Mandar no WhatsApp</a>
+    <button class="btn ghost" onclick="copyLink(this,'${onde}')">Copiar link</button></div></div>`;
+}
+function shared(onde,canal){ (answers.compartilhou=answers.compartilhou||[]).push({pesquisa:cur,onde,canal,quando:new Date().toISOString()}); enviar({evento:"compartilhou",pesquisa:cur,onde,canal}); }
+function copyLink(btn,onde){ try{ navigator.clipboard.writeText(SHARE_MSG).then(()=>{btn.textContent="Copiado ✓"; shared(onde,"copiou");},()=>btn.textContent="Não deu para copiar"); }catch(e){ btn.textContent="Não deu para copiar"; } }
+function scale(key, val, legend){
+  return `<div class="scale">${Array.from({length:11},(_,v)=>`<button class="opt ${val===v?"sel":""}" onclick="setN('${key}',${v})">${v}</button>`).join("")}</div>
+    <div class="scale-legend"><span>${esc(legend[0])}</span><span>${esc(legend[1])}</span></div>`;
+}
+function thumbs(key){
+  const v=answers[key];
+  return `<div class="row2"><button class="opt ${v==="Gostei"?"sel":""}" onclick="setA('${key}','Gostei')">👍 Gostei</button>
+    <button class="opt ${v==="Não gostei"?"sel":""}" onclick="setA('${key}','Não gostei')">👎 Não gostei</button></div>`;
+}
+function redoBox(s){
+  const n=(answers[s.id+"_refez"]||[]).length;
+  if(refazAsk!==s.id) return `<div class="redo"><button class="back" onclick="refazAsk='${s.id}';rr()">↺ Quero refazer esta parte${n?` (já refez ${n}x)`:""}</button></div>`;
+  return `<div class="redo"><p class="sub" style="margin-bottom:10px">Por que você quer refazer?</p>
+    <div class="opts">${MOTIVOS.map((m,i)=>`<button class="opt" onclick="refazer(${i})"><span class="k">${L(i)}</span>${m}</button>`).join("")}</div>
+    <button class="back" onclick="refazAsk=null;rr()">cancelar</button></div>`;
+}
+function refazer(i){
+  const s=S[idx];
+  const ids = s.type==="f2" ? s.gs.map(g=>"f2_"+g.id) : [s.id];
+  ids.forEach(id=>{ (answers[id+"_refez"]=answers[id+"_refez"]||[]).push(MOTIVOS[i]);
+    ["","_gostou","_nota","_fim","_prato","_acertos"].forEach(k=>{ if(k!==""||s.type==="f1") delete answers[id+k]; }); });
+  refazAsk=null; click(); render(); window.scrollTo({top:0});
+}
+function pickCard(fotoId, cor, sentido, nome){
+  return `<div class="pick fade"><div class="ph sel"><div class="img">${fotoHTML(fotoId)}</div><span>${esc(ok(fotoId)?fotoId:"")}</span></div>
+    <div><span class="chip" style="background:${cor}">${esc(sentido)}</span>${ok(nome)?`<div class="logo" style="font-size:46px;margin-top:6px">${esc(nome)}</div>`:""}</div></div>`;
+}
+
+/* ============ TRILHA ============ */
+function drawTrail(s){
+  const b = s.bloco==null?0:s.bloco;
+  let h="";
+  BLOCOS.forEach((nm,i)=>{
+    const cls = i<b?"done":i===b?"now":"";
+    h+=`<div class="tb ${cls}">${i===b?'<div class="walker">🚶</div>':""}<div class="bar"></div><small>${nm}</small></div>`;
+    if(i<BLOCOS.length-1) h+=`<div class="tlock ${i<b?"open":""}">${i<b?"🔓":"🔒"}</div>`;
+  });
+  h+=`<div class="tend">${b>=BLOCOS.length?'<div style="font-size:22px">🏃</div>':""}🏆<small>Hall da<br>Fama</small></div>`;
+  document.getElementById("trail").innerHTML=h;
+}
+
+/* ============ TELAS ============ */
+function render(){
+  if(view==="abertura") return abertura();
+  if(view==="escolha") return escolha();
+  if(view==="escolhas") return escolhas();
+  if(view==="fim") return fim();
+  const s = S[idx]; enterStep();
+  document.getElementById("anon").style.display="none";
+  const prog=document.getElementById("prog");
+  if(cur==="reality"){ prog.style.display="block"; drawTrail(s); document.getElementById("blockName").textContent = s.block || ""; }
+  else { prog.style.display="block"; document.getElementById("trail").innerHTML=""; document.getElementById("blockName").textContent = s.block || "Montar um app"; }
+  let h = "", needNext = false, ownNav = false;
+
+  if(s.type==="cast"){
+    const c=s.c, fk=c.id+"_foto", nk=c.id+"_nome", tk=c.id+"_tipo";
+    if(c.fixo){ answers[fk]="fixo:"+c.id; answers[nk]=c.fixo.nome; }
+    const fase = answers[fk]==null?0:answers[nk]==null?1:2;
+    const qn = c.fixo?s.num:s.num+fase;
+    if(c.fixo){
+      h=`<div class="qnum">Pergunta ${qn} · perfil ${s.i+1} de 7</div>
+        <div class="pick fade"><div class="ph sel"><div class="img">${c.fixo.foto?`<img src="${c.fixo.foto}" alt="${esc(c.fixo.nome)}">`:SIL}</div></div>
+        <div><span class="chip" style="background:${c.cor}">${esc(c.sentido)}</span><div class="logo" style="font-size:46px;margin-top:6px">${esc(c.fixo.nome)}</div>${c.fixo.apelido?`<div style="color:var(--muted);font-size:18px">${esc(c.fixo.apelido)}</div>`:""}</div></div>
+        <div class="ficha"><p>${esc(c.brief)}</p></div>
+        <h2>Qual é o jeito ${c.fixo.nome==="Luzia"||c.fixo.nome==="Duda"||c.fixo.nome==="Yara"?"dela":"dele"}?</h2>
+        <div class="opts fade">${c.tipo.map((o,i)=>`<button class="opt ${answers[tk]===o?"sel":""}" onclick="castSet('${tk}',${JSON.stringify(o).replace(/"/g,"&quot;")},true)"><span class="k">${L(i)}</span>${esc(o)}</button>`).join("")}</div>`;
+    } else if(fase===0){
+      const used=usedPhotos(c.id), left=FOTOS.filter(f=>!used.includes(f.id));
+      h=`<div class="qnum">Pergunta ${qn} · perfil ${s.i+1} de 7</div><h2>Qual foto combina com esse perfil?</h2>
+        <div class="ficha"><span class="chip" style="background:${c.cor}">${esc(c.sentido)}</span><p>${esc(c.brief)}</p></div>
+        <div class="photos fade">${left.map(f=>`<button class="ph" onclick="castSet('${fk}','${f.id}')"><div class="img">${fotoHTML(f.id)}</div><span>${f.id}</span></button>`).join("")}</div>`;
+    } else if(fase===1){
+      const nomes=nomesPara(c, answers[fk]);
+      h=`<div class="qnum">Pergunta ${qn} · perfil ${s.i+1} de 7</div>${pickCard(answers[fk],c.cor,c.sentido)}<h2>E qual nome você escolhe?</h2>
+        <div class="opts fade">${nomes.map((o,i)=>`<button class="opt" onclick="castSet('${nk}',${JSON.stringify(o).replace(/"/g,"&quot;")})"><span class="k">${L(i)}</span>${esc(o)}</button>`).join("")}</div>`;
+    } else {
+      const nm=answers[nk];
+      h=`<div class="qnum">Pergunta ${qn} · perfil ${s.i+1} de 7</div>${pickCard(answers[fk],c.cor,c.sentido,nm)}<h2>Qual é o jeito ${ok(nm)?"de "+esc(nm):"desse personagem"}?</h2>
+        <div class="opts fade">${c.tipo.map((o,i)=>`<button class="opt ${answers[tk]===o?"sel":""}" onclick="castSet('${tk}',${JSON.stringify(o).replace(/"/g,"&quot;")},true)"><span class="k">${L(i)}</span>${esc(o)}</button>`).join("")}</div>`;
+    }
+    h+=`<div class="err" id="err"></div><div class="nav"><button class="back" onclick="castBack('${c.id}')">← voltar</button><button class="skip" onclick="castPular('${c.id}')">pular</button></div>`;
+    ownNav=true;
+  }
+  else if(s.type==="vilao"){
+    const used=usedPhotos(null), left=FOTOS.filter(f=>!used.includes(f.id));
+    if(answers.vilao_foto==null) answers.vilao_foto = left.length?left[left.length-1].id:"pulou";
+    const fase = !answers.vilao_visto?0:answers.vilao_nome==null?1:answers.vilao_tipo==null?2:3;
+    if(fase===0){
+      h=`<div class="center"><div class="qnum">Pergunta ${s.num} · perfil 7 de 7</div><div class="big-emoji">🕵️</div>
+        <h1>Descubra quem você acha, inconscientemente, que é o vilão</h1>
+        <p class="sub">A foto que você deixou por último diz muito.</p>
+        <button class="btn" onclick="answers.vilao_visto=true;click();rr()">Revelar o vilão →</button></div>`;
+    } else if(fase===1){
+      h=`<div class="qnum">Pergunta ${s.num+1} · o vilão</div>${pickCard(answers.vilao_foto,VILAO.cor,"Vilão")}
+        <p style="margin:0 0 14px">Ninguém escolheu essa pessoa. Ela ficou de lado, viu tudo e guardou cada detalhe.</p>
+        <h2>E que nome você escolhe?</h2>
+        <div class="opts fade">${nomesPara(VILAO,answers.vilao_foto).map((o,i)=>`<button class="opt" onclick="castSet('vilao_nome',${JSON.stringify(o).replace(/"/g,"&quot;")})"><span class="k">${L(i)}</span>${esc(o)}</button>`).join("")}</div>`;
+    } else if(fase===2){
+      h=`<div class="qnum">Pergunta ${s.num+2} · o vilão</div>${pickCard(answers.vilao_foto,VILAO.cor,"Vilão",answers.vilao_nome)}<h2>Qual é o jeito do vilão?</h2>
+        <div class="opts fade">${VILAO.tipo.map((o,i)=>`<button class="opt" onclick="castSet('vilao_tipo',${JSON.stringify(o).replace(/"/g,"&quot;")})"><span class="k">${L(i)}</span>${esc(o)}</button>`).join("")}</div>`;
+    } else {
+      h=`<div class="center"><div class="big-emoji">🎉</div><h1>Parabéns!</h1>
+        <p class="sub">${ok(answers.vilao_nome)?esc(answers.vilao_nome)+" é":"Esse é"} o seu vilão. Se muita gente escolher parecido, ele vira o vilão do reality.</p>
+        ${pickCard(answers.vilao_foto,VILAO.cor,"Vilão",answers.vilao_nome)}
+        <button class="btn" onclick="next()">Seguir →</button></div>`;
+    }
+    h+=`<div class="nav"><button class="back" onclick="vilaoBack()">← voltar</button>${fase>0&&fase<3?`<button class="skip" onclick="castPular('vilao')">pular</button>`:""}</div>`;
+    ownNav=true;
+  }
+  else if(s.type==="elenco"){
+    h=`<div class="qnum">Pergunta ${s.num}</div><h2>Escolha o gênero de cada personagem</h2><p class="sub">Toque numa opção para cada um.</p>
+      <div class="elenco">${ELENCO.map(e=>{const v=answers["elenco__"+e.k]; const fid=e.from==="vilao"?answers.vilao_foto:e.from?answers[e.from+"_foto"]:null;
+        const nm=e.from==="vilao"?answers.vilao_nome:e.from?answers[e.from+"_nome"]:null;
+        return `<div class="elrow"><div class="ph"><div class="img">${fotoHTML(fid,!e.from)}</div></div><div><b>${esc(e.nome)}</b>${ok(nm)?` <span style="color:var(--muted);font-size:16px">· ${esc(nm)}</span>`:""}
+          <div class="row2" style="margin-top:8px">${["Hétero","LGBTQIA+"].map(o=>`<button class="opt ${v===o?"sel":""}" onclick="setEl('${e.k}','${o}')">${o}</button>`).join("")}</div></div></div>`}).join("")}</div>`;
+    needNext=true;
+  }
+  else if(s.type==="comodo"){
+    const r=s.r, temas=temasDo(s.ri);
+    h=`<div class="qnum">Pergunta ${s.num} · <span class="etapa">ETAPA ${s.etapa} DE 2 · CÔMODO ${s.ri+1} DE 7</span></div>
+      <div class="room fade" style="border-color:${r.cor};background:linear-gradient(135deg,${r.cor}22,#1c1920)"><div style="font-size:48px">${r.emoji}</div><div class="rn">${esc(r.nome)}</div><span class="chip" style="background:${r.cor}">${esc(r.s)}</span></div>
+      <h2>Qual tema combina com esse cômodo?</h2>
+      <div class="row2 fade">${temas.map(t=>`<button class="opt ${answers[s.id]===r.nome+": "+t?"sel":""}" onclick="pickRoom('${s.id}',${JSON.stringify(r.nome+": "+t).replace(/"/g,"&quot;")})">${esc(t)}</button>`).join("")}</div>`;
+  }
+  else if(s.type==="trava"){
+    const titulo = s.titulo || "Parabéns!";
+    h=`<div class="center"><div class="big-emoji">🎬</div><h1>${esc(titulo)}</h1><p class="sub">${s.msg?esc(s.msg)+"<br>":""}Bloco concluído. 🔓</p></div>`;
+    if(s.v!=null) h+=`<div class="center"><div class="qnum">Um recado de ${esc(HOSTS[s.v].nome)}</div></div>${videoBox(s.v)}`;
+    if(travaSaiu===s.t){
+      h+=`<div class="card-dark center"><b style="font-size:22px">Valeu! Suas respostas já foram guardadas.</b></div>${shareBox("trava"+s.t)}
+        <div class="center"><button class="back" onclick="travaSaiu=null;rr()">← mudei de ideia, quero continuar</button></div>`;
+    } else {
+      h+=`<div class="stack"><button class="btn" onclick="travaConvite=false;next()">Continuar para ${esc(s.prox)} →</button>
+        <button class="btn ghost" onclick="travaConvite=!travaConvite;rr()">Convidar alguém</button>${travaConvite?shareBox("trava"+s.t):""}
+        <button class="btn ghost" onclick="sair(${s.t})">Ir embora</button></div>
+        <div class="nav"><button class="back" onclick="prev()">← voltar</button></div>`;
+    }
+    ownNav=true;
+  }
+  else if(s.type==="favorito"){
+    h=`<div class="qnum">Pergunta ${s.num}</div><h2>Qual apresentador você prefere?</h2><p class="sub">Toque na foto. Quer rever? Tem o vídeo de cada um.</p>
+      <div class="hosts">${HOSTS.map((hs,i)=>`<div class="host ${answers[s.id]===hs.nome?"sel":""}"><button class="ph" style="width:100px" onclick="pickI('${s.id}',HOSTS.map(x=>x.nome),${i})" aria-label="Escolher ${esc(hs.nome)}"><div class="img">${hs.foto?`<img src="${hs.foto}" alt="">`:SIL}</div></button>
+        <div><div style="font-weight:800;font-size:22px">${esc(hs.nome)}</div><button class="back" style="color:var(--accent);padding:6px 0" onclick="reverVideo(${i})">▶ rever o vídeo</button></div></div>`).join("")}</div>
+      <div id="rever"></div>`;
+  }
+  else if(s.type==="guardiao"){
+    const pers=[...CAST.map(c=>({n:ok(answers[c.id+"_nome"])?answers[c.id+"_nome"]:c.sentido, s:c.sentido, cor:c.cor})),
+      {n:ok(answers.vilao_nome)?answers.vilao_nome:"O vilão", s:"Vilão", cor:VILAO.cor},{n:"Lucas", s:"Noção de corpo", cor:"#3fd6d0"}];
+    h=`<div class="center"><div class="big-emoji">🛡️</div><div class="qnum">Pergunta ${s.num}</div><h1>Guardiões dos Sentidos</h1>
+      <p class="sub">As 200 primeiras pessoas que responderem viram Guardiões dos Sentidos e escolhem, em segredo, quem vai vencer o reality.</p></div>
+      <h2>Quem você acha que vai vencer?</h2><p class="sub">Seu voto fica em segredo.</p>
+      <div class="opts fade">${pers.map((p,i)=>`<button class="opt ${answers[s.id]===p.n?"sel":""}" onclick="setA('${s.id}',${JSON.stringify(p.n).replace(/"/g,"&quot;")})"><span class="k">${L(i)}</span>${esc(p.n)} <span class="chip" style="background:${p.cor};margin-left:8px">${esc(p.s)}</span></button>`).join("")}</div>
+      ${answers[s.id]!=null?`<div class="guard center fade"><b style="font-size:24px">Será que os Guardiões têm razão?</b><br>O Brasil é quem vai dizer.</div>`:""}`;
+    needNext=true;
+  }
+  else if(s.type==="hall"){
+    h=`<div class="center"><div class="big-emoji">🏆</div><h1>Você chegou ao Hall da Fama!</h1>
+      <p class="sub">Quer aparecer no Hall da Fama${cur==="reality"?", no último capítulo do reality":" do app 7entidos"}?</p></div>
+      <div class="card-dark"><b>Então deixe seu nome ou apelido</b>
+      <p style="margin:6px 0 12px;color:var(--muted);font-size:17px">🔒 A partir de agora, seu nome fica desconectado da pesquisa. Ninguém vai saber o que você respondeu.</p>
+      <input class="txt" id="hallName" maxlength="30" placeholder="Seu nome ou apelido" value="${esc(contato.nome||"")}">
+      <div class="stack"><button class="btn" onclick="hallOk(true)">Quero aparecer com esse nome</button>
+      <button class="btn ghost" onclick="hallOk(false)">Não quero aparecer</button></div>
+      <div class="err" id="herr"></div></div><div class="nav"><button class="back" onclick="prev()">← voltar</button></div>`;
+    ownNav=true;
+  }
+  else if(s.type==="fase2"){
+    h=`<div class="center"><div class="big-emoji">🔓</div><h1>Quer participar da próxima fase?</h1>
+      <p class="sub">A próxima fase da pesquisa abre em breve. Deixe seu telefone e a gente libera pra você.</p></div>
+      <div class="card-dark"><p style="margin:0 0 12px;color:var(--muted);font-size:17px">🔒 Seu telefone também fica desconectado das suas respostas.</p>
+      <input class="txt" id="tel" type="tel" inputmode="tel" maxlength="20" placeholder="(13) 99999-9999" value="${esc(contato.tel||"")}">
+      <div class="stack"><button class="btn" onclick="telOk(true)">Quero participar</button>
+      <button class="btn ghost" onclick="telOk(false)">Agora não</button></div>
+      <div class="err" id="terr"></div></div><div class="nav"><button class="back" onclick="prev()">← voltar</button></div>`;
+    ownNav=true;
+  }
+  else if(s.type==="prize"){
+    h=`<div class="center"><div class="big-emoji">🎁</div><h1>Corta! Ficou incrível.</h1>
+      <div class="ficha" style="text-align:left;padding-bottom:46px"><div class="nm">Temporada 2 de graça</div><p>Seu acesso gratuito à temporada 2 já está garantido.</p><div class="stamp">LIBERADO</div></div>
+      <p class="sub">Corre, são só 100 vagas! Quer dar uma pra alguém? Quem você convidar também ganha.</p></div>
+      ${shareBox("final")}<div class="center"><button class="btn ghost" onclick="next()">Continuar →</button></div>
+      <div class="nav"><button class="back" onclick="prev()">← voltar</button></div>`;
+    ownNav=true;
+  }
+  else if(s.type==="f1"){
+    const f=s.f, sel=Array.isArray(answers[s.id])?answers[s.id]:[];
+    h = `<div class="qnum">Pergunta ${s.num}</div><div style="margin-bottom:8px"><span class="chip" style="background:${f.cor}">${esc(f.s)}</span></div>
+      <h2>${esc(f.q)}</h2><p class="sub">Escolha quantos quiser. Sem pressa.</p>
+      <div class="chips">${f.o.map((o,i)=>`<button class="opt ${sel.includes(o)?"sel":""}" onclick="toggleF1(${i})">${sel.includes(o)?"✓ ":""}${esc(o)}</button>`).join("")}</div>
+      <div class="feed"><h3>Gostou desta parte?</h3>${thumbs(s.id+"_gostou")}</div>${redoBox(s)}`;
+    needNext = true;
+  }
+  else if(s.type==="f1page"){
+    h = `<div class="qnum">Perguntas ${s.num} a ${s.num+FASE1.length-1}</div><h2>O que te faz bem?</h2><p class="sub">Escolha quantos quiser. Sem pressa.</p>`;
+    FASE1.forEach((f,fi)=>{ const k="f1_"+f.id, sel=Array.isArray(answers[k])?answers[k]:[];
+      h += `<div class="f1q"><div class="qnum">Pergunta ${s.num+fi}</div><span class="chip" style="background:${f.cor}">${esc(f.s)}</span>
+        <h3>${esc(f.q)}</h3><small>Escolha quantos quiser</small>
+        <div class="chips mini">${f.o.map((o,oi)=>`<button class="opt ${sel.includes(o)?"sel":""}" onclick="toggleF1p(${fi},${oi})">${sel.includes(o)?"✓ ":""}${esc(o)}</button>`).join("")}</div></div>`; });
+    needNext = true;
+  }
+  else if(s.type==="f2"){
+    const allFim = s.gs.every(g=>answers["f2_"+g.id+"_fim"]!=null);
+    h = "";
+    s.gs.forEach((g,gi)=>{ const fimv=answers["f2_"+g.id+"_fim"], pis=(g.id==="audicao"||g.id==="tato")?" pisca":"";
+      const jogo = `<div id="gw_${g.id}">${!fimv?`<div class="gamebox" id="game_${g.id}"></div><button class="back" onclick="gameDone('${g.id}','pulou')">pular este jogo →</button>`
+          :`<div class="done-tag">${fimv==="completou"?"✓ Jogo completo!":"Jogo pulado"}</div>`}</div>`;
+      const ref = g.id==="olfato" ? `<div class="refq card-dark"><h3>De quem é a referência dessas imagens?</h3><div class="chips mini" id="refopts">${REFS.map((o,i)=>`<button class="opt ${answers.f2_olfato_referencia===o?"sel":""}" onclick="setRef(${i})">${L(i)}) ${esc(o)}</button>`).join("")}</div></div>` : "";
+      h += `<div class="gsec"><div class="qnum">Pergunta ${s.num+gi}</div><div style="margin-bottom:6px"><span class="chip${pis}" style="--c:${g.cor};background:${g.cor}">${esc(g.s)}</span></div><h2 class="f2h">${esc(g.nome)}</h2>
+        ${ref?`<div class="olfwrap"><div>${jogo}</div>${ref}</div>`:jogo}</div>`; });
+    if(allFim){
+      h += `<div class="feed"><h3>Quanto você gostou dessa atividade?</h3>${s.gs.map(g=>`<div class="notarow"><div class="gimg" style="border-color:${g.cor};background:${g.cor}22" aria-hidden="true">${g.img}</div>
+        <div><b>${esc(g.nome)}</b>${scale("f2_"+g.id+"_nota", answers["f2_"+g.id+"_nota"], ["0 · não gostei nada","10 · amei"])}</div></div>`).join("")}</div>${redoBox(s)}`;
+    }
+    needNext = true;
+  }
+  else if(s.type==="multi"){
+    const sel=Array.isArray(answers[s.id])?answers[s.id]:[];
+    h = `<div class="qnum">Pergunta ${s.num}</div><h2>${esc(s.title)}</h2><p class="sub">${esc(s.sub||"")}</p>
+      <div class="chips mini">${s.opts.map((o,i)=>`<button class="opt ${sel.includes(o)?"sel":""}" onclick="toggleMulti(${i})">${sel.includes(o)?"✓ ":""}${esc(o)}</button>`).join("")}</div>`;
+    needNext = true;
+  }
+  else if(s.type==="combo"){
+    const m=s.mt, sel=Array.isArray(answers[m.id])?answers[m.id]:[];
+    h = `<div class="qnum">Pergunta ${s.num}</div><h2>${esc(m.title)}</h2><p class="sub">${esc(m.sub)}</p>
+      <div class="chips mini">${m.opts.map((o,i)=>`<button class="opt ${sel.includes(o)?"sel":""}" onclick="toggleCombo(${i})">${sel.includes(o)?"✓ ":""}${esc(o)}</button>`).join("")}</div>
+      <div class="qnum" style="margin-top:26px">Pergunta ${s.num+1} · última</div><h2>Quanto tempo você acha que passou?</h2>
+      <p class="sub">Desde que você começou esta pesquisa até agora. Não olhe o relógio!</p>
+      <div class="opts">${TEMPOS_APP.map((o,i)=>`<button class="opt ${answers.app_tempo_chute===o?"sel":""}" onclick="setA('app_tempo_chute',TEMPOS_APP[${i}])"><span class="k">${L(i)}</span>${o}</button>`).join("")}</div>`;
+    needNext = true;
+  }
+  else if(s.type==="nota"){
+    h = `<div class="qnum">Pergunta ${s.num}</div><h2>${esc(s.title)}</h2><p class="sub">Toque numa nota de 0 a 10.</p>${scale(s.id, answers[s.id], s.legend)}`;
+  }
+  else if(s.type==="tempo"){
+    const T = cur==="app"?"TEMPOS_APP":"TEMPOS", TT = cur==="app"?TEMPOS_APP:TEMPOS;
+    h = `<div class="qnum">Pergunta ${s.num}</div><h2>Quanto tempo você acha que passou?</h2>
+      <p class="sub">Desde que você começou esta pesquisa até agora. Não olhe o relógio!</p>
+      <div class="opts">${TT.map((o,i)=>`<button class="opt ${answers[s.id]===o?"sel":""}" onclick="pickI('${s.id}',${T},${i})"><span class="k">${L(i)}</span>${o}</button>`).join("")}</div>`;
+    if(cur==="app") h += `<div class="flowtxt" style="margin-top:18px">🌀 <b>Montar o app</b><br>O <b>Flow</b> é quando a gente se envolve tanto que nem percebe o tempo passar.<br><br><span style="color:var(--muted);font-size:17px">Quem descobriu isso foi o psicólogo Mihaly Csikszentmihalyi (1934–2021), estudando bailarinos, pintores e jogadores de xadrez. Os jogos do 7entidos foram feitos pra te levar até lá, pelos sete sentidos.</span></div>
+      ${FLOW_AUDIO?`<audio controls src="${FLOW_AUDIO}" style="width:100%;margin-bottom:12px"></audio>`:""}`;
+  }
+  else if(s.type==="revela" && cur==="app"){
+    const chute = answers.app_tempo_chute;
+    if(answers.app_tempo_real_seg==null) answers.app_tempo_real_seg = Math.round((Date.now()-answers.app_inicio)/1000);
+    const seg = answers.app_tempo_real_seg, min = seg/60;
+    const realB = TEMPO_LIM_APP.findIndex(l=>min<l), chuteB = TEMPOS_APP.indexOf(chute);
+    let msg, emo;
+    if(chuteB===0 && realB>0){ msg="Você entrou em Flow!"; emo="🌀"; }
+    else if(chuteB===0){ msg="Você acertou: passou menos de 3 minutos mesmo."; emo="🎯"; }
+    else if(chuteB===1){ msg="Você quase entrou em Flow."; emo="🌊"; }
+    else if(chuteB===2){ msg="Você não entrou em Flow, foi indiferente."; emo="😐"; }
+    else if(chuteB===3){ msg="Você não entrou em Flow."; emo="⏳"; }
+    else { msg="Você não respondeu quanto tempo achou que passou."; emo="⏱️"; }
+    answers.app_flow = msg;
+    const m=Math.floor(seg/60), sg=seg%60;
+    const real = m===0 ? sg+(sg===1?" segundo":" segundos") : m+(m===1?" minuto":" minutos")+(sg?" e "+sg+" segundos":"");
+    h = `<div class="center"><div class="big-emoji">${emo}</div><h1>Na verdade, se passaram ${real}.</h1>
+      <p class="sub">Você achou: ${esc(chute&&chute!=="pulou"?chute:"-")}</p>
+      <div class="flowtxt center" style="font-size:24px;font-weight:800">${esc(msg)}</div>
+      ${!verGraf?`<button class="btn" style="margin-top:12px" onclick="verGraf=true;rr()">Ver meu gráfico →</button>`:""}</div>
+      ${verGraf?`<div class="lado fade">
+        <div class="card-dark"><b style="font-size:20px">O seu gráfico dos sentidos</b><p style="margin:4px 0 10px;color:var(--muted);font-size:15px">As notas que você deu para cada jogo, de 0 a 10.</p>
+          <div class="grafico">${FASE2.map(g=>{const v=answers["f2_"+g.id+"_nota"];return `<div class="gbar"><span><i class="dot" style="background:${g.cor}"></i>${esc(g.s)}</span><div class="tr"><i style="width:${typeof v==="number"?v*10:0}%;background:${g.cor}"></i></div><b>${typeof v==="number"?v:"–"}</b></div>`}).join("")}</div></div>
+        <div class="card-dark eagora"><b style="font-size:22px">E agora?</b><p style="color:var(--muted);font-size:16px;margin:6px 0 14px">Você quer continuar ou chamar alguém para responder também?</p>
+          <div class="stack" style="margin:0"><button class="btn" onclick="next()">Quero continuar →</button>
+          <button class="btn ghost" onclick="answers.eagora_compartilhar=!answers.eagora_compartilhar;window.click();rr()">Quero compartilhar com alguém</button></div>
+          ${answers.eagora_compartilhar?shareBox("eagora"):""}</div>
+      </div>
+      <div class="card-dark flowvid fade"><b style="font-size:20px">O que é Flow?</b>
+        ${FLOW_VIDEO?`<video src="${FLOW_VIDEO}" controls playsinline style="width:100%;border-radius:12px;margin-top:10px"></video>`:`<div class="vidph"><div class="vplay">▶</div><span>Vídeo explicativo sobre o Flow · em breve</span></div>`}
+        <p class="fontes"><b>Fontes</b><br>Csikszentmihalyi, M. (1990). <i>Flow: The Psychology of Optimal Experience</i>. Harper &amp; Row.<br>
+        Csikszentmihalyi, M. e LeFevre, J. (1989). Optimal experience in work and leisure. <i>Journal of Personality and Social Psychology</i>, 56(5).<br>
+        Nakamura, J. e Csikszentmihalyi, M. (2002). The concept of flow. <i>Handbook of Positive Psychology</i>. Oxford University Press.</p></div>`:""}
+      <div class="nav"><button class="back" onclick="verGraf=false;prev()">← voltar</button></div>`;
+    ownNav=true;
+  }
+  else if(s.type==="segue"){
+    const ab = answers[s.id+"_compartilhar"];
+    h = `<div class="center"><div class="big-emoji">${s.fase===1?"💛":"✨"}</div><h1>${s.fase===1?"Agora, sobre o 7entidos":"E agora?"}</h1>
+      <p class="sub">${s.fase===1?"Faltam só algumas perguntas. Você quer continuar?":"Você quer compartilhar ou continuar?"}</p></div>
+      <div class="stack"><button class="btn" onclick="segue('${s.id}','continuar')">Quero continuar →</button>
+        <button class="btn ghost" onclick="answers['${s.id}_compartilhar']=!answers['${s.id}_compartilhar'];window.click();rr()">Quero compartilhar com alguém</button>${ab?shareBox(s.id):""}
+        ${s.fase===1?`<button class="btn ghost" onclick="segue('${s.id}','não quero')">Não quero</button>`:""}</div>
+      <div class="nav"><button class="back" onclick="prev()">← voltar</button></div>`;
+    ownNav=true;
+  }
+  else if(s.type==="planos"){
+    h = `<div class="qnum">Pergunta ${s.num}</div><h2>${esc(s.title)}</h2><p class="sub">Toque no plano que combina com você.</p>
+      <div class="planos">${PLANOS.map(p=>`<div class="plano ${p.dest?"dest":""}"><div class="pn">${esc(p.nome)}</div>
+        <div class="pp">${esc(p.preco)}${p.mes?"<small> /mês</small>":""}</div>
+        <ul>${p.itens.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>
+        ${p.opts.map(i=>`<button class="opt ${answers[s.id]===s.opts[i]?"sel":""}" onclick="pickI('${s.id}',S[idx].opts,${i})">${L(i)}) ${esc(s.opts[i])}</button>`).join("")}</div>`).join("")}</div>`;
+  }
+  else if(s.type==="grafico"){
+    const notas = FASE2.map(g=>({g, v:answers["f2_"+g.id+"_nota"]}));
+    h = `<div class="center"><div class="big-emoji">📊</div><h1>O seu gráfico dos sentidos</h1><p class="sub">As notas que você deu para cada jogo, de 0 a 10.</p></div>
+      <div class="card-dark"><div class="grafico">${notas.map(({g,v})=>`<div class="gbar"><span>${g.img} ${esc(g.s)}</span><div class="tr"><i style="width:${typeof v==="number"?v*10:0}%;background:${g.cor}"></i></div><b>${typeof v==="number"?v:"–"}</b></div>`).join("")}</div></div>
+      <div class="center"><button class="btn" style="margin-top:16px" onclick="next()">Continuar →</button></div>
+      <div class="nav"><button class="back" onclick="prev()">← voltar</button></div>`;
+    ownNav=true;
+  }
+  else if(s.type==="hall2"){
+    const c = answers.hall_canal;
+    h = `<div class="center"><div class="big-emoji">🏆</div><h1>Seja um dos 100 primeiros e tenha benefícios exclusivos.</h1></div>
+      <div class="card-dark"><p style="margin:0 0 12px;color:#d9d3df;font-size:17px">🔒 Seus dados ficam desconectados das suas respostas. Ninguém vai saber o que você respondeu. Seguimos todas as regras da LGPD.</p>
+      <button class="opt ciente ${answers.lgpd_ciente?"sel":""}" onclick="answers.lgpd_ciente=!answers.lgpd_ciente;window.click();rr()">${answers.lgpd_ciente?"☑":"☐"} Clique aqui para confirmar que você está ciente</button>
+      ${answers.lgpd_ciente?`<div class="row2" style="margin-top:12px"><button class="opt ${c==="email"?"sel":""}" onclick="answers.hall_canal='email';click();rr()">✉️ Sim, por e-mail</button>
+        <button class="opt zap ${c==="whatsapp"?"sel":""}" onclick="answers.hall_canal='whatsapp';click();rr()">💬 Sim, por WhatsApp</button></div>`:""}
+      ${c&&answers.lgpd_ciente?`<div class="stack"><input class="txt" id="hallName" maxlength="30" placeholder="Seu nome ou apelido (para o Hall da Fama)" value="${esc(contato.nome||"")}">
+        ${c==="email"?`<input class="txt" id="hallCont" type="email" inputmode="email" maxlength="80" placeholder="seu@email.com" value="${esc(contato.email||"")}">`
+          :`<input class="txt" id="hallCont" type="tel" inputmode="tel" maxlength="20" placeholder="(13) 99999-9999" value="${esc(contato.tel||"")}">`}
+        <button class="btn" onclick="hall2Ok(true)">Quero fazer parte</button></div>`:""}
+      <div class="stack"><button class="btn ghost" onclick="hall2Ok(false)">Agora não</button></div>
+      <div class="err" id="herr"></div></div><div class="nav"><button class="back" onclick="prev()">← voltar</button></div>`;
+    ownNav=true;
+  }
+  else if(s.type==="portaoFinal"){
+    h = `<div class="center"><div class="big-emoji">🚪</div><h1>Você chegou ao portão.</h1>
+      <p class="sub">Pode parar por aqui. Obrigado! Suas escolhas vão construir o 7entidos de verdade.</p></div>
+      <div class="stack"><button class="btn ghost" onclick="view='fim';render()">Quero sair</button>
+        <button class="btn" onclick="view='escolhas';render()">Quero ver minhas escolhas</button></div>`;
+    ownNav=true;
+  }
+  else if(s.type==="revela"){
+    const chute = answers[cur+"_tempo_chute"];
+    if(answers[cur+"_tempo_real_seg"]==null) answers[cur+"_tempo_real_seg"] = Math.round((Date.now()-answers[cur+"_inicio"])/1000);
+    const seg = answers[cur+"_tempo_real_seg"], min = seg/60;
+    const realB = TEMPO_LIM.findIndex(l=>min<l), chuteB = TEMPOS.indexOf(chute);
+    const cmp = chuteB<0 ? "-" : chuteB===realB ? "acertou" : chuteB<realB ? "achou que passou menos" : "achou que passou mais";
+    answers[cur+"_tempo_comparacao"] = cmp;
+    if(revelaFase===0){
+      const txt = cmp==="achou que passou menos"
+        ? `<b>Parabéns, você chegou no estado de Flow!</b><br>Quando estamos envolvidos em algo, não percebemos o tempo passar.`
+        : cmp==="achou que passou mais"
+        ? `Dessa vez você não chegou no estado de <b>Flow</b>, aquele em que a gente se envolve tanto que nem percebe o tempo passar. Se quiser, pode tentar de novo.`
+        : cmp==="acertou" ? `Seu relógio interno está afiado! O <b>Flow</b> é quando a gente se envolve tanto que nem percebe o tempo passar.`
+        : `O <b>Flow</b> é quando a gente se envolve tanto que nem percebe o tempo passar.`;
+      h = `<div class="center"><div class="big-emoji">🌀</div><h1>Antes de revelar o tempo…</h1>
+        <div class="flowtxt">${txt}<br><br><span style="color:var(--muted);font-size:17px">Quem descobriu isso foi o psicólogo Mihaly Csikszentmihalyi (1934–2021), estudando bailarinos, pintores e jogadores de xadrez. Os jogos do 7entidos foram feitos pra te levar até lá, pelos sete sentidos.</span></div>
+        ${FLOW_AUDIO?`<audio controls src="${FLOW_AUDIO}" style="width:100%;margin-bottom:12px"></audio>`:""}
+        <div class="stack"><button class="btn" onclick="revelaFase=1;click();rr()">Ver quanto tempo passou de verdade →</button>
+        ${cmp==="achou que passou mais"&&cur==="reality"?`<button class="btn ghost" onclick="tentarDeNovo()">Tentar de novo</button>`:""}</div></div>`;
+    } else {
+      h = `<div class="center"><div class="big-emoji">⏱️</div><h1>Na verdade, se passaram ${Math.floor(seg/60)} min e ${seg%60} s</h1>
+        <p class="sub">Você achou: ${esc(chute&&chute!=="pulou"?chute:"-")}</p>
+        <button class="btn" style="margin-top:12px" onclick="revelaFase=0;next()">Continuar →</button></div>`;
+    }
+    h+=`<div class="nav"><button class="back" onclick="if(revelaFase){revelaFase=0;rr()}else prev()">← voltar</button></div>`;
+    ownNav=true;
+  }
+  else if(s.type==="break"){
+    h = `<div class="center"><div class="big-emoji">${s.emoji}</div><h1>${esc(s.title)}</h1><p class="sub">${esc(s.sub)}</p><button class="btn" onclick="next()">Continuar →</button></div>
+      <div class="nav"><button class="back" onclick="prev()">← voltar</button></div>`;
+    ownNav=true;
+  }
+  else if(s.type==="portao"){
+    h = `<div class="center"><div class="big-emoji">🚪</div><h1>Você chegou ao portão</h1>
+      <p class="sub">Obrigado! Suas escolhas vão construir o 7entidos de verdade.</p></div>
+      <div class="stack">
+        ${cur==="reality"?`<button class="btn" onclick="startFlow('app')">Fazer a pesquisa do app →</button>`:""}
+        <button class="btn ghost" onclick="view='fim';render()">Parar por aqui</button>
+        <button class="btn ghost" onclick="view='escolhas';render()">Ver minhas escolhas</button>
+      </div>`;
+    ownNav=true;
+  }
+  else {
+    h = `<div class="qnum">Pergunta ${s.num}</div><h2>${esc(s.title)}</h2>` + (s.sub?`<p class="sub">${esc(s.sub)}</p>`:"");
+    h += `<div class="opts">`+s.opts.map((o,i)=>`<button class="opt ${answers[s.id]===o?"sel":""}" onclick="pickI('${s.id}',S[idx].opts,${i})"><span class="k">${L(i)}</span><span>${esc(o)}</span></button>`).join("")+`</div>`;
+  }
+  if(!ownNav){
+    h += `<div class="err" id="err"></div><div class="nav"><button class="back" onclick="prev()">← voltar</button>${s.num?'<button class="skip" onclick="pular()">pular</button>':""}${needNext?`<button class="btn" onclick="tryNext()">Próximo →</button>`:""}</div>`;
+  }
+  stage.innerHTML = `<div class="scene">${h}</div>`;
+  if(s.type==="f2") s.gs.forEach(g=>{ if(answers["f2_"+g.id+"_fim"]==null) GAMES[g.id](document.getElementById("game_"+g.id), ()=>gameDone(g.id,"completou")); });
+}
+/* fim de um jogo: se ainda tem outro jogo rodando na página, não redesenha (para não reiniciar o outro) */
+function gameDone(gid,v){
+  answers["f2_"+gid+"_fim"]=v; click();
+  const s=S[idx];
+  if(s.gs.every(g=>answers["f2_"+g.id+"_fim"]!=null)) rr();
+  else { const w=document.getElementById("gw_"+gid); if(w) w.innerHTML=`<div class="done-tag">${v==="completou"?"✓ Jogo completo!":"Jogo pulado"}</div>`; }
+}
+/* pergunta das referências: atualiza só os botões, para não reiniciar o jogo */
+function setRef(i){ answers.f2_olfato_referencia=REFS[i]; click(); document.querySelectorAll("#refopts .opt").forEach((b,j)=>b.classList.toggle("sel",j===i)); }
+function toggleCombo(i){ const m=S[idx].mt, o=m.opts[i], a=(Array.isArray(answers[m.id])?answers[m.id]:[]).slice(), p=a.indexOf(o); p>=0?a.splice(p,1):a.push(o); answers[m.id]=a; click(); rr(); }
+function toggleMulti(i){ const s=S[idx], o=s.opts[i], a=(Array.isArray(answers[s.id])?answers[s.id]:[]).slice(), p=a.indexOf(o); p>=0?a.splice(p,1):a.push(o); answers[s.id]=a; click(); rr(); }
+function toggleF1p(fi,oi){ const k="f1_"+FASE1[fi].id, o=FASE1[fi].o[oi], a=(Array.isArray(answers[k])?answers[k]:[]).slice(), p=a.indexOf(o); p>=0?a.splice(p,1):a.push(o); answers[k]=a; click(); rr(); }
+function rr(){ const y=window.scrollY; render(); window.scrollTo({top:y}); }
+function setA(k,v){ answers[k]=v; click(); rr(); }
+function setN(k,v){ answers[k]=v; click(); rr(); if(S[idx].type==="nota") setTimeout(next,320); }
+function pickI(id,arr,i){ answers[id]=arr[i]; click(); rr(); setTimeout(next,320); }
+function toggleF1(i){ const s=S[idx], o=s.f.o[i], a=(Array.isArray(answers[s.id])?answers[s.id]:[]).slice(), p=a.indexOf(o); p>=0?a.splice(p,1):a.push(o); answers[s.id]=a; click(); rr(); }
+
+/* casting: a pergunta some e entra a próxima, no mesmo slide */
+function castSet(k,v,fim){
+  answers[k]=v; click();
+  const s=S[idx];
+  if(s.type==="cast" && isDone(s)){ rr(); setTimeout(next,350); }
+  else { render(); window.scrollTo({top:0}); }
+}
+function castBack(id){
+  const cc=CAST.find(x=>x.id===id);
+  if(cc&&cc.fixo){ if(answers[id+"_tipo"]!=null){ delete answers[id+"_tipo"]; render(); return; } return prev(); }
+  if(answers[id+"_tipo"]!=null){ delete answers[id+"_tipo"]; delete answers[id+"_nome"]; }
+  else if(answers[id+"_nome"]!=null) delete answers[id+"_nome"];
+  else if(answers[id+"_foto"]!=null) delete answers[id+"_foto"];
+  else return prev();
+  render();
+}
+function castPular(id){
+  const ks=[id+"_foto",id+"_nome",id+"_tipo"];
+  if(id==="vilao"){ ks.shift(); }
+  const k=ks.find(x=>answers[x]==null);
+  if(k) answers[k]="pulou";
+  click();
+  const s=S[idx];
+  if(isDone(s)){ if(s.type==="vilao") rr(); else next(); } else render();
+}
+function vilaoBack(){
+  if(answers.vilao_tipo!=null) delete answers.vilao_tipo;
+  else if(answers.vilao_nome!=null) delete answers.vilao_nome;
+  else if(answers.vilao_visto){ delete answers.vilao_visto; }
+  else { delete answers.vilao_foto; return prev(); }
+  render();
+}
+function setEl(k,o){
+  answers["elenco__"+k]=o; click();
+  if(ELENCO.every(e=>answers["elenco__"+e.k])){ answers.elenco=ELENCO.map(e=>e.nome+": "+answers["elenco__"+e.k]).join(" · "); rr(); setTimeout(next,450); }
+  else rr();
+}
+const _temas={};
+function temasDo(ri){ if(!_temas[ri]){ const t=[...TEMAS].sort(()=>Math.random()-.5); _temas[ri]=t.slice(0,4); } return _temas[ri]; }
+function pickRoom(id,v){ answers[id]=v; click(); rr(); setTimeout(next,300); }
+function reverVideo(i){ const el=document.getElementById("rever"); el.innerHTML=`<div class="card-dark fade" style="margin-top:14px"><div class="qnum">${esc(HOSTS[i].nome)}</div>${videoBox(i,true)}<button class="back" onclick="document.getElementById('rever').innerHTML=''">fechar</button></div>`; el.scrollIntoView({behavior:"smooth"}); }
+function tentarDeNovo(){
+  tentativa++; answers.reality_tentativas=tentativa;
+  ["reality_tempo_chute","reality_tempo_real_seg","reality_tempo_comparacao"].forEach(k=>delete answers[k]);
+  answers.reality_inicio=Date.now(); revelaFase=0;
+  idx=S.findIndex(s=>s.id==="gancho"); click(); render(); window.scrollTo({top:0});
+}
+function tryNext(){
+  const s=S[idx];
+  if(!isDone(s)){
+    const m = s.type==="elenco"?"Escolha uma opção para cada personagem, ou toque em pular."
+      : s.type==="f1page"?"Escolha pelo menos uma opção, ou toque em pular."
+      : s.type==="f1"?"Escolha pelo menos uma opção e diga se gostou desta parte."
+      : s.type==="f2"?(s.gs.every(g=>answers["f2_"+g.id+"_fim"]!=null)?"Dê uma nota de 0 a 10 para seguir.":"Jogue (ou pule) o jogo para seguir.")
+      : "Responda para seguir, ou toque em pular.";
+    document.getElementById("err").textContent = m; return;
+  }
+  next();
+}
+function pular(){ const s=S[idx]; if(!isDone(s)) answers[s.id]="pulou"; click(); next(); }
+function next(){ if(idx<S.length-1){ leaveStep(); refazAsk=null; travaConvite=false; idx++; render(); window.scrollTo({top:0,behavior:"smooth"}); } }
+function prev(){ leaveStep(); refazAsk=null; travaConvite=false; revelaFase=0; if(idx>0){ idx--; render(); window.scrollTo({top:0}); } else goEscolha(); }
+function goEscolha(){ leaveStep(); view="escolha"; render(); window.scrollTo({top:0}); }
+
+/* ============ ENVIO (respostas e contato sempre separados) ============ */
+const PID=(function(){ try{ let v=localStorage.getItem("7e_pessoa"); if(!v){ v=Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4); localStorage.setItem("7e_pessoa",v); } return v; }catch(e){ return Math.random().toString(36).slice(2,12); } })();
+function enviar(p){ if(!p.evento){ p.pessoa=PID; if(!p.parcial){ try{ localStorage.setItem("7e_respondeu","1"); }catch(e){} } } if(ENDPOINT){ try{ fetch(ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(p)}).catch(()=>{}); }catch(e){} } }
+function sair(t){ travaSaiu=t; enviar({pesquisa:cur, versao:VERSAO, parcial:true, parou_na_trava:t, quando:new Date().toISOString(), respostas:answers}); click(); rr(); }
+function hallOk(sim){
+  const v=(document.getElementById("hallName").value||"").trim();
+  if(sim && !v){ document.getElementById("herr").textContent="Escreva um nome ou apelido, ou escolha não aparecer."; return; }
+  contato.nome = sim?v:""; answers.hall_escolha = sim?"quer aparecer":"não quer aparecer"; click();
+  if(cur==="app") finish(); else next();
+}
+/* escolha "continuar / compartilhar / não quero" antes e depois das perguntas finais */
+function segue(id,v){ answers[id]=v; click(); if(v==="não quero"){ leaveStep(); idx=S.findIndex(x=>x.type==="hall2"); render(); window.scrollTo({top:0}); } else next(); }
+function hall2Ok(sim){
+  const err=document.getElementById("herr");
+  if(sim){
+    const c=answers.hall_canal, v=((document.getElementById("hallCont")||{}).value||"").trim(), nm=((document.getElementById("hallName")||{}).value||"").trim();
+    if(c==="email" && !/^\S+@\S+\.\S+$/.test(v)){ err.textContent="Digite um e-mail válido, ou toque em Agora não."; return; }
+    if(c==="whatsapp" && v.replace(/\D/g,"").length<10){ err.textContent="Digite o WhatsApp com DDD, ou toque em Agora não."; return; }
+    contato.nome=nm; if(c==="email") contato.email=v; else contato.tel=v;
+    answers.hall_escolha="quer fazer parte ("+c+")";
+  } else answers.hall_escolha="agora não";
+  click(); finish();
+}
+function telOk(sim){
+  const v=(document.getElementById("tel").value||"").trim();
+  if(sim && v.replace(/\D/g,"").length<10){ document.getElementById("terr").textContent="Digite o telefone com DDD, ou toque em Agora não."; return; }
+  contato.tel = sim?v:""; answers.fase2 = sim?"quer participar":"agora não"; click(); finish();
+}
+function finish(){
+  done[cur]=true; leaveStep();
+  enviar({pesquisa:cur, versao:VERSAO, quando:new Date().toISOString(), respostas:answers, campea: cur==="app"?campeas():null});
+  if(contato.nome||contato.tel||contato.email) enviar({evento:"contato", pesquisa:cur, nome:contato.nome||"", telefone:contato.tel||"", email:contato.email||""});
+  if(cur==="app") return abrirLuzia(true);   /* terminou o Monte o App: vai direto para a pergunta 1 da Luzia */
+  next();
+}
+/* ===== CAMARIM DA LUZIA (Pesquisa 1 de 7), dentro do mesmo link ===== */
+function abrirLuzia(direto){
+  let f=document.getElementById("salaLuzia");
+  if(!f){ f=document.createElement("iframe"); f.id="salaLuzia"; f.title="Pesquisa 1 de 7 · Luzia"; f.setAttribute("allow","autoplay");
+    f.style.cssText="position:fixed;inset:0;width:100%;height:100%;border:0;z-index:9000;background:#0b1640"; document.body.appendChild(f); }
+  f.src="luzia.html"+(direto?"?ir=1":"");
+  document.body.style.overflow="hidden"; window.scrollTo({top:0});
+}
+
+/* ============ MINI JOGOS ============ */
+let ac;
+function tone(f,delay){ try{ ac=ac||new (window.AudioContext||window.webkitAudioContext)(); const t=ac.currentTime+delay, o=ac.createOscillator(), g=ac.createGain(); o.type="sine"; o.frequency.value=f; g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.25,t+.03); g.gain.exponentialRampToValueAtTime(.0001,t+.45); o.connect(g).connect(ac.destination); o.start(t); o.stop(t+.5);}catch(e){} }
+const GAMES = {
+  /* as 3 rodadas ficam juntas; acertando ou não, a rodada fecha e conta */
+  visao(el,win){ const R=[0,1,2].map(r=>({hu:Math.floor(Math.random()*360), k:Math.floor(Math.random()*16), d:18-r*4, feito:false, ok:false}));
+    el.innerHTML=`<p class="gtip">Existe um quadrado de cor diferente em cada rodada. Olhe bem e descubra.</p><div class="rounds3">`+R.map((x,r)=>`<div class="round" data-r="${r}"><div class="rlab">Rodada ${r+1} de 3</div>
+      <div class="ggrid">${Array.from({length:16},(_,i)=>`<button class="gcell" data-i="${i}" aria-label="rodada ${r+1}, quadrado ${i+1}" style="background:hsl(${x.hu},60%,${i===x.k?48+x.d:48}%)"></button>`).join("")}</div><div class="rres"></div></div>`).join("")+`</div>`;
+    el.querySelectorAll(".round").forEach(rd=>{ const r=+rd.dataset.r, x=R[r];
+      rd.querySelectorAll(".gcell").forEach(b=>b.onclick=()=>{ if(x.feito) return; x.feito=true; x.ok=+b.dataset.i===x.k; click();
+        rd.querySelectorAll(".gcell").forEach(c=>{ if(+c.dataset.i===x.k) c.classList.add("ok"); else if(c===b) c.classList.add("bad"); });
+        rd.querySelector(".rres").innerHTML=x.ok?'<span style="color:#9be7b0">✓ Achou!</span>':'<span style="color:#ff8a80">Era o quadrado marcado de verde.</span>';
+        if(R.every(y=>y.feito)){ answers.f2_visao_acertos=R.filter(y=>y.ok).length; setTimeout(win,700); } }); }); },
+  audicao(el,win){ const R=[0,1,2].map(()=>{ const a=300+Math.random()*200, up=Math.random()<.5; return {a, b:up?a*1.3:a/1.3, up, feito:false, ok:false}; });
+    el.innerHTML=`<p class="gtip">Ouça os dois sons de cada rodada e diga qual é mais fino.</p>`+R.map((x,r)=>`<div class="round sround chips mini" data-r="${r}"><span class="rlab">Rodada ${r+1}</span><button class="opt" data-a="ouvir">▶ Ouvir</button><button class="opt" data-a="1">1º mais fino</button><button class="opt" data-a="2">2º mais fino</button><span class="rres"></span></div>`).join("");
+    el.querySelectorAll(".round").forEach(rd=>{ const x=R[+rd.dataset.r];
+      rd.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ const a=b.dataset.a;
+        if(a==="ouvir"){ tone(x.a,0); tone(x.b,.6); return; }
+        if(x.feito) return; x.feito=true; x.ok=(a==="2")===x.up; click(); b.classList.add("sel");
+        rd.querySelector(".rres").innerHTML=x.ok?'<span style="color:#9be7b0">✓ Acertou!</span>':`<span style="color:#ff8a80">Era o ${x.up?"2º":"1º"}.</span>`;
+        if(R.every(y=>y.feito)){ answers.f2_audicao_acertos=R.filter(y=>y.ok).length; setTimeout(win,700); } }); }); },
+  tato(el,win){ el.innerHTML=`<p class="gtip">Segure o botão apertado até a barra encher</p><div class="progress" style="height:16px"><i id="hb"></i></div>
+      <button class="btn" id="hold" style="margin-top:10px;padding:12px 20px;font-size:18px;touch-action:none;user-select:none;-webkit-user-select:none">Segure aqui ✋</button><div class="err" id="gerr"></div>`;
+    let t=null,p=0; const bar=el.querySelector("#hb"), b=el.querySelector("#hold");
+    const stop=()=>{ if(!t) return; clearInterval(t); t=null; if(p<100){ p=0; bar.style.width="0"; el.querySelector("#gerr").textContent="Soltou! Tente segurar até o fim."; } };
+    b.oncontextmenu=e=>e.preventDefault();
+    b.onpointerdown=e=>{ e.preventDefault(); if(t) return; el.querySelector("#gerr").textContent=""; t=setInterval(()=>{ p+=5; bar.style.width=p+"%"; if(p>=100){ clearInterval(t); t=null; win(); } },100); };
+    b.onpointerup=b.onpointerleave=b.onpointercancel=stop; },
+  paladar(el,win){ const I=[["🍅","Tomate"],["🧀","Queijo"],["🌶️","Pimenta"],["🍯","Mel"],["🍋","Limão"],["🌿","Manjericão"],["🥥","Coco"],["🍫","Chocolate"]]; const sel=[];
+    const draw=()=>{ el.innerHTML=`<p class="gtip">Monte o seu prato: escolha 3 ingredientes (${sel.length}/3)</p><div class="chips mini">${I.map((x,i)=>`<button class="opt ${sel.includes(i)?"sel":""}" data-i="${i}">${x[0]} ${x[1]}</button>`).join("")}</div>`;
+      el.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ const i=+b.dataset.i, p=sel.indexOf(i); if(p>=0) sel.splice(p,1); else if(sel.length<3) sel.push(i); click();
+        if(sel.length===3){ answers[S[idx].id+"_prato"]=sel.map(i=>I[i][1]); win(); } else draw(); }); }; draw(); },
+  olfato(el,win){ const E=["🌸","☕","🍋","🌸","☕","🍋"].sort(()=>Math.random()-.5), open=[], okk=[]; let lock=false;
+    const draw=()=>{ el.innerHTML=`<p class="gtip">Ache os pares de cheiros iguais</p><div class="ggrid g3">${E.map((e,i)=>open.includes(i)||okk.includes(i)?`<button class="gcard" data-i="${i}">${e}</button>`:`<button class="gcard pint p${i%3}" data-i="${i}" aria-label="carta ${i+1}"></button>`).join("")}</div>`;
+      el.querySelectorAll(".gcard").forEach(b=>b.onclick=()=>{ const i=+b.dataset.i; if(lock||open.includes(i)||okk.includes(i)) return; open.push(i); click(); draw();
+        if(open.length===2){ lock=true; setTimeout(()=>{ if(E[open[0]]===E[open[1]]) okk.push(...open); open.length=0; lock=false; if(okk.length===E.length) win(); else draw(); },700); } }); }; draw(); },
+  equilibrio(el,win){ let hits=0,x=0,dir=1,raf;
+    el.innerHTML=`<p class="gtip">Toque em “Agora!” quando a bolinha estiver na faixa do meio (<span id="eh">0</span>/3)</p><div class="bal"><div class="zone"></div><div class="dot" id="dot"></div></div>
+      <button class="btn" id="eb" style="margin-top:14px">Agora!</button><div class="err" id="gerr"></div>`;
+    const dot=el.querySelector("#dot");
+    const step=()=>{ if(!document.body.contains(dot)) return; x+=dir*1.1; if(x>=100){x=100;dir=-1} if(x<=0){x=0;dir=1} dot.style.left=x+"%"; raf=requestAnimationFrame(step); }; step();
+    el.querySelector("#eb").onclick=()=>{ if(Math.abs(x-50)<9){ hits++; click(); el.querySelector("#eh").textContent=hits; el.querySelector("#gerr").textContent=""; if(hits>=3){ cancelAnimationFrame(raf); win(); } } else el.querySelector("#gerr").textContent="Passou do ponto! Tente de novo."; }; },
+  corpo(el,win){ const P=["✋ Mão","🦶 Pé","👂 Orelha","👃 Nariz"], seq=[0,1,2].map(()=>Math.floor(Math.random()*4)); let got=[], showing=true, timers=[];
+    el.innerHTML=`<p class="gtip" id="ct">Preste atenção na ordem em que as partes do corpo acendem…</p><div class="ggrid g2">${P.map((p,i)=>`<button class="opt pad" data-i="${i}" style="justify-content:center">${p}</button>`).join("")}</div>
+      <div class="err" id="gerr"></div><button class="back" id="rv">↺ ver a ordem de novo</button>`;
+    const pads=el.querySelectorAll(".pad"), ct=el.querySelector("#ct");
+    const play=()=>{ timers.forEach(clearTimeout); timers=[]; pads.forEach(p=>p.classList.remove("sel")); showing=true; got=[]; ct.textContent="Preste atenção na ordem em que as partes do corpo acendem…";
+      seq.forEach((k,j)=>{ timers.push(setTimeout(()=>pads[k].classList.add("sel"),j*800+300)); timers.push(setTimeout(()=>pads[k].classList.remove("sel"),j*800+800)); });
+      timers.push(setTimeout(()=>{ showing=false; ct.textContent="Agora toque na mesma ordem"; },seq.length*800+400)); };
+    play(); el.querySelector("#rv").onclick=play;
+    pads.forEach(b=>b.onclick=()=>{ if(showing) return; const i=+b.dataset.i; click();
+      if(seq[got.length]===i){ got.push(i); b.classList.add("sel"); setTimeout(()=>b.classList.remove("sel"),200); if(got.length===seq.length) win(); }
+      else { el.querySelector("#gerr").textContent="Ops, a ordem era outra. Veja de novo."; got=[]; } }); }
+};
+function campeas(){
+  const fala = FASE2.map(g=>({nome:g.nome, v:answers["f2_"+g.id+"_nota"]})).filter(x=>x.v!=null).sort((a,b)=>b.v-a.v)[0]||null;
+  const faz = FASE2.map(g=>{ const id="f2_"+g.id, r=answers[id+"_refez"]||[];
+    const v=(answers[id+"_fim"]==="completou"?5:0)+3*r.filter(m=>m===MOTIVOS[2]).length-r.filter(m=>m===MOTIVOS[1]).length+Math.min(3,Math.floor((answers[id+"_tempo_seg"]||0)/20));
+    return {nome:g.nome, v}; }).sort((a,b)=>b.v-a.v)[0]||null;
+  return {pelo_que_falou:fala, pelo_que_fez:faz, divergencia: !!(fala&&faz&&fala.nome!==faz.nome)};
+}
+
+/* ============ FIM / ESCOLHAS ============ */
+function fim(){
+  document.getElementById("prog").style.display="none";
+  stage.innerHTML = `<div class="scene center"><div class="big-emoji">⭐</div><h1>Valeu demais!</h1>
+    <p class="sub">Suas respostas já ajudaram a construir o 7entidos.</p>${shareBox("fim")}
+    <div class="stack"><button class="btn ghost" onclick="goEscolha()">Voltar para o início</button></div></div>`;
+}
+const tmin = s => s==null?"-":Math.floor(s/60)+" min "+(s%60)+" s";
+function linhas(){
+  const out=[];
+  ["reality","app"].forEach(f=>{
+    if(!done[f] && !FLOWS[f].some(s=>s.num && isDone(s))) return;
+    out.push(""); out.push(f==="reality"?"PESQUISA DO REALITY":"PESQUISA DO APP");
+    FLOWS[f].filter(s=>s.num).forEach(s=>{
+      if(s.type==="cast") out.push("Perfil "+(s.i+1)+" ("+s.c.sentido+"): "+(answers[s.id+"_foto"]||"-")+" / "+(answers[s.id+"_nome"]||"-")+" / "+(answers[s.id+"_tipo"]||"-"));
+      else if(s.type==="vilao") out.push("Vilão: "+(answers.vilao_foto||"-")+" / "+(answers.vilao_nome||"-")+" / "+(answers.vilao_tipo||"-"));
+      else if(s.type==="elenco") out.push("Elenco: "+(answers.elenco||"-"));
+      else if(s.type==="comodo") out.push("Cômodo "+s.r.nome+": "+(answers[s.id]||"-"));
+      else if(s.type==="f1") out.push(s.num+". Fase 1 - "+s.f.s+": "+((Array.isArray(answers[s.id])?answers[s.id]:[]).join(", ")||"-")+" / "+(answers[s.id+"_gostou"]||"-"));
+      else if(s.type==="f1page") FASE1.forEach((x,i)=>out.push((s.num+i)+". Fase 1 - "+x.s+": "+((Array.isArray(answers["f1_"+x.id])?answers["f1_"+x.id]:[]).join(", ")||"-")));
+      else if(s.type==="f2") s.gs.forEach((g,i)=>{ const id="f2_"+g.id; out.push((s.num+i)+". Fase 2 - "+g.nome+": "+(answers[id+"_fim"]||"-")+(answers[id+"_acertos"]!=null?" ("+answers[id+"_acertos"]+"/3 acertos)":"")+" / nota "+(answers[id+"_nota"]??"-")+" / tempo "+tmin(answers[id+"_tempo_seg"])); });
+      else if(s.type==="combo"){ out.push(s.num+". "+s.mt.title+": "+((answers.motivos_nao_comprar||[]).join(", ")||"-")); out.push("Tempo que achou: "+(answers.app_tempo_chute||"-")+" / tempo real: "+tmin(answers.app_tempo_real_seg)); }
+      else if(s.type==="tempo") out.push("Tempo que achou: "+(answers[s.id]||"-")+" / tempo real: "+tmin(answers[f+"_tempo_real_seg"]));
+      else out.push(s.title+": "+(answers[s.id]??"-"));
+    });
+    if(f==="app"){ out.push("Referência das cartas: "+(answers.f2_olfato_referencia||"-")); out.push("Flow: "+(answers.app_flow||"-")); }
+    if(f==="app"){ const c=campeas(); out.push("Jogo campeão pelo que você falou: "+(c.pelo_que_falou?c.pelo_que_falou.nome:"-")+" / pelo que você fez: "+(c.pelo_que_fez?c.pelo_que_fez.nome:"-")); }
+  });
+  return out;
+}
+let downloads = null;
+try{ window.claude && claude.use("downloads").then(d=>{ downloads=d; if(view==="escolhas") escolhas(); }).catch(()=>{}); }catch(e){}
+function escolhas(){
+  document.getElementById("prog").style.display="none";
+  stage.innerHTML = `<div class="scene center">
+    <div class="logo" style="margin:20px 0 6px"><i>7</i>ENTIDOS</div><p class="sub">Suas escolhas estão prontas.</p>
+    <div class="stack" style="max-width:420px;margin:18px auto">
+      ${downloads?`<button class="btn" onclick="baixarPDF()">Baixar minhas escolhas em PDF</button>`:`<button class="btn" onclick="copiar(this)">Copiar minhas escolhas</button>`}
+      <div class="err" id="perr"></div></div>
+    <div class="card-dark" style="text-align:left;max-width:420px;margin:0 auto">
+      ${REDES.filter(r=>r.url).map(r=>`<div>${r.ic} <a href="${r.url}" target="_blank" rel="noopener">${esc(r.nome)}</a></div>`).join("")}</div>
+    <div style="max-width:420px;margin:0 auto;text-align:left">${shareBox("escolhas")}</div>
+    <div class="stack" style="max-width:420px;margin:18px auto"><button class="btn ghost" onclick="view='flow';render()">← Voltar ao portão</button></div></div>`;
+}
+async function baixarPDF(){
+  const err=document.getElementById("perr");
+  try{
+    const { jsPDF } = window.jspdf; const doc = new jsPDF({unit:"mm",format:"a4"});
+    doc.setFillColor(16,14,18); doc.rect(0,0,210,34,"F");
+    doc.setTextColor(245,197,66); doc.setFont("helvetica","bold"); doc.setFontSize(26); doc.text("7ENTIDOS",15,20);
+    doc.setTextColor(255,255,255); doc.setFontSize(11); doc.text("Minhas escolhas - pesquisa 7entidos",15,28);
+    doc.setTextColor(30,30,30); doc.setFont("helvetica","normal"); doc.setFontSize(11);
+    let y=46;
+    linhas().forEach(l=>{ doc.splitTextToSize(l||" ",180).forEach(t=>{ if(y>275){doc.addPage();y=20;} doc.text(t,15,y); y+=6; }); y+=1; });
+    await downloads.save({filename:"minhas-escolhas-7entidos.pdf", data:doc.output("blob")});
+    err.style.color="#9be7b0"; err.textContent="PDF salvo ✓";
+  }catch(e){ err.style.color=""; err.textContent = e && e.code==="declined" ? "Tudo bem, o PDF não foi salvo." : "Não deu para gerar o PDF aqui. Tente de novo."; }
+}
+function copiar(btn){ try{ navigator.clipboard.writeText(linhas().join("\n")).then(()=>btn.textContent="Copiado ✓",()=>btn.textContent="Não deu para copiar"); }catch(e){ btn.textContent="Não deu para copiar"; } }
+function click(){ try{ ac=ac||new (window.AudioContext||window.webkitAudioContext)(); const o=ac.createOscillator(),g=ac.createGain(); o.type="sine";o.frequency.value=180; g.gain.setValueAtTime(.18,ac.currentTime); g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.12); o.connect(g).connect(ac.destination); o.start(); o.stop(ac.currentTime+.13);}catch(e){} }
+
+if(location.hash==="#app"){ startFlow("app"); } else render();
+</script>
+
+<!-- ===== SALA TRANCADA NAS 100 PESSOAS + LISTA DE ESPERA ===== -->
+<style>
+#tranca{position:fixed;inset:0;z-index:9998;display:none;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:28px 20px;text-align:center;overflow:auto;
+background:radial-gradient(ellipse 80% 60% at 50% 40%,#1b2a5c 0%,#0d1636 55%,#060a1c 100%);color:#f6e7b8;font-family:Inter,system-ui,sans-serif}
+#tranca .t-logo{font-family:"Bebas Neue",sans-serif;font-size:clamp(30px,7vw,48px);letter-spacing:3px;background:linear-gradient(180deg,#fff1c2,#f5c542 45%,#b9821c);-webkit-background-clip:text;background-clip:text;color:transparent}
+#tranca .t-tit{font-family:"Bebas Neue",sans-serif;font-size:clamp(36px,9vw,64px);line-height:1;color:#fff6dc;animation:t-pisca 1.6s ease-in-out infinite}
+@keyframes t-pisca{0%,100%{opacity:1}50%{opacity:.45}}
+#tranca p{max-width:460px;margin:0;font-size:19px;color:#e9dcb4}
+#tranca form{width:min(420px,100%);display:flex;flex-direction:column;gap:12px;text-align:left}
+#tranca input[type=text],#tranca input[type=email]{width:100%;padding:14px 16px;border-radius:12px;border:2px solid #f5c542;background:#0b1430;color:#fff;font-size:18px;box-sizing:border-box}
+#tranca label.lg{display:flex;gap:10px;align-items:flex-start;font-size:15px;color:#d9cfae;line-height:1.35}
+#tranca label.lg input{width:22px;height:22px;flex:none;margin-top:2px;accent-color:#f5c542}
+#tranca button{padding:16px;border:0;border-radius:14px;background:linear-gradient(180deg,#ffe08a,#f5c542);color:#1a1405;font-weight:800;font-size:20px;cursor:pointer}
+#tranca .t-err{color:#ff9a8a;font-size:15px;min-height:18px}
+</style>
+<div id="tranca" role="dialog" aria-label="As 100 vagas acabaram">
+  <div class="t-logo">A Casa dos 7 Sentidos</div>
+  <div class="t-tit">As 100 vagas desta sala acabaram</div>
+  <p>Deixe seu nome e e-mail e seja avisado quando abrirem as próximas salas.</p>
+  <form id="t-form" novalidate>
+    <input type="text" id="t-nome" placeholder="Seu nome" autocomplete="name">
+    <input type="email" id="t-email" placeholder="Seu e-mail" autocomplete="email">
+    <label class="lg"><input type="checkbox" id="t-lgpd"> Estou ciente de que meu nome e e-mail serão usados só para me avisar sobre as próximas salas do 7entidos (LGPD).</label>
+    <div class="t-err" id="t-err"></div>
+    <button type="submit">Quero ser avisado</button>
+  </form>
+</div>
+<script>
+(function(){
+  var URL=(window.PESQUISA_URL||""); if(!URL) return;
+  try{ if(localStorage.getItem("7e_respondeu")==="1") return; }catch(e){}
+  var tela=document.getElementById("tranca");
+  function trancar(){ tela.style.display="flex"; document.body.style.overflow="hidden";
+    document.querySelectorAll("video").forEach(function(v){ try{v.pause();}catch(e){} }); }
+  fetch(URL+"?acao=vagas",{cache:"no-store"}).then(function(r){return r.json();}).then(function(d){ if(d&&d.trancada) trancar(); }).catch(function(){});
+  document.getElementById("t-form").addEventListener("submit",function(ev){
+    ev.preventDefault();
+    var n=document.getElementById("t-nome").value.trim(), m=document.getElementById("t-email").value.trim(), ok=document.getElementById("t-lgpd").checked, er=document.getElementById("t-err");
+    if(!n){ er.textContent="Escreva seu nome."; return; }
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(m)){ er.textContent="Confira o e-mail."; return; }
+    if(!ok){ er.textContent="Marque a caixinha de ciência para continuar."; return; }
+    try{ fetch(URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify({evento:"espera",nome:n,email:m,lgpd:true})}).catch(function(){}); }catch(e){}
+    this.outerHTML='<p style="font-size:22px;color:#f5c542;font-weight:800">Pronto! Você está na lista. ✨</p><p>Assim que a próxima sala abrir, a gente te avisa por e-mail.</p>';
+  });
+})();
+</script>
+</body>
+</html>
