@@ -230,7 +230,7 @@ function render(){
   else if(extra==="duda") h=`<div class="center"><h2>Próximo morador: Duda</h2><div class="porta" style="background:linear-gradient(90deg,#3a2a6a,#b48cff,#3a2a6a)"></div><p class="sub">(Prévia) A pesquisa 2 de 7, da Duda, é a próxima que vamos montar.</p><button class="btn ghost" onclick="extra=null;render()">← voltar</button></div>`;
   else if(p.t==="capa"){
     h=`<div class="anon">🛡️ Pesquisa 100% anônima · ninguém vai saber quem respondeu</div>${vagas()}
-    <div class="brief"><div class="retrato"><img src="luzia.jpg" alt="Luzia"></div>
+    <div class="brief"><div class="retrato"><img src="livia.jpg" alt="Luzia"></div>
       <div><span class="sentido">👁️ Visão</span><h1>Luzia</h1><div class="apelido">“Mas todo mundo me chama de Ju.”</div>
         <div class="ficha"><p>A heroína da casa. Rala de madrugada estudando e trabalhando, usa um terço no peito e quer voltar a sentir.</p></div>
         <p style="font-size:18px;color:var(--muted);margin:12px 0 0">Você vai escolher os looks e o jeito dela. Leva uns 2 minutos.</p></div></div>
@@ -251,7 +251,7 @@ function render(){
   else if(p.t==="pers"){
     const P=PERS[p.i], v=R[P.id];
     h=`<div class="qn">Pergunta ${5+p.i} de 8 · o jeito da Luzia</div>
-    ${p.i===0?`<div class="fala"><div class="av"><img src="luzia.jpg" alt=""></div><div class="balao">“Três da manhã e eu aqui, com café e marca-texto...”</div></div>`:""}
+    ${p.i===0?`<div class="fala"><div class="av"><img src="livia.jpg" alt=""></div><div class="balao">“Três da manhã e eu aqui, com café e marca-texto...”</div></div>`:""}
     <h2>${P.q}</h2>
     <div class="duo">${[P.a,P.b].map(o=>`<button class="op ${o[2]?"face":""} ${v===o[0]?"sel":""}" onclick="escolhe('${P.id}','${esc(o[0])}')"><span class="em">${o[2]?rosto(o[2]):o[1]}</span>${o[0]}</button>`).join("")}</div>${nav(true)}`;
   }
