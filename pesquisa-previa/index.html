@@ -759,11 +759,18 @@ function render(){
           <button class="btn ghost" onclick="answers.eagora_compartilhar=!answers.eagora_compartilhar;window.click();rr()">Quero compartilhar com alguém</button></div>
           ${answers.eagora_compartilhar?shareBox("eagora"):""}</div>
       </div>
-      <div class="card-dark flowvid fade"><b style="font-size:20px">O que é Flow?</b>
-        ${FLOW_VIDEO?`<video src="${FLOW_VIDEO}" controls playsinline style="width:100%;border-radius:12px;margin-top:10px"></video>`:`<div class="vidph"><div class="vplay">▶</div><span>Vídeo explicativo sobre o Flow · em breve</span></div>`}
-        <p class="fontes"><b>Fontes</b><br>Csikszentmihalyi, M. (1990). <i>Flow: The Psychology of Optimal Experience</i>. Harper &amp; Row.<br>
-        Csikszentmihalyi, M. e LeFevre, J. (1989). Optimal experience in work and leisure. <i>Journal of Personality and Social Psychology</i>, 56(5).<br>
-        Nakamura, J. e Csikszentmihalyi, M. (2002). The concept of flow. <i>Handbook of Positive Psychology</i>. Oxford University Press.</p></div>`:""}
+      <div class="card-dark flowvid fade"><p class="fontes" style="margin:0"><b>Fontes</b><br>Maslow, A. H. (1943). A theory of human motivation. <i>Psychological Review</i>, 50(4), 370–396.<br>
+        Csikszentmihalyi, M. (1975). <i>Beyond Boredom and Anxiety</i>. Jossey-Bass.<br>
+        Getzels, J. W. e Csikszentmihalyi, M. (1976). <i>The Creative Vision: A Longitudinal Study of Problem Finding in Art</i>. Wiley.<br>
+        Larson, R. e Csikszentmihalyi, M. (1983). The experience sampling method. <i>New Directions for Methodology of Social and Behavioral Science</i>, 15, 41–56.<br>
+        Csikszentmihalyi, M. e LeFevre, J. (1989). Optimal experience in work and leisure. <i>Journal of Personality and Social Psychology</i>, 56(5), 815–822.<br>
+        Csikszentmihalyi, M. (1990). <i>Flow: The Psychology of Optimal Experience</i>. Harper &amp; Row.<br>
+        Csikszentmihalyi, M. (1993). <i>The Evolving Self: A Psychology for the Third Millennium</i>. HarperCollins.<br>
+        Csikszentmihalyi, M., Rathunde, K. e Whalen, S. (1993). <i>Talented Teenagers: The Roots of Success and Failure</i>. Cambridge University Press.<br>
+        Csikszentmihalyi, M. (1997). <i>Finding Flow: The Psychology of Engagement with Everyday Life</i>. Basic Books.<br>
+        Seligman, M. E. P. e Csikszentmihalyi, M. (2000). Positive psychology: An introduction. <i>American Psychologist</i>, 55(1), 5–14.<br>
+        Nakamura, J. e Csikszentmihalyi, M. (2002). The concept of flow. In C. R. Snyder e S. J. Lopez (orgs.), <i>Handbook of Positive Psychology</i>. Oxford University Press.<br>
+        Harari, Y. N. (2015). <i>Sapiens: Uma breve história da humanidade</i>. L&amp;PM.</p></div>`:""}
       <div class="nav"><button class="back" onclick="verGraf=false;prev()">← voltar</button></div>`;
     ownNav=true;
   }
