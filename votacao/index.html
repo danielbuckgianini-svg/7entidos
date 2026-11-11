@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Qual é o sentido do Brasil? · A Casa dos 7 Sentidos</title>
+<meta name="description" content="Estamos numa campanha para descobrir o sentido do Brasil. Vote até sexta.">
+<meta property="og:title" content="Qual é o sentido do Brasil?">
+<meta property="og:description" content="Estamos numa campanha para descobrir o sentido do Brasil. Vote até sexta.">
+<link rel="icon" href="logo-7entidos-simbolo.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=Fraunces:ital,wght@1,700&display=swap" rel="stylesheet">
+<style>
+/* Página de votação · versão escolhida na Sala da Landing Page (11/11):
+   B · Lista grande · foto pequena redonda · cor forte de cada sentido ·
+   botão "Votar em <sentido>" · só foto + sentido no cartão ·
+   confirmação em gaveta · o prazo pisca · logo do 7entidos + logo do reality no topo */
+:root{--fundo:#0b0f1e;--card:#151a30;--texto:#fff;--suave:#c9c9d6;--ouro:#F5C542;
+--visao:#f5c542;--audicao:#4aa8ff;--tato:#ff8a3d;--olfato:#5ccf8a;--paladar:#ff5a6e;--equilibrio:#b48cff;--corpo:#3fd6d0}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:"DM Sans",system-ui,sans-serif;background:var(--fundo);color:var(--texto);min-height:100vh;font-size:17px;line-height:1.4}
+.luz{position:fixed;inset:0;pointer-events:none;z-index:0;background:
+ radial-gradient(60vmax 40vmax at 0% 0%,rgba(245,197,66,.10),transparent 60%),
+ radial-gradient(60vmax 40vmax at 100% 30%,rgba(74,168,255,.10),transparent 60%),
+ radial-gradient(60vmax 40vmax at 0% 100%,rgba(180,140,255,.10),transparent 60%)}
+main{position:relative;z-index:1;max-width:520px;margin:0 auto;padding:22px 16px 40px}
+.topo{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.marca{display:flex;align-items:center;gap:8px;font-weight:800;font-size:16px;color:#fff;text-decoration:none}
+.marca img{width:30px;height:30px}
+.marca b{color:var(--ouro)}
+.reality{display:flex;align-items:center;gap:8px;font-family:Fraunces,serif;font-style:italic;font-size:13px;color:var(--ouro);text-align:right;line-height:1.05}
+.mandala{position:relative;width:34px;height:34px;flex:0 0 auto;border-radius:50%;background:radial-gradient(#22336f,#0e1b44);box-shadow:0 0 12px rgba(245,197,66,.5),inset 0 0 0 1.5px var(--ouro);display:flex;align-items:center;justify-content:center;font-family:Fraunces,serif;font-weight:700;font-style:normal;font-size:18px;color:var(--ouro)}
+.mandala i{position:absolute;width:6px;height:6px;border-radius:50%;left:50%;top:50%;margin:-3px}
+h1{font-weight:800;font-size:clamp(30px,8.5vw,40px);line-height:1.08;margin:22px 0 8px}
+.campanha{font-size:17px;color:#fff;margin-bottom:4px}
+.instrucao{font-size:16px;color:var(--suave);margin-bottom:14px}
+.prazo{display:inline-block;font-weight:800;font-size:15px;color:#231F1A;background:var(--ouro);border-radius:30px;padding:6px 14px;margin-bottom:18px;animation:pisca 1.2s steps(1) infinite}
+@keyframes pisca{50%{background:#fff3c4}}
+.lista{display:flex;flex-direction:column;gap:10px}
+.cartao{display:flex;align-items:center;gap:14px;width:100%;padding:12px;border-radius:18px;background:var(--card);border:0;border-left:7px solid var(--cor);color:inherit;font:inherit;text-align:left;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.cartao:active{transform:scale(.98)}
+.cartao.sel{box-shadow:0 0 0 3px var(--cor),0 0 24px var(--cor)}
+.cartao img{width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid var(--cor);flex:0 0 auto;background:#222}
+.cartao .txt{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.cartao .nome{font-weight:800;font-size:22px;line-height:1.1;color:var(--cor)}
+.cartao .botao{font-weight:800;font-size:15px;line-height:1.15;background:var(--cor);color:#111;border-radius:30px;padding:9px 12px}
+.rodape{margin-top:22px;text-align:center;font-size:13px;color:#8d8fa6}
+/* gaveta de confirmação */
+.sombra{position:fixed;inset:0;z-index:5;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .25s}
+.sombra.on{opacity:1;pointer-events:auto}
+.gaveta{position:fixed;left:0;right:0;bottom:0;z-index:6;max-width:520px;margin:0 auto;padding:20px 18px calc(22px + env(safe-area-inset-bottom));background:#fff;color:#1b1b1b;border-radius:24px 24px 0 0;transform:translateY(110%);visibility:hidden;transition:transform .3s,visibility .3s}
+.gaveta.on{transform:none;visibility:visible}
+.gaveta .linha{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.gaveta img{width:56px;height:56px;border-radius:50%;object-fit:cover;border:3px solid var(--cor)}
+.gaveta p{font-size:15px;color:#555}
+.gaveta .qual{font-weight:800;font-size:24px}
+.gaveta button{display:block;width:100%;border:0;font:inherit;font-weight:800;font-size:18px;padding:15px;border-radius:14px;margin-top:8px;cursor:pointer}
+.gaveta .sim{background:var(--cor);color:#111}
+.gaveta .nao{background:#eee;color:#333}
+/* depois do voto (o Bloco 3 completa esta tela) */
+.pronto{position:fixed;inset:0;z-index:7;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;background:rgba(11,15,30,.97)}
+.pronto.on{display:flex}
+.pronto h2{font-family:Fraunces,serif;font-style:italic;font-size:40px;color:var(--ouro)}
+.pronto p{margin-top:8px;color:var(--suave)}
+</style>
+</head>
+<body>
+<div class="luz"></div>
+<main>
+  <div class="topo">
+    <a class="marca" href="/?site"><img src="logo-7entidos-simbolo.png" alt=""><span><b>7</b>entidos</span></a>
+    <div class="reality"><span>A Casa dos<br>7 Sentidos</span><span class="mandala" id="mandala">7</span></div>
+  </div>
+
+  <h1>Qual é o sentido do Brasil?</h1>
+  <p class="campanha">Estamos numa campanha para descobrir o sentido do Brasil.</p>
+  <p class="instrucao">Toque no sentido que é a cara do Brasil.</p>
+  <div class="prazo">Vote até sexta, 23h59</div>
+
+  <div class="lista" id="lista"></div>
+  <p class="rodape">Um reality do app 7entidos · @7entidoss</p>
+</main>
+
+<div class="sombra" id="sombra"></div>
+<div class="gaveta" id="gaveta" role="dialog" aria-label="Confirmar voto">
+  <div class="linha"><img id="gFoto" alt=""><div><p>Seu voto vai para</p><div class="qual" id="gNome"></div></div></div>
+  <button class="sim" id="gSim">Confirmar meu voto</button>
+  <button class="nao" id="gNao">Voltar e escolher outro</button>
+</div>
+
+<div class="pronto" id="pronto"><h2>Voto guardado!</h2><p id="prontoTxt"></p></div>
+
+<script>
+/* Os 7 sentidos e o morador de cada um (fotos do reality A Casa dos 7 Sentidos) */
+var SENTIDOS=[
+ {id:"visao",nome:"Visão",morador:"Luzia",foto:"luzia.jpg",cor:"var(--visao)"},
+ {id:"audicao",nome:"Audição",morador:"Rafa",foto:"rafa.jpg",cor:"var(--audicao)"},
+ {id:"tato",nome:"Tato",morador:"Tonho",foto:"tonho.jpg",cor:"var(--tato)"},
+ {id:"olfato",nome:"Olfato",morador:"Yara",foto:"yara.jpg",cor:"var(--olfato)"},
+ {id:"paladar",nome:"Paladar",morador:"Beto",foto:"beto.jpg",cor:"var(--paladar)"},
+ {id:"equilibrio",nome:"Equilíbrio",morador:"Duda",foto:"duda.jpg",cor:"var(--equilibrio)"},
+ {id:"corpo",nome:"Noção de corpo",morador:"Lucas",foto:"lucas.jpg",cor:"var(--corpo)"}
+];
+var lista=document.getElementById("lista");
+SENTIDOS.forEach(function(s,i){
+  var b=document.createElement("button");b.className="cartao";b.style.setProperty("--cor",s.cor);
+  b.innerHTML='<img src="'+s.foto+'" alt="'+s.morador+', do sentido '+s.nome+'"><span class="txt"><span class="nome">'+s.nome+'</span><span class="botao">Votar em '+s.nome+'</span></span>';
+  b.onclick=function(){abrir(i,b)};lista.appendChild(b);
+});
+/* pontinhos da mandala do reality, nas 7 cores */
+(function(){var m=document.getElementById("mandala");SENTIDOS.forEach(function(s,i){var a=-Math.PI/2+i*2*Math.PI/7,d=document.createElement("i");d.style.background=s.cor;d.style.transform="translate("+(15*Math.cos(a))+"px,"+(15*Math.sin(a))+"px)";m.appendChild(d)})})();
+
+var escolhido=-1,gaveta=document.getElementById("gaveta"),sombra=document.getElementById("sombra");
+function abrir(i,el){
+  escolhido=i;var s=SENTIDOS[i];
+  document.querySelectorAll(".cartao.sel").forEach(function(c){c.classList.remove("sel")});el.classList.add("sel");
+  gaveta.style.setProperty("--cor",s.cor);
+  document.getElementById("gFoto").src=s.foto;document.getElementById("gNome").textContent=s.nome;
+  gaveta.classList.add("on");sombra.classList.add("on");
+}
+function fechar(){gaveta.classList.remove("on");sombra.classList.remove("on");document.querySelectorAll(".cartao.sel").forEach(function(c){c.classList.remove("sel")})}
+document.getElementById("gNao").onclick=fechar;sombra.onclick=fechar;
+document.getElementById("gSim").onclick=function(){
+  if(escolhido<0)return;var s=SENTIDOS[escolhido];
+  fechar();
+  document.getElementById("prontoTxt").textContent="Você votou em "+s.nome+".";
+  document.getElementById("pronto").classList.add("on");
+};
+</script>
+</body>
+</html>
