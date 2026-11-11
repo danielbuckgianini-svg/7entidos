@@ -456,16 +456,16 @@ const TEMPO_LIM = [3,6,10,15,Infinity];
 const BLOCOS = ["Casting 1","Casting 2","Elenco","Cômodos","Momentos"];
 
 /* ===== DADOS DO APP (segunda pesquisa) ===== */
-/* Fase 1: 15 opções em 3 grupos de 5 por tema: em casa, na rua, na natureza (Sala da Jornada, 10/11) */
+/* Fase 1: 4 opções com fotos por sentido, igual ao site (decisão de 11/11, no lugar das 15 opções em 3 grupos) */
 const GRUPOS5 = ["Em casa","Na rua","Na natureza"];
 const FASE1 = [
-  {id:"visao", s:"Visão", cor:"#f5c542", q:"O que te faz bem de olhar?", o:["Fotos antigas de família", "Luz de vela", "Quadro na parede", "Luzinhas de Natal", "Livro ilustrado", "Um mural colorido de grafite", "Luzes da cidade à noite", "Bandeirinhas de festa junina", "Fogos de Ano Novo", "Vitrine enfeitada", "Pôr do sol na praia", "Céu estrelado", "Arco-íris depois da chuva", "Fundo do mar", "Jardim florido"]},
-  {id:"audicao", s:"Audição", cor:"#4aa8ff", q:"O que te faz bem ouvir?", o:["Café passando", "Panela no fogo", "Gato ronronando", "Chuva no telhado", "Silêncio total", "Música ao vivo", "Risada de amigos", "Feira de domingo", "Batucada de samba", "Sino de igreja", "Som do mar", "Pássaros", "Vento nas árvores", "Riacho correndo", "Grilos à noite"]},
-  {id:"tato", s:"Tato", cor:"#ff8a3d", q:"O que te faz bem de sentir na pele?", o:["Cobertor macio", "Toalha felpuda", "Lã de tricô", "Pelo de bichinho", "Espuma de banho", "Abraço apertado", "Mão dada", "Vento no rosto", "Sol quente na pele", "Água gelada", "Areia nos pés", "Grama", "Pedrinhas de rio", "Folha", "Água do mar"]},
-  {id:"paladar", s:"Paladar", cor:"#ff5a6e", q:"Que sabor te faz bem?", o:["Comida de vó", "Café passado na hora", "Arroz com feijão", "Brigadeiro", "Caldo quentinho", "Doce de padaria", "Pastel de feira", "Pão de queijo", "Sorvete", "Pipoca doce", "Fruta fresca", "Água de coco", "Manga", "Melancia", "Mel"]},
-  {id:"olfato", s:"Olfato", cor:"#5ccf8a", q:"Que cheiro te faz bem?", o:["Pão saindo do forno", "Cheiro de café", "Roupa limpa", "Bolo no forno", "Perfume de alguém querido", "Pipoca de cinema", "Churrasco de domingo", "Livro novo", "Protetor solar", "Asfalto depois da chuva", "Terra molhada", "Maresia", "Grama cortada", "Eucalipto", "Flor de laranjeira"]},
-  {id:"equilibrio", s:"Equilíbrio", cor:"#b48cff", q:"Que movimento te faz bem?", o:["Balançar numa rede", "Dança lenta na sala", "Girar devagar", "Cadeira de balanço", "Ficar num pé só", "Andar de bicicleta", "Dançar", "Andar no meio-fio", "Carrossel", "Montanha-russa", "Ficar de pé numa prancha", "Ir e vir de onda", "Boiar no mar", "Balanço de árvore", "Barquinho no mar"]},
-  {id:"corpo", s:"Noção do corpo", cor:"#3fd6d0", q:"O que te faz bem no corpo?", o:["Deitar e respirar fundo", "Alongar", "Banho quente", "Cochilo depois do almoço", "Cantar no chuveiro", "Correr", "Caminhar", "Rir até doer a barriga", "Treinar na academia", "Subir escada", "Nadar", "Pés descalços na grama", "Espreguiçar ao sol", "Respirar ar puro", "Deitar na areia"]}
+  {id:"visao", s:"Visão", cor:"#f5c542", q:"O que te faz bem de olhar?", o:["Pôr do sol na praia","Céu estrelado","Um mural colorido de grafite","Fotos antigas de família"]},
+  {id:"audicao", s:"Audição", cor:"#4aa8ff", q:"O que te faz bem ouvir?", o:["Som do mar","Música ao vivo","Chuva no telhado","Silêncio total"]},
+  {id:"tato", s:"Tato", cor:"#ff8a3d", q:"O que te faz bem de sentir na pele?", o:["Areia nos pés","Cobertor macio","Água gelada","Abraço apertado"]},
+  {id:"paladar", s:"Paladar", cor:"#ff5a6e", q:"Que sabor te faz bem?", o:["Comida de vó","Doce de padaria","Fruta fresca","Café passado na hora"]},
+  {id:"olfato", s:"Olfato", cor:"#5ccf8a", q:"Que cheiro te faz bem?", o:["Terra molhada","Pão saindo do forno","Perfume de alguém querido","Cheiro de café"]},
+  {id:"equilibrio", s:"Equilíbrio", cor:"#b48cff", q:"Que movimento te faz bem?", o:["Dançar","Balançar numa rede","Andar de bicicleta","Ficar de pé numa prancha"]},
+  {id:"corpo", s:"Noção de corpo", cor:"#3fd6d0", q:"O que te faz bem no corpo?", o:["Alongar","Correr","Nadar","Deitar e respirar fundo"]}
 ];
 
 /* fotos das opções (pasta pesquisa/opcoes, nomes sentido-1.jpg a sentido-4.jpg) e ícone de reserva */
@@ -1161,12 +1161,21 @@ let parSubiu=null;
 function parAtivo(s){ return s.itens.find(it=>!isDone(it))||null; }
 /* Fase 1 em 3 grupos de 5 (Gestalt), escolha várias, passa sozinha */
 function f1Grupos(it, ativa, emPar){
-  const f=it.f, k=it.id, sel=rascSel(k);
+  const f=it.f, sel=Array.isArray(answers[it.id])?answers[it.id]:[];
   return `<div class="f1q"><div class="qnum">Pergunta ${it.num}</div><span class="chip" style="background:${f.cor}">${esc(f.s)}</span>
-    <h2>${esc(f.q)}</h2>
-    ${[0,1,2].map(g=>`<div class="g5nome" style="--c:${f.cor}">${GRUPOS5[g]}</div><div class="chips g5 ${sel.length?"temsel":""}" style="--c:${f.cor}">${f.o.slice(g*5,g*5+5).map(o=>`<button class="opt ${sel.includes(o)?"sel":""}" ${ativa?`onclick="rascToggle('${k}',${JSON.stringify(o).replace(/"/g,"&quot;")},${emPar},this)"`:'tabindex="-1"'}>${sel.includes(o)?"✓ ":""}${esc(o)}</button>`).join("")}</div>`).join("")}
-    ${ativa?(sel.length?seguindo(k):'<p class="sub so-dica" style="margin-top:12px">Escolha quantas quiser.</p>'):""}</div>`;
+    <h2>${esc(f.q)}</h2><p class="sub">Escolha a que mais combina com você.</p>
+    <div class="fotos">${f.o.map((o,oi)=>`<div class="fcard ${sel.includes(o)?"sel":""}" role="button" tabindex="${ativa?0:-1}" style="--fc:${f.cor}" aria-label="${esc(o)}"
+       onclick="${ativa?(emPar?`parF1(${it.fi},${oi})`:`f1Solo(${it.fi},${oi})`):""}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}">
+       <span class="fsem" aria-hidden="true">${F1ICO[f.id][oi]}</span>
+       <img src="${f1foto(f.id,oi)}" alt="" loading="lazy" onerror="this.remove()">
+       ${f.id==="audicao"?`<button class="ouvir" type="button" onclick="event.stopPropagation();tocarSom('${F1SOM[oi]}',this)">▶ ouvir</button>`:""}
+       <span class="fnome">${esc(o)}</span></div>`).join("")}</div></div>`;
 }
+/* pergunta da Fase 1 sozinha na tela: tocou na foto, marca e passa sozinha */
+function f1Solo(fi,oi){ const k="f1_"+FASE1[fi].id; answers[k]=[FASE1[fi].o[oi]]; click(); pararSom();
+  document.querySelectorAll(".fcard").forEach((c,i)=>c.classList.toggle("sel",i===oi));
+  const alvo=idx; setTimeout(()=>{ if(idx===alvo&&view==="flow") next(); },420); }
+
 function parItem(it, ativa){
   if(it.type==="f1one") return f1Grupos(it, ativa, true);
   if(it.type==="nota") return `<div class="qnum">Pergunta ${it.num}</div><h2>${esc(it.title)}</h2>${scale(it.id, answers[it.id], it.legend, ativa?"parNota":"void")}`;
