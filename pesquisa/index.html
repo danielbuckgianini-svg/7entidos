@@ -336,6 +336,26 @@ body.tela-inicio .logo-top{visibility:hidden}
 .pad.fcard{aspect-ratio:4/3}.pad.fcard.sel{border-color:#F5C542;box-shadow:0 0 0 4px #F5C542,0 0 26px #F5C542;transform:scale(1.03)}
 .fcard .ouvir{position:absolute;top:8px;right:8px;border:0;border-radius:999px;padding:7px 11px;font:700 13px Inter,system-ui,sans-serif;background:rgba(5,8,20,.78);color:#fff;cursor:pointer;z-index:2}
 .fcard .ouvir.tocando{background:#F5C542;color:#0a1128}
+/* ===== Céus de luz (pergunta 1) ===== */
+.ceuluz{position:relative;width:100%;max-width:460px;aspect-ratio:1/.72;margin:14px auto 4px;border-radius:26px;overflow:hidden;
+  background:radial-gradient(ellipse 90% 80% at 50% 100%,#1d2a66 0%,#101846 45%,#070b24 100%);border:1px solid rgba(255,255,255,.08);box-shadow:inset 0 -30px 60px rgba(245,197,66,.06)}
+.cl-est b{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;opacity:.5;animation:clpisca 3s ease-in-out infinite;animation-delay:var(--d)}
+@keyframes clpisca{50%{opacity:.12}}
+.cl-luz{position:absolute;transform:translate(-50%,-50%);width:44px;height:44px;border:0;background:none;padding:0;cursor:pointer;display:grid;place-items:center;color:rgba(255,255,255,.8);font:400 19px/1 "Bebas Neue",sans-serif;-webkit-tap-highlight-color:transparent}
+.cl-luz i{position:absolute;inset:9px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);transition:background .35s,box-shadow .35s,inset .35s;transition-delay:var(--d)}
+.cl-luz span{position:relative;z-index:1;transition:color .3s;transition-delay:var(--d)}
+.cl-luz:hover i{border-color:var(--rc)}
+.cl-luz.on i{background:var(--rc);border-color:var(--rc);box-shadow:0 0 16px var(--rc),0 0 34px color-mix(in srgb,var(--rc) 45%,transparent)}
+.cl-luz.on span{color:#0a1128}
+.cl-luz.sel i{inset:3px}
+.cl-luz:focus-visible{outline:3px solid #F5C542;outline-offset:2px;border-radius:50%}
+.cl-centro{position:absolute;left:50%;bottom:9%;transform:translateX(-50%);width:76px;height:76px;border-radius:50%;display:grid;place-items:center;
+  font:400 40px/1 "Bebas Neue",sans-serif;color:rgba(255,255,255,.45);background:rgba(255,255,255,.05);border:1px dashed rgba(255,255,255,.25);transition:all .5s}
+.cl-centro.aceso{color:#0a1128;background:var(--rc);border:0;box-shadow:0 0 30px var(--rc),0 0 70px color-mix(in srgb,var(--rc) 40%,transparent);animation:clnasce .6s cubic-bezier(.2,.8,.2,1)}
+@keyframes clnasce{from{transform:translateX(-50%) scale(.6)}}
+.cl-dica{text-align:center;color:var(--muted);font-weight:700;font-size:14px;margin:6px 0 0}
+@media (max-width:420px){.cl-luz{width:38px;height:38px;font-size:17px}.cl-luz i{inset:7px}.cl-centro{width:64px;height:64px;font-size:34px}}
+@media (prefers-reduced-motion:reduce){.cl-est b,.cl-centro.aceso{animation:none}.cl-luz i,.cl-luz span{transition:none}}
 </style>
 <link rel="stylesheet" href="tema.css?v=v6">
 <script src="tema.js?v=v6"></script>
@@ -352,7 +372,7 @@ body.tela-inicio .logo-top{visibility:hidden}
   </div>
   <main id="stage"></main>
 </div>
-<script src="config.js?v=robo100"></script>
+<script src="config.js?v=trava1"></script>
 <script>
 /* ===== CONFIGURAÇÃO ===== */
 const ENDPOINT = (window.PESQUISA_URL||"");  /* script da planilha do Google (só funciona no site 7entidos.com.br) */
@@ -510,10 +530,8 @@ function buildApp(){
   /* duas perguntas por tela: respondeu a primeira, ela some e a segunda sobe */
   const par=(a,b,block)=>{ a.num=n+1; b.num=n+2; n+=2; S.push({type:"par", id:"par_"+a.id, itens:[a,b], block}); };
   const f1=fi=>({type:"f1one", id:"f1_"+FASE1[fi].id, f:FASE1[fi], fi});
-  par({type:"nota", id:"app_chegada", title:"Escolha um número de 0 a 10", legend:null, semSub:true}, f1(0), "Antes de começar · Visão");
-  par(f1(1), f1(2), "Fase 1 · Audição e Tato");
-  par(f1(3), f1(4), "Fase 1 · Paladar e Olfato");
-  par(f1(5), f1(6), "Fase 1 · Equilíbrio e Noção de corpo");
+  q({type:"nota", id:"app_chegada", ceu:true, block:"Antes de começar", title:"Escolha um número de 0 a 10", legend:null, semSub:true});
+  FASE1.forEach((f,fi)=> q({...f1(fi), block:"Fase 1 · "+f.s}));
   let jg=0;
   F2PAGINAS.flat().forEach(gid=>{ const g=G2(gid); jg++;
     q({type:"f2", id:"f2_"+g.id, gs:[g], block:"Fase 2 · jogo "+jg+" de 7"}); });
@@ -634,7 +652,7 @@ function escolha(){
         <div class="no"><span>2</span></div>
         <button class="pesq ic2" onclick="abrirLuzia(false)">
           <span class="rostos" aria-hidden="true">${ROSTOS.map(r=>`<img src="${r}.jpg" alt="">`).join("")}</span>
-          <span class="tag">🔴 PASSO 2 · O REALITY</span><b>A Casa dos 7 Sentidos</b>
+          <span class="tag">🔴 PASSO 2 · DEPOIS</span><b>Participe do reality</b>
           <p>Monte o elenco do reality, descubra quem é o seu vilão e decore a casa do seu jeito.</p>
           ${done.reality?'<p style="color:#9be7b0;font-weight:800">você já participou ✓</p>':""}</button>
       </div>
@@ -657,6 +675,23 @@ function shareBox(onde){
 function shared(onde,canal){ (answers.compartilhou=answers.compartilhou||[]).push({pesquisa:cur,onde,canal,quando:new Date().toISOString()}); enviar({evento:"compartilhou",pesquisa:cur,onde,canal}); }
 function copyLink(btn,onde){ try{ navigator.clipboard.writeText(SHARE_MSG).then(()=>{btn.textContent="Copiado ✓"; shared(onde,"copiou");},()=>btn.textContent="Não deu para copiar"); }catch(e){ btn.textContent="Não deu para copiar"; } }
 const RCOR=["#f5c542","#f5c542","#ff8a3d","#ff8a3d","#ff5a6e","#ff5a6e","#b48cff","#4aa8ff","#3fd6d0","#5ccf8a","#5ccf8a"];
+/* CÉUS DE LUZ: o 0 a 10 vira um céu; as luzes sobem num arco e acendem até o número escolhido.
+   Sem palavras nas pontas, para não direcionar a resposta. */
+function ceuLuz(key, val, fn){
+  const f=fn||"setN", tem=val!=null&&val!=="pulou";
+  const luzes=Array.from({length:11},(_,v)=>{ const a=Math.PI-v*Math.PI/10, x=50+Math.cos(a)*42, y=86-Math.sin(a)*66;
+    return `<button type="button" class="cl-luz ${tem&&v<=val?"on":""} ${val===v?"sel":""}" style="left:${x.toFixed(1)}%;top:${y.toFixed(1)}%;--rc:${RCOR[v]};--d:${(v*.12).toFixed(2)}s" aria-label="Número ${v}" onclick="${f}('${key}',${v})"><i></i><span>${v}</span></button>`; }).join("");
+  const est=Array.from({length:26},(_,i)=>`<b style="left:${(i*37%100)}%;top:${(i*53%70)+4}%;--d:${(i%7)*.4}s"></b>`).join("");
+  return `<div class="ceuluz" role="group" aria-label="Escolha um número de 0 a 10"><div class="cl-est" aria-hidden="true">${est}</div>${luzes}
+    <div class="cl-centro ${tem?"aceso":""}" style="${tem?`--rc:${RCOR[val]}`:""}" aria-live="polite">${tem?val:"?"}</div></div>
+    <p class="cl-dica">${tem?"Anotado. Seguindo…":"Toque numa luz"}</p>`;
+}
+/* acende o céu sem redesenhar a tela (a pessoa vê a luz brilhar) e segue sozinho */
+function setCeu(k,v){ answers[k]=v; click();
+  document.querySelectorAll(".ceuluz .cl-luz").forEach((b,i)=>{ b.classList.toggle("on",i<=v); b.classList.toggle("sel",i===v); });
+  const c=document.querySelector(".ceuluz .cl-centro"); if(c){ c.textContent=v; c.style.setProperty("--rc",RCOR[v]); c.classList.remove("aceso"); void c.offsetWidth; c.classList.add("aceso"); }
+  const d=document.querySelector(".cl-dica"); if(d) d.textContent="Anotado. Seguindo…";
+  passaSozinho(1600); }
 function scale(key, val, legend, fn){
   const f=fn||"setN";
   return `<div class="scale regua">${Array.from({length:11},(_,v)=>`<button class="opt ${val===v?"sel":""} ${val!=null&&val!=="pulou"&&v<=val?"on":""}" style="--rc:${RCOR[v]}" aria-label="Nota ${v}" onclick="${f}('${key}',${v})">${v}</button>`).join("")}</div>
@@ -934,7 +969,7 @@ function render(){
     needNext = true;
   }
   else if(s.type==="nota"){
-    h = `<div class="qnum">Pergunta ${s.num}</div><h2>${esc(s.title)}</h2>${s.semSub?"":'<p class="sub">Toque numa nota de 0 a 10.</p>'}${scale(s.id, answers[s.id], s.legend)}`;
+    h = `<div class="qnum">Pergunta ${s.num}</div><h2>${esc(s.title)}</h2>${s.semSub?"":'<p class="sub">Toque numa nota de 0 a 10.</p>'}${s.ceu?ceuLuz(s.id, answers[s.id], "setCeu"):scale(s.id, answers[s.id], s.legend)}`;
   }
   else if(s.type==="tempo"){
     const T = cur==="app"?"TEMPOS_APP":"TEMPOS", TT = cur==="app"?TEMPOS_APP:TEMPOS;
