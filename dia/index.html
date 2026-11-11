@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Momento do dia · 7entidos</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..600&family=Manrope:wght@400;600;700;800&display=swap">
+<style>
+/* Momento do dia (Sala do Hábito, 11/11): 3 cards em leque com perspectiva, régua de 1 a 10 e carta dourada que vira quando o app encontra um padrão */
+:root{
+  --bg:#0A0F24; --card:#111A3D; --field:#0D1430; --soft:#18224A; --line:#26315F;
+  --ink:#F4F1EA; --mute:#AEB5D6; --ouro:#F9CB39; --ouro2:#B8891A;
+  --visao:#FFD23F; --aud:#5AB8FF; --tato:#FF8A5C; --olf:#7DDB8B; --pal:#FF6FA3; --equi:#A98BFF; --corpo:#3FE0D0;
+  --titulo:"Fraunces", Georgia, serif; --texto:"Manrope", "Segoe UI", system-ui, sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--texto);font-size:19px;line-height:1.5;min-height:100vh;
+  background-image:radial-gradient(ellipse 110% 55% at 50% -8%, #1b2759, transparent 70%)}
+.pg{max-width:620px;margin:0 auto;padding-block:22px 48px;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));
+  display:flex;flex-direction:column;gap:22px}
+.topo{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.topo a{color:var(--mute);font-size:15px;text-decoration:none}
+.marca{font-family:var(--titulo);font-size:20px}
+.marca b{color:var(--ouro);font-weight:600}
+.k{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);font-weight:800}
+h1,h2{font-family:var(--titulo);font-weight:400;margin:0;text-wrap:balance;line-height:1.15}
+h1{font-size:clamp(30px,7.5vw,40px)}
+h2{font-size:26px}
+p{margin:0}
+.mute{color:var(--mute)}
+.small{font-size:15px}
+
+/* 7 luzes da temporada */
+.luzes{display:flex;gap:10px;justify-content:center}
+.luzes i{width:16px;height:16px;border-radius:50%;background:var(--c);opacity:.2;transition:opacity .5s, box-shadow .5s}
+.luzes i.on{opacity:1;box-shadow:0 0 12px 2px var(--c)}
+.luzes i.hoje{outline:2px solid var(--c);outline-offset:3px;opacity:.55}
+.cab{display:flex;flex-direction:column;gap:10px;text-align:center;align-items:center}
+
+/* Leque de cards em perspectiva */
+.leque{perspective:900px;display:flex;justify-content:center;gap:10px;padding-block:8px 4px}
+.carta{flex:1 1 0;min-width:0;max-width:190px;aspect-ratio:3/4.3;border-radius:18px;border:1px solid var(--line);
+  background:linear-gradient(165deg,var(--soft),var(--card) 60%);color:var(--ink);padding:16px 12px;
+  display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;text-align:left;
+  font:inherit;font-size:17px;line-height:1.3;cursor:pointer;transition:transform .35s, box-shadow .35s, border-color .35s;
+  box-shadow:0 20px 40px -22px rgba(0,0,0,.9)}
+.carta:nth-child(1){transform:rotateY(14deg) translateZ(-20px)}
+.carta:nth-child(3){transform:rotateY(-14deg) translateZ(-20px)}
+.carta:hover,.carta:focus-visible{transform:translateY(-8px) rotateY(0) translateZ(10px);border-color:var(--c);box-shadow:0 26px 50px -20px var(--c)}
+.carta .sel{width:34px;height:34px;border-radius:50%;background:var(--c);opacity:.9;box-shadow:0 0 16px var(--c)}
+.carta b{font-weight:700}
+.carta .tipo{font-size:13px;color:var(--mute);letter-spacing:.06em;text-transform:uppercase}
+@media (max-width:440px){.carta{font-size:15px;padding:12px 10px}}
+
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid var(--ouro);outline-offset:3px}
+.btn{border:0;border-radius:999px;padding:14px 24px;font-weight:800;font-size:18px;background:var(--ouro);color:#1a1300}
+.btn[disabled]{opacity:.35;cursor:default}
+.lnk{background:none;border:0;color:var(--mute);text-decoration:underline;font-size:15px;padding:6px}
+
+.escolhida{border-radius:20px;padding:18px;background:var(--card);border:1px solid var(--line);border-left:6px solid var(--c);display:flex;flex-direction:column;gap:4px}
+.escolhida b{font-size:21px}
+
+/* Régua */
+.regua{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.regua button{background:var(--field);border:2px solid var(--line);border-radius:14px;padding:10px 4px;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:0}
+.regua button span{font-family:var(--titulo);font-size:24px;line-height:1}
+.regua button small{font-size:12px;color:var(--mute);line-height:1.15;text-align:center}
+.regua button.on{border-color:var(--ouro);background:#2a2a20}
+.regua button.on small{color:var(--ink)}
+.lembra{display:flex;flex-direction:column;gap:6px}
+.lembra label{font-weight:700;font-size:16px}
+.lembra input{font:inherit;font-size:17px;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--field);color:var(--ink);width:100%}
+
+/* Carta dourada */
+.palco{perspective:1000px;display:flex;justify-content:center;padding-block:6px}
+.dourada{width:min(320px,100%);aspect-ratio:3/4;position:relative;transform-style:preserve-3d;transition:transform 1s cubic-bezier(.2,.8,.2,1)}
+.dourada.virada{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;border-radius:22px;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:24px;text-align:center;gap:12px}
+.costas{background:repeating-linear-gradient(45deg,#3a2d08 0 10px,#2d2306 10px 20px);border:2px solid var(--ouro);box-shadow:0 0 40px -6px var(--ouro)}
+.costas .sim{width:70px;height:70px;border-radius:50%;border:2px solid var(--ouro);display:grid;place-items:center;font-family:var(--titulo);font-size:34px;color:var(--ouro)}
+.frente{transform:rotateY(180deg);background:linear-gradient(160deg,#fff3c4,var(--ouro) 45%,var(--ouro2));color:#2a1d00;box-shadow:0 0 60px -6px var(--ouro)}
+.frente h2{font-size:24px}
+.frente p{font-size:16px;line-height:1.4}
+.frente .k{color:#5a4200}
+.retorno{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.retorno button{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:10px 16px;font-size:16px;font-weight:700}
+.retorno button.on{border-color:var(--ouro);color:var(--ouro)}
+.centro{display:flex;flex-direction:column;gap:16px;align-items:center;text-align:center}
+.aviso{font-size:14px;color:var(--mute);text-align:center}
+
+/* Revisão dos cards (só na prévia, link com #revisar) */
+.rev{display:flex;flex-direction:column;gap:14px}
+.rev-s{display:flex;flex-direction:column;gap:10px}
+.rev-s h2{font-size:22px;color:var(--c)}
+.rv{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--c);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.rv .t{font-weight:700}
+.rv .ops{display:flex;gap:8px;flex-wrap:wrap}
+.rv .ops button{border:1px solid var(--line);background:var(--field);border-radius:999px;padding:8px 14px;font-size:15px;font-weight:700}
+.rv .ops button.ok{background:var(--olf);color:#0a2010;border-color:transparent}
+.rv .ops button.rv1{background:var(--tato);color:#2a0d00;border-color:transparent}
+.rv .ops button.nq{background:#3a1a24;color:#ffb3c8;border-color:transparent}
+.rv input{font:inherit;font-size:16px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--field);color:var(--ink)}
+.placar{position:sticky;bottom:0;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:env(safe-area-inset-bottom,0px)}
+.fade{animation:fade .45s ease both}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="pg">
+  <div class="topo"><span class="marca"><b>7</b>entidos</span><a href="/">Início</a></div>
+  <div id="app"></div>
+  <p class="aviso">Fica só no seu celular. O 7entidos não é terapia nem tratamento.</p>
+</main>
+<script>
+"use strict";
+/* ===== Sentidos (mesmas cores da Jornada) ===== */
+const SENT=[["visao","Visão","var(--visao)"],["aud","Audição","var(--aud)"],["tato","Tato","var(--tato)"],["olf","Olfato","var(--olf)"],["pal","Paladar","var(--pal)"],["equi","Equilíbrio","var(--equi)"],["corpo","Noção do corpo","var(--corpo)"]];
+const TIPO={calma:"calma",aconchego:"aconchego",movimento:"movimento",natureza:"natureza",alegria:"alegria"};
+/* ===== 49 cards propostos pelo Claude (7 por sentido), para o Daniel validar ===== */
+const CARDS={
+ visao:[["Olhar o céu por 30 segundos","natureza"],["Procurar a cor mais bonita perto de você","alegria"],["Ver uma foto de um dia feliz","aconchego"],["Olhar uma luz acesa no escuro","calma"],["Seguir com os olhos algo que se move lá fora","movimento"],["Fechar os olhos e abrir bem devagar","calma"],["Olhar uma planta de pertinho","natureza"]],
+ aud:[["Ouvir uma música que você ama","alegria"],["Fechar os olhos e contar 3 sons ao redor","calma"],["Ouvir o barulho da água correndo","natureza"],["Escutar a própria respiração","calma"],["Mandar um áudio para alguém querido","aconchego"],["Ouvir os pássaros ou o vento lá fora","natureza"],["Cantarolar a sua música favorita","alegria"]],
+ tato:[["Passar a mão num tecido macio","aconchego"],["Lavar as mãos com água morna, devagar","calma"],["Tocar uma planta ou a terra","natureza"],["Segurar uma caneca quentinha","aconchego"],["Tirar o sapato e sentir o chão","natureza"],["Fazer carinho num bicho ou numa pessoa","aconchego"],["Apertar algo que amassa","movimento"]],
+ olf:[["Cheirar o café ou o chá antes de beber","aconchego"],["Sentir o cheiro de uma fruta","natureza"],["Passar um creme ou perfume e respirar fundo","calma"],["Abrir a janela e sentir o ar","natureza"],["Cheirar uma roupa limpa","aconchego"],["Esfregar uma folha ou erva e cheirar","natureza"],["Respirar perto de um tempero","alegria"]],
+ pal:[["Comer bem devagar a primeira mordida","calma"],["Beber um copo de água gelada","calma"],["Provar algo doce com calma","alegria"],["Tomar algo quente em pequenos goles","aconchego"],["Provar um sabor que você não come há tempo","alegria"],["Comer uma fruta azedinha","alegria"],["Comer algo que lembra a infância","aconchego"]],
+ equi:[["Ficar num pé só por 10 segundos","movimento"],["Girar devagar uma vez","movimento"],["Balançar o corpo de um lado para o outro","movimento"],["Andar em linha reta, um pé na frente do outro","movimento"],["Sentar e balançar as pernas","alegria"],["Subir na ponta dos pés e descer devagar","calma"],["Deitar e sentir o chão segurando você","calma"]],
+ corpo:[["Espreguiçar bem devagar","calma"],["Rolar os ombros 3 vezes","movimento"],["Dar um abraço apertado","aconchego"],["Respirar fundo com a mão na barriga","calma"],["Dançar uma música inteira","alegria"],["Massagear as próprias mãos","aconchego"],["Alongar o pescoço para os dois lados","calma"]]
+};
+/* Régua do app (mesmas palavras da Fase 3 · Minha régua) */
+const REGUA=[[1,"Péssimo"],[2,"Muito ruim"],[3,"Ruim"],[4,"Desconfortável"],[5,"Razoável"],[6,"Bom"],[7,"Muito bom"],[8,"Felicidade"],[9,"Muita felicidade"],[10,"Êxtase"]];
+
+/* ===== Dados (só neste aparelho; o app e a Jornada usam o mesmo endereço, então é um registro só) ===== */
+const CHAVE="momento7";
+let D={reg:[],cartas:[],ret:{}};
+try{const s=JSON.parse(localStorage.getItem(CHAVE)||"null");if(s&&Array.isArray(s.reg))D=Object.assign(D,s);}catch(e){}
+function salva(){try{localStorage.setItem(CHAVE,JSON.stringify(D));}catch(e){}}
+const hojeStr=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");};
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=id=>document.getElementById(id);
+const app=$("app");
+
+/* Pausa sem culpa: o dia só avança quando a pessoa faz. Dia perdido não zera nada. */
+function posicao(){const n=D.reg.length;return {temporada:Math.floor(n/7)+1,dia:n%7};}
+function cardsDoDia(){const {temporada,dia}=posicao();const s=SENT[dia];const lista=CARDS[s[0]];
+  const ini=((temporada-1)*3)%7;return [0,1,2].map(k=>lista[(ini+k)%7]);}
+const periodo=h=>h<12?"de manhã":h<18?"à tarde":"à noite";
+
+/* ===== Carta dourada: só vira quando o app encontra um padrão novo ===== */
+function acharPadrao(){
+  const R=D.reg, n=R.length, viu=k=>D.cartas.some(c=>c.id===k);
+  if(n%7===0&&n>0&&!viu("temp:"+n/7)){
+    const top=[...R.slice(-7)].sort((a,b)=>b.n-a.n).slice(0,2);
+    return {id:"temp:"+n/7,t:`Sua temporada ${n/7} terminou`,d:`Nestes 7 dias, ${SENT[top[0].s][1]} (nota ${top[0].n}) e ${SENT[top[1].s][1]} (nota ${top[1].n}) foram os sentidos que mais te fizeram bem.`};}
+  if(n>=4){const cont={};R.forEach(r=>cont[r.tp]=(cont[r.tp]||0)+1);
+    const [tp,q]=Object.entries(cont).sort((a,b)=>b[1]-a[1])[0];
+    if(q>=Math.ceil(n/2)&&!viu("tipo:"+tp))return {id:"tipo:"+tp,t:`Você tem buscado ${TIPO[tp]}`,d:`Em ${q} dos seus ${n} momentos, você escolheu algo de ${TIPO[tp]}. Sem combinar, o seu dia está pedindo isso.`};}
+  if(n>=3){const a=R.slice(-3);if(a[0].n<a[1].n&&a[1].n<a[2].n&&!viu("sobe:"+n))
+    return {id:"sobe:"+n,t:"Suas notas estão subindo",d:`Seus três últimos momentos foram ${a.map(x=>x.n).join(", ")}. Cada dia um pouco mais alto.`};}
+  if(n>=3){const max=Math.max(...R.map(r=>r.n));const tops=R.filter(r=>r.n===max);
+    if(max>=8&&tops.length===1&&!viu("alto:"+tops[0].s))
+      return {id:"alto:"+tops[0].s,t:`${SENT[tops[0].s][1]} te levou mais alto`,d:`"${tops[0].c}" ganhou nota ${max} (${REGUA[max-1][1]}), a maior até agora.`};}
+  if(n>=4){const g={};R.forEach(r=>{const p=periodo(r.h);(g[p]=g[p]||[]).push(r.n);});
+    const med=Object.entries(g).map(([p,L])=>[p,L.reduce((x,y)=>x+y,0)/L.length]).sort((a,b)=>b[1]-a[1]);
+    if(med.length>=2&&med[0][1]-med[1][1]>=1&&!viu("hora:"+med[0][0]))
+      return {id:"hora:"+med[0][0],t:`Seu horário bom é ${med[0][0]}`,d:`Os momentos que você faz ${med[0][0]} têm as notas mais altas, uma média de ${med[0][1].toFixed(1).replace(".",",")}.`};}
+  return null;}
+
+/* ===== Telas ===== */
+let esc_c=null, nota=null;
+function luzes(extra){const {dia}=posicao();const n=D.reg.length%7;
+  return `<div class="luzes" aria-label="Temporada: ${n} de 7 dias">${SENT.map((s,k)=>`<i style="--c:${s[2]}" class="${k<n||extra&&k<=n?"on":k===dia?"hoje":""}"></i>`).join("")}</div>`;}
+function telaEscolha(){
+  const {temporada,dia}=posicao();const s=SENT[dia];const ult=D.reg[D.reg.length-1];
+  const voltou=ult&&(new Date(hojeStr())-new Date(ult.d))/864e5>1;
+  app.innerHTML=`<section class="cab fade">${luzes()}
+    <span class="k">Temporada ${temporada} · dia ${dia+1} de 7 · ${s[1]}</span>
+    <h1>Qual destes você quer sentir hoje?</h1>
+    <p class="mute">${voltou?"Que bom que você voltou. A temporada continua de onde parou.":"Escolha 1. Leva uns 30 segundos."}</p></section>
+    <div class="leque fade">${cardsDoDia().map((c,k)=>`<button class="carta" style="--c:${s[2]}" data-c="${k}"><span class="sel"></span><b>${esc(c[0])}</b><span class="tipo">${TIPO[c[1]]}</span></button>`).join("")}</div>`;
+  app.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{esc_c=cardsDoDia()[+b.dataset.c];nota=null;telaNota();});}
+function telaNota(){
+  const {dia}=posicao();const s=SENT[dia];
+  app.innerHTML=`<section class="cab fade"><span class="k">${s[1]}</span><h1>Faça agora e dê uma nota</h1></section>
+   <div class="escolhida fade" style="--c:${s[2]}"><span class="small mute">Seu momento de hoje</span><b>${esc(esc_c[0])}</b></div>
+   <div class="fade"><p style="font-weight:700;margin-bottom:10px">Na sua régua, que nota esse momento teve?</p>
+   <div class="regua">${REGUA.map(([v,t])=>`<button data-n="${v}" class="${nota===v?"on":""}" aria-label="${v}, ${t}"><span>${v}</span><small>${t}</small></button>`).join("")}</div></div>
+   <div class="lembra fade"><label for="lem">Quer guardar uma lembrança? (opcional)</label><input id="lem" maxlength="90" placeholder="Ex.: o cheiro do café da minha mãe"></div>
+   <div class="centro"><button class="btn" id="guardar" ${nota===null?"disabled":""}>Guardar meu momento</button>
+   <button class="lnk" id="trocar">Trocar de card</button></div>`;
+  app.querySelectorAll("[data-n]").forEach(b=>b.onclick=()=>{nota=+b.dataset.n;app.querySelectorAll("[data-n]").forEach(x=>x.classList.toggle("on",x===b));$("guardar").disabled=false;});
+  $("trocar").onclick=telaEscolha;
+  $("guardar").onclick=()=>{if(nota===null)return;const {dia}=posicao();
+    D.reg.push({d:hojeStr(),s:dia,c:esc_c[0],tp:esc_c[1],n:nota,h:new Date().getHours(),l:$("lem").value.trim()});
+    const p=acharPadrao();if(p){D.cartas.push({id:p.id,t:p.t,d:p.d,em:hojeStr()});}
+    salva();p?telaCarta(p):telaGuardado();scrollTo(0,0);};}
+function telaCarta(p){
+  app.innerHTML=`<section class="cab fade">${luzes()}<span class="k">O 7entidos encontrou um padrão</span><h1>Toque na carta</h1></section>
+   <div class="palco"><button class="dourada" id="dc" aria-label="Virar a carta dourada" style="border:0;background:none;padding:0">
+     <div class="face costas"><span class="sim">7</span><span style="color:var(--ouro);font-weight:800">Carta dourada</span></div>
+     <div class="face frente"><span class="k">Descoberta sobre você</span><h2>${esc(p.t)}</h2><p>${esc(p.d)}</p></div></button></div>
+   <div class="centro" id="dep" hidden><p class="small mute">É uma hipótese. Quem confirma é você.</p>
+     <div class="retorno">${[["sim","Faz sentido"],["talvez","Não sei"],["nao","Não tem a ver"]].map(([v,t])=>`<button data-r="${v}">${t}</button>`).join("")}</div>
+     <button class="btn" id="fim">Pronto</button></div>`;
+  $("dc").onclick=()=>{$("dc").classList.add("virada");setTimeout(()=>$("dep").hidden=false,700);};
+  app.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{D.ret[p.id]=b.dataset.r;salva();app.querySelectorAll("[data-r]").forEach(x=>x.classList.toggle("on",x===b));});
+  $("fim").onclick=()=>{telaHoje();scrollTo(0,0);};}
+function telaGuardado(){telaHoje(true);}
+function telaHoje(acabou){
+  const ult=D.reg[D.reg.length-1];const {temporada,dia}=posicao();
+  app.innerHTML=`<section class="cab fade">${luzes()}<span class="k">${acabou?"Guardado":"Hoje já foi"}</span>
+    <h1>${acabou?"Seu momento ficou guardado.":"Seu momento de hoje está guardado."}</h1></section>
+    <div class="escolhida fade" style="--c:${SENT[ult.s][2]}"><span class="small mute">${SENT[ult.s][1]} · nota ${ult.n} (${REGUA[ult.n-1][1]})</span><b>${esc(ult.c)}</b>${ult.l?`<span class="mute">"${esc(ult.l)}"</span>`:""}</div>
+    <div class="centro fade"><p class="mute">Amanhã: temporada ${temporada}, dia ${dia+1}, ${SENT[dia][1]}.<br>Se não der amanhã, tudo bem. Nada zera.</p>
+    ${D.cartas.length?`<p class="small mute">Cartas douradas: ${D.cartas.length}</p>`:""}</div>`;}
+
+/* ===== Revisão dos 49 cards (link com #revisar) ===== */
+let V={};try{V=JSON.parse(localStorage.getItem("momento7-rev")||"{}")||{};}catch(e){}
+function salvaV(){try{localStorage.setItem("momento7-rev",JSON.stringify(V));}catch(e){}}
+function telaRevisar(){
+  const total=49,feitos=Object.values(V).filter(v=>v.st).length;
+  app.innerHTML=`<section class="cab"><span class="k">Prévia · validar os cards</span><h1>Os 49 cards do Momento do dia</h1>
+    <p class="mute">7 por sentido. Marque cada um. Em "Revisar", escreva como você quer.</p></section>
+    <div class="rev">${SENT.map(([id,nome,cor],si)=>`<div class="rev-s" style="--c:${cor}"><h2>${si+1}. ${nome}</h2>
+      ${CARDS[id].map(([t,tp],k)=>{const key=id+k,v=V[key]||{};return `<div class="rv" style="--c:${cor}"><span class="t">${si+1}.${k+1} · ${esc(t)}</span><span class="small mute">${TIPO[tp]}</span>
+        <div class="ops"><button data-k="${key}" data-st="ok" class="${v.st==="ok"?"ok":""}">Validado</button><button data-k="${key}" data-st="rev" class="${v.st==="rev"?"rv1":""}">Revisar</button><button data-k="${key}" data-st="nq" class="${v.st==="nq"?"nq":""}">Não quero</button></div>
+        ${v.st==="rev"?`<input data-txt="${key}" value="${esc(v.txt||"")}" placeholder="Como deve ficar?" aria-label="Novo texto do card ${si+1}.${k+1}">`:""}</div>`;}).join("")}</div>`).join("")}</div>
+    <div class="placar"><b>${feitos} de ${total} marcados</b><button class="btn" id="copia">Copiar resultado</button></div><p class="small mute" id="cmsg"></p>`;
+  app.querySelectorAll("[data-st]").forEach(b=>b.onclick=()=>{const y=scrollY;V[b.dataset.k]=Object.assign(V[b.dataset.k]||{},{st:b.dataset.st});salvaV();telaRevisar();scrollTo(0,y);});
+  app.querySelectorAll("[data-txt]").forEach(i=>i.oninput=()=>{V[i.dataset.txt].txt=i.value;salvaV();});
+  $("copia").onclick=()=>{const L=["CARDS DO MOMENTO DO DIA — revisão"];SENT.forEach(([id,nome],si)=>{L.push("",nome.toUpperCase());CARDS[id].forEach(([t],k)=>{const v=V[id+k]||{};L.push(`${si+1}.${k+1} ${t} → ${v.st==="ok"?"validado":v.st==="nq"?"não quero":v.st==="rev"?"revisar: "+(v.txt||"(sem texto)"):"sem marcar"}`);});});
+    const txt=L.join("\n");const ok=()=>$("cmsg").textContent="Copiado. Cole na conversa com o Claude.";
+    try{navigator.clipboard.writeText(txt).then(ok,()=>falha(txt));}catch(e){falha(txt);}};
+  function falha(txt){const ta=document.createElement("textarea");ta.value=txt;ta.rows=8;ta.style.width="100%";$("cmsg").textContent="Selecione e copie:";$("cmsg").after(ta);ta.select();}
+}
+
+function inicio(){
+  if(location.hash==="#revisar"){telaRevisar();return;}
+  const ult=D.reg[D.reg.length-1];
+  if(ult&&ult.d===hojeStr())telaHoje(false);else telaEscolha();}
+addEventListener("hashchange",inicio);
+inicio();
+</script>
+</body>
+</html>

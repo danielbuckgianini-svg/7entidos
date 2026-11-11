@@ -331,6 +331,7 @@ function vFim(){const p=perfil();const [tn,ti,tk,td]=TAGS[p.top],[sn]=TAGS[p.seg
  if(J.fim)return `<div class="hero" style="padding-top:20px"><div class="luzes">${C.map(c=>`<i style="background:${c};box-shadow:0 0 10px ${c}"></i>`).join('')}</div><div class="k">Pesquisa finalizada ✓</div><h1 class="f" style="font-size:32px">Obrigado!</h1>
  <div class="mapa" id="mp" style="max-width:320px;margin:12px auto">${mapaSVG()}</div><p class="mute">Perfil ${tn} + ${sn}</p>
  <a class="btn pri" style="display:block;text-decoration:none;margin:8px 0" href="/jornada/fase2/?c=${CONVITE}">Começar a Fase 2 →</a>
+ <a class="btn" style="display:block;text-decoration:none;margin:8px 0;border:1px solid #F9CB39;color:#F9CB39" href="/dia/">✨ Meu momento do dia (30 s)</a>
  <div style="display:grid;gap:10px;margin-top:10px"><button class="btn pri" data-a="baixa">Baixar minha imagem</button><button class="btn" data-a="convida">📲 Convidar alguém pelo WhatsApp</button></div><p class="small mute" id="bx"></p></div>`;
  return `<div class="k">Minha imagem dos 7 sentidos</div><div style="display:flex;gap:12px;align-items:center">${J.foto?`<img src="${J.foto}" alt="" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid #F9CB39">`:''}<h1 class="f" style="font-size:30px;margin:0">Perfil ${tn} + ${sn}</h1></div>
  <div class="mapa" id="mp">${mapaSVG()}</div>

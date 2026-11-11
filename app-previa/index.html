@@ -1002,6 +1002,7 @@ function GuardiaoHall({s,downloads,toast,onClose,onIr}){
     ${passo==="bau"?html`<p class="nc-apoio" style=${{marginTop:0}}>O baú guarda todo o seu histórico. Só você tem a chave: o arquivo fica no seu celular.</p>
       <button class="nc-btn" onClick=${()=>bau("livro")}>Baixar meu livro da jornada</button>
       <button class="nc-btn" style=${{background:"#18224A",color:"#F4F1EA",border:"1px solid #3A4680"}} onClick=${()=>bau("json")}>Baixar tudo (cópia completa)</button>`:null}
+    <a class="nc-btn" href="/dia/" style=${{display:"block",textDecoration:"none",background:"none",color:"#F9CB39",border:"1px solid #F9CB39"}}>Meu momento do dia</a>
     <button class="nc-btn" style=${{background:"none",color:"#AEB5D6",fontWeight:600}} onClick=${onClose}>Sair do Hall</button>
   </div></div>`);
 }
