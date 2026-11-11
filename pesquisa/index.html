@@ -336,6 +336,12 @@ body.tela-inicio .logo-top{visibility:hidden}
 .pad.fcard{aspect-ratio:4/3}.pad.fcard.sel{border-color:#F5C542;box-shadow:0 0 0 4px #F5C542,0 0 26px #F5C542;transform:scale(1.03)}
 .fcard .ouvir{position:absolute;top:8px;right:8px;border:0;border-radius:999px;padding:7px 11px;font:700 13px Inter,system-ui,sans-serif;background:rgba(5,8,20,.78);color:#fff;cursor:pointer;z-index:2}
 .fcard .ouvir.tocando{background:#F5C542;color:#0a1128}
+/* ===== passa sozinho (escolha várias) ===== */
+.seguindo{margin-top:14px;display:grid;gap:6px;text-align:center}
+.seguindo i{display:block;height:4px;border-radius:4px;background:linear-gradient(90deg,var(--accent,#F5C542),#ff8a3d);transform-origin:left;animation:segue linear forwards}
+.seguindo span{font-size:13.5px;color:var(--muted);font-weight:700}
+@keyframes segue{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+@media (prefers-reduced-motion:reduce){.seguindo i{animation:none}}
 /* ===== Céus de luz (pergunta 1) ===== */
 .ceuluz{position:relative;width:100%;max-width:460px;aspect-ratio:1/.72;margin:14px auto 4px;border-radius:26px;overflow:hidden;
   background:radial-gradient(ellipse 90% 80% at 50% 100%,#1d2a66 0%,#101846 45%,#070b24 100%);border:1px solid rgba(255,255,255,.08);box-shadow:inset 0 -30px 60px rgba(245,197,66,.06)}
@@ -531,7 +537,11 @@ function buildApp(){
   const par=(a,b,block)=>{ a.num=n+1; b.num=n+2; n+=2; S.push({type:"par", id:"par_"+a.id, itens:[a,b], block}); };
   const f1=fi=>({type:"f1one", id:"f1_"+FASE1[fi].id, f:FASE1[fi], fi});
   q({type:"nota", id:"app_chegada", ceu:true, block:"Antes de começar", title:"Escolha um número de 0 a 10", legend:null, semSub:true});
-  FASE1.forEach((f,fi)=> q({...f1(fi), block:"Fase 1 · "+f.s}));
+  q({...f1(0), block:"Fase 1 · Visão"});
+  par(f1(1), f1(2), "Fase 1 · Audição e Tato");
+  par(f1(3), f1(4), "Fase 1 · Paladar e Olfato");
+  q({...f1(5), block:"Fase 1 · Equilíbrio"});
+  q({...f1(6), block:"Fase 1 · Noção do corpo"});
   let jg=0;
   F2PAGINAS.flat().forEach(gid=>{ const g=G2(gid); jg++;
     q({type:"f2", id:"f2_"+g.id, gs:[g], block:"Fase 2 · jogo "+jg+" de 7"}); });
@@ -596,7 +606,8 @@ function abertura(){
     <button class="btn" style="margin-top:14px;width:100%" onclick="sairAbertura()">Continuar →</button></div></div>`;
   const v=document.getElementById("vab"); if(v){ const p=v.play(); if(p&&p.catch) p.catch(()=>{}); }
 }
-function sairAbertura(){ const v=document.getElementById("vab"); if(v) v.pause();
+function sairAbertura(){ if(view!=="abertura") return;   /* só sai da abertura quem está nela (o fim do vídeo não interrompe outra tela) */
+  const v=document.getElementById("vab"); if(v) v.pause();
   if(!answers.vaso_viu){ view="vaso"; render(); window.scrollTo({top:0}); return; }
   depoisDoVaso(); }
 /* depois do vaso: se já fez a pesquisa 1 neste aparelho, vai direto para a 2; senão pergunta */
@@ -915,11 +926,7 @@ function render(){
     needNext = true;
   }
   else if(s.type==="f1one"){
-    const f=s.f, sel=Array.isArray(answers[s.id])?answers[s.id]:[];
-    h = `<div class="f1q"><div class="qnum">Pergunta ${s.num}</div><span class="chip" style="background:${f.cor}">${esc(f.s)}</span>
-      <h2>${esc(f.q)}</h2><p class="sub">Escolha quantos quiser. Sem pressa.</p>
-      ${[0,1,2].map(g=>`<div class="g5nome" style="--c:${f.cor}">${GRUPOS5[g]}</div><div class="chips g5 ${sel.length?"temsel":""}" style="--c:${f.cor}">${f.o.slice(g*5,g*5+5).map((o,j)=>{const oi=g*5+j;return `<button class="opt ${sel.includes(o)?"sel":""}" onclick="toggleF1p(${s.fi},${oi})">${sel.includes(o)?"✓ ":""}${esc(o)}</button>`;}).join("")}</div>`).join("")}</div>`;
-    needNext = true;
+    h = f1Grupos(s, true, false);
   }
   else if(s.type==="par"){
     const ativo=parAtivo(s);
@@ -956,8 +963,8 @@ function render(){
   else if(s.type==="multi"){
     const sel=Array.isArray(answers[s.id])?answers[s.id]:[];
     h = `<div class="qnum">Pergunta ${s.num}</div><h2>${esc(s.title)}</h2><p class="sub">${esc(s.sub||"")}</p>
-      <div class="chips mini">${s.opts.map((o,i)=>`<button class="opt ${sel.includes(o)?"sel":""}" onclick="toggleMulti(${i})">${sel.includes(o)?"✓ ":""}${esc(o)}</button>`).join("")}</div>`;
-    needNext = true;
+      <div class="chips mini">${s.opts.map((o,i)=>{const on=rascSel(s.id).includes(o);return `<button class="opt ${on?"sel":""}" onclick="rascToggle('${s.id}',S[idx].opts[${i}],false,this)">${on?"✓ ":""}${esc(o)}</button>`;}).join("")}</div>${seguindo(s.id)||'<p class="sub so-dica" style="margin-top:12px">Escolha quantas quiser.</p>'}`;
+    needNext = (cur!=="app");
   }
   else if(s.type==="combo"){
     const m=s.mt, sel=Array.isArray(answers[m.id])?answers[m.id]:[];
@@ -1066,12 +1073,11 @@ function render(){
   }
   else if(s.type==="hall2"){
     const c = answers.hall_canal;
-    h = `<div class="center"><div class="big-emoji">🏆</div><h1>Seja um dos 100 primeiros e tenha benefícios exclusivos.</h1></div>
+    h = `<div class="center"><div class="big-emoji">🏆</div><h1>Seja um dos 100 primeiros e ganhe o seu nome no Hall da Fama.</h1><p class="sub">O seu prêmio: o seu nome (ou apelido) fica gravado no Hall da Fama do 7entidos, dentro do app.</p></div>
       <div class="card-dark"><p style="margin:0 0 12px;color:#d9d3df;font-size:17px">🔒 Seus dados ficam desconectados das suas respostas. Ninguém vai saber o que você respondeu. Seguimos todas as regras da LGPD.</p>
-      <button class="opt ciente ${answers.lgpd_ciente?"sel":""}" onclick="answers.lgpd_ciente=!answers.lgpd_ciente;window.click();rr()">${answers.lgpd_ciente?"☑":"☐"} Clique aqui para confirmar que você está ciente</button>
-      ${answers.lgpd_ciente?`<div class="row2" style="margin-top:12px"><button class="opt ${c==="email"?"sel":""}" onclick="answers.hall_canal='email';click();rr()">✉️ Sim, por e-mail</button>
+      ${true?`<p style="margin:0 0 8px;font-weight:800">Como avisamos você quando o Hall abrir?</p><div class="row2"><button class="opt ${c==="email"?"sel":""}" onclick="answers.hall_canal='email';click();rr()">✉️ Sim, por e-mail</button>
         <button class="opt zap ${c==="whatsapp"?"sel":""}" onclick="answers.hall_canal='whatsapp';click();rr()">💬 Sim, por WhatsApp</button></div>`:""}
-      ${c&&answers.lgpd_ciente?`<div class="stack"><input class="txt" id="hallName" maxlength="30" placeholder="Seu nome ou apelido (para o Hall da Fama)" value="${esc(contato.nome||"")}">
+      ${c?`<div class="stack"><input class="txt" id="hallName" maxlength="30" placeholder="Seu nome ou apelido (para o Hall da Fama)" value="${esc(contato.nome||"")}">
         ${c==="email"?`<input class="txt" id="hallCont" type="email" inputmode="email" maxlength="80" placeholder="seu@email.com" value="${esc(contato.email||"")}">`
           :`<input class="txt" id="hallCont" type="tel" inputmode="tel" maxlength="20" placeholder="(13) 99999-9999" value="${esc(contato.tel||"")}">`}
         <button class="btn" onclick="hall2Ok(true)">Quero fazer parte</button></div>`:""}
@@ -1081,9 +1087,9 @@ function render(){
   }
   else if(s.type==="portaoFinal"){
     h = `<div class="center"><div class="big-emoji">🚪</div><h1>Você chegou ao portão.</h1>
-      <p class="sub">Pode parar por aqui. Obrigado! Suas escolhas vão construir o 7entidos de verdade.</p></div>
-      <div class="stack"><button class="btn ghost" onclick="view='fim';render()">Quero sair</button>
-        <button class="btn" onclick="view='escolhas';render()">Quero ver minhas escolhas</button></div>`;
+      <p class="sub">Obrigado! Suas escolhas vão construir o 7entidos de verdade. Quer conhecer a Luzia, a heroína do reality?</p></div>
+      <div class="stack">${cur==="app"?`<button class="btn" onclick="click();abrirLuzia(true)">Seguir para a Luzia →</button>`:""}
+        <button class="btn ghost" onclick="click();view='fim';render()">Sair</button></div>`;
     ownNav=true;
   }
   else if(s.type==="revela"){
@@ -1153,7 +1159,16 @@ function toggleF1p(fi,oi){ const k="f1_"+FASE1[fi].id, o=FASE1[fi].o[oi], a=(Arr
 /* ===== telas em par: duas perguntas, sem botão Próximo ===== */
 let parSubiu=null;
 function parAtivo(s){ return s.itens.find(it=>!isDone(it))||null; }
+/* Fase 1 em 3 grupos de 5 (Gestalt), escolha várias, passa sozinha */
+function f1Grupos(it, ativa, emPar){
+  const f=it.f, k=it.id, sel=rascSel(k);
+  return `<div class="f1q"><div class="qnum">Pergunta ${it.num}</div><span class="chip" style="background:${f.cor}">${esc(f.s)}</span>
+    <h2>${esc(f.q)}</h2>
+    ${[0,1,2].map(g=>`<div class="g5nome" style="--c:${f.cor}">${GRUPOS5[g]}</div><div class="chips g5 ${sel.length?"temsel":""}" style="--c:${f.cor}">${f.o.slice(g*5,g*5+5).map(o=>`<button class="opt ${sel.includes(o)?"sel":""}" ${ativa?`onclick="rascToggle('${k}',${JSON.stringify(o).replace(/"/g,"&quot;")},${emPar},this)"`:'tabindex="-1"'}>${sel.includes(o)?"✓ ":""}${esc(o)}</button>`).join("")}</div>`).join("")}
+    ${ativa?(sel.length?seguindo(k):'<p class="sub so-dica" style="margin-top:12px">Escolha quantas quiser.</p>'):""}</div>`;
+}
 function parItem(it, ativa){
+  if(it.type==="f1one") return f1Grupos(it, ativa, true);
   if(it.type==="nota") return `<div class="qnum">Pergunta ${it.num}</div><h2>${esc(it.title)}</h2>${scale(it.id, answers[it.id], it.legend, ativa?"parNota":"void")}`;
   if(it.opts) return `<div class="qnum">Pergunta ${it.num}</div><h2>${esc(it.title)}</h2>${it.sub?`<p class="sub">${esc(it.sub)}</p>`:""}
     <div class="opts">${it.opts.map((o,i)=>`<button class="opt ${answers[it.id]===o?"sel":""}" ${ativa?`onclick="parOpt(${i})"`:'tabindex="-1"'}><span class="k">${L(i)}</span><span>${esc(o)}</span></button>`).join("")}</div>`;
@@ -1211,6 +1226,28 @@ function tocarSom(qual,btn){
   const tm=setTimeout(pararSom,dur*1000);
   somAtual={parar(){ clearTimeout(tm); fontes.forEach(f=>{try{f.stop();}catch(e){}}); try{ mestre.disconnect(); }catch(e){} }};
 }
+/* ESCOLHA VÁRIAS SEM "PRÓXIMO": cada toque guarda num rascunho e reinicia a contagem;
+   quando a pessoa para de tocar por PAUSA_MS, a resposta é gravada e a pesquisa segue sozinha. */
+const PAUSA_MS=2400; let rasc={}, _rascT=null;
+function rascSel(k){ return Array.isArray(rasc[k])?rasc[k]:(Array.isArray(answers[k])?answers[k]:[]); }
+function rascToggle(k,o,emPar,btn){
+  const a=rascSel(k).slice(), p=a.indexOf(o); p>=0?a.splice(p,1):a.push(o); rasc[k]=a; click();
+  if(_rascT){ clearTimeout(_rascT); _rascT=null; }
+  if(_passaT){ clearTimeout(_passaT); _passaT=null; }
+  /* atualiza só o que mudou (sem redesenhar a tela, que repetiria a animação de entrada) */
+  const caixa=btn&&btn.closest(".psub, .scene");
+  if(caixa){ const on=a.includes(o); btn.classList.toggle("sel",on); btn.textContent=(on?"✓ ":"")+o;
+    caixa.querySelectorAll(".chips.g5").forEach(c=>c.classList.toggle("temsel",a.length>0));
+    const velho=caixa.querySelector(".seguindo, .so-dica"); const novo=document.createElement("div");
+    novo.innerHTML=a.length?seguindo(k):'<p class="sub so-dica" style="margin-top:12px">Escolha quantas quiser.</p>';
+    if(velho) velho.replaceWith(novo.firstElementChild); else btn.closest(".chips").parentNode.appendChild(novo.firstElementChild); }
+  else rr();
+  if(!a.length) return;
+  const alvo=idx;
+  _rascT=setTimeout(()=>{ _rascT=null; if(idx!==alvo||view!=="flow") return; const v=rasc[k]; delete rasc[k];
+    if(emPar) parResp(k,v); else { answers[k]=v; next(); } }, PAUSA_MS);
+}
+function seguindo(k){ return rascSel(k).length?`<div class="seguindo" aria-live="polite"><i style="animation-duration:${PAUSA_MS}ms"></i><span>Escolha quantas quiser. Quando parar de tocar, seguimos.</span></div>`:""; }
 function rr(){ const y=window.scrollY; render(); window.scrollTo({top:y}); }
 function setA(k,v){ answers[k]=v; click(); rr(); }
 function setN(k,v){ answers[k]=v; click(); rr(); const t=S[idx]; if(t.type==="nota" || (cur==="app" && t.type==="f2" && isDone(t))) passaSozinho(); }
@@ -1284,7 +1321,7 @@ function passaSozinho(ms){ if(_passaT) return; const alvo=idx, fl=cur; _passaT=s
 function trocouTela(){ if(_passaT){ clearTimeout(_passaT); _passaT=null; } _trocouEm=Date.now(); window.scrollTo(0,0); }
 /* dois toques rápidos: o 2º toque logo depois de trocar de tela é ignorado */
 document.addEventListener("click", e=>{ if(Date.now()-_trocouEm<450 && e.target.closest && e.target.closest("#stage")){ e.stopPropagation(); e.preventDefault(); } }, true);
-function next(){ if(idx<S.length-1){ leaveStep(); salvaParcial(); refazAsk=null; travaConvite=false; idx++; render(); trocouTela(); } }
+function next(){ if(_rascT){ clearTimeout(_rascT); _rascT=null; } rasc={}; if(idx<S.length-1){ leaveStep(); salvaParcial(); refazAsk=null; travaConvite=false; idx++; render(); trocouTela(); } }
 function prev(){ const sp=S[idx]; if(view!=="escolha"&&sp&&sp.type==="par"){ const feitos=sp.itens.filter(isDone); if(feitos.length){ delete answers[feitos[feitos.length-1].id]; render(); return; } } leaveStep(); refazAsk=null; travaConvite=false; revelaFase=0; if(idx>0){ idx--; render(); trocouTela(); } else goEscolha(); }
 function goEscolha(){ leaveStep(); view="escolha"; render(); window.scrollTo({top:0}); }
 
@@ -1321,7 +1358,7 @@ function finish(){
   if(cur==="app"){ try{ localStorage.setItem("7e_p1_feito","1"); }catch(e){} }
   enviar({pesquisa:cur, versao:VERSAO, quando:new Date().toISOString(), respostas:answers, campea: cur==="app"?campeas():null});
   if(contato.nome||contato.tel||contato.email) enviar({evento:"contato", pesquisa:cur, nome:contato.nome||"", telefone:contato.tel||"", email:contato.email||""});
-  if(cur==="app") return abrirLuzia(true);   /* terminou o Monte o App: vai direto para a pergunta 1 da Luzia */
+  /* terminou o Monte o App: segue para o portão (Seguir para a Luzia / Sair) */
   next();
 }
 /* ===== CAMARIM DA LUZIA (Pesquisa 1 de 7), dentro do mesmo link ===== */
