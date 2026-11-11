@@ -161,7 +161,10 @@ function registrarVoto(s){
   var url=window.PESQUISA_URL||"";
   if(!url)return; /* prévia, teste ou fora do site oficial: não grava nada */
   try{fetch(url,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},
-    body:JSON.stringify({evento:"voto",sentido:s.nome,aparelho:codigoAparelho()})}).catch(function(){})}catch(e){}
+    /* Usa o robô atual da planilha sem alteração: SEM o campo "evento".
+       parcial:true é obrigatório para o voto NÃO contar nas 100 vagas da pesquisa.
+       O voto cai na aba "Reality · Respostas", com "votacao" na coluna Pesquisa. */
+    body:JSON.stringify({pesquisa:"votacao",pessoa:codigoAparelho(),parcial:true,respostas:{sentido:s.nome}})}).catch(function(){})}catch(e){}
 }
 function mostrarFim(){document.body.classList.add("fim");document.getElementById("encerrada").classList.add("on")}
 if(acabou())mostrarFim();
