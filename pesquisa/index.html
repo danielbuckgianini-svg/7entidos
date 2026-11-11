@@ -242,7 +242,7 @@ input.txt:focus{border-color:var(--accent)}
 const ENDPOINT = (window.PESQUISA_URL||"");  /* script da planilha do Google (só funciona no site 7entidos.com.br) */
 const VERSAO = "v5";
 const LINK = "https://7entidos.com.br/pesquisa";
-const SHARE_MSG = "Respondi a pesquisa do reality A Casa dos 7 Sentidos, do 7entidos, um app santista (013). É anônima, é só tocar nas respostas. Quem responde ganha a temporada 2 de graça, mas são só 100 vagas. Responde por esse link e nós dois garantimos o acesso: " + LINK;
+const SHARE_MSG = "Montei o app dos 7 sentidos, do 7entidos, um app santista (013). É anônimo e leva poucos minutos. Monta o seu também: 7entidos.com.br/pesquisa";
 
 /* Tela 1: vídeo de abertura. Quando o arquivo .mp4 for enviado junto com a página, o nome dele vai em video (ex.: "abertura.mp4"). */
 const ABERTURA = {titulo:"Abertura 7entidos — Pesquisa 013", video:"abertura.mp4", drive:"https://drive.google.com/file/d/1pyuRO69teyrTLF0yEOoUmLl2-u3UdiQx/view"};
@@ -480,7 +480,7 @@ function startFlow(f){
 function shareBox(onde){
   const wa = "https://wa.me/?text="+encodeURIComponent(SHARE_MSG);
   return `<div class="card-dark share fade"><b style="font-size:22px">📣 Convide alguém</b>
-    <p>Quem você convidar também ganha a temporada 2 de graça, enquanto tiver vaga.</p>
+    <p>Quanto mais gente montar, melhor o app fica para todo mundo.</p>
     <div class="row2"><a class="btn" href="${wa}" target="_blank" rel="noopener" onclick="shared('${onde}','whatsapp')">Mandar no WhatsApp</a>
     <button class="btn ghost" onclick="copyLink(this,'${onde}')">Copiar link</button></div></div>`;
 }
