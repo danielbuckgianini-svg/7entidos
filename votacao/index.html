@@ -60,10 +60,23 @@ h1{font-weight:800;font-size:clamp(30px,8.5vw,40px);line-height:1.08;margin:22px
 .gaveta .sim{background:var(--cor);color:#111}
 .gaveta .nao{background:#eee;color:#333}
 /* depois do voto (o Bloco 3 completa esta tela) */
-.pronto{position:fixed;inset:0;z-index:7;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;background:rgba(11,15,30,.97)}
-.pronto.on{display:flex}
-.pronto h2{font-family:Fraunces,serif;font-style:italic;font-size:40px;color:var(--ouro)}
-.pronto p{margin-top:8px;color:var(--suave)}
+.pronto{position:fixed;inset:0;z-index:7;display:none;overflow-y:auto;-webkit-overflow-scrolling:touch;text-align:center;background:rgba(11,15,30,.98)}
+.pronto.on{display:block}
+.pronto .caixa{max-width:480px;margin:0 auto;padding:26px 18px calc(30px + env(safe-area-inset-bottom))}
+.pronto h2{font-family:Fraunces,serif;font-style:italic;font-size:38px;color:var(--ouro);line-height:1.1}
+.pronto .voce{margin-top:4px;color:var(--suave);font-size:16px}
+/* foto grande de quem recebeu o voto */
+.pronto .fotoG{display:block;width:100%;max-width:340px;height:min(52vh,460px);object-fit:cover;object-position:center 20%;margin:16px auto 0;border-radius:24px;border:4px solid var(--cor);box-shadow:0 0 34px var(--cor);animation:surge .6s ease-out}
+@keyframes surge{from{transform:scale(.85);opacity:0}to{transform:none;opacity:1}}
+.pronto .quem{margin-top:14px;font-weight:800;font-size:34px;line-height:1.05;color:var(--cor)}
+.pronto .chip{display:inline-block;margin-top:8px;font-weight:800;font-size:15px;background:var(--cor);color:#111;border-radius:30px;padding:5px 14px}
+.pronto .dados{margin-top:10px;font-weight:700;font-size:17px;color:#fff}
+.pronto .desc{margin-top:10px;font-size:18px;line-height:1.45;color:#e9e9f2}
+.pronto .bordao{margin-top:12px;font-family:Fraunces,serif;font-style:italic;font-size:21px;color:var(--cor)}
+.pronto .resultado{margin-top:18px;font-size:16px;color:var(--suave)}
+.pronto .resultado b{color:var(--ouro)}
+.pronto .yt{display:inline-block;margin-top:10px;font-weight:700;font-size:15px;color:#fff;text-decoration:underline}
+.pronto .fechar{display:block;width:100%;margin-top:18px;border:0;font:inherit;font-weight:800;font-size:17px;padding:14px;border-radius:14px;background:#2a3050;color:#fff;cursor:pointer}
 .encerrada,.jafoi{display:none;text-align:center;background:var(--card);border:2px solid var(--ouro);border-radius:20px;padding:24px 18px;margin-top:6px}
 .encerrada.on,.jafoi.on{display:block}
 .encerrada h2,.jafoi h2{font-family:Fraunces,serif;font-style:italic;font-size:30px;color:var(--ouro);margin-bottom:8px}
@@ -99,18 +112,37 @@ body.fim .lista,body.fim .prazo,body.fim .instrucao,body.votou .lista,body.votou
   <button class="nao" id="gNao">Voltar e escolher outro</button>
 </div>
 
-<div class="pronto" id="pronto"><h2>Voto guardado!</h2><p id="prontoTxt"></p></div>
+<div class="pronto" id="pronto" role="dialog" aria-label="Voto guardado"><div class="caixa">
+  <h2>Voto guardado!</h2>
+  <p class="voce" id="prontoTxt"></p>
+  <img class="fotoG" id="pFoto" alt="">
+  <div class="quem" id="pNome"></div>
+  <span class="chip" id="pSentido"></span>
+  <div class="dados" id="pDados"></div>
+  <p class="desc" id="pDesc"></p>
+  <p class="bordao" id="pBordao"></p>
+  <p class="resultado">O resultado sai <b>domingo às 16h</b> no @7entidoss.</p>
+  <a class="yt" href="https://www.youtube.com/@7Entidos" target="_blank" rel="noopener">▶️ Assista aos episódios no nosso YouTube</a>
+  <button class="fechar" id="pFechar">Fechar</button>
+</div></div>
 
 <script>
 /* Os 7 sentidos e o morador de cada um (fotos do reality A Casa dos 7 Sentidos) */
 var SENTIDOS=[
- {id:"visao",nome:"Visão",morador:"Luzia",foto:"luzia.jpg",cor:"var(--visao)"},
- {id:"audicao",nome:"Audição",morador:"Rafa",foto:"rafa.jpg",cor:"var(--audicao)"},
- {id:"tato",nome:"Tato",morador:"Tonho",foto:"tonho.jpg",cor:"var(--tato)"},
- {id:"olfato",nome:"Olfato",morador:"Yara",foto:"yara.jpg",cor:"var(--olfato)"},
- {id:"paladar",nome:"Paladar",morador:"Beto",foto:"beto.jpg",cor:"var(--paladar)"},
- {id:"equilibrio",nome:"Equilíbrio",morador:"Duda",foto:"duda.jpg",cor:"var(--equilibrio)"},
- {id:"corpo",nome:"Noção de corpo",morador:"Lucas",foto:"lucas.jpg",cor:"var(--corpo)"}
+ {id:"visao",nome:"Visão",morador:"Bia",foto:"luzia.jpg",grande:"grande-luzia.jpg",cor:"var(--visao)",idade:28,signo:"Leão",
+  desc:"Sofreu uma injustiça e perdeu o brilho. Rala de madrugada estudando e trabalhando, usa um terço no peito e sonha voltar a enxergar a beleza das coisas."},
+ {id:"audicao",nome:"Audição",morador:"Rafa",foto:"rafa.jpg",grande:"grande-rafa.jpg",cor:"var(--audicao)",idade:29,signo:"Peixes",
+  desc:"Veio do interior e vive de música. Coração grande: se apaixona fácil e sofre do mesmo jeito."},
+ {id:"tato",nome:"Tato",morador:"Tonho",foto:"tonho.jpg",grande:"grande-tonho.jpg",cor:"var(--tato)",idade:34,signo:"Sagitário",
+  desc:"Inteligente e admirado por todos. Não aceita injustiça e, quando fala, a casa escuta."},
+ {id:"olfato",nome:"Olfato",morador:"Yara",foto:"yara.jpg",grande:"grande-yara.jpg",cor:"var(--olfato)",idade:67,signo:"Peixes",
+  desc:"Estrangeira e a mais velha da casa. Calma, guarda muitas memórias e acolhe quem chega. Percebe as coisas antes de todo mundo e tem um segredo."},
+ {id:"paladar",nome:"Paladar",morador:"Beto",foto:"beto.jpg",grande:"grande-beto.jpg",cor:"var(--paladar)",idade:50,signo:"Touro",
+  desc:"Faz todo mundo rir. Já passou fome; hoje cozinha, ajuda quem precisa e sonha ter um restaurante."},
+ {id:"equilibrio",nome:"Equilíbrio",morador:"Duda",foto:"duda.jpg",grande:"grande-duda.jpg",cor:"var(--equilibrio)",idade:24,signo:"Escorpião",
+  desc:"Bailarina. Estética delicada, parece perfeita, doce e sempre calma. Nunca perde a pose, nem quando tudo desaba.",bordao:"Brilho não se pede, se toma."},
+ {id:"corpo",nome:"Noção de corpo",morador:"Lucas",foto:"lucas.jpg",grande:"grande-lucas.jpg",cor:"var(--corpo)",idade:9,signo:"Aquário",
+  desc:"O mais novo da casa. Ninguém sabe por que ele está lá... mas ele sabe.",bordao:"Segredo de fantasminha!"}
 ];
 var lista=document.getElementById("lista");
 SENTIDOS.forEach(function(s,i){
@@ -137,8 +169,7 @@ document.getElementById("gSim").onclick=function(){
   if(acabou()){mostrarFim();return}
   if(jaVotouHoje()){document.body.classList.add("votou");document.getElementById("jafoi").classList.add("on");return}
   registrarVoto(s);
-  document.getElementById("prontoTxt").textContent="Você votou em "+s.nome+".";
-  document.getElementById("pronto").classList.add("on");
+  mostrarEscolhido(s);
 };
 
 /* ===== Regras do voto (Bloco 2) =====
@@ -168,6 +199,22 @@ function registrarVoto(s){
        uma linha nova, um voto não apaga o outro, nem a pesquisa da pessoa. */
     body:JSON.stringify({pesquisa:"votacao",pessoa:codigoAparelho()+"-"+hojeBR(),parcial:true,respostas:{sentido:s.nome}})}).catch(function(){})}catch(e){}
 }
+/* depois do voto: foto grande de quem recebeu o voto e as características dele */
+function mostrarEscolhido(s){
+  var p=document.getElementById("pronto");p.style.setProperty("--cor",s.cor);
+  document.getElementById("prontoTxt").textContent="Você votou em "+s.nome+".";
+  var f=document.getElementById("pFoto");f.src=s.grande;f.alt=s.morador+", do sentido "+s.nome;
+  document.getElementById("pNome").textContent=s.morador;
+  document.getElementById("pSentido").textContent="Sentido: "+s.nome;
+  document.getElementById("pDados").textContent=s.idade+" anos · "+s.signo;
+  document.getElementById("pDesc").textContent=s.desc;
+  var b=document.getElementById("pBordao");b.textContent=s.bordao?"“"+s.bordao+"”":"";b.style.display=s.bordao?"":"none";
+  p.classList.add("on");p.scrollTop=0;
+}
+document.getElementById("pFechar").onclick=function(){
+  document.getElementById("pronto").classList.remove("on");
+  document.body.classList.add("votou");document.getElementById("jafoi").classList.add("on");window.scrollTo(0,0);
+};
 function mostrarFim(){document.body.classList.add("fim");document.getElementById("encerrada").classList.add("on")}
 if(acabou())mostrarFim();
 else if(jaVotouHoje()){document.body.classList.add("votou");document.getElementById("jafoi").classList.add("on")}
