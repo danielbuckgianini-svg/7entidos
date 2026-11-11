@@ -447,7 +447,7 @@ const SIL_KID = '<svg viewBox="0 0 60 70" aria-hidden="true"><circle cx="30" cy=
 
 /* ===== DADOS DO REALITY ===== */
 const CAST = [
-  {id:"p1", fixo:{nome:"Luzia", foto:"livia.jpg"}, sentido:"Visão", cor:"#f5c542", brief:"Sofreu uma injustiça e perdeu o brilho. É forte, mas anda desconfiando de todo mundo. Sonha voltar a enxergar a beleza das coisas.",
+  {id:"p1", fixo:{nome:"Bia", foto:"livia.jpg"}, sentido:"Visão", cor:"#f5c542", brief:"Sofreu uma injustiça e perdeu o brilho. É forte, mas anda desconfiando de todo mundo. Sonha voltar a enxergar a beleza das coisas.",
    F:["Luzia","Lúcia","Luana"], M:["Luiz","Lino","Leandro"], tipo:["Perdoa quem errou","Dá o troco na hora certa","Se reconstrói em silêncio"]},
   {id:"p2", fixo:{nome:"Duda", apelido:"mais conhecida como Luca", foto:"duda.jpg"}, sentido:"Equilíbrio", cor:"#b48cff", brief:"Dança. Estética delicada, parece perfeita, doce e sempre calma. Nunca perde a pose, nem quando tudo desaba.",
    F:["Duda","Dora","Mei"], M:["Dudu","Bento","Kenji"], tipo:["Doce e gentil","Fria e distante","Sedutora"]},
@@ -830,7 +830,7 @@ function render(){
         <div class="pick fade"><div class="ph sel"><div class="img">${c.fixo.foto?`<img src="${c.fixo.foto}" alt="${esc(c.fixo.nome)}">`:SIL}</div></div>
         <div><span class="chip" style="background:${c.cor}">${esc(c.sentido)}</span><div class="logo" style="font-size:46px;margin-top:6px">${esc(c.fixo.nome)}</div>${c.fixo.apelido?`<div style="color:var(--muted);font-size:18px">${esc(c.fixo.apelido)}</div>`:""}</div></div>
         <div class="ficha"><p>${esc(c.brief)}</p></div>
-        <h2>Qual é o jeito ${c.fixo.nome==="Luzia"||c.fixo.nome==="Duda"||c.fixo.nome==="Yara"?"dela":"dele"}?</h2>
+        <h2>Qual é o jeito ${c.fixo.nome==="Bia"||c.fixo.nome==="Duda"||c.fixo.nome==="Yara"?"dela":"dele"}?</h2>
         <div class="opts fade">${c.tipo.map((o,i)=>`<button class="opt ${answers[tk]===o?"sel":""}" onclick="castSet('${tk}',${JSON.stringify(o).replace(/"/g,"&quot;")},true)"><span class="k">${L(i)}</span>${esc(o)}</button>`).join("")}</div>`;
     } else if(fase===0){
       const used=usedPhotos(c.id), left=FOTOS.filter(f=>!used.includes(f.id));
@@ -1406,7 +1406,7 @@ function finish(){
 /* ===== CAMARIM DA LUZIA (Pesquisa 1 de 7), dentro do mesmo link ===== */
 function abrirLuzia(direto){
   let f=document.getElementById("salaLuzia");
-  if(!f){ f=document.createElement("iframe"); f.id="salaLuzia"; f.title="Pesquisa 1 de 7 · Luzia"; f.setAttribute("allow","autoplay");
+  if(!f){ f=document.createElement("iframe"); f.id="salaLuzia"; f.title="Pesquisa 1 de 7 · Bia"; f.setAttribute("allow","autoplay");
     f.style.cssText="position:fixed;inset:0;width:100%;height:100%;border:0;z-index:9000;background:#0b1640"; document.body.appendChild(f); }
   f.src="luzia.html"+(direto?"?ir=1":"");
   document.body.style.overflow="hidden"; window.scrollTo({top:0});
