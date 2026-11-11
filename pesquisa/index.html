@@ -237,6 +237,30 @@ input.txt:focus{border-color:var(--accent)}
 .fio i{position:absolute;left:21px;top:-6px;bottom:-6px;width:4px;border-radius:4px;background:linear-gradient(var(--accent),#e2483d);box-shadow:0 0 12px rgba(245,197,66,.6)}
 .fio span{font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
 .passo .pesq{width:100%}
+
+/* tela inicial: logo + infográfico em 2 passos */
+body.tela-inicio .logo-top{visibility:hidden}
+.inicio .logo-ini{text-align:center;margin:6px 0 18px}
+.inicio .logo-ini img{width:min(320px,78vw);height:auto;filter:drop-shadow(0 0 22px rgba(245,197,66,.25))}
+.info2{position:relative;display:grid;gap:0;margin:0 0 18px}
+.etapa{position:relative;padding-left:64px}
+.etapa .no{position:absolute;left:0;top:22px;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#fff6,#F5C542 45%,#b8860b);box-shadow:0 0 0 5px rgba(245,197,66,.18),0 0 24px rgba(245,197,66,.55);z-index:2}
+.etapa .no span{font-family:"Bebas Neue";font-size:30px;color:#141216;line-height:1}
+.etapa .pesq{width:100%;box-sizing:border-box;position:relative;overflow:hidden;padding-right:104px;min-height:150px}
+.caminho{position:relative;height:64px;padding-left:64px;display:flex;align-items:center}
+.caminho i{position:absolute;left:22px;top:-8px;bottom:-8px;width:4px;border-radius:4px;background:linear-gradient(#F5C542,#FF5D7A);box-shadow:0 0 14px rgba(245,197,66,.65)}
+.caminho b{position:absolute;left:18px;width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 0 14px 4px #F5C542;animation:desce 1.8s ease-in-out infinite}
+@keyframes desce{0%{top:-6px;opacity:0}15%{opacity:1}85%{opacity:1}100%{top:58px;opacity:0}}
+.caminho span{font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.anel{position:absolute;right:16px;top:50%;width:76px;height:76px;margin-top:-38px;border-radius:50%;border:1.5px solid rgba(201,162,74,.7)}
+.anel i{position:absolute;left:50%;top:50%;width:12px;height:12px;margin:-6px;border-radius:50%;background:var(--c);box-shadow:0 0 10px var(--c);transform:rotate(var(--a)) translateY(-38px);animation:pis 2.4s ease-in-out infinite;animation-delay:calc(var(--a) / 360deg * 2.4s)}
+@keyframes pis{50%{filter:brightness(1.6)}}
+.anel em{position:absolute;inset:0;display:grid;place-items:center;font-style:italic;font-family:Fraunces,serif;font-weight:700;font-size:34px;color:#F5C542;text-shadow:0 0 12px #F5C542}
+.rostos{position:absolute;right:12px;top:50%;width:86px;height:86px;margin-top:-43px}
+.rostos img{position:absolute;width:40px;height:40px;border-radius:50%;object-fit:cover;object-position:center 18%;border:2px solid #C9A24A;box-shadow:0 4px 10px rgba(0,0,0,.5)}
+.rostos img:nth-child(1){left:23px;top:0;z-index:3;width:44px;height:44px}
+.rostos img:nth-child(2){left:0;top:22px}.rostos img:nth-child(3){left:46px;top:22px}
+.rostos img:nth-child(4){left:4px;top:46px}.rostos img:nth-child(5){left:42px;top:46px}.rostos img:nth-child(6){left:23px;top:50px;z-index:0;opacity:.85}
 .guard{background:linear-gradient(135deg,#2b2410,#1c1920);border:2px solid var(--accent);border-radius:16px;padding:16px;margin:14px 0}
 /* logo oficial nos vídeos: pequeno no canto o tempo todo, grande 1 s antes de começar e grande no fim com @7entidoss */
 .vbox{position:relative;display:block;width:fit-content;max-width:100%;margin:12px auto}
@@ -437,7 +461,7 @@ function buildReality(){
 function buildApp(){
   const S=[]; let n=0; const q=(o,count=1)=>{o.num=n+1; n+=count; S.push(o)};
   /* uma pergunta por tela: cada sentido da Fase 1 e cada jogo da Fase 2 em sua própria tela */
-  q({type:"nota", id:"app_chegada", block:"Antes de começar", title:"De 0 a 10, como você está se sentindo agora?", legend:null, semSub:true});
+  q({type:"nota", id:"app_chegada", block:"Antes de começar", title:"Escolha um número de 0 a 10", legend:null, semSub:true});
   FASE1.forEach((f,fi)=> q({type:"f1one", id:"f1_"+f.id, f, fi, block:"Fase 1 · "+f.s}));
   let jg=0;
   F2PAGINAS.flat().forEach(gid=>{ const g=G2(gid); jg++;
@@ -520,20 +544,25 @@ function verAbertura(){ view="abertura"; render(); window.scrollTo({top:0}); }
 function escolha(){
   document.getElementById("prog").style.display="none";
   document.getElementById("anon").style.display="flex";
-  stage.innerHTML=`<div class="scene">
-    <div class="center" style="margin:14px 0 14px"><h1>Escolha uma pesquisa</h1></div>
-    <div class="fluxo">
-      <div class="passo">
-        <div class="pnum">1</div>
-        <button class="pesq" onclick="startFlow('app')"><span class="tag" style="background:#1f6b45">PRIMEIRO</span><b>Monte o app dos 7 sentidos</b>
+  const ROSTOS=["livia","duda","yara","rafa","tonho","beto"];
+  stage.innerHTML=`<div class="scene inicio">
+    <div class="logo-ini"><img src="logo-7entidos.png" alt="7entidos · A vida é feita de boas sensações"></div>
+    <div class="info2" role="list">
+      <div class="etapa" role="listitem">
+        <div class="no"><span>1</span></div>
+        <button class="pesq ic1" onclick="startFlow('app')">
+          <span class="anel" aria-hidden="true">${["#F5C542","#4DA3FF","#FF8A3D","#FF5D7A","#3DDC84","#B38CFF","#2ED3C6"].map((c,i)=>`<i style="--c:${c};--a:${i*360/7}deg"></i>`).join("")}<em>7</em></span>
+          <span class="tag" style="background:#1f6b45">PASSO 1 · COMECE AQUI</span><b>Monte o seu app</b>
           <p>Descubra o que te faz bem em cada sentido e jogue os mini jogos.</p>
           ${done.app?'<p style="color:#9be7b0;font-weight:800">você já participou ✓</p>':""}</button>
       </div>
-      <div class="fio" aria-hidden="true"><i></i><span>depois</span></div>
-      <div class="passo">
-        <div class="pnum">2</div>
-        <button class="pesq" onclick="abrirLuzia(false)"><span class="tag">🔴 ESTREIA</span><b>Participe do reality</b>
-          <p>Monte o elenco de A Casa dos 7 Sentidos, descubra quem é o seu vilão e decore a casa do seu jeito.</p>
+      <div class="caminho" aria-hidden="true"><i></i><b></b><span>depois</span></div>
+      <div class="etapa" role="listitem">
+        <div class="no"><span>2</span></div>
+        <button class="pesq ic2" onclick="abrirLuzia(false)">
+          <span class="rostos" aria-hidden="true">${ROSTOS.map(r=>`<img src="${r}.jpg" alt="">`).join("")}</span>
+          <span class="tag">🔴 PASSO 2 · O REALITY</span><b>A Casa dos 7 Sentidos</b>
+          <p>Monte o elenco do reality, descubra quem é o seu vilão e decore a casa do seu jeito.</p>
           ${done.reality?'<p style="color:#9be7b0;font-weight:800">você já participou ✓</p>':""}</button>
       </div>
     </div></div>`;
@@ -598,6 +627,7 @@ function drawTrail(s){
 /* ============ TELAS ============ */
 /* visual novo (Sala do Visual, 10/11): estilo escolhido para cada tela */
 function aplicaTema(){
+  document.body.classList.toggle("tela-inicio", view==="escolha");
   if(!window.TEMA) return;
   if(view==="abertura") return TEMA.set("C","#F5C542","s01","Vídeo de abertura");
   if(view==="escolha") return TEMA.set("C","#4aa8ff","s02","Escolha da pesquisa");
