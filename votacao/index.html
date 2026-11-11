@@ -64,7 +64,14 @@ h1{font-weight:800;font-size:clamp(30px,8.5vw,40px);line-height:1.08;margin:22px
 .pronto.on{display:flex}
 .pronto h2{font-family:Fraunces,serif;font-style:italic;font-size:40px;color:var(--ouro)}
 .pronto p{margin-top:8px;color:var(--suave)}
+.encerrada,.jafoi{display:none;text-align:center;background:var(--card);border:2px solid var(--ouro);border-radius:20px;padding:24px 18px;margin-top:6px}
+.encerrada.on,.jafoi.on{display:block}
+.encerrada h2,.jafoi h2{font-family:Fraunces,serif;font-style:italic;font-size:30px;color:var(--ouro);margin-bottom:8px}
+.encerrada p,.jafoi p{color:var(--suave)}
+body.fim .lista,body.fim .prazo,body.fim .instrucao,body.votou .lista,body.votou .instrucao{display:none}
+.teste{position:fixed;top:0;left:0;right:0;z-index:9;text-align:center;font-size:12px;font-weight:800;background:#ff5a6e;color:#fff;padding:3px}
 </style>
+<script src="../pesquisa/config.js"></script>
 </head>
 <body>
 <div class="luz"></div>
@@ -80,6 +87,8 @@ h1{font-weight:800;font-size:clamp(30px,8.5vw,40px);line-height:1.08;margin:22px
   <div class="prazo">Vote até sexta, 23h59</div>
 
   <div class="lista" id="lista"></div>
+  <div class="jafoi" id="jafoi"><h2>Você já votou hoje.</h2><p>Volte amanhã!</p></div>
+  <div class="encerrada" id="encerrada"><h2>A votação acabou.</h2><p>Obrigado por participar! O resultado sai no episódio de domingo de A Casa dos 7 Sentidos.</p></div>
   <p class="rodape">Um reality do app 7entidos · @7entidoss</p>
 </main>
 
@@ -125,9 +134,39 @@ document.getElementById("gNao").onclick=fechar;sombra.onclick=fechar;
 document.getElementById("gSim").onclick=function(){
   if(escolhido<0)return;var s=SENTIDOS[escolhido];
   fechar();
+  if(acabou()){mostrarFim();return}
+  if(jaVotouHoje()){document.body.classList.add("votou");document.getElementById("jafoi").classList.add("on");return}
+  registrarVoto(s);
   document.getElementById("prontoTxt").textContent="Você votou em "+s.nome+".";
   document.getElementById("pronto").classList.add("on");
 };
+
+/* ===== Regras do voto (Bloco 2) =====
+   1 voto por aparelho por dia, até sexta 13/11/2026 às 23h59 (Brasília).
+   Voto anônimo: não pede nome nem telefone. Resultado não aparece na página.
+   Trava de teste (a mesma da pesquisa, em ../pesquisa/config.js): só grava na planilha
+   no site oficial 7entidos.com.br e sem "?teste" no endereço. */
+var FIM=Date.parse("2026-11-14T02:59:59Z");
+function acabou(){return Date.now()>FIM}
+function hojeBR(){try{return new Date().toLocaleDateString("en-CA",{timeZone:"America/Sao_Paulo"})}catch(e){var d=new Date(Date.now()-3*36e5);return d.toISOString().slice(0,10)}}
+function guarda(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
+function codigoAparelho(){
+  var c=guarda("7e_aparelho");
+  if(!c){c="AP-"+Math.random().toString(36).slice(2,8).toUpperCase()+Date.now().toString(36).slice(-4).toUpperCase();guarda("7e_aparelho",c)}
+  return c;
+}
+function jaVotouHoje(){return guarda("7e_voto_dia")===hojeBR()}
+function registrarVoto(s){
+  guarda("7e_voto_dia",hojeBR());
+  var url=window.PESQUISA_URL||"";
+  if(!url)return; /* prévia, teste ou fora do site oficial: não grava nada */
+  try{fetch(url,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},
+    body:JSON.stringify({evento:"voto",sentido:s.nome,aparelho:codigoAparelho()})}).catch(function(){})}catch(e){}
+}
+function mostrarFim(){document.body.classList.add("fim");document.getElementById("encerrada").classList.add("on")}
+if(acabou())mostrarFim();
+else if(jaVotouHoje()){document.body.classList.add("votou");document.getElementById("jafoi").classList.add("on")}
+if(window.PESQUISA_TESTE!==false){var t=document.createElement("div");t.className="teste";t.textContent="Modo teste: este voto não é gravado na planilha";document.body.appendChild(t)}
 </script>
 </body>
 </html>
