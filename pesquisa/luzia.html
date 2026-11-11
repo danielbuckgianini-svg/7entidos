@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pesquisa 1 de 7 · Luzia · A Casa dos 7 Sentidos</title>
+<title>Pesquisa 1 de 7 · Bia · A Casa dos 7 Sentidos</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Caveat:wght@600;700&family=Inter:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500;1,9..144,700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -138,8 +138,10 @@ h2{font-family:"Bebas Neue";font-weight:400;font-size:clamp(38px,8vw,52px);line-
 .looks.um{grid-template-columns:minmax(0,340px);justify-content:center}
 @media(max-width:420px){.lin{grid-template-columns:128px 1fr}.lin .mini div{width:68px;height:92px}.lin .mini div:last-child{left:52px}}
 /* rostos da Luzia */
-.duo .op .em svg.rosto{width:118px;height:118px;color:inherit;margin:0 auto 6px;border-radius:50%;background:radial-gradient(circle at 50% 40%,#2f5bd1,#0b1640 72%);box-shadow:inset 0 0 0 3px rgba(255,207,58,.55)}
-.duo .op.sel .em svg.rosto{box-shadow:inset 0 0 0 4px #0b1640}
+.duo .op .em img.rosto{display:block;object-fit:cover;outline:3px solid rgba(255,207,58,.55);outline-offset:-3px}
+.duo .op.sel .em img.rosto{outline:4px solid #0b1640;outline-offset:-4px}
+.duo .op .em :is(svg,img).rosto{width:118px;height:118px;color:inherit;margin:0 auto 6px;border-radius:50%;background:radial-gradient(circle at 50% 40%,#2f5bd1,#0b1640 72%);box-shadow:inset 0 0 0 3px rgba(255,207,58,.55)}
+.duo .op.sel .em :is(svg,img).rosto{box-shadow:inset 0 0 0 4px #0b1640}
 .duo .op.face{min-height:190px}
 /* foto da Luzia no Parabéns */
 .foto-fim{width:150px;height:150px;margin:6px auto 4px;border-radius:50%;overflow:hidden;border:5px solid var(--y);box-shadow:0 0 0 8px rgba(255,207,58,.22),0 0 46px rgba(255,207,58,.65);animation:brilho 2s ease-in-out infinite}
@@ -185,10 +187,10 @@ const PID=(function(){ try{ let v=localStorage.getItem("7e_pessoa"); if(!v){ v=M
 const ABA="Luzia";
 const LIMITE=100, MOSTRA_CONTADOR=60;
 let RESPOSTAS_JA=0;         /* vem do robô da planilha */
-const ZAP="Respondi a pesquisa da Luzia, do reality A Casa dos 7 Sentidos (7entidos, um app brasileiro). É anônima e leva 2 minutos. Só 100 vagas: https://7entidos.com.br/pesquisa";
+const ZAP="Respondi a pesquisa da Bia, do reality A Casa dos 7 Sentidos (7entidos, um app brasileiro). É anônima e leva 2 minutos. Só 100 vagas: https://7entidos.com.br/pesquisa";
 
 const MORADORES=[
-  {n:"Luzia",f:"livia.jpg"},{n:"Duda",f:"duda.jpg"},{n:"Yara",f:"yara.jpg"},{n:"Rafa",f:"rafa.jpg"},
+  {n:"Bia",f:"livia.jpg"},{n:"Duda",f:"duda.jpg"},{n:"Yara",f:"yara.jpg"},{n:"Rafa",f:"rafa.jpg"},
   {n:"Tonho",f:"tonho.jpg"},{n:"Beto",f:"beto.jpg"},{n:"Lucas",f:""}];
 /* fotos dos looks (pasta "LUZIA ROUPAS CAMARIM" no Drive). Sem foto: fica a pintura de reserva */
 const LINHAS=[
@@ -202,13 +204,13 @@ const LINHAS=[
     {id:"camisa_quarto_arles",nome:"Camisa “Quarto em Arles”",f:"luzia-camisa-quarto-em-arles.jpg",bg:"linear-gradient(90deg,#2f5bd1 0 33%,#ffcf3a 33% 66%,#ff8a3d 66%)"}]}
 ];
 const PERS=[
-  {id:"perdoa_ou_troco",q:"Você acha que a Luzia é mais...",a:["Perdoa","🤍"],b:["Dá o troco","⚡"]},
-  {id:"chora",q:"Quando dói, a Luzia...",a:["Chora escondido","",  "chora_esc"],b:["Chora na frente","","chora_frente"]},
-  {id:"confia",q:"Com as pessoas, a Luzia...",a:["Confia em todo mundo","","confia"],b:["Desconfia","","desconfia"]},
-  {id:"sonha",q:"Sobre o futuro, a Luzia...",a:["Sonha alto","","sonha"],b:["Pé no chão","","pe_no_chao"]}
+  {id:"perdoa_ou_troco",q:"Você acha que a Bia é mais...",a:["Perdoa","🤍"],b:["Dá o troco","⚡"]},
+  {id:"chora",q:"Quando dói, a Bia...",a:["Chora escondido","",  "chora_esc"],b:["Chora na frente","","chora_frente"]},
+  {id:"confia",q:"Com as pessoas, a Bia...",a:["Confia em todo mundo","","confia"],b:["Desconfia","","desconfia"]},
+  {id:"sonha",q:"Sobre o futuro, a Bia...",a:["Sonha alto","","sonha"],b:["Pé no chão","","pe_no_chao"]}
 ];
 /* roteiro: cada tela é um passo */
-const PASSOS=[{t:"capa",nome:"Briefing da Luzia"},...LINHAS.map((l,i)=>({t:"linha",i,nome:"Looks · linha "+l.nome})),{t:"favorita",nome:"Linha favorita"},...PERS.map((p,i)=>({t:"pers",i,nome:"Personalidade "+(i+1)})),{t:"fim",nome:"Parabéns / sala liberada"}];
+const PASSOS=[{t:"capa",nome:"Briefing da Bia"},...LINHAS.map((l,i)=>({t:"linha",i,nome:"Looks · linha "+l.nome})),{t:"favorita",nome:"Linha favorita"},...PERS.map((p,i)=>({t:"pers",i,nome:"Personalidade "+(i+1)})),{t:"fim",nome:"Parabéns / sala liberada"}];
 
 /* ===== ESTADO ===== */
 let idx=0, R={}, extra=null, t0=Date.now();
@@ -228,22 +230,22 @@ function nav(pulavel){ return `<div class="nav"><button class="link" onclick="vo
 
 function aplicaTema(){
   if(!window.TEMA) return; const p=PASSOS[idx];
-  if(extra) return TEMA.set("C","#b48cff","l_extra","Luzia · porta da próxima sala");
-  if(p.t==="capa") return TEMA.set("M","#F5C542","s26","Luzia · Capa");
-  if(p.t==="linha") return TEMA.set("M","#F5C542","s"+(27+p.i),"Luzia · Linha "+LINHAS[p.i].nome);
-  if(p.t==="favorita") return TEMA.set("M","#F5C542","s30","Luzia · Linha favorita");
-  if(p.t==="pers") return TEMA.set("C","#F5C542","s"+(31+p.i),"Luzia · Jeito "+(p.i+1));
-  return TEMA.set("C","#F5C542","s35","Luzia · Parabéns");
+  if(extra) return TEMA.set("C","#b48cff","l_extra","Bia · porta da próxima sala");
+  if(p.t==="capa") return TEMA.set("M","#F5C542","s26","Bia · Capa");
+  if(p.t==="linha") return TEMA.set("M","#F5C542","s"+(27+p.i),"Bia · Linha "+LINHAS[p.i].nome);
+  if(p.t==="favorita") return TEMA.set("M","#F5C542","s30","Bia · Linha favorita");
+  if(p.t==="pers") return TEMA.set("C","#F5C542","s"+(31+p.i),"Bia · Jeito "+(p.i+1));
+  return TEMA.set("C","#F5C542","s35","Bia · Parabéns");
 }
 function render(){
   if(RESPOSTAS_JA>=LIMITE && idx===0 && !R._comecou){ return travada(); }
   aplicaTema(); trilha(); const p=PASSOS[idx]; let h="";
-  if(extra==="sala") h=`<div class="center"><h2>A sala da Luzia</h2><div class="porta"></div><p class="sub">Em breve! A porta abre no episódio 2.</p><button class="btn ghost" onclick="extra=null;render()">← voltar</button></div>`;
+  if(extra==="sala") h=`<div class="center"><h2>A sala da Bia</h2><div class="porta"></div><p class="sub">Em breve! A porta abre no episódio 2.</p><button class="btn ghost" onclick="extra=null;render()">← voltar</button></div>`;
   else if(extra==="duda") h=`<div class="center"><h2>Próximo morador: Duda</h2><div class="porta" style="background:linear-gradient(90deg,#3a2a6a,#b48cff,#3a2a6a)"></div><p class="sub">(Prévia) A pesquisa 2 de 7, da Duda, é a próxima que vamos montar.</p><button class="btn ghost" onclick="extra=null;render()">← voltar</button></div>`;
   else if(p.t==="capa"){
     h=`<div class="anon">🛡️ Pesquisa 100% anônima · ninguém vai saber quem respondeu</div>${vagas()}
-    <div class="brief"><div class="retrato"><img src="livia.jpg" alt="Luzia"></div>
-      <div><span class="sentido">👁️ Visão</span><h1>Luzia</h1><div class="apelido">“Mas todo mundo me chama de Ju.”</div>
+    <div class="brief"><div class="retrato"><img src="livia.jpg" alt="Bia"></div>
+      <div><span class="sentido">👁️ Visão</span><h1>Bia</h1><div class="apelido">“Mas todo mundo me chama de Ju.”</div>
         <div class="ficha"><p>A heroína da casa. Rala de madrugada estudando e trabalhando, usa um terço no peito e quer voltar a sentir.</p></div>
         <p style="font-size:18px;color:var(--muted);margin:12px 0 0">Você vai escolher os looks e o jeito dela. Leva uns 2 minutos.</p></div></div>
     <div class="stack"><button class="btn full" onclick="R._comecou=true;ir(1)">Começar →</button></div>`;
@@ -256,19 +258,19 @@ function render(){
     <div class="err" id="err"></div><div class="stack"><button class="btn full" onclick="seguirLinha(${p.i})">Próximo →</button></div>${nav(true)}`;
   }
   else if(p.t==="favorita"){
-    h=`<div class="qn">Pergunta 4 de 8</div><h2>De qual linha você mais gosta?</h2><p class="sub">A linha vencedora vira a base de todos os looks da Luzia.</p>
+    h=`<div class="qn">Pergunta 4 de 8</div><h2>De qual linha você mais gosta?</h2><p class="sub">A linha vencedora vira a base de todos os looks da Bia.</p>
     <div class="linhas">${LINHAS.map((L,i)=>{const ns=L.looks.map(l=>R[l.id]).filter(v=>typeof v==="number");const m=ns.length?(ns.reduce((a,b)=>a+b,0)/ns.length).toFixed(1).replace(".",","):null;
       return `<button class="lin ${R.linha_favorita===L.id?"sel":""}" onclick="escolhe('linha_favorita','${L.id}')"><div class="mini">${L.looks.map(l=>`<div style="background:${l.bg}">${l.f?`<img src="${l.f}" alt="" onerror="this.remove()">`:""}</div>`).join("")}</div><div><b>${L.em} ${L.nome}</b><span>${L.looks.map(l=>esc(l.nome)).join(" · ")}</span>${m?`<div class="media">Sua média: ${m}</div>`:""}</div></button>`;}).join("")}</div>${nav(true)}`;
   }
   else if(p.t==="pers"){
     const P=PERS[p.i], v=R[P.id];
-    h=`<div class="qn">Pergunta ${5+p.i} de 8 · o jeito da Luzia</div>
+    h=`<div class="qn">Pergunta ${5+p.i} de 8 · o jeito da Bia</div>
     ${p.i===0?`<div class="fala"><div class="av"><img src="livia.jpg" alt=""></div><div class="balao">“Três da manhã e eu aqui, com café e marca-texto...”</div></div>`:""}
     <h2>${P.q}</h2>
-    <div class="duo">${[P.a,P.b].map(o=>`<button class="op ${o[2]?"face":""} ${v===o[0]?"sel":""}" onclick="escolhe('${P.id}','${esc(o[0])}')"><span class="em">${o[2]?rosto(o[2]):o[1]}</span>${o[0]}</button>`).join("")}</div>${nav(true)}`;
+    <div class="duo">${[P.a,P.b].map(o=>`<button class="op ${o[2]?"face":""} ${v===o[0]?"sel":""}" onclick="escolhe('${P.id}','${esc(o[0])}')"><span class="em">${o[2]?fotoBia(o[2]):o[1]}</span>${o[0]}</button>`).join("")}</div>${nav(true)}`;
   }
   else if(p.t==="fim"){
-    h=`<div class="center"><div class="foto-fim"><img src="livia.jpg" alt="Luzia"></div><h1 style="font-size:clamp(44px,10vw,70px)">Parabéns!</h1><p class="sub" style="font-size:24px">Você terminou a sala da Luzia!</p>
+    h=`<div class="center"><div class="foto-fim"><img src="livia.jpg" alt="Bia"></div><h1 style="font-size:clamp(44px,10vw,70px)">Parabéns!</h1><p class="sub" style="font-size:24px">Você terminou a sala da Bia!</p>
     <p style="color:var(--muted);font-size:18px;margin:0">Os looks mais votados entram no episódio 2.</p></div>
     <div class="stack"><button class="btn full travado" disabled aria-disabled="true">🔒 Em breve: Duda</button>
       <a class="btn full zap" href="https://wa.me/?text=${encodeURIComponent(ZAP)}" target="_blank" rel="noopener">💬 Convidar alguém no WhatsApp</a></div>
@@ -277,7 +279,7 @@ function render(){
   $("tela").innerHTML=`<div class="cena">${h}</div>`;
   barra();
 }
-function travada(){ if(window.TEMA) TEMA.set("M","#F5C542","s25","Sala trancada (100 vagas)"); trilha(); $("tela").innerHTML=`<div class="cena trava"><h2>As 100 vagas acabaram!</h2><p>Obrigado pelo interesse. A pesquisa da Luzia já fechou.</p><p class="sub">Acompanhe A Casa dos 7 Sentidos no @7entidoss.</p><a class="btn" href="https://www.instagram.com/7entidoss/" target="_blank" rel="noopener">Seguir o @7entidoss</a></div>`; barra(); }
+function travada(){ if(window.TEMA) TEMA.set("M","#F5C542","s25","Sala trancada (100 vagas)"); trilha(); $("tela").innerHTML=`<div class="cena trava"><h2>As 100 vagas acabaram!</h2><p>Obrigado pelo interesse. A pesquisa da Bia já fechou.</p><p class="sub">Acompanhe A Casa dos 7 Sentidos no @7entidoss.</p><a class="btn" href="https://www.instagram.com/7entidoss/" target="_blank" rel="noopener">Seguir o @7entidoss</a></div>`; barra(); }
 
 /* ===== AÇÕES ===== */
 function ir(i){ idx=Math.max(0,Math.min(PASSOS.length-1,i)); extra=null; render(); window.scrollTo({top:0,behavior:"smooth"}); if(PASSOS[idx].t==="fim") terminar(); }
@@ -302,7 +304,9 @@ function terminar(){
   [523,659,784,1046].forEach((f,i)=>setTimeout(()=>som(f,.3,.1),i*110)); setTimeout(()=>c.innerHTML="",3500);
 }
 
-/* ===== ROSTOS DA LUZIA (desenho, uma expressão por opção) ===== */
+/* ===== FOTOS DA LUZIA (uma expressão por opção) ===== */
+function fotoBia(ex){ return `<img class="rosto" src="bia-${ex.replace(/_/g,"-")}.jpg" alt="" width="118" height="118">`; }
+/* ===== ROSTOS DA LUZIA (desenho antigo, guardado caso precise voltar) ===== */
 function rosto(ex){
   const PELE="#a06a47", PELE2="#8a5737", CAB="#1b110c", LINHA="#24160f", CARD="#f5c542";
   const up = ex==="sonha" ? -5 : ex==="chora_esc" ? 4 : 0;   /* cabeça para cima / para baixo */
