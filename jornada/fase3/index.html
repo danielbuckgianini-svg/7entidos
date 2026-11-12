@@ -312,5 +312,5 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b
  if(a==='fim3'){if(G.sens==null){document.getElementById('er3').textContent='Dê a sua nota de 0 a 10 antes de finalizar.';return;}G.fim=true;salva3();
   post('fase3',{lembrancas:itens().map(([id,sen,,,n])=>{const x=G.ass[id]||{};return sen+': '+n+' → '+(x.v||'-')+(x.p?' ("'+x.p+'")':'');}),padroes:padroes(),sensacao:G.sens});render();scrollTo(0,0);return;}});
 render();
-</script><script src="../../js/rodape.js?v=20261110"></script>
+</script><script src="../../js/rodape.js?v=20261112"></script>
 </body></html>

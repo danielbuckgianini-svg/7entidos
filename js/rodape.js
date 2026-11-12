@@ -12,7 +12,7 @@
     whatsapp: "",
     email: "contato@7entidos.com.br",
     instagram: "https://www.instagram.com/7entidoss/",
-    tiktok: "https://www.tiktok.com/@7entidos",
+    youtube: "https://www.youtube.com/@7Entidos",
     facebook: "https://www.facebook.com/profile.php?id=61596119254628",
     linkedin: "https://www.linkedin.com/company/145418964/",
     /* Troque pelo endereço da página da empresa no Reclame Aqui. */
@@ -25,7 +25,7 @@
 
   var ic = {
     ig: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor"/></svg>',
-    tt: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.6 2h-3.3v13.3a2.9 2.9 0 1 1-2.9-2.9c.3 0 .6 0 .9.1V9.1a6.3 6.3 0 1 0 5.3 6.2V8.7a8 8 0 0 0 4.4 1.3V6.7a4.6 4.6 0 0 1-4.4-4.7z"/></svg>',
+    yt: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8zM10 15V9l5.2 3z"/></svg>',
     fb: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14 8h3V4h-3c-2.8 0-4 1.8-4 4.3V10H7v4h3v7h4v-7h3l.5-4H14V8.6c0-.4.2-.6.6-.6z"/></svg>',
     li: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.6 4.8 6V21h-4v-5.2c0-1.2 0-2.8-1.7-2.8s-2 1.3-2 2.7V21h-4z"/></svg>',
     wa: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1 2.7c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>'
@@ -64,8 +64,8 @@
       '<a class="r7-wa" href="' + waHref + '" target="_blank" rel="noopener">' + ic.wa + '<span>' + waTxt + '</span></a>' +
       '<div class="r7-redes" aria-label="7entidos nas redes">' +
         '<a href="' + DADOS.instagram + '" target="_blank" rel="noopener" aria-label="Instagram @7entidoss" title="Instagram @7entidoss">' + ic.ig + '</a>' +
-        '<a href="' + DADOS.tiktok + '" target="_blank" rel="noopener" aria-label="TikTok @7entidos" title="TikTok @7entidos">' + ic.tt + '</a>' +
         '<a href="' + DADOS.facebook + '" target="_blank" rel="noopener" aria-label="Facebook do 7entidos" title="Facebook">' + ic.fb + '</a>' +
+        '<a href="' + DADOS.youtube + '" target="_blank" rel="noopener" aria-label="Canal do 7entidos no YouTube" title="YouTube @7Entidos">' + ic.yt + '</a>' +
         '<a href="' + DADOS.linkedin + '" target="_blank" rel="noopener" aria-label="LinkedIn do 7entidos" title="LinkedIn">' + ic.li + '</a>' +
       '</div>' +
       '<nav class="r7-links" aria-label="Documentos">' +
