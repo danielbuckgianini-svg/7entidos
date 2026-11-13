@@ -1,0 +1,8 @@
+{
+  "_como_usar": "Para trocar a votação da semana, mude só este arquivo. semana = nome que vai para a planilha. pergunta = título da página. aberta = true (votação ligada) ou false (encerrada). abre e encerra = data e hora de Brasília (-03:00).",
+  "semana": "Semana 2 · 15 a 20/11/2026",
+  "pergunta": "Quem merece ser o protegido da semana?",
+  "aberta": true,
+  "abre": "2026-11-15T20:00:00-03:00",
+  "encerra": "2026-11-20T23:59:00-03:00"
+}
