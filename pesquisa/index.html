@@ -4,6 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Pesquisa 7entidos · A Casa dos 7 Sentidos</title>
+<meta property="og:title" content="Pesquisa 7entidos · A Casa dos 7 Sentidos">
+<meta property="og:description" content="A vida é feita de boas sensações. Descubra quais sentidos mais te fazem bem.">
+<meta property="og:image" content="https://7entidos.com.br/assets/compartilhar.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://7entidos.com.br/pesquisa/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -399,8 +407,11 @@ body.tela-inicio .logo-top{visibility:hidden}
 <link rel="stylesheet" href="tema.css?v=v6">
 <script src="tema.js?v=v6"></script>
 <link rel="stylesheet" href="../css/marca.css">
+<script src="../js/icones.js"></script>
 </head>
-<body>
+<body class="pg-pesq">
+<header class="topo7"><a class="marca7" href="/" aria-label="7entidos, página inicial"><img src="/assets/simbolo-contando-7.svg?v=20261102-novo" alt="" width="30" height="30"><span>7entidos</span></a><a class="sair7" href="/">Sair</a></header>
+
 <div class="wrap" id="wrap">
   <div class="top">
     <div class="seal seal-pisca" id="anon"><div style="font-size:24px">🛡️</div><b>Pesquisa 100% anônima, ninguém vai saber quem respondeu</b></div>
@@ -507,13 +518,13 @@ const F1ICO = {visao:["🌅","🌌","🎨","📷"],audicao:["🌊","🎸","🌧�
 const F1SOM = ["mar","musica","chuva","silencio"];
 const f1foto = (fid,oi) => "opcoes/"+fid+"-"+(oi+1)+".jpg";
 const FASE2 = [
-  {id:"visao", s:"Visão", cor:"#f5c542", nome:"Olho de águia", img:"👁️"},
-  {id:"audicao", s:"Audição", cor:"#4aa8ff", nome:"Qual som é mais fino?", img:"👂"},
-  {id:"tato", s:"Tato", cor:"#ff8a3d", nome:"Segure firme", img:"✋"},
-  {id:"paladar", s:"Paladar", cor:"#ff5a6e", nome:"Monte o seu prato", img:"🍽️"},
-  {id:"olfato", s:"Olfato", cor:"#5ccf8a", nome:"Ache o pintor de cada quadro", img:"👃"},
-  {id:"equilibrio", s:"Equilíbrio", cor:"#b48cff", nome:"No meio certinho", img:"🩰"},
-  {id:"corpo", s:"Noção do corpo", cor:"#3fd6d0", nome:"Siga a ordem", img:"🧘"}
+  {id:"visao", s:"Visão", cor:"#f5c542", nome:"Olho de águia", img:ICONE7("visao")},
+  {id:"audicao", s:"Audição", cor:"#4aa8ff", nome:"Qual som é mais fino?", img:ICONE7("audicao")},
+  {id:"tato", s:"Tato", cor:"#ff8a3d", nome:"Segure firme", img:ICONE7("tato")},
+  {id:"paladar", s:"Paladar", cor:"#ff5a6e", nome:"Monte o seu prato", img:ICONE7("paladar")},
+  {id:"olfato", s:"Olfato", cor:"#5ccf8a", nome:"Ache o pintor de cada quadro", img:ICONE7("olfato")},
+  {id:"equilibrio", s:"Equilíbrio", cor:"#b48cff", nome:"No meio certinho", img:ICONE7("equilibrio")},
+  {id:"corpo", s:"Noção do corpo", cor:"#3fd6d0", nome:"Siga a ordem", img:ICONE7("corpo")}
 ];
 /* jogos que ficam juntos na mesma página */
 const F2PAGINAS = [["visao"],["audicao","tato"],["paladar","olfato"],["equilibrio","corpo"]];

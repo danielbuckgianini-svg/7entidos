@@ -83,3 +83,19 @@ html body,html body.t-C,html body.t-X,html body.t-M,html body.pg-jornada{
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
+
+/* ===== Bloco 5 (13/11): topo ===== */
+.topo .marca img,.topo7 .marca7 img{border-radius:0}
+/* páginas internas: botão Menu */
+.menu7{position:relative}
+.menu7 summary{list-style:none;cursor:pointer;min-height:44px;padding:0 18px;border-radius:999px;border:1.5px solid rgba(243,238,227,.6);display:inline-flex;align-items:center;font:700 16px Manrope,system-ui,sans-serif;color:#F3EEE3}
+.menu7 summary::-webkit-details-marker{display:none}
+.menu7 nav{position:absolute;right:0;top:54px;z-index:80;min-width:220px;display:grid;padding:8px;border-radius:16px;background:linear-gradient(180deg,rgba(32,48,100,.98),rgba(17,27,61,.98));border:1px solid rgba(169,179,209,.25);box-shadow:0 30px 50px -20px rgba(0,0,0,.9)}
+.menu7 nav a{min-height:48px;display:flex;align-items:center;padding:0 14px;border-radius:10px;color:#F3EEE3!important;text-decoration:none;font:600 17px Manrope,system-ui,sans-serif}
+.menu7 nav a:hover{background:rgba(245,197,66,.12)}
+/* pesquisas: símbolo + 7entidos + Sair */
+.topo7{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:760px;margin:0 auto;padding:12px 16px 4px;position:relative;z-index:5}
+.marca7{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:#F3EEE3!important;font:800 18px Manrope,system-ui,sans-serif}
+.marca7::after{content:"";width:18px;height:18px;border-radius:50%;background:conic-gradient(#f5c542,#4aa8ff,#ff8a3d,#ff5a6e,#5ccf8a,#b48cff,#3fd6d0,#f5c542);-webkit-mask:radial-gradient(circle,transparent 50%,#000 53%);mask:radial-gradient(circle,transparent 50%,#000 53%);animation:anelMarca 40s linear infinite}
+.sair7{min-height:44px;padding:0 18px;border-radius:999px;border:1.5px solid rgba(243,238,227,.6);display:inline-flex;align-items:center;color:#F3EEE3!important;text-decoration:none;font:700 16px Manrope,system-ui,sans-serif}
+body.pg-pesq .logo-top,body.pg-pesq .topo .logo,body.pg-pesq .bar0 .logo{display:none!important}

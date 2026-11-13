@@ -4,6 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Pesquisa 1 de 7 · Bia · A Casa dos 7 Sentidos</title>
+<meta property="og:title" content="Pesquisa 1 de 7 · Bia · A Casa dos 7 Sentidos">
+<meta property="og:description" content="A vida é feita de boas sensações. Descubra quais sentidos mais te fazem bem.">
+<meta property="og:image" content="https://7entidos.com.br/assets/compartilhar.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://7entidos.com.br/pesquisa/luzia.html">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -171,8 +179,11 @@ h2{font-family:Fraunces;font-weight:400;font-size:clamp(38px,8vw,52px);line-heig
 <link rel="stylesheet" href="tema.css?v=v6">
 <script src="tema.js?v=v6"></script>
 <link rel="stylesheet" href="../css/marca.css">
+<script src="../js/icones.js"></script>
 </head>
-<body>
+<body class="pg-pesq">
+<header class="topo7"><a class="marca7" href="/" aria-label="7entidos, página inicial"><img src="/assets/simbolo-contando-7.svg?v=20261102-novo" alt="" width="30" height="30"><span>7entidos</span></a><a class="sair7" href="/">Sair</a></header>
+
 <div class="confete" id="confete"></div>
 <div class="wrap">
   <div class="topo"><span class="cont">Nº 01 / 07</span><div class="logo"><i>7</i>entidos</div></div>
@@ -265,7 +276,7 @@ function render(){
   else if(p.t==="capa"){
     h=`<div class="anon">🛡️ Pesquisa 100% anônima · ninguém vai saber quem respondeu</div>${vagas()}
     <div class="brief"><div class="retrato"><img src="livia.jpg" alt="Bia"></div>
-      <div><span class="sentido">👁️ Visão</span><h1>Bia</h1>
+      <div><span class="sentido"><i data-icone="visao" data-cor="#0B1430" data-tam="20"></i> Visão</span><h1>Bia</h1>
         <div class="ficha"><p>A heroína da casa. Rala de madrugada estudando e trabalhando, usa um terço no peito e quer voltar a sentir.</p></div>
         <p style="font-size:18px;color:var(--muted);margin:12px 0 0">Você vai escolher os looks e o jeito dela. Leva uns 2 minutos.</p></div></div>
     <div class="stack"><button class="btn full" onclick="R._comecou=true;ir(1)">Começar →</button></div>`;

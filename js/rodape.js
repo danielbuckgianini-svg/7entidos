@@ -45,10 +45,10 @@
     '.r7-in{max-width:960px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:12px}' +
     '.r7 a{color:#F3EEE3;text-decoration:none}' +
     '.r7 a:focus-visible{outline:2px solid #f5c542;outline-offset:3px;border-radius:6px}' +
-    '.r7-wa{display:inline-flex;align-items:center;gap:8px;background:#f5c542;color:#0B1430!important;font-weight:700;border-radius:999px;padding:9px 16px;min-height:40px}' +
+    '.r7-wa{display:inline-flex;align-items:center;gap:8px;background:#f5c542;color:#0B1430!important;font-weight:700;border-radius:999px;padding:9px 16px;min-height:44px}' +
     '.r7-wa svg{width:18px;height:18px}' +
     '.r7-redes{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}' +
-    '.r7-redes a{width:40px;height:40px;display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(245,197,66,.45);border-radius:50%}' +
+    '.r7-redes a{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(245,197,66,.45);border-radius:50%}' +
     '.r7-redes a:hover{background:rgba(245,197,66,.15)}' +
     '.r7-redes svg{width:19px;height:19px}' +
     '.r7-links{display:flex;gap:6px 16px;justify-content:center;flex-wrap:wrap}' +
@@ -57,7 +57,7 @@
     '.r7-ra b{color:#f5c542}' +
     '.r7-emp{color:#A9B3D1;font-size:16px;margin:0}' +
     '.r7-emp b{color:#f5c542;font-weight:700}' +
-    '@media (max-width:600px){.r7{padding:16px 12px 20px;font-size:16px}.r7-in{gap:9px}.r7-wa{padding:7px 13px;min-height:36px;font-size:16px}.r7-redes a{width:34px;height:34px}.r7-redes svg{width:16px;height:16px}.r7-emp{font-size:16px}}';
+    '@media (max-width:600px){.r7{padding:16px 12px 20px;font-size:16px}.r7-in{gap:9px}.r7-wa{padding:7px 13px;min-height:44px;font-size:16px}.r7-redes a{width:44px;height:44px}.r7-redes svg{width:16px;height:16px}.r7-emp{font-size:16px}}';
 
   var html =
     '<div class="r7-in">' +
@@ -66,9 +66,9 @@
         '<a href="' + DADOS.instagram + '" target="_blank" rel="noopener" aria-label="Instagram @7entidoss" title="Instagram @7entidoss">' + ic.ig + '</a>' +
         '<a href="' + DADOS.facebook + '" target="_blank" rel="noopener" aria-label="Facebook do 7entidos" title="Facebook">' + ic.fb + '</a>' +
         '<a href="' + DADOS.youtube + '" target="_blank" rel="noopener" aria-label="Canal do 7entidos no YouTube" title="YouTube @7Entidos">' + ic.yt + '</a>' +
-        '<a href="' + DADOS.linkedin + '" target="_blank" rel="noopener" aria-label="LinkedIn do 7entidos" title="LinkedIn">' + ic.li + '</a>' +
       '</div>' +
       '<nav class="r7-links" aria-label="Documentos">' +
+        '<a href="' + raiz + 'sobre/">Quem somos</a>' +
         '<a href="' + raiz + 'ciencia/">A ciência</a>' +
         '<a href="' + raiz + 'privacidade.html">Política de Privacidade</a>' +
         '<a href="' + raiz + 'termos.html">Termos de Uso</a>' +
