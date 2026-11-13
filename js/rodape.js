@@ -14,6 +14,7 @@
     instagram: "https://www.instagram.com/7entidoss/",
     youtube: "https://www.youtube.com/@7Entidos",
     facebook: "https://www.facebook.com/profile.php?id=61596119254628",
+    tiktok: "https://www.tiktok.com/@7entidos",
     linkedin: "https://www.linkedin.com/company/145418964/",
     /* Troque pelo endereço da página da empresa no Reclame Aqui. */
     reclameAqui: "https://www.reclameaqui.com.br/busca/?q=DBGIANINI"
@@ -25,6 +26,7 @@
 
   var ic = {
     ig: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor"/></svg>',
+    tt: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.6 3c.4 2.2 1.8 3.7 4 4v3.1c-1.5 0-2.9-.4-4-1.2v6.3a5.8 5.8 0 1 1-5-5.7v3.2a2.6 2.6 0 1 0 1.8 2.5V3z"/></svg>',
     yt: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8zM10 15V9l5.2 3z"/></svg>',
     fb: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14 8h3V4h-3c-2.8 0-4 1.8-4 4.3V10H7v4h3v7h4v-7h3l.5-4H14V8.6c0-.4.2-.6.6-.6z"/></svg>',
     li: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.6 4.8 6V21h-4v-5.2c0-1.2 0-2.8-1.7-2.8s-2 1.3-2 2.7V21h-4z"/></svg>',
@@ -66,6 +68,7 @@
         '<a href="' + DADOS.instagram + '" target="_blank" rel="noopener" aria-label="Instagram @7entidoss" title="Instagram @7entidoss">' + ic.ig + '</a>' +
         '<a href="' + DADOS.facebook + '" target="_blank" rel="noopener" aria-label="Facebook do 7entidos" title="Facebook">' + ic.fb + '</a>' +
         '<a href="' + DADOS.youtube + '" target="_blank" rel="noopener" aria-label="Canal do 7entidos no YouTube" title="YouTube @7Entidos">' + ic.yt + '</a>' +
+        '<a href="' + DADOS.tiktok + '" target="_blank" rel="noopener" aria-label="TikTok @7entidos" title="TikTok @7entidos">' + ic.tt + '</a>' +
       '</div>' +
       '<nav class="r7-links" aria-label="Documentos">' +
         '<a href="' + raiz + 'sobre/">Quem somos</a>' +
