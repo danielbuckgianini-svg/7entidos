@@ -1647,14 +1647,19 @@ function RecForm({r,onClose,update,toast}){
 }
 
 /* ============ APOIO ============ */
+/* Bloco 3 (13/11): saem Respiração 4–6, Aterramento, Registro de pensamento, Desfusão e as outras técnicas de consultório.
+   Entram pausas sensoriais de saborear, com foto real. */
 const TOOLS=[
-  {t:"Respiração 4–6",tag:"Regulação",steps:["Inspire pelo nariz contando até 4.","Solte o ar devagar contando até 6.","Repita por 2 a 3 minutos. Expirar mais longo que inspirar ajuda o corpo a desacelerar."]},
-  {t:"Aterramento 5-4-3-2-1",tag:"Regulação",steps:["Nomeie 5 coisas que você vê.","4 que você pode tocar.","3 sons que você ouve.","2 cheiros.","1 sabor ou uma coisa boa sobre você agora."]},
-  {t:"Registro de pensamento",tag:"TCC",steps:["Situação: o que aconteceu?","Pensamento automático: o que passou pela cabeça?","Emoção e intensidade (0–10).","Evidências a favor e contra esse pensamento.","Um pensamento alternativo mais equilibrado — e a nova intensidade."]},
-  {t:"Desfusão: “Estou tendo o pensamento de que…”",tag:"ACT",steps:["Pegue um pensamento difícil.","Repita-o começando com “Estou tendo o pensamento de que…”.","Observe a distância que se cria: você é quem nota o pensamento, não o pensamento."]},
-  {t:"Ação guiada por valores",tag:"ACT",steps:["O que importa para você hoje (ex.: conexão, beleza, cuidado)?","Qual é uma ação de 5 minutos alinhada a isso?","Faça-a, mesmo que o desconforto continue junto."]},
-  {t:"Autocompaixão em 3 frases",tag:"Regulação",steps:["“Este é um momento difícil.”","“Dificuldade faz parte da vida de todo mundo.”","“Que eu possa ser gentil comigo agora.”"]}
+  {t:"Ouvir o mar por 1 minuto",foto:"audicao-1",frase:"Feche os olhos e imagine o som das ondas indo e voltando.",seg:60,c:"#4aa8ff"},
+  {t:"Sentir uma textura macia",foto:"tato-2",frase:"Passe a mão devagar num tecido macio perto de você.",seg:30,c:"#ff8a3d"},
+  {t:"Lembrar de um cheiro bom",foto:"olfato-4",frase:"Feche os olhos e lembre do cheiro do café coado.",seg:20,c:"#5ccf8a"},
+  {t:"Olhar o céu por um minuto",foto:"visao-1",frase:"Repare nas cores do céu agora, sem pressa.",seg:60,c:"#f5c542"},
+  {t:"Saborear o primeiro gole",foto:"paladar-4",frase:"No próximo gole, repare na temperatura e no sabor.",seg:20,c:"#ff5a6e"},
+  {t:"Balançar devagar",foto:"equilibrio-2",frase:"Balance o corpo de leve, para um lado e para o outro.",seg:30,c:"#b48cff"},
+  {t:"Espreguiçar com calma",foto:"corpo-1",frase:"Estique os braços para cima e sinta o corpo acordar.",seg:20,c:"#3fd6d0"}
 ];
+function Pausa({t,onClose}){useEffect(()=>{const x=setTimeout(onClose,t.seg*1000);return()=>clearTimeout(x)},[]);
+  return ncPortal(html`<div class="pz" style=${{"--c":t.c,"--d":t.seg+"s"}} role="dialog" aria-modal="true" aria-label=${t.t}><img src=${"../pesquisa/opcoes/"+t.foto+".jpg"} alt=""/><div class="pz-t"><div class="pz-k">${t.t}</div><p>${t.frase}</p><div class="pz-b"><i></i></div><small>${t.seg<60?t.seg+" segundos":"1 minuto"} · pode parar quando quiser</small><button class="pz-btn" onClick=${onClose}>Parar</button></div></div>`)}
 function Apoio({s,update,toast}){
   const [f,setF]=useState({mood:5,energy:5,sleep:5,note:"",p1:"",p2:"",p3:"",reflection:""});const [tool,setTool]=useState(null);
   const set=k=>e=>setF(Object.assign({},f,{[k]:e.target.value}));
@@ -1663,7 +1668,7 @@ function Apoio({s,update,toast}){
   const avg=k=>{const v=week.filter(w=>typeof w[k]==="number");return v.length?(v.reduce((a,w)=>a+w[k],0)/v.length).toFixed(1):"—"};
   const low=+f.mood<=2;
   return html`<div class="fade"><div class="eyebrow">Módulo G</div><h1>Bem-estar</h1>
-    <p class="muted">Um espaço complementar para cuidar do dia a dia. Não substitui terapia nem acompanhamento médico, e não faz diagnósticos.</p>
+    <p class="muted">Um espaço para cuidar do dia a dia. Não faz diagnósticos e não substitui acompanhamento médico.</p>
     <div class="banner" style=${{marginBottom:16}} role="note"><b>Se você estiver em risco imediato</b>, procure ajuda humana agora: <b>SAMU 192</b> · <b>CVV 188</b> (apoio emocional, 24 h, ligação gratuita) · chat em <a href="https://cvv.org.br" target="_blank" rel="noopener">cvv.org.br</a> · ou alguém de confiança perto de você.</div>
     <div class="grid g2">
       <div class="card"><h3>Check-in de hoje</h3>
@@ -1678,10 +1683,10 @@ function Apoio({s,update,toast}){
         <div class="card"><h3>Revisão semanal</h3>${week.length?html`<dl class="kv"><dt>Check-ins (7 dias)</dt><dd>${week.length}</dd><dt>Humor médio</dt><dd>${avg("mood")}</dd><dt>Energia média</dt><dd>${avg("energy")}</dd><dt>Sono médio</dt><dd>${avg("sleep")}</dd></dl>
           <div class="bars" style=${{marginTop:12}} aria-label="Humor dos últimos check-ins">${week.slice(-10).map(w=>html`<i key=${w.id} title=${fmtDate(w.at)+": humor "+w.mood} style=${{height:(w.mood*10)+"%"}}></i>`)}</div>
           <p class="small muted" style=${{marginTop:6}}>Médias apenas dos seus próprios registros.</p>`:html`<p class="muted">Ainda sem check-ins nesta semana. O primeiro aparece aqui.</p>`}</div>
-        <div class="card"><h3>Caixa de Primeiros Socorros Emocionais</h3><div class="list">${TOOLS.map((t,i)=>html`<button key=${i} class="opt" onClick=${()=>setTool(t)}><span class="chip" style=${{marginRight:8}}>${t.tag}</span><b>${t.t}</b></button>`)}</div></div>
+        <div class="card"><h3>Pausas para saborear</h3><div class="pzl">${TOOLS.map((t,i)=>html`<button key=${i} class="pzl-i" style=${{"--c":t.c}} onClick=${()=>setTool(t)}><img src=${"../pesquisa/opcoes/"+t.foto+".jpg"} alt=""/><b>${t.t}</b></button>`)}</div><p class="small muted">Se você sentir que pode se machucar, ligue 188 (CVV) ou 192 (SAMU).</p></div>
       </div></div>
     ${s.wellbeing.length?html`<h2 style=${{marginTop:22}}>Registros</h2><div class="list">${s.wellbeing.slice().reverse().slice(0,20).map(w=>html`<div key=${w.id} class="item small"><div class="spread"><b>${fmtDate(w.at)}</b><span class="muted">humor ${w.mood}${typeof w.energy==="number"?" · energia "+w.energy:""}${typeof w.sleep==="number"?" · sono "+w.sleep:" · check-in rápido"}</span></div>${w.note?html`<p style=${{margin:"4px 0 0"}}>${w.note}</p>`:null}${w.positives.length?html`<p class="muted" style=${{margin:"4px 0 0"}}>✦ ${w.positives.join(" · ")}</p>`:null}</div>`)}</div>`:null}
-    ${tool?html`<${Modal} title=${tool.t} onClose=${()=>setTool(null)}><span class="chip">${tool.tag}</span><ol style=${{marginTop:12}}>${tool.steps.map((x,i)=>html`<li key=${i} style=${{marginBottom:8}}>${x}</li>`)}</ol><p class="small muted">Se nada disso ajudar e você sentir que pode se machucar, ligue 188 (CVV) ou 192 (SAMU).</p><//>`:null}
+    ${tool?html`<${Pausa} t=${tool} onClose=${()=>setTool(null)}/>`:null}
   </div>`;
 }
 
@@ -1870,7 +1875,7 @@ function Celebra({s,c,onClose}){
   <//>`;
 }
 
-const SAFETY_TEXT=html`<b>O 7entidos não é terapia nem tratamento.</b> É um app de bem-estar do dia a dia, para você se conhecer melhor. Ele não faz diagnósticos e não substitui um profissional de saúde. Se você estiver em risco ou sofrendo muito, procure ajuda humana agora: <b>CVV 188</b> (24 h, gratuito, ou <a href="https://cvv.org.br" target="_blank" rel="noopener">cvv.org.br</a>) · <b>SAMU 192</b>.`;
+const SAFETY_TEXT=html`<b>O 7entidos é um app de bem-estar do dia a dia,</b> para você se conhecer melhor. Ele não faz diagnósticos e não substitui um profissional de saúde. Se você estiver em risco ou sofrendo muito, procure ajuda humana agora: <b>CVV 188</b> (24 h, gratuito, ou <a href="https://cvv.org.br" target="_blank" rel="noopener">cvv.org.br</a>) · <b>SAMU 192</b>.`;
 
 function ConsentGate({s,update}){
   const [main,setMain]=useState(false);const [social,setSocial]=useState(!!(s.consent&&s.consent.social));const [stats,setStats]=useState(!!(s.consent&&s.consent.analytics));
@@ -2105,7 +2110,13 @@ function livroHTML(s){
   const mems=(s.memories||[]).filter(m=>!m.sensitive&&!m.substance);
   const boas=(s.wellbeing||[]).flatMap(w=>(w.positives||[]).map(p=>({at:w.at,p}))).reverse();
   return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Livro das boas sensações</title>
-<style>body{font-family:Georgia,serif;background:#f8f4ee;color:#2d1f38;max-width:720px;margin:0 auto;padding:32px 20px;line-height:1.6}h1{font-size:2.2rem;color:#5a2d73;margin:0}h2{color:#5a2d73;margin-top:2.2em;border-bottom:1px solid #e0d4ea;padding-bottom:.2em}.it{margin:14px 0;padding:12px 16px;background:#fff;border-radius:12px;border:1px solid #ece4f2}.d{font-family:Arial,sans-serif;font-size:.8rem;color:#776a86}img{max-width:100%;border-radius:10px;margin-top:8px}.q{font-style:italic}footer{margin-top:3em;font-family:Arial,sans-serif;font-size:.85rem;color:#776a86;text-align:center}</style></head><body>
+<style>body{font-family:Georgia,serif;background:#f8f4ee;color:#2d1f38;max-width:720px;margin:0 auto;padding:32px 20px;line-height:1.6}h1{font-size:2.2rem;color:#5a2d73;margin:0}h2{color:#5a2d73;margin-top:2.2em;border-bottom:1px solid #e0d4ea;padding-bottom:.2em}.it{margin:14px 0;padding:12px 16px;background:#fff;border-radius:12px;border:1px solid #ece4f2}.d{font-family:Arial,sans-serif;font-size:.8rem;color:#776a86}img{max-width:100%;border-radius:10px;margin-top:8px}.q{font-style:italic}footer{margin-top:3em;font-family:Arial,sans-serif;font-size:.85rem;color:#776a86;text-align:center}
+/* Bloco 3 (13/11): leitura fácil e mesma luz dourada nas fotos */
+.pzl{display:grid;grid-template-columns:1fr 1fr;gap:10px}.pzl-i{position:relative;border:3px solid var(--c);border-radius:16px;overflow:hidden;padding:0;aspect-ratio:1;cursor:pointer;background:#0A0F24}.pzl-i img{width:100%;height:100%;object-fit:cover;display:block}.pzl-i b{position:absolute;left:0;right:0;bottom:0;padding:22px 8px 8px;background:linear-gradient(transparent,rgba(5,7,15,.88));color:#F4F1EA;font:700 16px/1.2 Manrope,system-ui,sans-serif;text-align:left}
+.pz{position:fixed;inset:0;z-index:9999;background:#05070F}.pz img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.pz-t{position:absolute;left:0;right:0;bottom:0;padding:60px 20px 28px;background:linear-gradient(transparent,rgba(5,7,15,.92) 40%);color:#F4F1EA;text-align:center}.pz-k{font:800 15px Manrope,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--c)}.pz-t p{font:600 26px/1.25 Fraunces,Georgia,serif;margin:8px 0 16px}.pz-b{height:10px;border-radius:999px;background:rgba(255,255,255,.18);overflow:hidden}.pz-b i{display:block;height:100%;width:0;background:var(--c);animation:pzenche var(--d) linear forwards}@keyframes pzenche{to{width:100%}}.pz-t small{display:block;margin-top:8px;font-size:16px}.pz-btn{width:100%;min-height:56px;margin-top:14px;border-radius:999px;border:2px solid rgba(244,241,234,.6);background:transparent;color:#F4F1EA;font:800 19px Manrope,system-ui,sans-serif;cursor:pointer}
+.btn{min-height:56px}.muted{color:#D3D9EC!important}.small{font-size:16px}
+img[src*="opcoes/"],img[src*="telas/"]{filter:sepia(.16) saturate(1.06) brightness(1.03) hue-rotate(-5deg)}
+</style></head><body>
 <p class="d">7entidos · by Gianini</p><h1>Livro das boas sensações${nome?" de "+e(nome):""}</h1><p class="d">Gerado em ${e(fmtDate(nowISO()))}</p>
 <h2>Minhas pistas ✦</h2>${qs.length?qs.map(q=>`<div class="it"><div class="d">${e(fmtDate(q.at))}</div><div>✦ ${e(q.text)}</div>${q.moment?`<div class="q">“${e(q.moment)}”</div>`:""}</div>`).join(""):"<p>Ainda sem pistas.</p>"}
 <h2>Coisas boas dos meus dias</h2>${boas.length?boas.map(b=>`<div class="it"><div class="d">${e(fmtDate(b.at))}</div><div>${e(b.p)}</div></div>`).join(""):"<p>Ainda sem registros.</p>"}

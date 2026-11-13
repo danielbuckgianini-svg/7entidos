@@ -141,6 +141,11 @@ h1{font-size:23px;line-height:1.25;margin:4px 0 10px}h2{font-size:18px;margin:22
 .cf{position:fixed;inset:0;pointer-events:none;z-index:50;overflow:hidden}.cf i{position:absolute;top:-12px;width:8px;height:14px;border-radius:2px;animation:cai linear forwards}
 @keyframes cai{to{top:105%;transform:rotate(720deg) translateX(40px)}}
 @media (prefers-reduced-motion:reduce){.al i.novo,.sqg.respira .sq,.resp i,.rv-espera i,.acorde span,.br .luzes i{animation:none}}
+
+/* Bloco 3 (13/11): leitura fácil e mesma luz dourada nas fotos */
+:root{--mute:#D3D9EC}body{font-size:20px}h1{font-size:28px}.small{font-size:18px}.btn{min-height:56px}.row{gap:12px}
+.pcards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0 6px}.pcard{display:grid;gap:4px}.pcard .pf{aspect-ratio:4/5;border-radius:18px;overflow:hidden}.pcard img{width:100%;height:100%;object-fit:cover;display:block}.pcard b{font:600 24px Fraunces,Georgia,serif}.pcard small{font-size:16px;color:var(--mute)}
+img[src*="opcoes/"],img[src*="telas/"]{filter:sepia(.16) saturate(1.06) brightness(1.03) hue-rotate(-5deg)}
 </style></head><body><div class="w" id="app"></div>
 <script>window.EF_SEMPRE=true;</script><script src="/jornada/config.js"></script><script src="/jornada/efeito.js"></script><script src="/app-previa/fechamento.js"></script>
 <script>/* ---------- estímulos sensoriais (sons feitos aqui, sem arquivos) ---------- */
@@ -395,7 +400,7 @@ function balaoBrisa(){const id=J.fechou;if(!id)return '';const s=SEN.find(x=>x[0
 function vAbre(){return `<div class="hero"><div class="luzes">${C.map(c=>`<i style="background:${c};box-shadow:0 0 10px ${c}"></i>`).join('')}</div><div class="k">Meu mapa dos 7 sentidos</div><h1 class="f">Escolha 7 de 15.<br>Sete vezes.</h1>
  <p class="mute">Em cada um dos 7 sentidos há 15 opções. Você escolhe as 7 de que mais gosta. Na Fase 2, você põe cada sentido em ordem com um mini-jogo. No fim, nasce a imagem dos seus 7 sentidos e 10 descobertas sobre você. Leva uns 7 minutos.</p>
  <p class="mute small">Se algum sentido não fizer parte da sua vida, você pode pular. Suas escolhas ficam guardadas só neste aparelho.</p>
- <button class="btn pri big" data-a="comeca">Começar meu mapa</button><p class="small mute">Sem resposta certa. O 7entidos não é terapia nem tratamento.</p></div>`;}
+ <button class="btn pri big" data-a="comeca">Começar meu mapa</button><p class="small mute">Sem resposta certa.</p></div>`;}
 function vNota(){return `<div class="hero" style="padding-top:20px"><div class="k">Antes de ver o seu mapa</div><h1 class="f" style="font-size:30px">Depois dessa fase, qual é a sua sensação agora?</h1><p class="mute">De 0 a 10. Um toque.</p>
  <div class="nota">${[...Array(11)].map((_,n)=>`<button class="${J.nota===n?'on':''}" data-a="nota" data-n="${n}">${n}</button>`).join('')}</div><div class="small mute" style="display:flex;justify-content:space-between;margin-top:6px"><span>0 = nada bem</span><span>10 = muito bem</span></div>
  <button class="btn pri big" data-a="verfim" ${J.nota===null?'disabled':''}>Ver a imagem dos meus 7 sentidos →</button></div>`;}
@@ -405,8 +410,8 @@ function vSen(){const [id,sen,ic,cor,,tiles]=SEN[J.i];const m=J.esc[id]||[];
  <div class="grid">${(A=['#E9B10E','#2F7FD1','#E8643A','#3E9E5E','#D9487E','#7457C9','#17A99B'],tiles).map((t,k)=>{const o=m.indexOf(t.n);const on=o>=0;const dis=!on&&m.length>=7;return `<div class="tile ${on?'on':''} ${dis?'dis':''}" role="button" tabindex="0" data-a="pick" data-v="${esc(t.n)}" aria-pressed="${on}" style="--c:${cor}"><span class="box">${on?'✓':''}</span>${t.som?`<button class="pl" data-a="play" data-som="${t.som}" aria-label="Ouvir ${esc(t.n)}">▶</button>`:''}<svg viewBox="0 0 300 300">${t.art()}</svg><b>${esc(t.n)}</b></div>`;}).join('')}</div>
  <div class="row"><button class="btn" data-a="volta">← Voltar</button>${m.length?`<button class="btn" data-a="limpa">Limpar</button>`:''}${!pulado(id)&&m.length<7?`<button class="btn" data-a="pula">Pular este sentido</button>`:''}<span class="sp"></span><button class="btn pri" data-a="prox" ${m.length<7&&!pulado(id)?'disabled':''}>${J.i<6?'Próximo sentido →':'Ver meu mapa →'}</button></div>${J.i===6&&nCompletos()<3&&(m.length>=7||pulado(id))?`<p class="small mute">Para ver o seu mapa, faça pelo menos 3 sentidos.</p>`:''}`;}
 function vFim(){const p=perfil();const [tn,ti,tk,td]=TAGS[p.top],[sn,si]=TAGS[p.seg];
- return `<div class="k">Fase 1 concluída</div><h1 class="f" style="font-size:30px">Perfil ${tn} + ${sn}</h1>
- <h2>✨ O que você talvez não tenha percebido</h2><div class="pal7">${insights(J,p,TAGS).filter(x=>x.s).map(x=>`<div class="pal7-i"><small>${esc(rotulo7(x))}</small><b>${esc(palavra7(x))}</b></div>`).join('')}</div>
+ return `<div class="k">Fase 1 concluída</div><h1 class="f" style="font-size:30px">Seu perfil</h1><div class="pcards">${[tn,sn].map((n,i)=>`<div class="pcard"><div class="pf"><img src="../pesquisa/opcoes/${({Raiz:"olfato-1",Ninho:"tato-2",Vento:"equilibrio-3",Lago:"equilibrio-4","Faísca":"audicao-2",Brisa:"audicao-1","Abraço":"tato-4"})[n]}.jpg" alt=""></div><b>${esc(n)}</b><small>${i?"Também":"Seu perfil"}</small></div>`).join("")}</div>
+ <h2>O que você talvez não tenha percebido</h2><div class="pal7">${insights(J,p,TAGS).filter(x=>x.s).map(x=>`<div class="pal7-i"><small>${esc(rotulo7(x))}</small><b>${esc(palavra7(x))}</b></div>`).join('')}</div>
  <div class="row"><span class="sp"></span><button class="btn pri big" data-a="fim">${QS.get('modo')==='refazer'?'Guardar este mapa →':'Continuar →'}</button></div><p class="small mute" id="bx"></p>
  <p class="small mute">O perfil mostra só as suas escolhas de hoje. Não é diagnóstico nem avaliação.</p>`;}
 function render(){if(typeof PD!=='undefined'&&PD)return renderPodio();salva();document.getElementById('app').innerHTML=`<div class="bar0"><a class="logo" aria-label="7entidos"><img src="/assets/simbolo-contando-7.svg?v=20261102-novo" alt="" width="30" height="30"><b class="f"><span style="color:#FFD43B">7</span>entidos</b></a><span class="sp"></span><span class="small mute" id="sv">${esc(saveTxt)}</span></div>`+(J.tela==='abre'?vAbre():J.tela==='sen'?vSen():vFim());}
