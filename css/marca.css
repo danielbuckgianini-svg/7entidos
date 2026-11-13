@@ -1,0 +1,18 @@
+/* 7entidos · cores da marca (Bloco 1, 13/11/2026)
+   Um lugar só para as cores do site inteiro. Para mudar uma cor, mude aqui. */
+:root{
+  --marca-fundo:#0B1430;      /* azul-noite: fundo de todas as páginas */
+  --marca-caixa:#111B3D;      /* um tom acima: faixas, caixas e cartões */
+  --marca-texto:#F3EEE3;      /* creme: títulos e texto principal */
+  --marca-apoio:#A9B3D1;      /* cinza-azulado: texto de apoio */
+  --marca-amarelo:#F5C542;    /* o único amarelo da marca */
+  --marca-linha:#2B3557;      /* linhas e bordas finas */
+  /* cores dos 7 sentidos (só onde o sentido aparece) */
+  --sentido-visao:#f5c542;
+  --sentido-audicao:#4aa8ff;
+  --sentido-tato:#ff8a3d;
+  --sentido-olfato:#5ccf8a;
+  --sentido-paladar:#ff5a6e;
+  --sentido-equilibrio:#b48cff;
+  --sentido-corpo:#3fd6d0;
+}

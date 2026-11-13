@@ -40,12 +40,12 @@
   var temConsent = !!document.querySelector('script[src*="consentimento"]');
 
   var css =
-    '.r7{background:#0b1640;color:#e9e6f2;font:400 13px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:22px 16px 26px;margin:0;border-top:2px solid #f5c542;text-align:center;position:relative;z-index:1;clear:both}' +
+    '.r7{background:#0B1430;color:#F3EEE3;font:400 13px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:22px 16px 26px;margin:0;border-top:2px solid #f5c542;text-align:center;position:relative;z-index:1;clear:both}' +
     '.r7 *{box-sizing:border-box}' +
     '.r7-in{max-width:960px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:12px}' +
-    '.r7 a{color:#e9e6f2;text-decoration:none}' +
+    '.r7 a{color:#F3EEE3;text-decoration:none}' +
     '.r7 a:focus-visible{outline:2px solid #f5c542;outline-offset:3px;border-radius:6px}' +
-    '.r7-wa{display:inline-flex;align-items:center;gap:8px;background:#f5c542;color:#0b1640!important;font-weight:700;border-radius:999px;padding:9px 16px;min-height:40px}' +
+    '.r7-wa{display:inline-flex;align-items:center;gap:8px;background:#f5c542;color:#0B1430!important;font-weight:700;border-radius:999px;padding:9px 16px;min-height:40px}' +
     '.r7-wa svg{width:18px;height:18px}' +
     '.r7-redes{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}' +
     '.r7-redes a{width:40px;height:40px;display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(245,197,66,.45);border-radius:50%}' +
@@ -55,7 +55,7 @@
     '.r7-links a{text-decoration:underline;text-decoration-color:rgba(245,197,66,.6);text-underline-offset:3px}' +
     '.r7-ra{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(233,230,242,.35);border-radius:10px;padding:6px 12px;font-size:12px}' +
     '.r7-ra b{color:#f5c542}' +
-    '.r7-emp{color:#b9b4cc;font-size:12px;margin:0}' +
+    '.r7-emp{color:#A9B3D1;font-size:12px;margin:0}' +
     '.r7-emp b{color:#f5c542;font-weight:700}' +
     '@media (max-width:600px){.r7{padding:16px 12px 20px;font-size:12px}.r7-in{gap:9px}.r7-wa{padding:7px 13px;min-height:36px;font-size:12.5px}.r7-redes a{width:34px;height:34px}.r7-redes svg{width:16px;height:16px}.r7-emp{font-size:11px}}';
 

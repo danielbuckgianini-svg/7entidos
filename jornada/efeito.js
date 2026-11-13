@@ -10,11 +10,11 @@
   var VW_INI=[10,20,35,50];
   var PRES=['Sim, para a família','Sim, para amigos','Sim, para o meu amor','Talvez','Não'];
   var css='.efganha{border:1px solid rgba(255,212,59,.45);border-radius:14px;padding:10px 14px;font-size:15px}.efganha ul{margin:6px 0 0;padding-left:18px}.efganha li{margin:2px 0}'+
-   '.efvw{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center;font-size:15px}.efvw input{grid-column:1/-1;width:100%;accent-color:#FFD43B;min-height:32px}.efvv{font-weight:800;color:#FFD43B;font-variant-numeric:tabular-nums;white-space:nowrap}'+
+   '.efvw{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center;font-size:15px}.efvw input{grid-column:1/-1;width:100%;accent-color:#F5C542;min-height:32px}.efvv{font-weight:800;color:#F5C542;font-variant-numeric:tabular-nums;white-space:nowrap}'+
    '.ef{display:grid;gap:10px;margin:14px 0}.ef h3{margin:0;font-size:20px}.ef .efc{display:flex;flex-wrap:wrap;gap:8px}'+
    '.ef .efc button{font:inherit;font-size:15px;font-weight:700;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.04);color:inherit;border-radius:999px;padding:9px 15px;cursor:pointer;display:inline-flex;gap:7px;align-items:center;min-height:44px}'+
-   '.ef .efc button i{width:10px;height:10px;border-radius:50%}.ef .efc button.on{background:#FFD43B;color:#0A0F24;border-color:#FFD43B}'+
-   '.ef .efc button:focus-visible{outline:3px solid #FFD43B;outline-offset:2px}.ef .efr{font-size:19px;line-height:1.35}.ef .efr b{color:#FFD43B}';
+   '.ef .efc button i{width:10px;height:10px;border-radius:50%}.ef .efc button.on{background:#F5C542;color:#0B1430;border-color:#F5C542}'+
+   '.ef .efc button:focus-visible{outline:3px solid #F5C542;outline-offset:2px}.ef .efr{font-size:19px;line-height:1.35}.ef .efr b{color:#F5C542}';
   if(on){var st=document.createElement('style');st.textContent=css;(document.head||document.documentElement).appendChild(st);}
   function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
   function chips(lista,sel,acao,cor){return '<div class="efc">'+lista.map(function(p){var v=p[cor?0:1];return '<button type="button" class="'+(sel===v?'on':'')+'" data-a="'+acao+'" data-v="'+esc(v)+'">'+(cor?'<i style="background:'+p[1]+'"></i>':p[0]+' ')+esc(v)+'</button>';}).join('')+'</div>';}
@@ -30,10 +30,10 @@
     sug:function(txt){return '<div class="ef"><h3>Quer deixar uma sugestão? <span style="font-weight:400;font-size:15px;opacity:.75">(opcional)</span></h3><textarea id="efsug" maxlength="500" rows="3" placeholder="O que deixaria esta fase ainda melhor?" style="font:inherit;font-size:16px;width:100%;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.04);color:inherit">'+esc(txt||'')+'</textarea></div>';},
     /* pesquisa de preço (Sala do Preço, 05/11): Van Westendorp, opcional, com pergunta de presente */
     preco:function(pr){pr=pr||{};
-      if(pr.pular)return '<div class="ef"><div class="efr" style="font-size:15px;opacity:.8">Tudo bem, a pergunta do preço ficou para depois. <button type="button" data-a="efprvolta" style="font:inherit;background:none;border:0;color:#FFD43B;text-decoration:underline;cursor:pointer">Responder agora</button></div></div>';
+      if(pr.pular)return '<div class="ef"><div class="efr" style="font-size:15px;opacity:.8">Tudo bem, a pergunta do preço ficou para depois. <button type="button" data-a="efprvolta" style="font:inherit;background:none;border:0;color:#F5C542;text-decoration:underline;cursor:pointer">Responder agora</button></div></div>';
       var v=pr.v||VW_INI;
       return '<div class="ef efpr"><h3>Uma pergunta rápida sobre preço <span style="font-weight:400;font-size:15px;opacity:.75">(opcional)</span></h3>'+
-       '<div class="efr" style="font-size:16px"><span style="color:#FFD43B">✦</span> Brisa: "Você me ajuda a dar um preço justo ao 7entidos?"</div>'+
+       '<div class="efr" style="font-size:16px"><span style="color:#F5C542">✦</span> Brisa: "Você me ajuda a dar um preço justo ao 7entidos?"</div>'+
        '<div class="efganha"><b>O 7entidos completo vai ter:</b><ul><li>As 7 fases da jornada, no seu ritmo</li><li>A sua pintura dos 7 sentidos</li><li>O Museu do 7entidos, com os 7 pintores</li><li>O Hall da Fama, com todo o seu histórico</li></ul></div>'+
        VW.map(function(t,i){return '<label class="efvw"><span>'+(i+1)+'. '+t+'</span><span class="efvv" id="efvv'+i+'">'+(pr.t?'R$ '+v[i]:'arraste')+'</span><input type="range" min="0" max="100" step="1" value="'+v[i]+'" data-vw="'+i+'" aria-label="Pergunta '+(i+1)+' do preço"></label>';}).join('')+
        '<h3 style="font-size:17px">Você daria o 7entidos de presente?</h3>'+chips(PRES.map(function(x){return ['',x];}),pr.pres,'efpres',false).replace(/<button([^>]*)> /g,'<button$1>')+

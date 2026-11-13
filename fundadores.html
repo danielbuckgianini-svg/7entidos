@@ -12,44 +12,45 @@
 <link rel="stylesheet" href="css/site.css?v=20261103-redes">
 <style>
 /* Convite para a Fase 1 · noite escura e amarelo */
-.fd{background:radial-gradient(900px 520px at 50% -160px,#2a2244,#101019 70%);color:#F3EEE4;min-height:100vh}
+.fd{background:radial-gradient(900px 520px at 50% -160px,#111B3D,#0B1430 70%);color:#F3EEE4;min-height:100vh}
 .fd .wrap{max-width:1080px}
 .fd-topo{padding:clamp(40px,7vw,88px) 0 24px;display:grid;gap:40px;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));align-items:start}
-.fd-selo{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#FFD43B;border:1px solid #4a3f22;padding:8px 14px;border-radius:999px}
-.fd-selo i{width:8px;height:8px;border-radius:50%;background:#FFD43B}
+.fd-selo{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#F5C542;border:1px solid #4a3f22;padding:8px 14px;border-radius:999px}
+.fd-selo i{width:8px;height:8px;border-radius:50%;background:#F5C542}
 .fd h1{font-family:var(--display);font-weight:400;font-size:clamp(38px,6vw,68px);line-height:1.05;margin:18px 0 16px;color:#fff}
-.fd h1 em{color:#FFD43B;font-style:italic}
+.fd h1 em{color:#F5C542;font-style:italic}
 .fd-lead{font-size:clamp(18px,1.8vw,21px);line-height:1.6;color:#D6CFE3;max-width:46ch;margin:0 0 22px}
-.fd-assin{font-family:var(--display);font-style:italic;color:#BDA8EB;font-size:19px;margin:0}
+.fd-assin{font-family:var(--display);font-style:italic;color:#A9B3D1;font-size:19px;margin:0}
 .fd-card{background:#17151f;border:1px solid #2f2a3d;border-radius:22px;padding:clamp(22px,3vw,32px)}
-.fd-card .rot{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#BDA8EB;margin:0 0 6px}
+.fd-card .rot{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#A9B3D1;margin:0 0 6px}
 .fd-preco{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:0 0 4px}
 .fd-preco b{font-family:var(--display);font-weight:500;font-size:56px;line-height:1;color:#fff}
-.fd-preco span{color:#B9B2C7;font-size:15px}
+.fd-preco span{color:#A9B3D1;font-size:15px}
 .fd-lista{list-style:none;padding:0;margin:18px 0 22px;display:grid;gap:10px}
 .fd-lista li{display:flex;gap:12px;align-items:flex-start;line-height:1.5;color:#E7E1F0}
-.fd-lista li::before{content:"";flex:none;width:18px;height:18px;margin-top:3px;border-radius:50%;background:#FFD43B url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 10.5l3.2 3L15 7' fill='none' stroke='%23101019' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/14px no-repeat}
-.fd-botao{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:56px;border-radius:999px;background:#FFD43B;color:#101019;font-weight:800;font-size:17px;text-decoration:none;border:0;cursor:pointer}
-.fd-botao:hover{background:#FFE27A;color:#101019}
-.fd-botao[aria-disabled=true]{background:#3a3548;color:#B9B2C7;cursor:default}
-.fd-vagas{margin:14px 0 0;text-align:center;font-size:14.5px;color:#B9B2C7}
-.fd-vagas b{color:#FFD43B}
+.fd-lista li::before{content:"";flex:none;width:18px;height:18px;margin-top:3px;border-radius:50%;background:#F5C542 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 10.5l3.2 3L15 7' fill='none' stroke='%23101019' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/14px no-repeat}
+.fd-botao{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:56px;border-radius:999px;background:#F5C542;color:#0B1430;font-weight:800;font-size:17px;text-decoration:none;border:0;cursor:pointer}
+.fd-botao:hover{background:#F5C542;color:#0B1430}
+.fd-botao[aria-disabled=true]{background:#3a3548;color:#A9B3D1;cursor:default}
+.fd-vagas{margin:14px 0 0;text-align:center;font-size:14.5px;color:#A9B3D1}
+.fd-vagas b{color:#F5C542}
 .fd-pag{margin:8px 0 0;text-align:center;font-size:13.5px;color:#8f88a0}
 .fd-sec{padding:clamp(36px,6vw,72px) 0;border-top:1px solid #241f33}
 .fd-sec h2{font-family:var(--display);font-weight:400;font-size:clamp(30px,4vw,44px);color:#fff;margin:0 0 24px}
 .fd-passos{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));list-style:none;padding:0;margin:0}
-.fd-passos li{background:#15131c;border:1px solid #2a2537;border-radius:18px;padding:20px}
-.fd-passos b{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:#FFD43B;color:#101019;font-weight:800;margin-bottom:12px}
+.fd-passos li{background:#111B3D;border:1px solid #111B3D;border-radius:18px;padding:20px}
+.fd-passos b{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:#F5C542;color:#0B1430;font-weight:800;margin-bottom:12px}
 .fd-passos h3{font-family:var(--corpo);font-weight:800;font-size:18px;color:#fff;margin:0 0 6px}
-.fd-passos p{color:#CFC8DC;line-height:1.55;margin:0}
+.fd-passos p{color:#A9B3D1;line-height:1.55;margin:0}
 .fd-info{display:grid;gap:14px;max-width:760px}
-.fd-info details{background:#15131c;border:1px solid #2a2537;border-radius:14px;padding:16px 18px}
+.fd-info details{background:#111B3D;border:1px solid #111B3D;border-radius:14px;padding:16px 18px}
 .fd-info summary{cursor:pointer;font-weight:800;color:#fff}
-.fd-info p{margin:10px 0 0;color:#CFC8DC;line-height:1.6}
+.fd-info p{margin:10px 0 0;color:#A9B3D1;line-height:1.6}
 .fd-aviso{margin-top:22px;max-width:760px;border:1px solid #4a3f22;background:#1b1810;border-radius:14px;padding:14px 18px;color:#E7D9B5;font-size:15.5px;line-height:1.55}
-.fd a:not(.fd-botao){color:#FFD43B}
-.fd :focus-visible{outline:3px solid #FFD43B;outline-offset:3px}
+.fd a:not(.fd-botao){color:#F5C542}
+.fd :focus-visible{outline:3px solid #F5C542;outline-offset:3px}
 </style>
+<link rel="stylesheet" href="css/marca.css">
 </head>
 <body>
 <a class="pular" href="#conteudo">Pular para o conteúdo</a>
