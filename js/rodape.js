@@ -69,6 +69,7 @@
         '<a href="' + DADOS.linkedin + '" target="_blank" rel="noopener" aria-label="LinkedIn do 7entidos" title="LinkedIn">' + ic.li + '</a>' +
       '</div>' +
       '<nav class="r7-links" aria-label="Documentos">' +
+        '<a href="' + raiz + 'ciencia/">A ciência</a>' +
         '<a href="' + raiz + 'privacidade.html">Política de Privacidade</a>' +
         '<a href="' + raiz + 'termos.html">Termos de Uso</a>' +
         (temConsent ? '<a href="#" data-preferencias-estatisticas>Preferências de estatísticas</a>' : '') +

@@ -1,0 +1,34 @@
+/* Páginas da Ciência · 7entidos */
+.ci{padding:clamp(36px,6vw,80px) 0 40px}
+.ci .wrap{max-width:860px}
+.ci-rot{display:flex;align-items:center;gap:10px;font:400 15px/1.3 "Space Mono",monospace;color:var(--marca-amarelo)}
+.ci-rot::after{content:"";flex:1;max-width:80px;height:1px;background:currentColor;opacity:.5}
+.ci h1{font-family:Fraunces,Georgia,serif;font-weight:400;font-size:clamp(36px,7vw,60px);line-height:1.05;margin:14px 0 12px;color:var(--marca-texto)}
+.ci h1 em{color:var(--marca-amarelo)}
+.ci h2{font-family:Fraunces,Georgia,serif;font-weight:400;font-size:clamp(28px,5vw,40px);line-height:1.12;margin:0 0 14px;color:var(--marca-texto)}
+.ci h3{font-family:Fraunces,Georgia,serif;font-weight:600;font-size:21px;margin:0 0 6px;color:var(--marca-texto)}
+.ci p,.ci li{font-size:18px;line-height:1.65;color:var(--marca-texto)}
+.ci .apoio{color:var(--marca-apoio)}
+.ci .pron{font:400 16px "Space Mono",monospace;color:var(--marca-apoio)}
+.ci a{color:var(--marca-amarelo)}
+.ci-cartao{background:linear-gradient(180deg,rgba(32,48,100,.85),rgba(17,27,61,.9));border:1px solid rgba(169,179,209,.25);border-radius:20px;padding:24px 20px;margin:0 0 22px;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 30px 50px -30px rgba(0,0,0,.9)}
+.ci-num{font:400 15px "Space Mono",monospace;color:var(--marca-amarelo);display:block;margin-bottom:6px}
+.ci-linha{list-style:none;margin:0;padding:0;border-left:1px solid rgba(245,197,66,.45)}
+.ci-linha li{position:relative;padding:0 0 18px 22px}
+.ci-linha li::before{content:"";position:absolute;left:-6px;top:9px;width:11px;height:11px;border-radius:50%;background:var(--marca-fundo);border:2px solid var(--marca-amarelo)}
+.ci-linha b{font:700 16px "Space Mono",monospace;color:var(--marca-amarelo);display:block}
+.ci-grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:10px}
+.ci-mini{border:1px solid rgba(169,179,209,.25);border-radius:14px;padding:14px;background:rgba(11,20,48,.5)}
+.ci-mini b{display:block;font-family:Fraunces,Georgia,serif;font-weight:600;font-size:19px;color:var(--marca-texto)}
+.ci-mini span{font-size:16.5px;color:var(--marca-apoio);line-height:1.5}
+.ci-sent{display:grid;gap:10px;margin-top:8px}
+.ci-sent div{display:grid;grid-template-columns:14px 1fr;gap:12px;align-items:start;border-bottom:1px solid rgba(169,179,209,.18);padding-bottom:10px}
+.ci-sent i{width:14px;height:14px;border-radius:50%;margin-top:7px;box-shadow:0 0 10px currentColor}
+.ci-numgrande{font-family:Fraunces,Georgia,serif;font-size:44px;line-height:1;color:var(--marca-amarelo)}
+.ci-cta{display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:0 28px;border-radius:999px;background:var(--marca-amarelo);color:#10131F!important;font-weight:800;font-size:18px;text-decoration:none}
+.ci-cta2{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 22px;border-radius:999px;border:1.5px solid rgba(243,238,227,.6);color:var(--marca-texto)!important;font-weight:700;font-size:17px;text-decoration:none}
+.ci-botoes{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+.ci-fontes li{font-size:16.5px;margin-bottom:8px}
+.ci svg.canal{width:100%;max-width:440px;height:auto;display:block;margin:10px auto 0}
+.ci-aviso{border-left:3px solid var(--marca-amarelo);padding:6px 0 6px 14px;color:var(--marca-apoio);font-size:17px}
+.ci-mini b.ci-numgrande{font-size:44px;line-height:1;color:var(--marca-amarelo);margin-bottom:6px}
