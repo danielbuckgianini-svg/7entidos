@@ -99,3 +99,13 @@ html body,html body.t-C,html body.t-X,html body.t-M,html body.pg-jornada{
 .marca7::after{content:"";width:18px;height:18px;border-radius:50%;background:conic-gradient(#f5c542,#4aa8ff,#ff8a3d,#ff5a6e,#5ccf8a,#b48cff,#3fd6d0,#f5c542);-webkit-mask:radial-gradient(circle,transparent 50%,#000 53%);mask:radial-gradient(circle,transparent 50%,#000 53%);animation:anelMarca 40s linear infinite}
 .sair7{min-height:44px;padding:0 18px;border-radius:999px;border:1.5px solid rgba(243,238,227,.6);display:inline-flex;align-items:center;color:#F3EEE3!important;text-decoration:none;font:700 16px Manrope,system-ui,sans-serif}
 body.pg-pesq .logo-top,body.pg-pesq .topo .logo,body.pg-pesq .bar0 .logo{display:none!important}
+
+/* ===== Bloco 6 (13/11): aviso de estatísticas em faixa fina, embaixo, sem cobrir o conteúdo ===== */
+.aviso-estatisticas{left:0!important;right:0!important;bottom:0!important;max-width:none!important;margin:0!important;border-radius:0!important;
+  padding:8px 12px calc(8px + env(safe-area-inset-bottom))!important;display:flex!important;flex-wrap:nowrap!important;gap:10px!important;align-items:center!important;
+  background:rgba(11,20,48,.97)!important;border:0!important;border-top:1px solid rgba(169,179,209,.3)!important;box-shadow:0 -10px 24px -12px rgba(0,0,0,.8)!important}
+.aviso-estatisticas p{flex:1 1 auto!important;font-size:16px!important;line-height:1.35!important;margin:0!important;color:#F3EEE3}
+.aviso-estatisticas .botoes{display:flex;gap:6px;flex:none}
+.aviso-estatisticas button{min-height:44px!important;padding:0 14px!important;font-size:16px!important;border-radius:999px!important;background:transparent!important;color:#F3EEE3!important;border:1.5px solid rgba(243,238,227,.5)!important}
+.aviso-estatisticas button.aceitar{background:#F5C542!important;color:#10131F!important;border-color:#F5C542!important}
+@media (max-width:420px){.aviso-estatisticas p strong{display:none}}

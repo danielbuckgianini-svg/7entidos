@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>7entidos · Descubra qual sentido mais te faz bem</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="Responda 3 perguntas em 30 segundos e descubra qual dos seus 7 sentidos mais te faz bem.">
+<meta property="og:title" content="Descubra em 30 segundos qual sentido mais te faz bem">
+<meta property="og:description" content="3 perguntas, um retrato seu. A vida é feita de boas sensações.">
+<meta property="og:image" content="https://7entidos.com.br/assets/compartilhar.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://7entidos.com.br/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/assets/simbolo-contando-7.svg?v=20261102-novo" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Manrope:wght@400;600;700;800&family=Space+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/site.css">
+<link rel="stylesheet" href="/ciencia/estilo-ciencia.css?v=2">
+<link rel="stylesheet" href="/css/marca.css">
+<script src="/js/icones.js"></script>
+<script src="/pesquisa/config.js"></script>
+<style>
+.h-hero{padding:18px 0 8px}
+.h-hero h1{margin:10px 0 12px}
+.h-hero h1 em{color:#F5C542;font-style:italic}
+.h-linha{font:400 16px "Space Mono",monospace;color:#A9B3D1;margin:0 0 14px}
+.h-selo{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border-radius:999px;border:1px solid rgba(245,197,66,.45);color:#F3EEE3!important;text-decoration:none;font-size:16px}
+.h-selo b{color:#F5C542;font-family:"Space Mono",monospace;font-weight:400}
+#teste{min-height:470px}
+.t-topo{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;margin-bottom:6px}
+.t-num{font:400 16px "Space Mono",monospace;color:#F5C542}
+.estrelas{display:flex;gap:6px}
+.estrelas i{width:12px;height:12px;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);background:rgba(169,179,209,.3)}
+.estrelas i.on{background:#F5C542}
+.t-voltar{all:unset;cursor:pointer;min-height:44px;min-width:44px;padding:0 6px;color:#A9B3D1;font-size:16px;display:inline-flex;align-items:center;justify-content:flex-end}
+.t-perg{font-family:Fraunces,Georgia,serif;font-weight:600;font-size:28px;line-height:1.15;margin:6px 0 16px;color:#F3EEE3}
+.t-grade{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.t-op{all:unset;box-sizing:border-box;cursor:pointer;min-height:132px;padding:16px 12px;border-radius:18px;background:#111B3D;border:1.5px solid rgba(169,179,209,.25);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;color:#F3EEE3;font:600 17px/1.25 Manrope,sans-serif;transition:transform .15s,border-color .15s,background .15s}
+.t-op:focus-visible{outline:3px solid #F5C542;outline-offset:2px}
+.t-op.sel{border-color:var(--c);background:color-mix(in srgb,var(--c) 18%,#111B3D);transform:scale(.97)}
+.t-priv,.t-mini{color:#A9B3D1;font-size:16px;margin:14px 0 0}
+.t-mini a{color:#F3EEE3}
+.t-micro{min-height:420px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;animation:tAparece .4s}
+.t-micro p{font-family:Fraunces,Georgia,serif;font-size:24px;color:#F3EEE3;max-width:18ch;margin:0}
+@keyframes tAparece{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.retrato{position:relative;overflow:hidden;border-radius:22px;padding:24px 20px;background:linear-gradient(180deg,rgba(32,48,100,.85),rgba(17,27,61,.95));border:1px solid color-mix(in srgb,var(--c) 55%,transparent);box-shadow:0 30px 50px -30px #000}
+.retrato>*{position:relative}
+.r-tex{position:absolute!important;inset:0;opacity:.18;-webkit-mask-image:radial-gradient(circle at 100% 0,#000 0,transparent 65%);mask-image:radial-gradient(circle at 100% 0,#000 0,transparent 65%);pointer-events:none}
+.p-visao .r-tex{background:repeating-radial-gradient(circle at 92% 8%,#6F93E8 0 2px,transparent 2px 16px)}
+.p-audicao .r-tex{background:repeating-linear-gradient(0deg,rgba(245,197,66,.9) 0 3px,transparent 3px 14px),repeating-linear-gradient(90deg,rgba(245,197,66,.9) 0 3px,transparent 3px 14px);opacity:.1}
+.p-tato .r-tex{background:linear-gradient(135deg,transparent 40%,#ff8a3d 40% 42%,transparent 42%),linear-gradient(60deg,transparent 55%,#ff8a3d 55% 56.5%,transparent 56.5%)}
+.p-olfato .r-tex{background:radial-gradient(circle,#5ccf8a 0 4px,transparent 5px) 0 0/34px 34px,radial-gradient(circle,#ff5a6e 0 3px,transparent 4px) 17px 17px/34px 34px}
+.p-paladar .r-tex{background:radial-gradient(60px 40px at 85% 12%,#ff5a6e,transparent),radial-gradient(70px 50px at 70% 25%,#7fa6ff,transparent),radial-gradient(60px 40px at 92% 35%,#5ccf8a,transparent)}
+.p-equilibrio .r-tex{background:repeating-linear-gradient(170deg,transparent 0 22px,rgba(180,140,255,.9) 22px 24px)}
+.p-corpo .r-tex{opacity:.25;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cg fill='none' stroke='%23F5C542' stroke-width='1.2'%3E%3Ccircle cx='100' cy='100' r='78'/%3E%3Crect x='38' y='38' width='124' height='124'/%3E%3Cpath d='M100 40v120M40 100h120'/%3E%3C/g%3E%3C/svg%3E") 100% 0/220px no-repeat}
+.r-nome{display:flex;align-items:center;gap:12px;margin:8px 0 12px}
+.r-nome b{font-family:Fraunces,Georgia,serif;font-weight:600;font-size:38px;line-height:1;color:var(--c)}
+.retrato p{font-size:19px;color:#F3EEE3;margin:0 0 10px}
+.r-emb{filter:blur(6px);user-select:none;opacity:.7}
+.t-pede{font-family:Fraunces,Georgia,serif;font-weight:600;font-size:24px;margin:24px 0 12px;color:#F3EEE3}
+.t-canais{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.t-canal{all:unset;box-sizing:border-box;cursor:pointer;min-height:64px;border-radius:16px;border:1.5px solid rgba(169,179,209,.35);background:#111B3D;display:flex;align-items:center;justify-content:center;gap:10px;font:700 18px Manrope,sans-serif;color:#F3EEE3}
+.t-canal.sel{border-color:#F5C542;color:#F5C542}
+.t-canal:focus-visible,.t-pular:focus-visible{outline:3px solid #F5C542;outline-offset:2px}
+.t-form{display:grid;gap:12px;margin-top:14px}
+.t-form label{display:grid;gap:6px;font-size:16px;color:#A9B3D1}
+.t-form input:not([type=checkbox]){min-height:52px;border-radius:12px;border:1.5px solid rgba(169,179,209,.35);background:#0B1430;color:#F3EEE3;font:500 18px Manrope,sans-serif;padding:0 14px}
+.t-form input:focus{outline:2px solid #F5C542;border-color:#F5C542}
+.t-form .t-check{display:flex;gap:10px;align-items:center;min-height:44px;color:#F3EEE3}
+.t-check input{width:22px;height:22px;accent-color:#F5C542}
+.t-erro{color:#ff8a8a;font-size:16px;margin:0;min-height:0}
+.t-enviar{width:100%;border:0;font:800 18px Manrope,sans-serif}
+.t-enviar:disabled{opacity:.45;cursor:not-allowed}
+.t-pular{all:unset;cursor:pointer;display:block;margin:14px auto 0;min-height:44px;line-height:44px;color:#A9B3D1;text-decoration:underline;font-size:16px;text-align:center}
+.t-ok{background:rgba(92,207,138,.12);border:1px solid rgba(92,207,138,.45);border-radius:14px;padding:12px 14px;color:#F3EEE3;font-size:17px;margin:0 0 14px}
+.t-share{width:100%;margin-top:16px;background:none;cursor:pointer;font-family:Manrope,sans-serif}
+.t-jornada{display:flex!important;width:100%;margin-top:16px;text-decoration:none;box-sizing:border-box}
+.t-yt{display:flex;align-items:center;gap:14px;margin-top:22px;min-height:64px;padding:12px 16px;border-radius:16px;background:#111B3D;border:1px solid rgba(255,90,110,.45);color:#F3EEE3!important;text-decoration:none;font-weight:700;font-size:17px}
+.t-yt-play{width:44px;height:44px;flex:none;border-radius:50%;background:#ff5a6e;color:#fff;display:grid;place-items:center;font-size:16px}
+.t-volta{min-height:340px;display:flex;flex-direction:column;justify-content:center;gap:8px;text-align:center}
+.t-volta p{color:#A9B3D1;font-size:18px;margin:0 0 10px}
+.t-volta .cta{border:0;font:800 18px Manrope,sans-serif;cursor:pointer}
+.h-pessoa{display:grid;grid-template-columns:96px 1fr;gap:16px;align-items:center}
+.h-foto{width:96px;height:96px;border-radius:50%;border:2px dashed rgba(245,197,66,.6);display:grid;place-items:center;text-align:center;font:400 13px/1.2 "Space Mono",monospace;color:#A9B3D1;padding:8px;box-sizing:border-box}
+.h-ass{font-family:Fraunces,Georgia,serif;font-style:italic;font-size:26px;color:#F5C542;margin-top:6px}
+@media (prefers-reduced-motion:reduce){.t-op,.t-micro{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+<header class="topo">
+  <div class="wrap">
+    <a class="marca" href="/" aria-label="7entidos, página principal"><img src="/assets/simbolo-contando-7.svg?v=20261102-novo" alt="" width="36" height="36"><span>7entidos</span></a>
+    <details class="menu7"><summary>Menu</summary><nav aria-label="Páginas do site"><a href="/">Início</a><a href="/sobre/">Quem somos</a><a href="/ciencia/">A ciência</a><a href="/privacidade.html">Privacidade</a><a href="/termos.html">Termos</a></nav></details>
+  </div>
+</header>
+
+<main id="conteudo" class="ci">
+  <div class="wrap">
+    <section class="h-hero">
+      <span class="ci-rot">Nº 01 — 30 segundos</span>
+      <h1 id="titulo">Descubra em 30 segundos qual sentido mais te <em>faz bem.</em></h1>
+      <p class="h-linha">3 perguntas · 7 sentidos · 1 retrato seu</p>
+      <a class="h-selo" href="/ciencia/"><b>Flow</b> Baseado na ciência do bem-estar ›</a>
+    </section>
+
+    <section class="ci-cartao" aria-label="Teste rápido" style="margin-top:18px">
+      <div id="teste" aria-live="polite"></div>
+    </section>
+
+    <section class="ci-cartao">
+      <span class="ci-num">Nº 02 — A ciência por trás</span>
+      <div class="ci-grade">
+        <div class="ci-mini"><b>Flow</b><span>Quando a gente se entrega ao que faz, o tempo voa e a gente se sente bem. Foi o que o pesquisador Mihaly Csikszentmihalyi estudou por décadas.</span></div>
+        <div class="ci-mini"><b>Saborear</b><span>Prestar atenção de propósito numa coisa boa faz a sensação durar mais. É um hábito que dá para treinar.</span></div>
+        <div class="ci-mini"><b>Os 7 sentidos</b><span>Além dos 5 conhecidos, o corpo tem o equilíbrio e a noção de onde cada parte está. Todos trazem boas sensações.</span></div>
+      </div>
+      <div class="ci-botoes"><a class="ci-cta2" href="/ciencia/">Ver a ciência completa</a></div>
+    </section>
+
+    <section class="ci-cartao">
+      <span class="ci-num">Nº 03 — Quem está por trás</span>
+      <div class="h-pessoa">
+        <div class="h-foto">foto do Daniel</div>
+        <div><p class="apoio" style="margin:0">Criado por Daniel Gianini, em Santos/SP.</p><div class="h-ass">Daniel Gianini</div></div>
+      </div>
+      <p class="apoio" style="margin-top:12px">DBGIANINI MARKETING LTDA · CNPJ 64.849.647/0001-75</p>
+      <p class="ci-aviso">O 7entidos não é terapia nem tratamento. É um convite para reparar no que te faz bem.</p>
+      <div class="ci-botoes"><a class="ci-cta2" href="/sobre/">Conhecer o projeto</a></div>
+    </section>
+  </div>
+</main>
+
+<script src="/js/teste.js?v=20261113"></script>
+<script src="/js/consentimento.js?v=20261113"></script>
+<script src="/js/rodape.js?v=20261113"></script>
+</body>
+</html>
