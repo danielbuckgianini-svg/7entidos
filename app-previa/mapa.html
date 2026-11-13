@@ -562,7 +562,7 @@ function vJogo(){const id=idAtual();const s=senDe(id);const G=PD.G;const tp=G.ti
   casa:['Qual destes cheiros é mais "casa" pra você?','Cada toque acende uma janela da sua casa.'],
   prato:['Monte o seu prato','A 1ª vai no centro do prato. As outras em volta.'],
   respira:['Respire… e toque no que o seu corpo pede agora','Sem pressa. Siga a bolinha que respira.'],
-  final:['A grande final','Toque na sua campeã das campeãs. Depois a 2ª, e assim por diante.']}[tp]||['Toque na que você mais gosta',''];
+  final:['A grande final','Toque na que mais te faz bem. Depois a 2ª, e assim por diante.']}[tp]||['Toque na que você mais gosta',''];
  let cena='';
  if(tp==='casa')cena=`<div class="cena-casa">${Array.from({length:7},(_,i)=>{const v=G.esc[i];return `<i class="${v?'on':''}" style="${v?`--c:${s[3]}`:''}">${v?`<svg viewBox="0 0 300 300">${artDe(id,v)}</svg>`:''}</i>`;}).join('')}</div>`;
  if(tp==='prato')cena=`<div class="cena-prato">${Array.from({length:7},(_,i)=>{const v=G.esc[i];return `<i class="p${i} ${v?'on':''}">${v?`<svg viewBox="0 0 300 300">${artDe(id,v)}</svg>`:''}</i>`;}).join('')}</div>`;
@@ -596,8 +596,8 @@ function vPausa(){const id=idAtual();const s=senDe(id);
  <p class="mute">Próximo: ${s[2]} ${esc(s[1])} · ${JOGO_NOME[JOGO[id]]}</p>${faltam()===1?`<p class="falta">Falta só 1!</p>`:''}
  <button class="btn pri" data-a="pausaok">Já respirei →</button></div>`;}
 function vSurpresa(){const ids=Object.keys(PD.res);
- return `${album()}<div class="hero" style="padding-top:6px"><div class="k">Surpresa do meio</div><h1 class="f">O som das suas 4 campeãs</h1>
- <p class="mute">Cada campeã virou uma nota. Juntas, elas fazem o seu acorde.</p>
+ return `${album()}<div class="hero" style="padding-top:6px"><div class="k">Surpresa do meio</div><h1 class="f">O som das suas 4 favoritas</h1>
+ <p class="mute">Cada favorita virou uma nota. Juntas, elas fazem o seu acorde.</p>
  <div class="acorde">${ids.map((id,i)=>{const s=senDe(id);return `<span style="--c:${s[3]};animation-delay:${i*.25}s">${s[2]}<b>${esc(PD.res[id][0])}</b></span>`;}).join('')}</div>
  <div class="row" style="justify-content:center"><button class="btn" data-a="acorde">▶ Ouvir de novo</button><button class="btn pri" data-a="surok">Continuar →</button></div></div>`;}
 function vAdiado(){const id=PD.adiados[0];const s=senDe(id);
@@ -612,7 +612,7 @@ function topPerfil(){try{const p=perfil();return {a:TAGS[p.top],b:TAGS[p.seg]};}
 function vStory(){const F=(PD.final||[]).map(v=>v.split('|'));const N=7;const st=PD.st;let c='';
  const bars=`<div class="stb">${Array.from({length:N},(_,i)=>`<i class="${i<st?'ok':i===st?'at':''}"></i>`).join('')}</div>`;
  if(st===0)c=`${brisa('Você terminou a Fase 2! Aqui está o seu resumo.')}<h1 class="f">Sua Fase 2 em 7 telas</h1><p class="mute">Toque em "Seguir" ou na tela para ver a próxima.</p>`;
- if(st===1&&F[0]){const s=senDe(F[0][0]);c=`<div class="k">Sua campeã das campeãs</div><div class="pd-campea grande" style="--c:${s[3]}"><svg viewBox="0 0 300 300">${artDe(F[0][0],F[0][1])}</svg><span>${s[2]} ${esc(F[0][1])}</span></div><p class="mute">De ${esc(s[1])}. Entre todas as suas escolhas, é a que mais te faz bem hoje.</p>`;}
+ if(st===1&&F[0]){const s=senDe(F[0][0]);c=`<div class="k">A que mais te faz bem</div><div class="pd-campea grande" style="--c:${s[3]}"><svg viewBox="0 0 300 300">${artDe(F[0][0],F[0][1])}</svg><span>${s[2]} ${esc(F[0][1])}</span></div><p class="mute">De ${esc(s[1])}. Entre todas as suas escolhas, é a que mais te faz bem hoje.</p>`;}
  if(st===2)c=`<div class="k">Seu pódio</div><div class="pd-podio">${[1,0,2].map(i=>{const x=F[i];if(!x)return '<div></div>';const s=senDe(x[0]);return `<div class="pd-deg pd-deg${i+1}" style="--c:${s[3]}"><svg viewBox="0 0 300 300">${artDe(x[0],x[1])}</svg><b>${esc(x[1])}</b><small>${esc(s[1])}</small><span>${i+1}º</span></div>`;}).join('')}</div>`;
  if(st===3){const m=maiorSubida();c=`<div class="k">O que mais mudou</div>${m?`<h1 class="f">${esc(m.n)} subiu ${m.d} ${m.d>1?'posições':'posição'}</h1><p class="mute">Em ${esc(senDe(m.id)[1])}, desde a Fase 1.</p>`:`<h1 class="f">Quase nada mudou</h1><p class="mute">Você manteve a ordem da Fase 1. Isso é saber o que quer.</p>`}
   <h2>Como você se sentiu em cada sentido</h2><div class="emos">${PD.ordem.filter(id=>PD.res[id]).map(id=>`<span>${senDe(id)[2]} ${PD.sent[id]&&PD.sent[id].emo||'·'}</span>`).join('')}</div>`;}
@@ -708,7 +708,7 @@ document.addEventListener('click',e=>{if(!PD)return;const b=e.target.closest('[d
  if(a==='mold'){PD.moldura=+b.dataset.v;sino(PD.moldura*2);return ok();}
  if(a==='abre'){PD.abriu=true;festa();return ok();}
  if(a==='stories'){pdStories();e.stopImmediatePropagation();return;}
- if(a==='combina'){const F=(PD.final||[]).map(v=>v.split('|')[1]);pdManda(`Minhas campeãs no 7entidos: ${F.slice(0,3).join(', ')} ${quadradinhos()}\nFaz a sua e vê se a gente combina: https://7entidos.com.br`);e.stopImmediatePropagation();return;}
+ if(a==='combina'){const F=(PD.final||[]).map(v=>v.split('|')[1]);pdManda(`Minhas favoritas no 7entidos: ${F.slice(0,3).join(', ')} ${quadradinhos()}\nFaz a sua e vê se a gente combina: https://7entidos.com.br`);e.stopImmediatePropagation();return;}
  if(a==='presente'){const n1=(PD.final||[])[0];const n=n1?n1.split('|')[1].toLowerCase():'uma coisa boa';pdManda(`Hoje, ${n} por 5 minutos. Lembrei de você. 💛\n(7entidos.com.br)`);e.stopImmediatePropagation();return;}
  if(a==='pdfim'){if(window.FCH&&!(PD.ef||{}).fimOk){PD.ef=PD.ef||{};PD.ef.k=0;PD.fase='fecha';return topo();}pdEntrega();if(LSK==='jornada7'&&window.parent===window){location.href='/jornada/fase3/?c='+(QS.get('c')||'7s0a4653');}e.stopImmediatePropagation();return;}
 },true);

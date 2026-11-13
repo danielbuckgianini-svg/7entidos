@@ -58,7 +58,7 @@
 .gh-senha{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0 10px}
 .gh-senha button{font:inherit;font-weight:700;font-size:14px;border-radius:14px;border:2px solid #3A4680;background:#18224A;color:#F4F1EA;padding:12px 8px;cursor:pointer}
 .gh-senha button:focus-visible,.gh-ouvir:focus-visible{outline:3px solid #F9CB39;outline-offset:2px}
-.gh-medalhas{display:flex;flex-direction:column;gap:8px;text-align:left;margin:4px 0 14px}
+.al7{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:4px 0 8px}.al7-c{position:relative;aspect-ratio:1;border-radius:14px;overflow:hidden;border:3px solid var(--c);background:#18224A;display:grid;place-items:center}.al7-c:first-child{grid-column:span 3;aspect-ratio:16/10}.al7-c img{width:100%;height:100%;object-fit:cover}.al7-c b{font:600 15px/1.15 Fraunces,Georgia,serif;padding:6px;text-align:center}.al7-c.vazio{opacity:.45;border-style:dashed}.al7-c span{position:absolute;left:0;right:0;bottom:0;padding:14px 6px 5px;background:linear-gradient(transparent,rgba(5,7,15,.85));font:700 13px Manrope,system-ui,sans-serif;color:#F4F1EA}.gh-medalhas{display:flex;flex-direction:column;gap:8px;text-align:left;margin:4px 0 14px}
 .gh-med{display:flex;align-items:center;gap:12px;background:#18224A;border-radius:14px;padding:10px 12px;font-weight:700}
 .gh-med i{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:900;color:#0A0F24;flex:none}
 .gh-med.off{opacity:.45}.gh-med.off i{background:#26315F!important;color:#AEB5D6}
@@ -741,7 +741,7 @@ function Home({s,go,resume,pause,update,toast,downloads}){
         <button class=${"btn "+(t.main?"gold":"")} onClick=${t.act}>${t.cta}</button></div>`)}</div>
       <div class="row" style=${{marginTop:12}}><button class="btn ghost small" onClick=${()=>go("eu",{sub:"lembrancas",add:true})}>＋ Nova lembrança</button></div>
     </section>
-    <section class="card" hidden=${!(s.achievements||[]).length}><div class="eyebrow">Suas conquistas 🏅</div><div class="row">${CONQ.filter(c=>(s.achievements||[]).some(a=>a.id===c.id)).map(c=>html`<span key=${c.id} class="chip gold">✦ ${c.t}</span>`)}</div></section>
+    <section class="card" hidden=${!(s.achievements||[]).length}><div class="eyebrow">Seus momentos bons</div><div class="row">${CONQ.filter(c=>(s.achievements||[]).some(a=>a.id===c.id)).map(c=>html`<span key=${c.id} class="chip gold">✦ ${c.t}</span>`)}</div></section>
     ${modal==="quick"?html`<${QuickDiscovery} s=${s} update=${update} toast=${toast} go=${go} onClose=${()=>setModal(null)}/>`:null}
     ${modal==="retro"?html`<${Retro} s=${s} downloads=${downloads} toast=${toast} onClose=${()=>setModal(null)}/>`:null}
     ${modal==="checkin"?html`<${QuickCheckin} s=${s} update=${update} toast=${toast} go=${go} onClose=${()=>setModal(null)}/>`:null}
@@ -764,7 +764,7 @@ function Eu(props){
       <div class="card"><h3>Seu perfil</h3><${ProfileForm} s=${s} update=${update} toast=${toast} saveLabel="Salvar perfil"/></div>
       <div class="card"><h3>Pausar o app</h3><label class="row small" style=${{gap:8}}><input type="checkbox" checked=${!!s.settings.paused} onChange=${e=>update(st=>{st.settings.paused=e.target.checked},"pause")}/> Estou de pausa (férias, dias difíceis). Nada se perde.</label>
         <h3 style=${{marginTop:18}}>Falar com o Daniel 💬</h3><p class="small muted">Dúvida ou erro? Mande mensagem pelo Instagram @bsgianini. No piloto, respondo em até 48 horas.</p><a class="btn" href=${FALAR_URL} target="_blank" rel="noopener">Falar com o Daniel</a></div>
-      <div class="card" hidden=${!(s.achievements||[]).length}><h3>Suas conquistas e comemorações 🎉</h3><div class="list">${CONQ.filter(c=>(s.achievements||[]).some(a=>a.id===c.id)).map(c=>{const a=(s.achievements||[]).find(x=>x.id===c.id);return html`<div key=${c.id} class="item row" style=${{flexWrap:"nowrap"}}><${GuideAvatar} s=${s} size=${36}/><div><b>${c.t}</b><div class="small muted">${c.d} · ${fmtDate(a.at)}</div></div></div>`})}</div></div>
+      <div class="card" hidden=${!(s.achievements||[]).length}><h3>Seus momentos bons</h3><div class="list">${CONQ.filter(c=>(s.achievements||[]).some(a=>a.id===c.id)).map(c=>{const a=(s.achievements||[]).find(x=>x.id===c.id);return html`<div key=${c.id} class="item row" style=${{flexWrap:"nowrap"}}><${GuideAvatar} s=${s} size=${36}/><div><b>${c.t}</b><div class="small muted">${c.d} · ${fmtDate(a.at)}</div></div></div>`})}</div></div>
       <${NcPerfil} ...${props}/><${Dados} ...${props}/></div>`:null}
     ${sub==="lembrancas"?html`<${Sensacoes} ...${props} initialAdd=${!!(opts&&opts.add)}/>`:null}
     ${sub==="bemestar"?html`<div><div class="card" style=${{marginBottom:16}}><div class="spread" style=${{alignItems:"center"}}><div><b>💌 Mandar uma boa sensação</b><p class="small muted" style=${{margin:0}}>Copia uma mensagem carinhosa com a sua última pista para um amigo.</p></div><button class="btn" disabled=${!quickList(s).length} onClick=${()=>{const q=quickList(s);if(q.length)compartilhar(q[q.length-1],toast)}}>Copiar mensagem</button></div></div><${Apoio} ...${props}/></div>`:null}
@@ -930,14 +930,18 @@ function Constelacao({feitas,titulo,frase,onFim,onIr}){
 const GH_FALAS={
   porta:{a:"07-porta",t:"Ei! O Hall ainda está fechado. Continue a jornada que eu te espero aqui."},
   oi:{a:"01-bem-vindo",t:"Bem-vindo ao Hall da Fama!"},
-  sou:{a:"02-quem-sou",t:"Eu sou o Theo, Guardião dos Campeões."},
+  sou:{a:null,t:"Eu sou o Theo, Guardião do Hall."}, /* Bloco 2 (13/11): sem palavras de competição; o áudio 02 dizia "dos Campeões" */
   senha:{a:"03-senha",t:"Pra entrar, diga a senha secreta!"},
   quase:{a:null,t:"Quase! Meu ouvido supersônico ouviu outra coisa. Junta os pedaços na ordem em que você ganhou."},
   nave:{a:null,t:"A nave do Hall da Fama pousou para você."},
-  medalhas:{a:"04-medalhas",t:"Olha as medalhas que você conquistou!"},
-  trofeu:{a:"05-trofeu",t:"Esse troféu é seu, campeão!"},
-  bau:{a:"06-bau",t:"Aqui está o seu baú. Ele guarda toda a sua jornada."}
+  album:{a:null,t:"Este é o seu álbum: tudo o que você já descobriu sobre você."}
 };
+/* Bloco 2 (13/11): "Seu álbum" no lugar de medalhas, troféu e baú. Uma foto por sentido descoberto (a nº 1 dela). */
+const AL_SEN=[["mapa","Visão","#f5c542"],["aud","Audição","#4aa8ff"],["tato","Tato","#ff8a3d"],["olf","Olfato","#5ccf8a"],["pal","Paladar","#ff5a6e"],["equi","Equilíbrio","#b48cff"],["corpo","Noção do corpo","#3fd6d0"]];
+const AL_FOTOS={"Chuva":"audicao-3","Mar":"audicao-1","Violão":"audicao-2","Areia":"tato-1","Água":"tato-3","Algodão / nuvem":"tato-2","Café coado":"olfato-4","Chuva na terra":"olfato-1","Pão quentinho":"olfato-2","Café":"paladar-4","Caldo quentinho":"paladar-1","Balanço de rede":"equilibrio-2","Dança lenta":"equilibrio-1","Pedalar":"equilibrio-3","Flutuar":"equilibrio-4","Espreguiçar":"corpo-1","Respirar fundo":"corpo-4","Abraço apertado":"tato-4"};
+function Album({s}){const m=ultimoMapa(s);const E=(m&&m.esc)||{};const it=AL_SEN.map(([id,nm,c])=>({nm,c,n:(E[id]||[])[0]}));const n=it.filter(x=>x.n).length;
+  return html`<div class="al7">${it.map((x,k)=>html`<div key=${k} class=${"al7-c"+(x.n?"":" vazio")} style=${{"--c":x.c}}>${x.n&&AL_FOTOS[x.n]?html`<img src=${"../pesquisa/opcoes/"+AL_FOTOS[x.n]+".jpg"} alt=${x.n}/>`:html`<b>${x.n||"Ainda por descobrir"}</b>`}<span>${x.nm}</span></div>`)}</div>
+  <p class="nc-apoio" style=${{marginTop:4}}><b style=${{color:"#F9CB39"}}>${n} de 7 sentidos descobertos</b></p>`}
 function ghTocar(k){const f=GH_FALAS[k];if(!f||!f.a)return;try{const au=new Audio("theo/"+f.a+".mp3");au.play().catch(()=>{})}catch(e){}}
 function TheoGibi({sombra}){
   const o="#0A0F24";const sw=3;
@@ -979,15 +983,15 @@ function GuardiaoHall({s,downloads,toast,onClose,onIr}){
   const embaralhadas=useMemo(()=>GH_PECAS.map((x,i)=>i).sort(()=>Math.random()-.5),[]);const feitas=ghFeitas(s);const nome=(personOf(s).name||"").trim();
   const ir=(p,f)=>{setPasso(p);setFala(f||p);ghTocar(f||p)};
   
-  const fl=GH_FALAS[fala];const txt=fala==="trofeu"&&nome?"Esse troféu é seu, "+nome+"!":fl.t;
+  const fl=GH_FALAS[fala];const txt=fl.t;
   const stamp=new Date().toISOString().slice(0,10);
-  async function bau(kind){let ok=false;try{ok=kind==="livro"?await ghBaixar(downloads,"livro-7entidos-"+stamp+".html",livroHTML(s),"text/html"):await ghBaixar(downloads,"jornada-7entidos-"+stamp+".json",JSON.stringify(s,null,2),"application/json")}catch(e){console.warn(e)}if(ok&&toast)toast("Seu baú foi aberto")}
+  async function bau(kind){let ok=false;try{ok=kind==="livro"?await ghBaixar(downloads,"livro-7entidos-"+stamp+".html",livroHTML(s),"text/html"):await ghBaixar(downloads,"jornada-7entidos-"+stamp+".json",JSON.stringify(s,null,2),"application/json")}catch(e){console.warn(e)}if(ok&&toast)toast("Seu álbum foi guardado")}
   return ncPortal(html`<div class="nc-tela bv-tela" role="dialog" aria-modal="true" aria-label="Hall da Fama"><div class="nc-caixa fade" style=${{textAlign:"center"}}>
     <div class="nc-eyebrow">Hall da Fama · a bordo da nave</div>
     ${passo==="nave"?html`<div class="gh-nave" aria-hidden="true">${["#FFD23F","#5AB8FF","#FF8A5C","#7DDB8B","#FF6FA3","#A98BFF","#3FE0D0"].map((c,k)=>{const a=k*2*Math.PI/7;return html`<i key=${k} style=${{background:c,boxShadow:"0 0 14px "+c,"--x":Math.round(Math.cos(a)*110)+"px","--y":Math.round(Math.sin(a)*90)+"px",animationDelay:(k*.08)+"s"}}></i>`})}
       <svg viewBox="0 0 220 200"><ellipse cx="110" cy="150" rx="70" ry="10" fill="#5AB8FF" opacity=".25"/><path d="M50 120c0-30 26-56 60-56s60 26 60 56z" fill="#26315F" stroke="#F9CB39" stroke-width="3"/><path d="M30 120h160c0 12-36 22-80 22s-80-10-80-22z" fill="#F2B632" stroke="#0A0F24" stroke-width="3"/><circle cx="110" cy="96" r="18" fill="#5AB8FF" opacity=".5" stroke="#F4F1EA" stroke-width="2"/>${[60,85,110,135,160].map((x,k)=>html`<circle key=${k} cx=${x} cy="131" r="4" fill=${["#FFD23F","#5AB8FF","#FF8A5C","#7DDB8B","#FF6FA3"][k]}/>`)}<path d="M70 142l-14 22M150 142l14 22" stroke="#F2B632" stroke-width="4" stroke-linecap="round"/></svg></div>`
       :passo==="trofeu"?html`<${TrofeuSVG}/>`:html`<${TheoFigura} revela=${passo==="oi"}/>`}
-    ${passo==="nave"?null:html`<div class="gh-nome">Theo, Guardião dos Campeões</div>`}
+    ${passo==="nave"?null:html`<div class="gh-nome">Theo, Guardião do Hall</div>`}
     <div class="gh-balao" aria-live="polite" key=${fala+passo}>${txt}</div>
     ${fl.a?html`<button class="gh-ouvir" onClick=${()=>ghTocar(fala)}>🔊 Ouvir o Theo</button>`:null}
     ${passo==="nave"?html`<button class="nc-btn" onClick=${()=>ir("oi")}>Entrar na nave</button>`:null}
@@ -995,13 +999,10 @@ function GuardiaoHall({s,downloads,toast,onClose,onIr}){
     ${passo==="sou"?html`<button class="nc-btn" onClick=${()=>ir("senha")}>Quero entrar</button>`:null}
     ${passo==="senha"?html`<p class="nc-apoio" style=${{marginTop:0}}>Cada fase te deu um pedaço da senha. Toque nos pedaços na ordem em que você ganhou.</p>
       <div style=${{fontSize:26,fontWeight:900,letterSpacing:".08em",color:"#F9CB39",minHeight:36,marginBottom:8}}>${GH_PECAS.map((x,i)=>i<seq.length?x:"_").join(" ")}</div>
-      <div class="gh-senha">${embaralhadas.map(i=>html`<button key=${i} disabled=${seq.includes(i)} style=${{opacity:seq.includes(i)?.35:1}} onClick=${()=>{const n=[...seq,i];if(i!==n.length-1){setSeq([]);setFala("quase");return}setSeq(n);if(n.length===GH_PECAS.length)setTimeout(()=>ir("medalhas"),500)}}>${GH_PECAS[i]}</button>`)}</div>`:null}
-    ${passo==="medalhas"?html`<div class="gh-medalhas">${FASES7.slice(0,FASES7.length-1).map((f,k)=>{const on=k<feitas;const ir=onIr&&f[1]!=="f4";return html`<div key=${k} class=${"gh-med"+(on||ir?"":" off")} role=${ir?"button":null} tabIndex=${ir?0:null} style=${ir?{cursor:"pointer"}:null} onClick=${ir?()=>onIr(f[1]):null}><i style=${{background:["#FFD23F","#5AB8FF","#FF8A5C","#7DDB8B","#FF6FA3"][k]}}>${on?"★":k+1}</i><span>${f[0]}<br/><small style=${{fontWeight:600,color:"#AEB5D6"}}>${on?"Conquistada":k>=4?"Em breve":"Ainda não"}${onIr&&f[1]!=="f4"?" · toque para ir":""}</small></span></div>`})}</div>
-      <button class="nc-btn" onClick=${()=>ir("trofeu")}>Receber meu troféu</button>`:null}
-    ${passo==="trofeu"?html`<button class="nc-btn" onClick=${()=>ir("bau")}>Abrir o baú</button>`:null}
-    ${passo==="bau"?html`<p class="nc-apoio" style=${{marginTop:0}}>O baú guarda todo o seu histórico. Só você tem a chave: o arquivo fica no seu celular.</p>
-      <button class="nc-btn" onClick=${()=>bau("livro")}>Baixar meu livro da jornada</button>
-      <button class="nc-btn" style=${{background:"#18224A",color:"#F4F1EA",border:"1px solid #3A4680"}} onClick=${()=>bau("json")}>Baixar tudo (cópia completa)</button>`:null}
+      <div class="gh-senha">${embaralhadas.map(i=>html`<button key=${i} disabled=${seq.includes(i)} style=${{opacity:seq.includes(i)?.35:1}} onClick=${()=>{const n=[...seq,i];if(i!==n.length-1){setSeq([]);setFala("quase");return}setSeq(n);if(n.length===GH_PECAS.length)setTimeout(()=>ir("album"),500)}}>${GH_PECAS[i]}</button>`)}</div>`:null}
+    ${passo==="album"?html`<${Album} s=${s}/>
+      <button class="nc-btn" onClick=${()=>bau("livro")}>Guardar meu álbum</button>
+      <button class="nc-btn" style=${{background:"#18224A",color:"#F4F1EA",border:"1px solid #3A4680"}} onClick=${()=>bau("json")}>Guardar uma cópia completa</button>`:null}
     <button class="nc-btn" style=${{background:"none",color:"#AEB5D6",fontWeight:600}} onClick=${onClose}>Sair do Hall</button>
   </div></div>`);
 }
@@ -1166,7 +1167,7 @@ function NcPerfil({s,update,toast}){
     ${mapaModo==="ver"&&um?ncPortal(html`<${MapaVer} m=${um} onClose=${()=>setMapaModo(null)}/>`):null}
     ${mapaModo==="refazer"?ncPortal(html`<${MapaFrame} modo="refazer" onPronto=${mapaRefeito} onFechar=${()=>setMapaModo(null)}/>`):null}
     <h3>Meu pódio dos sentidos</h3>
-    ${s.podio?html`<p class="small muted" style=${{marginTop:0}}>Campeã das campeãs: ${(s.podio.campeas&&s.podio.campeas[0]&&s.podio.campeas[0].n)||"—"} · feito em ${fmtDate(s.podio.em)}</p>`:html`<p class="small muted" style=${{marginTop:0}}>Você ainda não fez o seu pódio.</p>`}
+    ${s.podio?html`<p class="small muted" style=${{marginTop:0}}>A que mais te faz bem: ${(s.podio.campeas&&s.podio.campeas[0]&&s.podio.campeas[0].n)||"—"} · feito em ${fmtDate(s.podio.em)}</p>`:html`<p class="small muted" style=${{marginTop:0}}>Você ainda não fez o seu pódio.</p>`}
     <div class="row" style=${{gap:8,marginBottom:14}}>${s.podio?html`<button class="btn small" onClick=${()=>setMapaModo("verpodio")}>Ver meu pódio</button>`:null}${um?html`<button class="btn small" onClick=${()=>{podioEntrada(MAPA_K+"-pr",um);setMapaModo("podio")}}>${s.podio?"Refazer meu pódio":"Fazer meu pódio"}</button>`:null}</div>
     ${mapaModo==="verpodio"&&s.podio?ncPortal(html`<${PodioVer} p=${s.podio} onClose=${()=>setMapaModo(null)}/>`):null}
     ${mapaModo==="podio"?ncPortal(html`<${MapaFrame} k=${MAPA_K+"-pr"} modo="podio-refazer" onPronto=${podioRefeito} onFechar=${()=>setMapaModo(null)}/>`):null}
@@ -1862,7 +1863,7 @@ const CONQ=[
 ];
 function diasAtivos(s){const d=new Set();const add=iso=>{if(iso)d.add(String(iso).slice(0,10))};quickList(s).forEach(q=>add(q.at));(s.wellbeing||[]).forEach(w=>add(w.at));(s.memories||[]).forEach(m=>add(m.createdAt));return d.size}
 function Celebra({s,c,onClose}){
-  return html`<${Modal} title="Conquista!" onClose=${onClose}>
+  return html`<${Modal} title="Que bom!" onClose=${onClose}>
     <div style=${{textAlign:"center",margin:"6px 0 14px",fontSize:44}} aria-hidden="true">✦</div>
     <${Guide} s=${s}><p style=${{margin:"0 0 6px",fontFamily:"var(--serif)",fontSize:"1.2rem"}}>${c.t}</p><p style=${{margin:0}}>${c.d} Estou feliz por você!</p><//>
     <div class="row" style=${{marginTop:16}}><button class="btn primary" onClick=${onClose}>Obrigado!</button></div>

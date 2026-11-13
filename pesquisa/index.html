@@ -344,7 +344,7 @@ body.tela-inicio .logo-top{visibility:hidden}
 .pad.fcard{aspect-ratio:4/3}.pad.fcard.sel{border-color:#F5C542;box-shadow:0 0 0 4px #F5C542,0 0 26px #F5C542;transform:scale(1.03)}
 .fcard .ouvir{position:absolute;top:8px;right:8px;border:0;border-radius:999px;padding:7px 11px;font:700 16px Manrope,system-ui,sans-serif;background:rgba(5,8,20,.78);color:#fff;cursor:pointer;z-index:2}
 .fcard .ouvir.tocando{background:#F5C542;color:#0a1128}
-/* ===== Bloco 3 · jogos ===== */
+/* ===== Bloco 3 · jogos ===== */ .nivel{margin:0 0 12px}.nivbt{display:grid;grid-template-columns:1fr 1fr;gap:10px}.nivbt button{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:68px;border-radius:16px;border:2px solid rgba(243,238,227,.55);background:transparent;color:#F3EEE3;font:800 19px Manrope,system-ui,sans-serif;cursor:pointer;padding:6px}.nivbt button small{font:400 14px "Space Mono",monospace;opacity:.85;text-align:center}.nivbt button.sel{background:#F5C542;border-color:#F5C542;color:#0B1430}
 .olho{max-width:420px;margin:0 auto}
 .olho .rlab{font-family:Fraunces,Manrope,sans-serif;font-size:22px;letter-spacing:1px;color:var(--accent);text-align:center;margin-bottom:8px}
 .olho .ggrid{max-width:none;width:100%;gap:8px}
@@ -1188,7 +1188,7 @@ function render(){
     h += `<div class="err" id="err"></div><div class="nav${needNext?" fixa":""}"><button class="back" onclick="prev()">← voltar</button>${(s.num||s.type==="par")?'<button class="skip" onclick="pular()">pular</button>':""}${needNext?`<button class="btn" onclick="tryNext()">Próximo →</button>`:""}</div>`;
   }
   stage.innerHTML = `<div class="scene${cur==="app"?" um":""}">${h}</div>`;
-  if(s.type==="f2") s.gs.forEach(g=>{ if(answers["f2_"+g.id+"_fim"]==null) GAMES[g.id](document.getElementById("game_"+g.id), ()=>gameDone(g.id,"completou")); });
+  if(s.type==="f2") s.gs.forEach(g=>{ if(answers["f2_"+g.id+"_fim"]==null) iniciaJogo(g); });
 }
 /* fim de um jogo: se ainda tem outro jogo rodando na página, não redesenha (para não reiniciar o outro) */
 function gameDone(gid,v){
@@ -1487,9 +1487,18 @@ function somPronto(){
 let tonsTocando=[];
 function pararTons(){ tonsTocando.forEach(o=>{ try{ o.stop(); }catch(e){} }); tonsTocando=[]; }
 function tone(f,delay){ try{ somPronto().then(c=>{ try{ const t=c.currentTime+delay, o=c.createOscillator(), g=c.createGain(); o.type="sine"; o.frequency.value=f; g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.25,t+.03); g.gain.exponentialRampToValueAtTime(.0001,t+.45); o.connect(g).connect(c.destination); o.start(t); o.stop(t+.5); tonsTocando.push(o); o.onended=()=>{ tonsTocando=tonsTocando.filter(x=>x!==o); }; }catch(e){} }); }catch(e){} }
+/* Bloco 2 (13/11): antes de cada mini-jogo ela escolhe "Tranquilo" ou "Desafio". Nenhuma escolha é punida; dá para trocar no meio. */
+const NV = id => answers["f2_"+id+"_nivel"]==="Desafio"?"d":"t";
+const NIVEL_TESTE = {visao:"o olhar",audicao:"o ouvido",tato:"a firmeza",olfato:"a memória",equilibrio:"o tempo certo",corpo:"a memória"};
+function iniciaJogo(g){ const el=document.getElementById("game_"+g.id); if(!el) return; const fim=()=>gameDone(g.id,"completou");
+  if(!NIVEL_TESTE[g.id]){ GAMES[g.id](el,fim); return; }
+  const n=answers["f2_"+g.id+"_nivel"];
+  el.innerHTML=`<div class="nivel"><p class="gtip">${n?"Quer trocar? Pode, a qualquer hora.":"Como você quer jogar?"}</p><div class="nivbt">${[["Tranquilo","para curtir"],["Desafio","para testar "+NIVEL_TESTE[g.id]]].map(([v,t])=>`<button type="button" class="${n===v?"sel":""}" data-n="${v}">${v}<small>${t}</small></button>`).join("")}</div></div><div id="gm_${g.id}"></div>`;
+  el.querySelectorAll(".nivbt button").forEach(b=>b.onclick=()=>{ answers["f2_"+g.id+"_nivel"]=b.dataset.n; try{click();}catch(e){} iniciaJogo(g); });
+  if(n) GAMES[g.id](document.getElementById("gm_"+g.id),fim); }
 const GAMES = {
   /* uma rodada por vez, grade grande (Bloco 3): acertando ou não, a rodada fecha e vem a próxima */
-  visao(el,win){ const R=[0,1,2].map(r=>({hu:Math.floor(Math.random()*360), k:Math.floor(Math.random()*16), d:18-r*4, feito:false, ok:false})); let r=0;
+  visao(el,win){ const R=[0,1,2].map(r=>({hu:Math.floor(Math.random()*360), k:Math.floor(Math.random()*16), d:(NV("visao")==="d"?[12,8,6]:[24,20,16])[r], feito:false, ok:false})); let r=0;
     const draw=()=>{ const x=R[r];
       el.innerHTML=`<p class="gtip">Um dos quadrados tem a cor um pouco diferente. Olhe bem e toque nele.</p>
         <div class="olho"><div class="pontos">${R.map((y,j)=>`<i class="${j<=r?"on":""}"></i>`).join("")}</div><div class="rlab">Rodada ${r+1} de 3</div>
@@ -1500,7 +1509,7 @@ const GAMES = {
         setTimeout(()=>{ if(r<R.length-1){ r++; draw(); } else { answers.f2_visao_acertos=R.filter(y=>y.ok).length; win(); } },900); }); };
     draw(); },
   /* "Qual som é mais fino?" (Bloco 3): explica o que é fino e grosso; respostas com imagens (passarinho = fino, tambor = grosso) */
-  audicao(el,win){ const R=[0,1,2].map(()=>{ const ag=Math.random()<.5; return {ag, f: ag?700+Math.random()*300:110+Math.random()*70, feito:false, ok:false}; }); let r=0;
+  audicao(el,win){ const R=[0,1,2].map(()=>{ const ag=Math.random()<.5; return {ag, f: NV("audicao")==="d"?(ag?380+Math.random()*80:220+Math.random()*60):(ag?700+Math.random()*300:110+Math.random()*70), feito:false, ok:false}; }); let r=0;
     const draw=()=>{ const x=R[r];
       el.innerHTML=`<div class="fino">🔊 <b>Som fino</b> é o som alto e agudinho, como o piu-piu de um passarinho.<br>🔊 <b>Som grosso</b> é o som baixo e encorpado, como a batida de um tambor.</div>
         <div class="round"><span class="rlab">Rodada ${r+1} de 3</span>
@@ -1519,7 +1528,7 @@ const GAMES = {
     let t=null,p=0; const bar=el.querySelector("#hb"), b=el.querySelector("#hold");
     const stop=()=>{ if(!t) return; clearInterval(t); t=null; if(p<100){ p=0; bar.style.width="0"; el.querySelector("#gerr").textContent="Soltou! Tente segurar até o fim."; } };
     b.oncontextmenu=e=>e.preventDefault();
-    b.onpointerdown=e=>{ e.preventDefault(); if(t) return; el.querySelector("#gerr").textContent=""; t=setInterval(()=>{ p+=5; bar.style.width=p+"%"; if(p>=100){ clearInterval(t); t=null; win(); } },100); };
+    b.onpointerdown=e=>{ e.preventDefault(); if(t) return; el.querySelector("#gerr").textContent=""; t=setInterval(()=>{ if(!document.body.contains(bar)){ clearInterval(t); t=null; return; } p+=NV("tato")==="d"?3:10; bar.style.width=Math.min(p,100)+"%"; if(p>=100){ clearInterval(t); t=null; win(); } },100); };
     b.onpointerup=b.onpointerleave=b.onpointercancel=stop; },
   paladar(el,win){ const I=[["🍅","Tomate","tomate"],["🧀","Queijo","queijo"],["🌶️","Pimenta","pimenta"],["🍯","Mel","mel"],["🍋","Limão","limao"],["🌿","Manjericão","manjericao"],["🥥","Coco","coco"],["🍫","Chocolate","chocolate"]]; const sel=[];
     const POS=[["27%","9%"],["8%","42%"],["46%","42%"]]; /* 3 lugares no prato, em volta do centro */
@@ -1530,10 +1539,10 @@ const GAMES = {
       el.querySelectorAll(".ing").forEach(b=>b.onclick=()=>{ const i=+b.dataset.i, p=sel.indexOf(i); if(p>=0) sel.splice(p,1); else if(sel.length<3) sel.push(i); click(); draw();
         if(sel.length===3){ answers[S[idx].id+"_prato"]=sel.map(i=>I[i][1]); el.querySelectorAll(".ing").forEach(x=>x.disabled=true); setTimeout(win,2200); } }); }; draw(); },
   /* Pergunta 13 (Bloco 3): achar os pares de cada quadro com o seu pintor (Van Gogh, Mondrian e Klimt) */
-  olfato(el,win){ const PIN=[["vangogh","Van Gogh"],["mondrian","Mondrian"],["klimt","Klimt"]];
+  olfato(el,win){ const PIN=[["vangogh","Van Gogh"],["mondrian","Mondrian"],["klimt","Klimt"]].slice(0,NV("olfato")==="d"?3:2);
     const C=PIN.flatMap(([k,n])=>[{k,t:"q"},{k,t:"n",n}]).sort(()=>Math.random()-.5), open=[], okk=[]; let lock=false;
     const face=(c)=>c.t==="q"?`<span class="qd q-${c.k}" aria-hidden="true"></span>`:esc(c.n);
-    const draw=()=>{ el.innerHTML=`<p class="gtip">Vire duas cartas: ache cada quadro e o nome do seu pintor (${okk.length/2}/3)</p>
+    const draw=()=>{ el.innerHTML=`<p class="gtip">Vire duas cartas: ache cada quadro e o nome do seu pintor (${okk.length/2}/${PIN.length})</p>
       <div class="pares">${C.map((c,i)=>{ const vis=open.includes(i)||okk.includes(i);
         return `<button class="pcarta ${vis?(c.t==="n"?"nome":""):"costas"} ${okk.includes(i)?"ok":""}" data-i="${i}" aria-label="${vis?(c.t==="q"?"quadro":c.n):"carta "+(i+1)}">${vis?face(c):""}</button>`; }).join("")}</div>`;
       el.querySelectorAll(".pcarta").forEach(b=>b.onclick=()=>{ const i=+b.dataset.i; if(lock||open.includes(i)||okk.includes(i)) return; open.push(i); click(); draw();
@@ -1543,9 +1552,9 @@ const GAMES = {
     el.innerHTML=`<p class="gtip">Toque em “Agora!” quando o girassol de Van Gogh estiver na moldura do meio (<span id="eh">0</span>/3)</p><div class="bal tela"><div class="zone"></div><div class="dot gira" id="dot"><img src="opcoes/jogo-meio-girassol.webp" alt="" onerror="this.parentNode.classList.remove('gira');this.remove()"></div></div>
       <button class="btn" id="eb" style="margin-top:14px">Agora!</button><div class="err" id="gerr"></div>`;
     const dot=el.querySelector("#dot");
-    const step=()=>{ if(!document.body.contains(dot)) return; x+=dir*1.1; if(x>=100){x=100;dir=-1} if(x<=0){x=0;dir=1} dot.style.left=x+"%"; raf=requestAnimationFrame(step); }; step();
-    el.querySelector("#eb").onclick=()=>{ if(Math.abs(x-50)<9){ hits++; click(); el.querySelector("#eh").textContent=hits; el.querySelector("#gerr").textContent=""; if(hits>=3){ cancelAnimationFrame(raf); win(); } } else el.querySelector("#gerr").textContent="Passou do ponto! Tente de novo."; }; },
-  corpo(el,win){ const P=["✋ Mão","🦶 Pé","👂 Orelha","👃 Nariz"], seq=[0,1,2].map(()=>Math.floor(Math.random()*4)); let got=[], showing=true, timers=[];
+    const step=()=>{ if(!document.body.contains(dot)) return; x+=dir*(NV("equilibrio")==="d"?1.6:.8); if(x>=100){x=100;dir=-1} if(x<=0){x=0;dir=1} dot.style.left=x+"%"; raf=requestAnimationFrame(step); }; step();
+    el.querySelector("#eb").onclick=()=>{ if(Math.abs(x-50)<(NV("equilibrio")==="d"?6:12)){ hits++; click(); el.querySelector("#eh").textContent=hits; el.querySelector("#gerr").textContent=""; if(hits>=3){ cancelAnimationFrame(raf); win(); } } else el.querySelector("#gerr").textContent="Passou do ponto! Tente de novo."; }; },
+  corpo(el,win){ const P=["✋ Mão","🦶 Pé","👂 Orelha","👃 Nariz"], seq=Array.from({length:NV("corpo")==="d"?5:3},()=>Math.floor(Math.random()*4)); let got=[], showing=true, timers=[];
     el.innerHTML=`<p class="gtip" id="ct">Preste atenção na ordem em que as partes do corpo acendem…</p><div class="ggrid g2">${P.map((p,i)=>`<button class="pad fcard" data-i="${i}" style="--fc:#3fd6d0" aria-label="${p.split(" ")[1]}"><span class="fsem" aria-hidden="true">${p.split(" ")[0]}</span><img src="opcoes/jogo-corpo-${["mao","pe","orelha","nariz"][i]}.jpg" alt="" onerror="this.remove()"><span class="fnome">${p.split(" ")[1]}</span></button>`).join("")}</div>
       <div class="err" id="gerr"></div><button class="back" id="rv">↺ ver a ordem de novo</button>`;
     const pads=el.querySelectorAll(".pad"), ct=el.querySelector("#ct");
@@ -1592,7 +1601,7 @@ function linhas(){
       else out.push(s.title+": "+(answers[s.id]??"-"));
     });
     if(f==="app"){ out.push("Flow: "+(answers.app_flow||"-")); out.push("Como você saiu (0 a 10): "+(answers.app_saida??"-")); }
-    if(f==="app"){ const c=campeas(); out.push("Jogo campeão pelo que você falou: "+(c.pelo_que_falou?c.pelo_que_falou.nome:"-")+" / pelo que você fez: "+(c.pelo_que_fez?c.pelo_que_fez.nome:"-")); }
+    if(f==="app"){ const c=campeas(); out.push("Jogo favorito pelo que você falou: "+(c.pelo_que_falou?c.pelo_que_falou.nome:"-")+" / pelo que você fez: "+(c.pelo_que_fez?c.pelo_que_fez.nome:"-")); }
   });
   return out;
 }
