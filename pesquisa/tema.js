@@ -2,11 +2,14 @@
 (function(){
   var NOMES={C:"Contemporânea",X:"Criativa",M:"Moderna"};
   var SWIRL='<svg viewBox="0 0 200 200" fill="none" stroke-linecap="round"><g stroke="#6F93E8" stroke-width="5"><path d="M100 100m-10 0a10 10 0 1 1 20 0a20 20 0 1 1-40 0a30 30 0 1 1 60 0a40 40 0 1 1-80 0a50 50 0 1 1 100 0a60 60 0 1 1-120 0a70 70 0 1 1 140 0"/></g><g stroke="#F5C542" stroke-width="2" opacity=".7"><path d="M100 100m-15 0a15 15 0 1 1 30 0a25 25 0 1 1-50 0a35 35 0 1 1 70 0a45 45 0 1 1-90 0a55 55 0 1 1 110 0"/></g></svg>';
-  function fx(t){
-    if(t==="C"){var st="";for(var i=0;i<22;i++){st+='<i class="st" style="left:'+((i*41)%96+2)+'%;top:'+((i*23)%88+4)+'%;animation-delay:'+((i%5)*.4)+'s"></i>';}
-      return '<div class="sw1">'+SWIRL+'</div><div class="sw2">'+SWIRL+'</div><div class="moon"></div>'+st;}
-    if(t==="X") return '<div class="big7">7</div><div class="scan"></div>';
-    return '<div class="spin"></div>';
+  /* Bloco 4 (13/11): fundo quase parado. Sem redemoinhos, lua, estrelas, "7" gigante ou faixa varrendo.
+     A marca do pintor aparece só nas telas do próprio sentido (fase 1 e jogos). */
+  function fx(t){ return ""; }
+  var PINTOR={"#f5c542":"visao","#4aa8ff":"audicao","#ff8a3d":"tato","#5ccf8a":"olfato","#ff5a6e":"paladar","#b48cff":"equilibrio","#3fd6d0":"corpo"};
+  function pintor(id,s){
+    if(!/^f[12]_/.test(id||"")) return "";
+    var k=PINTOR[String(s||"").toLowerCase()];
+    return k?'<div class="pintor p-'+k+'" aria-hidden="true"></div>':"";
   }
   var atual=null, tela=null;
   var V={}; try{V=JSON.parse(localStorage.getItem("visualV6")||"{}")}catch(e){}
@@ -22,6 +25,7 @@
       f.innerHTML=fx(t); atual=t;
     }
     b.style.setProperty("--s", s||"#F5C542");
+    var fxEl=document.getElementById("tfx"); if(fxEl) fxEl.innerHTML=pintor(id,s);
     if(!tela||tela.id!==id) aberto=null;
     tela={id:id,nome:nome,t:t}; barra();
   }

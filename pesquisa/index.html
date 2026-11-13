@@ -1695,6 +1695,20 @@ background:radial-gradient(ellipse 80% 60% at 50% 40%,#1b2a5c 0%,#0d1636 55%,#06
   new MutationObserver(varre).observe(document.documentElement,{childList:true,subtree:true}); varre();
 })();
 </script>
+<script>
+/* Bloco 4 (13/11): ao passar de pergunta, a tela atual sai deslizando para a esquerda (0,14 s) e a próxima entra pela direita (0,3 s). */
+(function(){
+  if(typeof render!=="function") return;
+  var orig=render, ultimo=null, menos=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+  render=function(){
+    var chave=(typeof view!=="undefined"?view:"")+"|"+(typeof cur!=="undefined"?cur:"")+"|"+(typeof idx!=="undefined"?idx:"");
+    var sc=document.querySelector(".scene");
+    if(menos||!sc||ultimo===null||chave===ultimo){ ultimo=chave; return orig.apply(this,arguments); }
+    ultimo=chave; var a=arguments,self=this; sc.classList.add("sai");
+    setTimeout(function(){ orig.apply(self,a); },140);
+  };
+})();
+</script>
 <script src="../js/rodape.js?v=20261112"></script>
 </body>
 </html>

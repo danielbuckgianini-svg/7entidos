@@ -71,3 +71,15 @@ html body,html body.t-C,html body.t-X,html body.t-M,html body.pg-jornada{
 .inicio h1 em,.t-C h1 em,h1 em{color:inherit!important}
 .assinatura{color:#A9B3D1!important}
 .sub{color:#A9B3D1!important}
+
+/* ===== Bloco 4 (13/11): movimento ===== */
+/* anel de 7 luzes girando bem devagar ao lado da marca, no alto */
+.logo-top,.topo .logo,.vlogo{display:inline-flex;align-items:center;gap:8px}
+.logo-top::before,.topo .logo::before{content:"";width:22px;height:22px;flex:none;border-radius:50%;background:conic-gradient(#f5c542,#4aa8ff,#ff8a3d,#ff5a6e,#5ccf8a,#b48cff,#3fd6d0,#f5c542);
+  -webkit-mask:radial-gradient(circle,transparent 50%,#000 53%);mask:radial-gradient(circle,transparent 50%,#000 53%);animation:anelMarca 40s linear infinite}
+.logo-top::after,.topo .logo::after{display:none!important}
+@keyframes anelMarca{to{transform:rotate(360deg)}}
+/* quem pede menos movimento no celular vê tudo parado, em todas as páginas */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}

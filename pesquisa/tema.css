@@ -164,3 +164,25 @@ body.t-C,body.t-X,body.t-M{padding-bottom:70px}
 .popup .btn,.opt.ciente{box-sizing:border-box}
 .t-C .btn.travado,.t-M .btn.travado{background:rgba(255,255,255,.06);color:#e8e2d0;border:2px dashed rgba(243,234,215,.4);outline:0;box-shadow:none;font-family:Manrope;font-style:normal}
 .t-C .btn.travado b{font-family:Fraunces;font-style:italic;color:#F5C542}
+
+/* ===== Bloco 4 (13/11): movimento ===== */
+#tfx *{animation:none!important}
+.t-X .btn,.t-M .btn::after{animation:none!important}
+/* uma transição só: entra pela direita em 0,3 s (a saída para a esquerda está no fim do index.html) */
+.scene,.cena{animation:entraLado .3s ease both!important}
+.t-C .scene>*,.t-X .scene>*,.t-M .scene>*,.t-C .cena>*,.t-M .cena>*{animation:none!important;clip-path:none!important;filter:none!important}
+.scene.sai{animation:saiLado .14s ease-in both!important}
+@keyframes entraLado{from{opacity:0;transform:translateX(26px)}to{opacity:1;transform:none}}
+@keyframes saiLado{to{opacity:0;transform:translateX(-26px)}}
+/* nada pisca: selo anônimo e avisos ficam parados, com um ponto de luz amarela fixo */
+.seal,.anon,.seal-pisca,.blink,.chip.pisca,#tranca .t-tit{animation:none!important}
+.seal::before,.anon::before,.seal-pisca::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:#F5C542;box-shadow:0 0 8px #F5C542;margin-right:8px;vertical-align:middle;flex:none}
+/* marcas dos pintores: só nas telas do próprio sentido, textura leve no canto */
+#tfx .pintor{position:absolute;inset:0;opacity:.16;-webkit-mask-image:radial-gradient(circle at 100% 0,#000 0,transparent 62%);mask-image:radial-gradient(circle at 100% 0,#000 0,transparent 62%)}
+#tfx .p-visao{background:repeating-radial-gradient(circle at 92% 8%,#6F93E8 0 2px,transparent 2px 16px),radial-gradient(circle at 80% 18%,#F5C542 0 3px,transparent 4px)}
+#tfx .p-audicao{background:repeating-linear-gradient(0deg,rgba(245,197,66,.9) 0 3px,transparent 3px 14px),repeating-linear-gradient(90deg,rgba(245,197,66,.9) 0 3px,transparent 3px 14px);opacity:.10}
+#tfx .p-tato{background:linear-gradient(135deg,transparent 40%,#ff8a3d 40% 42%,transparent 42%),linear-gradient(60deg,transparent 55%,#ff8a3d 55% 56.5%,transparent 56.5%),linear-gradient(20deg,transparent 70%,#ff8a3d 70% 71%,transparent 71%)}
+#tfx .p-olfato{background:radial-gradient(circle,#5ccf8a 0 4px,transparent 5px) 0 0/34px 34px,radial-gradient(circle,#ff5a6e 0 3px,transparent 4px) 17px 17px/34px 34px}
+#tfx .p-paladar{background:radial-gradient(60px 40px at 85% 12%,#ff5a6e,transparent),radial-gradient(70px 50px at 70% 25%,#7fa6ff,transparent),radial-gradient(60px 40px at 92% 35%,#5ccf8a,transparent)}
+#tfx .p-equilibrio{background:repeating-linear-gradient(170deg,transparent 0 22px,rgba(180,140,255,.9) 22px 24px)}
+#tfx .p-corpo{opacity:.22;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cg fill='none' stroke='%23F5C542' stroke-width='1.2'%3E%3Ccircle cx='100' cy='100' r='78'/%3E%3Crect x='38' y='38' width='124' height='124'/%3E%3Cpath d='M100 40v120M40 100h120'/%3E%3C/g%3E%3C/svg%3E") 100% 0/240px no-repeat}
