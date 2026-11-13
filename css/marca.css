@@ -26,3 +26,48 @@ h1{font-size:clamp(36px,calc(5vw + 16px),64px)!important;line-height:1.08!import
 .qnum,.qn{display:flex!important;align-items:center;gap:10px;background:none!important;padding:0!important;transform:none!important;box-shadow:none!important}
 .qnum::after,.qn::after{content:"";flex:0 0 60px;height:1px;background:currentColor;opacity:.6}
 .center .qnum,.center .qn{justify-content:center}
+
+/* ===== Bloco 3 (13/11): botões, cartões, opções e destaques ===== */
+/* 1. Botão principal: pílula amarela, texto escuro em negrito, 56 px */
+.cta,.ci-cta,.fd-botao,.botao.amarelo,.btn.pri,
+body:not(.pg-jornada) .btn:not(.ghost):not(.zap):not(.travado):not(.pri){
+  background:#F5C542!important;color:#10131F!important;border:0!important;border-radius:999px!important;
+  min-height:56px;padding-left:26px;padding-right:26px;font-family:Manrope,system-ui,sans-serif!important;font-weight:800!important;
+  font-style:normal!important;text-transform:none!important;letter-spacing:0!important;text-shadow:none!important;
+  box-shadow:0 12px 26px -12px rgba(245,197,66,.55)!important;transform:none!important;animation:none!important;outline:0!important;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;box-sizing:border-box}
+.btn::after,.cta::after{display:none!important}
+.cta:hover,.btn:hover,.botao.amarelo:hover,.fd-botao:hover{filter:brightness(1.06)}
+.btn:focus-visible,.cta:focus-visible{outline:3px solid #F3EEE3!important;outline-offset:3px!important}
+/* 2. Botão secundário: mesma pílula, sem fundo, contorno creme fino */
+.btn.ghost,.ci-cta2,.botao.contorno,body.pg-jornada .btn:not(.pri){
+  background:transparent!important;color:#F3EEE3!important;border:1.5px solid rgba(243,238,227,.6)!important;border-radius:999px!important;
+  min-height:44px;font-family:Manrope,system-ui,sans-serif!important;font-weight:700!important;font-style:normal!important;text-transform:none!important;
+  letter-spacing:0!important;text-shadow:none!important;box-shadow:none!important;transform:none!important;animation:none!important;outline:0!important;
+  display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box}
+/* 3. Cartões em vidro escuro */
+.card-dark,.gamebox,.flowtxt,.trava,.ficha,.look,.notarow,.pesq,.anon-exp,.f1q,.lin,.guard,.refq,.popup,.funcao,.planejados,.ci-cartao{
+  background:linear-gradient(180deg,rgba(32,48,100,.85),rgba(17,27,61,.9))!important;color:#F3EEE3!important;
+  border:1px solid rgba(169,179,209,.25)!important;border-radius:18px!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 30px 50px -28px rgba(0,0,0,.85)!important;transform:none!important}
+.ficha::before,.ficha::after{display:none!important}
+.ficha{font-family:Manrope,system-ui,sans-serif!important}
+.ficha .nm{font-family:Fraunces,Georgia,serif!important}
+/* 4. Opções de resposta: faixa escura, letra no círculo, acende em amarelo */
+.opt,.op,.opt2{background:#111B3D!important;color:#F3EEE3!important;border:2px solid rgba(169,179,209,.25)!important;border-radius:14px!important;
+  box-shadow:none!important;transform:none!important;font-family:Manrope,system-ui,sans-serif!important;font-weight:600!important;
+  text-transform:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;outline:0!important}
+.opt:hover,.op:hover,.opt2:hover{border-color:rgba(245,197,66,.6)!important}
+.opt.sel,.op.sel,.opt2.sel{border-color:#F5C542!important;background:rgba(245,197,66,.10)!important;color:#F3EEE3!important;box-shadow:0 0 0 3px rgba(245,197,66,.22)!important}
+.opt .k,.op .k{background:#1B2958!important;color:#F5C542!important;border-radius:50%!important;font-family:Fraunces,Georgia,serif!important;font-style:normal!important;box-shadow:none!important;transform:none!important}
+.opt.sel .k,.op.sel .k{background:#F5C542!important;color:#10131F!important}
+.opt small{color:#A9B3D1!important}
+/* 5. Destaques: amarelo só no botão principal e no selecionado; grade fina de caderno no fundo */
+html body,html body.t-C,html body.t-X,html body.t-M,html body.pg-jornada{
+  background-color:#0B1430!important;
+  background-image:linear-gradient(rgba(169,179,209,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(169,179,209,.06) 1px,transparent 1px)!important;
+  background-size:24px 24px!important;background-attachment:fixed!important}
+.t-C h1,.t-C h2,.t-X h1,.t-X h2{background:none!important;padding-bottom:0!important;text-shadow:none!important;-webkit-text-stroke:0!important}
+.inicio h1 em,.t-C h1 em,h1 em{color:inherit!important}
+.assinatura{color:#A9B3D1!important}
+.sub{color:#A9B3D1!important}
