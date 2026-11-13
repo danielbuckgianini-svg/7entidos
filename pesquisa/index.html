@@ -1524,9 +1524,9 @@ const GAMES = {
   paladar(el,win){ const I=[["🍅","Tomate","tomate"],["🧀","Queijo","queijo"],["🌶️","Pimenta","pimenta"],["🍯","Mel","mel"],["🍋","Limão","limao"],["🌿","Manjericão","manjericao"],["🥥","Coco","coco"],["🍫","Chocolate","chocolate"]]; const sel=[];
     const POS=[["27%","9%"],["8%","42%"],["46%","42%"]]; /* 3 lugares no prato, em volta do centro */
     const draw=()=>{ el.innerHTML=`<p class="gtip">Monte o seu prato: escolha 3 ingredientes (${sel.length}/3)</p>
-      <div class="prato ${sel.length===3?"pronto":""}">${sel.length===3?'<span class="brilho"></span>':""}<img class="pvazio" src="opcoes/jogo-prato-vazio.png" alt="" onerror="this.remove()">${sel.map((k,j)=>`<span class="ping" style="left:${POS[j][0]};top:${POS[j][1]}"><span class="pem" aria-hidden="true">${I[k][0]}</span><img src="opcoes/jogo-prato-${I[k][2]}.png" alt="" onerror="this.remove()"></span>`).join("")}</div>
+      <div class="prato ${sel.length===3?"pronto":""}">${sel.length===3?'<span class="brilho"></span>':""}<img class="pvazio" src="opcoes/jogo-prato-vazio.webp" alt="" onerror="this.remove()">${sel.map((k,j)=>`<span class="ping" style="left:${POS[j][0]};top:${POS[j][1]}"><span class="pem" aria-hidden="true">${I[k][0]}</span><img src="opcoes/jogo-prato-${I[k][2]}.webp" alt="" onerror="this.remove()"></span>`).join("")}</div>
       <div class="pratonome">${sel.length===3?"✨ Seu prato ficou pronto: "+sel.map(i=>I[i][1].toLowerCase()).join(", ").replace(/, ([^,]*)$/," e $1")+"!":""}</div>
-      <div class="ggrid ingr">${I.map((x,i)=>`<button class="fcard ing ${sel.includes(i)?"sel":""}" data-i="${i}" style="--fc:#ff5a6e" aria-label="${x[1]}"><span class="fsem" aria-hidden="true">${x[0]}</span><img src="opcoes/jogo-prato-${x[2]}.png" alt="" onerror="this.remove()"><span class="fnome">${x[1]}</span></button>`).join("")}</div>`;
+      <div class="ggrid ingr">${I.map((x,i)=>`<button class="fcard ing ${sel.includes(i)?"sel":""}" data-i="${i}" style="--fc:#ff5a6e" aria-label="${x[1]}"><span class="fsem" aria-hidden="true">${x[0]}</span><img src="opcoes/jogo-prato-${x[2]}.webp" alt="" onerror="this.remove()"><span class="fnome">${x[1]}</span></button>`).join("")}</div>`;
       el.querySelectorAll(".ing").forEach(b=>b.onclick=()=>{ const i=+b.dataset.i, p=sel.indexOf(i); if(p>=0) sel.splice(p,1); else if(sel.length<3) sel.push(i); click(); draw();
         if(sel.length===3){ answers[S[idx].id+"_prato"]=sel.map(i=>I[i][1]); el.querySelectorAll(".ing").forEach(x=>x.disabled=true); setTimeout(win,2200); } }); }; draw(); },
   /* Pergunta 13 (Bloco 3): achar os pares de cada quadro com o seu pintor (Van Gogh, Mondrian e Klimt) */
@@ -1540,7 +1540,7 @@ const GAMES = {
         if(open.length===2){ lock=true; const [x,y]=open.map(j=>C[j]); setTimeout(()=>{ if(x.k===y.k&&x.t!==y.t) okk.push(...open); open.length=0; lock=false; draw(); if(okk.length===C.length) setTimeout(win,500); },850); } }); };
     draw(); },
   equilibrio(el,win){ let hits=0,x=0,dir=1,raf;
-    el.innerHTML=`<p class="gtip">Toque em “Agora!” quando o girassol de Van Gogh estiver na moldura do meio (<span id="eh">0</span>/3)</p><div class="bal tela"><div class="zone"></div><div class="dot gira" id="dot"><img src="opcoes/jogo-meio-girassol.png" alt="" onerror="this.parentNode.classList.remove('gira');this.remove()"></div></div>
+    el.innerHTML=`<p class="gtip">Toque em “Agora!” quando o girassol de Van Gogh estiver na moldura do meio (<span id="eh">0</span>/3)</p><div class="bal tela"><div class="zone"></div><div class="dot gira" id="dot"><img src="opcoes/jogo-meio-girassol.webp" alt="" onerror="this.parentNode.classList.remove('gira');this.remove()"></div></div>
       <button class="btn" id="eb" style="margin-top:14px">Agora!</button><div class="err" id="gerr"></div>`;
     const dot=el.querySelector("#dot");
     const step=()=>{ if(!document.body.contains(dot)) return; x+=dir*1.1; if(x>=100){x=100;dir=-1} if(x<=0){x=0;dir=1} dot.style.left=x+"%"; raf=requestAnimationFrame(step); }; step();

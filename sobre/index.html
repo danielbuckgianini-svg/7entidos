@@ -89,7 +89,7 @@
       <h2>O que já existe no teste</h2>
       <p class="apoio">Toque num nome para ver a tela de verdade do protótipo.</p>
       <div class="so-app">
-        <div class="so-cel"><img id="telaImg" src="/telas/descoberta-rapida.png" alt="Tela do protótipo do 7entidos" width="540" height="1140" loading="lazy"></div>
+        <div class="so-cel"><img id="telaImg" src="/telas/descoberta-rapida.webp" alt="Tela do protótipo do 7entidos" width="540" height="1140" loading="lazy"></div>
         <p class="so-desc" id="telaDesc"></p>
         <div class="so-nomes" id="telaNomes"></div>
       </div>
@@ -132,7 +132,7 @@
     ["descobridor","Descobridor","Experiências sugeridas a partir das suas pistas, cada uma com o porquê."],
     ["retrospectiva","Retrospectiva","Um resumo do mês. Você escolhe o que aparece."]];
   var img=document.getElementById("telaImg"),desc=document.getElementById("telaDesc"),box=document.getElementById("telaNomes");
-  function mostra(i){img.src="/telas/"+T[i][0]+".png";img.alt="Tela "+T[i][1]+" do protótipo";desc.textContent=T[i][2];
+  function mostra(i){img.src="/telas/"+T[i][0]+".webp";img.alt="Tela "+T[i][1]+" do protótipo";desc.textContent=T[i][2];
     box.querySelectorAll("button").forEach(function(b,j){b.setAttribute("aria-pressed",j===i?"true":"false");});}
   T.forEach(function(t,i){var b=document.createElement("button");b.type="button";b.textContent=t[1];b.addEventListener("click",function(){mostra(i);});box.appendChild(b);});
   mostra(0);

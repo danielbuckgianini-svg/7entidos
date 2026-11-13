@@ -36,12 +36,12 @@ window.SITE = {
      sem nenhum dado real.
      --------------------------------------------------------------- */
   telas: {
-    "descoberta-rapida": { arquivo: "descoberta-rapida.png", descricao: "Tela da Descoberta Rápida no celular: primeira de três perguntas, com seis opções de resposta e uma delas escolhida." },
-    "sala-detetive":     { arquivo: "sala-detetive.png", descricao: "Tela da Sala de Detetive no celular: a investigação aparece pausada na pergunta 13, com o botão para retomar." },
-    "mapa":              { arquivo: "mapa.png", descricao: "Tela do Mapa no celular: uma constelação escura em que pontos amarelos ligam pistas como aconchego, som e música e cores e luz." },
-    "sensacoes":         { arquivo: "sensacoes.png", descricao: "Tela de Memórias no celular: o que se repete nos relatos e uma linha do tempo com lembranças como café coado na casa da avó." },
-    "descobridor":       { arquivo: "descobridor.png", descricao: "Tela Para viver no celular: experiências sugeridas, cada uma com o porquê e o que ainda não se sabe." },
-    "retrospectiva":     { arquivo: "retrospectiva.png", descricao: "Retrospectiva do mês em formato de Stories: fundo roxo, duas boas sensações registradas e o que mais fez bem no mês." }
+    "descoberta-rapida": { arquivo: "descoberta-rapida.webp", descricao: "Tela da Descoberta Rápida no celular: primeira de três perguntas, com seis opções de resposta e uma delas escolhida." },
+    "sala-detetive":     { arquivo: "sala-detetive.webp", descricao: "Tela da Sala de Detetive no celular: a investigação aparece pausada na pergunta 13, com o botão para retomar." },
+    "mapa":              { arquivo: "mapa.webp", descricao: "Tela do Mapa no celular: uma constelação escura em que pontos amarelos ligam pistas como aconchego, som e música e cores e luz." },
+    "sensacoes":         { arquivo: "sensacoes.webp", descricao: "Tela de Memórias no celular: o que se repete nos relatos e uma linha do tempo com lembranças como café coado na casa da avó." },
+    "descobridor":       { arquivo: "descobridor.webp", descricao: "Tela Para viver no celular: experiências sugeridas, cada uma com o porquê e o que ainda não se sabe." },
+    "retrospectiva":     { arquivo: "retrospectiva.webp", descricao: "Retrospectiva do mês em formato de Stories: fundo roxo, duas boas sensações registradas e o que mais fez bem no mês." }
   },
 
   /* ---------------------------------------------------------------
