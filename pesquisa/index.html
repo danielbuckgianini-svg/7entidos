@@ -5,16 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Pesquisa 7entidos · A Casa dos 7 Sentidos</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Special+Elite&family=Inter:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500;1,9..144,700&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&family=Syne:wght@600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root{--bg:#0B1430;--panel:#111B3D;--paper:#F3EEE3;--ink:#231f1a;--tape:#F5C542;--red:#e2483d;--muted:#A9B3D1;--line:#2e2a33;--accent:#f5c542}
 *{box-sizing:border-box}
 html,body{margin:0}
-body{background:radial-gradient(ellipse 70% 55% at 50% 0%,rgba(255,236,190,.14),transparent 70%),var(--bg);color:#F3EEE3;font-family:Inter,system-ui,sans-serif;font-size:21px;line-height:1.45;min-height:100vh}
+body{background:radial-gradient(ellipse 70% 55% at 50% 0%,rgba(255,236,190,.14),transparent 70%),var(--bg);color:#F3EEE3;font-family:Manrope,system-ui,sans-serif;font-size:20px;line-height:1.45;min-height:100vh}
 .wrap{max-width:760px;margin:0 auto;padding:18px 18px 60px}
 .top{display:flex;align-items:center;gap:12px;margin-bottom:14px}
-.logo-top{font-family:"Bebas Neue";font-size:34px;letter-spacing:2px;margin-left:auto;line-height:1}
+.logo-top{font-family:Fraunces;font-size:34px;letter-spacing:2px;margin-left:auto;line-height:1}
 .logo-top i,.logo i{font-style:normal;color:var(--accent)}
 .progress{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin:6px 0 4px}
 .progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--red),var(--accent));transition:width .4s}
@@ -24,40 +24,40 @@ body{background:radial-gradient(ellipse 70% 55% at 50% 0%,rgba(255,236,190,.14),
 .tb .bar{height:10px;border-radius:99px;background:#3a3540}
 .tb.done .bar{background:linear-gradient(90deg,var(--red),var(--accent))}
 .tb.now .bar{background:repeating-linear-gradient(90deg,var(--accent) 0 8px,#3a3540 8px 14px)}
-.tb small{display:block;font-size:11px;color:var(--muted);font-weight:800;margin-top:4px;line-height:1.1}
+.tb small{display:block;font-size:16px;color:var(--muted);font-weight:800;margin-top:4px;line-height:1.1}
 .tb.now small{color:var(--accent)}
-.tlock{font-size:13px;flex:none;margin-bottom:16px;opacity:.85}
+.tlock{font-size:16px;flex:none;margin-bottom:16px;opacity:.85}
 .tlock.open{opacity:.35}
 .walker{position:absolute;top:-30px;font-size:26px;left:50%;transform:translateX(-50%)}
 .tend{flex:none;text-align:center;font-size:28px;line-height:1;margin-left:4px}
-.tend small{display:block;font-size:10px;color:var(--accent);font-weight:800}
-.meta{color:var(--muted);font-size:15px;margin:6px 0 18px}
+.tend small{display:block;font-size:16px;color:var(--accent);font-weight:800}
+.meta{color:var(--muted);font-size:16px;margin:6px 0 18px}
 .scene{animation:in .45s ease}
 /* Monte o App: uma pergunta por vez, no meio da tela */
 .scene.um{min-height:calc(100svh - 200px);display:flex;flex-direction:column;justify-content:center}
 @keyframes in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 .fade{animation:fd .35s ease}
 @keyframes fd{from{opacity:0}to{opacity:1}}
-.qnum{font-family:"Bebas Neue";font-size:22px;letter-spacing:2px;color:var(--accent)}
-h1{font-family:"Bebas Neue";font-weight:400;font-size:54px;line-height:.95;margin:4px 0 10px;letter-spacing:1px}
-h2{font-family:"Bebas Neue";font-weight:400;font-size:42px;line-height:1;margin:2px 0 10px;letter-spacing:1px}
-h3{font-family:"Bebas Neue";font-weight:400;font-size:30px;margin:22px 0 8px;letter-spacing:1px}
+.qnum{font-family:Fraunces;font-size:22px;letter-spacing:2px;color:var(--accent)}
+h1{font-family:Fraunces;font-weight:400;font-size:54px;line-height:.95;margin:4px 0 10px;letter-spacing:1px}
+h2{font-family:Fraunces;font-weight:400;font-size:42px;line-height:1;margin:2px 0 10px;letter-spacing:1px}
+h3{font-family:Fraunces;font-weight:400;font-size:30px;margin:22px 0 8px;letter-spacing:1px}
 .sub{color:var(--accent);font-size:20px;font-weight:600;margin:0 0 18px}
 .opts{display:grid;gap:12px}
 .opt{all:unset;cursor:pointer;display:flex;align-items:center;gap:14px;background:var(--panel);border:2px solid var(--line);border-radius:14px;padding:16px 18px;font-size:21px;font-weight:600;transition:transform .15s,border-color .15s,background .15s}
 .opt:hover,.opt:focus-visible{border-color:var(--accent);transform:translateY(-2px)}
 .opt.sel{border-color:var(--accent);background:#2b2410}
-.opt .k{font-family:"Bebas Neue";font-size:26px;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#2a2630;color:var(--accent);flex:none}
+.opt .k{font-family:Fraunces;font-size:26px;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#2a2630;color:var(--accent);flex:none}
 .opt small{display:block;font-weight:400;color:var(--muted);font-size:16px;margin-top:2px}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .row2 .opt{justify-content:center;text-align:center;padding:14px 8px}
-.ficha{background:var(--paper);color:var(--ink);border-radius:6px;padding:22px 20px 20px;margin:8px 0 18px;font-family:"Special Elite",monospace;position:relative;transform:rotate(-.5deg);box-shadow:0 18px 40px rgba(0,0,0,.45)}
+.ficha{background:var(--paper);color:var(--ink);border-radius:6px;padding:22px 20px 20px;margin:8px 0 18px;font-family:"Space Mono",monospace;position:relative;transform:rotate(-.5deg);box-shadow:0 18px 40px rgba(0,0,0,.45)}
 .ficha:before,.ficha:after{content:"";position:absolute;top:-12px;width:90px;height:26px;background:var(--tape);opacity:.85}
 .ficha:before{left:22px;transform:rotate(-6deg)}.ficha:after{right:22px;transform:rotate(5deg)}
-.ficha .nm{font-family:"Bebas Neue";font-size:40px;line-height:1;letter-spacing:1px}
+.ficha .nm{font-family:Fraunces;font-size:40px;line-height:1;letter-spacing:1px}
 .ficha p{margin:10px 0 0;font-size:18px;line-height:1.5}
-.stamp{position:absolute;right:14px;bottom:10px;font-family:"Bebas Neue";color:var(--red);border:3px solid var(--red);padding:0 8px;font-size:22px;transform:rotate(-8deg);opacity:.85}
-.chip{display:inline-block;font-size:15px;padding:3px 10px;border-radius:99px;font-weight:800;color:#141216;margin-right:6px;font-family:Inter}
+.stamp{position:absolute;right:14px;bottom:10px;font-family:Fraunces;color:var(--red);border:3px solid var(--red);padding:0 8px;font-size:22px;transform:rotate(-8deg);opacity:.85}
+.chip{display:inline-block;font-size:16px;padding:3px 10px;border-radius:99px;font-weight:800;color:#141216;margin-right:6px;font-family:Manrope}
 .photos{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:460px;margin:0 auto}
 .photos .ph:last-child:nth-child(3n+1){grid-column:2}
 .ph{all:unset;cursor:pointer;background:#fff;padding:6px 6px 22px;border-radius:3px;box-shadow:0 4px 10px rgba(0,0,0,.4);position:relative;transition:transform .15s}
@@ -67,7 +67,7 @@ h3{font-family:"Bebas Neue";font-weight:400;font-size:30px;margin:22px 0 8px;let
 .ph .img{aspect-ratio:3/4;display:grid;place-items:center;background:#3a3540;overflow:hidden}
 .ph .img svg{width:60%;height:60%}
 .ph .img img{width:100%;height:100%;object-fit:cover}
-.ph span{position:absolute;left:0;right:0;bottom:3px;text-align:center;font-family:"Special Elite";font-size:13px;color:#333}
+.ph span{position:absolute;left:0;right:0;bottom:3px;text-align:center;font-family:"Space Mono";font-size:16px;color:#333}
 .pick{display:flex;gap:16px;align-items:center;margin:4px 0 18px}
 .pick .ph{width:110px;flex:none;cursor:default}
 .btn{all:unset;cursor:pointer;display:inline-block;background:var(--accent);color:#141216;font-weight:800;padding:16px 26px;border-radius:12px;font-size:21px;text-align:center}
@@ -85,10 +85,10 @@ h3{font-family:"Bebas Neue";font-weight:400;font-size:30px;margin:22px 0 8px;let
 .center{text-align:center}
 .big-emoji{font-size:0;width:78px;height:78px;margin:6px auto 10px;border-radius:50%;position:relative;background:conic-gradient(#f5c542,#4aa8ff,#ff8a3d,#ff5a6e,#5ccf8a,#b48cff,#3fd6d0,#f5c542);-webkit-mask:radial-gradient(circle,transparent 54%,#000 56%);mask:radial-gradient(circle,transparent 54%,#000 56%);filter:drop-shadow(0 0 14px rgba(245,197,66,.55));animation:anel 7s linear infinite}
 @keyframes anel{to{transform:rotate(360deg)}}
-/* logo oficial junto dos vídeos de explicação: anel de sete luzes + 7ENTIDOS, fora da imagem (não cobre o rosto) */
+/* logo oficial junto dos vídeos de explicação: anel de sete luzes + 7entidos, fora da imagem (não cobre o rosto) */
 .vlogo{display:flex;align-items:center;justify-content:center;gap:10px;margin:10px auto 6px}
 .vlogo .anel7{width:34px;height:34px;border-radius:50%;flex:none;background:conic-gradient(#f5c542,#4aa8ff,#ff8a3d,#ff5a6e,#5ccf8a,#b48cff,#3fd6d0,#f5c542);-webkit-mask:radial-gradient(circle,transparent 52%,#000 55%);mask:radial-gradient(circle,transparent 52%,#000 55%);box-shadow:0 0 14px rgba(245,197,66,.45)}
-.vlogo b{font-family:"Bebas Neue",sans-serif;font-size:28px;letter-spacing:3px;line-height:1;color:#F3EEE3}
+.vlogo b{font-family:Fraunces,sans-serif;font-size:28px;letter-spacing:3px;line-height:1;color:#F3EEE3}
 .vlogo b i{font-style:normal;color:#f5c542}
 .card-dark{background:var(--panel);border:2px solid var(--line);border-radius:14px;padding:18px}
 .stack{display:grid;gap:12px;margin:18px 0}
@@ -102,12 +102,12 @@ h3{font-family:"Bebas Neue";font-weight:400;font-size:30px;margin:22px 0 8px;let
 .host{display:flex;gap:14px;align-items:center;background:var(--panel);border:2px solid var(--line);border-radius:16px;padding:10px;overflow-wrap:anywhere}
 .host.sel{border-color:var(--accent);background:#2b2410}
 .hosts{display:grid;gap:14px}
-.logo{font-family:"Bebas Neue";font-size:56px;letter-spacing:3px;line-height:1}
+.logo{font-family:Fraunces;font-size:56px;letter-spacing:3px;line-height:1}
 a{color:var(--accent)}
 .flowtxt{background:#141216;border-radius:12px;padding:16px;margin:10px 0 14px;font-size:19px;text-align:left}
 .video{display:flex;gap:14px;align-items:center;background:#000;border:2px solid var(--line);border-radius:14px;padding:16px;margin:16px 0 6px;text-align:left}
 .vplay{width:56px;height:56px;border-radius:50%;background:var(--accent);color:#141216;display:grid;place-items:center;font-size:24px;flex:none}
-.video small{display:block;color:var(--muted);font-size:15px}
+.video small{display:block;color:var(--muted);font-size:16px}
 .fala{font-style:italic;color:#fff;font-size:18px;margin-top:8px}
 .share{margin:18px 0}
 .share p{margin:6px 0 14px;font-size:18px;color:var(--muted)}
@@ -117,8 +117,8 @@ a{color:var(--accent)}
 .abert-ph .vplay{margin:0 auto 14px;width:84px;height:84px;font-size:36px}
 .pesq{all:unset;cursor:pointer;display:block;border-radius:18px;padding:20px;border:2px solid var(--line);background:linear-gradient(135deg,#2b2410,#111B3D);transition:transform .15s,border-color .15s}
 .pesq:hover,.pesq:focus-visible{transform:translateY(-3px);border-color:var(--accent)}
-.pesq .tag{display:inline-block;background:var(--red);color:#fff;font-weight:800;font-size:14px;padding:4px 10px;border-radius:99px;margin-bottom:8px;letter-spacing:.5px}
-.pesq b{display:block;font-family:"Bebas Neue";font-weight:400;font-size:38px;line-height:1;letter-spacing:1px}
+.pesq .tag{display:inline-block;background:var(--red);color:#fff;font-weight:800;font-size:16px;padding:4px 10px;border-radius:99px;margin-bottom:8px;letter-spacing:.5px}
+.pesq b{display:block;font-family:Fraunces;font-weight:400;font-size:38px;line-height:1;letter-spacing:1px}
 .pesq p{margin:8px 0 0;font-size:18px;color:#d9d3df}
 .pesq.lock{background:var(--panel);opacity:.75}
 .elenco{display:grid;gap:12px}
@@ -127,15 +127,15 @@ a{color:var(--accent)}
 .elrow .row2 .opt{font-size:17px;padding:10px 6px}
 .elrow b{font-size:19px}
 .room{border-radius:20px;padding:22px;border:3px solid;margin-bottom:16px;text-align:center}
-.room .rn{font-family:"Bebas Neue";font-size:44px;line-height:1;letter-spacing:1px}
-.etapa{display:inline-block;font-size:14px;font-weight:800;color:var(--muted);letter-spacing:1px}
+.room .rn{font-family:Fraunces;font-size:44px;line-height:1;letter-spacing:1px}
+.etapa{display:inline-block;font-size:16px;font-weight:800;color:var(--muted);letter-spacing:1px}
 .redo{margin-top:16px;padding-top:12px;border-top:1px dashed var(--line)}
 .done-tag{display:inline-block;background:#16251b;border:2px solid #3fae6a;color:#9be7b0;font-weight:800;padding:8px 14px;border-radius:10px}
 input.txt{all:unset;box-sizing:border-box;width:100%;background:var(--panel);border:2px solid var(--line);border-radius:12px;padding:16px;font-size:21px}
 input.txt:focus{border-color:var(--accent)}
 .scale{display:grid;grid-template-columns:repeat(11,1fr);gap:6px}
-.scale .opt{justify-content:center;padding:14px 0;font-family:"Bebas Neue";font-size:28px}
-.scale-legend{display:flex;justify-content:space-between;color:var(--muted);font-size:14px;margin-top:6px}
+.scale .opt{justify-content:center;padding:14px 0;font-family:Fraunces;font-size:28px}
+.scale-legend{display:flex;justify-content:space-between;color:var(--muted);font-size:16px;margin-top:6px}
 .gamebox{background:#141216;border:2px solid var(--line);border-radius:16px;padding:16px;margin:10px 0}
 .gtip{margin:0 0 12px;font-weight:600}
 .ggrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:360px}
@@ -157,7 +157,7 @@ input.txt:focus{border-color:var(--accent)}
 .ggrid.ingr{grid-template-columns:repeat(4,1fr);max-width:none;gap:8px}
 .fcard.ing{aspect-ratio:1;background:radial-gradient(circle at 50% 40%,#3a2340,#141a3a 80%)}
 .fcard.ing img{object-fit:contain;padding:8px 8px 22px}
-.fcard.ing .fnome{font-size:13px}
+.fcard.ing .fnome{font-size:16px}
 .fcard.ing.sel{border-color:#F5C542;box-shadow:0 0 0 3px #F5C542}
 .fcard.sompic.sel{border-color:#F5C542;box-shadow:0 0 0 4px #F5C542}
 .chips{display:flex;flex-wrap:wrap;gap:10px}
@@ -165,14 +165,14 @@ input.txt:focus{border-color:var(--accent)}
 .chips.mini{gap:8px}
 .chips.mini .opt{padding:8px 12px;font-size:16px;border-radius:10px;gap:6px}
 .f1q{margin:0 0 18px;padding-bottom:14px;border-bottom:1px dashed var(--line)}
-.f1q h3{margin:6px 0 2px;font-family:Inter;font-size:20px;font-weight:800;letter-spacing:0}
-.f1q small{display:block;color:var(--muted);font-size:14px;margin-bottom:8px}
+.f1q h3{margin:6px 0 2px;font-family:Manrope;font-size:20px;font-weight:800;letter-spacing:0}
+.f1q small{display:block;color:var(--muted);font-size:16px;margin-bottom:8px}
 .gsec{margin:0 0 20px}
 .round{margin-bottom:16px}
 .round .gtip{margin-bottom:8px}
 .gcell.ok{outline:4px solid #3fae6a;outline-offset:-4px}
 .gcell.bad{opacity:.3}
-.rres{font-size:15px;font-weight:800;margin-top:6px;min-height:20px}
+.rres{font-size:16px;font-weight:800;margin-top:6px;min-height:20px}
 .notarow{display:grid;grid-template-columns:84px 1fr;gap:14px;align-items:center;margin:14px 0;background:var(--panel);border:2px solid var(--line);border-radius:14px;padding:12px}
 .notarow .scale{grid-template-columns:repeat(6,1fr)}
 .gimg{width:84px;height:84px;border-radius:16px;display:grid;place-items:center;font-size:42px;border:3px solid}
@@ -188,11 +188,11 @@ input.txt:focus{border-color:var(--accent)}
 .rounds3 .round{margin:0}
 .rounds3 .ggrid{gap:3px;max-width:none}
 .rounds3 .gcell{border-radius:4px}
-.rounds3 .rlab{font-family:"Bebas Neue";font-size:18px;letter-spacing:1px;color:var(--accent);margin-bottom:4px}
-.rounds3 .rres{font-size:13px}
+.rounds3 .rlab{font-family:Fraunces;font-size:18px;letter-spacing:1px;color:var(--accent);margin-bottom:4px}
+.rounds3 .rres{font-size:16px}
 .sround{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:8px}
-.sround .rlab{font-weight:800;font-size:15px;min-width:74px}
-.sround .rres{margin:0;font-size:14px}
+.sround .rlab{font-weight:800;font-size:16px;min-width:74px}
+.sround .rres{margin:0;font-size:16px}
 .gcard{font-size:30px}
 .ggrid.g3{max-width:250px}
 .olfwrap{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start}
@@ -206,24 +206,24 @@ input.txt:focus{border-color:var(--accent)}
 .refops{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
 .refops .opt{font-size:17px;padding:10px 14px}
 .olfwrap .refq{flex:1;min-width:200px}
-.refq h3{font-family:Inter;font-size:18px;font-weight:800;letter-spacing:0;margin:0 0 8px}
+.refq h3{font-family:Manrope;font-size:18px;font-weight:800;letter-spacing:0;margin:0 0 8px}
 .chip.pisca{animation:chipPisca 1s steps(1,end) infinite}
 @keyframes chipPisca{0%{background:var(--c);color:#141216}50%{background:#000;color:var(--c)}100%{background:var(--c);color:#141216}}
 /* blocos de preço */
 .planos{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;align-items:stretch}
 .plano{background:var(--panel);border:2px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px}
 .plano.dest{border-color:var(--accent);background:linear-gradient(180deg,#2b2410,#111B3D)}
-.plano .pn{font-family:"Bebas Neue";font-size:26px;letter-spacing:1px;color:var(--muted)}
-.plano .pp{font-family:"Bebas Neue";font-size:40px;line-height:1}
-.plano .pp small{font-family:Inter;font-size:15px;color:var(--muted)}
+.plano .pn{font-family:Fraunces;font-size:26px;letter-spacing:1px;color:var(--muted)}
+.plano .pp{font-family:Fraunces;font-size:40px;line-height:1}
+.plano .pp small{font-family:Manrope;font-size:16px;color:var(--muted)}
 .plano ul{margin:0;padding-left:18px;font-size:16px;color:#d9d3df;flex:1}
 .plano .opt{font-size:16px;padding:10px 12px;justify-content:center;text-align:center}
 .grafico{display:grid;gap:10px;margin:14px 0}
 .gbar{display:grid;grid-template-columns:150px 1fr 34px;gap:10px;align-items:center;font-size:16px}
 .gbar .tr{height:22px;background:#2a2630;border-radius:99px;overflow:hidden}
 .gbar .tr i{display:block;height:100%;border-radius:99px}
-.gbar b{font-family:"Bebas Neue";font-size:24px;text-align:right}
-@media (max-width:620px){.planos{grid-template-columns:1fr}.gbar{grid-template-columns:110px 1fr 30px;font-size:14px}}
+.gbar b{font-family:Fraunces;font-size:24px;text-align:right}
+@media (max-width:620px){.planos{grid-template-columns:1fr}.gbar{grid-template-columns:110px 1fr 30px;font-size:16px}}
 @media (prefers-reduced-motion:reduce){.chip.pisca{animation:none}}
 .feed{margin-top:20px}
 .opt.zap{background:linear-gradient(#2fe27a,#1fae55);border-color:#25d366;color:#04230f;font-weight:800}
@@ -233,10 +233,10 @@ input.txt:focus{border-color:var(--accent)}
 .eagora{display:flex;flex-direction:column;justify-content:center}
 .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;font-style:normal}
 .flowvid{margin-top:4px}.vidph{margin-top:10px;aspect-ratio:16/9;border-radius:12px;display:grid;place-items:center;text-align:center;color:var(--muted);background:linear-gradient(135deg,#2a1d55,#0f2d5c)}
-.fontes{font-size:14px;color:var(--muted);margin:12px 0 0;line-height:1.5}.fontes b{color:#F3EEE3}
+.fontes{font-size:16px;color:var(--muted);margin:12px 0 0;line-height:1.5}.fontes b{color:#F3EEE3}
 .feed h3{margin:16px 0 8px}
 @media (prefers-reduced-motion:reduce){.blink,.scene,.fade{animation:none}}
-@media (max-width:520px){h1{font-size:44px}h2{font-size:34px}.scale{grid-template-columns:repeat(6,1fr)}.seal b{font-size:15px}.tb small{font-size:9px}}
+@media (max-width:520px){h1{font-size:44px}h2{font-size:34px}.scale{grid-template-columns:repeat(6,1fr)}.seal b{font-size:16px}.tb small{font-size:16px}}
 .popup-bg{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.82);display:flex;align-items:center;justify-content:center;padding:16px}
 .popup{position:relative;width:min(380px,100%);background:var(--panel);border:2px solid var(--accent);border-radius:20px;padding:14px;box-shadow:0 30px 80px rgba(0,0,0,.7)}
 .popup .abert-video{width:100%;max-height:72vh;border-radius:14px;display:block;background:#000}
@@ -246,10 +246,10 @@ input.txt:focus{border-color:var(--accent)}
 .anon-exp b{display:block;color:var(--accent);font-size:19px}.anon-exp span{color:#d9d3df;font-size:16px}
 .fluxo{display:grid;gap:0;margin:8px 0 18px}
 .passo{position:relative;padding-left:62px}
-.pnum{position:absolute;left:0;top:18px;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-family:"Bebas Neue";font-size:30px;color:#141216;background:linear-gradient(135deg,var(--accent),#e2483d);box-shadow:0 0 0 4px rgba(245,197,66,.18),0 10px 20px rgba(0,0,0,.5)}
+.pnum{position:absolute;left:0;top:18px;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-family:Fraunces;font-size:30px;color:#141216;background:linear-gradient(135deg,var(--accent),#e2483d);box-shadow:0 0 0 4px rgba(245,197,66,.18),0 10px 20px rgba(0,0,0,.5)}
 .fio{position:relative;height:54px;padding-left:62px;display:flex;align-items:center}
 .fio i{position:absolute;left:21px;top:-6px;bottom:-6px;width:4px;border-radius:4px;background:linear-gradient(var(--accent),#e2483d);box-shadow:0 0 12px rgba(245,197,66,.6)}
-.fio span{font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.fio span{font-size:16px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
 .passo .pesq{width:100%}
 
 /* tela inicial: logo + infográfico em 2 passos */
@@ -259,13 +259,13 @@ body.tela-inicio .logo-top{visibility:hidden}
 .info2{position:relative;display:grid;gap:0;margin:0 0 18px}
 .etapa{position:relative;padding-left:64px}
 .etapa .no{position:absolute;left:0;top:22px;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#fff6,#F5C542 45%,#b8860b);box-shadow:0 0 0 5px rgba(245,197,66,.18),0 0 24px rgba(245,197,66,.55);z-index:2}
-.etapa .no span{font-family:"Bebas Neue";font-size:30px;color:#141216;line-height:1}
+.etapa .no span{font-family:Fraunces;font-size:30px;color:#141216;line-height:1}
 .etapa .pesq{width:100%;box-sizing:border-box;position:relative;overflow:hidden;padding-right:104px;min-height:150px}
 .caminho{position:relative;height:64px;padding-left:64px;display:flex;align-items:center}
 .caminho i{position:absolute;left:22px;top:-8px;bottom:-8px;width:4px;border-radius:4px;background:linear-gradient(#F5C542,#FF5D7A);box-shadow:0 0 14px rgba(245,197,66,.65)}
 .caminho b{position:absolute;left:18px;width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 0 14px 4px #F5C542;animation:desce 1.8s ease-in-out infinite}
 @keyframes desce{0%{top:-6px;opacity:0}15%{opacity:1}85%{opacity:1}100%{top:58px;opacity:0}}
-.caminho span{font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.caminho span{font-size:16px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
 .anel{position:absolute;right:16px;top:50%;width:76px;height:76px;margin-top:-38px;border-radius:50%;border:1.5px solid rgba(245,197,66,.7)}
 .anel i{position:absolute;left:50%;top:50%;width:12px;height:12px;margin:-6px;border-radius:50%;background:var(--c);box-shadow:0 0 10px var(--c);transform:rotate(var(--a)) translateY(-38px);animation:pis 2.4s ease-in-out infinite;animation-delay:calc(var(--a) / 360deg * 2.4s)}
 @keyframes pis{50%{filter:brightness(1.6)}}
@@ -284,23 +284,23 @@ body.tela-inicio .logo-top{visibility:hidden}
 .vl-big.on{opacity:1;pointer-events:auto}
 .vl-big img{width:78%;max-width:320px;height:auto}
 .vl-big b{font:800 22px/1.1 system-ui,sans-serif;color:#f5c542;letter-spacing:.5px}
-.vl-big small{color:#F3EEE3;font-size:13px;opacity:.85}
+.vl-big small{color:#F3EEE3;font-size:16px;opacity:.85}
 /* ===== Gestalt (Sala da Gestalt, 10/11) ===== */
 /* Fase 1: 3 grupos de 5, com espaço entre eles (proximidade) */
 .chips.g5{padding:10px 0;margin:0}
-.g5nome{margin:16px 0 2px;font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--c)}
+.g5nome{margin:16px 0 2px;font-size:16px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--c)}
 .chips.g5.temsel .opt:not(.sel){opacity:.5}
 .chips.g5 .opt.sel{border-color:var(--c);box-shadow:0 0 0 2px var(--c) inset}
 /* constelação do 7 na trilha */
 .sete{display:flex;align-items:center;gap:10px;margin:2px 0 4px}
 .sete svg{width:70px;height:84px;flex:none;overflow:visible}
 .sete .st{transition:all .5s}
-.sete small{font-size:12px;color:var(--muted);font-weight:800;line-height:1.25}
+.sete small{font-size:16px;color:var(--muted);font-weight:800;line-height:1.25}
 .sete small b{color:var(--accent)}
 /* peças do museu: o quadro inteiro em sombra; cada fase revela uma marca branca */
 .museu{display:flex;align-items:center;gap:12px;margin:0 0 12px;padding:8px 10px;border-radius:12px;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.08)}
 .museu svg{width:84px;height:64px;flex:none;border-radius:6px;background:#070b22}
-.museu small{font-size:12.5px;color:var(--muted);font-weight:700;line-height:1.3}
+.museu small{font-size:16px;color:var(--muted);font-weight:700;line-height:1.3}
 .museu small b{color:#fff}
 /* teste do vaso */
 .vaso{display:block;width:min(300px,100%);margin:10px auto;border-radius:14px}
@@ -311,7 +311,7 @@ body.tela-inicio .logo-top{visibility:hidden}
 
 /* ===== Régua de luz (escala 0 a 10) ===== */
 .scale.regua{display:grid;grid-template-columns:repeat(11,1fr);gap:6px}
-.scale.regua .opt{aspect-ratio:1;padding:0!important;border-radius:50%!important;justify-content:center;font-family:"Bebas Neue",sans-serif!important;font-size:22px!important;font-weight:400!important;background:rgba(255,255,255,.06)!important;color:rgba(255,255,255,.75)!important;border:1px solid rgba(255,255,255,.18)!important;box-shadow:none!important;transition:transform .2s,background .25s,box-shadow .25s,color .2s}
+.scale.regua .opt{aspect-ratio:1;padding:0!important;border-radius:50%!important;justify-content:center;font-family:Fraunces,sans-serif!important;font-size:22px!important;font-weight:400!important;background:rgba(255,255,255,.06)!important;color:rgba(255,255,255,.75)!important;border:1px solid rgba(255,255,255,.18)!important;box-shadow:none!important;transition:transform .2s,background .25s,box-shadow .25s,color .2s}
 .scale.regua .opt.on{background:var(--rc)!important;color:#0a1128!important;border-color:var(--rc)!important;box-shadow:0 0 14px var(--rc)!important}
 .scale.regua .opt.sel{transform:scale(1.22)}
 @media (max-width:520px){.scale.regua{grid-template-columns:repeat(11,1fr);gap:3px}.scale.regua .opt{font-size:16px!important}}
@@ -331,14 +331,14 @@ body.tela-inicio .logo-top{visibility:hidden}
 .fcard:focus-visible{outline:3px solid #F5C542;outline-offset:3px}
 .fcard img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .fcard .fsem{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:38px;opacity:.55}
-.fcard .fnome{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 9px;font-weight:700;font-size:15px;line-height:1.2;background:linear-gradient(transparent,rgba(5,8,20,.88))}
+.fcard .fnome{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 9px;font-weight:700;font-size:16px;line-height:1.2;background:linear-gradient(transparent,rgba(5,8,20,.88))}
 .fcard.sel{border-color:#F5C542;box-shadow:0 0 0 3px #F5C54266}
 .pad.fcard{aspect-ratio:4/3}.pad.fcard.sel{border-color:#F5C542;box-shadow:0 0 0 4px #F5C542,0 0 26px #F5C542;transform:scale(1.03)}
-.fcard .ouvir{position:absolute;top:8px;right:8px;border:0;border-radius:999px;padding:7px 11px;font:700 13px Inter,system-ui,sans-serif;background:rgba(5,8,20,.78);color:#fff;cursor:pointer;z-index:2}
+.fcard .ouvir{position:absolute;top:8px;right:8px;border:0;border-radius:999px;padding:7px 11px;font:700 16px Manrope,system-ui,sans-serif;background:rgba(5,8,20,.78);color:#fff;cursor:pointer;z-index:2}
 .fcard .ouvir.tocando{background:#F5C542;color:#0a1128}
 /* ===== Bloco 3 · jogos ===== */
 .olho{max-width:420px;margin:0 auto}
-.olho .rlab{font-family:"Bebas Neue",Inter,sans-serif;font-size:22px;letter-spacing:1px;color:var(--accent);text-align:center;margin-bottom:8px}
+.olho .rlab{font-family:Fraunces,Manrope,sans-serif;font-size:22px;letter-spacing:1px;color:var(--accent);text-align:center;margin-bottom:8px}
 .olho .ggrid{max-width:none;width:100%;gap:8px}
 .olho .gcell{border-radius:12px;min-height:64px}
 .olho .rres{text-align:center;font-weight:800;font-size:18px;min-height:26px;margin-top:10px}
@@ -346,9 +346,9 @@ body.tela-inicio .logo-top{visibility:hidden}
 .olho .pontos i{width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,.18)}.olho .pontos i.on{background:var(--accent)}
 .fino{background:rgba(74,168,255,.12);border:1px solid rgba(74,168,255,.4);border-radius:16px;padding:12px 14px;margin-bottom:12px;font-size:16px;line-height:1.4}
 .fino b{color:#9fd0ff}
-.ouvirgrande{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px;border:0;border-radius:18px;background:#4aa8ff;color:#0a1128;font:800 20px Inter,system-ui,sans-serif;cursor:pointer;margin:6px 0 12px}
+.ouvirgrande{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px;border:0;border-radius:18px;background:#4aa8ff;color:#0a1128;font:800 20px Manrope,system-ui,sans-serif;cursor:pointer;margin:6px 0 12px}
 .ouvirgrande.tocando{background:#F5C542}
-.sompic .exemplo{position:absolute;top:8px;right:8px;border:0;border-radius:999px;padding:6px 10px;font:700 12px Inter,system-ui,sans-serif;background:rgba(5,8,20,.78);color:#fff;cursor:pointer;z-index:2}
+.sompic .exemplo{position:absolute;top:8px;right:8px;border:0;border-radius:999px;padding:6px 10px;font:700 16px Manrope,system-ui,sans-serif;background:rgba(5,8,20,.78);color:#fff;cursor:pointer;z-index:2}
 .prato .ping{width:46%;height:46%}
 .prato.pronto .pvazio{filter:drop-shadow(0 0 22px rgba(245,197,66,.55)) drop-shadow(0 10px 18px rgba(0,0,0,.45))}
 .prato .brilho{position:absolute;inset:-6%;border-radius:50%;pointer-events:none;background:radial-gradient(circle,transparent 58%,rgba(245,197,66,.25) 62%,transparent 70%);animation:brilha 1.6s ease-in-out infinite}
@@ -357,7 +357,7 @@ body.tela-inicio .logo-top{visibility:hidden}
 .pares{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:420px;margin:0 auto}
 .pcarta{all:unset;cursor:pointer;aspect-ratio:3/4;border-radius:14px;border:3px solid #F3EEE3;box-shadow:inset 0 0 0 4px #231f1a,0 6px 14px rgba(0,0,0,.35);display:grid;place-items:center;text-align:center;font-weight:800;font-size:17px;line-height:1.15;color:#231f1a;background:#F3EEE3;position:relative;overflow:hidden;transition:transform .2s}
 .pcarta.costas{background:repeating-linear-gradient(45deg,#1b2450 0 10px,#222c5e 10px 20px);border-color:#F5C542;color:transparent}
-.pcarta.costas::after{content:"7";position:absolute;inset:0;display:grid;place-items:center;font:900 34px "Bebas Neue",Inter,sans-serif;color:#F5C542}
+.pcarta.costas::after{content:"7";position:absolute;inset:0;display:grid;place-items:center;font:900 34px Fraunces,Manrope,sans-serif;color:#F5C542}
 .pcarta.ok{border-color:#5ccf8a;box-shadow:0 0 0 3px #5ccf8a,0 0 18px rgba(92,207,138,.5)}
 .pcarta.nome{padding:6px;font-family:Georgia,serif}
 .pcarta .qd{position:absolute;inset:0}
@@ -372,7 +372,7 @@ body.tela-inicio .logo-top{visibility:hidden}
 /* ===== passa sozinho (escolha várias) ===== */
 .seguindo{margin-top:14px;display:grid;gap:6px;text-align:center}
 .seguindo i{display:block;height:4px;border-radius:4px;background:linear-gradient(90deg,var(--accent,#F5C542),#ff8a3d);transform-origin:left;animation:segue linear forwards}
-.seguindo span{font-size:13.5px;color:var(--muted);font-weight:700}
+.seguindo span{font-size:16px;color:var(--muted);font-weight:700}
 @keyframes segue{from{transform:scaleX(1)}to{transform:scaleX(0)}}
 @media (prefers-reduced-motion:reduce){.seguindo i{animation:none}}
 /* ===== Céus de luz (pergunta 1) ===== */
@@ -380,7 +380,7 @@ body.tela-inicio .logo-top{visibility:hidden}
   background:radial-gradient(ellipse 90% 80% at 50% 100%,#1d2a66 0%,#101846 45%,#070b24 100%);border:1px solid rgba(255,255,255,.08);box-shadow:inset 0 -30px 60px rgba(245,197,66,.06)}
 .cl-est b{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;opacity:.5;animation:clpisca 3s ease-in-out infinite;animation-delay:var(--d)}
 @keyframes clpisca{50%{opacity:.12}}
-.cl-luz{position:absolute;transform:translate(-50%,-50%);width:44px;height:44px;border:0;background:none;padding:0;cursor:pointer;display:grid;place-items:center;color:rgba(255,255,255,.8);font:400 19px/1 "Bebas Neue",sans-serif;-webkit-tap-highlight-color:transparent}
+.cl-luz{position:absolute;transform:translate(-50%,-50%);width:44px;height:44px;border:0;background:none;padding:0;cursor:pointer;display:grid;place-items:center;color:rgba(255,255,255,.8);font:400 19px/1 Fraunces,sans-serif;-webkit-tap-highlight-color:transparent}
 .cl-luz i{position:absolute;inset:9px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);transition:background .35s,box-shadow .35s,inset .35s;transition-delay:var(--d)}
 .cl-luz span{position:relative;z-index:1;transition:color .3s;transition-delay:var(--d)}
 .cl-luz:hover i{border-color:var(--rc)}
@@ -389,10 +389,10 @@ body.tela-inicio .logo-top{visibility:hidden}
 .cl-luz.sel i{inset:3px}
 .cl-luz:focus-visible{outline:3px solid #F5C542;outline-offset:2px;border-radius:50%}
 .cl-centro{position:absolute;left:50%;bottom:9%;transform:translateX(-50%);width:76px;height:76px;border-radius:50%;display:grid;place-items:center;
-  font:400 40px/1 "Bebas Neue",sans-serif;color:rgba(255,255,255,.45);background:rgba(255,255,255,.05);border:1px dashed rgba(255,255,255,.25);transition:all .5s}
+  font:400 40px/1 Fraunces,sans-serif;color:rgba(255,255,255,.45);background:rgba(255,255,255,.05);border:1px dashed rgba(255,255,255,.25);transition:all .5s}
 .cl-centro.aceso{color:#0a1128;background:var(--rc);border:0;box-shadow:0 0 30px var(--rc),0 0 70px color-mix(in srgb,var(--rc) 40%,transparent);animation:clnasce .6s cubic-bezier(.2,.8,.2,1)}
 @keyframes clnasce{from{transform:translateX(-50%) scale(.6)}}
-.cl-dica{text-align:center;color:var(--muted);font-weight:700;font-size:14px;margin:6px 0 0}
+.cl-dica{text-align:center;color:var(--muted);font-weight:700;font-size:16px;margin:6px 0 0}
 @media (max-width:420px){.cl-luz{width:38px;height:38px;font-size:17px}.cl-luz i{inset:7px}.cl-centro{width:64px;height:64px;font-size:34px}}
 @media (prefers-reduced-motion:reduce){.cl-est b,.cl-centro.aceso{animation:none}.cl-luz i,.cl-luz span{transition:none}}
 </style>
@@ -404,7 +404,7 @@ body.tela-inicio .logo-top{visibility:hidden}
 <div class="wrap" id="wrap">
   <div class="top">
     <div class="seal seal-pisca" id="anon"><div style="font-size:24px">🛡️</div><b>Pesquisa 100% anônima, ninguém vai saber quem respondeu</b></div>
-    <div class="logo-top"><i>7</i>ENTIDOS</div>
+    <div class="logo-top"><i>7</i>entidos</div>
   </div>
   <div id="prog" style="display:none">
     <div class="trail" id="trail" aria-hidden="true"></div>
@@ -591,6 +591,7 @@ function buildApp(){
 const FLOWS = {reality:buildReality(), app:buildApp()};
 
 /* ============ ESTADO ============ */
+const pad2=n=>String(n).padStart(2,"0"); const nn=(n,extra)=>"Nº "+pad2(n)+" / "+pad2(S.total||n)+(extra?" · "+extra:"");
 let cur="reality", S=FLOWS.reality, answers={}, idx=0, view="abertura", done={}, refazAsk=null;
 let stepId=null, stepT0=0, travaSaiu=null, travaConvite=false, contato={}, revelaFase=0, tentativa=1;
 const stage = document.getElementById("stage");
@@ -620,7 +621,7 @@ function enterStep(){ const s=S[idx]; if((s.type==="f1"||s.type==="f1one"||s.typ
 function leaveStep(){ if(stepId){ answers[stepId+"_tempo_seg"]=(answers[stepId+"_tempo_seg"]||0)+Math.round((Date.now()-stepT0)/1000); stepId=null; } }
 
 /* ============ VÍDEOS ============ */
-const vLogo = () => `<div class="vlogo" aria-label="7entidos"><span class="anel7"></span><b><i>7</i>ENTIDOS</b></div>`;
+const vLogo = () => `<div class="vlogo" aria-label="7entidos"><span class="anel7"></span><b><i>7</i>entidos</b></div>`;
 function videoBox(i, auto){
   const h=HOSTS[i];
   if(h.video) return `<video id="vid${i}" src="${h.video}" ${auto?"autoplay":""} controls playsinline style="width:min(340px,100%);max-height:70vh;border-radius:14px;margin:12px auto;display:block"></video>`;
@@ -827,7 +828,7 @@ function render(){
     const fase = answers[fk]==null?0:answers[nk]==null?1:2;
     const qn = c.fixo?s.num:s.num+fase;
     if(c.fixo){
-      h=`<div class="qnum">Pergunta ${qn} · perfil ${s.i+1} de 7</div>
+      h=`<div class="qnum">${nn(qn)} · perfil ${s.i+1} de 7</div>
         <div class="pick fade"><div class="ph sel"><div class="img">${c.fixo.foto?`<img src="${c.fixo.foto}" alt="${esc(c.fixo.nome)}">`:SIL}</div></div>
         <div><span class="chip" style="background:${c.cor}">${esc(c.sentido)}</span><div class="logo" style="font-size:46px;margin-top:6px">${esc(c.fixo.nome)}</div>${c.fixo.apelido?`<div style="color:var(--muted);font-size:18px">${esc(c.fixo.apelido)}</div>`:""}</div></div>
         <div class="ficha"><p>${esc(c.brief)}</p></div>
@@ -835,16 +836,16 @@ function render(){
         <div class="opts fade">${c.tipo.map((o,i)=>`<button class="opt ${answers[tk]===o?"sel":""}" onclick="castSet('${tk}',${JSON.stringify(o).replace(/"/g,"&quot;")},true)"><span class="k">${L(i)}</span>${esc(o)}</button>`).join("")}</div>`;
     } else if(fase===0){
       const used=usedPhotos(c.id), left=FOTOS.filter(f=>!used.includes(f.id));
-      h=`<div class="qnum">Pergunta ${qn} · perfil ${s.i+1} de 7</div><h2>Qual foto combina com esse perfil?</h2>
+      h=`<div class="qnum">${nn(qn)} · perfil ${s.i+1} de 7</div><h2>Qual foto combina com esse perfil?</h2>
         <div class="ficha"><span class="chip" style="background:${c.cor}">${esc(c.sentido)}</span><p>${esc(c.brief)}</p></div>
         <div class="photos fade">${left.map(f=>`<button class="ph" onclick="castSet('${fk}','${f.id}')"><div class="img">${fotoHTML(f.id)}</div><span>${f.id}</span></button>`).join("")}</div>`;
     } else if(fase===1){
       const nomes=nomesPara(c, answers[fk]);
-      h=`<div class="qnum">Pergunta ${qn} · perfil ${s.i+1} de 7</div>${pickCard(answers[fk],c.cor,c.sentido)}<h2>E qual nome você escolhe?</h2>
+      h=`<div class="qnum">${nn(qn)} · perfil ${s.i+1} de 7</div>${pickCard(answers[fk],c.cor,c.sentido)}<h2>E qual nome você escolhe?</h2>
         <div class="opts fade">${nomes.map((o,i)=>`<button class="opt" onclick="castSet('${nk}',${JSON.stringify(o).replace(/"/g,"&quot;")})"><span class="k">${L(i)}</span>${esc(o)}</button>`).join("")}</div>`;
     } else {
       const nm=answers[nk];
-      h=`<div class="qnum">Pergunta ${qn} · perfil ${s.i+1} de 7</div>${pickCard(answers[fk],c.cor,c.sentido,nm)}<h2>Qual é o jeito ${ok(nm)?"de "+esc(nm):"desse personagem"}?</h2>
+      h=`<div class="qnum">${nn(qn)} · perfil ${s.i+1} de 7</div>${pickCard(answers[fk],c.cor,c.sentido,nm)}<h2>Qual é o jeito ${ok(nm)?"de "+esc(nm):"desse personagem"}?</h2>
         <div class="opts fade">${c.tipo.map((o,i)=>`<button class="opt ${answers[tk]===o?"sel":""}" onclick="castSet('${tk}',${JSON.stringify(o).replace(/"/g,"&quot;")},true)"><span class="k">${L(i)}</span>${esc(o)}</button>`).join("")}</div>`;
     }
     h+=`<div class="err" id="err"></div><div class="nav"><button class="back" onclick="castBack('${c.id}')">← voltar</button><button class="skip" onclick="castPular('${c.id}')">pular</button></div>`;
@@ -855,17 +856,17 @@ function render(){
     if(answers.vilao_foto==null) answers.vilao_foto = left.length?left[left.length-1].id:"pulou";
     const fase = !answers.vilao_visto?0:answers.vilao_nome==null?1:answers.vilao_tipo==null?2:3;
     if(fase===0){
-      h=`<div class="center"><div class="qnum">Pergunta ${s.num} · perfil 7 de 7</div><div class="big-emoji">🕵️</div>
+      h=`<div class="center"><div class="qnum">${nn(s.num)} · perfil 7 de 7</div><div class="big-emoji">🕵️</div>
         <h1>Descubra quem você acha, inconscientemente, que é o vilão</h1>
         <p class="sub">A foto que você deixou por último diz muito.</p>
         <button class="btn" onclick="answers.vilao_visto=true;click();rr()">Revelar o vilão →</button></div>`;
     } else if(fase===1){
-      h=`<div class="qnum">Pergunta ${s.num+1} · o vilão</div>${pickCard(answers.vilao_foto,VILAO.cor,"Vilão")}
+      h=`<div class="qnum">${nn(s.num+1)} · o vilão</div>${pickCard(answers.vilao_foto,VILAO.cor,"Vilão")}
         <p style="margin:0 0 14px">Ninguém escolheu essa pessoa. Ela ficou de lado, viu tudo e guardou cada detalhe.</p>
         <h2>E que nome você escolhe?</h2>
         <div class="opts fade">${nomesPara(VILAO,answers.vilao_foto).map((o,i)=>`<button class="opt" onclick="castSet('vilao_nome',${JSON.stringify(o).replace(/"/g,"&quot;")})"><span class="k">${L(i)}</span>${esc(o)}</button>`).join("")}</div>`;
     } else if(fase===2){
-      h=`<div class="qnum">Pergunta ${s.num+2} · o vilão</div>${pickCard(answers.vilao_foto,VILAO.cor,"Vilão",answers.vilao_nome)}<h2>Qual é o jeito do vilão?</h2>
+      h=`<div class="qnum">${nn(s.num+2)} · o vilão</div>${pickCard(answers.vilao_foto,VILAO.cor,"Vilão",answers.vilao_nome)}<h2>Qual é o jeito do vilão?</h2>
         <div class="opts fade">${VILAO.tipo.map((o,i)=>`<button class="opt" onclick="castSet('vilao_tipo',${JSON.stringify(o).replace(/"/g,"&quot;")})"><span class="k">${L(i)}</span>${esc(o)}</button>`).join("")}</div>`;
     } else {
       h=`<div class="center"><div class="big-emoji">🎉</div><h1>Parabéns!</h1>
@@ -877,7 +878,7 @@ function render(){
     ownNav=true;
   }
   else if(s.type==="elenco"){
-    h=`<div class="qnum">Pergunta ${s.num}</div><h2>Escolha o gênero de cada personagem</h2><p class="sub">Toque numa opção para cada um.</p>
+    h=`<div class="qnum">${nn(s.num)}</div><h2>Escolha o gênero de cada personagem</h2><p class="sub">Toque numa opção para cada um.</p>
       <div class="elenco">${ELENCO.map(e=>{const v=answers["elenco__"+e.k]; const fid=e.from==="vilao"?answers.vilao_foto:e.from?answers[e.from+"_foto"]:null;
         const nm=e.from==="vilao"?answers.vilao_nome:e.from?answers[e.from+"_nome"]:null;
         return `<div class="elrow"><div class="ph"><div class="img">${fotoHTML(fid,!e.from)}</div></div><div><b>${esc(e.nome)}</b>${ok(nm)?` <span style="color:var(--muted);font-size:16px">· ${esc(nm)}</span>`:""}
@@ -886,7 +887,7 @@ function render(){
   }
   else if(s.type==="comodo"){
     const r=s.r, temas=temasDo(s.ri);
-    h=`<div class="qnum">Pergunta ${s.num} · <span class="etapa">ETAPA ${s.etapa} DE 2 · CÔMODO ${s.ri+1} DE 7</span></div>
+    h=`<div class="qnum">${nn(s.num)} · <span class="etapa">ETAPA ${s.etapa} DE 2 · CÔMODO ${s.ri+1} DE 7</span></div>
       <div class="room fade" style="border-color:${r.cor};background:linear-gradient(135deg,${r.cor}22,#111B3D)"><div style="font-size:48px">${r.emoji}</div><div class="rn">${esc(r.nome)}</div><span class="chip" style="background:${r.cor}">${esc(r.s)}</span></div>
       <h2>Qual tema combina com esse cômodo?</h2>
       <div class="row2 fade">${temas.map(t=>`<button class="opt ${answers[s.id]===r.nome+": "+t?"sel":""}" onclick="pickRoom('${s.id}',${JSON.stringify(r.nome+": "+t).replace(/"/g,"&quot;")})">${esc(t)}</button>`).join("")}</div>`;
@@ -907,7 +908,7 @@ function render(){
     ownNav=true;
   }
   else if(s.type==="favorito"){
-    h=`<div class="qnum">Pergunta ${s.num}</div><h2>Qual apresentador você prefere?</h2><p class="sub">Toque na foto. Quer rever? Tem o vídeo de cada um.</p>
+    h=`<div class="qnum">${nn(s.num)}</div><h2>Qual apresentador você prefere?</h2><p class="sub">Toque na foto. Quer rever? Tem o vídeo de cada um.</p>
       <div class="hosts">${HOSTS.map((hs,i)=>`<div class="host ${answers[s.id]===hs.nome?"sel":""}"><button class="ph" style="width:100px" onclick="pickI('${s.id}',HOSTS.map(x=>x.nome),${i})" aria-label="Escolher ${esc(hs.nome)}"><div class="img">${hs.foto?`<img src="${hs.foto}" alt="">`:SIL}</div></button>
         <div><div style="font-weight:800;font-size:22px">${esc(hs.nome)}</div><button class="back" style="color:var(--accent);padding:6px 0" onclick="reverVideo(${i})">▶ rever o vídeo</button></div></div>`).join("")}</div>
       <div id="rever"></div>`;
@@ -915,7 +916,7 @@ function render(){
   else if(s.type==="guardiao"){
     const pers=[...CAST.map(c=>({n:ok(answers[c.id+"_nome"])?answers[c.id+"_nome"]:c.sentido, s:c.sentido, cor:c.cor})),
       {n:ok(answers.vilao_nome)?answers.vilao_nome:"O vilão", s:"Vilão", cor:VILAO.cor},{n:"Lucas", s:"Noção do corpo", cor:"#3fd6d0"}];
-    h=`<div class="center"><div class="big-emoji">🛡️</div><div class="qnum">Pergunta ${s.num}</div><h1>Guardiões dos Sentidos</h1>
+    h=`<div class="center"><div class="big-emoji">🛡️</div><div class="qnum">${nn(s.num)}</div><h1>Guardiões dos Sentidos</h1>
       <p class="sub">As 200 primeiras pessoas que responderem viram Guardiões dos Sentidos e escolhem, em segredo, quem vai vencer o reality.</p></div>
       <h2>Quem você acha que vai vencer?</h2><p class="sub">Seu voto fica em segredo.</p>
       <div class="opts fade">${pers.map((p,i)=>`<button class="opt ${answers[s.id]===p.n?"sel":""}" onclick="setA('${s.id}',${JSON.stringify(p.n).replace(/"/g,"&quot;")})"><span class="k">${L(i)}</span>${esc(p.n)} <span class="chip" style="background:${p.cor};margin-left:8px">${esc(p.s)}</span></button>`).join("")}</div>
@@ -953,7 +954,7 @@ function render(){
   }
   else if(s.type==="f1"){
     const f=s.f, sel=Array.isArray(answers[s.id])?answers[s.id]:[];
-    h = `<div class="qnum">Pergunta ${s.num}</div><div style="margin-bottom:8px"><span class="chip" style="background:${f.cor}">${esc(f.s)}</span></div>
+    h = `<div class="qnum">${nn(s.num)}</div><div style="margin-bottom:8px"><span class="chip" style="background:${f.cor}">${esc(f.s)}</span></div>
       <h2>${esc(f.q)}</h2><p class="sub">Escolha quantos quiser. Sem pressa.</p>
       <div class="chips">${f.o.map((o,i)=>`<button class="opt ${sel.includes(o)?"sel":""}" onclick="toggleF1(${i})">${sel.includes(o)?"✓ ":""}${esc(o)}</button>`).join("")}</div>
       <div class="feed"><h3>Gostou desta parte?</h3>${thumbs(s.id+"_gostou")}</div>${redoBox(s)}`;
@@ -972,9 +973,9 @@ function render(){
     parSubiu=null;
   }
   else if(s.type==="f1page"){
-    h = `<div class="qnum">Perguntas ${s.num} a ${s.num+FASE1.length-1}</div><h2>O que te faz bem?</h2><p class="sub">Escolha quantos quiser. Sem pressa.</p>`;
+    h = `<div class="qnum">Nº ${pad2(s.num)}–${pad2(s.num+FASE1.length-1)} / ${pad2(S.total)}</div><h2>O que te faz bem?</h2><p class="sub">Escolha quantos quiser. Sem pressa.</p>`;
     FASE1.forEach((f,fi)=>{ const k="f1_"+f.id, sel=Array.isArray(answers[k])?answers[k]:[];
-      h += `<div class="f1q"><div class="qnum">Pergunta ${s.num+fi}</div><span class="chip" style="background:${f.cor}">${esc(f.s)}</span>
+      h += `<div class="f1q"><div class="qnum">${nn(s.num+fi)}</div><span class="chip" style="background:${f.cor}">${esc(f.s)}</span>
         <h3>${esc(f.q)}</h3><small>Escolha quantos quiser</small>
         <div class="chips mini">${f.o.map((o,oi)=>`<button class="opt ${sel.includes(o)?"sel":""}" onclick="toggleF1p(${fi},${oi})">${sel.includes(o)?"✓ ":""}${esc(o)}</button>`).join("")}</div></div>`; });
     needNext = true;
@@ -986,7 +987,7 @@ function render(){
       const jogo = `<div id="gw_${g.id}">${!fimv?`<div class="gamebox" id="game_${g.id}"></div><button class="back" onclick="gameDone('${g.id}','pulou')">pular este jogo →</button>`
           :`<div class="done-tag">${fimv==="completou"?"✓ Jogo completo!":"Jogo pulado"}</div>`}</div>`;
       const ref = "";
-      h += `<div class="gsec"><div class="qnum">Pergunta ${s.num+gi}</div><div style="margin-bottom:6px"><span class="chip${pis}" style="--c:${g.cor};background:${g.cor}">${esc(g.s)}</span></div><h2 class="f2h">${esc(g.nome)}</h2>
+      h += `<div class="gsec"><div class="qnum">${nn(s.num+gi)}</div><div style="margin-bottom:6px"><span class="chip${pis}" style="--c:${g.cor};background:${g.cor}">${esc(g.s)}</span></div><h2 class="f2h">${esc(g.nome)}</h2>
         ${ref?`<div class="olfwrap"><div>${jogo}</div>${ref}</div>`:jogo}</div>`; });
     if(allFim){
       h += `<div class="feed"><h3>Quanto você gostou dessa atividade?</h3>${s.gs.map(g=>`<div class="notarow"><div class="gimg" style="border-color:${g.cor};background:${g.cor}22" aria-hidden="true">${g.img}</div>
@@ -996,25 +997,25 @@ function render(){
   }
   else if(s.type==="multi"){
     const sel=Array.isArray(answers[s.id])?answers[s.id]:[];
-    h = `<div class="qnum">Pergunta ${s.num}</div><h2>${esc(s.title)}</h2><p class="sub">${esc(s.sub||"")}</p>
+    h = `<div class="qnum">${nn(s.num)}</div><h2>${esc(s.title)}</h2><p class="sub">${esc(s.sub||"")}</p>
       <div class="chips mini">${s.opts.map((o,i)=>{const on=rascSel(s.id).includes(o);return `<button class="opt ${on?"sel":""}" onclick="rascToggle('${s.id}',S[idx].opts[${i}],false,this)">${on?"✓ ":""}${esc(o)}</button>`;}).join("")}</div>${seguindo(s.id)||'<p class="sub so-dica" style="margin-top:12px">Escolha quantas quiser.</p>'}`;
     needNext = (cur!=="app");
   }
   else if(s.type==="combo"){
     const m=s.mt, sel=Array.isArray(answers[m.id])?answers[m.id]:[];
-    h = `<div class="qnum">Pergunta ${s.num}</div><h2>${esc(m.title)}</h2><p class="sub">${esc(m.sub)}</p>
+    h = `<div class="qnum">${nn(s.num)}</div><h2>${esc(m.title)}</h2><p class="sub">${esc(m.sub)}</p>
       <div class="chips mini">${m.opts.map((o,i)=>`<button class="opt ${sel.includes(o)?"sel":""}" onclick="toggleCombo(${i})">${sel.includes(o)?"✓ ":""}${esc(o)}</button>`).join("")}</div>
-      <div class="qnum" style="margin-top:26px">Pergunta ${s.num+1} · última</div><h2>Quanto tempo você acha que passou?</h2>
+      <div class="qnum" style="margin-top:26px">${nn(s.num+1)} · última</div><h2>Quanto tempo você acha que passou?</h2>
       <p class="sub">Desde que você começou esta pesquisa até agora. Não olhe o relógio!</p>
       <div class="opts">${TEMPOS_APP.map((o,i)=>`<button class="opt ${answers.app_tempo_chute===o?"sel":""}" onclick="setA('app_tempo_chute',TEMPOS_APP[${i}])"><span class="k">${L(i)}</span>${o}</button>`).join("")}</div>`;
     needNext = true;
   }
   else if(s.type==="nota"){
-    h = `<div class="qnum">Pergunta ${s.num}</div><h2>${esc(s.title)}</h2>${s.semSub?"":'<p class="sub">Toque numa nota de 0 a 10.</p>'}${s.ceu?ceuLuz(s.id, answers[s.id], "setCeu"):scale(s.id, answers[s.id], s.legend)}`;
+    h = `<div class="qnum">${nn(s.num)}</div><h2>${esc(s.title)}</h2>${s.semSub?"":'<p class="sub">Toque numa nota de 0 a 10.</p>'}${s.ceu?ceuLuz(s.id, answers[s.id], "setCeu"):scale(s.id, answers[s.id], s.legend)}`;
   }
   else if(s.type==="tempo"){
     const T = cur==="app"?"TEMPOS_APP":"TEMPOS", TT = cur==="app"?TEMPOS_APP:TEMPOS;
-    h = `<div class="qnum">Pergunta ${s.num}</div><h2>Quanto tempo você acha que passou?</h2>
+    h = `<div class="qnum">${nn(s.num)}</div><h2>Quanto tempo você acha que passou?</h2>
       <p class="sub">Desde que você começou esta pesquisa até agora. Não olhe o relógio!</p>
       <div class="opts">${TT.map((o,i)=>`<button class="opt ${answers[s.id]===o?"sel":""}" onclick="pickI('${s.id}',${T},${i})"><span class="k">${L(i)}</span>${o}</button>`).join("")}</div>`;
     if(cur==="app" && !s.semFlow) h += `<div class="flowtxt" style="margin-top:18px">🌀 <b>Montar o app</b><br>O <b>Flow</b> é quando a gente se envolve tanto que nem percebe o tempo passar.<br><br><span style="color:var(--muted);font-size:17px">Quem descobriu isso foi o psicólogo Mihaly Csikszentmihalyi (1934–2021), estudando bailarinos, pintores e jogadores de xadrez. Os jogos do 7entidos foram feitos pra te levar até lá, pelos sete sentidos.</span></div>
@@ -1041,7 +1042,7 @@ function render(){
       <div class="card-dark" style="text-align:left;margin-top:12px"><h3 style="margin:0 0 10px">De 0 a 10, como você está se sentindo agora?</h3>${scale("app_saida", answers.app_saida, null)}</div>
       ${!verGraf?`<button class="btn" style="margin-top:12px" onclick="verGraf=true;rr()">Ver meu gráfico →</button>`:""}</div>
       ${verGraf?`<div class="lado fade">
-        <div class="card-dark"><b style="font-size:20px">O seu gráfico dos sentidos</b><p style="margin:4px 0 10px;color:var(--muted);font-size:15px">As notas que você deu para cada jogo, de 0 a 10.</p>
+        <div class="card-dark"><b style="font-size:20px">O seu gráfico dos sentidos</b><p style="margin:4px 0 10px;color:var(--muted);font-size:16px">As notas que você deu para cada jogo, de 0 a 10.</p>
           <div class="grafico">${FASE2.map(g=>{const v=answers["f2_"+g.id+"_nota"];return `<div class="gbar"><span><i class="dot" style="background:${g.cor}"></i>${esc(g.s)}</span><div class="tr"><i style="width:${typeof v==="number"?v*10:0}%;background:${g.cor}"></i></div><b>${typeof v==="number"?v:"–"}</b></div>`}).join("")}</div></div>
         <div class="card-dark eagora"><b style="font-size:22px">E agora?</b><p style="color:var(--muted);font-size:16px;margin:6px 0 14px">Você quer continuar ou chamar alguém para responder também?</p>
           <div class="stack" style="margin:0"><button class="btn" onclick="next()">Quero continuar →</button>
@@ -1074,7 +1075,7 @@ function render(){
     ownNav=true;
   }
   else if(s.type==="planos"){
-    h = `<div class="qnum">Pergunta ${s.num}</div><h2>${esc(s.title)}</h2><p class="sub">Toque no plano que combina com você.</p>
+    h = `<div class="qnum">${nn(s.num)}</div><h2>${esc(s.title)}</h2><p class="sub">Toque no plano que combina com você.</p>
       <div class="planos">${PLANOS.map(p=>`<div class="plano ${p.dest?"dest":""}"><div class="pn">${esc(p.nome)}</div>
         <div class="pp">${esc(p.preco)}${p.mes?"<small> /mês</small>":""}</div>
         <ul>${p.itens.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>
@@ -1169,7 +1170,7 @@ function render(){
     ownNav=true;
   }
   else {
-    h = `<div class="qnum">Pergunta ${s.num}</div><h2>${esc(s.title)}</h2>` + (s.sub?`<p class="sub">${esc(s.sub)}</p>`:"");
+    h = `<div class="qnum">${nn(s.num)}</div><h2>${esc(s.title)}</h2>` + (s.sub?`<p class="sub">${esc(s.sub)}</p>`:"");
     h += `<div class="opts">`+s.opts.map((o,i)=>`<button class="opt ${answers[s.id]===o?"sel":""}" onclick="pickI('${s.id}',S[idx].opts,${i})"><span class="k">${L(i)}</span><span>${esc(o)}</span></button>`).join("")+`</div>`;
   }
   if(!ownNav){
@@ -1196,7 +1197,7 @@ function parAtivo(s){ return s.itens.find(it=>!isDone(it))||null; }
 /* Fase 1 em 3 grupos de 5 (Gestalt), escolha várias, passa sozinha */
 function f1Grupos(it, ativa, emPar){
   const f=it.f, sel=Array.isArray(answers[it.id])?answers[it.id]:[];
-  return `<div class="f1q"><div class="qnum">Pergunta ${it.num}</div><span class="chip" style="background:${f.cor}">${esc(f.s)}</span>
+  return `<div class="f1q"><div class="qnum">${nn(it.num)}</div><span class="chip" style="background:${f.cor}">${esc(f.s)}</span>
     <h2>${esc(f.q)}</h2><p class="sub">Escolha a que mais combina com você.</p>
     <div class="fotos">${f.o.map((o,oi)=>`<div class="fcard ${sel.includes(o)?"sel":""}" role="button" tabindex="${ativa?0:-1}" style="--fc:${f.cor}" aria-label="${esc(o)}"
        onclick="${ativa?(emPar?`parF1(${it.fi},${oi})`:`f1Solo(${it.fi},${oi})`):""}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}">
@@ -1212,11 +1213,11 @@ function f1Solo(fi,oi){ const k="f1_"+FASE1[fi].id; answers[k]=[FASE1[fi].o[oi]]
 
 function parItem(it, ativa){
   if(it.type==="f1one") return f1Grupos(it, ativa, true);
-  if(it.type==="nota") return `<div class="qnum">Pergunta ${it.num}</div><h2>${esc(it.title)}</h2>${scale(it.id, answers[it.id], it.legend, ativa?"parNota":"void")}`;
-  if(it.opts) return `<div class="qnum">Pergunta ${it.num}</div><h2>${esc(it.title)}</h2>${it.sub?`<p class="sub">${esc(it.sub)}</p>`:""}
+  if(it.type==="nota") return `<div class="qnum">${nn(it.num)}</div><h2>${esc(it.title)}</h2>${scale(it.id, answers[it.id], it.legend, ativa?"parNota":"void")}`;
+  if(it.opts) return `<div class="qnum">${nn(it.num)}</div><h2>${esc(it.title)}</h2>${it.sub?`<p class="sub">${esc(it.sub)}</p>`:""}
     <div class="opts">${it.opts.map((o,i)=>`<button class="opt ${answers[it.id]===o?"sel":""}" ${ativa?`onclick="parOpt(${i})"`:'tabindex="-1"'}><span class="k">${L(i)}</span><span>${esc(o)}</span></button>`).join("")}</div>`;
   const f=it.f, sel=Array.isArray(answers[it.id])?answers[it.id]:[];
-  return `<div class="f1q"><div class="qnum">Pergunta ${it.num}</div><span class="chip" style="background:${f.cor}">${esc(f.s)}</span>
+  return `<div class="f1q"><div class="qnum">${nn(it.num)}</div><span class="chip" style="background:${f.cor}">${esc(f.s)}</span>
     <h2>${esc(f.q)}</h2><p class="sub">Escolha a que mais combina com você.</p>
     <div class="fotos">${f.o.map((o,oi)=>`<div class="fcard ${sel.includes(o)?"sel":""}" role="button" tabindex="${ativa?0:-1}" style="--fc:${f.cor}" aria-label="${esc(o)}"
        onclick="${ativa?`parF1(${it.fi},${oi})`:""}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}">
@@ -1589,7 +1590,7 @@ try{ window.claude && claude.use("downloads").then(d=>{ downloads=d; if(view==="
 function escolhas(){
   document.getElementById("prog").style.display="none";
   stage.innerHTML = `<div class="scene center">
-    <div class="logo" style="margin:20px 0 6px"><i>7</i>ENTIDOS</div><p class="sub">Suas escolhas estão prontas.</p>
+    <div class="logo" style="margin:20px 0 6px"><i>7</i>entidos</div><p class="sub">Suas escolhas estão prontas.</p>
     <div class="stack" style="max-width:420px;margin:18px auto">
       ${downloads?`<button class="btn" onclick="baixarPDF()">Baixar minhas escolhas em PDF</button>`:`<button class="btn" onclick="copiar(this)">Copiar minhas escolhas</button>`}
       <div class="err" id="perr"></div></div>
@@ -1603,7 +1604,7 @@ async function baixarPDF(){
   try{
     const { jsPDF } = window.jspdf; const doc = new jsPDF({unit:"mm",format:"a4"});
     doc.setFillColor(16,14,18); doc.rect(0,0,210,34,"F");
-    doc.setTextColor(245,197,66); doc.setFont("helvetica","bold"); doc.setFontSize(26); doc.text("7ENTIDOS",15,20);
+    doc.setTextColor(245,197,66); doc.setFont("helvetica","bold"); doc.setFontSize(26); doc.text("7entidos",15,20);
     doc.setTextColor(255,255,255); doc.setFontSize(11); doc.text("Minhas escolhas - pesquisa 7entidos",15,28);
     doc.setTextColor(30,30,30); doc.setFont("helvetica","normal"); doc.setFontSize(11);
     let y=46;
@@ -1622,17 +1623,17 @@ if(location.hash==="#app"){ startFlow("app"); } else render();
 <!-- ===== SALA TRANCADA NAS 100 PESSOAS + LISTA DE ESPERA ===== -->
 <style>
 #tranca{position:fixed;inset:0;z-index:9998;display:none;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:28px 20px;text-align:center;overflow:auto;
-background:radial-gradient(ellipse 80% 60% at 50% 40%,#1b2a5c 0%,#0d1636 55%,#060a1c 100%);color:#f6e7b8;font-family:Inter,system-ui,sans-serif}
-#tranca .t-logo{font-family:"Bebas Neue",sans-serif;font-size:clamp(30px,7vw,48px);letter-spacing:3px;background:linear-gradient(180deg,#fff1c2,#f5c542 45%,#b9821c);-webkit-background-clip:text;background-clip:text;color:transparent}
-#tranca .t-tit{font-family:"Bebas Neue",sans-serif;font-size:clamp(36px,9vw,64px);line-height:1;color:#fff6dc;animation:t-pisca 1.6s ease-in-out infinite}
+background:radial-gradient(ellipse 80% 60% at 50% 40%,#1b2a5c 0%,#0d1636 55%,#060a1c 100%);color:#f6e7b8;font-family:Manrope,system-ui,sans-serif}
+#tranca .t-logo{font-family:Fraunces,sans-serif;font-size:clamp(30px,7vw,48px);letter-spacing:3px;background:linear-gradient(180deg,#fff1c2,#f5c542 45%,#b9821c);-webkit-background-clip:text;background-clip:text;color:transparent}
+#tranca .t-tit{font-family:Fraunces,sans-serif;font-size:clamp(36px,9vw,64px);line-height:1;color:#fff6dc;animation:t-pisca 1.6s ease-in-out infinite}
 @keyframes t-pisca{0%,100%{opacity:1}50%{opacity:.45}}
 #tranca p{max-width:460px;margin:0;font-size:19px;color:#e9dcb4}
 #tranca form{width:min(420px,100%);display:flex;flex-direction:column;gap:12px;text-align:left}
 #tranca input[type=text],#tranca input[type=email]{width:100%;padding:14px 16px;border-radius:12px;border:2px solid #f5c542;background:#0b1430;color:#fff;font-size:18px;box-sizing:border-box}
-#tranca label.lg{display:flex;gap:10px;align-items:flex-start;font-size:15px;color:#d9cfae;line-height:1.35}
+#tranca label.lg{display:flex;gap:10px;align-items:flex-start;font-size:16px;color:#d9cfae;line-height:1.35}
 #tranca label.lg input{width:22px;height:22px;flex:none;margin-top:2px;accent-color:#f5c542}
 #tranca button{padding:16px;border:0;border-radius:14px;background:linear-gradient(180deg,#ffe08a,#f5c542);color:#1a1405;font-weight:800;font-size:20px;cursor:pointer}
-#tranca .t-err{color:#ff9a8a;font-size:15px;min-height:18px}
+#tranca .t-err{color:#ff9a8a;font-size:16px;min-height:18px}
 </style>
 <div id="tranca" role="dialog" aria-label="As 100 vagas acabaram">
   <div class="t-logo">A Casa dos 7 Sentidos</div>

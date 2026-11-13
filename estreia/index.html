@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>A Casa dos 7 Sentidos · Capítulo 1</title>
 <meta name="description" content="Assista ao Capítulo 1 de A Casa dos 7 Sentidos. Você decide a vida deles.">
-<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root{--navy:#0B1430;--gold:#F5C542;--txt:#F3EEE3;--mut:#A9B3D1;
 --visao:#f5c542;--audicao:#4aa8ff;--tato:#ff8a3d;--paladar:#ff5a6e;--olfato:#5ccf8a;--equilibrio:#b48cff;--corpo:#3fd6d0}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;color:var(--txt);font-family:Poppins,system-ui,sans-serif;font-size:18px;line-height:1.5;background:var(--navy);overflow-x:hidden;padding-bottom:96px}
+body{margin:0;color:var(--txt);font-family:Manrope,system-ui,sans-serif;font-size:18px;line-height:1.5;background:var(--navy);overflow-x:hidden;padding-bottom:96px}
 /* fundo em camadas: casa da capa + luzes dos 7 sentidos + chão de palco */
 .bg{position:fixed;inset:0;z-index:0;pointer-events:none}
 .bg .casa{position:absolute;inset:-4%;background:url(capa.jpg) center 30%/cover;filter:blur(6px) brightness(.45) saturate(1.2);transform:scale(1.08)}
@@ -32,16 +32,16 @@ body{margin:0;color:var(--txt);font-family:Poppins,system-ui,sans-serif;font-siz
 @keyframes fl{50%{transform:translate3d(5vw,4vh,0) scale(1.1)}}
 main{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:18px 16px 30px}
 /* topo */
-.top{display:flex;justify-content:center;align-items:center;gap:8px;font-weight:800;letter-spacing:.06em;font-size:15px;color:var(--mut)}
+.top{display:flex;justify-content:center;align-items:center;gap:8px;font-weight:800;letter-spacing:.06em;font-size:16px;color:var(--mut)}
 .top b{color:var(--gold)}
-.live{display:inline-flex;align-items:center;gap:6px;background:#d0021b;color:#fff;border-radius:8px;padding:3px 10px;font-size:13px;letter-spacing:.08em}
+.live{display:inline-flex;align-items:center;gap:6px;background:#d0021b;color:#fff;border-radius:8px;padding:3px 10px;font-size:16px;letter-spacing:.08em}
 .live::before{content:"";width:8px;height:8px;border-radius:50%;background:#fff;animation:bl 1.2s infinite}
 @keyframes bl{50%{opacity:.2}}
 /* título dourado com brilho passando */
-h1{position:relative;overflow:hidden;font-family:"Abril Fatface",serif;font-weight:400;text-align:center;color:var(--gold);font-size:clamp(40px,11vw,74px);line-height:.98;margin:12px 0 4px;text-shadow:0 2px 0 #a8751a,0 4px 0 #7a5208,0 6px 0 #4d3305,0 16px 34px rgba(242,193,78,.45)}
+h1{position:relative;overflow:hidden;font-family:Fraunces,serif;font-weight:400;text-align:center;color:var(--gold);font-size:clamp(40px,11vw,74px);line-height:.98;margin:12px 0 4px;text-shadow:0 2px 0 #a8751a,0 4px 0 #7a5208,0 6px 0 #4d3305,0 16px 34px rgba(242,193,78,.45)}
 h1::after{content:"";position:absolute;top:0;bottom:0;width:40%;left:-60%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-20deg);animation:brilho 4.5s ease-in-out infinite}
 @keyframes brilho{0%,60%{left:-60%}100%{left:130%}}
-.cap{text-align:center;font-family:"Abril Fatface",serif;color:var(--gold);letter-spacing:.3em;font-size:18px;margin:0 0 18px}
+.cap{text-align:center;font-family:Fraunces,serif;color:var(--gold);letter-spacing:.3em;font-size:18px;margin:0 0 18px}
 .cap::before,.cap::after{content:"—";margin:0 10px;opacity:.6}
 /* celular flutuando em 3D */
 .palco{perspective:1400px;display:flex;justify-content:center;margin:6px 0 10px}
@@ -55,7 +55,7 @@ h1::after{content:"";position:absolute;top:0;bottom:0;width:40%;left:-60%;backgr
 @keyframes pulsa{50%{transform:translate(-50%,-50%) scale(1.07);box-shadow:0 7px 0 #7a5208,0 0 40px rgba(242,193,78,.8)}}
 /* botão da pesquisa: dourado em relevo 3D pulsando */
 .cta{display:block;width:min(100%,460px);margin:20px auto;text-align:center;text-decoration:none;font-weight:800;font-size:23px;color:#1d1300;border-radius:22px;padding:20px 24px;background:linear-gradient(#ffe08a,#d9981f);box-shadow:0 8px 0 #7a5208,0 18px 34px rgba(0,0,0,.6),inset 0 2px 0 rgba(255,255,255,.6);animation:pulsaC 1.8s ease-in-out infinite}
-.cta small{display:block;font-weight:600;font-size:15px;opacity:.8}
+.cta small{display:block;font-weight:600;font-size:16px;opacity:.8}
 .cta:active{transform:translateY(6px);box-shadow:0 2px 0 #7a5208}
 @keyframes pulsaC{50%{box-shadow:0 8px 0 #7a5208,0 0 46px rgba(242,193,78,.75),inset 0 2px 0 rgba(255,255,255,.6)}}
 .fixo{position:fixed;left:0;right:0;bottom:0;z-index:5;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:linear-gradient(to top,rgba(5,10,31,.96),rgba(5,10,31,.7) 70%,transparent);transform:translateY(120%);transition:transform .4s}
@@ -63,7 +63,7 @@ h1::after{content:"";position:absolute;top:0;bottom:0;width:40%;left:-60%;backgr
 .fixo .cta{margin:0 auto;padding:15px 20px;font-size:20px}
 /* seções */
 .sec{margin:46px 0 0}
-.sec h2{font-family:"Abril Fatface",serif;font-weight:400;color:var(--gold);text-align:center;font-size:clamp(30px,8vw,44px);line-height:1.05;margin:0 0 8px;text-shadow:0 3px 0 #6d4a08,0 10px 24px rgba(0,0,0,.6)}
+.sec h2{font-family:Fraunces,serif;font-weight:400;color:var(--gold);text-align:center;font-size:clamp(30px,8vw,44px);line-height:1.05;margin:0 0 8px;text-shadow:0 3px 0 #6d4a08,0 10px 24px rgba(0,0,0,.6)}
 .sec .lead{text-align:center;color:var(--mut);margin:0 auto 18px;max-width:560px}
 /* mistério da campainha */
 .misterio{position:relative;max-width:560px;margin:0 auto;padding:28px 22px;border-radius:26px;text-align:center;background:linear-gradient(160deg,rgba(255,255,255,.12),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.16);box-shadow:0 30px 60px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.2);backdrop-filter:blur(6px)}
@@ -85,13 +85,13 @@ h1::after{content:"";position:absolute;top:0;bottom:0;width:40%;left:-60%;backgr
 .mor .f,.mor .b{position:absolute;inset:0;border-radius:20px;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:0 18px 34px rgba(0,0,0,.6),0 0 0 2px var(--c),0 0 26px color-mix(in srgb,var(--c) 50%,transparent)}
 .mor .f img{width:100%;height:100%;object-fit:cover;display:block}
 .mor .f .nm{position:absolute;left:0;right:0;bottom:0;padding:26px 10px 10px;background:linear-gradient(transparent,rgba(0,0,0,.85));font-weight:800;font-size:19px}
-.mor .f .nm span{display:block;font-size:13px;font-weight:600;color:var(--c)}
+.mor .f .nm span{display:block;font-size:16px;font-weight:600;color:var(--c)}
 .mor .b{transform:rotateY(180deg);background:linear-gradient(160deg,color-mix(in srgb,var(--c) 35%,#0a0f2c),#0a0f2c 70%);display:flex;flex-direction:column;justify-content:center;padding:16px;text-align:center}
-.mor .b .chip{align-self:center;background:var(--c);color:#0b1030;font-weight:800;font-size:13px;border-radius:99px;padding:3px 12px}
-.mor .b h3{font-family:"Abril Fatface",serif;font-weight:400;font-size:28px;margin:10px 0 4px}
+.mor .b .chip{align-self:center;background:var(--c);color:#0b1030;font-weight:800;font-size:16px;border-radius:99px;padding:3px 12px}
+.mor .b h3{font-family:Fraunces,serif;font-weight:400;font-size:28px;margin:10px 0 4px}
 .mor .b q{font-size:16px;line-height:1.35}
-.mor .b small{display:block;margin-top:10px;color:var(--mut);font-size:12px}
-.dica{text-align:center;color:var(--mut);font-size:15px;margin-top:10px}
+.mor .b small{display:block;margin-top:10px;color:var(--mut);font-size:16px}
+.dica{text-align:center;color:var(--mut);font-size:16px;margin-top:10px}
 /* convite + capa */
 .row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
 .vidro{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:var(--txt);font-weight:600;padding:14px 18px;border-radius:18px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);box-shadow:0 14px 26px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.2);backdrop-filter:blur(6px)}
@@ -104,11 +104,11 @@ h1::after{content:"";position:absolute;top:0;bottom:0;width:40%;left:-60%;backgr
 footer{position:relative;z-index:1;margin-top:56px;padding:26px 16px 30px;text-align:center;border-top:1px solid rgba(255,255,255,.1);background:rgba(5,10,31,.55)}
 .faixa{height:4px;max-width:420px;margin:0 auto 20px;border-radius:4px;background:linear-gradient(90deg,var(--visao),var(--audicao),var(--tato),var(--paladar),var(--olfato),var(--equilibrio),var(--corpo))}
 .redes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;max-width:520px;margin:0 auto}
-.rede{display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:var(--txt);font-size:13px;font-weight:600}
+.rede{display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:var(--txt);font-size:16px;font-weight:600}
 .rede .ic{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);box-shadow:0 12px 22px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.25);backdrop-filter:blur(6px)}
 .rede svg{width:26px;height:26px;fill:#fff}
 .rede small{color:var(--mut);font-weight:400}
-.slogan{margin:22px 0 0;color:var(--mut);font-size:14px}
+.slogan{margin:22px 0 0;color:var(--mut);font-size:16px}
 .slogan b{color:var(--gold)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>

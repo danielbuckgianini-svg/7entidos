@@ -40,7 +40,7 @@
   var temConsent = !!document.querySelector('script[src*="consentimento"]');
 
   var css =
-    '.r7{background:#0B1430;color:#F3EEE3;font:400 13px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:22px 16px 26px;margin:0;border-top:2px solid #f5c542;text-align:center;position:relative;z-index:1;clear:both}' +
+    '.r7{background:#0B1430;color:#F3EEE3;font:400 16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:22px 16px 26px;margin:0;border-top:2px solid #f5c542;text-align:center;position:relative;z-index:1;clear:both}' +
     '.r7 *{box-sizing:border-box}' +
     '.r7-in{max-width:960px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:12px}' +
     '.r7 a{color:#F3EEE3;text-decoration:none}' +
@@ -53,11 +53,11 @@
     '.r7-redes svg{width:19px;height:19px}' +
     '.r7-links{display:flex;gap:6px 16px;justify-content:center;flex-wrap:wrap}' +
     '.r7-links a{text-decoration:underline;text-decoration-color:rgba(245,197,66,.6);text-underline-offset:3px}' +
-    '.r7-ra{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(233,230,242,.35);border-radius:10px;padding:6px 12px;font-size:12px}' +
+    '.r7-ra{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(233,230,242,.35);border-radius:10px;padding:6px 12px;font-size:16px}' +
     '.r7-ra b{color:#f5c542}' +
-    '.r7-emp{color:#A9B3D1;font-size:12px;margin:0}' +
+    '.r7-emp{color:#A9B3D1;font-size:16px;margin:0}' +
     '.r7-emp b{color:#f5c542;font-weight:700}' +
-    '@media (max-width:600px){.r7{padding:16px 12px 20px;font-size:12px}.r7-in{gap:9px}.r7-wa{padding:7px 13px;min-height:36px;font-size:12.5px}.r7-redes a{width:34px;height:34px}.r7-redes svg{width:16px;height:16px}.r7-emp{font-size:11px}}';
+    '@media (max-width:600px){.r7{padding:16px 12px 20px;font-size:16px}.r7-in{gap:9px}.r7-wa{padding:7px 13px;min-height:36px;font-size:16px}.r7-redes a{width:34px;height:34px}.r7-redes svg{width:16px;height:16px}.r7-emp{font-size:16px}}';
 
   var html =
     '<div class="r7-in">' +

@@ -40,7 +40,7 @@
       '<button data-a="lista" title="Ver o que já marquei">📋 '+n+'</button></div>';
     if(aberto==="rev"){
       var sel=(v&&v.rev)||[];
-      h+='<div class="box"><p>'+tela.nome+': o que muda?</p><div class="ch">'+REV.map(function(r){return '<button class="'+(sel.indexOf(r)>=0?"sel":"")+'" data-r="'+r+'">'+r+'</button>';}).join("")+'</div><p style="font-weight:400;font-size:13px;color:#cfc8d8">Fica anotado. Depois é só copiar a lista e me mandar.</p><button class="min" data-a="fecha">fechar</button></div>';
+      h+='<div class="box"><p>'+tela.nome+': o que muda?</p><div class="ch">'+REV.map(function(r){return '<button class="'+(sel.indexOf(r)>=0?"sel":"")+'" data-r="'+r+'">'+r+'</button>';}).join("")+'</div><p style="font-weight:400;font-size:16px;color:#cfc8d8">Fica anotado. Depois é só copiar a lista e me mandar.</p><button class="min" data-a="fecha">fechar</button></div>';
     } else if(aberto==="lista"){
       h+='<div class="box"><p>O que você já marcou ('+n+')</p><ul>'+(n?Object.keys(V).map(function(k){var x=V[k];return "<li>"+x.nome+": "+(x.s==="validado"?"✓ validado":"✎ revisar ("+(x.rev.join(", ")||"sem detalhe")+")")+"</li>";}).join(""):"<li>nada ainda</li>")+'</ul><div class="ch"><button class="v" data-a="copia">Copiar para me mandar</button><button class="min" data-a="fecha">fechar</button></div></div>';
     }

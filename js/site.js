@@ -1,4 +1,4 @@
-/* 7ENTIDOS · comportamento do site (sem dependências externas) */
+/* 7entidos · comportamento do site (sem dependências externas) */
 (function () {
   var S = window.SITE || {};
   var esc = function (t) { return String(t || "").replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };

@@ -1,4 +1,4 @@
-/* 7ENTIDOS · aviso de consentimento das estatísticas (Google Analytics e Metricool)
+/* 7entidos · aviso de consentimento das estatísticas (Google Analytics e Metricool)
    Regra: nada do Google é carregado antes de a pessoa tocar em "Aceitar".
    A escolha fica guardada só neste navegador. Para mudar de ideia:
    link "Preferências de estatísticas" no rodapé. */

@@ -1,5 +1,5 @@
 /* =====================================================================
-   7ENTIDOS · CONTEÚDO EDITÁVEL DO SITE
+   7entidos · CONTEÚDO EDITÁVEL DO SITE
    Este é o arquivo para trocar fotos e ligar/desligar recursos.
    Os textos ficam direto no index.html, cada um marcado com um
    comentário <!-- TEXTO: ... --> para achar fácil.
