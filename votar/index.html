@@ -473,13 +473,24 @@ $("confirmar").onclick=function(){
   if(gosto<0||longe<0||!humano||gosto===longe)return;
   var st=estado();if(st==="antes"){$("msg").textContent="A votação abre hoje às 20h. Volte e confirme! 💛";return}if(st!=="aberta"){aplicar();return}
   if(jaVotouHoje()){mostrar("avisoJaVotou");return}
-  var g=MORADORES[gosto],l=MORADORES[longe];
-  registrar(g,l);ultimoVoto={g:g,l:l};
+  if(enviando)return;
+  var g=MORADORES[gosto],l=MORADORES[longe],bt=$("confirmar");
+  /* Só mostra "voto guardado" (e só trava o dia) DEPOIS que a planilha confirmar que gravou. */
+  enviando=true;bt.disabled=true;bt.textContent="Guardando seu voto…";$("msg").textContent="";
+  registrar(g,l).then(function(ok){
+    enviando=false;
+    if(!ok){bt.disabled=false;bt.textContent="Confirmar meu voto";$("msg").textContent="Não conseguimos guardar seu voto agora. Confira a internet e toque de novo.";return}
+    votoGuardado(g,l);
+  });
+};
+var enviando=false;
+function votoGuardado(g,l){
+  ultimoVoto={g:g,l:l};
   $("pRotG").firstChild.nodeValue=peso===2?"💛 Gosto muito":"❤️ Mais gosto";$("pGosto").textContent=g.nome;$("pLonge").textContent=l.nome;
   $("pFotoG").src=FOTOS+g.foto;$("pFotoG").alt=g.nome;$("pFotoL").src=FOTOS+l.foto;$("pFotoL").alt=l.nome;
   fazerStory(g,l);
   mostrar("avisoPronto");$("avisoPronto").scrollIntoView({block:"start"});festa("Voto guardado! 💛");
-};
+}
 function estado(){
   if(window.VOTAR_PREVIA)return "aberta";
   if(!CFG||CFG.aberta===false)return "fim";
@@ -489,17 +500,23 @@ function estado(){
   return "aberta";
 }
 function registrar(g,l){
-  guarda(chaveDia(),hojeBR());
+  /* Devolve uma promessa: true só quando o robô da planilha responde {"ok":true}. */
   var url=window.VOTAR_URL_TESTE||window.PESQUISA_URL||"";
-  if(!url)return; /* prévia ou ?teste: não grava nada */
+  if(!url){guarda(chaveDia(),hojeBR());return Promise.resolve(true)} /* prévia ou ?teste: não grava nada na planilha */
   var cod=(window.VOTAR_PREFIXO||"")+codigoAparelho();
   var voto={data:dataBR(),hora:horaBR(),mais_gosto:g.nome,peso_gosto:peso,quero_ver_longe:l.nome,aparelho:cod,semana:CFG.semana};
   if(window.VOTAR_PREFIXO)voto.teste="TESTE do Claude - pode apagar";
-  /* Mesmo robô da pesquisa. Cai na aba "Reality · Respostas" com "votar" na coluna Pesquisa.
-     parcial:true para NÃO contar nas 100 vagas da pesquisa. A coluna "Campeã" mostra o voto resumido. */
-  try{fetch(url,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},
-    body:JSON.stringify({pesquisa:"votar",pessoa:cod,parcial:true,
-      campea:(peso===2?"💛 "+g.nome+" (gosto muito, vale 2)":"❤️ "+g.nome)+" · 👋 "+l.nome,respostas:voto})}).catch(function(){})}catch(e){}
+  /* Mesmo robô da pesquisa. Cai na aba "Reality · Respostas" com "votar" na coluna Pesquisa
+     (é dali que o "🔒 Votação · Painel" soma). parcial:true para NÃO contar nas 100 vagas da pesquisa. */
+  var corpo=JSON.stringify({pesquisa:"votar",pessoa:cod,parcial:true,
+      campea:(peso===2?"💛 "+g.nome+" (gosto muito, vale 2)":"❤️ "+g.nome)+" · 👋 "+l.nome,respostas:voto});
+  function tenta(){
+    return fetch(url,{method:"POST",headers:{"Content-Type":"text/plain"},body:corpo})
+      .then(function(r){return r.text()}).then(function(t){var j={};try{j=JSON.parse(t)}catch(e){}return !!(j&&j.ok)});
+  }
+  return tenta().catch(function(){return new Promise(function(ok){setTimeout(ok,1500)}).then(tenta)})
+    .then(function(ok){if(ok)guarda(chaveDia(),hojeBR());return ok})
+    .catch(function(){return false});
 }
 function aplicar(){
   if(CFG.subtitulo)$("sub").textContent=CFG.subtitulo;
