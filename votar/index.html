@@ -100,6 +100,11 @@ h1 span{display:block;color:var(--marca-amarelo)}
 @keyframes pisca2{50%{box-shadow:0 0 0 6px rgba(245,197,66,.25)}}
 .confirmar:disabled{opacity:.4;animation:none;cursor:not-allowed}
 .msg{min-height:0;font-size:15px;color:#ffb3c1;margin-top:6px;text-align:center}
+.dica{min-height:0;margin:8px 0 0;text-align:center;font-weight:700;font-size:16px;color:var(--marca-amarelo)}
+.dica:empty{display:none}
+.pv{background:var(--marca-caixa,#111b3d);border:1px solid rgba(233,196,106,.45);border-radius:24px;padding:26px 20px;display:grid;gap:12px}
+.pv-tit{margin:0;font-family:"Playfair Display",Georgia,serif;font-size:32px;color:var(--marca-amarelo)}
+.pv-perg{margin:0 0 6px;font-size:19px;line-height:1.35;color:var(--marca-texto)}
 .armadilha{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
 /* avisos */
 .aviso{display:none;margin-top:26px;text-align:center;background:var(--marca-caixa);border:1px solid rgba(169,179,209,.25);border-radius:22px;padding:28px 18px}
@@ -359,13 +364,22 @@ body.glam .resumo div{background:rgba(255,255,255,.05);border-color:rgba(233,196
   </div>
 </div>
 
+<div class="janela" id="posVoto" role="dialog" aria-modal="true" aria-labelledby="pvTit">
+  <div class="dentro pv">
+    <p class="pv-tit" id="pvTit">Voto registrado! 💛</p>
+    <p class="pv-perg">Quer participar da nossa pesquisa sobre boas sensações?</p>
+    <a class="botao amarelo" href="/pesquisa" style="width:100%">Quero participar</a>
+    <button type="button" class="botao contorno" id="pvNao" style="width:100%">Agora não</button>
+  </div>
+</div>
+
 <div class="barra" id="barra">
   <div class="dentro">
     <div class="resumo">
       <div>❤️ Mais gosto<b id="rGosto">—</b></div>
       <div>👋 Quero ver longe<b id="rLonge">—</b></div>
     </div>
-    <button type="button" class="humano" id="humano"><span class="caixa" id="caixa"></span>Sou humano</button>
+    <p class="dica" id="dica" role="status"></p>
     <input class="armadilha" id="armadilha" tabindex="-1" autocomplete="off" aria-hidden="true">
     <button type="button" class="confirmar" id="confirmar" disabled>Confirmar meu voto</button>
     <p class="msg" id="msg" role="status"></p>
@@ -415,19 +429,21 @@ function montar(){
     else h+='<div class="botoes"><button type="button" class="bt gosto" id="g'+i+'">❤️ Mais gosto</button>';
     if(!semLonge(m))h+='<button type="button" class="bt longe" id="l'+i+'">👋 Quero ver longe</button>';
     h+='</div></div>';c.innerHTML=h;l.appendChild(c);
-    $("g"+i).onclick=function(){escolher("gosto",i,1)};
-    if($("m"+i))$("m"+i).onclick=function(){escolher("gosto",i,2)};
+    $("g"+i).onclick=function(ev){escolher("gosto",i,1,ev)};
+    if($("m"+i))$("m"+i).onclick=function(ev){escolher("gosto",i,2,ev)};
     $("q"+i).onclick=function(){abrirQuadro(m)};
-    if($("l"+i))$("l"+i).onclick=function(){escolher("longe",i)};
+    if($("l"+i))$("l"+i).onclick=function(ev){escolher("longe",i,0,ev)};
   });
   pintar();
 }
-function escolher(tipo,i,p){
+function escolher(tipo,i,p,ev){
+  if(enviando||document.body.classList.contains("votou"))return;
   $("msg").textContent="";
   if(tipo==="gosto"){if(i===longe){$("msg").textContent="Não pode ser a mesma pessoa nos dois.";return}if(gosto===i&&peso===(p||1)){gosto=-1;peso=1}else{gosto=i;peso=p||1}}
   else{if(i===gosto){$("msg").textContent="Não pode ser a mesma pessoa nos dois.";return}longe=(longe===i?-1:i)}
   pintar();
   var cc=$("c"+i);if(cc){cc.classList.remove("click");void cc.offsetWidth;cc.classList.add("click")}
+  if(gosto>=0&&longe>=0)votarAgora(ev);
 }
 (function(){var cs=["#f5c542","#4aa8ff","#ff8a3d","#5ccf8a","#ff5a6e","#b48cff","#3fd6d0"],h="";for(var k=0;k<7;k++){var a=-Math.PI/2+k*2*Math.PI/7;h+='<i style="left:'+(50+50*Math.cos(a))+'%;top:'+(50+50*Math.sin(a))+'%;background:'+cs[k]+';box-shadow:0 0 12px '+cs[k]+';animation-delay:'+(k*.3)+'s"></i>'}if($("anel"))$("anel").innerHTML=h})();
 (function(){var f=$("flashes"),h="";for(var k=0;k<16;k++){h+='<i style="left:'+(Math.random()*100)+'%;top:'+(Math.random()*100)+'%;animation-delay:'+(Math.random()*7).toFixed(2)+'s;animation-duration:'+(5+Math.random()*5).toFixed(2)+'s;transform:scale('+(.5+Math.random()*.9).toFixed(2)+')"></i>'}f.innerHTML=h})();
@@ -435,7 +451,7 @@ function festa(texto){
   if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)return;
   var f=document.createElement("div");f.className="festa";
   for(var k=0;k<46;k++){var c=document.createElement("i");c.style.left=(Math.random()*100)+"%";c.style.animationDelay=(Math.random()*.6)+"s";c.style.background=Math.random()<.7?"#f5c542":"#fff3c4";f.appendChild(c)}
-  var v=document.createElement("div");v.className="viva";v.textContent=texto;f.appendChild(v);
+  if(texto){var v=document.createElement("div");v.className="viva";v.textContent=texto;f.appendChild(v)}
   document.body.appendChild(f);setTimeout(function(){f.remove()},2600);
 }
 function pintar(){
@@ -456,41 +472,44 @@ function pintar(){
   var sel=gosto>=0?MORADORES[gosto]:(longe>=0?MORADORES[longe]:null);
   document.body.classList.toggle("escolheu",!!sel);if(sel)document.body.style.setProperty("--sel",sel.cor);
   var pronto=gosto>=0&&longe>=0;
-  $("humano").classList.toggle("mostra",pronto);
-  $("confirmar").style.display=pronto?"block":"none";
-  var cedo=CFG&&estado()==="antes";
-  $("confirmar").disabled=cedo||!(pronto&&humano);
-  $("confirmar").textContent=cedo?"A votação abre às 20h":"Confirmar meu voto";
+  /* Sem botão de confirmar: o voto conta assim que as duas escolhas estão feitas.
+     O botão só aparece como "Tentar de novo" se a internet falhar. */
+  $("confirmar").style.display=falhou?"block":"none";$("confirmar").disabled=enviando;$("confirmar").textContent="Tentar de novo";
+  if(!enviando&&!falhou&&!document.body.classList.contains("votou")&&!$("msg").textContent&&(gosto>=0)!==(longe>=0))
+    $("dica").textContent=gosto>=0?"Agora escolha 1 👋. O voto conta na hora.":"Agora escolha 1 ❤️. O voto conta na hora.";
+  else $("dica").textContent="";
+  if(enviando)[].forEach.call(document.querySelectorAll("#lista .bt"),function(b){b.disabled=true});
   if(document.body.classList.contains("votou"))[].forEach.call(document.querySelectorAll("#lista .bt"),function(b){b.disabled=true});
 }
-$("humano").onclick=function(ev){
-  /* "Sou humano": precisa ser um toque de verdade (não um clique de robô),
-     a pessoa precisa ter ficado alguns segundos na página e o campo escondido precisa estar vazio. */
-  if(!ev.isTrusted||Date.now()-abriuEm<3000||$("armadilha").value){$("msg").textContent="Espere um instante e toque de novo.";return}
-  humano=true;$("humano").classList.add("ok");$("caixa").textContent="✓";$("msg").textContent="";pintar();
-};
-$("confirmar").onclick=function(){
-  if(gosto<0||longe<0||!humano||gosto===longe)return;
-  var st=estado();if(st==="antes"){$("msg").textContent="A votação abre hoje às 20h. Volte e confirme! 💛";return}if(st!=="aberta"){aplicar();return}
+function votarAgora(ev){
+  var st=estado();if(st==="antes"){$("msg").textContent="A votação ainda não abriu. Volte mais tarde! 💛";return}if(st!=="aberta"){aplicar();return}
   if(jaVotouHoje()){mostrar("avisoJaVotou");return}
-  if(enviando)return;
-  var g=MORADORES[gosto],l=MORADORES[longe],bt=$("confirmar");
-  /* Só mostra "voto guardado" (e só trava o dia) DEPOIS que a planilha confirmar que gravou. */
-  enviando=true;bt.disabled=true;bt.textContent="Guardando seu voto…";$("msg").textContent="";
-  registrar(g,l).then(function(ok){
-    enviando=false;
-    if(!ok){bt.disabled=false;bt.textContent="Confirmar meu voto";$("msg").textContent="Não conseguimos guardar seu voto agora. Confira a internet e toque de novo.";return}
-    votoGuardado(g,l);
-  });
-};
-var enviando=false;
+  if(enviando||gosto<0||longe<0||gosto===longe)return;
+  /* Proteção invisível contra robôs: precisa ser um toque de verdade e o campo escondido precisa estar vazio. */
+  if(!ev||!ev.isTrusted||$("armadilha").value)return;
+  var g=MORADORES[gosto],l=MORADORES[longe];
+  enviando=true;falhou=false;$("msg").textContent="Registrando seu voto…";pintar();
+  /* E a pessoa precisa ter ficado alguns segundos na página (se votar rápido demais, a página só espera um pouco). */
+  var espera=Math.max(0,3000-(Date.now()-abriuEm));
+  setTimeout(function(){
+    registrar(g,l).then(function(ok){
+      enviando=false;
+      if(!ok){falhou=true;$("msg").textContent="Não conseguimos registrar seu voto. Confira a internet e toque em Tentar de novo.";pintar();return}
+      $("msg").textContent="";votoGuardado(g,l);
+    });
+  },espera);
+}
+$("confirmar").onclick=function(ev){falhou=false;votarAgora(ev)};
+var enviando=false,falhou=false;
 function votoGuardado(g,l){
   ultimoVoto={g:g,l:l};
   $("pRotG").firstChild.nodeValue=peso===2?"💛 Gosto muito":"❤️ Mais gosto";$("pGosto").textContent=g.nome;$("pLonge").textContent=l.nome;
   $("pFotoG").src=FOTOS+g.foto;$("pFotoG").alt=g.nome;$("pFotoL").src=FOTOS+l.foto;$("pFotoL").alt=l.nome;
   fazerStory(g,l);
-  mostrar("avisoPronto");$("avisoPronto").scrollIntoView({block:"start"});festa("Voto registrado! 💛");
+  mostrar("avisoPronto");festa("");
+  $("posVoto").classList.add("on");
 }
+$("pvNao").onclick=function(){$("posVoto").classList.remove("on");$("avisoPronto").scrollIntoView({block:"start"})};
 function estado(){
   if(window.VOTAR_PREVIA)return "aberta";
   if(!CFG||CFG.aberta===false)return "fim";
