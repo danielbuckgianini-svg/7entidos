@@ -195,8 +195,10 @@ h1.ouro{margin:4px 0 8px;font-size:clamp(26px,7.4vw,38px);line-height:1.08;backg
 h1.ouro span{color:transparent;font-size:.72em;margin-top:2px}
 @keyframes brilhoOuro{to{background-position:-220% 0}}
 .tapete .sub{font-size:14px}
-.abre{display:none;margin:8px auto 0;max-width:420px;padding:7px 12px;font-size:16px!important;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(233,196,106,.5);font-size:17px}
-.abre.on{display:block}
+.linha{font-size:16px;color:var(--marca-apoio);margin-top:2px}
+.abre{display:none!important}.abre.on{display:inline!important;color:#f6dfa0;font-weight:700}
+.xabre{display:none;margin:8px auto 0;max-width:420px;padding:7px 12px;font-size:16px!important;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(233,196,106,.5);font-size:17px}
+
 .tapete .regras{margin-top:8px;font-size:16px}
 .tapete .sub{margin-top:0;padding:4px 12px}
 .lista{margin-top:16px!important}
@@ -210,6 +212,9 @@ h1.ouro span{color:transparent;font-size:.72em;margin-top:2px}
 .cartao.click .foto:after{animation:clique .55s ease-out}
 @keyframes clique{0%{opacity:0}15%{opacity:1}100%{opacity:0}}
 .depois{margin-top:26px}
+.depois .gancho{text-align:center;margin:0 0 10px}
+.depois .sub{display:flex;justify-content:center;margin:0 auto 12px;width:max-content;max-width:100%}
+.depois .regras{text-align:center;margin:0 0 14px}
 .confirmar:disabled{opacity:.55}
 body.glam .barra{background:rgba(14,8,20,.96);border-top:1px solid rgba(233,196,106,.35)}
 body.glam .resumo div{background:rgba(255,255,255,.05);border-color:rgba(233,196,106,.25)}
@@ -227,11 +232,8 @@ body.glam .resumo div{background:rgba(255,255,255,.05);border-color:rgba(233,196
 
   <section class="tapete">
     <p class="aovivo"><span></span>Ao vivo do tapete vermelho</p>
-    <p class="gancho">Menina, a festa pegou fogo! 🔥</p>
-    <h1 class="ouro">Quem você mais gosta? <span>E quem você quer ver longe?</span></h1>
-    <p class="sub" id="sub">Semana 2 · votação até sexta, 20/11, às 23h59</p>
-    <p class="abre" id="abreFaixa">📸 A votação abre <b>hoje, às 20h</b>. Já vá escolhendo os seus!</p>
-    <p class="regras">Toque em <b>1 ❤️</b> e <b>1 👋</b> (pessoas diferentes). <b>Um voto por dia.</b></p>
+    <h1 class="ouro">Quem você mais gosta?</h1>
+    <p class="linha"><span class="abre" id="abreFaixa">Abre hoje às 20h · </span>1 voto por dia</p>
   </section>
 
   <div class="lista" id="lista"></div>
@@ -242,6 +244,9 @@ body.glam .resumo div{background:rgba(255,255,255,.05);border-color:rgba(233,196
       <div class="termo-barra"><i></i></div>
       <p class="termo-frase" id="termoFrase">Os votos estão chegando…</p>
     </div>
+    <p class="gancho">Menina, a festa pegou fogo! 🔥</p>
+    <p class="sub" id="sub">Semana 2 · votação até sexta, 20/11, às 23h59</p>
+    <p class="regras">Toque em <b>1 ❤️</b> (quem você mais gosta) e <b>1 👋</b> (quem você quer ver longe). Não pode ser a mesma pessoa.</p>
     <div class="jogo">
       <p><b>❤️ O mais querido ganha uma estrela ⭐.</b> Na final, quem tiver mais estrelas vira o rosto do app 7entidos.</p>
       <p><b>👋 O mais votado para longe…</b> você descobre no domingo.</p>
