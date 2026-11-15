@@ -439,7 +439,7 @@ function fraseFlow(){
 }
 function revela(){
   const seg=resp.tempo_real_seg||Math.round((Date.now()-(inicio||Date.now()))/1000), frase=fraseFlow(); resp.flow=frase;
-  const usaMin=seg>=120, alvo=usaMin?Math.round(seg/60):seg, unid=usaMin?"minutos":"segundos";
+  const usaMin=false, alvo=seg, unid=seg===1?"segundo":"segundos";
   mostra(`<div class="rot">Na verdade, se passaram</div><div class="grande" id="num">0</div><div class="unid">${unid}</div>
     <p class="pisca">${frase}</p><button class="btn" onclick="click();avanca()">Ver meu gráfico</button>
     <p class="miud">Flow é quando a gente se envolve tanto que nem percebe o tempo passar (Csikszentmihalyi).</p>`, c=>{
