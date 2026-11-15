@@ -16,7 +16,7 @@
 <link rel="icon" href="/reality/votacao/logo-7entidos-simbolo.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Manrope:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Fraunces:opsz,wght@9..144,400..700&family=Manrope:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/marca.css">
 <script src="/pesquisa/config.js"></script>
 <style>
@@ -24,13 +24,13 @@
    Semana, datas e quem não pode ir para "longe" ficam em semana.json. */
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
-body{font-family:Manrope,system-ui,sans-serif;background:radial-gradient(120% 60% at 50% 0%,#1b2a5c 0%,var(--marca-fundo) 60%);background-color:var(--marca-fundo);color:var(--marca-texto);min-height:100vh;font-size:20px;line-height:1.45}
+body{font-family:Manrope,system-ui,sans-serif;background:radial-gradient(70% 34% at 50% 0%,rgba(245,197,66,.22),transparent 72%),radial-gradient(120% 60% at 50% 0%,#1b2a5c 0%,var(--marca-fundo) 60%);background-color:var(--marca-fundo);color:var(--marca-texto);min-height:100vh;font-size:20px;line-height:1.45}
 main{max-width:600px;margin:0 auto;padding:20px 16px 150px}
 .topo{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .marca{display:flex;align-items:center;gap:8px;font-weight:800;font-size:17px;color:var(--marca-texto);text-decoration:none}
 .marca img{width:30px;height:30px}
-.reality{font-family:Fraunces,serif;font-size:16px;color:var(--marca-amarelo);text-align:right;line-height:1.1}
-h1{font-family:Fraunces,serif;font-weight:600;font-size:clamp(30px,8.4vw,42px);line-height:1.1;margin:26px 0 10px}
+.reality{font-family:"Playfair Display",Georgia,serif;font-size:16px;color:var(--marca-amarelo);text-align:right;line-height:1.1}
+h1{font-family:"Playfair Display",Georgia,serif;font-weight:600;font-size:clamp(30px,8.4vw,42px);line-height:1.1;margin:26px 0 10px}
 h1 span{display:block;color:var(--marca-amarelo)}
 .sub{display:inline-flex;align-items:center;gap:8px;font-family:"Space Mono",monospace;font-size:16px;color:var(--marca-texto);background:rgba(245,197,66,.12);border:1px solid rgba(245,197,66,.35);border-radius:999px;padding:6px 14px}
 .sub:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--marca-amarelo);animation:pisca 1.4s infinite}
@@ -43,7 +43,7 @@ h1 span{display:block;color:var(--marca-amarelo)}
 .termo-vivo:before{content:"";width:9px;height:9px;border-radius:50%;background:#ff6b8a;animation:pisca 1.2s infinite}
 .termo-barra{height:14px;border-radius:999px;margin:10px 0 12px;overflow:hidden;background:linear-gradient(90deg,#4aa8ff,#b48cff,#ff5a6e,#ff8a3d,#f5c542);background-size:300% 100%;animation:calor 6s ease-in-out infinite;box-shadow:0 0 18px rgba(255,138,61,.35)}
 @keyframes calor{50%{background-position:100% 0}}
-.termo-frase{font-family:Fraunces,serif;font-weight:600;font-size:26px;line-height:1.2;color:var(--marca-texto);animation:pisca3 2.4s infinite}
+.termo-frase{font-family:"Playfair Display",Georgia,serif;font-weight:600;font-size:26px;line-height:1.2;color:var(--marca-texto);animation:pisca3 2.4s infinite}
 @keyframes pisca3{50%{opacity:.6}}
 .jogo{margin-top:14px;padding:16px 18px;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid var(--marca-linha);font-size:18px;color:var(--marca-apoio)}
 .jogo p+p{margin-top:8px}
@@ -71,7 +71,7 @@ h1 span{display:block;color:var(--marca-amarelo)}
 .janela .jp{font-family:"Space Mono",monospace;color:var(--marca-amarelo);margin:16px 0 4px;font-size:16px}
 .janela .jf{font-family:"Playfair Display",Georgia,serif;font-style:italic;font-size:25px;line-height:1.25;color:var(--marca-texto)}
 .janela .jn{color:var(--marca-apoio);font-size:14px;margin-top:8px}
-.nome{font-family:Fraunces,serif;font-weight:600;font-size:30px;line-height:1.1}
+.nome{font-family:"Playfair Display",Georgia,serif;font-weight:600;font-size:30px;line-height:1.1}
 .sentido{font-family:"Space Mono",monospace;font-size:17px;color:var(--cor);font-weight:700}
 .selo{display:inline-flex;align-items:center;gap:6px;margin-top:6px;align-self:flex-start;font-size:15px;font-weight:800;color:#3a2a00;background:linear-gradient(135deg,#ffe28a,#f5c542 45%,#c9961c);border-radius:999px;padding:4px 10px;box-shadow:0 0 14px rgba(245,197,66,.55);animation:brilho 2.4s infinite}
 @keyframes brilho{50%{box-shadow:0 0 4px rgba(245,197,66,.2)}}
@@ -102,7 +102,7 @@ h1 span{display:block;color:var(--marca-amarelo)}
 /* avisos */
 .aviso{display:none;margin-top:26px;text-align:center;background:var(--marca-caixa);border:1px solid rgba(169,179,209,.25);border-radius:22px;padding:28px 18px}
 .aviso.on{display:block}
-.aviso h2{font-family:Fraunces,serif;font-weight:600;font-size:30px;line-height:1.15;color:var(--marca-amarelo);margin-bottom:10px}
+.aviso h2{font-family:"Playfair Display",Georgia,serif;font-weight:600;font-size:30px;line-height:1.15;color:var(--marca-amarelo);margin-bottom:10px}
 .aviso p{color:var(--marca-apoio)}
 .aviso .par{display:flex;gap:10px;margin:16px 0 4px}
 .aviso .par div{flex:1;border-radius:14px;padding:10px;background:rgba(255,255,255,.05);font-size:15px;color:var(--marca-apoio)}
@@ -118,7 +118,7 @@ body.fechado main{padding-bottom:48px}
 .dupla figure+figure{border-color:#9fb4ff}
 .dupla img{width:100%;aspect-ratio:4/5;object-fit:cover;object-position:top;display:block}
 .dupla figcaption{padding:8px;font-size:14px;color:var(--marca-apoio)}
-.dupla b{display:block;font-family:Fraunces,serif;font-size:22px;color:var(--marca-texto)}
+.dupla b{display:block;font-family:"Playfair Display",Georgia,serif;font-size:22px;color:var(--marca-texto)}
 .bloco{margin-top:22px;padding-top:18px;border-top:1px solid var(--marca-linha)}
 .titulo-bloco{font-family:"Space Mono",monospace;font-size:14px;color:var(--marca-amarelo)!important;margin-bottom:10px}
 .story{display:block;width:62%;max-width:260px;margin:0 auto;border-radius:16px;box-shadow:0 14px 30px rgba(0,0,0,.4);aspect-ratio:9/16;background:#0d1533}
@@ -130,7 +130,7 @@ body.fechado main{padding-bottom:48px}
 .botao.contorno{width:100%}
 .msg2{font-size:15px;margin-top:8px;color:#5ccf8a!important}
 .t2{margin-top:22px;padding:20px 16px;border-radius:22px;text-align:left;background:linear-gradient(160deg,rgba(245,197,66,.18),rgba(180,140,255,.12) 60%,rgba(17,27,61,.9));border:2px solid var(--marca-amarelo);box-shadow:0 0 28px rgba(245,197,66,.25)}
-.t2-tit{font-family:Fraunces,serif;font-weight:600;font-size:25px;line-height:1.2;color:var(--marca-amarelo)!important;margin-bottom:10px}
+.t2-tit{font-family:"Playfair Display",Georgia,serif;font-weight:600;font-size:25px;line-height:1.2;color:var(--marca-amarelo)!important;margin-bottom:10px}
 .t2-form,.t2-ok{display:none}
 .t2-form.on,.t2-ok.on{display:block}
 .t2-form label{display:block;margin-top:14px;color:var(--marca-texto);font-weight:700;font-size:17px}
@@ -145,6 +145,26 @@ body.fechado main{padding-bottom:48px}
 .rodape{margin-top:28px;text-align:center;font-size:15px;color:var(--marca-apoio)}
 .rodape a{color:var(--marca-amarelo)}
 .teste{position:fixed;top:0;left:0;right:0;z-index:9;text-align:center;font-size:14px;font-weight:800;background:#ff5a6e;color:#fff;padding:4px}
+/* Noite de Gala (Bloco 6, 15/11): mandala + anel de 7 luzes, luz dourada, brilho na cor do sentido */
+.abertura{text-align:center;margin:22px 0 4px}
+.mandala{position:relative;display:inline-block;width:112px;height:112px}
+.mandala img{width:100%;height:100%;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px rgba(245,197,66,.85),0 0 46px rgba(245,197,66,.45);transition:box-shadow .4s}
+.anel{position:absolute;inset:-12px;pointer-events:none}
+.anel i{position:absolute;width:11px;height:11px;margin:-5.5px 0 0 -5.5px;border-radius:50%;animation:luz 2.6s ease-in-out infinite}
+@keyframes luz{0%,100%{opacity:.55;transform:scale(.85)}50%{opacity:1;transform:scale(1.3)}}
+body.escolheu .mandala img{box-shadow:0 0 0 2px var(--sel),0 0 50px var(--sel)}
+.casa{font-family:"Playfair Display",Georgia,serif;font-weight:700;font-size:30px;line-height:1.1;margin-top:14px}
+.casa i{color:var(--marca-amarelo)}
+.chamada{font-family:"Space Mono",monospace;font-size:14px;letter-spacing:.14em;color:var(--marca-amarelo);margin-top:6px;text-transform:uppercase}
+.cartao{transition:border-color .25s,box-shadow .35s,transform .35s cubic-bezier(.2,1.3,.4,1)}
+.cartao.gosto,.cartao.longe{transform:translateY(-3px) scale(1.015);border-color:var(--cor)!important;box-shadow:0 0 0 3px color-mix(in srgb,var(--cor) 55%,transparent),0 0 34px color-mix(in srgb,var(--cor) 55%,transparent),0 14px 30px rgba(0,0,0,.35)!important;animation:acende .6s ease-out}
+@keyframes acende{0%{filter:brightness(1.6)}100%{filter:brightness(1)}}
+.bt{transition:transform .12s,background .2s}
+.bt:active{transform:scale(.95)}
+.festa{position:fixed;inset:0;z-index:30;pointer-events:none;overflow:hidden}
+.festa i{position:absolute;top:-14px;width:9px;height:14px;border-radius:2px;animation:cai 1.9s ease-in forwards}
+@keyframes cai{to{transform:translateY(110vh) rotate(620deg);opacity:.7}}
+.festa .viva{position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);white-space:nowrap;background:#16224a;border:2px solid var(--marca-amarelo);border-radius:20px;padding:16px 22px;font-family:"Playfair Display",Georgia,serif;font-weight:700;font-size:26px;box-shadow:0 0 40px rgba(245,197,66,.45);animation:pula .45s cubic-bezier(.2,1.4,.4,1)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -152,9 +172,13 @@ body.fechado main{padding-bottom:48px}
 <main>
   <div class="topo">
     <a class="marca" href="/"><img src="/reality/votacao/logo-7entidos-simbolo.png" alt=""><span>7entidos</span></a>
-    <div class="reality">A Casa dos<br>7 Sentidos</div>
   </div>
 
+  <div class="abertura">
+    <span class="mandala"><img src="/reality/votacao/mandala.jpg" alt="Mandala de A Casa dos 7 Sentidos"><span class="anel" id="anel"></span></span>
+    <p class="casa">A Casa dos <i>7 Sentidos</i></p>
+    <p class="chamada">Votação da semana</p>
+  </div>
   <h1>Quem você mais gosta? <span>E quem você quer ver longe?</span></h1>
   <p class="sub" id="sub">Semana 2 · votação até sexta, 20/11, às 23h59</p>
   <div class="termo" id="termo" aria-live="polite">
@@ -329,6 +353,14 @@ function escolher(tipo,i,p){
   else{if(i===gosto){$("msg").textContent="Não pode ser a mesma pessoa nos dois.";return}longe=(longe===i?-1:i)}
   pintar();
 }
+(function(){var cs=["#f5c542","#4aa8ff","#ff8a3d","#5ccf8a","#ff5a6e","#b48cff","#3fd6d0"],h="";for(var k=0;k<7;k++){var a=-Math.PI/2+k*2*Math.PI/7;h+='<i style="left:'+(50+50*Math.cos(a))+'%;top:'+(50+50*Math.sin(a))+'%;background:'+cs[k]+';box-shadow:0 0 12px '+cs[k]+';animation-delay:'+(k*.3)+'s"></i>'}$("anel").innerHTML=h})();
+function festa(texto){
+  if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+  var f=document.createElement("div");f.className="festa";
+  for(var k=0;k<46;k++){var c=document.createElement("i");c.style.left=(Math.random()*100)+"%";c.style.animationDelay=(Math.random()*.6)+"s";c.style.background=Math.random()<.7?"#f5c542":"#fff3c4";f.appendChild(c)}
+  var v=document.createElement("div");v.className="viva";v.textContent=texto;f.appendChild(v);
+  document.body.appendChild(f);setTimeout(function(){f.remove()},2600);
+}
 function pintar(){
   MORADORES.forEach(function(m,i){
     var c=$("c"+i),g=$("g"+i),l=$("l"+i),mu=$("m"+i);if(!c)return;
@@ -344,6 +376,8 @@ function pintar(){
   });
   $("rGosto").textContent=gosto>=0?MORADORES[gosto].nome+(peso===2?" 💛":""):"—";
   $("rLonge").textContent=longe>=0?MORADORES[longe].nome:"—";
+  var sel=gosto>=0?MORADORES[gosto]:(longe>=0?MORADORES[longe]:null);
+  document.body.classList.toggle("escolheu",!!sel);if(sel)document.body.style.setProperty("--sel",sel.cor);
   var pronto=gosto>=0&&longe>=0;
   $("humano").classList.toggle("mostra",pronto);
   $("confirmar").style.display=pronto?"block":"none";
@@ -364,7 +398,7 @@ $("confirmar").onclick=function(){
   $("pGosto").textContent=g.nome;$("pLonge").textContent=l.nome;
   $("pFotoG").src=FOTOS+g.foto;$("pFotoG").alt=g.nome;$("pFotoL").src=FOTOS+l.foto;$("pFotoL").alt=l.nome;
   fazerStory(g,l);
-  mostrar("avisoPronto");window.scrollTo(0,0);
+  mostrar("avisoPronto");window.scrollTo(0,0);festa("Voto guardado, amiga! 💛");
 };
 function estado(){
   if(window.VOTAR_PREVIA)return "aberta";
@@ -418,8 +452,8 @@ function fazerStory(g,l){
     /* logo: anel de 7 luzes + "A Casa dos 7 Sentidos" */
     var cores=["#f5c542","#4aa8ff","#ff8a3d","#5ccf8a","#ff5a6e","#b48cff","#3fd6d0"];
     for(var k=0;k<7;k++){var a=-Math.PI/2+k*2*Math.PI/7;c.beginPath();c.fillStyle=cores[k];c.shadowColor=cores[k];c.shadowBlur=24;c.arc(540+Math.cos(a)*62,190+Math.sin(a)*62,15,0,7);c.fill()}
-    c.shadowBlur=0;c.fillStyle="#F5C542";c.font="700 60px Fraunces, serif";c.textAlign="center";c.fillText("7",540,212);
-    c.fillStyle="#F3EEE3";c.font="600 58px Fraunces, serif";c.fillText("A Casa dos 7 Sentidos",540,340);
+    c.shadowBlur=0;c.fillStyle="#F5C542";c.font="700 60px 'Playfair Display', serif";c.textAlign="center";c.fillText("7",540,212);
+    c.fillStyle="#F3EEE3";c.font="600 58px 'Playfair Display', serif";c.fillText("A Casa dos 7 Sentidos",540,340);
     c.fillStyle="#F5C542";c.font="700 40px 'Space Mono', monospace";c.fillText("MEU VOTO DA SEMANA",540,410);
     function painel(img,m,x,cor,emo){
       c.save();arred(c,x,480,440,600,40);c.clip();c.fillStyle="#111B3D";c.fillRect(x,480,440,600);cobrir(c,img,x,480,440,600);c.restore();
@@ -427,7 +461,7 @@ function fazerStory(g,l){
       c.font="90px sans-serif";c.textAlign="center";c.fillText(emo,x+220,1170);
     }
     painel(r[0],g,80,"#ff6b8a","❤️");painel(r[1],l,560,"#9fb4ff","👋");
-    c.textAlign="center";c.fillStyle="#F3EEE3";c.font="600 76px Fraunces, serif";c.fillText("Eu gosto de "+g.nome+" ❤️",540,1330);
+    c.textAlign="center";c.fillStyle="#F3EEE3";c.font="600 76px 'Playfair Display', serif";c.fillText("Eu gosto de "+g.nome+" ❤️",540,1330);
     c.fillStyle="#A9B3D1";c.font="600 60px Manrope, sans-serif";c.fillText("Quero ver longe: "+l.nome+" 👋",540,1440);
     c.fillStyle="#F5C542";arred(c,190,1600,700,120,60);c.fill();
     c.fillStyle="#10131F";c.font="800 50px Manrope, sans-serif";c.fillText("7entidos.com.br/votar",540,1677);
