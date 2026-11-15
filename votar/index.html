@@ -1,15 +1,365 @@
 <!DOCTYPE html>
-<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Votação da semana · A Casa dos 7 Sentidos</title>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quem você mais gosta? · A Casa dos 7 Sentidos</title>
+<meta name="description" content="Vote em A Casa dos 7 Sentidos: quem você mais gosta e quem você quer ver longe. Um voto por dia.">
 <meta property="og:image" content="https://7entidos.com.br/assets/compartilhar.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-<meta property="og:title" content="Votação da semana · A Casa dos 7 Sentidos">
-<meta property="og:description" content="Vote no seu morador favorito. Um voto por dia, direto do celular.">
+<meta property="og:title" content="Quem você mais gosta? E quem você quer ver longe?">
+<meta property="og:description" content="Votação da semana de A Casa dos 7 Sentidos. Um voto por dia, direto do celular.">
 <meta property="og:url" content="https://7entidos.com.br/votar">
-<meta http-equiv="refresh" content="0; url=/reality/votacao/">
-<link rel="canonical" href="https://7entidos.com.br/reality/votacao/">
-<script>location.replace("/reality/votacao/"+location.search);</script>
-</head><body style="background:#0B1430;color:#F3EEE3;font-family:sans-serif;padding:24px"><p>Levando você para a votação… <a style="color:#F5C542" href="/reality/votacao/">toque aqui se não abrir</a>.</p></body></html>
+<link rel="icon" href="/reality/votacao/logo-7entidos-simbolo.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Manrope:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/marca.css">
+<script src="/pesquisa/config.js"></script>
+<style>
+/* Votação da semana (Bloco 1, 15/11/2026).
+   Semana, datas e quem não pode ir para "longe" ficam em semana.json. */
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:Manrope,system-ui,sans-serif;background:radial-gradient(120% 60% at 50% 0%,#1b2a5c 0%,var(--marca-fundo) 60%);background-color:var(--marca-fundo);color:var(--marca-texto);min-height:100vh;font-size:19px;line-height:1.45}
+main{max-width:600px;margin:0 auto;padding:20px 16px 150px}
+.topo{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.marca{display:flex;align-items:center;gap:8px;font-weight:800;font-size:17px;color:var(--marca-texto);text-decoration:none}
+.marca img{width:30px;height:30px}
+.reality{font-family:Fraunces,serif;font-size:16px;color:var(--marca-amarelo);text-align:right;line-height:1.1}
+h1{font-family:Fraunces,serif;font-weight:600;font-size:clamp(30px,8.4vw,42px);line-height:1.1;margin:26px 0 10px}
+h1 span{display:block;color:var(--marca-amarelo)}
+.sub{display:inline-flex;align-items:center;gap:8px;font-family:"Space Mono",monospace;font-size:15px;color:var(--marca-texto);background:rgba(245,197,66,.12);border:1px solid rgba(245,197,66,.35);border-radius:999px;padding:6px 14px}
+.sub:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--marca-amarelo);animation:pisca 1.4s infinite}
+@keyframes pisca{50%{opacity:.2}}
+.regras{margin-top:16px;color:var(--marca-apoio);font-size:16px}
+.regras b{color:var(--marca-texto)}
+.lista{display:flex;flex-direction:column;gap:14px;margin-top:20px}
+.cartao{position:relative;display:grid;grid-template-columns:116px 1fr;gap:14px;align-items:stretch;padding:12px;border-radius:22px;background:linear-gradient(160deg,color-mix(in srgb,var(--cor) 22%,#16224a) 0%,#111B3D 55%);border:1.5px solid color-mix(in srgb,var(--cor) 45%,transparent);box-shadow:0 14px 30px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.08);transition:border-color .2s,box-shadow .2s}
+.cartao.gosto{border-color:#ff6b8a;box-shadow:0 0 0 3px rgba(255,107,138,.35),0 14px 30px rgba(0,0,0,.3)}
+.cartao.longe{border-color:#9fb4ff;box-shadow:0 0 0 3px rgba(159,180,255,.35),0 14px 30px rgba(0,0,0,.3)}
+.foto{position:relative;width:116px;height:140px;border-radius:16px;overflow:hidden;background:#0d1533;border:3px solid var(--cor)}
+.foto img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+.info{display:flex;flex-direction:column;min-width:0}
+.nome{font-family:Fraunces,serif;font-weight:600;font-size:26px;line-height:1.1}
+.sentido{font-family:"Space Mono",monospace;font-size:15px;color:var(--cor);font-weight:700}
+.selo{display:inline-flex;align-items:center;gap:6px;margin-top:6px;align-self:flex-start;font-size:13px;font-weight:800;color:#3a2a00;background:linear-gradient(135deg,#ffe28a,#f5c542 45%,#c9961c);border-radius:999px;padding:4px 10px;box-shadow:0 0 14px rgba(245,197,66,.55);animation:brilho 2.4s infinite}
+@keyframes brilho{50%{box-shadow:0 0 4px rgba(245,197,66,.2)}}
+.botoes{display:flex;flex-direction:column;gap:8px;margin-top:auto;padding-top:10px}
+.bt{min-height:48px;border-radius:999px;border:1.5px solid rgba(243,238,227,.35);background:rgba(255,255,255,.06);color:var(--marca-texto);font:inherit;font-weight:800;font-size:16px;cursor:pointer;padding:0 12px;text-align:left;display:flex;align-items:center;gap:8px}
+.bt:focus-visible{outline:3px solid var(--marca-texto);outline-offset:2px}
+.bt.gosto.on{background:#ff6b8a;border-color:#ff6b8a;color:#2a0710}
+.bt.longe.on{background:#9fb4ff;border-color:#9fb4ff;color:#0b1430}
+.bt:disabled{opacity:.35;cursor:not-allowed}
+.bt small{font-weight:600;font-size:13px;margin-left:auto;opacity:.9}
+/* barra de baixo: resumo + "Sou humano" + confirmar */
+.barra{position:fixed;left:0;right:0;bottom:0;z-index:5;background:rgba(11,20,48,.96);backdrop-filter:blur(8px);border-top:1px solid var(--marca-linha);padding:12px 16px calc(14px + env(safe-area-inset-bottom))}
+.barra .dentro{max-width:600px;margin:0 auto}
+.resumo{display:flex;gap:10px;font-size:15px;color:var(--marca-apoio)}
+.resumo div{flex:1;background:var(--marca-caixa);border-radius:14px;padding:8px 10px;border:1px solid var(--marca-linha)}
+.resumo b{display:block;color:var(--marca-texto);font-size:17px}
+.humano{display:none;align-items:center;gap:12px;width:100%;margin-top:10px;min-height:54px;border-radius:14px;border:1.5px dashed rgba(243,238,227,.5);background:transparent;color:var(--marca-texto);font:inherit;font-weight:700;font-size:17px;padding:0 14px;cursor:pointer}
+.humano .caixa{width:28px;height:28px;border-radius:8px;border:2px solid var(--marca-texto);display:flex;align-items:center;justify-content:center;font-size:18px}
+.humano.ok{border-style:solid;border-color:#5ccf8a;color:#5ccf8a}
+.humano.ok .caixa{background:#5ccf8a;border-color:#5ccf8a;color:#0b1430}
+.mostra{display:flex!important}
+.confirmar{display:none;width:100%;margin-top:10px;min-height:58px;border-radius:999px;border:0;background:var(--marca-amarelo);color:#10131F;font:inherit;font-weight:800;font-size:19px;cursor:pointer;animation:pisca2 1.6s infinite}
+@keyframes pisca2{50%{box-shadow:0 0 0 6px rgba(245,197,66,.25)}}
+.confirmar:disabled{opacity:.4;animation:none;cursor:not-allowed}
+.msg{min-height:0;font-size:15px;color:#ffb3c1;margin-top:6px;text-align:center}
+.armadilha{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+/* avisos */
+.aviso{display:none;margin-top:26px;text-align:center;background:var(--marca-caixa);border:1px solid rgba(169,179,209,.25);border-radius:22px;padding:28px 18px}
+.aviso.on{display:block}
+.aviso h2{font-family:Fraunces,serif;font-weight:600;font-size:30px;line-height:1.15;color:var(--marca-amarelo);margin-bottom:10px}
+.aviso p{color:var(--marca-apoio)}
+.aviso .par{display:flex;gap:10px;margin:16px 0 4px}
+.aviso .par div{flex:1;border-radius:14px;padding:10px;background:rgba(255,255,255,.05);font-size:15px;color:var(--marca-apoio)}
+.aviso .par b{display:block;font-size:20px;color:var(--marca-texto)}
+.botao{display:flex;align-items:center;justify-content:center;gap:8px;min-height:56px;margin-top:14px;padding:0 20px;border-radius:999px;font-weight:800;font-size:17px;text-decoration:none;border:0;cursor:pointer;font-family:inherit}
+.botao.amarelo{background:var(--marca-amarelo);color:#10131F}
+.botao.zap{background:#25D366;color:#0b2a17}
+.botao.contorno{background:transparent;color:var(--marca-texto);border:1.5px solid rgba(243,238,227,.6)}
+body.fechado .lista,body.fechado .regras,body.fechado .barra{display:none}
+body.fechado main{padding-bottom:48px}
+.dupla{display:flex;gap:12px;margin:16px 0 6px}
+.dupla figure{flex:1;margin:0;border-radius:18px;overflow:hidden;background:rgba(255,255,255,.05);border:2px solid #ff6b8a}
+.dupla figure+figure{border-color:#9fb4ff}
+.dupla img{width:100%;aspect-ratio:4/5;object-fit:cover;object-position:top;display:block}
+.dupla figcaption{padding:8px;font-size:14px;color:var(--marca-apoio)}
+.dupla b{display:block;font-family:Fraunces,serif;font-size:22px;color:var(--marca-texto)}
+.bloco{margin-top:22px;padding-top:18px;border-top:1px solid var(--marca-linha)}
+.titulo-bloco{font-family:"Space Mono",monospace;font-size:14px;color:var(--marca-amarelo)!important;margin-bottom:10px}
+.story{display:block;width:62%;max-width:260px;margin:0 auto;border-radius:16px;box-shadow:0 14px 30px rgba(0,0,0,.4);aspect-ratio:9/16;background:#0d1533}
+.lado{display:flex;gap:10px}.lado .botao{flex:1}
+.pergunta{color:var(--marca-texto)!important;font-weight:700;font-size:19px}
+.campo{width:100%;min-height:56px;margin-top:12px;border-radius:14px;border:1.5px solid rgba(243,238,227,.4);background:#0d1533;color:var(--marca-texto);font:inherit;font-size:20px;padding:0 16px;text-align:center}
+.priv{font-size:14px;margin-top:8px}
+.botao.zapcheio{width:100%;background:#25D366;color:#0b2a17}
+.botao.contorno{width:100%}
+.msg2{font-size:15px;margin-top:8px;color:#5ccf8a!important}
+.final{margin-top:24px;padding-top:18px;border-top:1px solid var(--marca-linha)}
+.final p{color:var(--marca-texto)!important;font-weight:700}
+.rodape{margin-top:28px;text-align:center;font-size:15px;color:var(--marca-apoio)}
+.rodape a{color:var(--marca-amarelo)}
+.teste{position:fixed;top:0;left:0;right:0;z-index:9;text-align:center;font-size:14px;font-weight:800;background:#ff5a6e;color:#fff;padding:4px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+  <div class="topo">
+    <a class="marca" href="/"><img src="/reality/votacao/logo-7entidos-simbolo.png" alt=""><span>7entidos</span></a>
+    <div class="reality">A Casa dos<br>7 Sentidos</div>
+  </div>
+
+  <h1>Quem você mais gosta? <span>E quem você quer ver longe?</span></h1>
+  <p class="sub" id="sub">Semana 2 · votação até sexta, 20/11, às 23h59</p>
+  <p class="regras">Escolha <b>1 morador em cada botão</b>: um ❤️ e um 👋. Não pode ser a mesma pessoa nos dois. Um voto por dia.</p>
+
+  <div class="lista" id="lista"></div>
+
+  <div class="aviso" id="avisoAntes">
+    <h2 id="abreTxt">A votação abre em breve.</h2>
+    <p>Logo depois do episódio de A Casa dos 7 Sentidos, lá no nosso YouTube. Guarde este link e volte!</p>
+    <a class="botao amarelo" href="https://www.youtube.com/@7Entidos" target="_blank" rel="noopener">Assistir no YouTube</a>
+  </div>
+  <div class="aviso" id="avisoFim">
+    <h2>Votação encerrada!</h2>
+    <p class="resultadoLinha">O resultado sai domingo, 22/11, às 20h, no YouTube.</p>
+    <a class="botao amarelo" href="https://www.youtube.com/@7Entidos" target="_blank" rel="noopener">Inscreva-se no canal</a>
+  </div>
+  <div class="aviso" id="avisoJaVotou">
+    <h2>Você já votou hoje. Volte amanhã!</h2>
+    <p class="resultadoLinha">O resultado sai domingo, 22/11, às 20h, no YouTube.</p>
+    <a class="botao zap" id="zap2" target="_blank" rel="noopener">Chame uma amiga para votar</a>
+    <a class="botao contorno" href="https://www.youtube.com/@7Entidos" target="_blank" rel="noopener">Assistir no YouTube</a>
+  </div>
+  <div class="aviso" id="avisoPronto">
+    <h2>Voto guardado! 🗳️</h2>
+    <div class="dupla">
+      <figure><img id="pFotoG" alt=""><figcaption>❤️ Mais gosto<b id="pGosto"></b></figcaption></figure>
+      <figure><img id="pFotoL" alt=""><figcaption>👋 Quero ver longe<b id="pLonge"></b></figcaption></figure>
+    </div>
+
+    <div class="bloco">
+      <p class="titulo-bloco">Meu voto · para os seus stories</p>
+      <img class="story" id="story" alt="Cartão Meu voto para os stories">
+      <div class="lado"><a class="botao amarelo" id="baixar" download="meu-voto-casa-dos-7-sentidos.png">Baixar</a><button class="botao contorno" id="compartilhar" type="button">Compartilhar</button></div>
+      <p class="msg2" id="msgStory"></p>
+    </div>
+
+    <a class="botao zap" id="zap" target="_blank" rel="noopener">Chame uma amiga para votar</a>
+
+    <div class="bloco" id="blocoZap">
+      <p class="titulo-bloco">Opcional</p>
+      <p class="pergunta">Quer saber o resultado antes de todo mundo? Deixe seu WhatsApp.</p>
+      <input class="campo" id="tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="(13) 99999-9999" aria-label="Seu WhatsApp com DDD">
+      <p class="priv">🔒 Usamos seu número só para avisar o resultado. Não passamos para ninguém e você pode pedir para apagar quando quiser.</p>
+      <button class="botao zapcheio" id="telOk" type="button">Quero saber antes</button>
+      <button class="botao contorno" id="telNao" type="button">Agora não</button>
+      <p class="msg2" id="msgTel"></p>
+    </div>
+
+    <div class="final">
+      <p id="resultadoTxt">O resultado sai domingo, 22/11, às 20h, no YouTube</p>
+      <a class="botao amarelo" href="https://www.youtube.com/@7Entidos" target="_blank" rel="noopener">Inscreva-se no canal</a>
+    </div>
+  </div>
+  <div class="aviso" id="avisoErro">
+    <h2>Ops, a votação não carregou.</h2>
+    <p>Confira sua internet e tente de novo.</p>
+    <button class="botao amarelo" onclick="location.reload()" style="width:100%">Tentar de novo</button>
+  </div>
+
+  <p class="rodape">Um reality do app 7entidos · <a href="/">Descobrir o meu sentido</a></p>
+</main>
+
+<div class="barra" id="barra">
+  <div class="dentro">
+    <div class="resumo">
+      <div>❤️ Mais gosto<b id="rGosto">—</b></div>
+      <div>👋 Quero ver longe<b id="rLonge">—</b></div>
+    </div>
+    <button type="button" class="humano" id="humano"><span class="caixa" id="caixa"></span>Sou humano</button>
+    <input class="armadilha" id="armadilha" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <button type="button" class="confirmar" id="confirmar" disabled>Confirmar meu voto</button>
+    <p class="msg" id="msg" role="status"></p>
+  </div>
+</div>
+
+<script>
+/* Os 7 moradores, na ordem pedida. */
+var FOTOS="/reality/votacao/fotos/";
+var MORADORES=[
+ {nome:"Luzia",sentido:"Visão",foto:"luzia.jpg",cor:"var(--sentido-visao)"},
+ {nome:"Duda",sentido:"Equilíbrio",foto:"duda.jpg",cor:"var(--sentido-equilibrio)"},
+ {nome:"Yara",sentido:"Olfato",foto:"yara.jpg",cor:"var(--sentido-olfato)"},
+ {nome:"Rafa",sentido:"Audição",foto:"rafa.jpg",cor:"var(--sentido-audicao)"},
+ {nome:"Tonho",sentido:"Tato",foto:"tonho.jpg",cor:"var(--sentido-tato)"},
+ {nome:"Beto",sentido:"Paladar",foto:"beto.jpg",cor:"var(--sentido-paladar)"},
+ {nome:"Lucas",sentido:"Noção do corpo",foto:"lucas.jpg",cor:"var(--sentido-corpo)"}
+];
+var LINK="https://7entidos.com.br/votar";
+var CFG=null,gosto=-1,longe=-1,humano=false,abriuEm=Date.now();
+function $(id){return document.getElementById(id)}
+function guarda(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
+function hojeBR(){try{return new Date().toLocaleDateString("en-CA",{timeZone:"America/Sao_Paulo"})}catch(e){return new Date(Date.now()-3*36e5).toISOString().slice(0,10)}}
+function dataBR(){try{return new Date().toLocaleDateString("pt-BR",{timeZone:"America/Sao_Paulo"})}catch(e){return hojeBR()}}
+function horaBR(){try{return new Date().toLocaleTimeString("pt-BR",{timeZone:"America/Sao_Paulo",hour12:false})}catch(e){return ""}}
+function codigoAparelho(){var c=guarda("7e_aparelho");if(!c){c="AP-"+Math.random().toString(36).slice(2,8).toUpperCase()+Date.now().toString(36).slice(-4).toUpperCase();guarda("7e_aparelho",c)}return c}
+function chaveDia(){return "7e_votar_"+(CFG&&CFG.codigo||"semana")}
+function jaVotouHoje(){return guarda(chaveDia())===hojeBR()}
+function semLonge(m){return (CFG&&CFG.sem_longe||["Rafa","Lucas"]).indexOf(m.nome)>=0}
+function protegido(m){return CFG&&CFG.protegido===m.nome}
+function mostrar(id){["avisoAntes","avisoFim","avisoJaVotou","avisoPronto","avisoErro"].forEach(function(a){$(a).classList.toggle("on",a===id)});if(id)document.body.classList.add("fechado")}
+function zap(){var t="Eu já votei em A Casa dos 7 Sentidos! Quem você quer ver longe? Vota aqui: 7entidos.com.br/votar";return "https://wa.me/?text="+encodeURIComponent(t)}
+
+function montar(){
+  var l=$("lista");l.innerHTML="";
+  MORADORES.forEach(function(m,i){
+    var c=document.createElement("div");c.className="cartao";c.id="c"+i;c.style.setProperty("--cor",m.cor);
+    var h='<div class="foto"><img src="'+FOTOS+m.foto+'" alt="'+m.nome+', do sentido '+m.sentido+'" loading="lazy"></div><div class="info"><span class="nome">'+m.nome+'</span><span class="sentido">'+m.sentido+'</span>';
+    if(protegido(m))h+='<span class="selo">★ Protegido da semana</span>';
+    h+='<div class="botoes"><button type="button" class="bt gosto" id="g'+i+'">❤️ Mais gosto</button>';
+    if(!semLonge(m))h+='<button type="button" class="bt longe" id="l'+i+'">👋 Quero ver longe</button>';
+    h+='</div></div>';c.innerHTML=h;l.appendChild(c);
+    $("g"+i).onclick=function(){escolher("gosto",i)};
+    if($("l"+i))$("l"+i).onclick=function(){escolher("longe",i)};
+  });
+  pintar();
+}
+function escolher(tipo,i){
+  $("msg").textContent="";
+  if(tipo==="gosto"){if(i===longe){$("msg").textContent="Não pode ser a mesma pessoa nos dois.";return}gosto=(gosto===i?-1:i)}
+  else{if(i===gosto){$("msg").textContent="Não pode ser a mesma pessoa nos dois.";return}longe=(longe===i?-1:i)}
+  pintar();
+}
+function pintar(){
+  MORADORES.forEach(function(m,i){
+    var c=$("c"+i),g=$("g"+i),l=$("l"+i);if(!c)return;
+    c.classList.toggle("gosto",i===gosto);c.classList.toggle("longe",i===longe);
+    g.classList.toggle("on",i===gosto);g.disabled=(i===longe);
+    g.innerHTML=i===gosto?'❤️ Mais gosto <small>escolhido ✓</small>':(i===longe?'❤️ Mais gosto <small>já está no 👋</small>':'❤️ Mais gosto');
+    if(l){l.classList.toggle("on",i===longe);l.disabled=(i===gosto);
+      l.innerHTML=i===longe?'👋 Quero ver longe <small>escolhido ✓</small>':(i===gosto?'👋 Quero ver longe <small>já está no ❤️</small>':'👋 Quero ver longe')}
+  });
+  $("rGosto").textContent=gosto>=0?MORADORES[gosto].nome:"—";
+  $("rLonge").textContent=longe>=0?MORADORES[longe].nome:"—";
+  var pronto=gosto>=0&&longe>=0;
+  $("humano").classList.toggle("mostra",pronto);
+  $("confirmar").style.display=pronto?"block":"none";
+  $("confirmar").disabled=!(pronto&&humano);
+}
+$("humano").onclick=function(ev){
+  /* "Sou humano": precisa ser um toque de verdade (não um clique de robô),
+     a pessoa precisa ter ficado alguns segundos na página e o campo escondido precisa estar vazio. */
+  if(!ev.isTrusted||Date.now()-abriuEm<3000||$("armadilha").value){$("msg").textContent="Espere um instante e toque de novo.";return}
+  humano=true;$("humano").classList.add("ok");$("caixa").textContent="✓";$("msg").textContent="";pintar();
+};
+$("confirmar").onclick=function(){
+  if(gosto<0||longe<0||!humano||gosto===longe)return;
+  var st=estado();if(st!=="aberta"){aplicar();return}
+  if(jaVotouHoje()){mostrar("avisoJaVotou");return}
+  var g=MORADORES[gosto],l=MORADORES[longe];
+  registrar(g,l);ultimoVoto={g:g,l:l};
+  $("pGosto").textContent=g.nome;$("pLonge").textContent=l.nome;
+  $("pFotoG").src=FOTOS+g.foto;$("pFotoG").alt=g.nome;$("pFotoL").src=FOTOS+l.foto;$("pFotoL").alt=l.nome;
+  fazerStory(g,l);
+  mostrar("avisoPronto");window.scrollTo(0,0);
+};
+function estado(){
+  if(window.VOTAR_PREVIA)return "aberta";
+  if(!CFG||CFG.aberta===false)return "fim";
+  var t=Date.now();
+  if(CFG.abre&&t<Date.parse(CFG.abre))return "antes";
+  if(CFG.encerra&&t>Date.parse(CFG.encerra))return "fim";
+  return "aberta";
+}
+function registrar(g,l){
+  guarda(chaveDia(),hojeBR());
+  var url=window.VOTAR_URL_TESTE||window.PESQUISA_URL||"";
+  if(!url)return; /* prévia ou ?teste: não grava nada */
+  var cod=(window.VOTAR_PREFIXO||"")+codigoAparelho();
+  var voto={data:dataBR(),hora:horaBR(),mais_gosto:g.nome,quero_ver_longe:l.nome,aparelho:cod,semana:CFG.semana};
+  if(window.VOTAR_PREFIXO)voto.teste="TESTE do Claude - pode apagar";
+  /* Mesmo robô da pesquisa. Cai na aba "Reality · Respostas" com "votar" na coluna Pesquisa.
+     parcial:true para NÃO contar nas 100 vagas da pesquisa. A coluna "Campeã" mostra o voto resumido. */
+  try{fetch(url,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},
+    body:JSON.stringify({pesquisa:"votar",pessoa:cod,parcial:true,
+      campea:"❤️ "+g.nome+" · 👋 "+l.nome,respostas:voto})}).catch(function(){})}catch(e){}
+}
+function aplicar(){
+  if(CFG.subtitulo)$("sub").textContent=CFG.subtitulo;
+  if(CFG.resultado){$("resultadoTxt").textContent=CFG.resultado;[].forEach.call(document.querySelectorAll(".resultadoLinha"),function(e){e.textContent=CFG.resultado+"."})}
+  montar();
+  var st=estado();
+  if(st==="antes"){$("abreTxt").textContent=CFG.abre_texto||"A votação abre em breve.";mostrar("avisoAntes")}
+  else if(st==="fim")mostrar("avisoFim");
+  else if(jaVotouHoje())mostrar("avisoJaVotou");
+}
+
+/* ---- Cartão "Meu voto" (1080x1920) para os stories ---- */
+var ultimoVoto=null,storyBlob=null;
+var CORES={"Visão":"#f5c542","Audição":"#4aa8ff","Tato":"#ff8a3d","Olfato":"#5ccf8a","Paladar":"#ff5a6e","Equilíbrio":"#b48cff","Noção do corpo":"#3fd6d0"};
+function carregar(src){return new Promise(function(ok){var i=new Image();i.onload=function(){ok(i)};i.onerror=function(){ok(null)};i.src=src})}
+function cobrir(ctx,img,x,y,w,h){if(!img)return;var r=Math.max(w/img.width,h/img.height),iw=img.width*r,ih=img.height*r;ctx.drawImage(img,x+(w-iw)/2,y,iw,ih)}
+function arred(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+function fazerStory(g,l){
+  var cv=document.createElement("canvas");cv.width=1080;cv.height=1920;var c=cv.getContext("2d");
+  var fundo=c.createRadialGradient(540,300,50,540,700,1400);fundo.addColorStop(0,"#22356f");fundo.addColorStop(.55,"#0B1430");fundo.addColorStop(1,"#070d22");
+  c.fillStyle=fundo;c.fillRect(0,0,1080,1920);
+  var fonteOk=(document.fonts&&document.fonts.ready)?document.fonts.ready:Promise.resolve();
+  Promise.all([carregar(FOTOS+g.foto),carregar(FOTOS+l.foto),fonteOk]).then(function(r){
+    /* logo: anel de 7 luzes + "A Casa dos 7 Sentidos" */
+    var cores=["#f5c542","#4aa8ff","#ff8a3d","#5ccf8a","#ff5a6e","#b48cff","#3fd6d0"];
+    for(var k=0;k<7;k++){var a=-Math.PI/2+k*2*Math.PI/7;c.beginPath();c.fillStyle=cores[k];c.shadowColor=cores[k];c.shadowBlur=24;c.arc(540+Math.cos(a)*62,190+Math.sin(a)*62,15,0,7);c.fill()}
+    c.shadowBlur=0;c.fillStyle="#F5C542";c.font="700 60px Fraunces, serif";c.textAlign="center";c.fillText("7",540,212);
+    c.fillStyle="#F3EEE3";c.font="600 58px Fraunces, serif";c.fillText("A Casa dos 7 Sentidos",540,340);
+    c.fillStyle="#F5C542";c.font="700 40px 'Space Mono', monospace";c.fillText("MEU VOTO DA SEMANA",540,410);
+    function painel(img,m,x,cor,emo){
+      c.save();arred(c,x,480,440,600,40);c.clip();c.fillStyle="#111B3D";c.fillRect(x,480,440,600);cobrir(c,img,x,480,440,600);c.restore();
+      c.lineWidth=10;c.strokeStyle=cor;arred(c,x,480,440,600,40);c.stroke();
+      c.font="90px sans-serif";c.textAlign="center";c.fillText(emo,x+220,1170);
+    }
+    painel(r[0],g,80,"#ff6b8a","❤️");painel(r[1],l,560,"#9fb4ff","👋");
+    c.textAlign="center";c.fillStyle="#F3EEE3";c.font="600 76px Fraunces, serif";c.fillText("Eu gosto de "+g.nome+" ❤️",540,1330);
+    c.fillStyle="#A9B3D1";c.font="600 60px Manrope, sans-serif";c.fillText("Quero ver longe: "+l.nome+" 👋",540,1440);
+    c.fillStyle="#F5C542";arred(c,190,1600,700,120,60);c.fill();
+    c.fillStyle="#10131F";c.font="800 50px Manrope, sans-serif";c.fillText("7entidos.com.br/votar",540,1677);
+    c.fillStyle="#A9B3D1";c.font="500 36px Manrope, sans-serif";c.fillText("Vote você também · um voto por dia",540,1800);
+    var url=cv.toDataURL("image/png");$("story").src=url;$("baixar").href=url;
+    try{cv.toBlob(function(b){storyBlob=b},"image/png")}catch(e){}
+  });
+}
+$("compartilhar").onclick=function(){
+  $("msgStory").textContent="";
+  try{
+    var f=storyBlob&&new File([storyBlob],"meu-voto-casa-dos-7-sentidos.png",{type:"image/png"});
+    if(f&&navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],text:"Meu voto em A Casa dos 7 Sentidos · 7entidos.com.br/votar"}).catch(function(){});return}
+  }catch(e){}
+  $("baixar").click();$("msgStory").textContent="Seu celular não abriu o compartilhar. Baixamos a imagem: é só postar nos stories.";
+};
+/* ---- WhatsApp opcional: vai junto com o código do voto ---- */
+$("telNao").onclick=function(){$("blocoZap").style.display="none"};
+$("telOk").onclick=function(){
+  var n=($("tel").value||"").replace(/\D/g,"");
+  if(n.length<10||n.length>13){$("msgTel").style.color="#ffb3c1";$("msgTel").textContent="Confira o número com DDD.";return}
+  var url=window.VOTAR_URL_TESTE||window.PESQUISA_URL||"";
+  var cod=(window.VOTAR_PREFIXO||"")+codigoAparelho();
+  var v=ultimoVoto?("❤️ "+ultimoVoto.g.nome+" · 👋 "+ultimoVoto.l.nome):"";
+  /* Cai na aba "Reality · Lista de espera": Telefone + Origem com o código do aparelho e o voto (liga o número ao voto). */
+  if(url){try{fetch(url,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},
+    body:JSON.stringify({evento:"contato",telefone:n,lgpd:true,pesquisa:"votar · "+cod+" · "+dataBR()+" "+horaBR()+" · "+v})}).catch(function(){})}catch(e){}}
+  $("tel").disabled=true;$("telOk").style.display="none";$("telNao").style.display="none";
+  $("msgTel").style.color="";$("msgTel").textContent="Pronto! Você fica sabendo antes de todo mundo. 💛";
+};
+$("zap").href=zap();$("zap2").href=zap();
+fetch("semana.json",{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){CFG=j;aplicar()}).catch(function(){mostrar("avisoErro")});
+if(window.PESQUISA_TESTE!==false&&!window.VOTAR_URL_TESTE){var t=document.createElement("div");t.className="teste";t.textContent=window.VOTAR_PREVIA?"PRÉVIA: este voto não é gravado":"Modo teste: este voto não é gravado na planilha";document.body.appendChild(t)}
+</script>
+</body>
+</html>

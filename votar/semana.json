@@ -1,0 +1,16 @@
+{
+  "_como_usar": "Para trocar a semana, mude só este arquivo. codigo = nome curto da semana (troque toda semana: libera um novo voto por dia). semana = nome que vai para a planilha. subtitulo = linha embaixo do título. protegido = quem ganha o selo dourado. sem_longe = quem NÃO tem o botão 'Quero ver longe'. abre e encerra = horário de Brasília (-03:00).",
+  "codigo": "semana2",
+  "semana": "Semana 2 · 15 a 20/11/2026",
+  "subtitulo": "Semana 2 · votação até sexta, 20/11, às 23h59",
+  "protegido": "Rafa",
+  "sem_longe": [
+    "Rafa",
+    "Lucas"
+  ],
+  "aberta": true,
+  "abre": "2026-11-15T20:00:00-03:00",
+  "abre_texto": "A votação abre hoje, domingo, às 20h.",
+  "encerra": "2026-11-20T23:59:00-03:00",
+  "resultado": "O resultado sai domingo, 22/11, às 20h, no YouTube"
+}
