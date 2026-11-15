@@ -173,36 +173,81 @@ body.escolheu .mandala img{box-shadow:0 0 0 2px var(--sel),0 0 50px var(--sel)}
 .festa i{position:absolute;top:-14px;width:9px;height:14px;border-radius:2px;animation:cai 1.9s ease-in forwards}
 @keyframes cai{to{transform:translateY(110vh) rotate(620deg);opacity:.7}}
 .festa .viva{position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);white-space:nowrap;background:#16224a;border:2px solid var(--marca-amarelo);border-radius:20px;padding:16px 22px;font-family:"Playfair Display",Georgia,serif;font-weight:700;font-size:26px;box-shadow:0 0 40px rgba(245,197,66,.45);animation:pula .45s cubic-bezier(.2,1.4,.4,1)}
+/* Tapete vermelho (15/11, tarde): glamour, flashes de paparazzi, celebridades. Votar logo de cara. */
+html body.glam{background-size:auto!important;background-color:#0a0712!important;background-image:radial-gradient(90% 30% at 50% 0%,rgba(255,215,140,.18),transparent 70%),radial-gradient(120% 50% at 50% 100%,rgba(120,10,30,.35),transparent 70%),linear-gradient(180deg,#0a0712 0%,#170b1f 50%,#0a0712 100%)!important;background-attachment:fixed!important}
+.flashes{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.flashes i{position:absolute;width:110px;height:110px;margin:-55px 0 0 -55px;opacity:0;border-radius:50%;background:radial-gradient(circle,#fff 0 6%,rgba(255,255,255,.75) 10%,rgba(255,240,200,.25) 30%,transparent 62%);animation:pap 7s infinite}
+.flashes i:before,.flashes i:after{content:"";position:absolute;left:50%;top:50%;width:120%;height:2px;margin:-1px 0 0 -60%;background:linear-gradient(90deg,transparent,#fff,transparent)}
+.flashes i:after{transform:rotate(90deg)}
+@keyframes pap{0%,88%,100%{opacity:0}90%{opacity:1}93%{opacity:.15}95%{opacity:.8}}
+main{position:relative;z-index:1}
+.topo{padding-bottom:4px}
+.selo-casa{display:flex;align-items:center;gap:8px;font-family:"Playfair Display",Georgia,serif;font-size:14px;line-height:1.05;text-align:right;color:var(--marca-texto)}
+.selo-casa img{width:38px;height:38px;border-radius:50%;box-shadow:0 0 0 1.5px #e9c46a,0 0 16px rgba(233,196,106,.5)}
+.selo-casa i{color:#f1cf7a}
+.tapete{position:relative;margin:8px -16px 0;padding:8px 16px 16px;text-align:center;background:linear-gradient(180deg,transparent 0%,rgba(140,12,34,.0) 30%,rgba(140,12,34,.55) 100%);border-bottom:3px solid #c9a24a;box-shadow:0 18px 30px -18px rgba(201,162,74,.6)}
+.tapete:before,.tapete:after{content:"";position:absolute;bottom:-3px;width:14px;height:58px;border-radius:7px 7px 0 0;background:linear-gradient(90deg,#8a6420,#f6df9f,#8a6420)}
+.tapete:before{left:6px}.tapete:after{right:6px}
+.aovivo{display:inline-flex;align-items:center;gap:8px;font-family:"Space Mono",monospace;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:rgba(216,38,60,.9);border-radius:6px;padding:4px 10px}
+.aovivo span{width:8px;height:8px;border-radius:50%;background:#fff;animation:pisca 1s infinite}
+.tapete .gancho{margin:8px 0 0;font-size:18px}
+h1.ouro{margin:4px 0 8px;font-size:clamp(26px,7.4vw,38px);line-height:1.08;background:linear-gradient(100deg,#b8862b 0%,#f9e29c 22%,#c8992e 40%,#fff6d6 50%,#c8992e 60%,#f9e29c 78%,#b8862b 100%);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:brilhoOuro 5s linear infinite}
+h1.ouro span{color:transparent;font-size:.72em;margin-top:2px}
+@keyframes brilhoOuro{to{background-position:-220% 0}}
+.tapete .sub{font-size:14px}
+.abre{display:none;margin:8px auto 0;max-width:420px;padding:7px 12px;font-size:16px!important;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(233,196,106,.5);font-size:17px}
+.abre.on{display:block}
+.tapete .regras{margin-top:8px;font-size:16px}
+.tapete .sub{margin-top:0;padding:4px 12px}
+.lista{margin-top:16px!important}
+.lista{margin-top:22px}
+.cartao{background:linear-gradient(160deg,rgba(40,24,48,.95),rgba(14,10,24,.96))!important;overflow:hidden}
+.cartao:not(.gosto):not(.longe){border:1.5px solid rgba(233,196,106,.35)!important}
+.cartao:before{content:"";position:absolute;inset:0;background:radial-gradient(1px 1px at 20% 30%,rgba(255,240,200,.7),transparent),radial-gradient(1px 1px at 70% 60%,rgba(255,240,200,.6),transparent),radial-gradient(1.5px 1.5px at 85% 20%,rgba(255,240,200,.7),transparent),radial-gradient(1px 1px at 40% 85%,rgba(255,240,200,.5),transparent);pointer-events:none}
+.nome{background:linear-gradient(100deg,#c8992e,#fff3c4 45%,#d9ae4a);-webkit-background-clip:text;background-clip:text;color:transparent}
+.foto{border-color:#e9c46a!important;box-shadow:0 0 0 3px var(--cor),0 0 22px rgba(233,196,106,.45)!important}
+.foto:after{content:"";position:absolute;inset:0;opacity:0;background:radial-gradient(circle at 70% 25%,#fff 0 8%,rgba(255,255,255,.8) 18%,transparent 60%)}
+.cartao.click .foto:after{animation:clique .55s ease-out}
+@keyframes clique{0%{opacity:0}15%{opacity:1}100%{opacity:0}}
+.depois{margin-top:26px}
+.confirmar:disabled{opacity:.55}
+body.glam .barra{background:rgba(14,8,20,.96);border-top:1px solid rgba(233,196,106,.35)}
+body.glam .resumo div{background:rgba(255,255,255,.05);border-color:rgba(233,196,106,.25)}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
-<body>
+<body class="glam">
+<div class="flashes" id="flashes" aria-hidden="true"></div>
 <main>
   <div class="topo">
     <a class="marca" href="/"><img src="/reality/votacao/logo-7entidos-simbolo.png" alt=""><span>7entidos</span></a>
+    <span class="selo-casa"><img src="/reality/votacao/mandala.jpg" alt=""><span>A Casa dos<br><i>7 Sentidos</i></span></span>
   </div>
 
-  <div class="abertura">
-    <span class="mandala"><img src="/reality/votacao/mandala.jpg" alt="Mandala de A Casa dos 7 Sentidos"><span class="anel" id="anel"></span></span>
-    <p class="casa">A Casa dos <i>7 Sentidos</i></p>
-    <p class="chamada">Votação da semana</p>
-  </div>
-  <p class="gancho">Menina, a festa pegou fogo! 🔥</p>
-  <h1>Quem você mais gosta? <span>E quem você quer ver longe?</span></h1>
-  <p class="amiga">Vote com o coração, igual a gente faz no sofá de casa comentando a novela.</p>
-  <p class="sub" id="sub">Semana 2 · votação até sexta, 20/11, às 23h59</p>
-  <div class="termo" id="termo" aria-live="polite">
-    <div class="termo-top"><span class="termo-rot">Termômetro da casa</span><span class="termo-vivo">ao vivo</span></div>
-    <div class="termo-barra"><i></i></div>
-    <p class="termo-frase" id="termoFrase">Os votos estão chegando…</p>
-  </div>
-  <div class="jogo">
-    <p><b>❤️ O mais querido ganha uma estrela ⭐.</b> Na final, quem tiver mais estrelas vira o rosto do app 7entidos.</p>
-    <p><b>👋 O mais votado para longe…</b> você descobre no domingo.</p>
-  </div>
-  <p class="regras">Escolha <b>1 morador em cada botão</b>: um ❤️ e um 👋 (não pode ser a mesma pessoa). Dá para votar <b>1 vez por dia</b>, então volte amanhã e traga as amigas!</p>
+  <section class="tapete">
+    <p class="aovivo"><span></span>Ao vivo do tapete vermelho</p>
+    <p class="gancho">Menina, a festa pegou fogo! 🔥</p>
+    <h1 class="ouro">Quem você mais gosta? <span>E quem você quer ver longe?</span></h1>
+    <p class="sub" id="sub">Semana 2 · votação até sexta, 20/11, às 23h59</p>
+    <p class="abre" id="abreFaixa">📸 A votação abre <b>hoje, às 20h</b>. Já vá escolhendo os seus!</p>
+    <p class="regras">Toque em <b>1 ❤️</b> e <b>1 👋</b> (pessoas diferentes). <b>Um voto por dia.</b></p>
+  </section>
 
   <div class="lista" id="lista"></div>
+
+  <div class="depois">
+    <div class="termo" id="termo" aria-live="polite">
+      <div class="termo-top"><span class="termo-rot">Termômetro da casa</span><span class="termo-vivo">ao vivo</span></div>
+      <div class="termo-barra"><i></i></div>
+      <p class="termo-frase" id="termoFrase">Os votos estão chegando…</p>
+    </div>
+    <div class="jogo">
+      <p><b>❤️ O mais querido ganha uma estrela ⭐.</b> Na final, quem tiver mais estrelas vira o rosto do app 7entidos.</p>
+      <p><b>👋 O mais votado para longe…</b> você descobre no domingo.</p>
+      <p>Vote com o coração, igual a gente faz no sofá de casa comentando a novela. E volte amanhã com as amigas! 💛</p>
+    </div>
+  </div>
 
   <div class="aviso" id="avisoAntes">
     <h2 id="abreTxt">A votação abre em breve.</h2>
@@ -371,8 +416,10 @@ function escolher(tipo,i,p){
   if(tipo==="gosto"){if(i===longe){$("msg").textContent="Não pode ser a mesma pessoa nos dois.";return}if(gosto===i&&peso===(p||1)){gosto=-1;peso=1}else{gosto=i;peso=p||1}}
   else{if(i===gosto){$("msg").textContent="Não pode ser a mesma pessoa nos dois.";return}longe=(longe===i?-1:i)}
   pintar();
+  var cc=$("c"+i);if(cc){cc.classList.remove("click");void cc.offsetWidth;cc.classList.add("click")}
 }
-(function(){var cs=["#f5c542","#4aa8ff","#ff8a3d","#5ccf8a","#ff5a6e","#b48cff","#3fd6d0"],h="";for(var k=0;k<7;k++){var a=-Math.PI/2+k*2*Math.PI/7;h+='<i style="left:'+(50+50*Math.cos(a))+'%;top:'+(50+50*Math.sin(a))+'%;background:'+cs[k]+';box-shadow:0 0 12px '+cs[k]+';animation-delay:'+(k*.3)+'s"></i>'}$("anel").innerHTML=h})();
+(function(){var cs=["#f5c542","#4aa8ff","#ff8a3d","#5ccf8a","#ff5a6e","#b48cff","#3fd6d0"],h="";for(var k=0;k<7;k++){var a=-Math.PI/2+k*2*Math.PI/7;h+='<i style="left:'+(50+50*Math.cos(a))+'%;top:'+(50+50*Math.sin(a))+'%;background:'+cs[k]+';box-shadow:0 0 12px '+cs[k]+';animation-delay:'+(k*.3)+'s"></i>'}if($("anel"))$("anel").innerHTML=h})();
+(function(){var f=$("flashes"),h="";for(var k=0;k<16;k++){h+='<i style="left:'+(Math.random()*100)+'%;top:'+(Math.random()*100)+'%;animation-delay:'+(Math.random()*7).toFixed(2)+'s;animation-duration:'+(5+Math.random()*5).toFixed(2)+'s;transform:scale('+(.5+Math.random()*.9).toFixed(2)+')"></i>'}f.innerHTML=h})();
 function festa(texto){
   if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)return;
   var f=document.createElement("div");f.className="festa";
@@ -400,7 +447,9 @@ function pintar(){
   var pronto=gosto>=0&&longe>=0;
   $("humano").classList.toggle("mostra",pronto);
   $("confirmar").style.display=pronto?"block":"none";
-  $("confirmar").disabled=!(pronto&&humano);
+  var cedo=CFG&&estado()==="antes";
+  $("confirmar").disabled=cedo||!(pronto&&humano);
+  $("confirmar").textContent=cedo?"A votação abre às 20h":"Confirmar meu voto";
 }
 $("humano").onclick=function(ev){
   /* "Sou humano": precisa ser um toque de verdade (não um clique de robô),
@@ -410,7 +459,7 @@ $("humano").onclick=function(ev){
 };
 $("confirmar").onclick=function(){
   if(gosto<0||longe<0||!humano||gosto===longe)return;
-  var st=estado();if(st!=="aberta"){aplicar();return}
+  var st=estado();if(st==="antes"){$("msg").textContent="A votação abre hoje às 20h. Volte e confirme! 💛";return}if(st!=="aberta"){aplicar();return}
   if(jaVotouHoje()){mostrar("avisoJaVotou");return}
   var g=MORADORES[gosto],l=MORADORES[longe];
   registrar(g,l);ultimoVoto={g:g,l:l};
@@ -445,7 +494,7 @@ function aplicar(){
   if(CFG.resultado){$("resultadoTxt").textContent=CFG.resultado;[].forEach.call(document.querySelectorAll(".resultadoLinha"),function(e){e.textContent=CFG.resultado+"."})}
   montar();
   var st=estado();
-  if(st==="antes"){$("abreTxt").textContent=CFG.abre_texto||"A votação abre em breve.";mostrar("avisoAntes")}
+  if(st==="antes"){$("abreFaixa").classList.add("on");pintar()}
   else if(st==="fim")mostrar("avisoFim");
   else if(jaVotouHoje())mostrar("avisoJaVotou");
 }
@@ -542,6 +591,7 @@ function termometro(){
 }
 termometro();setInterval(termometro,60*60*1000);
 /* ---- Fecha sozinha: confere a cada 30 segundos se já passou de sexta 20/11 23h59 ---- */
+setInterval(function(){if(CFG&&estado()==="aberta"&&$("abreFaixa").classList.contains("on")){$("abreFaixa").classList.remove("on");pintar()}},20000);
 setInterval(function(){if(CFG&&!window.VOTAR_PREVIA&&estado()==="fim"&&!$("avisoFim").classList.contains("on")&&!$("avisoPronto").classList.contains("on")){mostrar("avisoFim");window.scrollTo(0,0)}},30000);
 $("zap").href=zap();$("zap2").href=zap();
 fetch("semana.json",{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){CFG=j;aplicar()}).catch(function(){mostrar("avisoErro")});
