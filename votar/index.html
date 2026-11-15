@@ -115,6 +115,8 @@ h1 span{display:block;color:var(--marca-amarelo)}
 .botao.contorno{background:transparent;color:var(--marca-texto);border:1.5px solid rgba(243,238,227,.6)}
 body.fechado .lista,body.fechado .regras,body.fechado .barra,body.fechado .termo,body.fechado .jogo{display:none}
 body.fechado main{padding-bottom:48px}
+.pesquisa-linha{margin:8px auto 0;max-width:520px;font-size:17px;color:var(--marca-texto)}
+.anonimo{margin:4px auto 0;max-width:520px;font-size:14px;color:var(--marca-apoio)}
 body.votou .barra{display:none}
 body.votou main{padding-bottom:48px}
 .jaVotou{display:none;margin:14px 0 4px;text-align:center;font-weight:800;font-size:19px;color:var(--marca-amarelo);background:var(--marca-caixa);border:1px solid rgba(245,197,66,.45);border-radius:16px;padding:12px}
@@ -238,6 +240,8 @@ body.glam .resumo div{background:rgba(255,255,255,.05);border-color:rgba(233,196
     <p class="aovivo"><span></span>Ao vivo do tapete vermelho</p>
     <h1 class="ouro">Para quem você torce?</h1>
     <p class="linha"><span class="abre" id="abreFaixa"></span>1 voto por dia</p>
+    <p class="pesquisa-linha">Seu voto também ajuda a nossa pesquisa sobre boas sensações.</p>
+    <p class="anonimo">🔒 Voto anônimo: usamos só os números somados, nunca quem votou em quem.</p>
   </section>
 
   <p class="jaVotou" id="jaVotouAviso">Você já votou hoje. Volte amanhã</p>
@@ -577,17 +581,17 @@ $("t2Form").onsubmit=function(ev){
       pesquisa:"temporada2"+teste+" · "+dataBR()+" "+horaBR()+" · Por que eu ia bombar: "+pq.replace(/[()]/g,"")})}).catch(function(){})}catch(e){}}
   $("t2Form").classList.remove("on");$("t2Ok").classList.add("on");convitePesquisa();
 };
-/* ---- WhatsApp opcional: vai junto com o código do voto ---- */
+/* ---- WhatsApp opcional: vai separado do voto (voto anônimo) ---- */
 $("telNao").onclick=function(){$("blocoZap").style.display="none"};
 $("telOk").onclick=function(){
   var n=($("tel").value||"").replace(/\D/g,"");
   if(n.length<10||n.length>13){$("msgTel").style.color="#ffb3c1";$("msgTel").textContent="Confira o número com DDD.";return}
   var url=window.VOTAR_URL_TESTE||window.PESQUISA_URL||"";
-  var cod=(window.VOTAR_PREFIXO||"")+codigoAparelho();
-  var v=ultimoVoto?("❤️ "+ultimoVoto.g.nome+" · 👋 "+ultimoVoto.l.nome):"";
-  /* Cai na aba "Reality · Lista de espera": Telefone + Origem com o código do aparelho e o voto (liga o número ao voto). */
+  var teste=window.VOTAR_PREFIXO?" · TESTE-CLAUDE":"";
+  /* Cai na aba "Reality · Lista de espera". Voto anônimo: o número vai SEPARADO do voto
+     (sem o voto, sem o código do aparelho e sem a hora), para nunca ligar quem votou em quem. */
   if(url){try{fetch(url,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},
-    body:JSON.stringify({evento:"contato",telefone:n,lgpd:true,pesquisa:"votar · "+cod+" · "+dataBR()+" "+horaBR()+" · "+v})}).catch(function(){})}catch(e){}}
+    body:JSON.stringify({evento:"contato",telefone:n,lgpd:true,pesquisa:"votar"+teste+" · "+dataBR()})}).catch(function(){})}catch(e){}}
   telSalvo=$("tel").value;guarda("7e_whats",telSalvo);if($("t2Form").classList.contains("on")&&!$("t2Contato").value)$("t2Contato").value=telSalvo;
   $("tel").disabled=true;$("telOk").style.display="none";$("telNao").style.display="none";
   $("msgTel").style.color="";$("msgTel").textContent="Pronto! Você fica sabendo antes de todo mundo. 💛";
