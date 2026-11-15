@@ -35,6 +35,8 @@ h1 span{display:block;color:var(--marca-amarelo)}
 .sub{display:inline-flex;align-items:center;gap:8px;font-family:"Space Mono",monospace;font-size:16px;color:var(--marca-texto);background:rgba(245,197,66,.12);border:1px solid rgba(245,197,66,.35);border-radius:999px;padding:6px 14px}
 .sub:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--marca-amarelo);animation:pisca 1.4s infinite}
 @keyframes pisca{50%{opacity:.2}}
+.gancho{font-family:"Playfair Display",Georgia,serif;font-style:italic;font-size:22px;color:#f6dfa0;margin:22px 0 -14px}
+.amiga{margin-top:12px;color:var(--marca-apoio);font-size:18px}
 .regras{margin-top:16px;color:var(--marca-apoio);font-size:18px}
 .regras b{color:var(--marca-texto)}
 .termo{margin-top:20px;padding:16px 18px;border-radius:20px;background:linear-gradient(160deg,#18265a,#0f1838);border:1px solid rgba(245,197,66,.35);box-shadow:0 10px 26px rgba(0,0,0,.3)}
@@ -140,6 +142,12 @@ body.fechado main{padding-bottom:48px}
 .conta{font-size:14px;text-align:right;margin-top:4px}
 .aceite{display:flex!important;gap:12px;align-items:flex-start;font-weight:600!important;font-size:16px!important;color:var(--marca-apoio)!important}
 .aceite input{width:28px;height:28px;flex:none;margin-top:2px;accent-color:#f5c542}
+.pesq{display:none;position:relative;margin-top:22px;padding:86px 18px 20px;border-radius:22px;text-align:center;background:linear-gradient(160deg,rgba(245,197,66,.26),rgba(245,197,66,.06));border:1.5px solid var(--marca-amarelo);box-shadow:0 0 30px rgba(245,197,66,.2)}
+.pesq.on{display:block;animation:pula .45s cubic-bezier(.2,1.4,.4,1)}
+.pesq .anelp{position:absolute;left:50%;top:18px;width:56px;height:56px;margin-left:-28px}
+.pesq .anelp i{position:absolute;width:11px;height:11px;margin:-5.5px 0 0 -5.5px;border-radius:50%;animation:luz 2.6s ease-in-out infinite}
+.pesq h3{font-family:"Playfair Display",Georgia,serif;font-size:26px;color:var(--marca-texto)}
+.pesq p{margin-top:6px}
 .final{margin-top:24px;padding-top:18px;border-top:1px solid var(--marca-linha)}
 .final p{color:var(--marca-texto)!important;font-weight:700}
 .rodape{margin-top:28px;text-align:center;font-size:15px;color:var(--marca-apoio)}
@@ -179,7 +187,9 @@ body.escolheu .mandala img{box-shadow:0 0 0 2px var(--sel),0 0 50px var(--sel)}
     <p class="casa">A Casa dos <i>7 Sentidos</i></p>
     <p class="chamada">Votação da semana</p>
   </div>
+  <p class="gancho">Menina, a festa pegou fogo! 🔥</p>
   <h1>Quem você mais gosta? <span>E quem você quer ver longe?</span></h1>
+  <p class="amiga">Vote com o coração, igual a gente faz no sofá de casa comentando a novela.</p>
   <p class="sub" id="sub">Semana 2 · votação até sexta, 20/11, às 23h59</p>
   <div class="termo" id="termo" aria-live="polite">
     <div class="termo-top"><span class="termo-rot">Termômetro da casa</span><span class="termo-vivo">ao vivo</span></div>
@@ -190,13 +200,13 @@ body.escolheu .mandala img{box-shadow:0 0 0 2px var(--sel),0 0 50px var(--sel)}
     <p><b>❤️ O mais querido ganha uma estrela ⭐.</b> Na final, quem tiver mais estrelas vira o rosto do app 7entidos.</p>
     <p><b>👋 O mais votado para longe…</b> você descobre no domingo.</p>
   </div>
-  <p class="regras">Escolha <b>1 morador em cada botão</b>: um ❤️ e um 👋. Não pode ser a mesma pessoa nos dois. Um voto por dia.</p>
+  <p class="regras">Escolha <b>1 morador em cada botão</b>: um ❤️ e um 👋 (não pode ser a mesma pessoa). Dá para votar <b>1 vez por dia</b>, então volte amanhã e traga as amigas!</p>
 
   <div class="lista" id="lista"></div>
 
   <div class="aviso" id="avisoAntes">
     <h2 id="abreTxt">A votação abre em breve.</h2>
-    <p>Logo depois do episódio de A Casa dos 7 Sentidos, lá no nosso YouTube. Guarde este link e volte!</p>
+    <p>Logo depois do episódio de A Casa dos 7 Sentidos, lá no nosso YouTube. Guarde este link e volte, amiga!</p>
     <a class="botao amarelo" href="https://www.youtube.com/@7Entidos" target="_blank" rel="noopener">Assistir no YouTube</a>
   </div>
   <div class="aviso" id="avisoFim">
@@ -205,15 +215,16 @@ body.escolheu .mandala img{box-shadow:0 0 0 2px var(--sel),0 0 50px var(--sel)}
     <a class="botao amarelo" href="https://www.youtube.com/@7Entidos" target="_blank" rel="noopener">Inscreva-se no canal</a>
   </div>
   <div class="aviso" id="avisoJaVotou">
-    <h2>Você já votou hoje. Volte amanhã!</h2>
+    <h2>Você já votou hoje, amiga! Volte amanhã 💛</h2>
     <p class="resultadoLinha">O resultado sai domingo, 22/11, às 20h, no YouTube.</p>
-    <a class="botao zap" id="zap2" target="_blank" rel="noopener">Chame uma amiga para votar</a>
+    <a class="botao zap" id="zap2" target="_blank" rel="noopener">Chamar as amigas no WhatsApp</a>
     <a class="botao contorno" href="https://www.youtube.com/@7Entidos" target="_blank" rel="noopener">Assistir no YouTube</a>
   </div>
   <div class="aviso" id="avisoPronto">
-    <h2>Voto guardado! 🗳️</h2>
+    <h2>Voto guardado, amiga! 💛</h2>
+    <p>Agora chama as comadres: quanto mais gente votando, mais emoção no domingo.</p>
     <div class="dupla">
-      <figure><img id="pFotoG" alt=""><figcaption>❤️ Mais gosto<b id="pGosto"></b></figcaption></figure>
+      <figure><img id="pFotoG" alt=""><figcaption id="pRotG">❤️ Mais gosto<b id="pGosto"></b></figcaption></figure>
       <figure><img id="pFotoL" alt=""><figcaption>👋 Quero ver longe<b id="pLonge"></b></figcaption></figure>
     </div>
 
@@ -224,7 +235,7 @@ body.escolheu .mandala img{box-shadow:0 0 0 2px var(--sel),0 0 50px var(--sel)}
       <p class="msg2" id="msgStory"></p>
     </div>
 
-    <a class="botao zap" id="zap" target="_blank" rel="noopener">Chame uma amiga para votar</a>
+    <a class="botao zap" id="zap" target="_blank" rel="noopener">Chamar as amigas no WhatsApp</a>
 
     <div class="t2" id="t2">
       <p class="t2-tit">🎬 Temporada 2: e se o próximo morador for você?</p>
@@ -250,6 +261,14 @@ body.escolheu .mandala img{box-shadow:0 0 0 2px var(--sel),0 0 50px var(--sel)}
         <p>Os detalhes da temporada 2 vêm ao longo do programa, no YouTube @7Entidos.</p>
         <a class="botao amarelo" href="https://www.youtube.com/@7Entidos" target="_blank" rel="noopener">Inscreva-se no canal</a>
       </div>
+    </div>
+
+    <div class="pesq" id="pesq">
+      <span class="anelp" id="anelp"></span>
+      <h3>Enquanto isso…</h3>
+      <p>Que tal descobrir quais são os <b>seus</b> 7 sentidos? É a pesquisa do app 7entidos, a mesma que os moradores fizeram.</p>
+      <a class="botao amarelo" href="/pesquisa" style="width:100%">Fazer a pesquisa</a>
+      <p class="priv">7entidos.com.br/pesquisa</p>
     </div>
 
     <div class="bloco" id="blocoZap">
@@ -328,7 +347,7 @@ function protegido(m){return CFG&&CFG.protegido===m.nome}
 function temMuito(m){return (CFG&&CFG.gosto_muito||["Lucas"]).indexOf(m.nome)>=0}
 function slug(m){return m.foto.replace(".jpg","")}
 function mostrar(id){["avisoAntes","avisoFim","avisoJaVotou","avisoPronto","avisoErro"].forEach(function(a){$(a).classList.toggle("on",a===id)});if(id)document.body.classList.add("fechado")}
-function zap(){var t="Eu já votei em A Casa dos 7 Sentidos! Quem você quer ver longe? Vota aqui: 7entidos.com.br/votar";return "https://wa.me/?text="+encodeURIComponent(t)}
+function zap(){var t="Amiga, tô votando no reality A Casa dos 7 Sentidos e preciso de você! Vota também, é rapidinho: 7entidos.com.br/votar 💛 Os capítulos estão no YouTube: youtube.com/@7Entidos";return "https://wa.me/?text="+encodeURIComponent(t)}
 
 function montar(){
   var l=$("lista");l.innerHTML="";
@@ -395,7 +414,7 @@ $("confirmar").onclick=function(){
   if(jaVotouHoje()){mostrar("avisoJaVotou");return}
   var g=MORADORES[gosto],l=MORADORES[longe];
   registrar(g,l);ultimoVoto={g:g,l:l};
-  $("pGosto").textContent=g.nome;$("pLonge").textContent=l.nome;
+  $("pRotG").firstChild.nodeValue=peso===2?"💛 Gosto muito":"❤️ Mais gosto";$("pGosto").textContent=g.nome;$("pLonge").textContent=l.nome;
   $("pFotoG").src=FOTOS+g.foto;$("pFotoG").alt=g.nome;$("pFotoL").src=FOTOS+l.foto;$("pFotoL").alt=l.nome;
   fazerStory(g,l);
   mostrar("avisoPronto");window.scrollTo(0,0);festa("Voto guardado, amiga! 💛");
@@ -481,7 +500,8 @@ $("compartilhar").onclick=function(){
 
 /* ---- Temporada 2: inscrição (fica separada dos votos, na aba "Reality · Lista de espera") ---- */
 var telSalvo=guarda("7e_whats")||"";
-$("t2Nao").onclick=function(){$("t2").style.display="none"};
+function convitePesquisa(){var a=$("anelp");if(!a.innerHTML){var cs=["#f5c542","#4aa8ff","#ff8a3d","#5ccf8a","#ff5a6e","#b48cff","#3fd6d0"],h="";for(var k=0;k<7;k++){var g=-Math.PI/2+k*2*Math.PI/7;h+='<i style="left:'+(50+50*Math.cos(g))+'%;top:'+(50+50*Math.sin(g))+'%;background:'+cs[k]+';box-shadow:0 0 10px '+cs[k]+';animation-delay:'+(k*.3)+'s"></i>'}a.innerHTML=h}$("pesq").classList.add("on")}
+$("t2Nao").onclick=function(){$("t2").style.display="none";convitePesquisa()};
 $("t2Sim").onclick=function(){$("t2Pergunta").style.display="none";$("t2Form").classList.add("on");if(telSalvo&&!$("t2Contato").value)$("t2Contato").value=telSalvo;$("t2Contato").focus()};
 $("t2Porque").oninput=function(){$("t2Conta").textContent=$("t2Porque").value.length+" / 300"};
 $("t2Form").onsubmit=function(ev){
@@ -498,7 +518,7 @@ $("t2Form").onsubmit=function(ev){
   if(url){try{fetch(url,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},
     body:JSON.stringify({evento:"contato",nome:nome,email:email,telefone:tel,lgpd:true,
       pesquisa:"temporada2"+teste+" · "+dataBR()+" "+horaBR()+" · Por que eu ia bombar: "+pq.replace(/[()]/g,"")})}).catch(function(){})}catch(e){}}
-  $("t2Form").classList.remove("on");$("t2Ok").classList.add("on");
+  $("t2Form").classList.remove("on");$("t2Ok").classList.add("on");convitePesquisa();
 };
 /* ---- WhatsApp opcional: vai junto com o código do voto ---- */
 $("telNao").onclick=function(){$("blocoZap").style.display="none"};
