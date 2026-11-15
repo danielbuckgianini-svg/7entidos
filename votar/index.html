@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Quem você mais gosta? · A Casa dos 7 Sentidos</title>
+<title>Qual é o sentido preferido do brasileiro? · A Casa dos 7 Sentidos</title>
 <meta name="description" content="Vote em A Casa dos 7 Sentidos: quem você mais gosta e quem você quer ver longe. Um voto por dia.">
 <meta property="og:image" content="https://7entidos.com.br/assets/compartilhar.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-<meta property="og:title" content="Quem você mais gosta? E quem você quer ver longe?">
+<meta property="og:title" content="Qual você acha que é o sentido preferido do brasileiro? E quem você quer ver longe?">
 <meta property="og:description" content="Votação da semana de A Casa dos 7 Sentidos. Um voto por dia, direto do celular.">
 <meta property="og:url" content="https://7entidos.com.br/votar">
 <link rel="icon" href="/reality/votacao/logo-7entidos-simbolo.png" type="image/png">
@@ -59,20 +59,10 @@ h1 span{display:block;color:var(--marca-amarelo)}
 .info{display:flex;flex-direction:column;min-width:0}
 .cab{display:flex;align-items:flex-start;gap:10px}
 .cab>div{flex:1;min-width:0;display:flex;flex-direction:column}
-.inspira{font-family:"Playfair Display",Georgia,serif;font-style:italic;font-size:15px;color:#f6dfa0;margin-top:2px}
-.quad{flex:none;width:52px;padding:4px;border:0;border-radius:4px;cursor:pointer;background:linear-gradient(145deg,#f6df9f,#b98a2e 45%,#f3d27a 60%,#8a6420);box-shadow:0 4px 12px rgba(0,0,0,.5),0 0 14px rgba(245,197,66,.25);transition:transform .2s}
-.quad:hover,.quad:focus-visible{transform:scale(1.08) rotate(-2deg)}
-.quad img{display:block;width:100%;height:58px;object-fit:cover;border:1px solid #3a2a0c}
-.janela{position:fixed;inset:0;z-index:20;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(3,5,18,.88)}
-.janela.on{display:flex;animation:surge .25s}
 @keyframes surge{from{opacity:0}}
-.janela .dentro{max-width:380px;width:100%;text-align:center;animation:pula .4s cubic-bezier(.2,1.4,.4,1)}
 @keyframes pula{from{transform:scale(.6)}}
 .moldura{padding:14px;border-radius:6px;background:linear-gradient(145deg,#f6df9f,#b98a2e 40%,#f3d27a 60%,#7a5618);box-shadow:0 30px 80px rgba(0,0,0,.7),0 0 60px rgba(245,197,66,.35)}
 .moldura img{display:block;width:100%;max-height:58vh;object-fit:cover;border:2px solid #3a2a0c}
-.janela .jp{font-family:"Space Mono",monospace;color:var(--marca-amarelo);margin:16px 0 4px;font-size:16px}
-.janela .jf{font-family:"Playfair Display",Georgia,serif;font-style:italic;font-size:25px;line-height:1.25;color:var(--marca-texto)}
-.janela .jn{color:var(--marca-apoio);font-size:14px;margin-top:8px}
 .nome{font-family:"Playfair Display",Georgia,serif;font-weight:600;font-size:30px;line-height:1.1}
 .sentido{font-family:"Space Mono",monospace;font-size:17px;color:var(--cor);font-weight:700}
 .selo{display:inline-flex;align-items:center;gap:6px;margin-top:6px;align-self:flex-start;font-size:15px;font-weight:800;color:#3a2a00;background:linear-gradient(135deg,#ffe28a,#f5c542 45%,#c9961c);border-radius:999px;padding:4px 10px;box-shadow:0 0 14px rgba(245,197,66,.55);animation:brilho 2.4s infinite}
@@ -150,6 +140,12 @@ body.fechado main{padding-bottom:48px}
 .pesq p{margin-top:6px}
 .final{margin-top:24px;padding-top:18px;border-top:1px solid var(--marca-linha)}
 .final p{color:var(--marca-texto)!important;font-weight:700}
+.redes{margin-top:30px;padding:20px 16px;border-radius:22px;background:rgba(255,255,255,.04);border:1px solid rgba(233,196,106,.35)}
+.redes-tit{font-family:"Playfair Display",Georgia,serif;font-weight:700;font-size:22px;text-align:center;margin-bottom:12px;color:var(--marca-texto)}
+.rede{display:flex;align-items:center;gap:12px;min-height:60px;margin-top:10px;padding:0 18px;border-radius:16px;text-decoration:none;color:var(--marca-texto);background:rgba(255,255,255,.05);border:2px solid var(--r);border-left-width:8px}
+.rede b{font-size:20px}
+.rede span{margin-left:auto;font-size:16px;color:var(--marca-apoio)}
+.rede:active{transform:scale(.98)}
 .rodape{margin-top:28px;text-align:center;font-size:15px;color:var(--marca-apoio)}
 .rodape a{color:var(--marca-amarelo)}
 .teste{position:fixed;top:0;left:0;right:0;z-index:9;text-align:center;font-size:14px;font-weight:800;background:#ff5a6e;color:#fff;padding:4px}
@@ -232,7 +228,7 @@ body.glam .resumo div{background:rgba(255,255,255,.05);border-color:rgba(233,196
 
   <section class="tapete">
     <p class="aovivo"><span></span>Ao vivo do tapete vermelho</p>
-    <h1 class="ouro">Quem você mais gosta?</h1>
+    <h1 class="ouro">Qual você acha que é o sentido preferido do brasileiro?</h1>
     <p class="linha"><span class="abre" id="abreFaixa">Abre hoje às 20h · </span>1 voto por dia</p>
   </section>
 
@@ -241,9 +237,9 @@ body.glam .resumo div{background:rgba(255,255,255,.05);border-color:rgba(233,196
   <div class="depois">
     <p class="gancho">Menina, a festa pegou fogo! 🔥</p>
     <p class="sub" id="sub">Semana 2 · votação até sexta, 20/11, às 23h59</p>
-    <p class="regras">Toque em <b>1 ❤️</b> (quem você mais gosta) e <b>1 👋</b> (quem você quer ver longe). Não pode ser a mesma pessoa.</p>
+    <p class="regras">Toque em <b>1 ❤️</b> (o sentido que você acha que é o preferido do brasileiro) e <b>1 👋</b> (quem você quer ver longe). Não pode ser o mesmo nos dois.</p>
     <div class="jogo">
-      <p><b>❤️ O mais querido ganha uma estrela ⭐.</b> Na final, quem tiver mais estrelas vira o rosto do app 7entidos.</p>
+      <p><b>❤️ O sentido mais votado ganha uma estrela ⭐.</b> Na final, quem tiver mais estrelas vira o rosto do app 7entidos.</p>
       <p><b>👋 O mais votado para longe…</b> você descobre no domingo.</p>
       <p>Vote com o coração, igual a gente faz no sofá de casa comentando a novela. E volte amanhã com as amigas! 💛</p>
     </div>
@@ -269,7 +265,7 @@ body.glam .resumo div{background:rgba(255,255,255,.05);border-color:rgba(233,196
     <h2>Voto guardado, amiga! 💛</h2>
     <p>Agora chama as comadres: quanto mais gente votando, mais emoção no domingo.</p>
     <div class="dupla">
-      <figure><img id="pFotoG" alt=""><figcaption id="pRotG">❤️ Mais gosto<b id="pGosto"></b></figcaption></figure>
+      <figure><img id="pFotoG" alt=""><figcaption id="pRotG">❤️ Sentido preferido do Brasil<b id="pGosto"></b></figcaption></figure>
       <figure><img id="pFotoL" alt=""><figcaption>👋 Quero ver longe<b id="pLonge"></b></figcaption></figure>
     </div>
 
@@ -337,23 +333,23 @@ body.glam .resumo div{background:rgba(255,255,255,.05);border-color:rgba(233,196
     <button class="botao amarelo" onclick="location.reload()" style="width:100%">Tentar de novo</button>
   </div>
 
+  <div class="redes">
+    <p class="redes-tit">Siga A Casa dos 7 Sentidos em todas as nossas redes</p>
+    <a class="rede" style="--r:#ff0033" href="https://www.youtube.com/@7Entidos" target="_blank" rel="noopener"><b>YouTube</b><span>@7Entidos · episódios completos</span></a>
+    <a class="rede" style="--r:#e1306c" href="https://www.instagram.com/7entidoss/" target="_blank" rel="noopener"><b>Instagram</b><span>@7entidoss</span></a>
+    <a class="rede" style="--r:#1877f2" href="https://www.facebook.com/profile.php?id=61596119254628" target="_blank" rel="noopener"><b>Facebook</b><span>7entidos</span></a>
+    <a class="rede" style="--r:#25f4ee" href="https://www.tiktok.com/@7entidos" target="_blank" rel="noopener"><b>TikTok</b><span>@7entidos</span></a>
+    <a class="rede" style="--r:#0a66c2" href="https://www.linkedin.com/company/145418964/" target="_blank" rel="noopener"><b>LinkedIn</b><span>7entidos</span></a>
+  </div>
   <p class="rodape">Um reality do app 7entidos · <a href="/">Descobrir o meu sentido</a></p>
 </main>
 
-<div class="janela" id="janela" role="dialog" aria-modal="true" aria-label="Quadro do morador">
-  <div class="dentro">
-    <div class="moldura"><img id="jImg" alt=""></div>
-    <p class="jp" id="jPintor"></p>
-    <p class="jf" id="jFrase"></p>
-    <p class="jn" id="jNota"></p>
-    <button type="button" class="botao contorno" id="jFechar">Fechar</button>
-  </div>
-</div>
+
 
 <div class="barra" id="barra">
   <div class="dentro">
     <div class="resumo">
-      <div>❤️ Mais gosto<b id="rGosto">—</b></div>
+      <div>❤️ Sentido preferido<b id="rGosto">—</b></div>
       <div>👋 Quero ver longe<b id="rLonge">—</b></div>
     </div>
     <button type="button" class="humano" id="humano"><span class="caixa" id="caixa"></span>Sou humano</button>
@@ -366,16 +362,14 @@ body.glam .resumo div{background:rgba(255,255,255,.05);border-color:rgba(233,196
 <script>
 /* Os 7 moradores, na ordem pedida. */
 var FOTOS="/reality/votacao/fotos/";
-var QUADROS="/reality/votacao/quadros/";
-/* pintor = quadrinho "Inspirado em…". Os quadros são criações nossas no estilo de cada pintor (os quartos da casa), nunca a obra original. */
 var MORADORES=[
- {nome:"Luzia",sentido:"Visão",foto:"luzia.jpg",cor:"var(--sentido-visao)",pintor:"Inspirada em Van Gogh",frase:"Voltou a ver beleza onde todo mundo só via noite."},
- {nome:"Duda",sentido:"Equilíbrio",foto:"duda.jpg",cor:"var(--sentido-equilibrio)",pintor:"Inspirada em Dalí",frase:"Quando ela entra, até o relógio derrete."},
- {nome:"Yara",sentido:"Olfato",foto:"yara.jpg",cor:"var(--sentido-olfato)",pintor:"Inspirada em Frida Kahlo",frase:"Transforma dor em flor, e flor em cuidado."},
- {nome:"Rafa",sentido:"Audição",foto:"rafa.jpg",cor:"var(--sentido-audicao)",pintor:"Inspirado em Klimt",frase:"Ouve o ouro que mora no silêncio."},
- {nome:"Tonho",sentido:"Tato",foto:"tonho.jpg",cor:"var(--sentido-tato)",pintor:"Inspirado no cubismo",frase:"Enxerga a vida por todos os lados ao mesmo tempo."},
- {nome:"Beto",sentido:"Paladar",foto:"beto.jpg",cor:"var(--sentido-paladar)",pintor:"Inspirado em Monet",frase:"Cada prato dele é um jardim ao pôr do sol."},
- {nome:"Lucas",sentido:"Noção do corpo",foto:"lucas.jpg",cor:"var(--sentido-corpo)",pintor:"Inspirado em Da Vinci",frase:"Pequeno inventor de segredos. Segredo de fantasminha!"}
+ {nome:"Luzia",sentido:"Visão",foto:"luzia.jpg",cor:"var(--sentido-visao)"},
+ {nome:"Duda",sentido:"Equilíbrio",foto:"duda.jpg",cor:"var(--sentido-equilibrio)"},
+ {nome:"Yara",sentido:"Olfato",foto:"yara.jpg",cor:"var(--sentido-olfato)"},
+ {nome:"Rafa",sentido:"Audição",foto:"rafa.jpg",cor:"var(--sentido-audicao)"},
+ {nome:"Tonho",sentido:"Tato",foto:"tonho.jpg",cor:"var(--sentido-tato)"},
+ {nome:"Beto",sentido:"Paladar",foto:"beto.jpg",cor:"var(--sentido-paladar)"},
+ {nome:"Lucas",sentido:"Noção do corpo",foto:"lucas.jpg",cor:"var(--sentido-corpo)"}
 ];
 var LINK="https://7entidos.com.br/votar";
 var CFG=null,gosto=-1,peso=1,longe=-1,humano=false,abriuEm=Date.now();
@@ -389,7 +383,7 @@ function chaveDia(){return "7e_votar_"+(CFG&&CFG.codigo||"semana")}
 function jaVotouHoje(){return guarda(chaveDia())===hojeBR()}
 function semLonge(m){return (CFG&&CFG.sem_longe||["Rafa","Lucas"]).indexOf(m.nome)>=0}
 function protegido(m){return CFG&&CFG.protegido===m.nome}
-function temMuito(m){return (CFG&&CFG.gosto_muito||["Lucas"]).indexOf(m.nome)>=0}
+function temMuito(m){return false}
 function slug(m){return m.foto.replace(".jpg","")}
 function mostrar(id){["avisoAntes","avisoFim","avisoJaVotou","avisoPronto","avisoErro"].forEach(function(a){$(a).classList.toggle("on",a===id)});if(id)document.body.classList.add("fechado")}
 function zap(){var t="Amiga, tô votando no reality A Casa dos 7 Sentidos e preciso de você! Vota também, é rapidinho: 7entidos.com.br/votar 💛 Os capítulos estão no YouTube: youtube.com/@7Entidos";return "https://wa.me/?text="+encodeURIComponent(t)}
@@ -398,15 +392,13 @@ function montar(){
   var l=$("lista");l.innerHTML="";
   MORADORES.forEach(function(m,i){
     var c=document.createElement("div");c.className="cartao";c.id="c"+i;c.style.setProperty("--cor",m.cor);
-    var h='<div class="foto"><img src="'+FOTOS+m.foto+'" alt="'+m.nome+', do sentido '+m.sentido+'" loading="lazy"></div><div class="info"><div class="cab"><div><span class="nome">'+m.nome+'</span><span class="sentido">'+m.sentido+'</span><span class="inspira">'+m.pintor+'</span></div><button type="button" class="quad" id="q'+i+'" aria-label="Ver o quadro: '+m.pintor+'"><img src="'+QUADROS+slug(m)+'.jpg" alt="" loading="lazy"></button></div>';
+    var h='<div class="foto"><img src="'+FOTOS+m.foto+'" alt="'+m.nome+', do sentido '+m.sentido+'" loading="lazy"></div><div class="info"><div class="cab"><div><span class="nome">'+m.sentido+'</span><span class="sentido">com '+m.nome+'</span></div></div>';
     if(protegido(m))h+='<span class="selo">Protegido da semana</span>';
-    if(temMuito(m))h+='<div class="botoes"><button type="button" class="bt gosto" id="g'+i+'">❤️ Gosto</button><button type="button" class="bt gosto muito" id="m'+i+'">💛 Gosto muito</button>';
-    else h+='<div class="botoes"><button type="button" class="bt gosto" id="g'+i+'">❤️ Mais gosto</button>';
+    h+='<div class="botoes"><button type="button" class="bt gosto" id="g'+i+'">❤️ É o preferido do Brasil</button>';
     if(!semLonge(m))h+='<button type="button" class="bt longe" id="l'+i+'">👋 Quero ver longe</button>';
     h+='</div></div>';c.innerHTML=h;l.appendChild(c);
     $("g"+i).onclick=function(){escolher("gosto",i,1)};
     if($("m"+i))$("m"+i).onclick=function(){escolher("gosto",i,2)};
-    $("q"+i).onclick=function(){abrirQuadro(m)};
     if($("l"+i))$("l"+i).onclick=function(){escolher("longe",i)};
   });
   pintar();
@@ -436,11 +428,11 @@ function pintar(){
       g.innerHTML=on1?'❤️ Gosto <small>escolhido ✓</small>':'❤️ Gosto';
       mu.innerHTML=on2?'💛 Gosto muito <small>vale 2 ✓</small>':'💛 Gosto muito <small>vale 2</small>';}
     else{g.classList.toggle("on",i===gosto);g.disabled=(i===longe);
-    g.innerHTML=i===gosto?'❤️ Mais gosto <small>escolhido ✓</small>':(i===longe?'❤️ Mais gosto <small>já está no 👋</small>':'❤️ Mais gosto');}
+    g.innerHTML=i===gosto?'❤️ É o preferido do Brasil <small>✓</small>':(i===longe?'❤️ É o preferido do Brasil <small>já está no 👋</small>':'❤️ É o preferido do Brasil');}
     if(l){l.classList.toggle("on",i===longe);l.disabled=(i===gosto);
       l.innerHTML=i===longe?'👋 Quero ver longe <small>escolhido ✓</small>':(i===gosto?'👋 Quero ver longe <small>já está no ❤️</small>':'👋 Quero ver longe')}
   });
-  $("rGosto").textContent=gosto>=0?MORADORES[gosto].nome+(peso===2?" 💛":""):"—";
+  $("rGosto").textContent=gosto>=0?MORADORES[gosto].sentido:"—";
   $("rLonge").textContent=longe>=0?MORADORES[longe].nome:"—";
   var sel=gosto>=0?MORADORES[gosto]:(longe>=0?MORADORES[longe]:null);
   document.body.classList.toggle("escolheu",!!sel);if(sel)document.body.style.setProperty("--sel",sel.cor);
@@ -463,7 +455,7 @@ $("confirmar").onclick=function(){
   if(jaVotouHoje()){mostrar("avisoJaVotou");return}
   var g=MORADORES[gosto],l=MORADORES[longe];
   registrar(g,l);ultimoVoto={g:g,l:l};
-  $("pRotG").firstChild.nodeValue=peso===2?"💛 Gosto muito":"❤️ Mais gosto";$("pGosto").textContent=g.nome;$("pLonge").textContent=l.nome;
+  $("pRotG").firstChild.nodeValue="❤️ Sentido preferido do Brasil";$("pGosto").textContent=g.sentido+" ("+g.nome+")";$("pLonge").textContent=l.nome;
   $("pFotoG").src=FOTOS+g.foto;$("pFotoG").alt=g.nome;$("pFotoL").src=FOTOS+l.foto;$("pFotoL").alt=l.nome;
   fazerStory(g,l);
   mostrar("avisoPronto");window.scrollTo(0,0);festa("Voto guardado, amiga! 💛");
@@ -481,7 +473,7 @@ function registrar(g,l){
   var url=window.VOTAR_URL_TESTE||window.PESQUISA_URL||"";
   if(!url)return; /* prévia ou ?teste: não grava nada */
   var cod=(window.VOTAR_PREFIXO||"")+codigoAparelho();
-  var voto={data:dataBR(),hora:horaBR(),mais_gosto:g.nome,peso_gosto:peso,quero_ver_longe:l.nome,aparelho:cod,semana:CFG.semana};
+  var voto={data:dataBR(),hora:horaBR(),mais_gosto:g.nome,sentido_preferido:g.sentido,peso_gosto:peso,quero_ver_longe:l.nome,aparelho:cod,semana:CFG.semana};
   if(window.VOTAR_PREFIXO)voto.teste="TESTE do Claude - pode apagar";
   /* Mesmo robô da pesquisa. Cai na aba "Reality · Respostas" com "votar" na coluna Pesquisa.
      parcial:true para NÃO contar nas 100 vagas da pesquisa. A coluna "Campeã" mostra o voto resumido. */
@@ -499,11 +491,6 @@ function aplicar(){
   else if(jaVotouHoje())mostrar("avisoJaVotou");
 }
 
-/* ---- Quadrinho: abre grande com uma frase ---- */
-function abrirQuadro(m){$("jImg").src=QUADROS+slug(m)+".jpg";$("jImg").alt="Quadro criado no estilo do pintor, para "+m.nome;$("jPintor").textContent=m.pintor;$("jFrase").textContent="“"+m.frase+"”";$("jNota").textContent=m.nome+" · "+m.sentido+" · quadro criado por nós no estilo do pintor";$("janela").classList.add("on")}
-$("jFechar").onclick=function(){$("janela").classList.remove("on")};
-$("janela").onclick=function(ev){if(ev.target===$("janela"))$("janela").classList.remove("on")};
-document.addEventListener("keydown",function(ev){if(ev.key==="Escape")$("janela").classList.remove("on")});
 
 /* ---- Cartão "Meu voto" (1080x1920) para os stories ---- */
 var ultimoVoto=null,storyBlob=null;
@@ -529,7 +516,7 @@ function fazerStory(g,l){
       c.font="90px sans-serif";c.textAlign="center";c.fillText(emo,x+220,1170);
     }
     painel(r[0],g,80,"#ff6b8a","❤️");painel(r[1],l,560,"#9fb4ff","👋");
-    c.textAlign="center";c.fillStyle="#F3EEE3";c.font="600 76px 'Playfair Display', serif";c.fillText("Eu gosto de "+g.nome+" ❤️",540,1330);
+    c.textAlign="center";c.fillStyle="#F3EEE3";c.font="600 76px 'Playfair Display', serif";c.fillText("Sentido do Brasil: "+g.sentido+" ❤️",540,1330);
     c.fillStyle="#A9B3D1";c.font="600 60px Manrope, sans-serif";c.fillText("Quero ver longe: "+l.nome+" 👋",540,1440);
     c.fillStyle="#F5C542";arred(c,190,1600,700,120,60);c.fill();
     c.fillStyle="#10131F";c.font="800 50px Manrope, sans-serif";c.fillText("7entidos.com.br/votar",540,1677);
