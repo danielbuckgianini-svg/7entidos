@@ -239,11 +239,6 @@ body.glam .resumo div{background:rgba(255,255,255,.05);border-color:rgba(233,196
   <div class="lista" id="lista"></div>
 
   <div class="depois">
-    <div class="termo" id="termo" aria-live="polite">
-      <div class="termo-top"><span class="termo-rot">Termômetro da casa</span><span class="termo-vivo">ao vivo</span></div>
-      <div class="termo-barra"><i></i></div>
-      <p class="termo-frase" id="termoFrase">Os votos estão chegando…</p>
-    </div>
     <p class="gancho">Menina, a festa pegou fogo! 🔥</p>
     <p class="sub" id="sub">Semana 2 · votação até sexta, 20/11, às 23h59</p>
     <p class="regras">Toque em <b>1 ❤️</b> (quem você mais gosta) e <b>1 👋</b> (quem você quer ver longe). Não pode ser a mesma pessoa.</p>
@@ -594,7 +589,7 @@ $("telOk").onclick=function(){
 function termometro(){
   fetch("termometro.json",{cache:"no-store"}).then(function(r){return r.json()}).then(function(t){if(t&&t.frase)$("termoFrase").textContent=t.frase}).catch(function(){});
 }
-termometro();setInterval(termometro,60*60*1000);
+/* termômetro retirado da página em 15/11 */
 /* ---- Fecha sozinha: confere a cada 30 segundos se já passou de sexta 20/11 23h59 ---- */
 setInterval(function(){if(CFG&&estado()==="aberta"&&$("abreFaixa").classList.contains("on")){$("abreFaixa").classList.remove("on");pintar()}},20000);
 setInterval(function(){if(CFG&&!window.VOTAR_PREVIA&&estado()==="fim"&&!$("avisoFim").classList.contains("on")&&!$("avisoPronto").classList.contains("on")){mostrar("avisoFim");window.scrollTo(0,0)}},30000);
