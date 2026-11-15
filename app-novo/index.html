@@ -60,9 +60,9 @@ h1 em,h2 em{color:var(--ouro)}
 .anel i.apag{opacity:.18;box-shadow:none}
 .anel i.acesa{width:30px;height:30px;margin:-15px;opacity:1;box-shadow:0 0 26px 10px var(--c),0 0 70px 20px var(--c);animation:acende 1.2s ease-out}
 @keyframes acende{from{width:10px;height:10px;margin:-5px;opacity:.2}}
-.anel.foto{width:250px;height:250px}
-.anel.foto i{transform:rotate(var(--a)) translateY(-111px)}
-.anel.foto img{position:absolute;inset:26px;width:calc(100% - 52px);height:calc(100% - 52px);border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px rgba(245,197,66,.55),0 0 50px rgba(245,197,66,.35),0 20px 40px rgba(0,0,0,.6)}
+.anel.comfoto{width:250px;height:250px}
+.anel.comfoto i{transform:rotate(var(--a)) translateY(-111px)}
+.anel.comfoto img{position:absolute;inset:26px;width:calc(100% - 52px);height:calc(100% - 52px);border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px rgba(245,197,66,.55),0 0 50px rgba(245,197,66,.35),0 20px 40px rgba(0,0,0,.6)}
 .anel .centro{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:40px}
 .nomesent{font:700 16px "Space Mono",monospace;letter-spacing:.14em;text-transform:uppercase}
 
@@ -295,7 +295,7 @@ function desenha(){
 
 /* ============ TELAS ============ */
 function brisa(){
-  mostra(`${anel("respira foto",-1,[],BRISA)}
+  mostra(`${anel("respira comfoto",-1,[],BRISA)}
     <p class="fala">Oi, eu sou a Brisa. Aqui não tem resposta certa nem errada. Só o que você sente.</p>
     <p class="fala2">Vamos descobrir, sentido por sentido, o que te faz bem?</p>
     <button class="btn" onclick="comecar()">Começar</button>
