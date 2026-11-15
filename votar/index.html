@@ -115,6 +115,10 @@ h1 span{display:block;color:var(--marca-amarelo)}
 .botao.contorno{background:transparent;color:var(--marca-texto);border:1.5px solid rgba(243,238,227,.6)}
 body.fechado .lista,body.fechado .regras,body.fechado .barra,body.fechado .termo,body.fechado .jogo{display:none}
 body.fechado main{padding-bottom:48px}
+body.votou .barra{display:none}
+body.votou main{padding-bottom:48px}
+.jaVotou{display:none;margin:14px 0 4px;text-align:center;font-weight:800;font-size:19px;color:var(--marca-amarelo);background:var(--marca-caixa);border:1px solid rgba(245,197,66,.45);border-radius:16px;padding:12px}
+body.votou .jaVotou{display:block}
 .dupla{display:flex;gap:12px;margin:16px 0 6px}
 .dupla figure{flex:1;margin:0;border-radius:18px;overflow:hidden;background:rgba(255,255,255,.05);border:2px solid #ff6b8a}
 .dupla figure+figure{border-color:#9fb4ff}
@@ -236,22 +240,23 @@ body.glam .resumo div{background:rgba(255,255,255,.05);border-color:rgba(233,196
     <p class="linha"><span class="abre" id="abreFaixa"></span>1 voto por dia</p>
   </section>
 
+  <p class="jaVotou" id="jaVotouAviso">Você já votou hoje. Volte amanhã</p>
   <div class="lista" id="lista"></div>
 
   <div class="depois">
-    <p class="gancho">Menina, a festa pegou fogo! 🔥</p>
+    <p class="gancho">A festa pegou fogo! 🔥</p>
     <p class="sub" id="sub">Semana 2 · votação até sexta, 20/11, às 23h59</p>
     <p class="regras">Toque em <b>1 ❤️</b> (quem você mais gosta) e <b>1 👋</b> (quem você quer ver longe). Não pode ser a mesma pessoa.</p>
     <div class="jogo">
       <p><b>❤️ O mais querido ganha uma estrela ⭐.</b> Na final, quem tiver mais estrelas vira o rosto do app 7entidos.</p>
       <p><b>👋 O mais votado para longe…</b> você descobre no domingo.</p>
-      <p>Vote com o coração, igual a gente faz no sofá de casa comentando a novela. E volte amanhã com as amigas! 💛</p>
+      <p>Vote com o coração, igual a gente faz no sofá de casa comentando a novela. E volte amanhã! 💛</p>
     </div>
   </div>
 
   <div class="aviso" id="avisoAntes">
     <h2 id="abreTxt">A votação abre em breve.</h2>
-    <p>Logo depois do episódio de A Casa dos 7 Sentidos, lá no nosso YouTube. Guarde este link e volte, amiga!</p>
+    <p>Logo depois do episódio de A Casa dos 7 Sentidos, lá no nosso YouTube. Guarde este link e volte!</p>
     <a class="botao amarelo" href="https://www.youtube.com/@7Entidos" target="_blank" rel="noopener">Assistir no YouTube</a>
   </div>
   <div class="aviso" id="avisoFim">
@@ -260,14 +265,14 @@ body.glam .resumo div{background:rgba(255,255,255,.05);border-color:rgba(233,196
     <a class="botao amarelo" href="https://www.youtube.com/@7Entidos" target="_blank" rel="noopener">Inscreva-se no canal</a>
   </div>
   <div class="aviso" id="avisoJaVotou">
-    <h2>Você já votou hoje, amiga! Volte amanhã 💛</h2>
+    <h2>Você já votou hoje! Volte amanhã 💛</h2>
     <p class="resultadoLinha">O resultado sai domingo, 22/11, às 20h, no YouTube.</p>
-    <a class="botao zap" id="zap2" target="_blank" rel="noopener">Chamar as amigas no WhatsApp</a>
+    <a class="botao zap" id="zap2" target="_blank" rel="noopener">Chamar no WhatsApp</a>
     <a class="botao contorno" href="https://www.youtube.com/@7Entidos" target="_blank" rel="noopener">Assistir no YouTube</a>
   </div>
   <div class="aviso" id="avisoPronto">
-    <h2>Voto guardado, amiga! 💛</h2>
-    <p>Agora chama as comadres: quanto mais gente votando, mais emoção no domingo.</p>
+    <h2>Voto guardado! 💛</h2>
+    <p>Agora chama mais gente: quanto mais gente votando, mais emoção no domingo.</p>
     <div class="dupla">
       <figure><img id="pFotoG" alt=""><figcaption id="pRotG">❤️ Mais gosto<b id="pGosto"></b></figcaption></figure>
       <figure><img id="pFotoL" alt=""><figcaption>👋 Quero ver longe<b id="pLonge"></b></figcaption></figure>
@@ -280,7 +285,7 @@ body.glam .resumo div{background:rgba(255,255,255,.05);border-color:rgba(233,196
       <p class="msg2" id="msgStory"></p>
     </div>
 
-    <a class="botao zap" id="zap" target="_blank" rel="noopener">Chamar as amigas no WhatsApp</a>
+    <a class="botao zap" id="zap" target="_blank" rel="noopener">Chamar no WhatsApp</a>
 
     <div class="t2" id="t2">
       <p class="t2-tit">🎬 Temporada 2: e se o próximo morador for você?</p>
@@ -391,8 +396,10 @@ function semLonge(m){return (CFG&&CFG.sem_longe||["Rafa","Lucas"]).indexOf(m.nom
 function protegido(m){return CFG&&CFG.protegido===m.nome}
 function temMuito(m){return (CFG&&CFG.gosto_muito||["Lucas"]).indexOf(m.nome)>=0}
 function slug(m){return m.foto.replace(".jpg","")}
-function mostrar(id){["avisoAntes","avisoFim","avisoJaVotou","avisoPronto","avisoErro"].forEach(function(a){$(a).classList.toggle("on",a===id)});if(id)document.body.classList.add("fechado")}
-function zap(){var t="Amiga, tô votando no reality A Casa dos 7 Sentidos e preciso de você! Vota também, é rapidinho: 7entidos.com.br/votar 💛 Os capítulos estão no YouTube: youtube.com/@7Entidos";return "https://wa.me/?text="+encodeURIComponent(t)}
+function mostrar(id){["avisoAntes","avisoFim","avisoJaVotou","avisoPronto","avisoErro"].forEach(function(a){$(a).classList.toggle("on",a===id)});
+  /* Depois de votar a página continua aberta: só os botões de voto ficam desativados. */
+  var votou=(id==="avisoJaVotou"||id==="avisoPronto");if(id)document.body.classList.add(votou?"votou":"fechado");if(votou)pintar()}
+function zap(){var t="Tô votando no reality A Casa dos 7 Sentidos e preciso de você! Vota também, é rapidinho: 7entidos.com.br/votar 💛 Os capítulos estão no YouTube: youtube.com/@7Entidos";return "https://wa.me/?text="+encodeURIComponent(t)}
 
 function montar(){
   var l=$("lista");l.innerHTML="";
@@ -450,6 +457,7 @@ function pintar(){
   var cedo=CFG&&estado()==="antes";
   $("confirmar").disabled=cedo||!(pronto&&humano);
   $("confirmar").textContent=cedo?"A votação abre às 20h":"Confirmar meu voto";
+  if(document.body.classList.contains("votou"))[].forEach.call(document.querySelectorAll("#lista .bt"),function(b){b.disabled=true});
 }
 $("humano").onclick=function(ev){
   /* "Sou humano": precisa ser um toque de verdade (não um clique de robô),
@@ -466,7 +474,7 @@ $("confirmar").onclick=function(){
   $("pRotG").firstChild.nodeValue=peso===2?"💛 Gosto muito":"❤️ Mais gosto";$("pGosto").textContent=g.nome;$("pLonge").textContent=l.nome;
   $("pFotoG").src=FOTOS+g.foto;$("pFotoG").alt=g.nome;$("pFotoL").src=FOTOS+l.foto;$("pFotoL").alt=l.nome;
   fazerStory(g,l);
-  mostrar("avisoPronto");window.scrollTo(0,0);festa("Voto guardado, amiga! 💛");
+  mostrar("avisoPronto");$("avisoPronto").scrollIntoView({block:"start"});festa("Voto guardado! 💛");
 };
 function estado(){
   if(window.VOTAR_PREVIA)return "aberta";
