@@ -275,7 +275,7 @@ body.glam .resumo div{background:rgba(255,255,255,.05);border-color:rgba(233,196
     <a class="botao contorno" href="https://www.youtube.com/@7Entidos" target="_blank" rel="noopener">Assistir no YouTube</a>
   </div>
   <div class="aviso" id="avisoPronto">
-    <h2>Voto guardado! 💛</h2>
+    <h2>Voto registrado! Volte amanhã para votar de novo 💛</h2>
     <p>Agora chama mais gente: quanto mais gente votando, mais emoção no domingo.</p>
     <div class="dupla">
       <figure><img id="pFotoG" alt=""><figcaption id="pRotG">❤️ Mais gosto<b id="pGosto"></b></figcaption></figure>
@@ -489,7 +489,7 @@ function votoGuardado(g,l){
   $("pRotG").firstChild.nodeValue=peso===2?"💛 Gosto muito":"❤️ Mais gosto";$("pGosto").textContent=g.nome;$("pLonge").textContent=l.nome;
   $("pFotoG").src=FOTOS+g.foto;$("pFotoG").alt=g.nome;$("pFotoL").src=FOTOS+l.foto;$("pFotoL").alt=l.nome;
   fazerStory(g,l);
-  mostrar("avisoPronto");$("avisoPronto").scrollIntoView({block:"start"});festa("Voto guardado! 💛");
+  mostrar("avisoPronto");$("avisoPronto").scrollIntoView({block:"start"});festa("Voto registrado! 💛");
 }
 function estado(){
   if(window.VOTAR_PREVIA)return "aberta";
