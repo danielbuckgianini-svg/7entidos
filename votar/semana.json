@@ -1,11 +1,14 @@
 {
-  "_como_usar": "Para trocar a semana, mude só este arquivo. codigo = nome curto da semana (troque toda semana: libera um novo voto por dia). semana = nome que vai para a planilha. subtitulo = linha embaixo do título. protegido = quem ganha o selo dourado. sem_longe = quem NÃO tem o botão 'Quero ver longe'. abre e encerra = horário de Brasília (-03:00).",
+  "_como_usar": "Para trocar a semana, mude só este arquivo. codigo = nome curto da semana (troque toda semana: libera um novo voto por dia). semana = nome que vai para a planilha. subtitulo = linha embaixo do título. protegido = quem ganha o selo dourado. sem_longe = quem NÃO tem o botão 'Quero ver longe'. abre e encerra = horário de Brasília (-03:00). gosto_muito = quem tem os botões '❤️ Gosto' e '💛 Gosto muito' (o 💛 vale 2).",
   "codigo": "semana2",
   "semana": "Semana 2 · 15 a 20/11/2026",
   "subtitulo": "Semana 2 · votação até sexta, 20/11, às 23h59",
   "protegido": "Rafa",
   "sem_longe": [
     "Rafa",
+    "Lucas"
+  ],
+  "gosto_muito": [
     "Lucas"
   ],
   "aberta": true,

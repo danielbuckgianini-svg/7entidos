@@ -52,9 +52,25 @@ h1 span{display:block;color:var(--marca-amarelo)}
 .cartao{position:relative;display:grid;grid-template-columns:120px 1fr;gap:14px;align-items:stretch;padding:12px;border-radius:22px;background:linear-gradient(160deg,color-mix(in srgb,var(--cor) 22%,#16224a) 0%,#111B3D 55%);border:1.5px solid color-mix(in srgb,var(--cor) 45%,transparent);box-shadow:0 14px 30px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.08);transition:border-color .2s,box-shadow .2s}
 .cartao.gosto{border-color:#ff6b8a;box-shadow:0 0 0 3px rgba(255,107,138,.35),0 14px 30px rgba(0,0,0,.3)}
 .cartao.longe{border-color:#9fb4ff;box-shadow:0 0 0 3px rgba(159,180,255,.35),0 14px 30px rgba(0,0,0,.3)}
-.foto{position:relative;width:120px;height:150px;border-radius:16px;overflow:hidden;background:#0d1533;border:3px solid var(--cor)}
-.foto img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+.foto{position:relative;width:120px;height:150px;border-radius:60px 60px 16px 16px;overflow:hidden;background:#0d1533;border:3px solid var(--cor);box-shadow:0 0 18px color-mix(in srgb,var(--cor) 45%,transparent)}
+.foto img{width:100%;height:100%;object-fit:cover;object-position:50% 38%;display:block}
 .info{display:flex;flex-direction:column;min-width:0}
+.cab{display:flex;align-items:flex-start;gap:10px}
+.cab>div{flex:1;min-width:0;display:flex;flex-direction:column}
+.inspira{font-family:"Playfair Display",Georgia,serif;font-style:italic;font-size:15px;color:#f6dfa0;margin-top:2px}
+.quad{flex:none;width:52px;padding:4px;border:0;border-radius:4px;cursor:pointer;background:linear-gradient(145deg,#f6df9f,#b98a2e 45%,#f3d27a 60%,#8a6420);box-shadow:0 4px 12px rgba(0,0,0,.5),0 0 14px rgba(245,197,66,.25);transition:transform .2s}
+.quad:hover,.quad:focus-visible{transform:scale(1.08) rotate(-2deg)}
+.quad img{display:block;width:100%;height:58px;object-fit:cover;border:1px solid #3a2a0c}
+.janela{position:fixed;inset:0;z-index:20;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(3,5,18,.88)}
+.janela.on{display:flex;animation:surge .25s}
+@keyframes surge{from{opacity:0}}
+.janela .dentro{max-width:380px;width:100%;text-align:center;animation:pula .4s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pula{from{transform:scale(.6)}}
+.moldura{padding:14px;border-radius:6px;background:linear-gradient(145deg,#f6df9f,#b98a2e 40%,#f3d27a 60%,#7a5618);box-shadow:0 30px 80px rgba(0,0,0,.7),0 0 60px rgba(245,197,66,.35)}
+.moldura img{display:block;width:100%;max-height:58vh;object-fit:cover;border:2px solid #3a2a0c}
+.janela .jp{font-family:"Space Mono",monospace;color:var(--marca-amarelo);margin:16px 0 4px;font-size:16px}
+.janela .jf{font-family:"Playfair Display",Georgia,serif;font-style:italic;font-size:25px;line-height:1.25;color:var(--marca-texto)}
+.janela .jn{color:var(--marca-apoio);font-size:14px;margin-top:8px}
 .nome{font-family:Fraunces,serif;font-weight:600;font-size:30px;line-height:1.1}
 .sentido{font-family:"Space Mono",monospace;font-size:17px;color:var(--cor);font-weight:700}
 .selo{display:inline-flex;align-items:center;gap:6px;margin-top:6px;align-self:flex-start;font-size:15px;font-weight:800;color:#3a2a00;background:linear-gradient(135deg,#ffe28a,#f5c542 45%,#c9961c);border-radius:999px;padding:4px 10px;box-shadow:0 0 14px rgba(245,197,66,.55);animation:brilho 2.4s infinite}
@@ -63,6 +79,7 @@ h1 span{display:block;color:var(--marca-amarelo)}
 .bt{min-height:56px;border-radius:999px;border:1.5px solid rgba(243,238,227,.35);background:rgba(255,255,255,.06);color:var(--marca-texto);font:inherit;font-weight:800;font-size:18px;cursor:pointer;padding:0 14px;text-align:left;display:flex;align-items:center;gap:8px}
 .bt:focus-visible{outline:3px solid var(--marca-texto);outline-offset:2px}
 .bt.gosto.on{background:#ff6b8a;border-color:#ff6b8a;color:#2a0710}
+.bt.muito.on{background:#f5c542;border-color:#f5c542;color:#2a1f00}
 .bt.longe.on{background:#9fb4ff;border-color:#9fb4ff;color:#0b1430}
 .bt:disabled{opacity:.35;cursor:not-allowed}
 .bt small{font-weight:600;font-size:13px;margin-left:auto;opacity:.9}
@@ -235,6 +252,16 @@ body.fechado main{padding-bottom:48px}
   <p class="rodape">Um reality do app 7entidos · <a href="/">Descobrir o meu sentido</a></p>
 </main>
 
+<div class="janela" id="janela" role="dialog" aria-modal="true" aria-label="Quadro do morador">
+  <div class="dentro">
+    <div class="moldura"><img id="jImg" alt=""></div>
+    <p class="jp" id="jPintor"></p>
+    <p class="jf" id="jFrase"></p>
+    <p class="jn" id="jNota"></p>
+    <button type="button" class="botao contorno" id="jFechar">Fechar</button>
+  </div>
+</div>
+
 <div class="barra" id="barra">
   <div class="dentro">
     <div class="resumo">
@@ -251,17 +278,19 @@ body.fechado main{padding-bottom:48px}
 <script>
 /* Os 7 moradores, na ordem pedida. */
 var FOTOS="/reality/votacao/fotos/";
+var QUADROS="/reality/votacao/quadros/";
+/* pintor = quadrinho "Inspirado em…". Os quadros são criações nossas no estilo de cada pintor (os quartos da casa), nunca a obra original. */
 var MORADORES=[
- {nome:"Luzia",sentido:"Visão",foto:"luzia.jpg",cor:"var(--sentido-visao)"},
- {nome:"Duda",sentido:"Equilíbrio",foto:"duda.jpg",cor:"var(--sentido-equilibrio)"},
- {nome:"Yara",sentido:"Olfato",foto:"yara.jpg",cor:"var(--sentido-olfato)"},
- {nome:"Rafa",sentido:"Audição",foto:"rafa.jpg",cor:"var(--sentido-audicao)"},
- {nome:"Tonho",sentido:"Tato",foto:"tonho.jpg",cor:"var(--sentido-tato)"},
- {nome:"Beto",sentido:"Paladar",foto:"beto.jpg",cor:"var(--sentido-paladar)"},
- {nome:"Lucas",sentido:"Noção do corpo",foto:"lucas.jpg",cor:"var(--sentido-corpo)"}
+ {nome:"Luzia",sentido:"Visão",foto:"luzia.jpg",cor:"var(--sentido-visao)",pintor:"Inspirada em Van Gogh",frase:"Voltou a ver beleza onde todo mundo só via noite."},
+ {nome:"Duda",sentido:"Equilíbrio",foto:"duda.jpg",cor:"var(--sentido-equilibrio)",pintor:"Inspirada em Dalí",frase:"Quando ela entra, até o relógio derrete."},
+ {nome:"Yara",sentido:"Olfato",foto:"yara.jpg",cor:"var(--sentido-olfato)",pintor:"Inspirada em Frida Kahlo",frase:"Transforma dor em flor, e flor em cuidado."},
+ {nome:"Rafa",sentido:"Audição",foto:"rafa.jpg",cor:"var(--sentido-audicao)",pintor:"Inspirado em Klimt",frase:"Ouve o ouro que mora no silêncio."},
+ {nome:"Tonho",sentido:"Tato",foto:"tonho.jpg",cor:"var(--sentido-tato)",pintor:"Inspirado no cubismo",frase:"Enxerga a vida por todos os lados ao mesmo tempo."},
+ {nome:"Beto",sentido:"Paladar",foto:"beto.jpg",cor:"var(--sentido-paladar)",pintor:"Inspirado em Monet",frase:"Cada prato dele é um jardim ao pôr do sol."},
+ {nome:"Lucas",sentido:"Noção do corpo",foto:"lucas.jpg",cor:"var(--sentido-corpo)",pintor:"Inspirado em Da Vinci",frase:"Pequeno inventor de segredos. Segredo de fantasminha!"}
 ];
 var LINK="https://7entidos.com.br/votar";
-var CFG=null,gosto=-1,longe=-1,humano=false,abriuEm=Date.now();
+var CFG=null,gosto=-1,peso=1,longe=-1,humano=false,abriuEm=Date.now();
 function $(id){return document.getElementById(id)}
 function guarda(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
 function hojeBR(){try{return new Date().toLocaleDateString("en-CA",{timeZone:"America/Sao_Paulo"})}catch(e){return new Date(Date.now()-3*36e5).toISOString().slice(0,10)}}
@@ -272,6 +301,8 @@ function chaveDia(){return "7e_votar_"+(CFG&&CFG.codigo||"semana")}
 function jaVotouHoje(){return guarda(chaveDia())===hojeBR()}
 function semLonge(m){return (CFG&&CFG.sem_longe||["Rafa","Lucas"]).indexOf(m.nome)>=0}
 function protegido(m){return CFG&&CFG.protegido===m.nome}
+function temMuito(m){return (CFG&&CFG.gosto_muito||["Lucas"]).indexOf(m.nome)>=0}
+function slug(m){return m.foto.replace(".jpg","")}
 function mostrar(id){["avisoAntes","avisoFim","avisoJaVotou","avisoPronto","avisoErro"].forEach(function(a){$(a).classList.toggle("on",a===id)});if(id)document.body.classList.add("fechado")}
 function zap(){var t="Eu já votei em A Casa dos 7 Sentidos! Quem você quer ver longe? Vota aqui: 7entidos.com.br/votar";return "https://wa.me/?text="+encodeURIComponent(t)}
 
@@ -279,32 +310,39 @@ function montar(){
   var l=$("lista");l.innerHTML="";
   MORADORES.forEach(function(m,i){
     var c=document.createElement("div");c.className="cartao";c.id="c"+i;c.style.setProperty("--cor",m.cor);
-    var h='<div class="foto"><img src="'+FOTOS+m.foto+'" alt="'+m.nome+', do sentido '+m.sentido+'" loading="lazy"></div><div class="info"><span class="nome">'+m.nome+'</span><span class="sentido">'+m.sentido+'</span>';
+    var h='<div class="foto"><img src="'+FOTOS+m.foto+'" alt="'+m.nome+', do sentido '+m.sentido+'" loading="lazy"></div><div class="info"><div class="cab"><div><span class="nome">'+m.nome+'</span><span class="sentido">'+m.sentido+'</span><span class="inspira">'+m.pintor+'</span></div><button type="button" class="quad" id="q'+i+'" aria-label="Ver o quadro: '+m.pintor+'"><img src="'+QUADROS+slug(m)+'.jpg" alt="" loading="lazy"></button></div>';
     if(protegido(m))h+='<span class="selo">Protegido da semana</span>';
-    h+='<div class="botoes"><button type="button" class="bt gosto" id="g'+i+'">❤️ Mais gosto</button>';
+    if(temMuito(m))h+='<div class="botoes"><button type="button" class="bt gosto" id="g'+i+'">❤️ Gosto</button><button type="button" class="bt gosto muito" id="m'+i+'">💛 Gosto muito</button>';
+    else h+='<div class="botoes"><button type="button" class="bt gosto" id="g'+i+'">❤️ Mais gosto</button>';
     if(!semLonge(m))h+='<button type="button" class="bt longe" id="l'+i+'">👋 Quero ver longe</button>';
     h+='</div></div>';c.innerHTML=h;l.appendChild(c);
-    $("g"+i).onclick=function(){escolher("gosto",i)};
+    $("g"+i).onclick=function(){escolher("gosto",i,1)};
+    if($("m"+i))$("m"+i).onclick=function(){escolher("gosto",i,2)};
+    $("q"+i).onclick=function(){abrirQuadro(m)};
     if($("l"+i))$("l"+i).onclick=function(){escolher("longe",i)};
   });
   pintar();
 }
-function escolher(tipo,i){
+function escolher(tipo,i,p){
   $("msg").textContent="";
-  if(tipo==="gosto"){if(i===longe){$("msg").textContent="Não pode ser a mesma pessoa nos dois.";return}gosto=(gosto===i?-1:i)}
+  if(tipo==="gosto"){if(i===longe){$("msg").textContent="Não pode ser a mesma pessoa nos dois.";return}if(gosto===i&&peso===(p||1)){gosto=-1;peso=1}else{gosto=i;peso=p||1}}
   else{if(i===gosto){$("msg").textContent="Não pode ser a mesma pessoa nos dois.";return}longe=(longe===i?-1:i)}
   pintar();
 }
 function pintar(){
   MORADORES.forEach(function(m,i){
-    var c=$("c"+i),g=$("g"+i),l=$("l"+i);if(!c)return;
+    var c=$("c"+i),g=$("g"+i),l=$("l"+i),mu=$("m"+i);if(!c)return;
     c.classList.toggle("gosto",i===gosto);c.classList.toggle("longe",i===longe);
-    g.classList.toggle("on",i===gosto);g.disabled=(i===longe);
-    g.innerHTML=i===gosto?'❤️ Mais gosto <small>escolhido ✓</small>':(i===longe?'❤️ Mais gosto <small>já está no 👋</small>':'❤️ Mais gosto');
+    if(mu){var on1=i===gosto&&peso===1,on2=i===gosto&&peso===2;
+      g.classList.toggle("on",on1);mu.classList.toggle("on",on2);g.disabled=mu.disabled=(i===longe);
+      g.innerHTML=on1?'❤️ Gosto <small>escolhido ✓</small>':'❤️ Gosto';
+      mu.innerHTML=on2?'💛 Gosto muito <small>vale 2 ✓</small>':'💛 Gosto muito <small>vale 2</small>';}
+    else{g.classList.toggle("on",i===gosto);g.disabled=(i===longe);
+    g.innerHTML=i===gosto?'❤️ Mais gosto <small>escolhido ✓</small>':(i===longe?'❤️ Mais gosto <small>já está no 👋</small>':'❤️ Mais gosto');}
     if(l){l.classList.toggle("on",i===longe);l.disabled=(i===gosto);
       l.innerHTML=i===longe?'👋 Quero ver longe <small>escolhido ✓</small>':(i===gosto?'👋 Quero ver longe <small>já está no ❤️</small>':'👋 Quero ver longe')}
   });
-  $("rGosto").textContent=gosto>=0?MORADORES[gosto].nome:"—";
+  $("rGosto").textContent=gosto>=0?MORADORES[gosto].nome+(peso===2?" 💛":""):"—";
   $("rLonge").textContent=longe>=0?MORADORES[longe].nome:"—";
   var pronto=gosto>=0&&longe>=0;
   $("humano").classList.toggle("mostra",pronto);
@@ -341,13 +379,13 @@ function registrar(g,l){
   var url=window.VOTAR_URL_TESTE||window.PESQUISA_URL||"";
   if(!url)return; /* prévia ou ?teste: não grava nada */
   var cod=(window.VOTAR_PREFIXO||"")+codigoAparelho();
-  var voto={data:dataBR(),hora:horaBR(),mais_gosto:g.nome,quero_ver_longe:l.nome,aparelho:cod,semana:CFG.semana};
+  var voto={data:dataBR(),hora:horaBR(),mais_gosto:g.nome,peso_gosto:peso,quero_ver_longe:l.nome,aparelho:cod,semana:CFG.semana};
   if(window.VOTAR_PREFIXO)voto.teste="TESTE do Claude - pode apagar";
   /* Mesmo robô da pesquisa. Cai na aba "Reality · Respostas" com "votar" na coluna Pesquisa.
      parcial:true para NÃO contar nas 100 vagas da pesquisa. A coluna "Campeã" mostra o voto resumido. */
   try{fetch(url,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},
     body:JSON.stringify({pesquisa:"votar",pessoa:cod,parcial:true,
-      campea:"❤️ "+g.nome+" · 👋 "+l.nome,respostas:voto})}).catch(function(){})}catch(e){}
+      campea:(peso===2?"💛 "+g.nome+" (gosto muito, vale 2)":"❤️ "+g.nome)+" · 👋 "+l.nome,respostas:voto})}).catch(function(){})}catch(e){}
 }
 function aplicar(){
   if(CFG.subtitulo)$("sub").textContent=CFG.subtitulo;
@@ -358,6 +396,12 @@ function aplicar(){
   else if(st==="fim")mostrar("avisoFim");
   else if(jaVotouHoje())mostrar("avisoJaVotou");
 }
+
+/* ---- Quadrinho: abre grande com uma frase ---- */
+function abrirQuadro(m){$("jImg").src=QUADROS+slug(m)+".jpg";$("jImg").alt="Quadro criado no estilo do pintor, para "+m.nome;$("jPintor").textContent=m.pintor;$("jFrase").textContent="“"+m.frase+"”";$("jNota").textContent=m.nome+" · "+m.sentido+" · quadro criado por nós no estilo do pintor";$("janela").classList.add("on")}
+$("jFechar").onclick=function(){$("janela").classList.remove("on")};
+$("janela").onclick=function(ev){if(ev.target===$("janela"))$("janela").classList.remove("on")};
+document.addEventListener("keydown",function(ev){if(ev.key==="Escape")$("janela").classList.remove("on")});
 
 /* ---- Cartão "Meu voto" (1080x1920) para os stories ---- */
 var ultimoVoto=null,storyBlob=null;
