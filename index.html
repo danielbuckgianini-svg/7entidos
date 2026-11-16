@@ -236,20 +236,21 @@ section.sec{padding:clamp(80px,12vw,140px) 0}
 .lista::before{content:"";position:absolute;left:50%;top:50%;width:900px;height:900px;margin:-450px;border-radius:50%;background:radial-gradient(circle,rgba(245,197,66,.16),transparent 62%);pointer-events:none}
 .lista .wrap{position:relative;display:grid;justify-items:center;gap:16px}
 .caixa{width:min(560px,100%);margin-top:22px;padding:28px;border-radius:28px;background:rgba(17,27,61,.75);border:1px solid rgba(245,197,66,.3);box-shadow:0 40px 80px -40px rgba(0,0,0,.9);display:grid;gap:16px;text-align:left}
-.escolha{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px;border-radius:999px;background:rgba(10,17,40,.8);border:1px solid var(--linha)}
-.escolha input{position:absolute;opacity:0;pointer-events:none}
-.escolha label{cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;min-height:52px;border-radius:999px;font-weight:800;font-size:18px;color:var(--azul);transition:.25s}
-.escolha input:checked+label{background:var(--creme);color:#0a1128}
-.escolha input:focus-visible+label{outline:2px solid var(--ouro);outline-offset:2px}
 .campo{display:grid;gap:8px}
-.campo label{font:400 13px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--azul)}
-.campo input{width:100%;min-height:60px;padding:0 20px;border-radius:16px;border:1.5px solid var(--linha);background:rgba(10,17,40,.8);color:var(--creme);font:600 20px var(--sans)}
+.campo label{font:700 18px var(--sans);color:var(--creme)}
+.campo label small{font-weight:500;font-size:16px;color:var(--azul)}
+.campo input{width:100%;min-height:64px;padding:0 20px;border-radius:16px;border:1.5px solid var(--linha);background:rgba(10,17,40,.8);color:var(--creme);font:600 22px var(--sans)}
+.campo input::placeholder{color:rgba(200,210,235,.45)}
 .campo input:focus{outline:none;border-color:var(--ouro);box-shadow:0 0 0 4px rgba(245,197,66,.18)}
-.caixa .btn{width:100%}
-.caixa .miud{font-size:15px;color:var(--azul);text-align:center}
-.caixa .aviso{display:none;padding:16px;border-radius:16px;background:rgba(92,207,138,.12);border:1px solid rgba(92,207,138,.45);font-size:17px;text-align:center}
+.campo input[aria-invalid=true]{border-color:#ffb3ab}
+.concordo{display:grid;grid-template-columns:30px 1fr;gap:12px;align-items:start;cursor:pointer;font-size:18px;line-height:1.4;color:var(--creme)}
+.concordo input{width:28px;height:28px;margin:1px 0 0;accent-color:var(--ouro);cursor:pointer}
+.concordo a{color:var(--ouro);text-decoration:underline;text-underline-offset:3px}
+.caixa .btn{width:100%;font-size:20px;min-height:64px}
+.caixa .miud{font-size:16px;color:var(--azul);text-align:center}
+.caixa .aviso{display:none;padding:18px;border-radius:16px;background:rgba(245,197,66,.12);border:1px solid rgba(245,197,66,.5);font-size:20px;text-align:center;color:var(--creme)}
 .caixa .aviso.on{display:block}
-.caixa .erro{color:#ffb3ab;font-size:16px;min-height:1px}
+.caixa .erro{color:#ffb3ab;font-size:18px;min-height:1px}
 
 /* ===== 2.3 SOBRE (faixa curta) ===== */
 .sobre{border-top:1px solid var(--linha);padding:44px 0}
@@ -313,7 +314,7 @@ body.sem-selos .selo{display:none}
 
 <header class="topo" id="topo">
   <img src="assets/home/logo-7entidos.png" alt="7entidos — A vida é feita de boas sensações.">
-  <a class="btn" href="#lista">Quero entrar na lista</a>
+  <a class="btn" href="#lista">Quero ser das primeiras</a>
 </header>
 
 <!-- ================= BLOCO 1 ================= -->
@@ -497,19 +498,27 @@ body.sem-selos .selo{display:none}
   <div class="wrap">
     <span class="etq rev">Lista de espera · app 7entidos</span>
     <h2 class="rev">Seja das primeiras pessoas a descobrir o que te faz <em>bem</em>.</h2>
-    <p class="sub rev" style="margin:0 auto">Avisamos você quando o app abrir. Escolha por onde prefere receber.</p>
+    <p class="sub rev" style="margin:0 auto">Deixe seu nome e seu WhatsApp. A gente avisa quando o app abrir.</p>
     <form class="caixa rev" id="form" novalidate>
-      <div class="escolha" role="radiogroup" aria-label="Por onde quer receber o aviso">
-        <input type="radio" name="canal" id="c-zap" value="whatsapp" checked><label for="c-zap">WhatsApp</label>
-        <input type="radio" name="canal" id="c-mail" value="email"><label for="c-mail">E-mail</label>
+      <div class="campo">
+        <label for="f-nome">Seu nome</label>
+        <input id="f-nome" name="nome" type="text" autocomplete="name" placeholder="Como podemos te chamar?" maxlength="80">
       </div>
       <div class="campo">
-        <label for="contato" id="rot-contato">Seu WhatsApp com DDD</label>
-        <input id="contato" name="contato" type="tel" inputmode="tel" autocomplete="tel" placeholder="(13) 99999-9999">
+        <label for="f-zap">Seu WhatsApp com DDD</label>
+        <input id="f-zap" name="whatsapp" type="tel" inputmode="tel" autocomplete="tel" placeholder="(13) 99999-9999" maxlength="20">
       </div>
+      <div class="campo">
+        <label for="f-mail">Seu e-mail <small>(se quiser)</small></label>
+        <input id="f-mail" name="email" type="email" inputmode="email" autocomplete="email" placeholder="voce@email.com" maxlength="120">
+      </div>
+      <label class="concordo" for="f-ok">
+        <input id="f-ok" name="concordo" type="checkbox">
+        <span>Concordo em receber o aviso do lançamento. Veja a <a href="https://7entidos.com.br/privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>.</span>
+      </label>
       <p class="erro" id="erro" aria-live="polite"></p>
-      <button class="btn" type="submit">Quero entrar na lista <span class="seta">→</span></button>
-      <p class="miud">Só usamos seu contato para avisar do lançamento. Sem spam.</p>
+      <button class="btn" type="submit">Quero ser das primeiras <span class="seta">→</span></button>
+      <p class="miud">Só usamos seus dados para avisar do lançamento. Sem spam.</p>
       <div class="aviso" id="aviso" role="status"></div>
     </form>
   </div>
@@ -596,32 +605,38 @@ body.sem-selos .selo{display:none}
   mostra("flow");
 })();
 
-/* lista de espera: WhatsApp ou e-mail. Mesmo robô da pesquisa (evento "contato", como na pesquisa do app).
+/* lista de espera: Nome + WhatsApp (obrigatórios) + e-mail (opcional) + caixinha de consentimento.
+   Mesmo robô da pesquisa (evento "contato", pesquisa "app"). O nome vai com a origem:
+   "Maria · Lista de espera · página inicial · 16/11/2026".
    Só mostra "pronto" depois que a planilha confirmar que gravou. */
 (function(){
-  const form=document.getElementById("form"),inp=document.getElementById("contato"),rot=document.getElementById("rot-contato"),erro=document.getElementById("erro"),aviso=document.getElementById("aviso"),bt=form.querySelector("button[type=submit]");
-  form.querySelectorAll('input[name=canal]').forEach(r=>r.addEventListener("change",()=>{
-    if(!r.checked)return;const zap=r.value==="whatsapp";
-    rot.textContent=zap?"Seu WhatsApp com DDD":"Seu e-mail";
-    inp.type=zap?"tel":"email";inp.inputMode=zap?"tel":"email";inp.autocomplete=zap?"tel":"email";
-    inp.placeholder=zap?"(13) 99999-9999":"voce@email.com";inp.value="";erro.textContent="";aviso.classList.remove("on");inp.focus();
-  }));
+  const $=id=>document.getElementById(id);
+  const form=$("form"),fNome=$("f-nome"),fZap=$("f-zap"),fMail=$("f-mail"),fOk=$("f-ok"),erro=$("erro"),aviso=$("aviso"),bt=form.querySelector("button[type=submit]");
+  const marca=(el,ruim)=>el.setAttribute("aria-invalid",ruim?"true":"false");
+  const falha=(msg,el)=>{erro.textContent=msg;aviso.classList.remove("on");if(el){marca(el,true);el.focus()}};
+  [fNome,fZap,fMail].forEach(el=>el.addEventListener("input",()=>marca(el,false)));
   let enviando=false;
   form.addEventListener("submit",e=>{
     e.preventDefault();if(enviando)return;
-    const zap=form.canal.value==="whatsapp",v=inp.value.trim(),d=v.replace(/\D/g,"");
-    const ok=zap?(d.length>=10&&d.length<=13):/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-    if(!ok){erro.textContent=zap?"Confere o número com DDD?":"Confere o e-mail?";aviso.classList.remove("on");return}
+    const nome=fNome.value.trim().replace(/\s+/g," ");
+    let d=fZap.value.replace(/\D/g,"");
+    if((d.length===12||d.length===13)&&d.startsWith("55"))d=d.slice(2);   /* tira o +55 se a pessoa digitou */
+    const mail=fMail.value.trim();
+    if(nome.length<2)return falha("Escreve seu nome, por favor.",fNome);
+    if(!(d.length===10||d.length===11)||d.startsWith("0"))return falha("Confere o WhatsApp com DDD? Ex.: (13) 99999-9999",fZap);
+    if(mail&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail))return falha("Confere o e-mail? Se preferir, pode deixar em branco.",fMail);
+    if(!fOk.checked)return falha("Marque a caixinha para concordar com o aviso.",fOk);
     erro.textContent="";
+    const primeiro=nome.split(" ")[0];
     const url=window.PESQUISA_URL||"";
-    if(!url){aviso.textContent="✓ Modo teste: nada foi enviado.";aviso.classList.add("on");return}
+    if(!url){aviso.textContent="✓ Modo teste: nada foi enviado. No site oficial apareceria: “Pronto, "+primeiro+"! Você está na lista. Avisamos quando o app abrir.”";aviso.classList.add("on");return}
     enviando=true;bt.disabled=true;bt.firstChild.nodeValue="Enviando… ";
     const hoje=new Date().toLocaleDateString("pt-BR",{timeZone:"America/Sao_Paulo"});
-    fetch(url,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify({evento:"contato",pesquisa:"app",nome:"Lista de espera · página inicial · "+hoje,telefone:zap?d:"",email:zap?"":v,lgpd:true})})
+    fetch(url,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify({evento:"contato",pesquisa:"app",nome:nome+" · Lista de espera · página inicial · "+hoje,telefone:d,email:mail,lgpd:true})})
       .then(r=>r.text()).then(t=>{let j={};try{j=JSON.parse(t)}catch(_){}if(!j.ok)throw 0;
-        aviso.textContent="✓ Pronto! Você está na lista. Avisamos quando o app abrir.";aviso.classList.add("on");inp.value="";})
+        aviso.textContent="✓ Pronto, "+primeiro+"! Você está na lista. Avisamos quando o app abrir.";aviso.classList.add("on");form.reset();})
       .catch(()=>{erro.textContent="Não conseguimos enviar agora. Confere a internet e tenta de novo."})
-      .finally(()=>{enviando=false;bt.disabled=false;bt.firstChild.nodeValue="Quero entrar na lista ";});
+      .finally(()=>{enviando=false;bt.disabled=false;bt.firstChild.nodeValue="Quero ser das primeiras ";});
   });
 })();
 </script>
