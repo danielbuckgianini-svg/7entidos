@@ -469,7 +469,7 @@ function guardaNome(v){ v=String(v||"").replace(/\s+/g," ").trim().slice(0,30); 
 
 /* ============ VÍDEO DA BRISA ============ */
 /* começa sem som; botão grande para ouvir (volta para o início com som); legenda na tela; se o vídeo não carregar, mostra a foto */
-function videoBrisa(src,leg){ return `<div class="vbrisa" id="vb"><video id="vid" src="${src}" poster="${BRISA}" muted autoplay playsinline webkit-playsinline preload="auto"></video>${VIDEO_TESTE&&PREVIA?'<span class="teste">vídeo de teste</span>':""}<div class="leg" id="leg"></div></div>
+function videoBrisa(src,leg){ return `<div class="vbrisa" id="vb"><video id="vid" src="${src}" poster="${src.replace(/\.mp4$/,".jpg")}" muted autoplay playsinline webkit-playsinline preload="auto"></video>${VIDEO_TESTE&&PREVIA?'<span class="teste">vídeo de teste</span>':""}<div class="leg" id="leg"></div></div>
   <button class="ouvirb" id="ouvir" type="button">🔊 Toque para ouvir a Brisa</button><button class="denovo" id="denovo" type="button" hidden>▶ Ver de novo</button>`; }
 function ligaVideo(c,leg,falha){ const v=c.querySelector("#vid"), lg=c.querySelector("#leg"), bo=c.querySelector("#ouvir"), dn=c.querySelector("#denovo"); if(!v) return;
   v.muted=true; v.addEventListener("timeupdate",()=>{ const t=v.currentTime, l=leg.find(x=>t>=x[0]&&t<x[1]); lg.textContent=l?l[2]:""; });
@@ -538,7 +538,7 @@ function fim1(){
 function comecar2(){ click(); if(!inicio2){ inicio2=Date.now(); resp.inicio_fase2=new Date().toISOString(); } avanca(); }
 /* abertura da Fase 2: vídeo curto da Brisa (~15 s), do mesmo jeito do primeiro */
 function abre2(p){
-  mostra(`<div class="rot">Fase 2</div>${videoBrisa(VID2,LEG2)}<div id="semvideo" hidden><p class="fala">${comNome("Agora vamos brincar, {n}. Sete jogos rapidinhos.","Agora vamos brincar com cada sentido. Sete jogos rapidinhos.")}</p></div>
+  mostra(`<div class="rot">Fase 2</div>${videoBrisa(VID2,LEG2)}<div id="semvideo" hidden><p class="fala">${comNome("Você já me contou do que gosta, {n}. Agora vem a outra metade: desafios rápidos para os seus sentidos, um para cada.","Você já me contou do que gosta. Agora vem a outra metade: desafios rápidos para os seus sentidos, um para cada.")}</p></div>
     <button class="btn" onclick="click();avanca()">Começar os jogos</button>`,
     c=>ligaVideo(c,LEG2,()=>{ c.querySelector("#semvideo").hidden=false; }));
 }
