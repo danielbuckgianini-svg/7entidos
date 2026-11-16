@@ -199,7 +199,29 @@ body.foco #vinheta{opacity:.55}
 .perto span{font-weight:800;font-size:22px}.perto small{color:var(--azul);font-size:15px}
 @keyframes abrePerto{from{opacity:0;transform:scale(.96)}}
 .foto,.foto img{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
-.denovojogo{all:unset;cursor:pointer;display:block;margin:14px auto 0;color:var(--azul);text-decoration:underline;font-size:16px}
+.denovojogo{all:unset;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-sizing:border-box;width:100%;max-width:340px;min-height:54px;margin:18px auto 0;padding:12px 20px;border-radius:999px;border:2px solid var(--ouro);color:var(--ouro);background:rgba(245,197,66,.12);font:800 19px Manrope,system-ui,sans-serif;box-shadow:0 0 22px rgba(245,197,66,.25);transition:transform .12s}
+.denovojogo:active{transform:scale(.97)}
+.basegesto{margin:2px 0 0;opacity:.8}
+/* Pare a ampulheta */
+.amp{position:relative;width:150px;height:230px;margin:14px auto 6px}
+.amp svg{width:100%;height:100%;overflow:visible}
+.amp .vidro{fill:rgba(255,255,255,.04);stroke:rgba(245,197,66,.55);stroke-width:2.5}
+.amp .areia{fill:#f5c542;filter:drop-shadow(0 0 10px rgba(245,197,66,.8))}
+.amp .fio{stroke:#f5c542;stroke-width:3;stroke-linecap:round;filter:drop-shadow(0 0 6px #f5c542)}
+.ampnum{font-family:Fraunces,serif;font-size:clamp(46px,13vw,64px);line-height:1;color:var(--ouro);text-shadow:0 0 30px rgba(245,197,66,.45);margin:4px 0 0}
+.ampnum small{font-size:.38em;margin-left:6px;color:var(--txt,#f4ecdc)}
+.revela2{font-family:Fraunces,serif;font-size:clamp(24px,6.4vw,30px);line-height:1.3;margin:6px 0 4px}
+.revela2 b{color:var(--ouro)}
+/* Saborear: imagem montada com as preferências */
+.sabcol{position:relative;width:min(78vw,330px);aspect-ratio:9/13;margin:4px auto 6px;border-radius:22px;overflow:hidden;border:3px solid #f5c542;box-shadow:0 0 50px rgba(245,197,66,.45);background:#0a1128;display:grid;gap:3px;grid-template-columns:repeat(6,1fr);grid-auto-rows:1fr;animation:entra .9s cubic-bezier(.2,.8,.2,1) both}
+.sabcol .ph{position:relative;background-size:cover;background-position:center;grid-column:span 2}
+.sabcol .ph.big{grid-column:1/-1;grid-row:span 2}
+.sabcol .ph.meio{grid-column:span 3}
+.sabcol .ph.big1{grid-column:1/-1}
+.sabcol .ph i{position:absolute;left:0;right:0;bottom:0;height:4px;background:var(--c)}
+.sabcol .ph span{position:absolute;left:0;right:0;bottom:4px;padding:16px 6px 4px;font:800 11px Manrope,sans-serif;line-height:1.15;color:#fff;background:linear-gradient(transparent,rgba(5,8,22,.9));text-shadow:none}
+.sabcol .marca{position:absolute;left:0;right:0;top:0;padding:8px;font:400 11px "Space Mono",monospace;letter-spacing:.12em;color:#f5c542;background:linear-gradient(rgba(5,8,22,.85),transparent);text-shadow:none}
+.saborear .frasebela{font-family:Fraunces,serif;font-style:italic;font-size:clamp(21px,5.6vw,26px);line-height:1.3;margin:6px 0 0;max-width:420px}
 .fundobtn{all:unset;cursor:pointer;position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom));z-index:6;font-size:14px;color:var(--azul);padding:8px 14px;border-radius:999px;background:rgba(10,17,40,.85);border:1px solid rgba(169,179,209,.3);white-space:nowrap}
 .fundobtn[hidden]{display:none}.fundobtn[disabled]{opacity:.6;cursor:default}
 .pisca2{animation:pisca2 1.4s ease-in-out infinite;color:var(--ouro)!important;font-size:16px}
@@ -421,7 +443,7 @@ body.foco #vinheta{opacity:.55}
 .mesa .ing .emo{font-size:46px}
 @media (prefers-reduced-motion:reduce){.vlua{animation:none}}
 /* saborear */
-.saborear{position:fixed;inset:0;z-index:4;display:grid;place-items:center;text-align:center;padding:24px}
+.saborear{position:fixed;inset:0;z-index:4;display:grid;place-items:center;text-align:center;padding:24px;overflow-y:auto}
 .saborear .fundo{position:absolute;inset:0;background-size:cover;background-position:center;animation:zoomlento 22s linear both}
 .saborear .fundo::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 55%,rgba(10,17,40,.25),rgba(10,17,40,.85) 80%)}
 @keyframes zoomlento{from{transform:scale(1)}to{transform:scale(1.08)}}
@@ -850,9 +872,17 @@ function saborear(p){
   /* a imagem vira a carta dourada (aparece no resultado em cartões, como antes) */
   resp.carta_dourada={sentido:s.s,escolha:s.o[j],foto:j};
   clearTimeout(saborTm);
+  /* imagem montada com as preferências: a foto principal em cima e as outras escolhas da pessoa embaixo (as que ela mais curtiu primeiro) */
+  const outros=SENT.map((x,k)=>({x,k,j:x.o.indexOf(resp["gosto_"+x.id]),v:v[k]})).filter(o=>o.j>=0&&o.x!==s).sort((a,b)=>b.v-a.v||a.k-b.k).slice(0,6);
+  const n=outros.length, larg=i=>n===1?"big1":(n===2||n===4)?"meio":(n===5&&i>=3)?"meio":"";
+  const tile=(x,jj,cls)=>`<div class="ph ${cls}" style="background-image:url('${foto(x.id,jj)}');--c:${x.cor}"><i></i><span>${esc(x.o[jj])}</span></div>`;
+  const col=`<div class="sabcol" id="sabcol" style="${n?"":"grid-template-rows:1fr"}"><div class="marca">7ENTIDOS · MEU MOMENTO</div>${tile(s,j,"big")}${outros.map((o,i)=>tile(o.x,o.j,larg(i))).join("")}</div>`;
+  const nomes=[s.o[j]].concat(outros.slice(0,2).map(o=>o.x.o[o.j])).map(t=>t.charAt(0).toLowerCase()+t.slice(1));
+  const lista=nomes.length>1?nomes.slice(0,-1).join(", ")+" e "+nomes[nomes.length-1]:nomes[0];
+  const frase=`O que te faz bem tem nome: ${lista}.`; resp.saborear_frase=frase; resp.saborear_fotos=1+n;
   mostra(`<div class="saborear"><div class="fundo" style="background-image:url('${img}')"></div><div class="dentro" id="sd">
-      <p class="fala">${comNome("Fique um pouco aqui, {n}. Este momento é seu.","Fique um pouco aqui. Este momento é seu.")}</p>
-      <p class="seg">${esc(s.o[j])} · ${s.s}</p><button class="btn sabseg" id="sbs">Seguir</button></div></div>`, c=>{
+      ${col}<p class="frasebela">${esc(frase)}</p>
+      <p class="seg">${comNome("Fique um pouco aqui, {n}. Este momento é seu.","Fique um pouco aqui. Este momento é seu.")}</p><button class="btn sabseg" id="sbs">Seguir</button></div></div>`, c=>{
     const ov=c.querySelector(".saborear"); document.body.appendChild(ov); somSuave(s.cor);
     const bt=ov.querySelector("#sbs"); bt.onclick=()=>{ click(); sigaSabor(); };
     saborTm=setTimeout(()=>bt.classList.add("on"),3500);
@@ -989,19 +1019,24 @@ const JOGOS={
       tr.addEventListener("pointerup",solta); tr.addEventListener("pointercancel",solta);
     }); },
   /* Sinta o corpo: 4 gestos simples no próprio corpo (só sensações); no fim, "Mudou alguma coisa?" */
-  corpo(s,fim){ const G=[["Esfregue as palmas das mãos, rápido.","Agora pare e sinta o calor nas mãos."],
-      ["Encoste as mãos no rosto.","Sinta o calor passando para o rosto."],
-      ["Gire os ombros para trás, bem devagar.","Repare no peso dos braços."],
-      ["Aperte os dedos dos pés no chão… e solte.","Sinta o chão embaixo de você."]];
+  /* Base dos gestos (só sensações, nada de saúde):
+     1. "Suspiro duplo": duas puxadas de ar pelo nariz e uma soltada longa pela boca (Balban e colegas, Universidade Stanford, Cell Reports Medicine, 2023).
+     2. Espreguiçar com os braços para cima (postura de yoga "Urdhva Hastasana", feita sentado: yoga na cadeira).
+     3. Girar os ombros para trás, devagar (aquecimento de yoga na cadeira).
+     4. Mão no peito para tentar sentir o coração (tarefa de "perceber o batimento", Schandry, 1981; Garfinkel e colegas, 2015). */
+  corpo(s,fim){ const G=[["Puxe o ar pelo nariz, puxe mais um pouquinho… e solte bem devagar pela boca.","Repare no ar saindo devagar.","Respiração estudada na Universidade Stanford (2023)."],
+      ["Entrelace os dedos e estique os braços para cima, bem alto.","Sinta o corpo inteiro se alongando.","Postura de yoga feita sentado."],
+      ["Gire os ombros para trás, bem devagar.","Repare no peso dos braços.","Movimento de yoga na cadeira."],
+      ["Ponha a mão no peito e fique paradinho.","Tente sentir o seu coração batendo.","Exercício usado em estudos sobre perceber o próprio corpo."]];
     let g=0, tm=null; resp.corpo_gestos=0;
     const passo=()=>{ if(!aindaNoJogo(s)) return; if(g>=G.length) return pergunta();
-      mostra(`${cab(s,`Gesto ${g+1} de ${G.length}`)}<p class="gesto">${esc(G[g][0])}</p>${aroLuz(s.cor,8)}<p class="olhos">${esc(G[g][1])}</p><button class="btn sec" id="fg" style="margin-top:8px">Pronto</button>`, c=>{
+      mostra(`${cab(s,`Gesto ${g+1} de ${G.length}`)}<p class="gesto">${esc(G[g][0])}</p>${aroLuz(s.cor,8)}<p class="olhos">${esc(G[g][1])}</p><p class="miud basegesto">${esc(G[g][2])}</p><button class="btn sec" id="fg" style="margin-top:8px">Pronto</button>`, c=>{
         somSuave(s.cor); let foi=false; const vai=()=>{ if(foi) return; foi=true; clearTimeout(tm); resp.corpo_gestos=g+1; g++; passo(); };
         tm=setTimeout(()=>{ if(aindaNoJogo(s)){ avisoFim(); vai(); } },8000); c.querySelector("#fg").onclick=()=>{ somJogo(); vai(); }; }); };
     const pergunta=()=>{ pararSom(); mostra(`${cab(s,comNome("E aí, {n}?","E aí?"))}<h2 class="mudou">Mudou alguma coisa?</h2>
-      <div class="opts">${["Sim, mudou bastante","Mudou um pouco","Não mudou nada"].map(o=>`<button class="opt" data-o="${o}">${o}</button>`).join("")}</div>`, c=>{
+      <div class="opts">${["Sim","Um pouco","Não"].map(o=>`<button class="opt" data-o="${o}">${o}</button>`).join("")}</div>`, c=>{
       c.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ somJogo(); resp.corpo_mudou=b.dataset.o; b.classList.add("sel"); c.querySelectorAll(".opt").forEach(y=>y.disabled=true);
-        c.insertAdjacentHTML("beforeend",`<p class="fala2">${b.dataset.o==="Não mudou nada"?"Tudo bem. Só de reparar, você já esteve aqui.":"Isso é o seu corpo respondendo a você."}</p>`); vibra([10,40,10]); fim(); }); }); };
+        c.insertAdjacentHTML("beforeend",`<p class="fala2">${b.dataset.o==="Não"?"Tudo bem. Só de reparar, você já esteve aqui.":"Isso é o seu corpo respondendo a você."}</p>`); vibra([10,40,10]); fim(); }); }); };
     passo(); }
 };
 
@@ -1036,11 +1071,27 @@ function curtiu(p){
 }
 function escolheCurtiu(b,k,v){ resp[k]=v; click(); b.parentNode.querySelectorAll("button").forEach(x=>x.classList.remove("sel")); b.classList.add("sel"); desenhaMini(); setTimeout(avanca,450); }
 
+/* Pare a ampulheta: uma ampulheta de luz enche de 0 a 15 minutos em poucos segundos; a pessoa toca em "Parar" no tempo que acha que passou */
+const AMP_MAX=15, AMP_SEG=6.5;
 function chute(){
-  mostra(`${compara()}<div class="rot">Uma última pergunta</div><h2>Quanto tempo você acha que passou desde que começou a Fase 2?</h2><p class="sub">Responda sem olhar o relógio.</p>
-    <div class="opts">${TEMPOS.map(o=>`<button class="opt ${resp.chute===o?"sel":""}" onclick="escolheChute(this,'${o}')">${o}</button>`).join("")}</div>`);
+  mostra(`${compara()}<div class="rot">Uma última pergunta</div><h2>Quanto tempo passou desde que começou a Fase 2?</h2><p class="sub">Sem olhar o relógio: pare a ampulheta no tempo que você acha.</p>
+    <div class="amp"><svg viewBox="0 0 100 150" aria-hidden="true"><defs><clipPath id="ampc"><path d="M12 6H88L53 75L88 144H12L47 75Z"/></clipPath></defs>
+      <g clip-path="url(#ampc)"><rect class="areia" id="ampcima" x="0" y="6" width="100" height="69"/><rect class="areia" id="ampbaixo" x="0" y="144" width="100" height="0"/></g>
+      <line class="fio" id="ampfio" x1="50" y1="75" x2="50" y2="144"/><path class="vidro" d="M12 6H88L53 75L88 144H12L47 75Z"/></svg></div>
+    <div class="ampnum" id="ampn">0<small>min</small></div>
+    <button class="btn" id="ampbt" style="margin-top:14px">Parar</button>`, c=>{
+    const cima=c.querySelector("#ampcima"), baixo=c.querySelector("#ampbaixo"), fio=c.querySelector("#ampfio"), num=c.querySelector("#ampn"), bt=c.querySelector("#ampbt");
+    let t0=performance.now(), raf=0, parou=false, ult=-1;
+    const passo=t=>{ if(parou||R[pos].t!=="chute"||!document.body.contains(c)) return; let p=((t-t0)/1000)/AMP_SEG; if(p>=1){ t0=t; p=0; } /* chegou em 15: começa de novo */
+      const m=Math.floor(p*AMP_MAX+.0001); cima.setAttribute("y",6+69*p); cima.setAttribute("height",69*(1-p)); baixo.setAttribute("y",144-69*p); baixo.setAttribute("height",69*p); fio.setAttribute("y1",75); fio.setAttribute("y2",144-69*p);
+      if(m!==ult){ ult=m; num.innerHTML=`${m}<small>${m===1?"minuto":"min"}</small>`; if(m>0) vibra(4); }
+      raf=requestAnimationFrame(passo); };
+    raf=requestAnimationFrame(passo);
+    bt.onclick=()=>{ if(parou) return; parou=true; cancelAnimationFrame(raf); click(); vibra([10,40,10]);
+      resp.chute_min=ult<0?0:ult; resp.chute=resp.chute_min+" minutos"; resp.tempo_real_seg=Math.round((Date.now()-(inicio2||inicio||Date.now()))/1000);
+      bt.disabled=true; bt.textContent=`Você parou em ${resp.chute_min} ${resp.chute_min===1?"minuto":"minutos"}`; setTimeout(avanca,900); };
+  });
 }
-function escolheChute(b,o){ resp.chute=o; resp.tempo_real_seg=Math.round((Date.now()-(inicio2||inicio||Date.now()))/1000); click(); b.parentNode.querySelectorAll(".opt").forEach(x=>x.classList.remove("sel")); b.classList.add("sel"); setTimeout(avanca,450); }
 
 /* Entenda o Flow: tela curta antes de revelar o tempo */
 function flow(){
@@ -1052,21 +1103,23 @@ function flow(){
     <p class="miud">Barra da esquerda: o desafio. Barra da direita: a sua habilidade.</p>
     <button class="btn" onclick="click();avanca()">Ver quanto tempo passou</button>`);
 }
+/* chutou MENOS do que passou = o tempo voou (Flow); chutou MAIS = o tempo passou devagar; diferença menor que 1 minuto = acertou em cheio */
 function fraseFlow(){
-  const seg=resp.tempo_real_seg||0, min=seg/60, real=TEMPO_LIM.findIndex(l=>min<l), ch=TEMPOS.indexOf(resp.chute);
-  if(ch<0) return "Você estava presente.";
-  if(ch<real) return ch===real-1 ? "Você quase chegou no Flow." : "Você chegou no Flow.";
-  if(ch===real) return "Seu relógio interno está afiado.";
-  return "Dessa vez, o tempo pesou um pouco.";
+  const real=(resp.tempo_real_seg||0)/60, ch=resp.chute_min;
+  if(ch==null) return "Você estava presente.";
+  if(Math.abs(ch-real)<1) return "Você acertou em cheio.";
+  return ch<real ? "O tempo voou." : "O tempo passou devagar.";
 }
+const txtMin=seg=>{ const m=Math.round(seg/60); return seg<60?"menos de 1 minuto":m===1?"1 minuto":m+" minutos"; };
 function revela(){
   const seg=resp.tempo_real_seg||Math.round((Date.now()-(inicio2||inicio||Date.now()))/1000), frase=fraseFlow(); resp.flow=frase;
-  const usaMin=false, alvo=seg, unid=seg===1?"segundo":"segundos";
+  const ch=resp.chute_min, usaMin=seg>=60, alvo=usaMin?Math.round(seg/60):seg, unid=usaMin?(alvo===1?"minuto":"minutos"):(seg===1?"segundo":"segundos");
+  const fr=ch==null?"":`<p class="revela2">Você achou <b>${ch} ${ch===1?"minuto":"minutos"}</b>. Foram <b>${txtMin(seg)}</b>.</p>`;
   mostra(`<div class="rot">Na verdade, se passaram</div><div class="grande" id="num">0</div><div class="unid">${unid}</div>
-    <p class="pisca">${frase}</p><button class="btn" onclick="click();avanca()">Ver meu gráfico</button>
+    ${fr}<p class="pisca">${frase}</p><button class="btn" onclick="click();avanca()">Ver meu gráfico</button>
     <p class="miud">Flow é quando a gente se envolve tanto que nem percebe o tempo passar (Csikszentmihalyi).</p>`, c=>{
     const n=c.querySelector("#num"), dur=1800, t0=performance.now();
-    const passo=t=>{ const k=Math.min(1,(t-t0)/dur), e=1-Math.pow(1-k,3); n.textContent=Math.round(alvo*e); if(k<1) requestAnimationFrame(passo); else { n.textContent=usaMin?alvo:seg; vibra(12); } };
+    const passo=t=>{ const k=Math.min(1,(t-t0)/dur), e=1-Math.pow(1-k,3); n.textContent=Math.round(alvo*e); if(k<1) requestAnimationFrame(passo); else { n.textContent=alvo; vibra(12); } };
     requestAnimationFrame(passo); });
   envia();
 }
@@ -1129,18 +1182,18 @@ function envia(){ if(!ENDPOINT||!resp.consentiu) return; try{ const r={...resp};
 
 /* ============ PAINEL DE VALIDAÇÃO (só na prévia) ============ */
 const ITENS=[
- ["b4a","Bloco 4 · 1 · Equilíbrio","Bolinha que acelera (pegar e segurar)","A bolinha anda de um lado para o outro. Pegue e segure 1 segundo: a cada acerto ela fica mais rápida. Se errar a bolinha, termina com o nível.",R.findIndex(x=>x.t==="jogo"&&SENT[x.i].id==="equilibrio")],
- ["b4b","Bloco 4 · 2 · Noção do corpo","Gestos simples + 'Mudou alguma coisa?'","4 gestos no próprio corpo (esfregar as mãos, mãos no rosto, girar os ombros, dedos dos pés), só sensações. No fim: 'Mudou alguma coisa?'",R.findIndex(x=>x.t==="jogo"&&SENT[x.i].id==="corpo")],
- ["b4c","Bloco 4 · 3 · Saborear","Uma imagem com uma frase curta","A foto favorita em tela cheia com 'Fique um pouco aqui. Este momento é seu.' e o botão Seguir.",R.findIndex(x=>x.t==="saborear")],
- ["b4d","Bloco 4 · 4 · Tela 17","Você chegou com X e sai com Y","Aparece depois de tocar a nota de saída e de novo no topo da tela seguinte, com as duas notas de 0 a 10.",R.findIndex(x=>x.t==="escala"&&x.id==="saida")],
- ["b4e","Bloco 4 · 5 · Entenda o Flow","Tela curta sobre o Flow","Antes de mostrar quanto tempo passou: quando desafio e habilidade ficam em equilíbrio, a pessoa se envolve e perde a noção do tempo (Csikszentmihalyi).",R.findIndex(x=>x.t==="flow")]
+ ["b4b1","Bloco 4 de 7 · 1 · Tela 14 · Noção do corpo","4 gestos de yoga e respiração + 'Mudou alguma coisa?'","Suspiro duplo (estudo de Stanford, 2023), espreguiçar com os braços para cima e girar os ombros (yoga na cadeira), mão no peito para sentir o coração. Só sensações. No fim: Sim / Um pouco / Não.",R.findIndex(x=>x.t==="jogo"&&SENT[x.i].id==="corpo")],
+ ["b4b2","Bloco 4 de 7 · 2 · Tela 15","'Quanto você curtiu?' + 'Jogar de novo' mais visível","Depois de cada jogo continua a pergunta. O 'Jogar de novo' virou um botão dourado grande, logo abaixo.",R.findIndex(x=>x.t==="jogo"&&SENT[x.i].id==="corpo")],
+ ["b4b3","Bloco 4 de 7 · 3 · Tela 16 · Saborear","Imagem montada com as preferências + frase bonita","A foto principal em cima e as outras escolhas da pessoa embaixo, com a frase 'O que te faz bem tem nome: ...'.",R.findIndex(x=>x.t==="saborear")],
+ ["b4b4","Bloco 4 de 7 · 4 · Tela 17","Você chegou com X e sai com Y","Conferido: aparece depois da nota de saída e no topo da tela da ampulheta.",R.findIndex(x=>x.t==="escala"&&x.id==="saida")],
+ ["b4b5","Bloco 4 de 7 · 5 · Tela 18","Pare a ampulheta","A ampulheta de luz enche de 0 a 15 minutos em uns 6 segundos; toque em Parar. Depois: 'Você achou X minutos. Foram Y.' e 'O tempo voou' (se achou menos) ou 'O tempo passou devagar' (se achou mais).",R.findIndex(x=>x.t==="chute")]
 ];
 const REVISAR=["Mudar o visual","Mudar o texto","Mudar como funciona","Tirar do app"];
 let val={}, vdb=null, VDOC=null;
 function painel(){
   let el=document.getElementById("vp"); if(!el){ el=document.createElement("div"); el.id="vp"; el.className="vpainel"; document.body.appendChild(el); }
   const nv=ITENS.filter(x=>val[x[0]]&&val[x[0]].s==="validado").length;
-  el.innerHTML=`<div class="vcaixa"><div class="rot">Prévia · app novo · Bloco 4</div><h2>Validar item por item</h2><p class="sub">${nv} de ${ITENS.length} validados. "Ver" leva direto para a tela do item.</p>
+  el.innerHTML=`<div class="vcaixa"><div class="rot">Prévia · app novo · Bloco 4 de 7</div><h2>Validar item por item</h2><p class="sub">${nv} de ${ITENS.length} validados. "Ver" leva direto para a tela do item.</p>
     ${ITENS.map(([id,num,tt,ds,alvo])=>{ const v=val[id]||{}; return `<div class="vitem"><div class="rot" style="margin:0">${num}</div><div class="tt">${tt}</div><div class="ds">${ds}</div>
       <div class="bb"><button class="v ${v.s==="validado"?"on":""}" onclick="marca('${id}','validado')">Validado</button><button class="r ${v.s==="revisar"?"on":""}" onclick="marca('${id}','revisar')">Revisar</button><button class="ir" onclick="ir(${alvo})">Ver</button></div>
       <div class="rev ${v.s==="revisar"?"on":""}">${REVISAR.map(o=>`<button class="${v.o===o?"on":""}" onclick="marcaRev('${id}','${o}')">${o}</button>`).join("")}</div></div>`; }).join("")}
@@ -1151,15 +1204,15 @@ function painel(){
 function fechaPainel(){ const el=document.getElementById("vp"); if(el) el.classList.remove("on"); }
 function marca(id,s){ val[id]={...(val[id]||{}),s}; if(s==="validado") delete val[id].o; salvaVal(); painel(); }
 function marcaRev(id,o){ val[id]={s:"revisar",o}; salvaVal(); painel(); }
-function salvaVal(){ try{ localStorage.setItem("7e_app_novo_val_s2b4",JSON.stringify(val)); }catch(e){}
+function salvaVal(){ try{ localStorage.setItem("7e_app_novo_val_s2b4b",JSON.stringify(val)); }catch(e){}
   if(VDOC) VDOC.set({atualizado:new Date().toISOString(), itens:ITENS.map(x=>({id:x[0],item:x[1]+" · "+x[2],situacao:(val[x[0]]||{}).s||null,revisar:(val[x[0]]||{}).o||null}))}).catch(()=>{}); }
 
 /* ============ INÍCIO ============ */
 try{ const s=JSON.parse(localStorage.getItem("7e_app_novo")||"null"); if(s&&s.resp&&s.pos>0&&s.pos<R.length-2){ resp=s.resp; pos=s.pos; inicio=s.inicio||Date.now(); inicio2=s.inicio2||null; } }catch(e){}
-try{ val=JSON.parse(localStorage.getItem("7e_app_novo_val_s2b4")||"{}")||{}; }catch(e){}
+try{ val=JSON.parse(localStorage.getItem("7e_app_novo_val_s2b4b")||"{}")||{}; }catch(e){}
 if(PREVIA){ const b=document.createElement("button"); b.className="vbtn"; b.type="button"; b.textContent="Validar a prévia"; b.onclick=()=>{ click(); painel(); }; document.body.appendChild(b); }
 desenha();
-if(PREVIA && window.claude && claude.use){ claude.use("db").then(db=>{ if(!db) return; VDOC=db.doc("validacao/app-novo-s2-b4"); return VDOC.get().then(sn=>{ const d=sn&&(sn.data?sn.data():sn); if(d&&d.itens&&!Object.keys(val).length){ d.itens.forEach(x=>{ if(x.situacao) val[x.id]={s:x.situacao,o:x.revisar||undefined}; }); } }); }).catch(()=>{}); }
+if(PREVIA && window.claude && claude.use){ claude.use("db").then(db=>{ if(!db) return; VDOC=db.doc("validacao/app-novo-s2-b4b"); return VDOC.get().then(sn=>{ const d=sn&&(sn.data?sn.data():sn); if(d&&d.itens&&!Object.keys(val).length){ d.itens.forEach(x=>{ if(x.situacao) val[x.id]={s:x.situacao,o:x.revisar||undefined}; }); } }); }).catch(()=>{}); }
 </script>
 </body>
 </html>
