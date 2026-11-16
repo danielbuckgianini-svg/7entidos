@@ -392,6 +392,23 @@ body.foco #vinheta{opacity:.55}
 .retrato .r span{position:absolute;left:0;right:0;bottom:0;padding:14px 4px 5px;font-size:11.5px;font-weight:800;line-height:1.15;background:linear-gradient(transparent,rgba(5,8,22,.92))}
 @media (min-width:420px){.retrato .r span{font-size:13px}}
 
+/* Bloco 4: bolinha no ritmo, mudou?, saborear simples, compara, flow */
+.trilha{position:relative;height:60px;width:min(440px,100%);margin:16px auto 14px;border-radius:999px;background:rgba(180,140,255,.12);border:1px solid rgba(180,140,255,.45);touch-action:manipulation;cursor:pointer;user-select:none;-webkit-user-select:none}
+.trilha .meio{position:absolute;left:41%;width:18%;top:7px;bottom:7px;border-radius:999px;background:rgba(245,197,66,.16);border:1px dashed rgba(245,197,66,.7)}
+.trilha .bola2{position:absolute;top:50%;left:6%;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#e3d1ff,#7b52d9 70%);box-shadow:0 0 18px #b48cff;pointer-events:none}
+.trilha .bola2.acertou{background:radial-gradient(circle at 40% 35%,#fff3c4,#f5c542 70%);box-shadow:0 0 26px #f5c542}
+.mudou{font-size:clamp(28px,7vw,36px);margin:6px 0 14px}
+.saborear .sabseg{margin-top:18px;opacity:0;pointer-events:none;transition:opacity .6s}
+.saborear .sabseg.on{opacity:1;pointer-events:auto}
+.compara{margin:6px auto 14px;padding:12px 16px;border-radius:16px;background:rgba(255,255,255,.06);border:1px solid var(--linha);font-size:20px;text-align:center;max-width:420px}
+.compara b{font:400 34px Fraunces,serif;margin:0 4px;vertical-align:-4px}
+.compara small{display:block;margin-top:4px;font-size:15px;color:var(--ouro)}
+.flowx{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:16px 0 8px}
+.flowx>div{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:80px auto auto;align-items:end;gap:6px;padding:12px 10px 10px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid var(--linha);text-align:center}
+.flowx>div.na{border-color:var(--ouro);box-shadow:0 0 24px rgba(245,197,66,.25)}
+.flowx i{display:block;height:var(--h);border-radius:8px 8px 3px 3px;background:var(--c);align-self:end}
+.flowx b{grid-column:1/-1;font-size:15px;line-height:1.2}
+.flowx span{grid-column:1/-1;font-size:13px;color:var(--azul)}
 /* saborear */
 .saborear{position:fixed;inset:0;z-index:4;display:grid;place-items:center;text-align:center;padding:24px}
 .saborear .fundo{position:absolute;inset:0;background-size:cover;background-position:center;animation:zoomlento 22s linear both}
@@ -483,13 +500,13 @@ const ENDPOINT = window.PESQUISA_URL || "";
 const VERSAO = "app-novo-v1";
 
 const SENT = [
- {id:"visao", missao:"achar o quadrado de cor diferente · 3 rodadas · revela o quanto seus olhos pegam detalhes.", s:"Visão", cor:"#f5c542", q:"O que te faz bem de olhar?", o:["Pôr do sol na praia","Céu estrelado","Um mural colorido de grafite","Fotos antigas de família"], brisa:"Comece pelos olhos.", jogo:"Olho de águia"},
- {id:"audicao", missao:"dizer qual som é mais fino · 3 rodadas · revela o quanto seu ouvido separa sons parecidos.", s:"Audição", cor:"#4aa8ff", q:"O que te faz bem ouvir?", o:["Som do mar","Música ao vivo","Chuva no telhado","Silêncio total"], sons:["mar","musica","chuva","silencio"], brisa:"Agora, feche os olhos e escute.", jogo:"Qual som é mais fino?"},
+ {id:"visao", missao:"achar o quadrado de cor diferente · até errar · revela o quanto seus olhos pegam detalhes.", s:"Visão", cor:"#f5c542", q:"O que te faz bem de olhar?", o:["Pôr do sol na praia","Céu estrelado","Um mural colorido de grafite","Fotos antigas de família"], brisa:"Comece pelos olhos.", jogo:"Olho de águia"},
+ {id:"audicao", missao:"dizer qual som é mais fino · até errar · revela o quanto seu ouvido separa sons parecidos.", s:"Audição", cor:"#4aa8ff", q:"O que te faz bem ouvir?", o:["Som do mar","Música ao vivo","Chuva no telhado","Silêncio total"], sons:["mar","musica","chuva","silencio"], brisa:"Agora, feche os olhos e escute.", jogo:"Qual som é mais fino?"},
  {id:"tato", missao:"fazer carinho nas 4 fotos · 1 passada em cada · revela que toque a sua pele prefere.", s:"Tato", cor:"#ff8a3d", q:"O que te faz bem de sentir na pele?", o:["Areia nos pés","Cobertor macio","Água gelada","Abraço apertado"], brisa:"Sinta com a ponta dos dedos.", jogo:"Carinho"},
  {id:"paladar", missao:"montar um prato com 3 ingredientes · 1 prato · revela as combinações que te atraem.", s:"Paladar", cor:"#ff5a6e", q:"Que sabor te faz bem?", o:["Comida de vó","Doce de padaria","Fruta fresca","Café passado na hora"], brisa:"Pense no sabor que te acolhe.", jogo:"Monte o seu prato"},
  {id:"olfato", missao:"achar 3 cheiros à sua volta · 1 rodada · revela o quanto você nota o ar ao seu redor.", s:"Olfato", cor:"#5ccf8a", q:"Que cheiro te faz bem?", o:["Terra molhada","Pão saindo do forno","Perfume de alguém querido","Cheiro de café"], brisa:"Respire fundo. O cheiro também lembra.", jogo:"Caça aos cheiros"},
- {id:"equilibrio", missao:"segurar firme até a luz fechar · até conseguir · revela a sua firmeza.", s:"Equilíbrio", cor:"#b48cff", q:"Que movimento te faz bem?", o:["Dançar","Balançar numa rede","Andar de bicicleta","Ficar de pé numa prancha"], brisa:"Encontre o seu centro.", jogo:"Segure firme"},
- {id:"corpo", missao:"marcar onde você sente algo agora · até 3 lugares · revela como o seu corpo está neste momento.", s:"Noção do corpo", cor:"#3fd6d0", q:"O que te faz bem no corpo?", o:["Alongar","Correr","Nadar","Deitar e respirar fundo"], brisa:"Por último, perceba o seu corpo.", jogo:"Mapa do agora"}
+ {id:"equilibrio", missao:"tocar quando a bolinha passar no meio · ela vai acelerando · revela o seu ritmo.", s:"Equilíbrio", cor:"#b48cff", q:"Que movimento te faz bem?", o:["Dançar","Balançar numa rede","Andar de bicicleta","Ficar de pé numa prancha"], brisa:"Encontre o seu centro.", jogo:"Bolinha no ritmo"},
+ {id:"corpo", missao:"fazer 4 gestos simples no próprio corpo · 8 segundos cada · revela o que muda quando você presta atenção nele.", s:"Noção do corpo", cor:"#3fd6d0", q:"O que te faz bem no corpo?", o:["Alongar","Correr","Nadar","Deitar e respirar fundo"], brisa:"Por último, perceba o seu corpo.", jogo:"Sinta o corpo"}
 ];
 const foto = (sid,i) => IMG+sid+"-"+(i+1)+".jpg";
 const TEMPOS = ["Menos de 3 minutos","De 3 a 6 minutos","De 6 a 10 minutos","10 minutos ou mais"];
@@ -503,7 +520,7 @@ SENT.forEach((s,i)=>{ R.push({t:"gosto",i,f:1}); });
 R.push({t:"fim1",f:1});
 R.push({t:"abre2",f:2});
 SENT.forEach((s,i)=>{ R.push({t:"jogo",i,f:2}); });
-R.push({t:"saborear",f:2},{t:"escala",id:"saida",f:2},{t:"chute",f:2},{t:"revela",f:2},{t:"grafico",f:2},{t:"trava3",f:2});
+R.push({t:"saborear",f:2},{t:"escala",id:"saida",f:2},{t:"chute",f:2},{t:"flow",f:2},{t:"revela",f:2},{t:"grafico",f:2},{t:"trava3",f:2});
 
 let pos=0, resp={}, inicio=null, inicio2=null, ocupado=false;
 const palco=document.getElementById("palco");
@@ -624,7 +641,7 @@ function desenhaMini(){
   const fez1=s=>resp["gosto_"+s.id]!=null||resp["pulou_gosto_"+s.id];
   const fez2=s=>resp["curtiu_"+s.id]!=null||resp["jogo_"+s.id]==="pulado";
   let lug=SENT.map((s,i)=>fez1(s)?i:-1).filter(i=>i>=0), luz=[];
-  if(f===2){ lug=TODOS; luz=SENT.map((s,i)=>fez2(s)?i:-1).filter(i=>i>=0); if(["saborear","escala","chute","revela","grafico","trava3"].includes(p.t)) luz=TODOS; }
+  if(f===2){ lug=TODOS; luz=SENT.map((s,i)=>fez2(s)?i:-1).filter(i=>i>=0); if(["saborear","escala","chute","flow","revela","grafico","trava3"].includes(p.t)) luz=TODOS; }
   else if(p.t==="fim1") lug=TODOS;
   const m=document.getElementById("mtopo");
   requestAnimationFrame(()=>requestAnimationFrame(()=>poeMandala(m,{pos:lug,luz,miolo:!!resp.local_luz0})));
@@ -643,7 +660,7 @@ function desenha(){
   /* "pular" aparece nas telas que pedem resposta ou jogo; nas outras o próprio botão já segue */
   document.getElementById("pularbtn").hidden = !PULAVEIS.includes(p.t);
   desenhaMini(); brilho(p.i!=null?SENT[p.i].cor:null);
-  ({brisa,vaso,escala,passagem,gosto,fim1,abre2,jogo,saborear,chute,revela,grafico,trava3})[p.t](p);
+  ({brisa,vaso,escala,passagem,gosto,fim1,abre2,jogo,saborear,chute,flow,revela,grafico,trava3})[p.t](p);
 }
 
 /* ============ NOME (fica SÓ no celular da pessoa; nunca vai para a planilha) ============ */
@@ -732,7 +749,14 @@ function nomeVivo(){ const n=NOME(), sh=document.getElementById("nmshow"), eb=do
 function visor(n){ const m=document.getElementById("mesc"); if(m){ const k=Math.round(n*9/10); poeMandala(m,{pos:TODOS,luz:[0,1,2,3,4,5,6,7].slice(0,Math.max(0,k-1)),miolo:k>=1}); }
   const eb=document.getElementById("escbloco"); if(eb) eb.classList.remove("apagado");
   const vp=document.getElementById("vpal"); if(vp) vp.innerHTML=`<b>${n}</b>${PALAVRA[n]}`; }
-function escolheNum(b,k,n){ resp[k]=n; click(); visor(n); vibra(8+n); b.parentNode.querySelectorAll("button").forEach(x=>x.classList.remove("sel")); b.classList.add("sel"); setTimeout(avanca,1100); }
+function escolheNum(b,k,n){ resp[k]=n; click(); visor(n); vibra(8+n); b.parentNode.querySelectorAll("button").forEach(x=>x.classList.remove("sel")); b.classList.add("sel");
+  /* na saída: mostra "Você chegou com X e sai com Y" antes de seguir */
+  if(k==="escala_saida"&&resp.escala_chegada!=null){ const eb=document.getElementById("escbloco"); if(eb){ const old=eb.querySelector(".compara"); if(old) old.remove(); eb.insertAdjacentHTML("beforeend",compara()); } clearTimeout(window._escTm); window._escTm=setTimeout(avanca,2800); return; }
+  setTimeout(avanca,1100); }
+/* compara a nota de chegada com a de saída (0 a 10) */
+function compara(){ const a=resp.escala_chegada, b=resp.escala_saida; if(a==null||b==null) return "";
+  const extra=b>a?`<small>Subiu ${b-a} ${b-a===1?"ponto":"pontos"} ✨</small>`:b===a?"<small>Ficou no mesmo lugar</small>":"";
+  return `<div class="compara">Você chegou com <b style="color:${corNum(a)}">${a}</b> e sai com <b style="color:${corNum(b)}">${b}</b>${extra}</div>`; }
 
 function passagem(p){
   const s=SENT[p.i], chave=p.f===1?"gosto_":"curtiu_", feitos=SENT.map((x,i)=>resp[chave+x.id]!=null?i:-1).filter(i=>i>=0);
@@ -806,38 +830,24 @@ function mostraCurtiu(p){
 }
 function jogarDeNovo(){ const p=R[pos]; if(!p||p.t!=="jogo") return; const s=SENT[p.i]; resp["repetiu_"+s.id]=(resp["repetiu_"+s.id]||0)+1; somJogo(); jogo(p); }
 
-/* saborear: 20 segundos com a foto escolhida no sentido de que mais curtiu o jogo */
+/* Saborear: uma imagem (a foto favorita do sentido de que mais curtiu) com uma frase curta */
 let saborTm=null;
-/* Saborear · "Olhe, respire, guarde" (cerca de 20 s): foto favorita em tela cheia + som do sentido; 3 passos guiados pela Brisa */
 function saborear(p){
   const v=SENT.map(s=>resp["curtiu_"+s.id]||0), max=Math.max(...v);
   let i=v.indexOf(max); if(SENT[i] && SENT[i].o.indexOf(resp["gosto_"+SENT[i].id])<0) i=SENT.findIndex(s=>s.o.indexOf(resp["gosto_"+s.id])>=0);
   const s=SENT[Math.max(i,0)], j=Math.max(0,s.o.indexOf(resp["gosto_"+s.id])), img=foto(s.id,j); resp.saborear_sentido=s.s;
-  clearInterval(saborTm);
-  mostra(`<div class="saborear"><div class="fundo" style="background-image:url('${img}')"></div><div class="dentro" id="sd"></div></div>`, c=>{
-    const ov=c.querySelector(".saborear"); document.body.appendChild(ov); const sd=ov.querySelector("#sd");
-    somSuave(s.cor); const vivo=()=>R[pos]===p;
-    /* 1 · OLHE (5 s) */
-    sd.innerHTML=`<div class="passo3">1 de 3 · Olhe</div><p class="fala">${comNome("Olhe com calma, {n}.","Olhe com calma.")}</p><p class="fala2" style="margin:0">${esc(s.o[j])} · ${s.s}</p>`;
-    saborTm=setTimeout(()=>{ if(!vivo()) return;
-      /* 2 · RESPIRE (2 respirações de 8 s) */
-      sd.innerHTML=`<div class="passo3">2 de 3 · Respire</div><div class="bola" id="bola"></div><p class="fala" id="rf">Puxe o ar…</p>`;
-      const bola=sd.querySelector("#bola"), rf=sd.querySelector("#rf"); let k=0;
-      const ciclo=()=>{ if(!vivo()) return; if(k>=4){ guarde(); return; } const enche=k%2===0; bola.classList.toggle("cheia",enche); rf.textContent=enche?"Puxe o ar…":"Solte devagar…"; vibra(enche?8:4); k++; saborTm=setTimeout(ciclo,4000); };
-      setTimeout(ciclo,60); },5000);
-    /* 3 · GUARDE: segurar a foto por 1,5 s e ela vira uma carta dourada */
-    function guarde(){ if(!vivo()) return;
-      sd.innerHTML=`<div class="passo3">3 de 3 · Guarde</div><p class="fala">Encoste e segure a foto para guardar.</p><div class="carta" id="ct"><img src="${img}" alt=""><span class="enche" id="en"></span></div><p class="olhos" id="dc">Segure até encher de luz</p>`;
-      const ct=sd.querySelector("#ct"), en=sd.querySelector("#en"); let h=0, tm=null, feito=false;
-      const para=()=>{ clearInterval(tm); tm=null; if(!feito){ h=0; en.style.height="0"; } };
-      ct.addEventListener("pointerdown",e=>{ e.preventDefault(); if(feito||tm) return; try{ ct.setPointerCapture(e.pointerId); }catch(_){}
-        tm=setInterval(()=>{ h+=100/15; en.style.height=Math.min(100,h)+"%"; if(h>=100){ feito=true; clearInterval(tm); tm=null; ct.classList.add("guardada"); vibra([10,40,10]); tom(784,1.2);
-          resp.carta_dourada={sentido:s.s,escolha:s.o[j],foto:j}; sd.querySelector("#dc").textContent="Sua carta dourada está guardada.";
-          const b=document.createElement("button"); b.className="btn"; b.style.marginTop="14px"; b.textContent="Seguir"; b.onclick=()=>{ click(); sigaSabor(); }; sd.appendChild(b); } },100); });
-      ["pointerup","pointercancel","pointerleave"].forEach(ev=>ct.addEventListener(ev,para)); ct.oncontextmenu=e=>e.preventDefault(); }
+  /* a imagem vira a carta dourada (aparece no resultado em cartões, como antes) */
+  resp.carta_dourada={sentido:s.s,escolha:s.o[j],foto:j};
+  clearTimeout(saborTm);
+  mostra(`<div class="saborear"><div class="fundo" style="background-image:url('${img}')"></div><div class="dentro" id="sd">
+      <p class="fala">${comNome("Fique um pouco aqui, {n}. Este momento é seu.","Fique um pouco aqui. Este momento é seu.")}</p>
+      <p class="seg">${esc(s.o[j])} · ${s.s}</p><button class="btn sabseg" id="sbs">Seguir</button></div></div>`, c=>{
+    const ov=c.querySelector(".saborear"); document.body.appendChild(ov); somSuave(s.cor);
+    const bt=ov.querySelector("#sbs"); bt.onclick=()=>{ click(); sigaSabor(); };
+    saborTm=setTimeout(()=>bt.classList.add("on"),3500);
   });
 }
-function sigaSabor(){ clearInterval(saborTm); clearTimeout(saborTm); pararSom(); avanca(); }
+function sigaSabor(){ clearTimeout(saborTm); pararSom(); avanca(); }
 const fraseJogo=s=>`Agora, o jogo ${["tato","paladar","olfato","equilibrio"].includes(s.id)?"do":"da"} ${s.s}: ${s.jogo}${/\?$/.test(s.jogo)?"":"."}`;
 const fraseGosto=(s,i)=>i===0&&NOME()?"Boa, "+NOME()+"! "+s.brisa:i===6&&NOME()?NOME()+", "+s.brisa.charAt(0).toLowerCase()+s.brisa.slice(1):s.brisa;
 const cabLongo=(s,dica)=>`<p class="brisafrase" style="--c:${s.cor}">${esc(fraseJogo(s))}</p><h2>${s.jogo}</h2><p class="missao" style="--c:${s.cor}"><b>Missão:</b> ${s.missao}</p><p class="dica">${dica}</p>`;
@@ -855,21 +865,18 @@ function conviteBonus(c,s,arr,quero,seguir){ c.innerHTML=`${cab(s,"Você acertou
 /* true enquanto a tela atual ainda é o jogo deste sentido (se a pessoa pulou, a próxima rodada não aparece) */
 const aindaNoJogo=s=>{ const q=R[pos]; return !!q&&q.t==="jogo"&&SENT[q.i].id===s.id; };
 const JOGOS={
-  /* Olho de águia: igual ao da pesquisa (3 rodadas, uma por vez) */
-  /* Olho de águia: 3 rodadas; a diferença de cor se ajusta (acertou → mais difícil; errou → mais fácil); bônus para quem acerta as 3 */
-  visao(s,fim){ const DIF=[22,16,12,9,6.5,4.5,3.2]; let lv=1, r=0, ac=0; const arr=[null,null,null];
-    const rod=(bonus)=>{ const d=bonus?DIF[Math.min(DIF.length-1,lv+1)]:DIF[lv], x={hu:Math.floor(Math.random()*360),k:Math.floor(Math.random()*16)};
-      mostra(`${cab(s,"Toque no quadrado diferente.")}<div class="rodada">${bonus?"Rodada bônus · bem difícil":"Rodada "+(r+1)+" de 3"}</div>
-        <div class="grade4">${Array.from({length:16},(_,i)=>`<button data-i="${i}" aria-label="quadrado ${i+1}" style="background:hsl(${x.hu},55%,${i===x.k?46+d:46}%)"></button>`).join("")}</div>${luzes(s,arr)}<div class="res" id="res"></div>`, c=>{
+  /* Olho de águia: a diferença de cor diminui a cada acerto, até a pessoa errar; o ponto onde parou vira o nível */
+  visao(s,fim){ const DIF=[22,16,12,9,6.5,4.5,3.2,2.4]; let lv=0;
+    const rod=()=>{ const d=DIF[lv], x={hu:Math.floor(Math.random()*360),k:Math.floor(Math.random()*16)};
+      mostra(`${cab(s,"Toque no quadrado diferente.")}<div class="nivel">Nível ${lv+1} <small>${lv===0?"as cores vão ficando parecidas":"mais parecidas agora"}</small></div>
+        <div class="grade4">${Array.from({length:16},(_,i)=>`<button data-i="${i}" aria-label="quadrado ${i+1}" style="background:hsl(${x.hu},55%,${i===x.k?46+d:46}%)"></button>`).join("")}</div><div class="res" id="res"></div>`, c=>{
         c.querySelectorAll(".grade4 button").forEach(b=>b.onclick=()=>{ if(x.feito) return; x.feito=true; const okk=+b.dataset.i===x.k; somJogo();
           c.querySelectorAll(".grade4 button").forEach(y=>{ if(+y.dataset.i===x.k) y.classList.add("ok"); else if(y===b) y.classList.add("bad"); });
-          c.querySelector("#res").innerHTML=okk?'<span class="bom">Achou!</span>':'<span class="nao">Era o quadrado marcado de verde.</span>';
-          if(bonus){ arr[3]=okk?1:0; acende(c,3,okk,s); resp.visao_bonus_acertou=okk; if(okk) lv=Math.min(DIF.length-1,lv+2); resp.visao_nivel=lv+1; c.querySelector("#res").innerHTML+=fraseNivel("olhar",lv+1,DIF.length); setTimeout(()=>{ if(aindaNoJogo(s)) fim(); },2600); return; }
-          arr[r]=okk?1:0; acende(c,r,okk,s); if(okk){ ac++; lv=Math.min(DIF.length-1,lv+1); } else lv=Math.max(0,lv-1);
-          setTimeout(()=>{ if(!aindaNoJogo(s)) return; if(r<2){ r++; rod(false); return; }
-            resp.visao_acertos=ac; resp.visao_nivel=lv+1;
-            if(ac===3){ arr.push(null); conviteBonus(c,s,arr,()=>rod(true),()=>{ c.querySelectorAll(".opts button").forEach(b=>b.disabled=true); c.insertAdjacentHTML("beforeend",fraseNivel("olhar",lv+1,DIF.length)); setTimeout(()=>{ if(aindaNoJogo(s)) fim(); },2400); }); } else { c.querySelector("#res").innerHTML+=fraseNivel("olhar",lv+1,DIF.length); setTimeout(()=>{ if(aindaNoJogo(s)) fim(); },2400); } },900); }); }); };
-    rod(false); },
+          if(okk&&lv<DIF.length-1){ c.querySelector("#res").innerHTML='<span class="bom">Achou! Agora fica mais parecido.</span>'; vibra(12); lv++; setTimeout(()=>{ if(aindaNoJogo(s)) rod(); },1000); return; }
+          const nivel=okk?DIF.length:lv; resp.visao_nivel=nivel; resp.visao_acertos=nivel; const nb=c.querySelector(".nivel"); if(nb) nb.remove();
+          c.querySelector("#res").innerHTML=(okk?'<span class="bom">Achou até o último!</span>':'<span class="nao">Era o quadrado marcado de verde.</span>')+fraseNivel("olhar",nivel,DIF.length);
+          setTimeout(()=>{ if(aindaNoJogo(s)) fim(); },2600); }); }); };
+    rod(); },
   /* Qual som é mais fino? A diferença diminui a cada acerto, até a pessoa errar; o ponto onde parou vira o nível (sem bolinhas de rodada) */
   audicao(s,fim){ const PARES=[[1046,349],[880,440],[784,494],[740,554],[698,587],[659,587],[640,587]]; let lv=0;
     const rod=()=>{ const [alto,baixo]=PARES[lv], primeiroFino=Math.random()<.5, fA=primeiroFino?alto:baixo, fB=primeiroFino?baixo:alto;
@@ -931,56 +938,39 @@ const JOGOS={
         c.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ somJogo(); const fav=b.dataset.t; if(ESCR.has(fav)){ delete resp.olfato_favorito; resp.local_olfato_favorito=fav; } else { resp.olfato_favorito=fav; delete resp.local_olfato_favorito; } vibra([10,40,10]);
           c.innerHTML=`<div class="rot" style="color:${s.cor}">Seu cheiro do momento</div><div class="campeao">${esc(b.dataset.t)}</div><p class="fala2" style="margin-bottom:0">${comNome("Guarde esse cheiro, {n}. Ele conta onde você está agora.","Guarde esse cheiro. Ele conta onde você está agora.")}</p>`; fim(); }); }
     }); },
-  /* Segure firme: segurar até a luz encher, sem mexer o dedo */
-  equilibrio(s,fim){ const L=2*Math.PI*96;
-    mostra(`${cab(s,"Segure o dedo no centro até a luz fechar.")}<div class="firme" id="fr"><svg viewBox="0 0 220 220"><circle cx="110" cy="110" r="96" fill="none" stroke="#1d2654" stroke-width="10"/><circle id="arco" cx="110" cy="110" r="96" fill="none" stroke="#b48cff" stroke-width="10" stroke-linecap="round" stroke-dasharray="0 ${L}" transform="rotate(-90 110 110)" style="filter:drop-shadow(0 0 8px #b48cff)"/></svg><div class="alvo" id="alvo">Segure</div></div><div class="res" id="res"></div>`, c=>{
-      const fr=c.querySelector("#fr"), alvo=c.querySelector("#alvo"), arco=c.querySelector("#arco"), res=c.querySelector("#res"); let p=0, tm=null, x0=null, feito=false, falhas=0;
-      const zera=msg=>{ clearInterval(tm); tm=null; fr.classList.remove("segurando"); if(feito) return; p=0; arco.setAttribute("stroke-dasharray","0 "+L); if(msg){ res.innerHTML=`<span class="nao">${msg}</span>`; falhas++; } };
-      alvo.addEventListener("pointerdown",e=>{ e.preventDefault(); if(feito||tm) return; somPronto().catch(()=>{}); try{ alvo.setPointerCapture(e.pointerId); }catch(_){} x0=[e.clientX,e.clientY]; res.textContent=""; fr.classList.add("segurando");
-        tm=setInterval(()=>{ const ant=p; p+=10/3; arco.setAttribute("stroke-dasharray",(L*Math.min(p,100)/100)+" "+L); if(Math.floor(p/25)>Math.floor(ant/25)) vibra(6); if(p>=100){ feito=true; clearInterval(tm); tm=null; fr.classList.remove("segurando"); alvo.textContent="Firme!"; res.innerHTML='<span class="bom">Você ficou firme até o fim.</span>'; resp[s.id+"_tentativas"]=falhas+1; vibra([10,40,10]); fim(); } },100); });
-      alvo.addEventListener("pointermove",e=>{ if(!tm||!x0) return; if(Math.hypot(e.clientX-x0[0],e.clientY-x0[1])>14) zera("O dedo mexeu. Tente de novo, bem firme."); });
-      ["pointerup","pointercancel"].forEach(ev=>alvo.addEventListener(ev,()=>{ if(tm) zera("Soltou antes. Tente de novo."); }));
-      alvo.oncontextmenu=e=>e.preventDefault(); }); },
-  /* Corpo que acende: silhueta neutra em linha de luz; toque onde sente */
-  /* Mapa do agora: tocar onde sente alguma coisa, dizer o que sente; o app devolve um gesto de 10 s */
-  corpo(s,fim){ const P=[["cabeca","Cabeça","a cabeça",'<circle cx="100" cy="42" r="26"/>'],["peito","Peito","o peito",'<rect x="66" y="78" width="68" height="52" rx="16"/>'],["barriga","Barriga","a barriga",'<rect x="70" y="130" width="60" height="48" rx="14"/>'],
-      ["bracos","Braços","os braços",'<path d="M64 84l-18 10-14 92 18 4 16-80z"/><path d="M136 84l18 10 14 92-18 4-16-80z"/>'],["maos","Mãos","as mãos",'<circle cx="38" cy="200" r="14"/><circle cx="162" cy="200" r="14"/>'],
-      ["pernas","Pernas","as pernas",'<path d="M72 178h56l-4 120h-18l-6-90-6 90H76z"/>'],["pes","Pés","os pés",'<ellipse cx="82" cy="312" rx="16" ry="9"/><ellipse cx="118" cy="312" rx="16" ry="9"/>']];
-    const SENTE=[["tenso","Tenso","#ff8a3d"],["leve","Leve","#9be7b0"],["quente","Quente","#ff5a6e"],["cansado","Cansado","#a9b3d1"],["vivo","Vivo","#f5c542"]];
-    const TENSO={cabeca:"Solte a testa e o queixo. Deixe o ar sair devagar, 3 vezes.",peito:"Abra os ombros e puxe o ar bem fundo. Solte devagar, 3 vezes.",barriga:"Deixe a barriga encher de ar… e esvaziar devagar. 3 vezes.",
-      bracos:"Estique os braços para cima… e solte de uma vez. 3 vezes.",maos:"Feche as mãos com força por 3 segundos… e abra devagar. 3 vezes.",pernas:"Aperte as pernas por 3 segundos… e solte devagar. 3 vezes.",pes:"Aperte os dedos dos pés… e solte devagar. 3 vezes."};
-    const GESTO={ tenso:(p,k)=>TENSO[k],
-      cansado:p=>`Espreguice ${p} bem devagar, como quem acorda.`, quente:(p,k)=>`Repare nesse calor ${EM[k]}. De onde ele vem?`,
-      vivo:p=>`Mexa ${p} de leve e aproveite essa energia.`, leve:()=>"Guarde isso: o que te deixou leve hoje?" };
-    const EM={cabeca:"na cabeça",peito:"no peito",barriga:"na barriga",bracos:"nos braços",maos:"nas mãos",pernas:"nas pernas",pes:"nos pés"};
-    const marcas=[]; let atual=null;
-    mostra(`${cab(s,"Toque onde você sente algo agora.")}
-      <svg class="corpo" viewBox="0 0 200 330" role="group" aria-label="Silhueta do corpo">
-        <defs><filter id="luz" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        <filter id="brilho" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter></defs>
-        ${P.map(([k,n,,d])=>`<g class="parte" data-k="${k}" role="button" aria-label="${n}" tabindex="0">${d}</g>`).join("")}
-        <g class="linha"><circle cx="100" cy="42" r="24"/><path d="M92 66v10M108 66v10M66 84c10-8 58-8 68 0M66 84l-20 12-12 88M134 84l20 12 12 88M66 84l4 96M134 84l-4 96M70 180l6 118M130 180l-6 118M100 200l-4 98M100 200l4 98M70 180h60"/><circle cx="38" cy="200" r="10"/><circle cx="162" cy="200" r="10"/><path d="M68 312h26M106 312h26"/></g>
-      </svg>
-      <div class="sentes" id="st"><p id="stq">O que você sente aí?</p>${SENTE.map(([k,n,cor])=>`<button type="button" data-s="${k}" style="--k:${cor}">${n}</button>`).join("")}</div>
-      <div class="partes" id="pt">Nenhum lugar marcado ainda</div><button class="btn" id="ok" disabled>Pronto</button>`, c=>{
-      const st=c.querySelector("#st"), pt=c.querySelector("#pt"), ok=c.querySelector("#ok");
-      const nomeia=()=>{ pt.textContent=marcas.length?marcas.map(m=>P.find(x=>x[0]===m.k)[1]+": "+SENTE.find(x=>x[0]===m.s)[1].toLowerCase()).join(" · "):"Nenhum lugar marcado ainda"; ok.disabled=!marcas.length; };
-      c.querySelectorAll(".parte").forEach(g=>{ const t=()=>{ const k=g.dataset.k, i=marcas.findIndex(m=>m.k===k); somJogo();
-          if(i>=0){ marcas.splice(i,1); g.classList.remove("on"); g.style.removeProperty("--k"); st.classList.remove("on"); nomeia(); return; }
-          if(marcas.length>=3){ pt.textContent="Já são 3 lugares. Toque num deles para desmarcar."; return; }
-          atual=k; c.querySelector("#stq").textContent="O que você sente "+EM[k]+"?"; st.classList.add("on"); try{ st.scrollIntoView({behavior:"smooth",block:"center"}); }catch(e){} };
-        g.addEventListener("click",t); g.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); t(); } }); });
-      st.querySelectorAll("button").forEach(b=>b.onclick=()=>{ if(!atual) return; const cor=SENTE.find(x=>x[0]===b.dataset.s)[2], g=c.querySelector(`.parte[data-k="${atual}"]`);
-        marcas.push({k:atual,s:b.dataset.s}); g.style.setProperty("--k",cor+"99"); g.classList.add("on"); tom(523,.4); vibra(10); somJogo(); atual=null; st.classList.remove("on"); nomeia(); });
-      const gesto=m=>{ const parte=P.find(x=>x[0]===m.k), txt=GESTO[m.s](parte[2],m.k); resp.corpo_mapa=marcas.map(x=>({lugar:P.find(y=>y[0]===x.k)[1],sente:x.s})); resp.corpo_gesto=txt;
-        c.innerHTML=`${cab(s,comNome("Um gesto rápido, {n}.","Um gesto rápido."))}<p class="gesto">${esc(txt)}</p>${aroLuz(s.cor,10)}<p class="olhos" id="tg">Faça com calma. A luz avisa quando terminar.</p><button class="btn sec" id="fg" style="margin-top:8px">Pronto</button>`;
-        somSuave(s.cor); let foi=false; const tm=setTimeout(()=>{ if(!aindaNoJogo(s)) return; c.querySelector("#tg").textContent="Feito."; acaba(true); },10000);
-        const acaba=(aviso)=>{ if(foi) return; foi=true; clearTimeout(tm); pararSom(); if(aviso) avisoFim(); else vibra([10,40,10]); if(c.querySelector("#fg")) c.querySelector("#fg").remove(); fim(); };
-        c.querySelector("#fg").onclick=()=>{ somJogo(); acaba(false); }; };
-      ok.onclick=()=>{ somJogo(); st.classList.remove("on");
-        if(marcas.length===1) return gesto(marcas[0]);
-        c.innerHTML=`${cab(s,"Qual está mais forte?")}<div class="opts">${marcas.map((m,i)=>`<button class="opt" data-i="${i}">${P.find(x=>x[0]===m.k)[1]} · ${SENTE.find(x=>x[0]===m.s)[1].toLowerCase()}</button>`).join("")}</div>`;
-        c.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ somJogo(); gesto(marcas[+b.dataset.i]); }); }; }); }
+  /* Bolinha no ritmo: a bolinha anda de um lado para o outro e vai acelerando aos poucos; tocar quando ela passar no meio */
+  equilibrio(s,fim){ const VEL=[1700,1450,1250,1080,940,820,720,640]; let lv=0, t0=0, raf=0, acabou=false, travado=false;
+    mostra(`${cab(s,"Toque quando a bolinha passar no meio.")}<div class="nivel" id="nv">Nível 1 <small>ela vai acelerando aos poucos</small></div>
+      <div class="trilha" id="tr" role="button" aria-label="Trilha da bolinha: toque quando ela passar no meio"><span class="meio"></span><span class="bola2" id="b2"></span></div>
+      <button class="btn" id="tq">Agora!</button><div class="res" id="res"></div>`, c=>{
+      const b2=c.querySelector("#b2"), res=c.querySelector("#res"), nv=c.querySelector("#nv"); let x=0;
+      const anda=t=>{ if(acabou||!aindaNoJogo(s)){ cancelAnimationFrame(raf); return; } if(!t0) t0=t; const per=VEL[lv]*2, f=((t-t0)%per)/per; x=f<.5?f*2:2-f*2;
+        b2.style.left=(6+x*88)+"%"; raf=requestAnimationFrame(anda); };
+      raf=requestAnimationFrame(anda);
+      const toque=e=>{ if(e) e.preventDefault(); if(acabou||travado) return; somJogo(); const ok=Math.abs(x-.5)<.1;
+        if(ok&&lv<VEL.length-1){ lv++; travado=true; vibra(12); b2.classList.add("acertou"); res.innerHTML='<span class="bom">No meio! Agora mais rápido.</span>';
+          nv.innerHTML=`Nível ${lv+1} <small>mais rápido agora</small>`; setTimeout(()=>{ travado=false; b2.classList.remove("acertou"); },450); return; }
+        acabou=true; cancelAnimationFrame(raf); const nivel=ok?VEL.length:lv; resp.equilibrio_nivel=nivel; nv.remove();
+        const fr=nivel>=Math.ceil(VEL.length*.7)?"Você acompanha até o ritmo mais rápido.":nivel>=Math.ceil(VEL.length*.4)?"Você segue o ritmo com firmeza.":"Você gosta de um ritmo mais calmo.";
+        res.innerHTML=(ok?'<span class="bom">No meio até o fim!</span>':'<span class="nao">Passou do meio.</span>')+`<div class="fimnivel"><b>Nível ${nivel}</b><p>${fr}</p></div>`; vibra([10,40,10]);
+        c.querySelector("#tq").remove(); setTimeout(()=>{ if(aindaNoJogo(s)) fim(); },2600); };
+      c.querySelector("#tq").addEventListener("pointerdown",toque); c.querySelector("#tr").addEventListener("pointerdown",toque);
+    }); },
+  /* Sinta o corpo: 4 gestos simples no próprio corpo (só sensações); no fim, "Mudou alguma coisa?" */
+  corpo(s,fim){ const G=[["Esfregue as palmas das mãos, rápido.","Agora pare e sinta o calor nas mãos."],
+      ["Encoste as mãos no rosto.","Sinta o calor passando para o rosto."],
+      ["Gire os ombros para trás, bem devagar.","Repare no peso dos braços."],
+      ["Aperte os dedos dos pés no chão… e solte.","Sinta o chão embaixo de você."]];
+    let g=0, tm=null; resp.corpo_gestos=0;
+    const passo=()=>{ if(!aindaNoJogo(s)) return; if(g>=G.length) return pergunta();
+      mostra(`${cab(s,`Gesto ${g+1} de ${G.length}`)}<p class="gesto">${esc(G[g][0])}</p>${aroLuz(s.cor,8)}<p class="olhos">${esc(G[g][1])}</p><button class="btn sec" id="fg" style="margin-top:8px">Pronto</button>`, c=>{
+        somSuave(s.cor); let foi=false; const vai=()=>{ if(foi) return; foi=true; clearTimeout(tm); resp.corpo_gestos=g+1; g++; passo(); };
+        tm=setTimeout(()=>{ if(aindaNoJogo(s)){ avisoFim(); vai(); } },8000); c.querySelector("#fg").onclick=()=>{ somJogo(); vai(); }; }); };
+    const pergunta=()=>{ pararSom(); mostra(`${cab(s,comNome("E aí, {n}?","E aí?"))}<h2 class="mudou">Mudou alguma coisa?</h2>
+      <div class="opts">${["Sim, mudou bastante","Mudou um pouco","Não mudou nada"].map(o=>`<button class="opt" data-o="${o}">${o}</button>`).join("")}</div>`, c=>{
+      c.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ somJogo(); resp.corpo_mudou=b.dataset.o; b.classList.add("sel"); c.querySelectorAll(".opt").forEach(y=>y.disabled=true);
+        c.insertAdjacentHTML("beforeend",`<p class="fala2">${b.dataset.o==="Não mudou nada"?"Tudo bem. Só de reparar, você já esteve aqui.":"Isso é o seu corpo respondendo a você."}</p>`); vibra([10,40,10]); fim(); }); }); };
+    passo(); }
 };
 
 function curtiu(p){
@@ -991,11 +981,21 @@ function curtiu(p){
 function escolheCurtiu(b,k,v){ resp[k]=v; click(); b.parentNode.querySelectorAll("button").forEach(x=>x.classList.remove("sel")); b.classList.add("sel"); desenhaMini(); setTimeout(avanca,450); }
 
 function chute(){
-  mostra(`<div class="rot">Uma última pergunta</div><h2>Quanto tempo você acha que passou desde que começou a Fase 2?</h2><p class="sub">Responda sem olhar o relógio.</p>
+  mostra(`${compara()}<div class="rot">Uma última pergunta</div><h2>Quanto tempo você acha que passou desde que começou a Fase 2?</h2><p class="sub">Responda sem olhar o relógio.</p>
     <div class="opts">${TEMPOS.map(o=>`<button class="opt ${resp.chute===o?"sel":""}" onclick="escolheChute(this,'${o}')">${o}</button>`).join("")}</div>`);
 }
 function escolheChute(b,o){ resp.chute=o; resp.tempo_real_seg=Math.round((Date.now()-(inicio2||inicio||Date.now()))/1000); click(); b.parentNode.querySelectorAll(".opt").forEach(x=>x.classList.remove("sel")); b.classList.add("sel"); setTimeout(avanca,450); }
 
+/* Entenda o Flow: tela curta antes de revelar o tempo */
+function flow(){
+  mostra(`<div class="rot">Entenda o Flow</div><h2>Por que o tempo some?</h2>
+    <p class="sub">O psicólogo Mihaly Csikszentmihalyi descobriu: quando o <b>desafio</b> e a sua <b>habilidade</b> ficam em equilíbrio, você se envolve tanto que perde a noção do tempo. Ele chamou isso de <b style="color:var(--ouro)">Flow</b>.</p>
+    <div class="flowx"><div><i style="--h:26px;--c:#a9b3d1"></i><i style="--h:72px;--c:#4aa8ff"></i><b>Fácil demais</b><span>dá tédio</span></div>
+      <div class="na"><i style="--h:56px;--c:#f5c542"></i><i style="--h:56px;--c:#f5c542"></i><b>Na medida</b><span>você entra no Flow</span></div>
+      <div><i style="--h:76px;--c:#ff8a3d"></i><i style="--h:26px;--c:#4aa8ff"></i><b>Difícil demais</b><span>dá aflição</span></div></div>
+    <p class="miud">Barra da esquerda: o desafio. Barra da direita: a sua habilidade.</p>
+    <button class="btn" onclick="click();avanca()">Ver quanto tempo passou</button>`);
+}
 function fraseFlow(){
   const seg=resp.tempo_real_seg||0, min=seg/60, real=TEMPO_LIM.findIndex(l=>min<l), ch=TEMPOS.indexOf(resp.chute);
   if(ch<0) return "Você estava presente.";
@@ -1073,21 +1073,18 @@ function envia(){ if(!ENDPOINT||!resp.consentiu) return; try{ const r={...resp};
 
 /* ============ PAINEL DE VALIDAÇÃO (só na prévia) ============ */
 const ITENS=[
- ["bb1","Ajuste B1 · Audição","Sem as 3 bolinhas","No lugar das bolinhas, aparece o Nível. Cada acerto deixa os sons mais parecidos, até errar.",R.findIndex(x=>x.t==="jogo"&&SENT[x.i].id==="audicao")],
- ["bb2","Ajuste B2 · Carinho","O barulhinho voltou","O som de cada textura ficou mais alto, o som de fundo pausa neste jogo, e toca um 'plim' ao completar cada foto.",R.findIndex(x=>x.t==="jogo"&&SENT[x.i].id==="tato")],
- ["bb3","Ajuste B3 · Carinho","Sem pular sozinho","No fim aparece 'Você sentiu as quatro' e o botão Seguir.",R.findIndex(x=>x.t==="jogo"&&SENT[x.i].id==="tato")],
- ["c1","Bloco 2 · 1 · Vaso","Frase de volta","Depois da escolha: 'Seu olhar foi primeiro para a forma' (ou para as pessoas).",R.findIndex(x=>x.t==="vaso")],
- ["c2","Bloco 2 · 2 · Mosaico","Faltam só 3","Aparece depois do 4º sentido, em cima do mosaico.",R.findIndex(x=>x.t==="gosto"&&x.i===4)],
- ["c3","Bloco 2 · 3 · Retrato","Mapa exclusivo + primeira pista","Embaixo do retrato da Fase 1.",R.findIndex(x=>x.t==="fim1")],
- ["c4","Bloco 2 · 4 · Abertura da Fase 2","Agora é com você","'Seus sentidos estão prontos?', Legenda pequeno e 'Começar os jogos' grande.",R.findIndex(x=>x.t==="abre2")],
- ["c5","Bloco 2 · 5 · Visão e Audição","Nível no fim, com frase","Visão: mantém as 3 rodadas e o bônus. Audição: até errar. No fim, o nível e uma frase como 'Seu ouvido pega detalhes que pouca gente percebe'.",R.findIndex(x=>x.t==="jogo"&&SENT[x.i].id==="visao")]
+ ["b4a","Bloco 4 · 1 · Equilíbrio","Bolinha que acelera","A bolinha anda de um lado para o outro e vai acelerando aos poucos. Toque quando ela passar no meio; o jogo vai até errar e termina com o nível.",R.findIndex(x=>x.t==="jogo"&&SENT[x.i].id==="equilibrio")],
+ ["b4b","Bloco 4 · 2 · Noção do corpo","Gestos simples + 'Mudou alguma coisa?'","4 gestos no próprio corpo (esfregar as mãos, mãos no rosto, girar os ombros, dedos dos pés), só sensações. No fim: 'Mudou alguma coisa?'",R.findIndex(x=>x.t==="jogo"&&SENT[x.i].id==="corpo")],
+ ["b4c","Bloco 4 · 3 · Saborear","Uma imagem com uma frase curta","A foto favorita em tela cheia com 'Fique um pouco aqui. Este momento é seu.' e o botão Seguir.",R.findIndex(x=>x.t==="saborear")],
+ ["b4d","Bloco 4 · 4 · Tela 17","Você chegou com X e sai com Y","Aparece depois de tocar a nota de saída e de novo no topo da tela seguinte, com as duas notas de 0 a 10.",R.findIndex(x=>x.t==="escala"&&x.id==="saida")],
+ ["b4e","Bloco 4 · 5 · Entenda o Flow","Tela curta sobre o Flow","Antes de mostrar quanto tempo passou: quando desafio e habilidade ficam em equilíbrio, a pessoa se envolve e perde a noção do tempo (Csikszentmihalyi).",R.findIndex(x=>x.t==="flow")]
 ];
 const REVISAR=["Mudar o visual","Mudar o texto","Mudar como funciona","Tirar do app"];
 let val={}, vdb=null, VDOC=null;
 function painel(){
   let el=document.getElementById("vp"); if(!el){ el=document.createElement("div"); el.id="vp"; el.className="vpainel"; document.body.appendChild(el); }
   const nv=ITENS.filter(x=>val[x[0]]&&val[x[0]].s==="validado").length;
-  el.innerHTML=`<div class="vcaixa"><div class="rot">Prévia · app novo · ajustes Parte B + Bloco 2</div><h2>Validar item por item</h2><p class="sub">${nv} de ${ITENS.length} validados. "Ver" leva direto para a tela do item.</p>
+  el.innerHTML=`<div class="vcaixa"><div class="rot">Prévia · app novo · Bloco 4</div><h2>Validar item por item</h2><p class="sub">${nv} de ${ITENS.length} validados. "Ver" leva direto para a tela do item.</p>
     ${ITENS.map(([id,num,tt,ds,alvo])=>{ const v=val[id]||{}; return `<div class="vitem"><div class="rot" style="margin:0">${num}</div><div class="tt">${tt}</div><div class="ds">${ds}</div>
       <div class="bb"><button class="v ${v.s==="validado"?"on":""}" onclick="marca('${id}','validado')">Validado</button><button class="r ${v.s==="revisar"?"on":""}" onclick="marca('${id}','revisar')">Revisar</button><button class="ir" onclick="ir(${alvo})">Ver</button></div>
       <div class="rev ${v.s==="revisar"?"on":""}">${REVISAR.map(o=>`<button class="${v.o===o?"on":""}" onclick="marcaRev('${id}','${o}')">${o}</button>`).join("")}</div></div>`; }).join("")}
@@ -1098,15 +1095,15 @@ function painel(){
 function fechaPainel(){ const el=document.getElementById("vp"); if(el) el.classList.remove("on"); }
 function marca(id,s){ val[id]={...(val[id]||{}),s}; if(s==="validado") delete val[id].o; salvaVal(); painel(); }
 function marcaRev(id,o){ val[id]={s:"revisar",o}; salvaVal(); painel(); }
-function salvaVal(){ try{ localStorage.setItem("7e_app_novo_val_s2b2",JSON.stringify(val)); }catch(e){}
+function salvaVal(){ try{ localStorage.setItem("7e_app_novo_val_s2b4",JSON.stringify(val)); }catch(e){}
   if(VDOC) VDOC.set({atualizado:new Date().toISOString(), itens:ITENS.map(x=>({id:x[0],item:x[1]+" · "+x[2],situacao:(val[x[0]]||{}).s||null,revisar:(val[x[0]]||{}).o||null}))}).catch(()=>{}); }
 
 /* ============ INÍCIO ============ */
 try{ const s=JSON.parse(localStorage.getItem("7e_app_novo")||"null"); if(s&&s.resp&&s.pos>0&&s.pos<R.length-2){ resp=s.resp; pos=s.pos; inicio=s.inicio||Date.now(); inicio2=s.inicio2||null; } }catch(e){}
-try{ val=JSON.parse(localStorage.getItem("7e_app_novo_val_s2b2")||"{}")||{}; }catch(e){}
+try{ val=JSON.parse(localStorage.getItem("7e_app_novo_val_s2b4")||"{}")||{}; }catch(e){}
 if(PREVIA){ const b=document.createElement("button"); b.className="vbtn"; b.type="button"; b.textContent="Validar a prévia"; b.onclick=()=>{ click(); painel(); }; document.body.appendChild(b); }
 desenha();
-if(PREVIA && window.claude && claude.use){ claude.use("db").then(db=>{ if(!db) return; VDOC=db.doc("validacao/app-novo-s2-b2"); return VDOC.get().then(sn=>{ const d=sn&&(sn.data?sn.data():sn); if(d&&d.itens&&!Object.keys(val).length){ d.itens.forEach(x=>{ if(x.situacao) val[x.id]={s:x.situacao,o:x.revisar||undefined}; }); } }); }).catch(()=>{}); }
+if(PREVIA && window.claude && claude.use){ claude.use("db").then(db=>{ if(!db) return; VDOC=db.doc("validacao/app-novo-s2-b4"); return VDOC.get().then(sn=>{ const d=sn&&(sn.data?sn.data():sn); if(d&&d.itens&&!Object.keys(val).length){ d.itens.forEach(x=>{ if(x.situacao) val[x.id]={s:x.situacao,o:x.revisar||undefined}; }); } }); }).catch(()=>{}); }
 </script>
 </body>
 </html>
