@@ -159,6 +159,11 @@ h1 em,h2 em{color:var(--ouro)}
 .firme .alvo{position:absolute;inset:50px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#c9a8ff,#6b45c9 70%);box-shadow:0 0 40px rgba(180,140,255,.55);display:grid;place-items:center;font-weight:800;font-size:18px;color:#fff;cursor:pointer}
 .firme.segurando .alvo{transform:scale(.96);box-shadow:0 0 60px rgba(180,140,255,.9)}
 
+/* pular este jogo (aparece discreto depois de 2 tentativas que não deram certo) */
+.pular{all:unset;cursor:pointer;display:block;margin:14px auto 0;padding:10px 18px;font-size:16px;color:var(--azul);text-decoration:underline;text-underline-offset:4px;border-radius:999px;animation:entra .5s both}
+.pular:hover,.pular:focus-visible{color:#f4ecdc;outline:2px solid rgba(245,197,66,.5);outline-offset:2px}
+.legenda .pulado{color:var(--azul);font-style:italic}
+
 /* corpo que acende */
 .corpo{width:min(250px,64vw);margin:0 auto 10px;display:block}
 .corpo .parte{fill:rgba(63,214,208,0);stroke:none;cursor:pointer;transition:fill .4s}
@@ -319,7 +324,8 @@ function desenhaMini(){
   if(!p || p.t==="brisa"){ el.hidden=true; return; }
   el.hidden=false;
   const f=p.f, chave=f===1?"gosto_":"curtiu_";
-  const acesas=new Set(SENT.map((s,i)=>resp[chave+s.id]!=null?i:-1).filter(i=>i>=0));
+  const feito=s=>resp[chave+s.id]!=null||(f===2&&resp["jogo_"+s.id]==="pulado");
+  const acesas=new Set(SENT.map((s,i)=>feito(s)?i:-1).filter(i=>i>=0));
   let agora=-1;
   if(p.i!=null) agora=p.i;
   else if(p.t==="escala"&&p.id==="chegada") agora=0;
@@ -327,7 +333,7 @@ function desenhaMini(){
   else if(p.t==="fim1"||["saborear","escala","chute","revela","grafico"].includes(p.t)) SENT.forEach((s,i)=>acesas.add(i));
   if(agora>=0) acesas.add(agora);
   const n=acesas.size;
-  el.innerHTML=`<span class="estrelas">${SENT.map((s,i)=>`<i class="${acesas.has(i)?"on":""} ${i===agora&&!(resp[chave+s.id]!=null)?"agora":""}" style="--c:${s.cor}" title="${s.s}"></i>`).join("")}</span>
+  el.innerHTML=`<span class="estrelas">${SENT.map((s,i)=>`<i class="${acesas.has(i)?"on":""} ${i===agora&&!feito(s)?"agora":""}" style="--c:${s.cor}" title="${s.s}"></i>`).join("")}</span>
     <span class="xde7"><small>Fase ${f}</small>${p.t==="vaso"?"começando":n+" de 7"}</span>`;
 }
 function brilho(cor){ document.body.style.setProperty("--glow", cor?cor+"26":"rgba(245,197,66,.10)"); }
@@ -488,10 +494,14 @@ const JOGOS={
   /* Segure firme: segurar até a luz encher, sem mexer o dedo */
   equilibrio(s,fim){ const L=2*Math.PI*96;
     mostra(`${cab(s,"Encoste o dedo no centro e segure firme, sem mexer, até a luz fechar o círculo.")}<div class="firme" id="fr"><svg viewBox="0 0 220 220"><circle cx="110" cy="110" r="96" fill="none" stroke="#1d2654" stroke-width="10"/><circle id="arco" cx="110" cy="110" r="96" fill="none" stroke="#b48cff" stroke-width="10" stroke-linecap="round" stroke-dasharray="0 ${L}" transform="rotate(-90 110 110)" style="filter:drop-shadow(0 0 8px #b48cff)"/></svg><div class="alvo" id="alvo">Segure</div></div><div class="res" id="res"></div>`, c=>{
-      const fr=c.querySelector("#fr"), alvo=c.querySelector("#alvo"), arco=c.querySelector("#arco"), res=c.querySelector("#res"); let p=0, tm=null, x0=null, feito=false;
-      const zera=msg=>{ clearInterval(tm); tm=null; fr.classList.remove("segurando"); if(feito) return; p=0; arco.setAttribute("stroke-dasharray","0 "+L); if(msg) res.innerHTML=`<span class="nao">${msg}</span>`; };
+      const fr=c.querySelector("#fr"), alvo=c.querySelector("#alvo"), arco=c.querySelector("#arco"), res=c.querySelector("#res"); let p=0, tm=null, x0=null, feito=false, falhas=0;
+      /* depois de 2 tentativas que não deram certo, aparece o botão discreto "Pular este jogo" */
+      const mostraPular=()=>{ if(feito||c.querySelector("#pular")) return; const b=document.createElement("button"); b.type="button"; b.id="pular"; b.className="pular"; b.textContent="Pular este jogo";
+        b.onclick=()=>{ if(feito) return; feito=true; click(); clearInterval(tm); tm=null; resp["jogo_"+s.id]="pulado"; delete resp["curtiu_"+s.id]; resp[s.id+"_tentativas"]=falhas; avanca(); };
+        fr.parentNode.insertBefore(b, res.nextSibling); };
+      const zera=msg=>{ clearInterval(tm); tm=null; fr.classList.remove("segurando"); if(feito) return; p=0; arco.setAttribute("stroke-dasharray","0 "+L); if(msg){ res.innerHTML=`<span class="nao">${msg}</span>`; falhas++; if(falhas>=2) mostraPular(); } };
       alvo.addEventListener("pointerdown",e=>{ e.preventDefault(); if(feito||tm) return; somPronto().catch(()=>{}); try{ alvo.setPointerCapture(e.pointerId); }catch(_){} x0=[e.clientX,e.clientY]; res.textContent=""; fr.classList.add("segurando");
-        tm=setInterval(()=>{ p+=2.5; arco.setAttribute("stroke-dasharray",(L*p/100)+" "+L); if(p%25===0) vibra(6); if(p>=100){ feito=true; clearInterval(tm); tm=null; fr.classList.remove("segurando"); alvo.textContent="Firme!"; res.innerHTML='<span class="bom">Você ficou firme até o fim.</span>'; vibra([10,40,10]); fim(); } },100); });
+        tm=setInterval(()=>{ p+=2.5; arco.setAttribute("stroke-dasharray",(L*p/100)+" "+L); if(p%25===0) vibra(6); if(p>=100){ feito=true; clearInterval(tm); tm=null; fr.classList.remove("segurando"); alvo.textContent="Firme!"; res.innerHTML='<span class="bom">Você ficou firme até o fim.</span>'; const pb=c.querySelector("#pular"); if(pb) pb.remove(); resp[s.id+"_tentativas"]=falhas+1; vibra([10,40,10]); fim(); } },100); });
       alvo.addEventListener("pointermove",e=>{ if(!tm||!x0) return; if(Math.hypot(e.clientX-x0[0],e.clientY-x0[1])>14) zera("O dedo mexeu. Tente de novo, bem firme."); });
       ["pointerup","pointercancel"].forEach(ev=>alvo.addEventListener(ev,()=>{ if(tm) zera("Soltou antes. Tente de novo."); }));
       alvo.oncontextmenu=e=>e.preventDefault(); }); },
@@ -549,7 +559,7 @@ function grafico(){
   mostra(`<div class="rot">Fase 2 completa</div><h2>Seus <em>7 sentidos</em></h2>
     <div class="graf" id="graf">${SENT.map((s,i)=>`<span class="l" data-v="${v[i]}" style="--c:${s.cor}"></span><span class="t">${s.s.replace("Noção do corpo","Noção<br>do corpo")}</span>`).join("")}
       <div class="meio"><div><div class="miud" style="margin:0">mais forte</div><div style="font-family:Fraunces,serif;font-size:24px;line-height:1.1;color:${forte[0]?forte[0].cor:"#f4ecdc"}">${forte.map(s=>s.s).join("<br>")||"—"}</div></div></div></div>
-    <div class="legenda">${SENT.map((s,i)=>`<span style="--c:${s.cor}"><i></i>${s.s}: ${["—","curti pouco","curti","curti muito"][v[i]]}</span>`).join("")}</div>
+    <div class="legenda">${SENT.map((s,i)=>`<span style="--c:${s.cor}"><i></i>${s.s}: ${resp["jogo_"+s.id]==="pulado"?'<b class="pulado">pulado</b>':["—","curti pouco","curti","curti muito"][v[i]]}</span>`).join("")}</div>
     <p class="fala2">A luz de cada sentido fica maior quanto mais você curtiu o jogo dele.</p>
     <button class="btn sec" onclick="recomecar()">Fazer de novo</button>`, c=>{
     const g=c.querySelector("#graf"), W=g.clientWidth, C=W/2, R0=W*.29, RT=W*.455, Ls=c.querySelectorAll(".l"), Ts=c.querySelectorAll(".t");
@@ -567,18 +577,14 @@ function envia(){ if(!ENDPOINT||!resp.consentiu) return; try{ const r={...resp};
 
 /* ============ PAINEL DE VALIDAÇÃO (só na prévia) ============ */
 const ITENS=[
- ["s1b1","Sala 1 · Bloco 1 · 1","App dividido em Fase 1 e Fase 2","Fase 1: Brisa, vaso, nota e as 7 perguntas de gosto, com o retrato rápido no fim. Fase 2: os 7 jogos, o saborear, o tempo e o gráfico.",R.findIndex(x=>x.t==="fim1")],
- ["s1b2","Sala 1 · Bloco 1 · 2","Constelação de progresso","7 luzes grandes embaixo do logo, com \"X de 7\". A 1ª acende logo depois do vaso.",2],
- ["s1b3","Sala 1 · Bloco 1 · 3","\"Quanto curtiu\" junto do jogo","Os 3 botões aparecem embaixo do jogo quando ele termina. Sem tela separada.",R.findIndex(x=>x.t==="jogo"&&x.i===0)],
- ["s1b4","Sala 1 · Bloco 1 · 4","Audição com 3 rodadas","Os sons vão ficando parecidos. No fim: \"Você acertou X de 3\".",R.findIndex(x=>x.t==="jogo"&&x.i===1)],
- ["s1b5","Sala 1 · Bloco 1 · 5","Momento de saborear","20 segundos com a foto do sentido de que mais curtiu o jogo, anel respirando e botão Seguir.",R.findIndex(x=>x.t==="saborear")]
+ ["pular","Bloco extra · antes do Bloco 2","\"Pular este jogo\" no Segure firme","Depois de 2 tentativas que não deram certo, aparece embaixo do jogo um botão discreto \"Pular este jogo\". Ao tocar, o app segue para o próximo sentido. No gráfico final, o Equilíbrio aparece como \"pulado\", sem nota e sem erro.",R.findIndex(x=>x.t==="jogo"&&x.i===SENT.findIndex(z=>z.id==="equilibrio"))]
 ];
 const REVISAR=["Mudar o visual","Mudar o texto","Mudar como funciona","Tirar do app"];
 let val={}, vdb=null, VDOC=null;
 function painel(){
   let el=document.getElementById("vp"); if(!el){ el=document.createElement("div"); el.id="vp"; el.className="vpainel"; document.body.appendChild(el); }
   const nv=ITENS.filter(x=>val[x[0]]&&val[x[0]].s==="validado").length;
-  el.innerHTML=`<div class="vcaixa"><div class="rot">Prévia · app novo · Sala 1, Bloco 1</div><h2>Validar item por item</h2><p class="sub">${nv} de ${ITENS.length} validados. "Ver" leva direto para a tela do item.</p>
+  el.innerHTML=`<div class="vcaixa"><div class="rot">Prévia · app novo · bloco extra (Pular este jogo)</div><h2>Validar item por item</h2><p class="sub">${nv} de ${ITENS.length} validados. "Ver" leva direto para a tela do item.</p>
     ${ITENS.map(([id,num,tt,ds,alvo])=>{ const v=val[id]||{}; return `<div class="vitem"><div class="rot" style="margin:0">${num}</div><div class="tt">${tt}</div><div class="ds">${ds}</div>
       <div class="bb"><button class="v ${v.s==="validado"?"on":""}" onclick="marca('${id}','validado')">Validado</button><button class="r ${v.s==="revisar"?"on":""}" onclick="marca('${id}','revisar')">Revisar</button><button class="ir" onclick="ir(${alvo})">Ver</button></div>
       <div class="rev ${v.s==="revisar"?"on":""}">${REVISAR.map(o=>`<button class="${v.o===o?"on":""}" onclick="marcaRev('${id}','${o}')">${o}</button>`).join("")}</div></div>`; }).join("")}
@@ -589,15 +595,15 @@ function painel(){
 function fechaPainel(){ const el=document.getElementById("vp"); if(el) el.classList.remove("on"); }
 function marca(id,s){ val[id]={...(val[id]||{}),s}; if(s==="validado") delete val[id].o; salvaVal(); painel(); }
 function marcaRev(id,o){ val[id]={s:"revisar",o}; salvaVal(); painel(); }
-function salvaVal(){ try{ localStorage.setItem("7e_app_novo_val_s1b1",JSON.stringify(val)); }catch(e){}
+function salvaVal(){ try{ localStorage.setItem("7e_app_novo_val_pular",JSON.stringify(val)); }catch(e){}
   if(VDOC) VDOC.set({atualizado:new Date().toISOString(), itens:ITENS.map(x=>({id:x[0],item:x[1]+" · "+x[2],situacao:(val[x[0]]||{}).s||null,revisar:(val[x[0]]||{}).o||null}))}).catch(()=>{}); }
 
 /* ============ INÍCIO ============ */
 try{ const s=JSON.parse(localStorage.getItem("7e_app_novo")||"null"); if(s&&s.resp&&s.pos>0&&s.pos<R.length-2){ resp=s.resp; pos=s.pos; inicio=s.inicio||Date.now(); inicio2=s.inicio2||null; } }catch(e){}
-try{ val=JSON.parse(localStorage.getItem("7e_app_novo_val_s1b1")||"{}")||{}; }catch(e){}
+try{ val=JSON.parse(localStorage.getItem("7e_app_novo_val_pular")||"{}")||{}; }catch(e){}
 if(PREVIA){ const b=document.createElement("button"); b.className="vbtn"; b.type="button"; b.textContent="Validar a prévia"; b.onclick=()=>{ click(); painel(); }; document.body.appendChild(b); }
 desenha();
-if(PREVIA && window.claude && claude.use){ claude.use("db").then(db=>{ if(!db) return; VDOC=db.doc("validacao/app-novo-sala1-bloco1"); return VDOC.get().then(sn=>{ const d=sn&&(sn.data?sn.data():sn); if(d&&d.itens&&!Object.keys(val).length){ d.itens.forEach(x=>{ if(x.situacao) val[x.id]={s:x.situacao,o:x.revisar||undefined}; }); } }); }).catch(()=>{}); }
+if(PREVIA && window.claude && claude.use){ claude.use("db").then(db=>{ if(!db) return; VDOC=db.doc("validacao/app-novo-bloco-pular"); return VDOC.get().then(sn=>{ const d=sn&&(sn.data?sn.data():sn); if(d&&d.itens&&!Object.keys(val).length){ d.itens.forEach(x=>{ if(x.situacao) val[x.id]={s:x.situacao,o:x.revisar||undefined}; }); } }); }).catch(()=>{}); }
 </script>
 </body>
 </html>
