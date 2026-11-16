@@ -5,20 +5,22 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Para quem você torce? · A Casa dos 7 Sentidos</title>
 <meta name="description" content="Vote em A Casa dos 7 Sentidos: quem você mais gosta e quem você quer ver longe. Um voto por dia.">
-<meta property="og:image" content="https://7entidos.com.br/assets/compartilhar.jpg">
+<meta property="og:image" content="https://7entidos.com.br/votar/compartilhar-votar.jpg?v=1">
+<meta property="og:image:alt" content="Para quem você torce? Os 7 moradores de A Casa dos 7 Sentidos">
+<meta property="og:site_name" content="7entidos">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-<meta property="og:title" content="Quem você mais gosta? E quem você quer ver longe?">
-<meta property="og:description" content="Votação da semana de A Casa dos 7 Sentidos. Um voto por dia, direto do celular.">
-<meta property="og:url" content="https://7entidos.com.br/votar">
-<link rel="icon" href="/reality/votacao/logo-7entidos-simbolo.png" type="image/png">
+<meta property="og:title" content="Para quem você torce? · A Casa dos 7 Sentidos">
+<meta property="og:description" content="Votação aberta! Escolha quem você mais gosta e quem você quer ver longe. Um voto por dia, direto do celular.">
+<meta property="og:url" content="https://7entidos.com.br/votar/">
+<link rel="icon" href="../reality/votacao/logo-7entidos-simbolo.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Fraunces:opsz,wght@9..144,400..700&family=Manrope:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/marca.css">
-<script src="/pesquisa/config.js"></script>
+<link rel="stylesheet" href="../css/marca.css">
+<script src="../pesquisa/config.js"></script>
 <style>
 /* Votação da semana (Bloco 1, 15/11/2026).
    Semana, datas e quem não pode ir para "longe" ficam em semana.json. */
@@ -237,8 +239,8 @@ body.glam .resumo div{background:rgba(255,255,255,.05);border-color:rgba(233,196
 <div class="flashes" id="flashes" aria-hidden="true"></div>
 <main>
   <div class="topo">
-    <a class="marca" href="/"><img src="/reality/votacao/logo-7entidos-simbolo.png" alt=""><span>7entidos</span></a>
-    <span class="selo-casa"><img src="/reality/votacao/mandala.jpg" alt=""><span>A Casa dos<br><i>7 Sentidos</i></span></span>
+    <a class="marca" href="../"><img src="../reality/votacao/logo-7entidos-simbolo.png" alt=""><span>7entidos</span></a>
+    <span class="selo-casa"><img src="../reality/votacao/mandala.jpg" alt=""><span>A Casa dos<br><i>7 Sentidos</i></span></span>
   </div>
 
   <section class="tapete">
@@ -326,7 +328,7 @@ body.glam .resumo div{background:rgba(255,255,255,.05);border-color:rgba(233,196
       <span class="anelp" id="anelp"></span>
       <h3>Enquanto isso…</h3>
       <p>Que tal descobrir quais são os <b>seus</b> 7 sentidos? É a pesquisa do app 7entidos, a mesma que os moradores fizeram.</p>
-      <a class="botao amarelo" href="/pesquisa" style="width:100%">Fazer a pesquisa</a>
+      <a class="botao amarelo" href="../pesquisa/" style="width:100%">Fazer a pesquisa</a>
       <p class="priv">7entidos.com.br/pesquisa</p>
     </div>
 
@@ -351,7 +353,7 @@ body.glam .resumo div{background:rgba(255,255,255,.05);border-color:rgba(233,196
     <button class="botao amarelo" onclick="location.reload()" style="width:100%">Tentar de novo</button>
   </div>
 
-  <p class="rodape">Um reality do app 7entidos · <a href="/">Descobrir o meu sentido</a></p>
+  <p class="rodape">Um reality do app 7entidos · <a href="../">Descobrir o meu sentido</a></p>
 </main>
 
 <div class="janela" id="janela" role="dialog" aria-modal="true" aria-label="Quadro do morador">
@@ -368,7 +370,7 @@ body.glam .resumo div{background:rgba(255,255,255,.05);border-color:rgba(233,196
   <div class="dentro pv">
     <p class="pv-tit" id="pvTit">Voto registrado! 💛</p>
     <p class="pv-perg">Quer participar da nossa pesquisa sobre boas sensações?</p>
-    <a class="botao amarelo" href="/pesquisa" style="width:100%">Quero participar</a>
+    <a class="botao amarelo" href="../pesquisa/" style="width:100%">Quero participar</a>
     <button type="button" class="botao contorno" id="pvNao" style="width:100%">Agora não</button>
   </div>
 </div>
@@ -388,8 +390,8 @@ body.glam .resumo div{background:rgba(255,255,255,.05);border-color:rgba(233,196
 
 <script>
 /* Os 7 moradores, na ordem pedida. */
-var FOTOS="/reality/votacao/fotos/";
-var QUADROS="/reality/votacao/quadros/";
+var FOTOS="../reality/votacao/fotos/";
+var QUADROS="../reality/votacao/quadros/";
 /* pintor = quadrinho "Inspirado em…". Os quadros são criações nossas no estilo de cada pintor (os quartos da casa), nunca a obra original. */
 var MORADORES=[
  {nome:"Luzia",sentido:"Visão",foto:"luzia.jpg",cor:"var(--sentido-visao)",pintor:"Inspirada em Van Gogh",frase:"Voltou a ver beleza onde todo mundo só via noite."},
@@ -401,6 +403,13 @@ var MORADORES=[
  {nome:"Lucas",sentido:"Noção do corpo",foto:"lucas.jpg",cor:"var(--sentido-corpo)",pintor:"Inspirado em Da Vinci",frase:"Pequeno inventor de segredos. Segredo de fantasminha!"}
 ];
 var LINK="https://7entidos.com.br/votar";
+/* Origem do voto (16/11): o link com ?origem=site|bio|stories|whatsapp|youtube diz de onde a pessoa veio.
+   Fica guardada só nesta visita e vai junto com o voto (coluna "Origem do voto" da aba Votação). */
+var ORIGENS=["site","bio","stories","whatsapp","youtube"];
+var ORIGEM=(function(){var o="";try{var q=new URLSearchParams(location.search);o=(q.get("origem")||q.get("utm_source")||"").toLowerCase().trim()}catch(e){}
+  if(ORIGENS.indexOf(o)<0)o="";
+  try{if(o)sessionStorage.setItem("7e_origem",o);else o=sessionStorage.getItem("7e_origem")||""}catch(e){}
+  return o||"direto"})();
 var CFG=null,gosto=-1,peso=1,longe=-1,humano=false,abriuEm=Date.now();
 function $(id){return document.getElementById(id)}
 function guarda(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
@@ -417,7 +426,7 @@ function slug(m){return m.foto.replace(".jpg","")}
 function mostrar(id){["avisoAntes","avisoFim","avisoJaVotou","avisoPronto","avisoErro"].forEach(function(a){$(a).classList.toggle("on",a===id)});
   /* Depois de votar a página continua aberta: só os botões de voto ficam desativados. */
   var votou=(id==="avisoJaVotou"||id==="avisoPronto");if(id)document.body.classList.add(votou?"votou":"fechado");if(votou)pintar()}
-function zap(){var t="Tô votando no reality A Casa dos 7 Sentidos e preciso de você! Vota também, é rapidinho: 7entidos.com.br/votar 💛 Os capítulos estão no YouTube: youtube.com/@7Entidos";return "https://wa.me/?text="+encodeURIComponent(t)}
+function zap(){var t="Tô votando no reality A Casa dos 7 Sentidos e preciso de você! Vota também, é rapidinho: https://7entidos.com.br/votar/?origem=whatsapp 💛 Os capítulos estão no YouTube: youtube.com/@7Entidos";return "https://wa.me/?text="+encodeURIComponent(t)}
 
 function montar(){
   var l=$("lista");l.innerHTML="";
@@ -523,7 +532,7 @@ function registrar(g,l){
   var url=window.VOTAR_URL_TESTE||window.PESQUISA_URL||"";
   if(!url){guarda(chaveDia(),hojeBR());return Promise.resolve(true)} /* prévia ou ?teste: não grava nada na planilha */
   var cod=(window.VOTAR_PREFIXO||"")+codigoAparelho();
-  var voto={data:dataBR(),hora:horaBR(),mais_gosto:g.nome,peso_gosto:peso,quero_ver_longe:l.nome,aparelho:cod,semana:CFG.semana};
+  var voto={data:dataBR(),hora:horaBR(),mais_gosto:g.nome,peso_gosto:peso,quero_ver_longe:l.nome,aparelho:cod,semana:CFG.semana,origem:ORIGEM};
   if(window.VOTAR_PREFIXO)voto.teste="TESTE do Claude - pode apagar";
   /* Mesmo robô da pesquisa. Cai na aba "Reality · Respostas" com "votar" na coluna Pesquisa
      (é dali que o "🔒 Votação · Painel" soma). parcial:true para NÃO contar nas 100 vagas da pesquisa. */

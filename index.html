@@ -306,9 +306,38 @@ body.sem-selos .selo{display:none}
   .celular{width:276px;height:570px}
   .celular .circulo{width:210px;--raio:88px}
 }
+
+/* ===== faixa da votação do reality (16/11): fica no topo enquanto a votação está aberta e muda sozinha quando fecha ===== */
+.faixa-voto{position:fixed;inset:0 0 auto 0;z-index:40;display:none;padding:calc(8px + env(safe-area-inset-top)) 14px 8px;overflow:hidden;
+  background:linear-gradient(100deg,#2a0612 0%,#5c0c22 45%,#2a0612 100%);border-bottom:2px solid #c9a24a;box-shadow:0 10px 26px -10px rgba(201,162,74,.55)}
+.faixa-voto.on{display:block}
+.faixa-voto .fv-in{position:relative;z-index:1;max-width:1120px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:10px 16px}
+.faixa-voto p{flex:0 1 auto;font:600 16px/1.25 var(--sans);color:#fff3d6}
+.faixa-voto p b{font-family:var(--serif);font-weight:600;font-size:18px;background:linear-gradient(100deg,#c8992e,#fff3c4 45%,#d9ae4a);-webkit-background-clip:text;background-clip:text;color:transparent}
+.faixa-voto .fv-bt{flex:none;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 18px;border-radius:999px;background:var(--ouro);color:#17120a;font:800 16px var(--sans);text-decoration:none;white-space:nowrap;box-shadow:0 0 0 0 rgba(245,197,66,.5);animation:fvPulsa 1.8s infinite}
+.faixa-voto.fechada .fv-bt{animation:none}
+.faixa-voto.fechada .fv-in{flex-wrap:wrap}.faixa-voto.fechada p{flex:1 1 100%;text-align:center}.faixa-voto.fechada .fv-bt{min-height:38px}
+@keyframes fvPulsa{50%{box-shadow:0 0 0 7px rgba(245,197,66,0)}}
+.faixa-voto .fv-flash{position:absolute;width:60px;height:60px;margin:-30px 0 0 -30px;border-radius:50%;opacity:0;pointer-events:none;background:radial-gradient(circle,#fff 0 6%,rgba(255,255,255,.7) 11%,rgba(255,240,200,.2) 32%,transparent 62%);animation:fvFlash 6s infinite}
+@keyframes fvFlash{0%,86%,100%{opacity:0}89%{opacity:1}92%{opacity:.15}94%{opacity:.8}}
+body.com-faixa{padding-top:calc(var(--fh,0px) + env(safe-area-inset-top))}
+body.com-faixa .topo{top:var(--fh,0px)}
+.r-botoes{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px}
+.reality a.r-votar{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 22px;border-radius:999px;border:0;background:var(--ouro);color:#17120a;font:800 16px var(--sans);letter-spacing:0;text-decoration:none;box-shadow:0 12px 30px -12px rgba(245,197,66,.8)}
+@media (max-width:520px){.faixa-voto p{font-size:15px}.faixa-voto p b{font-size:16px}.faixa-voto .fv-bt{min-height:42px;padding:0 14px;font-size:15px}}
+@media (prefers-reduced-motion:reduce){.faixa-voto .fv-bt,.faixa-voto .fv-flash{animation:none}}
 </style>
 </head>
 <body>
+
+<!-- Faixa da votação (16/11). Texto e horário vêm de votar/semana.json; muda sozinha quando a votação fecha. -->
+<div class="faixa-voto" id="faixaVoto" role="region" aria-label="Votação do reality">
+  <i class="fv-flash" style="left:8%;top:40%"></i><i class="fv-flash" style="left:62%;top:20%;animation-delay:2.2s"></i><i class="fv-flash" style="left:92%;top:70%;animation-delay:4.1s"></i>
+  <div class="fv-in">
+    <p id="fvTexto">🗳️ Votação aberta: <b>Para quem você torce?</b> Vote até sexta, 20/11</p>
+    <a class="fv-bt" id="fvBotao" href="votar/?origem=site">Votar agora</a>
+  </div>
+</div>
 
 
 <header class="topo" id="topo">
@@ -435,7 +464,7 @@ body.sem-selos .selo{display:none}
     </ol>
     <div class="r-pe">
       <span class="r-anon">🔒 Votação anônima: só usamos os números somados, nunca quem votou em quem.</span>
-      <a href="https://www.youtube.com/@7Entidos">Assista no YouTube →</a>
+      <span class="r-botoes"><a class="r-votar" href="votar/?origem=site">Votar agora</a><a href="https://www.youtube.com/@7Entidos">Assista no YouTube →</a></span>
     </div>
   </div>
 </div>
@@ -535,6 +564,29 @@ body.sem-selos .selo{display:none}
 
 
 <script>
+/* faixa da votação: aberta → "Votar agora"; depois de fechar → resultado + "Inscreva-se no canal" (por 2 dias); fora disso, some */
+(function(){
+  const f=document.getElementById("faixaVoto"),txt=document.getElementById("fvTexto"),bt=document.getElementById("fvBotao");
+  const DIAS=["domingo","segunda","terça","quarta","quinta","sexta","sábado"];
+  let C={aberta:true,abre:"2026-11-15T19:00:00-03:00",encerra:"2026-11-20T23:59:00-03:00",resultado:"O resultado sai domingo, 22/11, às 20h, no YouTube"};
+  function quando(iso){const d=new Date(Date.parse(iso)-3*36e5);return DIAS[d.getUTCDay()]+", "+String(d.getUTCDate()).padStart(2,"0")+"/"+String(d.getUTCMonth()+1).padStart(2,"0")}
+  function altura(){document.body.style.setProperty("--fh",f.classList.contains("on")?f.offsetHeight+"px":"0px")}
+  function aplicar(){
+    const t=Date.now(),abre=Date.parse(C.abre||0)||0,fim=Date.parse(C.encerra||0)||0;
+    let modo="";
+    if(C.aberta!==false&&t>=abre&&(!fim||t<=fim))modo="aberta";
+    else if(fim&&t>fim&&t<fim+48*36e5)modo="fechada";
+    else if(C.aberta===false&&fim&&t<fim+48*36e5)modo="fechada";
+    f.classList.toggle("on",!!modo);f.classList.toggle("fechada",modo==="fechada");document.body.classList.toggle("com-faixa",!!modo);
+    if(modo==="aberta"){txt.innerHTML="🗳️ Votação aberta: <b>Para quem você torce?</b> Vote até "+quando(C.encerra);bt.textContent="Votar agora";bt.href="votar/?origem=site";bt.removeAttribute("target")}
+    if(modo==="fechada"){txt.innerHTML="<b>Votação encerrada!</b> "+(C.resultado||"O resultado sai no YouTube");bt.textContent="Inscreva-se no canal";bt.href="https://www.youtube.com/@7Entidos";bt.target="_blank";bt.rel="noopener"}
+    altura();
+  }
+  aplicar();
+  fetch("votar/semana.json",{cache:"no-store"}).then(r=>r.json()).then(j=>{C=j;aplicar()}).catch(()=>{});
+  addEventListener("resize",altura);setInterval(aplicar,30000);
+})();
+
 /* faixa que desliza: 7 fotos, repetidas 2x para girar sem emenda */
 (function(){
   const S=[["visao","Visão","--visao"],["audicao","Audição","--audicao"],["tato","Tato","--tato"],["paladar","Paladar","--paladar"],["olfato","Olfato","--olfato"],["equilibrio","Equilíbrio","--equilibrio"],["corpo","Corpo","--corpo"]];
