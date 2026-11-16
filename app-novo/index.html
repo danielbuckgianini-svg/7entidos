@@ -409,6 +409,17 @@ body.foco #vinheta{opacity:.55}
 .flowx i{display:block;height:var(--h);border-radius:8px 8px 3px 3px;background:var(--c);align-self:end}
 .flowx b{grid-column:1/-1;font-size:15px;line-height:1.2}
 .flowx span{grid-column:1/-1;font-size:13px;color:var(--azul)}
+.trilha .bola2.presa{background:radial-gradient(circle at 40% 35%,#fff3c4,#f5c542 70%);box-shadow:0 0 30px #f5c542;transform:scale(1.15)}
+.anelb{position:absolute;inset:-7px;border-radius:50%;background:conic-gradient(#f5c542 var(--p,0%),transparent 0);-webkit-mask:radial-gradient(circle,transparent 58%,#000 60%);mask:radial-gradient(circle,transparent 58%,#000 60%)}
+.viagem{position:relative;display:grid;justify-items:center;gap:14px;padding:30px 6px 10px;min-height:56vh;align-content:center}
+.vlua{width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--c) 45%,transparent),transparent 70%);box-shadow:0 0 60px color-mix(in srgb,var(--c) 40%,transparent);animation:respira 10s ease-in-out infinite}
+@keyframes respira{0%,100%{transform:scale(.8)}40%{transform:scale(1.15)}}
+.vleg{font-family:Fraunces,serif;font-size:clamp(24px,6.5vw,32px);line-height:1.3;max-width:520px;margin:0;opacity:0;transition:opacity 1.2s}
+.vleg.on{opacity:1}
+.grupoc{font:400 13px "Space Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--azul);margin:14px 0 6px}
+.ingr .emo,.mesa .ing .emo{display:block;font-size:34px;line-height:1.2}
+.mesa .ing .emo{font-size:46px}
+@media (prefers-reduced-motion:reduce){.vlua{animation:none}}
 /* saborear */
 .saborear{position:fixed;inset:0;z-index:4;display:grid;place-items:center;text-align:center;padding:24px}
 .saborear .fundo{position:absolute;inset:0;background-size:cover;background-position:center;animation:zoomlento 22s linear both}
@@ -503,9 +514,9 @@ const SENT = [
  {id:"visao", missao:"achar o quadrado de cor diferente · até errar · revela o quanto seus olhos pegam detalhes.", s:"Visão", cor:"#f5c542", q:"O que te faz bem de olhar?", o:["Pôr do sol na praia","Céu estrelado","Um mural colorido de grafite","Fotos antigas de família"], brisa:"Comece pelos olhos.", jogo:"Olho de águia"},
  {id:"audicao", missao:"dizer qual som é mais fino · até errar · revela o quanto seu ouvido separa sons parecidos.", s:"Audição", cor:"#4aa8ff", q:"O que te faz bem ouvir?", o:["Som do mar","Música ao vivo","Chuva no telhado","Silêncio total"], sons:["mar","musica","chuva","silencio"], brisa:"Agora, feche os olhos e escute.", jogo:"Qual som é mais fino?"},
  {id:"tato", missao:"fazer carinho nas 4 fotos · 1 passada em cada · revela que toque a sua pele prefere.", s:"Tato", cor:"#ff8a3d", q:"O que te faz bem de sentir na pele?", o:["Areia nos pés","Cobertor macio","Água gelada","Abraço apertado"], brisa:"Sinta com a ponta dos dedos.", jogo:"Carinho"},
- {id:"paladar", missao:"montar um prato com 3 ingredientes · 1 prato · revela as combinações que te atraem.", s:"Paladar", cor:"#ff5a6e", q:"Que sabor te faz bem?", o:["Comida de vó","Doce de padaria","Fruta fresca","Café passado na hora"], brisa:"Pense no sabor que te acolhe.", jogo:"Monte o seu prato"},
- {id:"olfato", missao:"achar 3 cheiros à sua volta · 1 rodada · revela o quanto você nota o ar ao seu redor.", s:"Olfato", cor:"#5ccf8a", q:"Que cheiro te faz bem?", o:["Terra molhada","Pão saindo do forno","Perfume de alguém querido","Cheiro de café"], brisa:"Respire fundo. O cheiro também lembra.", jogo:"Caça aos cheiros"},
- {id:"equilibrio", missao:"tocar quando a bolinha passar no meio · ela vai acelerando · revela o seu ritmo.", s:"Equilíbrio", cor:"#b48cff", q:"Que movimento te faz bem?", o:["Dançar","Balançar numa rede","Andar de bicicleta","Ficar de pé numa prancha"], brisa:"Encontre o seu centro.", jogo:"Bolinha no ritmo"},
+ {id:"paladar", missao:"montar um prato com 3 comidas e fazer uma viagem rápida · revela os sabores que te atraem.", s:"Paladar", cor:"#ff5a6e", q:"Que sabor te faz bem?", o:["Comida de vó","Doce de padaria","Fruta fresca","Café passado na hora"], brisa:"Pense no sabor que te acolhe.", jogo:"Monte o seu prato"},
+ {id:"olfato", missao:"uma viagem de olhos fechados, guiada pela Brisa · revela o quanto a sua imaginação sente cheiros.", s:"Olfato", cor:"#5ccf8a", q:"Que cheiro te faz bem?", o:["Terra molhada","Pão saindo do forno","Perfume de alguém querido","Cheiro de café"], brisa:"Respire fundo. O cheiro também lembra.", jogo:"Viagem do cheiro"},
+ {id:"equilibrio", missao:"pegar a bolinha e segurar · ela fica mais rápida a cada acerto · revela o seu ritmo.", s:"Equilíbrio", cor:"#b48cff", q:"Que movimento te faz bem?", o:["Dançar","Balançar numa rede","Andar de bicicleta","Ficar de pé numa prancha"], brisa:"Encontre o seu centro.", jogo:"Bolinha no ritmo"},
  {id:"corpo", missao:"fazer 4 gestos simples no próprio corpo · 8 segundos cada · revela o que muda quando você presta atenção nele.", s:"Noção do corpo", cor:"#3fd6d0", q:"O que te faz bem no corpo?", o:["Alongar","Correr","Nadar","Deitar e respirar fundo"], brisa:"Por último, perceba o seu corpo.", jogo:"Sinta o corpo"}
 ];
 const foto = (sid,i) => IMG+sid+"-"+(i+1)+".jpg";
@@ -863,6 +874,23 @@ function conviteBonus(c,s,arr,quero,seguir){ c.innerHTML=`${cab(s,"Você acertou
   c.querySelector("#bq").onclick=()=>{ somJogo(); resp[s.id+"_bonus"]="aceitou"; quero(); }; c.querySelector("#bs").onclick=()=>{ somJogo(); resp[s.id+"_bonus"]="recusou"; seguir(); }; }
 
 /* true enquanto a tela atual ainda é o jogo deste sentido (se a pessoa pulou, a próxima rodada não aparece) */
+/* VIAGENS GUIADAS · voz da Brisa (HeyGen) + legenda. Quando os áudios chegarem, é só pôr o nome do arquivo aqui (ex.: "brisa-praia.mp3"). Nunca usar a palavra "hipnose". */
+const AUDIO_VIAGEM={praia:"",livro:"",limao:"",limaoMilk:""};
+const ROTEIRO={
+ praia:"Feche os olhos. [2] Puxe o ar pelo nariz… devagar… e solte pela boca, mais devagar ainda. [4] Mais uma vez. [4] Agora você está numa praia, no fim da tarde. [2] Seus pés afundam na areia morna. [3] Dá para ouvir as ondas indo… e voltando. [3] Um vento leve passa no seu rosto. [2] Ele traz o cheiro do mar: sal, alga, água fria. [4] Respire esse cheiro. [4] Talvez venha uma lembrança junto. Deixe ela vir. [4] Quando quiser, abra os olhos devagar.",
+ livro:"Feche os olhos… respire fundo… e solte devagar. [4] Você está diante de uma estante antiga. [2] Passe o dedo pelas lombadas… algumas lisas, outras ásperas. [3] Escolha um livro. Sinta o peso dele na mão. [3] Abra no meio. Ouça o papel estalar. [2] Agora aproxime o rosto das páginas… e respire. [4] Papel, tempo, um pouco de poeira… talvez baunilha. [4] Que lugar esse cheiro te lembra? [4] Abra os olhos quando quiser.",
+ limao:"Feche os olhos… respire… [3] Imagine um limão bem amarelo na sua mão. Frio. [2] Corte ao meio… o suco escorre. [2] Agora pingue uma gota na ponta da língua. [4] Repare: a boca já está enchendo d’água? [3] Abra os olhos.",
+ limaoMilk:"Feche os olhos… respire… [3] Imagine um limão bem amarelo na sua mão. Frio. [2] Corte ao meio… o suco escorre. [2] Agora pingue uma gota na ponta da língua. [4] Repare: a boca já está enchendo d’água? [3] Agora troque. Um copo de milkshake de chocolate, gelado, grosso. [2] Um gole grande… doce… mais doce… doce demais. [4] O que seu corpo quer agora? [3] Abra os olhos."
+};
+/* tempo de cada frase: leitura lenta (~0,45 s por palavra, mínimo 2,5 s) + a pausa escrita no roteiro */
+function trechos(id){ return ROTEIRO[id].split(/\[(\d+)\]/).reduce((a,x,i,arr)=>{ if(i%2===0&&x.trim()) a.push({t:x.trim(),p:+(arr[i+1]||0)}); return a; },[]); }
+function viagem(c,id,s,depois){ const L=trechos(id); let i=0, tm=null, au=null, acabou=false;
+  c.innerHTML=`<div class="viagem"><div class="vlua" style="--c:${s.cor}"></div><p class="vleg" id="vleg"></p><p class="olhos">De olhos fechados. Quando acabar, o celular vibra.</p><button class="btn sec" id="vpula">Pular a viagem</button></div>`;
+  somSuave(s.cor,.035); if(AUDIO_VIAGEM[id]){ try{ au=new Audio(AUDIO_VIAGEM[id]); au.play().catch(()=>{}); }catch(_){ } }
+  const fim=()=>{ if(acabou) return; acabou=true; clearTimeout(tm); try{ au&&au.pause(); }catch(_){} pararSom(); vibra([30,80,30]); tom(660,.6); depois(); };
+  const passo=()=>{ if(acabou||!aindaNoJogo(s)) return; if(i>=L.length) return fim(); const x=L[i++], el=c.querySelector("#vleg"); el.classList.remove("on"); void el.offsetWidth; el.textContent=x.t; el.classList.add("on");
+    tm=setTimeout(passo,(Math.max(2.5,x.t.split(/\s+/).length*.45)+x.p)*1000); };
+  c.querySelector("#vpula").onclick=()=>{ somJogo(); resp["viagem_"+id]="pulou"; fim(); }; resp["viagem_"+id]="fez"; passo(); }
 const aindaNoJogo=s=>{ const q=R[pos]; return !!q&&q.t==="jogo"&&SENT[q.i].id===s.id; };
 const JOGOS={
   /* Olho de águia: a diferença de cor diminui a cada acerto, até a pessoa errar; o ponto onde parou vira o nível */
@@ -895,32 +923,93 @@ const JOGOS={
     rod(); },
   /* Carinho: toque e deslize o dedo nas texturas; vibra de leve e cada uma tem um som suave */
   tato(s,fim){ const T=[["areia","Areia",0],["cobertor","Cobertor macio",1],["agua","Água gelada",2],["abraco","Abraço",3]], prog=[0,0,0,0];
+    /* cada textura vibra de um jeito: areia = tremidinha; cobertor = longa e macia; água = picadinha; abraço = pulsos firmes */
+    const VIBT={areia:[6,22,6,22,6,22,6],cobertor:[70],agua:[4,60,4],abraco:[45,35,45]};
     const MAO='<span class="mao" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M22 8c0-3 5-3 5 0v20l3-1V22c0-3 5-3 5 0v6l3-1v-3c0-3 5-3 5 0v5l3-1c0-3 5-3 5 0v12c0 10-6 18-16 18h-2c-6 0-10-3-13-8L12 36c-2-3 2-6 5-3l5 5z" fill="#f4ecdc" stroke="#15110a" stroke-width="2" stroke-linejoin="round"/></svg></span>';
     mostra(`${cabLongo(s,"Encoste o dedo na foto e arraste de um lado para o outro, como um carinho.")}<p class="dica2">Uma ou duas passadas em cada foto.</p><div class="texturas">${T.map(([k,n,j],i)=>`<div class="tex" data-i="${i}" data-k="${k}"><img src="${foto("tato",j)}" alt=""><span class="barra"><b></b></span><span class="nm">${n}</span><span class="rastro"></span>${i===0?MAO:""}</div>`).join("")}</div><div class="res" id="res"></div>`, c=>{
       let terminou=false;
       c.querySelectorAll(".tex").forEach(el=>{ const i=+el.dataset.i, k=el.dataset.k, ras=el.querySelector(".rastro"); let ult=null, down=false;
         const mexe=e=>{ if(!down&&e.pointerType!=="mouse") return; const r=el.getBoundingClientRect(), x=e.clientX-r.left, y=e.clientY-r.top; ras.style.left=x+"px"; ras.style.top=y+"px"; ras.style.opacity=1;
-          if(ult){ const d=Math.hypot(x-ult[0],y-ult[1]); if(d>2){ prog[i]=Math.min(100,prog[i]+d/(r.width*.95)*100); /* ~1 passada de ponta a ponta completa; 2 passadas curtas também */ el.querySelector(".barra b").style.width=prog[i]+"%"; somTextura(k); } } ult=[x,y];
+          if(ult){ const d=Math.hypot(x-ult[0],y-ult[1]); if(d>2){ prog[i]=Math.min(100,prog[i]+d/(r.width*.95)*100); /* ~1 passada de ponta a ponta completa; 2 passadas curtas também */ el.querySelector(".barra b").style.width=prog[i]+"%"; somTextura(k); const ag=Date.now(); if(ag-(el._vb||0)>240){ el._vb=ag; vibra(VIBT[k]); } } } ult=[x,y];
           if(prog[i]>=100&&!el.classList.contains("feita")){ el.classList.add("feita"); vibra([10,40,10]); tom(988,.5); setTimeout(()=>tom(1319,.7),120); }
-          if(!terminou&&prog.every(v=>v>=100)){ terminou=true; c.querySelector("#res").innerHTML='<span class="bom">Você sentiu as quatro.</span><br><button class="btn" id="segtato" style="margin:14px 0 70px">Seguir</button>'; resp.tato_texturas="4 de 4"; avisoFim(); c.querySelector("#segtato").onclick=()=>{ click(); fim(); }; } };
+          if(!terminou&&prog.every(v=>v>=100)){ terminou=true; resp.tato_texturas="4 de 4"; avisoFim();
+            c.querySelector("#res").innerHTML=`<span class="bom">Você sentiu as quatro.</span><h3 class="bonusq">Qual foi a mais gostosa?</h3><div class="opts" style="margin-bottom:70px">${T.map(([kk,nn])=>`<button class="opt" data-n="${nn}">${nn}</button>`).join("")}</div>`;
+            c.querySelectorAll("#res .opt").forEach(b=>b.onclick=()=>{ somJogo(); resp.tato_favorita=b.dataset.n; b.classList.add("sel"); c.querySelectorAll("#res .opt").forEach(y=>y.disabled=true); vibra([10,40,10]); setTimeout(fim,500); });
+            try{ c.querySelector("#res").scrollIntoView({behavior:"smooth",block:"center"}); }catch(_){} } };
         el.addEventListener("pointerdown",e=>{ down=true; ult=null; c.querySelector(".texturas").classList.add("tocou"); somPronto().catch(()=>{}); try{ el.setPointerCapture(e.pointerId); }catch(_){} mexe(e); });
         el.addEventListener("pointermove",mexe);
         const sol=()=>{ down=false; ult=null; ras.style.opacity=0; }; el.addEventListener("pointerup",sol); el.addEventListener("pointercancel",sol); el.addEventListener("pointerleave",sol);
       }); }); },
-  /* Monte o seu prato: prato visto de cima, ingredientes realistas caindo no prato */
-  paladar(s,fim){ const I=[["tomate","Tomate"],["queijo","Queijo"],["manjericao","Manjericão"],["mel","Mel"],["limao","Limão"],["pimenta","Pimenta"],["coco","Coco"],["chocolate","Chocolate"]], sel=[];
-    const LUG=[["14%","16%"],["50%","20%"],["32%","50%"]];
-    mostra(`${cabLongo(s,"Escolha 3 ingredientes. Eles vão se juntando no prato.")}<div class="mesa" id="mesa"></div><div class="pratonome" id="pn">0 de 3</div>
-      <div class="ingr">${I.map(([k,n],i)=>`<button data-i="${i}"><img src="${IMG}jogo-prato-${k}.webp" alt="">${n}</button>`).join("")}</div>`, c=>{
-      const mesa=c.querySelector("#mesa"), pn=c.querySelector("#pn");
-      const pinta=()=>{ mesa.innerHTML=sel.map((i,j)=>`<span class="ing" style="left:${LUG[j][0]};top:${LUG[j][1]}"><img src="${IMG}jogo-prato-${I[i][0]}.webp" alt=""></span>`).join("");
-        pn.textContent = sel.length===3 ? "Seu prato: "+sel.map(i=>I[i][1].toLowerCase()).join(", ").replace(/, ([^,]*)$/," e $1")+"." : sel.length+" de 3"; };
-      c.querySelectorAll(".ingr button").forEach(b=>b.onclick=()=>{ if(sel.length===3) return; const i=+b.dataset.i, p=sel.indexOf(i); somJogo();
-        if(p>=0){ sel.splice(p,1); b.classList.remove("sel"); } else { sel.push(i); b.classList.add("sel"); }
-        pinta(); if(sel.length===3){ resp.paladar_prato=sel.map(i=>I[i][1]); mesa.classList.add("pronto"); c.querySelectorAll(".ingr button").forEach(x=>{ if(!x.classList.contains("sel")) x.disabled=true; }); setTimeout(fim,1600); } }); }); },
+  /* Monte o seu prato: 15 comidas em 3 grupos de 5 (imagens provisórias até chegarem as do Canva); depois, a viagem do limão */
+  paladar(s,fim){ const G=[["Pratos",[["carne","Carne / churrasco","🥩"],["frango","Frango","🍗"],["peixe","Peixe","🐟"],["massa","Massa","🍝"],["japonesa","Comida japonesa","🍣"]]],
+      ["Brasil e mundo",[["arroz-feijao","Arroz e feijão","🍛"],["pizza","Pizza","🍕"],["baiana","Comida baiana","🥘"],["pao-queijo","Pão de queijo","🧀"],["apimentada","Comida apimentada","🌶️"]]],
+      ["Leves e doces",[["salada","Salada fresca","🥗"],["frutas","Frutas tropicais","🥭"],["chocolate","Chocolate / doce","🍫"],["sorvete","Sorvete / milkshake","🍨"],["cafe","Café","☕"]]]];
+    const I=G.flatMap(g=>g[1]), sel=[], LUG=[["14%","16%"],["50%","20%"],["32%","50%"]];
+    /* quando as imagens do Canva chegarem: pôr o nome do arquivo aqui (ex.: carne:"comida-carne.webp") */
+    const IMG_COMIDA={};
+    const vis=(k,e)=>IMG_COMIDA[k]?`<img src="${IMG}${IMG_COMIDA[k]}" alt="">`:`<span class="emo" aria-hidden="true">${e}</span>`;
+    mostra(`${cab(s,"Escolha 3 comidas. Elas vão se juntando no prato.")}<div class="mesa" id="mesa"></div><div class="pratonome" id="pn">0 de 3</div>
+      ${G.map(([gn,L])=>`<div class="grupoc">${gn}</div><div class="ingr">${L.map(([k,n,e])=>`<button data-k="${k}">${vis(k,e)}${n}</button>`).join("")}</div>`).join("")}`, c=>{
+      const mesa=c.querySelector("#mesa"), pn=c.querySelector("#pn"), achar=k=>I.find(x=>x[0]===k);
+      const pinta=()=>{ mesa.innerHTML=sel.map((k,j)=>`<span class="ing" style="left:${LUG[j][0]};top:${LUG[j][1]}">${vis(k,achar(k)[2])}</span>`).join("");
+        pn.textContent = sel.length===3 ? "Seu prato: "+sel.map(k=>achar(k)[1].toLowerCase()).join(", ").replace(/, ([^,]*)$/," e $1")+"." : sel.length+" de 3"; };
+      c.querySelectorAll(".ingr button").forEach(b=>b.onclick=()=>{ if(sel.length===3) return; const k=b.dataset.k, p=sel.indexOf(k); somJogo();
+        if(p>=0){ sel.splice(p,1); b.classList.remove("sel"); } else { sel.push(k); b.classList.add("sel"); }
+        pinta(); if(sel.length===3){ resp.paladar_prato=sel.map(k=>achar(k)[1]); mesa.classList.add("pronto"); c.querySelectorAll(".ingr button").forEach(x=>{ if(!x.classList.contains("sel")) x.disabled=true; }); setTimeout(()=>{ if(aindaNoJogo(s)) limao(); },1800); } });
+      /* viagem do limão: 15 s só com a gota de limão; quem volta ao app faz a versão completa (limão e milkshake) */
+      function limao(){ let volta=false; try{ volta=localStorage.getItem("7e_paladar_viagem")==="1"; }catch(_){} const id=volta?"limaoMilk":"limao"; resp.paladar_viagem=volta?"completa":"curta";
+        c.innerHTML=`${cab(s,"Agora, uma viagem rápida.")}<p class="gesto">Feche os olhos e imagine comigo.</p><button class="btn" id="vai">Começar</button>`;
+        c.querySelector("#vai").onclick=()=>{ somJogo(); viagem(c,id,s,()=>{ if(!aindaNoJogo(s)) return; try{ localStorage.setItem("7e_paladar_viagem","1"); }catch(_){} fundo(s);
+          const Q=volta?["Qual dos dois você sentiu mais?",["Limão","Milkshake","Os dois","Nenhum"],"paladar_sentiu_mais"]:["Sua boca encheu d’água?",["Sim","Um pouco","Não"],"paladar_boca"];
+          c.innerHTML=`${cab(s,"De volta.")}<h2 class="mudou">${Q[0]}</h2><div class="opts">${Q[1].map(o=>`<button class="opt" data-o="${o}">${o}</button>`).join("")}</div>`;
+          c.querySelectorAll(".opt").forEach(q=>q.onclick=()=>{ somJogo(); resp[Q[2]]=q.dataset.o; q.classList.add("sel"); c.querySelectorAll(".opt").forEach(y=>y.disabled=true); vibra([10,40,10]); fim(); }); }); }; }
+    }); },
+  /* Viagem do cheiro: viagem guiada pela imaginação, de olhos fechados, na voz da Brisa (Praia ou Livro na estante) */
+  olfato(s,fim){ mostra(`${cab(s,"Para onde você quer ir?")}<div class="opts"><button class="opt" data-v="praia">🌊 Uma praia no fim da tarde</button><button class="opt" data-v="livro">📚 Uma estante de livros antigos</button></div>`, c=>{
+      c.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ somJogo(); const v=b.dataset.v; resp.olfato_viagem=v==="praia"?"Praia":"Livro na estante";
+        viagem(c,v,s,()=>{ if(!aindaNoJogo(s)) return; fundo(s); c.innerHTML=`${cab(s,"De volta.")}<h2 class="mudou">Você conseguiu sentir o cheiro?</h2><div class="opts">${["Sim","Um pouco","Não"].map(o=>`<button class="opt" data-o="${o}">${o}</button>`).join("")}</div>`;
+          c.querySelectorAll(".opt").forEach(q=>q.onclick=()=>{ somJogo(); resp.olfato_sentiu=q.dataset.o; q.classList.add("sel"); c.querySelectorAll(".opt").forEach(y=>y.disabled=true); vibra([10,40,10]); fim(); }); }); }); }); },
+  /* Bolinha no ritmo: a bolinha anda de um lado para o outro; a pessoa pega e segura 1 segundo; a cada acerto ela fica mais rápida; errou a bolinha, termina com o nível */
+  equilibrio(s,fim){ const VEL=[1700,1450,1250,1080,940,820,720,640]; let lv=0, t0=0, raf=0, acabou=false, preso=false, x=0, hold=0, htm=null, pausa=0;
+    mostra(`${cab(s,"Pegue a bolinha e segure.")}<div class="nivel" id="nv">Nível 1 <small>ela vai acelerando a cada acerto</small></div>
+      <div class="trilha" id="tr" aria-label="Trilha da bolinha: toque na bolinha e segure"><span class="bola2" id="b2"><i class="anelb" id="ab"></i></span></div><div class="res" id="res"></div>`, c=>{
+      const tr=c.querySelector("#tr"), b2=c.querySelector("#b2"), ab=c.querySelector("#ab"), res=c.querySelector("#res"), nv=c.querySelector("#nv");
+      const anda=t=>{ if(acabou||!aindaNoJogo(s)){ cancelAnimationFrame(raf); return; } if(!t0) t0=t; if(preso){ pausa=t; raf=requestAnimationFrame(anda); return; } if(pausa){ t0+=t-pausa; pausa=0; }
+        const per=VEL[lv]*2, f=((t-t0)%per)/per; x=f<.5?f*2:2-f*2; b2.style.left=(6+x*88)+"%"; raf=requestAnimationFrame(anda); };
+      raf=requestAnimationFrame(anda);
+      const termina=ok=>{ acabou=true; cancelAnimationFrame(raf); clearInterval(htm); const nivel=ok?VEL.length:lv; resp.equilibrio_nivel=nivel; nv.remove();
+        const fr=nivel>=Math.ceil(VEL.length*.7)?"Você acompanha até o ritmo mais rápido.":nivel>=Math.ceil(VEL.length*.4)?"Você segue o ritmo com firmeza.":"Você gosta de um ritmo mais calmo.";
+        res.innerHTML=(ok?'<span class="bom">Pegou até a mais rápida!</span>':'<span class="nao">A bolinha escapou.</span>')+`<div class="fimnivel"><b>Nível ${nivel}</b><p>${fr}</p></div>`; vibra([10,40,10]); setTimeout(()=>{ if(aindaNoJogo(s)) fim(); },2600); };
+      tr.addEventListener("pointerdown",e=>{ e.preventDefault(); if(acabou||preso) return; somPronto().catch(()=>{}); const r=tr.getBoundingClientRect(), bx=r.left+r.width*(6+x*88)/100;
+        if(Math.abs(e.clientX-bx)>Math.max(30,r.width*.07)){ somJogo(); return termina(false); }
+        try{ tr.setPointerCapture(e.pointerId); }catch(_){} preso=true; hold=0; b2.classList.add("presa"); res.textContent="Segure…"; vibra(8);
+        htm=setInterval(()=>{ hold+=50; ab.style.setProperty("--p",Math.min(100,hold/10)+"%"); if(hold>=1000){ clearInterval(htm); preso=false; b2.classList.remove("presa"); ab.style.setProperty("--p","0%"); somJogo(); vibra(14);
+          if(lv>=VEL.length-1) return termina(true); lv++; nv.innerHTML=`Nível ${lv+1} <small>mais rápida agora</small>`; res.innerHTML='<span class="bom">Pegou! Agora mais rápida.</span>'; } },50); });
+      const solta=()=>{ if(!preso) return; clearInterval(htm); preso=false; b2.classList.remove("presa"); ab.style.setProperty("--p","0%"); if(!acabou) res.innerHTML='<span class="nao">Soltou cedo. Pegue de novo e segure.</span>'; };
+      tr.addEventListener("pointerup",solta); tr.addEventListener("pointercancel",solta);
+    }); },
+  /* Sinta o corpo: 4 gestos simples no próprio corpo (só sensações); no fim, "Mudou alguma coisa?" */
+  corpo(s,fim){ const G=[["Esfregue as palmas das mãos, rápido.","Agora pare e sinta o calor nas mãos."],
+      ["Encoste as mãos no rosto.","Sinta o calor passando para o rosto."],
+      ["Gire os ombros para trás, bem devagar.","Repare no peso dos braços."],
+      ["Aperte os dedos dos pés no chão… e solte.","Sinta o chão embaixo de você."]];
+    let g=0, tm=null; resp.corpo_gestos=0;
+    const passo=()=>{ if(!aindaNoJogo(s)) return; if(g>=G.length) return pergunta();
+      mostra(`${cab(s,`Gesto ${g+1} de ${G.length}`)}<p class="gesto">${esc(G[g][0])}</p>${aroLuz(s.cor,8)}<p class="olhos">${esc(G[g][1])}</p><button class="btn sec" id="fg" style="margin-top:8px">Pronto</button>`, c=>{
+        somSuave(s.cor); let foi=false; const vai=()=>{ if(foi) return; foi=true; clearTimeout(tm); resp.corpo_gestos=g+1; g++; passo(); };
+        tm=setTimeout(()=>{ if(aindaNoJogo(s)){ avisoFim(); vai(); } },8000); c.querySelector("#fg").onclick=()=>{ somJogo(); vai(); }; }); };
+    const pergunta=()=>{ pararSom(); mostra(`${cab(s,comNome("E aí, {n}?","E aí?"))}<h2 class="mudou">Mudou alguma coisa?</h2>
+      <div class="opts">${["Sim, mudou bastante","Mudou um pouco","Não mudou nada"].map(o=>`<button class="opt" data-o="${o}">${o}</button>`).join("")}</div>`, c=>{
+      c.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ somJogo(); resp.corpo_mudou=b.dataset.o; b.classList.add("sel"); c.querySelectorAll(".opt").forEach(y=>y.disabled=true);
+        c.insertAdjacentHTML("beforeend",`<p class="fala2">${b.dataset.o==="Não mudou nada"?"Tudo bem. Só de reparar, você já esteve aqui.":"Isso é o seu corpo respondendo a você."}</p>`); vibra([10,40,10]); fim(); }); }); };
+    passo(); }
+};
+
+/* GUARDADO para as Fases 3 a 5: Caça aos cheiros (não aparece na Fase 2) */
+const JOGOS_GUARDADOS={
   /* Pares de cheiros: jogo da memória com 3 cheiros */
   /* Caça aos cheiros: olhos fechados 10 s, marcar 3 cheiros de onde a pessoa está, escolher o mais gostoso */
-  olfato(s,fim){ const SUG=["Café","Comida","Perfume","Sabonete","Ar livre","Roupa limpa","Chuva","Plantas","Madeira","Mar","Pão","Nenhum cheiro"]; let sel=[]; const ESCR=new Set(); /* o que a pessoa escreve fica só no celular */
+  cacaCheiros(s,fim){ const SUG=["Café","Comida","Perfume","Sabonete","Ar livre","Roupa limpa","Chuva","Plantas","Madeira","Mar","Pão","Nenhum cheiro"]; let sel=[]; const ESCR=new Set(); /* o que a pessoa escreve fica só no celular */
     mostra(`${cab(s,"Feche os olhos. Que cheiros tem aí?")}<div class="escuro">${aroLuz(s.cor,10,'<span class="luzverde"></span>')}<p class="olhos" id="tmp">Olhos fechados. Quando a luz fechar, um som te avisa.</p></div><button class="btn sec" id="ja" style="margin-top:10px">Já senti</button>`, c=>{
       somSuave(s.cor); const tm=setTimeout(()=>{ if(!aindaNoJogo(s)) return; c.querySelector("#tmp").textContent="Pode abrir os olhos."; avisoFim(); setTimeout(()=>{ if(aindaNoJogo(s)) passo2(); },900); },10000);
       c.querySelector("#ja").onclick=()=>{ clearTimeout(tm); somJogo(); passo2(); };
@@ -938,39 +1027,6 @@ const JOGOS={
         c.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ somJogo(); const fav=b.dataset.t; if(ESCR.has(fav)){ delete resp.olfato_favorito; resp.local_olfato_favorito=fav; } else { resp.olfato_favorito=fav; delete resp.local_olfato_favorito; } vibra([10,40,10]);
           c.innerHTML=`<div class="rot" style="color:${s.cor}">Seu cheiro do momento</div><div class="campeao">${esc(b.dataset.t)}</div><p class="fala2" style="margin-bottom:0">${comNome("Guarde esse cheiro, {n}. Ele conta onde você está agora.","Guarde esse cheiro. Ele conta onde você está agora.")}</p>`; fim(); }); }
     }); },
-  /* Bolinha no ritmo: a bolinha anda de um lado para o outro e vai acelerando aos poucos; tocar quando ela passar no meio */
-  equilibrio(s,fim){ const VEL=[1700,1450,1250,1080,940,820,720,640]; let lv=0, t0=0, raf=0, acabou=false, travado=false;
-    mostra(`${cab(s,"Toque quando a bolinha passar no meio.")}<div class="nivel" id="nv">Nível 1 <small>ela vai acelerando aos poucos</small></div>
-      <div class="trilha" id="tr" role="button" aria-label="Trilha da bolinha: toque quando ela passar no meio"><span class="meio"></span><span class="bola2" id="b2"></span></div>
-      <button class="btn" id="tq">Agora!</button><div class="res" id="res"></div>`, c=>{
-      const b2=c.querySelector("#b2"), res=c.querySelector("#res"), nv=c.querySelector("#nv"); let x=0;
-      const anda=t=>{ if(acabou||!aindaNoJogo(s)){ cancelAnimationFrame(raf); return; } if(!t0) t0=t; const per=VEL[lv]*2, f=((t-t0)%per)/per; x=f<.5?f*2:2-f*2;
-        b2.style.left=(6+x*88)+"%"; raf=requestAnimationFrame(anda); };
-      raf=requestAnimationFrame(anda);
-      const toque=e=>{ if(e) e.preventDefault(); if(acabou||travado) return; somJogo(); const ok=Math.abs(x-.5)<.1;
-        if(ok&&lv<VEL.length-1){ lv++; travado=true; vibra(12); b2.classList.add("acertou"); res.innerHTML='<span class="bom">No meio! Agora mais rápido.</span>';
-          nv.innerHTML=`Nível ${lv+1} <small>mais rápido agora</small>`; setTimeout(()=>{ travado=false; b2.classList.remove("acertou"); },450); return; }
-        acabou=true; cancelAnimationFrame(raf); const nivel=ok?VEL.length:lv; resp.equilibrio_nivel=nivel; nv.remove();
-        const fr=nivel>=Math.ceil(VEL.length*.7)?"Você acompanha até o ritmo mais rápido.":nivel>=Math.ceil(VEL.length*.4)?"Você segue o ritmo com firmeza.":"Você gosta de um ritmo mais calmo.";
-        res.innerHTML=(ok?'<span class="bom">No meio até o fim!</span>':'<span class="nao">Passou do meio.</span>')+`<div class="fimnivel"><b>Nível ${nivel}</b><p>${fr}</p></div>`; vibra([10,40,10]);
-        c.querySelector("#tq").remove(); setTimeout(()=>{ if(aindaNoJogo(s)) fim(); },2600); };
-      c.querySelector("#tq").addEventListener("pointerdown",toque); c.querySelector("#tr").addEventListener("pointerdown",toque);
-    }); },
-  /* Sinta o corpo: 4 gestos simples no próprio corpo (só sensações); no fim, "Mudou alguma coisa?" */
-  corpo(s,fim){ const G=[["Esfregue as palmas das mãos, rápido.","Agora pare e sinta o calor nas mãos."],
-      ["Encoste as mãos no rosto.","Sinta o calor passando para o rosto."],
-      ["Gire os ombros para trás, bem devagar.","Repare no peso dos braços."],
-      ["Aperte os dedos dos pés no chão… e solte.","Sinta o chão embaixo de você."]];
-    let g=0, tm=null; resp.corpo_gestos=0;
-    const passo=()=>{ if(!aindaNoJogo(s)) return; if(g>=G.length) return pergunta();
-      mostra(`${cab(s,`Gesto ${g+1} de ${G.length}`)}<p class="gesto">${esc(G[g][0])}</p>${aroLuz(s.cor,8)}<p class="olhos">${esc(G[g][1])}</p><button class="btn sec" id="fg" style="margin-top:8px">Pronto</button>`, c=>{
-        somSuave(s.cor); let foi=false; const vai=()=>{ if(foi) return; foi=true; clearTimeout(tm); resp.corpo_gestos=g+1; g++; passo(); };
-        tm=setTimeout(()=>{ if(aindaNoJogo(s)){ avisoFim(); vai(); } },8000); c.querySelector("#fg").onclick=()=>{ somJogo(); vai(); }; }); };
-    const pergunta=()=>{ pararSom(); mostra(`${cab(s,comNome("E aí, {n}?","E aí?"))}<h2 class="mudou">Mudou alguma coisa?</h2>
-      <div class="opts">${["Sim, mudou bastante","Mudou um pouco","Não mudou nada"].map(o=>`<button class="opt" data-o="${o}">${o}</button>`).join("")}</div>`, c=>{
-      c.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ somJogo(); resp.corpo_mudou=b.dataset.o; b.classList.add("sel"); c.querySelectorAll(".opt").forEach(y=>y.disabled=true);
-        c.insertAdjacentHTML("beforeend",`<p class="fala2">${b.dataset.o==="Não mudou nada"?"Tudo bem. Só de reparar, você já esteve aqui.":"Isso é o seu corpo respondendo a você."}</p>`); vibra([10,40,10]); fim(); }); }); };
-    passo(); }
 };
 
 function curtiu(p){
@@ -1073,7 +1129,7 @@ function envia(){ if(!ENDPOINT||!resp.consentiu) return; try{ const r={...resp};
 
 /* ============ PAINEL DE VALIDAÇÃO (só na prévia) ============ */
 const ITENS=[
- ["b4a","Bloco 4 · 1 · Equilíbrio","Bolinha que acelera","A bolinha anda de um lado para o outro e vai acelerando aos poucos. Toque quando ela passar no meio; o jogo vai até errar e termina com o nível.",R.findIndex(x=>x.t==="jogo"&&SENT[x.i].id==="equilibrio")],
+ ["b4a","Bloco 4 · 1 · Equilíbrio","Bolinha que acelera (pegar e segurar)","A bolinha anda de um lado para o outro. Pegue e segure 1 segundo: a cada acerto ela fica mais rápida. Se errar a bolinha, termina com o nível.",R.findIndex(x=>x.t==="jogo"&&SENT[x.i].id==="equilibrio")],
  ["b4b","Bloco 4 · 2 · Noção do corpo","Gestos simples + 'Mudou alguma coisa?'","4 gestos no próprio corpo (esfregar as mãos, mãos no rosto, girar os ombros, dedos dos pés), só sensações. No fim: 'Mudou alguma coisa?'",R.findIndex(x=>x.t==="jogo"&&SENT[x.i].id==="corpo")],
  ["b4c","Bloco 4 · 3 · Saborear","Uma imagem com uma frase curta","A foto favorita em tela cheia com 'Fique um pouco aqui. Este momento é seu.' e o botão Seguir.",R.findIndex(x=>x.t==="saborear")],
  ["b4d","Bloco 4 · 4 · Tela 17","Você chegou com X e sai com Y","Aparece depois de tocar a nota de saída e de novo no topo da tela seguinte, com as duas notas de 0 a 10.",R.findIndex(x=>x.t==="escala"&&x.id==="saida")],
