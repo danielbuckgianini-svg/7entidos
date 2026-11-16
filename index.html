@@ -335,7 +335,7 @@ body.com-faixa .topo{top:var(--fh,0px)}
   <i class="fv-flash" style="left:8%;top:40%"></i><i class="fv-flash" style="left:62%;top:20%;animation-delay:2.2s"></i><i class="fv-flash" style="left:92%;top:70%;animation-delay:4.1s"></i>
   <div class="fv-in">
     <p id="fvTexto">🗳️ Votação aberta: <b>Para quem você torce?</b> Vote até sexta, 20/11</p>
-    <a class="fv-bt" id="fvBotao" href="votar/?origem=site">Votar agora</a>
+    <a class="fv-bt" id="fvBotao" href="votar/index.html?origem=site">Votar agora</a>
   </div>
 </div>
 
@@ -464,7 +464,7 @@ body.com-faixa .topo{top:var(--fh,0px)}
     </ol>
     <div class="r-pe">
       <span class="r-anon">🔒 Votação anônima: só usamos os números somados, nunca quem votou em quem.</span>
-      <span class="r-botoes"><a class="r-votar" href="votar/?origem=site">Votar agora</a><a href="https://www.youtube.com/@7Entidos">Assista no YouTube →</a></span>
+      <span class="r-botoes"><a class="r-votar" href="votar/index.html?origem=site">Votar agora</a><a href="https://www.youtube.com/@7Entidos">Assista no YouTube →</a></span>
     </div>
   </div>
 </div>
@@ -578,7 +578,7 @@ body.com-faixa .topo{top:var(--fh,0px)}
     else if(fim&&t>fim&&t<fim+48*36e5)modo="fechada";
     else if(C.aberta===false&&fim&&t<fim+48*36e5)modo="fechada";
     f.classList.toggle("on",!!modo);f.classList.toggle("fechada",modo==="fechada");document.body.classList.toggle("com-faixa",!!modo);
-    if(modo==="aberta"){txt.innerHTML="🗳️ Votação aberta: <b>Para quem você torce?</b> Vote até "+quando(C.encerra);bt.textContent="Votar agora";bt.href="votar/?origem=site";bt.removeAttribute("target")}
+    if(modo==="aberta"){txt.innerHTML="🗳️ Votação aberta: <b>Para quem você torce?</b> Vote até "+quando(C.encerra);bt.textContent="Votar agora";bt.href="votar/index.html?origem=site";bt.removeAttribute("target")}
     if(modo==="fechada"){txt.innerHTML="<b>Votação encerrada!</b> "+(C.resultado||"O resultado sai no YouTube");bt.textContent="Inscreva-se no canal";bt.href="https://www.youtube.com/@7Entidos";bt.target="_blank";bt.rel="noopener"}
     altura();
   }
