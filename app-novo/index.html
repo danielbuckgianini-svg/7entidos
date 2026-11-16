@@ -23,20 +23,23 @@ button{font-family:inherit}
 .topo{position:fixed;top:0;left:0;right:0;z-index:5;display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:calc(10px + env(safe-area-inset-top)) 16px 10px;pointer-events:none;background:linear-gradient(rgba(10,17,40,.92),rgba(10,17,40,.6) 70%,transparent)}
 .marca{display:flex;align-items:center;pointer-events:auto}
 .marca img{height:52px;width:auto;display:block}
-/* MANDALA OFICIAL DO LOGO (imagem mandala.webp): miolo com o 7 + anel cortado em 7 pedaços, um por sentido */
+/* MANDALA OFICIAL DO LOGO (imagem mandala.webp). As luzes são os PRÓPRIOS CÍRCULOS da mandala:
+   8 círculos em volta (os 7 primeiros, um por sentido, em sentido horário a partir do de cima; o 8º acende quando os 7 estão acesos) + o miolo com o 7 */
 .mdl{position:relative;display:inline-block;flex:none;border-radius:50%;transition:box-shadow .8s}
-.mdl img{position:absolute;inset:0;width:100%;height:100%;display:block;transition:transform .9s cubic-bezier(.3,1.35,.5,1),filter .7s,opacity .7s;pointer-events:none}
-.mdl .mi{clip-path:circle(21.5% at 50% 50%);-webkit-clip-path:circle(21.5% at 50% 50%)}
-.mdl .mi.apag{filter:grayscale(.75) brightness(.5)}
-.mdl .pd{-webkit-mask:radial-gradient(circle,transparent 21%,#000 21.5%);mask:radial-gradient(circle,transparent 21%,#000 21.5%)}
-.mdl .pd.fora{transform:translate(var(--tx),var(--ty)) rotate(var(--r));filter:grayscale(.85) brightness(.45);opacity:.55}
-.mdl .pd.lugar{filter:grayscale(.55) brightness(.62)}
-.mdl .pd.luz{filter:none;opacity:1}
-.mdl .lz{position:absolute;left:50%;top:50%;width:13%;height:13%;margin:-6.5%;border-radius:50%;background:var(--c);box-shadow:0 0 10px 3px var(--c);transform:rotate(var(--a)) translateY(calc(var(--raio) * -1));opacity:0;transition:opacity .7s;pointer-events:none}
-.mdl .lz.on{opacity:1}
-.mdl.brilha{box-shadow:0 0 30px 6px rgba(245,197,66,.35)}
+.mdl img{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none;transition:transform .9s cubic-bezier(.3,1.35,.5,1),filter .7s,opacity .7s}
+.mdl .bs{filter:brightness(.36) saturate(.55)}
+.mdl.cheia .bs{filter:none}
+.mdl .c.fora{transform:translate(var(--tx),var(--ty)) scale(.85);filter:grayscale(.9) brightness(.35);opacity:.55}
+.mdl .c.lugar{filter:grayscale(.55) brightness(.55)}
+.mdl .c.luz{filter:brightness(1.12) saturate(1.2)}
+.mdl .mi{filter:brightness(1.12) saturate(1.15)}
+.mdl .mi.apag{filter:grayscale(.6) brightness(.5)}
+.mdl .hl{position:absolute;width:36%;height:36%;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,var(--c) 0,transparent 68%);opacity:0;transition:opacity .9s;pointer-events:none}
+.mdl .hl.mh{width:58%;height:58%}
+.mdl .hl.on{opacity:.8}
+.mdl.brilha{box-shadow:0 0 26px 4px rgba(245,197,66,.3)}
 .mdl.pulsa{animation:mpulsa 1.6s ease-out}
-@keyframes mpulsa{0%{box-shadow:0 0 0 0 rgba(245,197,66,.9)}40%{box-shadow:0 0 50px 18px rgba(245,197,66,.55)}100%{box-shadow:0 0 30px 6px rgba(245,197,66,.35)}}
+@keyframes mpulsa{0%{box-shadow:0 0 0 0 rgba(245,197,66,.9)}40%{box-shadow:0 0 50px 18px rgba(245,197,66,.55)}100%{box-shadow:0 0 26px 4px rgba(245,197,66,.3)}}
 .const .xde7 b.pal{display:block;font:600 19px Fraunces,serif;color:var(--creme);letter-spacing:0;text-transform:none}
 .const .xde7 b.pal em{font-style:normal;color:var(--ouro)}
 .const .mdl{margin-right:6px}
@@ -56,6 +59,7 @@ button{font-family:inherit}
 .escala.e11 button{font-size:22px}
 .escala.e11 button.antes{border:2px dashed rgba(169,179,209,.75);opacity:.6;position:relative}
 .escala.e11 button.antes::after{content:"chegada";position:absolute;bottom:-17px;left:50%;transform:translateX(-50%);font:400 11px "Space Mono",monospace;color:var(--azul);white-space:nowrap}
+.escmdl .mdl{margin-bottom:4px}
 .palavra{min-height:34px;margin-top:22px;font-size:19px;font-weight:800;color:var(--azul)}
 .palavra b{font:400 30px Fraunces,serif;color:var(--creme);margin-right:6px}
 /* constelação de progresso (7 luzes, uma por sentido) */
@@ -345,6 +349,12 @@ body.foco #vinheta{opacity:.55}
 .ouvirb.on{background:var(--ouro);color:#15110a}
 .denovo{all:unset;cursor:pointer;display:block;margin:0 auto 12px;color:var(--azul);text-decoration:underline;font-size:16px}
 .denovo[hidden]{display:none}
+.vbotoes .ouvirb{min-height:34px;padding:0 14px;font-size:14px;font-weight:700;border:1px solid var(--linha);color:var(--azul);background:transparent;margin:0;opacity:.75}
+.vbotoes .ouvirb.on{background:transparent;color:var(--creme);border-color:rgba(245,197,66,.4)}
+.btn.cta{min-height:68px;padding:0 46px;font-size:23px;box-shadow:0 0 0 0 rgba(245,197,66,.6),0 16px 40px -10px rgba(245,197,66,.75);animation:ctapulsa 2.2s ease-in-out infinite}
+@keyframes ctapulsa{0%,100%{box-shadow:0 0 0 0 rgba(245,197,66,.55),0 16px 40px -10px rgba(245,197,66,.75)}50%{box-shadow:0 0 0 12px rgba(245,197,66,0),0 16px 40px -10px rgba(245,197,66,.75)}}
+.legfora.menor{font-size:17px;font-weight:600;min-height:2.6em}
+.logocom{display:block;width:min(80vw,340px);height:auto;margin:-46px auto 18px}
 /* nome na tela da escala */
 .nome{max-width:420px;margin:0 auto 26px;text-align:left}
 .nome label{display:block;font-family:Fraunces,serif;font-size:clamp(26px,7vw,32px);margin-bottom:10px;text-align:center}
@@ -441,6 +451,7 @@ body.foco #vinheta{opacity:.55}
 const NO_SITE = /7entidos\.com\.br$/i.test(location.hostname) || location.pathname.indexOf("/app-novo")===0;
 const IMG = NO_SITE ? "/pesquisa/opcoes/" : "opcoes/";
 const BRISA = NO_SITE ? "/app-novo/brisa.jpg" : "brisa.jpg";
+const LOGO = NO_SITE ? "/app-novo/logo-7entidos.png" : "logo-7entidos.png"; /* logo comercial (a marca) */
 const MANDALA = NO_SITE ? "/app-novo/mandala.webp" : "mandala.webp"; /* mandala oficial do logo (sem os riscos antigos) */
 /* VÍDEOS DA BRISA (do HeyGen): troque os arquivos brisa-entrada.mp4 (~30 s) e brisa-fase2.mp4 (~15 s), verticais.
    Os de agora são VÍDEOS DE TESTE (foto da Brisa + som suave). Quando chegarem os verdadeiros, mude VIDEO_TESTE para false
@@ -573,23 +584,26 @@ function pularMesmo(){ const p=R[pos]; if(!p) return; click(); pararSom(); clear
   avanca(); }
 function ir(n){ if(n<0){ entrou=false; n=0; } pos=n; fechaPainel(); desenha(); }
 /* ===== MANDALA OFICIAL ===== montar(tam): cria a mandala; poeMandala(el,{pos,luz,miolo}): pedaços no lugar (pos), acesos (luz), miolo aceso */
-function mandala(tam,id){ let h=`<span class="mdl" ${id?`id="${id}"`:""} style="width:${tam}px;height:${tam}px;--raio:${(tam*.44).toFixed(1)}px"><img class="mi apag" src="${MANDALA}" alt="Mandala do 7entidos">`;
-  const P=(g,r)=>{ const a=g*Math.PI/180; return (50+r*Math.cos(a)).toFixed(1)+"% "+(50+r*Math.sin(a)).toFixed(1)+"%"; };
-  SENT.forEach((x,i)=>{ const a=-90+i*360/7, d=180/7, cp=`polygon(50% 50%,${P(a-d,80)},${P(a,80)},${P(a+d,80)})`, r=a*Math.PI/180;
-    h+=`<img class="pd lugar" src="${MANDALA}" alt="" style="clip-path:${cp};-webkit-clip-path:${cp};--tx:${(Math.cos(r)*tam*.3).toFixed(0)}px;--ty:${(Math.sin(r)*tam*.3).toFixed(0)}px;--r:${i%2?26:-26}deg">`; });
-  SENT.forEach((x,i)=>{ h+=`<i class="lz" style="--c:${x.cor};--a:${i*360/7}deg"></i>`; });
+const MC=[0,1,2,3,4,5,6,7].map(k=>{ const a=(-90+k*45)*Math.PI/180; return [50+34*Math.cos(a),50+34*Math.sin(a),a]; });
+function mandala(tam,id){ let h=`<span class="mdl" ${id?`id="${id}"`:""} style="width:${tam}px;height:${tam}px"><img class="bs" src="${MANDALA}" alt="Mandala do 7entidos"><span class="hl mh" style="left:50%;top:50%;--c:rgba(245,197,66,.95)"></span>`;
+  MC.forEach(([x,y],k)=>{ h+=`<span class="hl" style="left:${x.toFixed(1)}%;top:${y.toFixed(1)}%;--c:${k<7?SENT[k].cor:"#f5c542"}"></span>`; });
+  h+=`<img class="mi apag" src="${MANDALA}" alt="" style="clip-path:circle(19% at 50% 50%);-webkit-clip-path:circle(19% at 50% 50%)">`;
+  MC.forEach(([x,y,a],k)=>{ const cp=`circle(12.4% at ${x.toFixed(1)}% ${y.toFixed(1)}%)`; h+=`<img class="c lugar" src="${MANDALA}" alt="" style="clip-path:${cp};-webkit-clip-path:${cp};--tx:${(Math.cos(a)*tam*.32).toFixed(0)}px;--ty:${(Math.sin(a)*tam*.32).toFixed(0)}px">`; });
   return h+`</span>`; }
-function poeMandala(el,o){ if(!el) return; o=o||{}; const pos=o.pos||[], luz=o.luz||[];
-  el.querySelector(".mi").classList.toggle("apag",!o.miolo); el.classList.toggle("brilha",!!o.miolo);
-  el.querySelectorAll(".pd").forEach((p,i)=>{ const no=pos.includes(i)||luz.includes(i); p.classList.toggle("fora",!no); p.classList.toggle("lugar",no); p.classList.toggle("luz",luz.includes(i)); });
-  el.querySelectorAll(".lz").forEach((z,i)=>z.classList.toggle("on",luz.includes(i))); }
+/* poeMandala(el,{pos,luz,miolo}): pos = círculos no lugar (os outros ficam quebrados, fora do lugar); luz = círculos acesos; miolo = o 7 aceso.
+   Quando os 7 sentidos estão acesos, o 8º círculo acende junto e a mandala fica inteira e brilhante. */
+function poeMandala(el,o){ if(!el) return; o=o||{}; let pos=o.pos||[], luz=(o.luz||[]).slice();
+  const cheia=[0,1,2,3,4,5,6].every(i=>luz.includes(i)) && o.miolo; if(cheia&&!luz.includes(7)) luz.push(7);
+  el.querySelector(".mi").classList.toggle("apag",!o.miolo); el.classList.toggle("brilha",!!o.miolo); el.classList.toggle("cheia",cheia);
+  const hl=el.querySelectorAll(".hl"); hl[0].classList.toggle("on",!!o.miolo);
+  el.querySelectorAll(".c").forEach((c,k)=>{ const no=pos.includes(k)||luz.includes(k)||(k===7&&pos.length>=7); c.classList.toggle("fora",!no); c.classList.toggle("lugar",no&&!luz.includes(k)); c.classList.toggle("luz",luz.includes(k)); hl[k+1].classList.toggle("on",luz.includes(k)); }); }
 const TODOS=[0,1,2,3,4,5,6];
 /* topo: a mandala começa QUEBRADA; na Fase 1 cada sentido escolhido faz o seu pedaço voar e encaixar;
    na Fase 2 cada jogo feito acende o seu pedaço na cor do sentido; no fim da Fase 2 ela fica completa e acesa.
    O miolo (o 7) acende no fim do vídeo da Brisa. */
 function desenhaMini(){
   const p=R[pos], el=document.getElementById("const");
-  if(!p || (p.t==="brisa"&&!entrou)){ el.hidden=true; return; }
+  if(!p || (p.t==="brisa"&&!entrou) || p.t==="vaso"){ el.hidden=true; return; }
   el.hidden=false;
   if(!document.getElementById("mtopo")){ el.innerHTML=mandala(58,"mtopo")+`<span class="xde7" id="xde7"></span>`; }
   const f=p.f;
@@ -630,8 +644,8 @@ function guardaNome(v){ v=String(v||"").replace(/\s+/g," ").trim().slice(0,30); 
 let GV=null, legOn=false, entrou=false;
 function pegaVideo(){ if(!GV){ GV=document.createElement("video"); GV.id="vid"; GV.setAttribute("playsinline",""); GV.setAttribute("webkit-playsinline",""); GV.preload="auto"; } return GV; }
 function destravaVideo(src){ const v=pegaVideo(); try{ v.muted=false; if(!v.src.endsWith(src.split("/").pop())){ v.src=src; v.poster=src.replace(/\.mp4$/,".jpg"); } const p=v.play(); v.pause(); if(p&&p.catch) p.catch(()=>{}); }catch(e){} }
-function videoBrisa(src,leg){ return `<div class="vbrisa" id="vb"><div class="vslot" id="vslot"></div>${VIDEO_TESTE&&PREVIA?'<span class="teste">vídeo de teste</span>':""}</div>
-  <div class="legfora" id="leg" ${legOn?"":"hidden"}></div>
+function videoBrisa(src,leg,legcls){ return `<div class="vbrisa" id="vb"><div class="vslot" id="vslot"></div>${VIDEO_TESTE&&PREVIA?'<span class="teste">vídeo de teste</span>':""}</div>
+  <div class="legfora ${legcls||""}" id="leg" ${legOn?"":"hidden"}></div>
   <div class="vbotoes"><button class="ouvirb ${legOn?"on":""}" id="legbtn" type="button" aria-pressed="${legOn}">💬 Legenda</button><button class="denovo" id="denovo" type="button" hidden>▶ Ver de novo</button></div>`; }
 function ligaVideo(c,leg,falha,src){ const lg=c.querySelector("#leg"), lb=c.querySelector("#legbtn"), dn=c.querySelector("#denovo"), slot=c.querySelector("#vslot"); if(!slot) return;
   if(!leg.length){ lb.style.display="none"; lg.hidden=true; }
@@ -660,7 +674,7 @@ function brisa(){
   mostra(`${videoBrisa(VID1,LEG1)}
     <div id="semvideo" hidden><p class="fala">Oi, eu sou a Brisa. Aqui não tem resposta certa nem errada. Só o que você sente.</p>
     <p class="fala2">Vamos descobrir, sentido por sentido, o que te faz bem?</p></div>
-    <button class="btn" onclick="comecar()">Começar</button>
+    <button class="btn cta" onclick="comecar()">Começar</button>
     <p class="miud mini">Suas respostas são anônimas: sem nome e sem telefone. Elas ajudam o estudo do 7entidos. Ao começar, você concorda com isso. <a href="/privacidade.html" target="_blank" rel="noopener">Privacidade</a></p>`,
     c=>ligaVideo(c,LEG1,()=>{ c.querySelector("#semvideo").hidden=false; },VID1));
 }
@@ -674,7 +688,7 @@ const VASO=`<svg class="vaso" viewBox="0 0 300 230" role="img" aria-label="Figur
   <path d="M112 0h76c-6 14-18 22-18 36 0 12 14 14 14 24 0 6-10 8-10 14 0 8 12 6 12 16 0 8-12 10-12 18 0 14 22 18 22 38 0 22-26 30-26 56v28h-40v-28c0-26-26-34-26-56 0-20 22-24 22-38 0-8-12-10-12-18 0-10 12-8 12-16 0-6-10-8-10-14 0-10 14-12 14-24 0-14-12-22-18-36z" fill="url(#km)"/>
   <path d="M112 0c-6 14-18 22-18 36 0 12 14 14 14 24 0 6-10 8-10 14 0 8 12 6 12 16 0 8-12 10-12 18 0 14 22 18 22 38 0 22-26 30-26 56v28M188 0c6 14 18 22 18 36 0 12-14 14-14 24 0 6 10 8 10 14 0 8-12 6-12 16 0 8 12 10 12 18 0 14-22 18-22 38 0 22 26 30 26 56v28" fill="none" stroke="#f6d36b" stroke-width="2.5"/></svg>`;
 function vaso(){
-  mostra(`<div class="rot">Olhe rapidinho</div>${VASO}<h2>O que você viu primeiro?</h2>
+  mostra(`<img class="logocom" src="${LOGO}" alt="7entidos · A vida é feita de boas sensações"><div class="rot">Olhe rapidinho</div>${VASO}<h2>O que você viu primeiro?</h2>
     <div class="opts">${["Um vaso","Dois rostos","Os dois juntos"].map(o=>`<button class="opt ${resp.vaso===o?"sel":""}" onclick="escolheOpt(this,'vaso','${o}')">${o}</button>`).join("")}</div>
     <p class="miud">Não tem resposta certa. É só o seu olhar.</p>`);
 }
@@ -685,19 +699,20 @@ const PALAVRA=["Vazio","Péssimo","Ruim","Desconfortável","Regular","Indiferent
 const corNum=n=>`hsl(${215-n*16.5},${55+n*3}%,${45+n*2}%)`;
 function escala(p){
   const k="escala_"+p.id, v=resp[k], ch=p.id==="chegada", antes=resp.escala_chegada;
-  const topo=`<div class="escmdl">${mandala(150,"mesc")}${ch?`<div class="nmshow" id="nmshow">${esc(NOME())}</div>`:""}</div>`;
+  const topo=`<div class="escmdl">${mandala(ch?170:200,"mesc")}${ch?`<div class="nmshow" id="nmshow">${esc(NOME())}</div>`:""}</div>`;
   const campoNome = ch ? `<div class="nome"><label for="nm">Como posso te chamar?</label><input id="nm" maxlength="30" autocomplete="given-name" placeholder="Seu nome ou apelido" value="${esc(NOME())}" oninput="guardaNome(this.value);nomeVivo()"><small>Se não quiser, é só pular. Seu nome fica só no seu celular.</small></div>` : "";
   const apag = ch && !NOME() && v==null;
   mostra(`${topo}${campoNome}<div class="escbloco ${apag?"apagado":""}" id="escbloco"><div class="rot">${ch?"Antes de começar":"Depois dos 7 sentidos"}</div>
     <h2>${ch?"Como estão seus sentidos agora?":"E agora, como estão seus sentidos?"}</h2>
     <p class="sub">${ch?"É o seu ponto de partida. Toque num número de 0 a 10.":(antes!=null?`Você chegou com ${antes}. Toque no número de agora.`:"Toque num número de 0 a 10.")}</p>
     <div class="escala e11">${Array.from({length:11},(_,n)=>`<button class="${v===n?"sel":""} ${!ch&&antes===n?"antes":""}" style="--k:${corNum(n)}" onpointerenter="visor(${n})" onclick="escolheNum(this,'${k}',${n})" aria-label="${n}: ${PALAVRA[n]}">${n}</button>`).join("")}</div>
-    <div class="palavra" id="vpal"></div></div>`, c=>{ poeMandala(c.querySelector("#mesc"),{pos:TODOS,luz:[],miolo:true}); if(v!=null) visor(v); });
+    <div class="palavra" id="vpal"></div></div>`, c=>{ poeMandala(c.querySelector("#mesc"),{pos:TODOS,luz:[],miolo:false}); if(v!=null) visor(v); });
 }
 /* o nome aparece embaixo da mandala; quando há nome, a escala sobe acesa */
 function nomeVivo(){ const n=NOME(), sh=document.getElementById("nmshow"), eb=document.getElementById("escbloco"); if(sh) sh.textContent=n; if(eb&&n) eb.classList.remove("apagado"); }
 /* as luzes da mandala acendem até o número (0 a 10 → 0 a 7 pedaços) */
-function visor(n){ const m=document.getElementById("mesc"); if(m){ const k=Math.round(n*7/10); poeMandala(m,{pos:TODOS,luz:TODOS.slice(0,k),miolo:true}); }
+/* 0 = tudo apagado; cada número acende mais círculos: primeiro o 7 do meio, depois os círculos em volta; 10 = mandala inteira acesa */
+function visor(n){ const m=document.getElementById("mesc"); if(m){ const k=Math.round(n*9/10); poeMandala(m,{pos:TODOS,luz:[0,1,2,3,4,5,6,7].slice(0,Math.max(0,k-1)),miolo:k>=1}); }
   const eb=document.getElementById("escbloco"); if(eb) eb.classList.remove("apagado");
   const vp=document.getElementById("vpal"); if(vp) vp.innerHTML=`<b>${n}</b>${PALAVRA[n]}`; }
 function escolheNum(b,k,n){ resp[k]=n; click(); visor(n); vibra(8+n); b.parentNode.querySelectorAll("button").forEach(x=>x.classList.remove("sel")); b.classList.add("sel"); setTimeout(avanca,1100); }
@@ -749,8 +764,8 @@ function fim1(){
 function comecar2(){ click(); destravaVideo(VID2); if(!inicio2){ inicio2=Date.now(); resp.inicio_fase2=new Date().toISOString(); } avanca(); }
 /* abertura da Fase 2: vídeo curto da Brisa (~15 s), do mesmo jeito do primeiro */
 function abre2(p){
-  mostra(`<div class="rot">Fase 2</div>${videoBrisa(VID2,LEG2)}<div id="semvideo" hidden><p class="fala">${comNome("Você já me contou do que gosta, {n}. Agora vem a outra metade: desafios rápidos para os seus sentidos, um para cada.","Você já me contou do que gosta. Agora vem a outra metade: desafios rápidos para os seus sentidos, um para cada.")}</p></div>
-    <button class="btn" onclick="click();avanca()">Começar os jogos</button>`,
+  mostra(`<div class="rot">Fase 2</div>${videoBrisa(VID2,LEG2,"menor")}<div id="semvideo" hidden><p class="fala">${comNome("Você já me contou do que gosta, {n}. Agora vem a outra metade: desafios rápidos para os seus sentidos, um para cada.","Você já me contou do que gosta. Agora vem a outra metade: desafios rápidos para os seus sentidos, um para cada.")}</p></div>
+    <button class="btn cta" onclick="click();avanca()">Começar os jogos</button>`,
     c=>ligaVideo(c,LEG2,()=>{ c.querySelector("#semvideo").hidden=false; },VID2));
 }
 
@@ -1034,18 +1049,18 @@ function envia(){ if(!ENDPOINT||!resp.consentiu) return; try{ const r={...resp};
 
 /* ============ PAINEL DE VALIDAÇÃO (só na prévia) ============ */
 const ITENS=[
- ["b1","1 · Nota de 0 a 10","A mandala acende até o número","Na chegada e na saída: toque no número e as luzes da mandala acendem. Na saída, a nota de chegada aparece apagadinha.",R.findIndex(x=>x.t==="escala"&&x.id==="chegada")],
- ["b2","2 · Mandala oficial","Começa quebrada e vai se montando","Lá em cima, à esquerda. Na Fase 1 cada sentido encaixa um pedaço; na Fase 2 cada jogo acende o seu pedaço. Os riscos antigos saíram.",R.findIndex(x=>x.t==="gosto")],
- ["b3","3 · Tela de abertura","2 fases · uns 7 minutos","Embaixo do logo, antes do Entrar.",-1],
- ["b4","4 · Vídeo da Brisa","Uma luz acende no fim","Quando o vídeo termina, o 7 do meio da mandala acende.",0],
- ["b5","5 · Nome + número","Uma tela, duas perguntas","O nome aparece embaixo da mandala; a nota fica apagada e sobe acesa quando o nome é preenchido.",R.findIndex(x=>x.t==="escala"&&x.id==="chegada")]
+ ["a1","A1 · Abertura","Sem bolinhas por cima","As luzes agora são os próprios círculos da mandala acendendo.",-1],
+ ["a2","A2 · Vídeo da Brisa","Legenda discreta, Começar em destaque","O botão da legenda ficou pequeno e apagado; o Começar ficou maior e pulsando.",0],
+ ["a3","A3 · Como estão seus sentidos?","A mandala que acende","A mandala começa apagada; a cada número acendem mais círculos: primeiro o 7 do meio, depois os círculos em volta. 10 = ela inteira acesa.",R.findIndex(x=>x.t==="escala"&&x.id==="chegada")],
+ ["a4","A4 · Vaso","Logo comercial, maior e mais em cima","Na tela do vaso entra o logo da marca (com o nome); a mandala sai dessa tela.",R.findIndex(x=>x.t==="vaso")],
+ ["a5","A5 · Vídeo da Fase 2","Legenda menor","Ligue a legenda para conferir o tamanho.",R.findIndex(x=>x.t==="abre2")]
 ];
 const REVISAR=["Mudar o visual","Mudar o texto","Mudar como funciona","Tirar do app"];
 let val={}, vdb=null, VDOC=null;
 function painel(){
   let el=document.getElementById("vp"); if(!el){ el=document.createElement("div"); el.id="vp"; el.className="vpainel"; document.body.appendChild(el); }
   const nv=ITENS.filter(x=>val[x[0]]&&val[x[0]].s==="validado").length;
-  el.innerHTML=`<div class="vcaixa"><div class="rot">Prévia · app novo · Sala 2, Bloco 1</div><h2>Validar item por item</h2><p class="sub">${nv} de ${ITENS.length} validados. "Ver" leva direto para a tela do item.</p>
+  el.innerHTML=`<div class="vcaixa"><div class="rot">Prévia · app novo · ajustes do Bloco 1 · Parte A</div><h2>Validar item por item</h2><p class="sub">${nv} de ${ITENS.length} validados. "Ver" leva direto para a tela do item.</p>
     ${ITENS.map(([id,num,tt,ds,alvo])=>{ const v=val[id]||{}; return `<div class="vitem"><div class="rot" style="margin:0">${num}</div><div class="tt">${tt}</div><div class="ds">${ds}</div>
       <div class="bb"><button class="v ${v.s==="validado"?"on":""}" onclick="marca('${id}','validado')">Validado</button><button class="r ${v.s==="revisar"?"on":""}" onclick="marca('${id}','revisar')">Revisar</button><button class="ir" onclick="ir(${alvo})">Ver</button></div>
       <div class="rev ${v.s==="revisar"?"on":""}">${REVISAR.map(o=>`<button class="${v.o===o?"on":""}" onclick="marcaRev('${id}','${o}')">${o}</button>`).join("")}</div></div>`; }).join("")}
@@ -1056,15 +1071,15 @@ function painel(){
 function fechaPainel(){ const el=document.getElementById("vp"); if(el) el.classList.remove("on"); }
 function marca(id,s){ val[id]={...(val[id]||{}),s}; if(s==="validado") delete val[id].o; salvaVal(); painel(); }
 function marcaRev(id,o){ val[id]={s:"revisar",o}; salvaVal(); painel(); }
-function salvaVal(){ try{ localStorage.setItem("7e_app_novo_val_s2b1",JSON.stringify(val)); }catch(e){}
+function salvaVal(){ try{ localStorage.setItem("7e_app_novo_val_s2b1a",JSON.stringify(val)); }catch(e){}
   if(VDOC) VDOC.set({atualizado:new Date().toISOString(), itens:ITENS.map(x=>({id:x[0],item:x[1]+" · "+x[2],situacao:(val[x[0]]||{}).s||null,revisar:(val[x[0]]||{}).o||null}))}).catch(()=>{}); }
 
 /* ============ INÍCIO ============ */
 try{ const s=JSON.parse(localStorage.getItem("7e_app_novo")||"null"); if(s&&s.resp&&s.pos>0&&s.pos<R.length-2){ resp=s.resp; pos=s.pos; inicio=s.inicio||Date.now(); inicio2=s.inicio2||null; } }catch(e){}
-try{ val=JSON.parse(localStorage.getItem("7e_app_novo_val_s2b1")||"{}")||{}; }catch(e){}
+try{ val=JSON.parse(localStorage.getItem("7e_app_novo_val_s2b1a")||"{}")||{}; }catch(e){}
 if(PREVIA){ const b=document.createElement("button"); b.className="vbtn"; b.type="button"; b.textContent="Validar a prévia"; b.onclick=()=>{ click(); painel(); }; document.body.appendChild(b); }
 desenha();
-if(PREVIA && window.claude && claude.use){ claude.use("db").then(db=>{ if(!db) return; VDOC=db.doc("validacao/app-novo-s2-b1"); return VDOC.get().then(sn=>{ const d=sn&&(sn.data?sn.data():sn); if(d&&d.itens&&!Object.keys(val).length){ d.itens.forEach(x=>{ if(x.situacao) val[x.id]={s:x.situacao,o:x.revisar||undefined}; }); } }); }).catch(()=>{}); }
+if(PREVIA && window.claude && claude.use){ claude.use("db").then(db=>{ if(!db) return; VDOC=db.doc("validacao/app-novo-s2-b1a"); return VDOC.get().then(sn=>{ const d=sn&&(sn.data?sn.data():sn); if(d&&d.itens&&!Object.keys(val).length){ d.itens.forEach(x=>{ if(x.situacao) val[x.id]={s:x.situacao,o:x.revisar||undefined}; }); } }); }).catch(()=>{}); }
 </script>
 </body>
 </html>
