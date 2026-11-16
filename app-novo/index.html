@@ -106,6 +106,20 @@ h1 em,h2 em{color:var(--ouro)}
 
 /* jogos */
 .dica{color:var(--azul);font-size:18px;margin:0 0 18px}
+.missao{font-size:16px;line-height:1.35;color:#f4ecdc;background:rgba(255,255,255,.05);border-left:4px solid var(--c);border-radius:10px;padding:8px 12px;margin:0 auto 10px;max-width:440px;text-align:left}
+.missao b{color:var(--c)}
+.luzes{display:flex;justify-content:center;gap:14px;margin:14px 0 4px}
+.luzes i{width:18px;height:18px;border-radius:50%;border:2px solid rgba(169,179,209,.45);background:transparent;transition:background .3s,box-shadow .3s,border-color .3s}
+.luzes i.on{background:var(--c);border-color:var(--c);box-shadow:0 0 14px var(--c)}
+.luzes i.off{border-color:rgba(169,179,209,.18)}
+.luzes i.pop{animation:luzpop .45s ease-out}
+@keyframes luzpop{0%{transform:scale(.4)}60%{transform:scale(1.35)}100%{transform:scale(1)}}
+.bonusq{font-size:22px;margin:16px 0 10px}
+/* modo foco: durante o jogo, topo e botões quase somem; bordas escurecem com a cor do sentido */
+body.foco .topo,body.foco #pularbtn,body.foco #voltar{opacity:.14;transition:opacity .5s}
+body.foco .topo:hover,body.foco #pularbtn:focus-visible,body.foco #voltar:focus-visible{opacity:.6}
+#vinheta{position:fixed;inset:0;pointer-events:none;z-index:4;opacity:0;transition:opacity .6s;box-shadow:inset 0 0 120px 40px rgba(3,6,18,.92),inset 0 0 220px 60px var(--foco,transparent)}
+body.foco #vinheta{opacity:.55}
 .rodada{font:400 15px "Space Mono",monospace;color:var(--azul);margin-bottom:10px}
 .grade4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:400px;margin:0 auto}
 .grade4 button{all:unset;cursor:pointer;aspect-ratio:1;border-radius:14px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
@@ -321,6 +335,7 @@ h1 em,h2 em{color:var(--ouro)}
 <body>
 <div class="topo"><div class="marca"><img src="" id="logo" alt="7entidos · A vida é feita de boas sensações"></div><div class="const" id="const" hidden aria-live="polite"></div></div>
 <main id="palco"></main>
+<div id="vinheta" aria-hidden="true"></div>
 <button class="voltar" id="voltar" type="button" onclick="voltar()" hidden>← voltar</button>
 <button class="pularbtn" id="pularbtn" type="button" onclick="pular()" hidden>pular →</button>
 
@@ -344,13 +359,13 @@ const VERSAO = "app-novo-v1";
 document.getElementById("logo").src = LOGO;
 
 const SENT = [
- {id:"visao", s:"Visão", cor:"#f5c542", q:"O que te faz bem de olhar?", o:["Pôr do sol na praia","Céu estrelado","Um mural colorido de grafite","Fotos antigas de família"], brisa:"Comece pelos olhos. Repare no que te chama.", jogo:"Olho de águia"},
- {id:"audicao", s:"Audição", cor:"#4aa8ff", q:"O que te faz bem ouvir?", o:["Som do mar","Música ao vivo","Chuva no telhado","Silêncio total"], sons:["mar","musica","chuva","silencio"], brisa:"Agora, feche os olhos e escute.", jogo:"Qual som é mais fino?"},
- {id:"tato", s:"Tato", cor:"#ff8a3d", q:"O que te faz bem de sentir na pele?", o:["Areia nos pés","Cobertor macio","Água gelada","Abraço apertado"], brisa:"Sinta com a ponta dos dedos.", jogo:"Carinho"},
- {id:"paladar", s:"Paladar", cor:"#ff5a6e", q:"Que sabor te faz bem?", o:["Comida de vó","Doce de padaria","Fruta fresca","Café passado na hora"], brisa:"Pense no sabor que te acolhe.", jogo:"Monte o seu prato"},
- {id:"olfato", s:"Olfato", cor:"#5ccf8a", q:"Que cheiro te faz bem?", o:["Terra molhada","Pão saindo do forno","Perfume de alguém querido","Cheiro de café"], brisa:"Respire fundo. O cheiro também lembra.", jogo:"Caça aos cheiros"},
- {id:"equilibrio", s:"Equilíbrio", cor:"#b48cff", q:"Que movimento te faz bem?", o:["Dançar","Balançar numa rede","Andar de bicicleta","Ficar de pé numa prancha"], brisa:"Encontre o seu centro.", jogo:"Segure firme"},
- {id:"corpo", s:"Noção do corpo", cor:"#3fd6d0", q:"O que te faz bem no corpo?", o:["Alongar","Correr","Nadar","Deitar e respirar fundo"], brisa:"Por último, perceba o seu corpo.", jogo:"Mapa do agora"}
+ {id:"visao", missao:"achar o quadrado de cor diferente · 3 rodadas · revela o quanto seus olhos pegam detalhes.", s:"Visão", cor:"#f5c542", q:"O que te faz bem de olhar?", o:["Pôr do sol na praia","Céu estrelado","Um mural colorido de grafite","Fotos antigas de família"], brisa:"Comece pelos olhos. Repare no que te chama.", jogo:"Olho de águia"},
+ {id:"audicao", missao:"dizer qual som é mais fino · 3 rodadas · revela o quanto seu ouvido separa sons parecidos.", s:"Audição", cor:"#4aa8ff", q:"O que te faz bem ouvir?", o:["Som do mar","Música ao vivo","Chuva no telhado","Silêncio total"], sons:["mar","musica","chuva","silencio"], brisa:"Agora, feche os olhos e escute.", jogo:"Qual som é mais fino?"},
+ {id:"tato", missao:"fazer carinho nas 4 fotos · 1 passada em cada · revela que toque a sua pele prefere.", s:"Tato", cor:"#ff8a3d", q:"O que te faz bem de sentir na pele?", o:["Areia nos pés","Cobertor macio","Água gelada","Abraço apertado"], brisa:"Sinta com a ponta dos dedos.", jogo:"Carinho"},
+ {id:"paladar", missao:"montar um prato com 3 ingredientes · 1 prato · revela as combinações que te atraem.", s:"Paladar", cor:"#ff5a6e", q:"Que sabor te faz bem?", o:["Comida de vó","Doce de padaria","Fruta fresca","Café passado na hora"], brisa:"Pense no sabor que te acolhe.", jogo:"Monte o seu prato"},
+ {id:"olfato", missao:"achar 3 cheiros à sua volta · 1 rodada · revela o quanto você nota o ar ao seu redor.", s:"Olfato", cor:"#5ccf8a", q:"Que cheiro te faz bem?", o:["Terra molhada","Pão saindo do forno","Perfume de alguém querido","Cheiro de café"], brisa:"Respire fundo. O cheiro também lembra.", jogo:"Caça aos cheiros"},
+ {id:"equilibrio", missao:"segurar firme até a luz fechar · até conseguir · revela a sua firmeza.", s:"Equilíbrio", cor:"#b48cff", q:"Que movimento te faz bem?", o:["Dançar","Balançar numa rede","Andar de bicicleta","Ficar de pé numa prancha"], brisa:"Encontre o seu centro.", jogo:"Segure firme"},
+ {id:"corpo", missao:"marcar onde você sente algo agora · até 3 lugares · revela como o seu corpo está neste momento.", s:"Noção do corpo", cor:"#3fd6d0", q:"O que te faz bem no corpo?", o:["Alongar","Correr","Nadar","Deitar e respirar fundo"], brisa:"Por último, perceba o seu corpo.", jogo:"Mapa do agora"}
 ];
 const foto = (sid,i) => IMG+sid+"-"+(i+1)+".jpg";
 const TEMPOS = ["Menos de 3 minutos","De 3 a 6 minutos","De 6 a 10 minutos","10 minutos ou mais"];
@@ -463,6 +478,7 @@ function anel(cls="respira", acesa=-1, feitos=[], img=""){ return `<div class="a
 
 function desenha(){
   document.querySelectorAll("body > .saborear").forEach(e=>e.remove());
+  foco(null);
   const p=R[pos]; document.getElementById("voltar").hidden = pos===0 || ["revela","grafico","abre2","saborear"].includes(p.t);
   /* "pular" aparece nas telas que pedem resposta ou jogo; nas outras o próprio botão já segue */
   document.getElementById("pularbtn").hidden = !PULAVEIS.includes(p.t);
@@ -572,11 +588,12 @@ function abre2(p){
 }
 
 /* jogo + "quanto curtiu" na mesma tela */
-function jogo(p){ const s=SENT[p.i]; resp["jogo_"+s.id+"_t0"]=Date.now(); JOGOS[s.id](s, ()=>{ resp["jogo_"+s.id]="completou"; setTimeout(()=>{ if(R[pos]===p) mostraCurtiu(p); },500); }); }
+function foco(cor){ document.body.classList.toggle("foco",!!cor); if(cor) document.body.style.setProperty("--foco",cor); }
+function jogo(p){ const s=SENT[p.i]; foco(s.cor); resp["jogo_"+s.id+"_t0"]=Date.now(); JOGOS[s.id](s, ()=>{ resp["jogo_"+s.id]="completou"; setTimeout(()=>{ if(R[pos]===p) mostraCurtiu(p); },500); }); }
 function mostraCurtiu(p){
   const cena=palco.querySelector(".cena"); if(!cena||cena.querySelector(".curtiu-in")) return;
   const s=SENT[p.i], k="curtiu_"+s.id, ok=cena.querySelector("#ok"); if(ok) ok.remove();
-  const d=document.createElement("div"); d.className="curtiu-in";
+  foco(null); const d=document.createElement("div"); d.className="curtiu-in";
   d.innerHTML=`<h3>Quanto você curtiu esse jogo?</h3><div class="curtiu" style="--c:${s.cor}">${[["Curti pouco",1],["Curti",2],["Curti muito",3]].map(([n,v])=>`<button class="${resp[k]===v?"sel":""}" onclick="escolheCurtiu(this,'${k}',${v})"><span class="lz">${"<i></i>".repeat(v)}</span>${n}</button>`).join("")}</div>`;
   cena.appendChild(d); try{ d.scrollIntoView({behavior:"smooth",block:"center"}); }catch(e){}
 }
@@ -613,35 +630,50 @@ function saborear(p){
   });
 }
 function sigaSabor(){ clearInterval(saborTm); clearTimeout(saborTm); pararSom(); avanca(); }
-const cab=(s,dica)=>`<div class="rot" style="color:${s.cor}">${s.s} · jogo</div><h2>${s.jogo}</h2><p class="dica">${dica}</p>`;
+const cab=(s,dica)=>`<div class="rot" style="color:${s.cor}">${s.s} · jogo</div><h2>${s.jogo}</h2><p class="missao" style="--c:${s.cor}"><b>Missão:</b> ${s.missao}</p><p class="dica">${dica}</p>`;
+/* luzinhas de retorno (uma por rodada): 1 = acertou (acesa), 0 = errou (apagada), null = ainda não jogou */
+const luzes=(s,arr)=>`<div class="luzes" style="--c:${s.cor}" aria-label="acertos">${arr.map(v=>`<i class="${v===1?"on":v===0?"off":""}"></i>`).join("")}</div>`;
+function acende(c,i,ok,s){ const el=c.querySelectorAll(".luzes i")[i]; if(!el) return; if(ok){ el.classList.add("on","pop"); tom(988,.18); vibra(12); } else el.classList.add("off"); }
+/* convite para a rodada bônus (só para quem acertou as 3) */
+function conviteBonus(c,s,arr,quero,seguir){ c.innerHTML=`${cab(s,"Você acertou as 3 rodadas.")}${luzes(s,arr)}<h3 class="bonusq">Quer uma rodada bônus, bem difícil?</h3><div class="opts"><button class="opt" id="bq">Quero</button><button class="opt" id="bs">Seguir</button></div>`;
+  c.querySelector("#bq").onclick=()=>{ click(); resp[s.id+"_bonus"]="aceitou"; quero(); }; c.querySelector("#bs").onclick=()=>{ click(); resp[s.id+"_bonus"]="recusou"; seguir(); }; }
 
 /* true enquanto a tela atual ainda é o jogo deste sentido (se a pessoa pulou, a próxima rodada não aparece) */
 const aindaNoJogo=s=>{ const q=R[pos]; return !!q&&q.t==="jogo"&&SENT[q.i].id===s.id; };
 const JOGOS={
   /* Olho de águia: igual ao da pesquisa (3 rodadas, uma por vez) */
-  visao(s,fim){ const RD=[0,1,2].map(r=>({hu:Math.floor(Math.random()*360),k:Math.floor(Math.random()*16),d:16-r*4})); let r=0, ac=0;
-    const rod=()=>{ const x=RD[r];
-      mostra(`${cab(s,"Um dos quadrados tem a cor um pouco diferente. Toque nele.")}<div class="rodada">Rodada ${r+1} de 3</div>
-        <div class="grade4">${Array.from({length:16},(_,i)=>`<button data-i="${i}" aria-label="quadrado ${i+1}" style="background:hsl(${x.hu},55%,${i===x.k?46+x.d:46}%)"></button>`).join("")}</div><div class="res" id="res"></div>`, c=>{
-        c.querySelectorAll(".grade4 button").forEach(b=>b.onclick=()=>{ if(x.feito) return; x.feito=true; const okk=+b.dataset.i===x.k; if(okk) ac++; click();
+  /* Olho de águia: 3 rodadas; a diferença de cor se ajusta (acertou → mais difícil; errou → mais fácil); bônus para quem acerta as 3 */
+  visao(s,fim){ const DIF=[22,16,12,9,6.5,4.5,3.2]; let lv=1, r=0, ac=0; const arr=[null,null,null];
+    const rod=(bonus)=>{ const d=bonus?DIF[Math.min(DIF.length-1,lv+1)]:DIF[lv], x={hu:Math.floor(Math.random()*360),k:Math.floor(Math.random()*16)};
+      mostra(`${cab(s,"Um dos quadrados tem a cor um pouco diferente. Toque nele.")}<div class="rodada">${bonus?"Rodada bônus · bem difícil":"Rodada "+(r+1)+" de 3"}</div>
+        <div class="grade4">${Array.from({length:16},(_,i)=>`<button data-i="${i}" aria-label="quadrado ${i+1}" style="background:hsl(${x.hu},55%,${i===x.k?46+d:46}%)"></button>`).join("")}</div>${luzes(s,arr)}<div class="res" id="res"></div>`, c=>{
+        c.querySelectorAll(".grade4 button").forEach(b=>b.onclick=()=>{ if(x.feito) return; x.feito=true; const okk=+b.dataset.i===x.k; click();
           c.querySelectorAll(".grade4 button").forEach(y=>{ if(+y.dataset.i===x.k) y.classList.add("ok"); else if(y===b) y.classList.add("bad"); });
           c.querySelector("#res").innerHTML=okk?'<span class="bom">Achou!</span>':'<span class="nao">Era o quadrado marcado de verde.</span>';
-          setTimeout(()=>{ if(!aindaNoJogo(s)) return; if(r<2){ r++; rod(); } else { resp.visao_acertos=ac; fim(); } },900); }); }); };
-    rod(); },
+          if(bonus){ arr[3]=okk?1:0; acende(c,3,okk,s); resp.visao_bonus_acertou=okk; if(okk) lv=Math.min(DIF.length-1,lv+2); resp.visao_nivel=lv+1; setTimeout(()=>{ if(aindaNoJogo(s)) fim(); },1000); return; }
+          arr[r]=okk?1:0; acende(c,r,okk,s); if(okk){ ac++; lv=Math.min(DIF.length-1,lv+1); } else lv=Math.max(0,lv-1);
+          setTimeout(()=>{ if(!aindaNoJogo(s)) return; if(r<2){ r++; rod(false); return; }
+            resp.visao_acertos=ac; resp.visao_nivel=lv+1;
+            if(ac===3){ arr.push(null); conviteBonus(c,s,arr,()=>rod(true),fim); } else fim(); },900); }); }); };
+    rod(false); },
   /* Qual som é mais fino? 3 rodadas, uma por vez: os sons vão ficando parecidos */
-  audicao(s,fim){ const PARES=[[880,440],[660,520],[620,575]]; let r=0, ac=0;
-    const rod=()=>{ const [alto,baixo]=PARES[r], primeiroFino=Math.random()<.5, fA=primeiroFino?alto:baixo, fB=primeiroFino?baixo:alto;
-    mostra(`${cab(s,"Ouça os dois sons. Som fino é o mais agudo, como o canto de um passarinho.")}<div class="rodada">Rodada ${r+1} de 3${r===2?" · bem parecidos":""}</div>
+  audicao(s,fim){ const PARES=[[880,440],[720,500],[660,540],[630,565],[610,575],[600,580],[595,583]]; let lv=1, r=0, ac=0; const arr=[null,null,null];
+    const rod=(bonus)=>{ const [alto,baixo]=PARES[bonus?Math.min(PARES.length-1,lv+1):lv], primeiroFino=Math.random()<.5, fA=primeiroFino?alto:baixo, fB=primeiroFino?baixo:alto;
+    mostra(`${cab(s,"Ouça os dois sons. Som fino é o mais agudo, como o canto de um passarinho.")}<div class="rodada">${bonus?"Rodada bônus · quase iguais":"Rodada "+(r+1)+" de 3"}</div>
       <div class="sons"><button class="som" id="s1"><svg class="onda" viewBox="0 0 72 36"><path d="M0 18 Q9 2 18 18 T36 18 T54 18 T72 18" fill="none" stroke="#4aa8ff" stroke-width="3"/></svg>Ouvir o primeiro</button>
       <button class="som" id="s2"><svg class="onda" viewBox="0 0 72 36"><path d="M0 18 Q9 2 18 18 T36 18 T54 18 T72 18" fill="none" stroke="#4aa8ff" stroke-width="3"/></svg>Ouvir o segundo</button></div>
-      <div class="opts"><button class="opt" data-k="1">O primeiro é mais fino</button><button class="opt" data-k="2">O segundo é mais fino</button></div><div class="res" id="res"></div>`, c=>{
+      <div class="opts"><button class="opt" data-k="1">O primeiro é mais fino</button><button class="opt" data-k="2">O segundo é mais fino</button></div>${luzes(s,arr)}<div class="res" id="res"></div>`, c=>{
       const toca=(b,f)=>{ tocaTom(f,.8); vibra(8); b.classList.add("tocando"); setTimeout(()=>b.classList.remove("tocando"),800); };
       c.querySelector("#s1").onclick=e=>toca(e.currentTarget,fA); c.querySelector("#s2").onclick=e=>toca(e.currentTarget,fB);
       let feito=false; c.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ if(feito) return; feito=true; click(); b.classList.add("sel");
-        const okk=(b.dataset.k==="1")===primeiroFino; if(okk) ac++;
+        const okk=(b.dataset.k==="1")===primeiroFino;
         c.querySelector("#res").innerHTML=okk?'<span class="bom">Acertou!</span>':`<span class="nao">O mais fino era o ${primeiroFino?"primeiro":"segundo"}.</span>`;
-        setTimeout(()=>{ if(!aindaNoJogo(s)) return; if(r<2){ r++; rod(); } else { resp.audicao_acertos=ac; c.querySelector("#res").innerHTML=`<span class="bom">Você acertou ${ac} de 3.</span>`; fim(); } },1100); }); }); };
-    rod(); },
+        if(bonus){ arr[3]=okk?1:0; acende(c,3,okk,s); resp.audicao_bonus_acertou=okk; if(okk) lv=Math.min(PARES.length-1,lv+2); resp.audicao_nivel=lv+1; setTimeout(()=>{ if(aindaNoJogo(s)) fim(); },1100); return; }
+        arr[r]=okk?1:0; acende(c,r,okk,s); if(okk){ ac++; lv=Math.min(PARES.length-1,lv+1); } else lv=Math.max(0,lv-1);
+        setTimeout(()=>{ if(!aindaNoJogo(s)) return; if(r<2){ r++; rod(false); return; }
+          resp.audicao_acertos=ac; resp.audicao_nivel=lv+1;
+          if(ac===3){ arr.push(null); conviteBonus(c,s,arr,()=>rod(true),fim); } else { c.querySelector("#res").innerHTML=`<span class="bom">Você acertou ${ac} de 3.</span>`; fim(); } },1100); }); }); };
+    rod(false); },
   /* Carinho: toque e deslize o dedo nas texturas; vibra de leve e cada uma tem um som suave */
   tato(s,fim){ const T=[["areia","Areia",0],["cobertor","Cobertor macio",1],["agua","Água gelada",2],["abraco","Abraço",3]], prog=[0,0,0,0];
     const MAO='<span class="mao" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M22 8c0-3 5-3 5 0v20l3-1V22c0-3 5-3 5 0v6l3-1v-3c0-3 5-3 5 0v5l3-1c0-3 5-3 5 0v12c0 10-6 18-16 18h-2c-6 0-10-3-13-8L12 36c-2-3 2-6 5-3l5 5z" fill="#f4ecdc" stroke="#15110a" stroke-width="2" stroke-linejoin="round"/></svg></span>';
