@@ -22,7 +22,7 @@ body::after{content:"";position:fixed;left:50%;top:38%;width:620px;height:620px;
 button{font-family:inherit}
 .topo{position:fixed;top:0;left:0;right:0;z-index:5;display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:calc(10px + env(safe-area-inset-top)) 16px 10px;pointer-events:none;background:linear-gradient(rgba(10,17,40,.92),rgba(10,17,40,.6) 70%,transparent)}
 .marca{display:flex;align-items:center;pointer-events:auto}
-.marca img{height:38px;width:auto;display:block}
+.marca img{height:52px;width:auto;display:block}
 /* constelação de progresso (7 luzes, uma por sentido) */
 .const{display:flex;align-items:center;gap:12px;pointer-events:auto;transition:opacity .5s}
 .const[hidden]{display:none}
@@ -40,6 +40,11 @@ button{font-family:inherit}
 .pularbtn{all:unset;position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:5;cursor:pointer;color:var(--azul);font-size:16px;padding:10px 14px;border-radius:999px;opacity:.8}
 .pularbtn:hover,.pularbtn:focus-visible{color:var(--creme);opacity:1;outline:2px solid rgba(245,197,66,.4)}
 .pularbtn[hidden]{display:none}
+#porque{position:fixed;inset:0;z-index:60;background:rgba(3,6,18,.6);display:flex;align-items:flex-end;justify-content:center;animation:abrePerto .2s ease-out}
+#porque .pq{width:100%;max-width:460px;background:#111a44;border-top:2px solid rgba(245,197,66,.5);border-radius:22px 22px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:10px}
+#porque p{margin:0 0 4px;font-weight:800;font-size:19px;text-align:center}
+#porque button{all:unset;cursor:pointer;text-align:center;padding:14px;border-radius:14px;background:rgba(255,255,255,.06);border:1.5px solid rgba(169,179,209,.3);font-weight:800;font-size:17px}
+#porque button.volta{background:none;border:none;color:var(--azul);font-weight:600;font-size:15px;padding:6px}
 
 #palco{position:relative;min-height:100vh;min-height:100dvh;display:grid;place-items:center;padding:128px 18px 130px}
 .cena{width:100%;max-width:560px;text-align:center}
@@ -61,6 +66,7 @@ h1 em,h2 em{color:var(--ouro)}
 .btn.sec{background:transparent;color:var(--creme);border:1.5px solid rgba(169,179,209,.45);box-shadow:none}
 .btn[disabled]{opacity:.35;pointer-events:none}
 .miud{font-size:15px;color:var(--azul);margin-top:16px}
+.miud.mini{font-size:12px;line-height:1.35;opacity:.85;max-width:340px;margin:14px auto 64px}
 .miud a{color:var(--azul)}
 
 /* anel de 7 luzes */
@@ -88,6 +94,15 @@ h1 em,h2 em{color:var(--ouro)}
 .vaso{width:min(300px,82vw);height:auto;border-radius:18px;box-shadow:0 26px 50px -18px rgba(0,0,0,.8);margin:6px auto 18px;display:block}
 
 /* escala 0 a 10 */
+.regua{display:flex;gap:14px;align-items:center;justify-content:center;max-width:460px;margin:8px auto 0}
+.regua .escala{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;flex:0 0 auto;width:min(56vw,210px);margin:0}
+.regua .escala button{font-size:22px;border-color:color-mix(in srgb,var(--k) 55%,transparent)!important}
+.regua .escala button.sel{background:var(--k)!important;color:#0b1020;box-shadow:0 0 24px var(--k)!important}
+.visor{flex:1;min-width:120px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+.visor .orbe{--k:#2a3a7a;--f:.3;width:92px;height:92px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#fff8,var(--k) 45%,transparent 72%);opacity:var(--f);box-shadow:0 0 calc(var(--f)*60px) calc(var(--f)*18px) var(--k);transform:scale(calc(.75 + var(--f)*.35));transition:all .45s cubic-bezier(.3,1.4,.5,1)}
+.visor b{font:400 44px/1 Fraunces,serif;color:#f4ecdc}
+.visor span:last-child{font-size:17px;font-weight:800;color:var(--azul);min-height:2.4em;transition:color .3s}
+.visor.on span:last-child{color:#f4ecdc}
 .escala{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;max-width:440px;margin:6px auto 0}
 .escala button{all:unset;cursor:pointer;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font-family:Fraunces,serif;font-size:24px;background:radial-gradient(circle at 40% 35%,rgba(255,255,255,.08),rgba(17,27,61,.9));border:1.5px solid var(--linha);transition:.25s}
 .escala button:hover{border-color:var(--ouro)}
@@ -261,7 +276,7 @@ body.foco #vinheta{opacity:.55}
 .dourada .carta2 img{width:100%;height:100%;object-fit:cover;display:block}
 
 /* Vídeo da Brisa (vertical) */
-.vbrisa{position:relative;height:min(44vh,500px);aspect-ratio:9/16;margin:0 auto 14px;border-radius:24px;overflow:hidden;border:2px solid rgba(245,197,66,.55);box-shadow:0 0 40px rgba(245,197,66,.25),0 30px 50px -20px rgba(0,0,0,.9);background:#05081a}
+.vbrisa{position:relative;height:min(60vh,640px);max-width:92vw;aspect-ratio:9/16;margin:0 auto 14px;border-radius:24px;overflow:hidden;border:2px solid rgba(245,197,66,.55);box-shadow:0 0 40px rgba(245,197,66,.25),0 30px 50px -20px rgba(0,0,0,.9);background:#05081a}
 .vbrisa video{width:100%;height:100%;object-fit:cover;display:block}
 .vbrisa .vslot,.vbrisa .vslot video{width:100%;height:100%}
 .vbrisa video{cursor:pointer}
@@ -271,7 +286,7 @@ body.foco #vinheta{opacity:.55}
 .vbotoes .ouvirb.on::after{content:" ✓"}
 .vbotoes{display:flex;flex-direction:column;align-items:center;gap:6px;margin-bottom:12px}
 .entrar{min-height:70vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:34px}
-.entrarlogo{width:min(64vw,280px);height:auto}
+.entrarlogo{width:min(84vw,360px);height:auto}
 .vbrisa .teste{position:absolute;left:8px;top:8px;padding:4px 10px;border-radius:999px;background:rgba(245,197,66,.9);color:#15110a;font:700 12px "Space Mono",monospace}
 .ouvirb{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:10px;min-height:52px;padding:0 24px;border-radius:999px;border:2px solid var(--ouro);color:var(--ouro);font-weight:800;font-size:19px;margin:0 0 14px;background:rgba(245,197,66,.08)}
 .ouvirb.on{background:var(--ouro);color:#15110a}
@@ -388,7 +403,7 @@ const VERSAO = "app-novo-v1";
 document.getElementById("logo").src = LOGO;
 
 const SENT = [
- {id:"visao", missao:"achar o quadrado de cor diferente · 3 rodadas · revela o quanto seus olhos pegam detalhes.", s:"Visão", cor:"#f5c542", q:"O que te faz bem de olhar?", o:["Pôr do sol na praia","Céu estrelado","Um mural colorido de grafite","Fotos antigas de família"], brisa:"Comece pelos olhos. Repare no que te chama.", jogo:"Olho de águia"},
+ {id:"visao", missao:"achar o quadrado de cor diferente · 3 rodadas · revela o quanto seus olhos pegam detalhes.", s:"Visão", cor:"#f5c542", q:"O que te faz bem de olhar?", o:["Pôr do sol na praia","Céu estrelado","Um mural colorido de grafite","Fotos antigas de família"], brisa:"Comece pelos olhos.", jogo:"Olho de águia"},
  {id:"audicao", missao:"dizer qual som é mais fino · 3 rodadas · revela o quanto seu ouvido separa sons parecidos.", s:"Audição", cor:"#4aa8ff", q:"O que te faz bem ouvir?", o:["Som do mar","Música ao vivo","Chuva no telhado","Silêncio total"], sons:["mar","musica","chuva","silencio"], brisa:"Agora, feche os olhos e escute.", jogo:"Qual som é mais fino?"},
  {id:"tato", missao:"fazer carinho nas 4 fotos · 1 passada em cada · revela que toque a sua pele prefere.", s:"Tato", cor:"#ff8a3d", q:"O que te faz bem de sentir na pele?", o:["Areia nos pés","Cobertor macio","Água gelada","Abraço apertado"], brisa:"Sinta com a ponta dos dedos.", jogo:"Carinho"},
  {id:"paladar", missao:"montar um prato com 3 ingredientes · 1 prato · revela as combinações que te atraem.", s:"Paladar", cor:"#ff5a6e", q:"Que sabor te faz bem?", o:["Comida de vó","Doce de padaria","Fruta fresca","Café passado na hora"], brisa:"Pense no sabor que te acolhe.", jogo:"Monte o seu prato"},
@@ -487,7 +502,14 @@ function mostra(html, depois){
 function avanca(){ if(ocupado) return; ocupado=true; pararSom(); salvaLocal(); if(pos<R.length-1){ pos++; desenha(); } }
 function voltar(){ pararSom(); if(pos>0){ pos--; while(pos>0 && (R[pos].t==="passagem"||R[pos].t==="abre2"||R[pos].t==="saborear")) pos--; desenha(); } }
 const PULAVEIS=["brisa","abre2","vaso","escala","gosto","jogo","saborear","chute"];
-function pular(){ const p=R[pos]; if(!p||!PULAVEIS.includes(p.t)) return; click(); pararSom(); clearInterval(saborTm); clearTimeout(saborTm);
+/* ao tocar em "pular", pergunta rapidinho por quê (guarda em pulou_motivo_…) e depois pula */
+function pular(){ const p=R[pos]; if(!p||!PULAVEIS.includes(p.t)||document.getElementById("porque")) return; click();
+  const k=p.t==="jogo"||p.t==="gosto"?p.t+"_"+SENT[p.i].id:p.t==="escala"?"escala_"+p.id:p.t;
+  const d=document.createElement("div"); d.id="porque"; d.innerHTML=`<div class="pq"><p>Antes de pular: por quê?</p>${["Achei chato","Não entendi","Não quero responder"].map(t=>`<button type="button">${t}</button>`).join("")}<button type="button" class="volta">Voltar</button></div>`;
+  document.body.appendChild(d);
+  d.querySelectorAll(".pq button").forEach(b=>b.onclick=()=>{ d.remove(); if(b.classList.contains("volta")) return; resp["pulou_motivo_"+k]=b.textContent; pularMesmo(); });
+  d.onclick=e=>{ if(e.target===d) d.remove(); }; }
+function pularMesmo(){ const p=R[pos]; if(!p) return; click(); pararSom(); clearInterval(saborTm); clearTimeout(saborTm);
   if(audTom){ try{ audTom.pause(); }catch(e){} }
   if(p.t==="brisa"){ comecar(); return; }
   if(p.t==="abre2"){ avanca(); return; }
@@ -568,7 +590,7 @@ function brisa(){
     <div id="semvideo" hidden><p class="fala">Oi, eu sou a Brisa. Aqui não tem resposta certa nem errada. Só o que você sente.</p>
     <p class="fala2">Vamos descobrir, sentido por sentido, o que te faz bem?</p></div>
     <button class="btn" onclick="comecar()">Começar</button>
-    <p class="miud">Suas respostas são anônimas: sem nome e sem telefone. Elas ajudam o estudo do 7entidos. Ao começar, você concorda com isso. <a href="/privacidade.html" target="_blank" rel="noopener">Privacidade</a></p>`,
+    <p class="miud mini">Suas respostas são anônimas: sem nome e sem telefone. Elas ajudam o estudo do 7entidos. Ao começar, você concorda com isso. <a href="/privacidade.html" target="_blank" rel="noopener">Privacidade</a></p>`,
     c=>ligaVideo(c,LEG1,()=>{ c.querySelector("#semvideo").hidden=false; },VID1));
 }
 function entrar(){ click(); entrou=true; destravaVideo(VID1); document.getElementById("pularbtn").hidden=false; brisa(); }
@@ -587,13 +609,18 @@ function vaso(){
 }
 function escolheOpt(b,k,v){ resp[k]=v; click(); b.parentNode.querySelectorAll(".opt").forEach(x=>x.classList.remove("sel")); b.classList.add("sel"); setTimeout(avanca,420); }
 
+/* palavras da régua do Daniel (10 = Êxtase … 1 = Péssimo) */
+const PALAVRA=["Vazio","Péssimo","Ruim","Desconfortável","Regular","Indiferente","Legal","Muito legal","Felicidade","Muita felicidade","Êxtase"];
+const corNum=n=>`hsl(${215-n*16.5},${55+n*3}%,${45+n*2}%)`;
 function escala(p){
-  const k="escala_"+p.id;
+  const k="escala_"+p.id, v=resp[k];
   const campoNome = p.id==="chegada" ? `<div class="nome"><label for="nm">Como posso te chamar?</label><input id="nm" maxlength="30" autocomplete="given-name" placeholder="Seu nome ou apelido" value="${esc(NOME())}" oninput="guardaNome(this.value)"><small>Se não quiser, é só pular. Seu nome fica só no seu celular.</small></div>` : "";
   mostra(`${campoNome}<div class="rot">${p.id==="chegada"?"Antes de começar":"Depois dos 7 sentidos"}</div><h2>Escolha um número de 0 a 10</h2><p class="sub">${p.id==="chegada"?"O primeiro que vier.":"De novo, o primeiro que vier."}</p>
-    <div class="escala">${Array.from({length:11},(_,n)=>`<button class="${resp[k]===n?"sel":""}" onclick="escolheNum(this,'${k}',${n})" aria-label="${n}">${n}</button>`).join("")}<div class="pontas"><span>0</span><span>10</span></div></div>`);
+    <div class="regua"><div class="escala">${Array.from({length:11},(_,n)=>`<button class="${v===n?"sel":""}" style="--k:${corNum(n)}" onpointerenter="visor(${n})" onclick="escolheNum(this,'${k}',${n})" aria-label="${n}: ${PALAVRA[n]}">${n}</button>`).join("")}</div>
+    <div class="visor" id="visor"><span class="orbe" id="orbe"></span><b id="vnum">?</b><span id="vpal">Como você está agora?</span></div></div>`, c=>{ if(v!=null) visor(v); });
 }
-function escolheNum(b,k,n){ resp[k]=n; click(); b.parentNode.querySelectorAll("button").forEach(x=>x.classList.remove("sel")); b.classList.add("sel"); setTimeout(avanca,420); }
+function visor(n){ const o=document.getElementById("orbe"); if(!o) return; o.style.setProperty("--k",corNum(n)); o.style.setProperty("--f",(.35+n*.065).toFixed(2)); document.getElementById("vnum").textContent=n; document.getElementById("vpal").textContent=PALAVRA[n]; document.getElementById("visor").classList.add("on"); }
+function escolheNum(b,k,n){ resp[k]=n; click(); visor(n); vibra(8+n); b.parentNode.querySelectorAll("button").forEach(x=>x.classList.remove("sel")); b.classList.add("sel"); setTimeout(avanca,900); }
 
 function passagem(p){
   const s=SENT[p.i], chave=p.f===1?"gosto_":"curtiu_", feitos=SENT.map((x,i)=>resp[chave+x.id]!=null?i:-1).filter(i=>i>=0);
@@ -636,7 +663,7 @@ function fim1(){
   mostra(`<div class="rot">Fase 1 completa</div><h2>Seu retrato <em>rápido</em></h2><p class="sub">${comNome("O que te faz bem, {n}, sentido por sentido.","O que te faz bem, sentido por sentido.")}</p>
     ${mosaico(true)}
     <button class="btn" onclick="comecar2()">Começar a Fase 2</button>
-    <p class="miud">Na Fase 2, um jogo rapidinho para cada sentido. Se quiser parar agora, pode fechar: a Fase 2 fica esperando aqui.</p>`);
+    <p class="miud mini">Na Fase 2, um jogo rapidinho para cada sentido. Se quiser parar agora, pode fechar: a Fase 2 fica esperando aqui.</p>`);
   salvaLocal();
 }
 function comecar2(){ click(); destravaVideo(VID2); if(!inicio2){ inicio2=Date.now(); resp.inicio_fase2=new Date().toISOString(); } avanca(); }
