@@ -326,11 +326,11 @@ const LOGO = NO_SITE ? "/app-novo/logo-7entidos.png" : "logo-7entidos.png";
 /* VÍDEOS DA BRISA (do HeyGen): troque os arquivos brisa-entrada.mp4 (~30 s) e brisa-fase2.mp4 (~15 s), verticais.
    Os de agora são VÍDEOS DE TESTE (foto da Brisa + som suave). Quando chegarem os verdadeiros, mude VIDEO_TESTE para false
    e troque as legendas abaixo pelas falas exatas do vídeo (segundo de início, segundo de fim, texto). */
-const VIDEO_TESTE = true;
+const VIDEO_TESTE = false;
 const VID1 = NO_SITE ? "/app-novo/brisa-entrada.mp4" : "brisa-entrada.mp4";
 const VID2 = NO_SITE ? "/app-novo/brisa-fase2.mp4" : "brisa-fase2.mp4";
-const LEG1 = [[0,6,"Oi, eu sou a Brisa."],[6,13,"Aqui não tem resposta certa nem errada."],[13,20,"Só o que você sente."],[20,30,"Vamos descobrir, sentido por sentido, o que te faz bem?"]];
-const LEG2 = [[0,7,"Agora vamos brincar com cada sentido."],[7,15,"Sete jogos rapidinhos. Vamos?"]];
+const LEG1 = [[0.8,3.0,"Oi! Eu sou a Brisa."],[3.0,6.9,"Aqui não tem resposta certa nem errada, só o que você sente."],[6.9,9.6,"A cada passo, a gente te conhece melhor:"],[9.6,13.6,"suas escolhas, seus desafios, suas sensações."],[13.6,17.5,"Com as suas respostas e com base em muito estudo e pesquisa,"],[17.5,19.5,"o app encontra os seus padrões"],[19.5,24.4,"e te propõe coisas novas, que você nem imaginava,"],[24.4,26.9,"para sentir o que te faz bem."],[26.9,29.5,"Por isso, responda com o coração."],[29.5,31.4,"Vamos começar?"]];
+const LEG2 = [[1.0,3.0,"Você já me contou do que gosta."],[3.0,4.7,"Agora vem a outra metade:"],[4.7,7.3,"desafios rápidos para os seus sentidos, um para cada."],[7.3,10.9,"Eles mostram como você sente, e não só o que escolhe."],[10.9,13.3,"Cada um revela um pouco mais de você."],[13.3,15.9,"Se entregue, e repare no que acontece."],[15.9,17.5,"Vamos?"]];
 const PREVIA = !/^(www\.)?7entidos\.com\.br$/i.test(location.hostname) || /[?&]previa/.test(location.search) || location.pathname.indexOf("/app-novo")===0;
 const ENDPOINT = window.PESQUISA_URL || "";
 const VERSAO = "app-novo-v1";
