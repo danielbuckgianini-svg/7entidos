@@ -36,6 +36,10 @@ button{font-family:inherit}
 .const .xde7 small{display:block;font-weight:400;font-size:12px;color:var(--azul);letter-spacing:.08em;text-transform:uppercase}
 .voltar{position:fixed;left:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:5;all:unset;cursor:pointer;color:var(--azul);font-size:16px;padding:10px 14px;border-radius:999px}
 .voltar:hover{color:var(--creme)}
+/* PULAR: discreto, no canto de baixo à direita, em todas as telas que pedem resposta ou jogo */
+.pularbtn{position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:5;all:unset;cursor:pointer;color:var(--azul);font-size:16px;padding:10px 14px;border-radius:999px;opacity:.8}
+.pularbtn:hover,.pularbtn:focus-visible{color:var(--creme);opacity:1;outline:2px solid rgba(245,197,66,.4)}
+.pularbtn[hidden]{display:none}
 
 #palco{position:relative;min-height:100vh;min-height:100dvh;display:grid;place-items:center;padding:128px 18px 130px}
 .cena{width:100%;max-width:560px;text-align:center}
@@ -123,6 +127,14 @@ h1 em,h2 em{color:var(--ouro)}
 .tex .barra{position:absolute;left:10px;right:10px;top:10px;height:6px;border-radius:9px;background:rgba(5,8,22,.6);overflow:hidden;pointer-events:none}
 .tex .barra b{display:block;height:100%;width:0;background:#ff8a3d;box-shadow:0 0 10px #ff8a3d;transition:width .15s}
 .tex.feita{border-color:#ff8a3d}
+.tex.feita::after{content:"✓";position:absolute;right:10px;top:22px;width:30px;height:30px;border-radius:50%;background:#ff8a3d;color:#2a1103;font-weight:800;display:grid;place-items:center;font-size:18px}
+.dica2{color:var(--creme);font-size:19px;font-weight:700;margin:-4px 0 16px}
+.mao{position:absolute;left:18%;top:42%;width:58px;height:58px;pointer-events:none;z-index:2;animation:desliza 1.8s ease-in-out infinite;filter:drop-shadow(0 6px 10px rgba(0,0,0,.6))}
+.mao svg{width:100%;height:100%}
+.mao::before{content:"";position:absolute;left:6px;top:4px;width:18px;height:18px;border-radius:50%;background:rgba(255,200,150,.55);animation:toque 1.8s ease-in-out infinite}
+@keyframes desliza{0%{transform:translateX(0)}50%{transform:translateX(90%)}100%{transform:translateX(0)}}
+@keyframes toque{0%,100%{opacity:.9;transform:scale(1)}50%{opacity:.4;transform:scale(1.4)}}
+.texturas.tocou .mao{display:none}
 .tex .rastro{position:absolute;width:44px;height:44px;margin:-22px;border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(255,200,150,.6),transparent 70%);opacity:0;transition:opacity .3s}
 
 /* prato */
@@ -154,9 +166,9 @@ h1 em,h2 em{color:var(--ouro)}
 .carta.ok .v{box-shadow:inset 0 0 0 3px #5ccf8a}
 
 /* segure firme */
-.firme{position:relative;width:220px;height:220px;margin:0 auto 10px;touch-action:none;user-select:none;-webkit-user-select:none}
+.firme{position:relative;width:190px;height:190px;margin:0 auto 10px;touch-action:none;user-select:none;-webkit-user-select:none}
 .firme svg{width:100%;height:100%}
-.firme .alvo{position:absolute;inset:50px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#c9a8ff,#6b45c9 70%);box-shadow:0 0 40px rgba(180,140,255,.55);display:grid;place-items:center;font-weight:800;font-size:18px;color:#fff;cursor:pointer}
+.firme .alvo{position:absolute;inset:47px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#c9a8ff,#6b45c9 70%);box-shadow:0 0 40px rgba(180,140,255,.55);display:grid;place-items:center;font-weight:800;font-size:18px;color:#fff;cursor:pointer}
 .firme.segurando .alvo{transform:scale(.96);box-shadow:0 0 60px rgba(180,140,255,.9)}
 
 /* pular este jogo (aparece discreto depois de 2 tentativas que não deram certo) */
@@ -210,7 +222,7 @@ h1 em,h2 em{color:var(--ouro)}
 .legenda span{display:flex;align-items:center;gap:8px}.legenda i{width:12px;height:12px;border-radius:50%;background:var(--c);box-shadow:0 0 8px var(--c);flex:none}
 
 /* painel de validação (só na prévia) */
-.vbtn{position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:30;all:unset;cursor:pointer;position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));padding:12px 18px;border-radius:999px;background:#15110a;border:1.5px solid var(--ouro);color:var(--ouro);font-weight:800;font-size:16px;box-shadow:0 10px 30px rgba(0,0,0,.6)}
+.vbtn{position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:30;all:unset;cursor:pointer;position:fixed;right:12px;bottom:calc(64px + env(safe-area-inset-bottom));padding:12px 18px;border-radius:999px;background:#15110a;border:1.5px solid var(--ouro);color:var(--ouro);font-weight:800;font-size:16px;box-shadow:0 10px 30px rgba(0,0,0,.6)}
 .vpainel{position:fixed;inset:0;z-index:40;background:rgba(5,8,22,.86);backdrop-filter:blur(8px);display:none;overflow:auto;padding:24px 16px 80px}
 .vpainel.on{display:block}
 .vcaixa{max-width:720px;margin:0 auto}
@@ -234,6 +246,7 @@ h1 em,h2 em{color:var(--ouro)}
 <div class="topo"><div class="marca"><img src="" id="logo" alt="7entidos · A vida é feita de boas sensações"></div><div class="const" id="const" hidden aria-live="polite"></div></div>
 <main id="palco"></main>
 <button class="voltar" id="voltar" type="button" onclick="voltar()" hidden>← voltar</button>
+<button class="pularbtn" id="pularbtn" type="button" onclick="pular()" hidden>pular →</button>
 
 <script>
 /* ============ CONFIGURAÇÃO ============ */
@@ -281,6 +294,16 @@ function somPronto(){ try{ if(navigator.audioSession&&navigator.audioSession.typ
 /* pisca clássico de carro: o mesmo som dos toques da Jornada */
 function click(){ somPronto().then(c=>{ try{ const t=c.currentTime, o=c.createOscillator(), f=c.createBiquadFilter(), g=c.createGain(); o.type="square"; o.frequency.setValueAtTime(150,t); f.type="lowpass"; f.frequency.value=900; g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.2,t+.004); g.gain.exponentialRampToValueAtTime(.0001,t+.07); o.connect(f).connect(g).connect(c.destination); o.start(t); o.stop(t+.08); }catch(e){} }).catch(()=>{}); }
 function tom(f,dur=.7){ somPronto().then(c=>{ try{ const t=c.currentTime, o=c.createOscillator(), g=c.createGain(); o.type="sine"; o.frequency.value=f; g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.28,t+.04); g.gain.exponentialRampToValueAtTime(.0001,t+dur); o.connect(g).connect(c.destination); o.start(t); o.stop(t+dur+.05); }catch(e){} }).catch(()=>{}); }
+/* Tons da Audição tocados por um <audio> com um arquivo de som criado no próprio app.
+   No celular isso é mais confiável que o outro jeito (Web Audio), que às vezes fica mudo. */
+const WAVS={};
+function wavTom(f,dur){ const k=f+"_"+dur; if(WAVS[k]) return WAVS[k];
+  const sr=44100, n=Math.floor(sr*dur), buf=new ArrayBuffer(44+n*2), v=new DataView(buf), w=(o,t)=>{ for(let i=0;i<t.length;i++) v.setUint8(o+i,t.charCodeAt(i)); };
+  w(0,"RIFF"); v.setUint32(4,36+n*2,true); w(8,"WAVE"); w(12,"fmt "); v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,1,true); v.setUint32(24,sr,true); v.setUint32(28,sr*2,true); v.setUint16(32,2,true); v.setUint16(34,16,true); w(36,"data"); v.setUint32(40,n*2,true);
+  for(let i=0;i<n;i++){ const t=i/sr, ataque=Math.min(1,t/.03), solta=Math.min(1,(dur-t)/.12), a=.55*Math.max(0,Math.min(ataque,solta)); v.setInt16(44+i*2, Math.round(a*Math.sin(2*Math.PI*f*t)*32767), true); }
+  return WAVS[k]=URL.createObjectURL(new Blob([buf],{type:"audio/wav"})); }
+let audTom=null;
+function tocaTom(f,dur=.8){ try{ if(audTom){ audTom.pause(); } audTom=new Audio(wavTom(f,dur)); audTom.volume=1; const pr=audTom.play(); if(pr&&pr.catch) pr.catch(()=>tom(f,dur)); return audTom; }catch(e){ tom(f,dur); return null; } }
 function vibra(ms){ try{ navigator.vibrate&&navigator.vibrate(ms); }catch(e){} }
 function ruido(c,seg,tipo){ const n=Math.floor(c.sampleRate*seg), b=c.createBuffer(1,n,c.sampleRate), d=b.getChannelData(0); let u=0; for(let i=0;i<n;i++){ const w=Math.random()*2-1; if(tipo==="marrom"){ u=(u+.02*w)/1.02; d[i]=u*3.5; } else d[i]=w; } return b; }
 function corda(c,f,q,dest){ const sr=c.sampleRate,n=Math.floor(sr*2.2),b=c.createBuffer(1,n,sr),d=b.getChannelData(0),p=Math.round(sr/f); for(let i=0;i<p;i++) d[i]=Math.random()*2-1; for(let i=p;i<n;i++) d[i]=.996*.5*(d[i-p]+d[i-p+1]); const s=c.createBufferSource(); s.buffer=b; const g=c.createGain(); g.gain.value=.35; s.connect(g).connect(dest); s.start(q); return s; }
@@ -317,6 +340,12 @@ function mostra(html, depois){
 }
 function avanca(){ if(ocupado) return; ocupado=true; pararSom(); salvaLocal(); if(pos<R.length-1){ pos++; desenha(); } }
 function voltar(){ pararSom(); if(pos>0){ pos--; while(pos>0 && (R[pos].t==="passagem"||R[pos].t==="abre2"||R[pos].t==="saborear")) pos--; desenha(); } }
+const PULAVEIS=["vaso","escala","gosto","jogo","saborear","chute"];
+function pular(){ const p=R[pos]; if(!p||!PULAVEIS.includes(p.t)) return; click(); pararSom(); clearInterval(saborTm);
+  if(audTom){ try{ audTom.pause(); }catch(e){} }
+  if(p.t==="jogo"){ const s=SENT[p.i]; resp["jogo_"+s.id]="pulado"; delete resp["curtiu_"+s.id]; }
+  else { const k=p.t==="escala"?"escala_"+p.id:p.t==="gosto"?"gosto_"+SENT[p.i].id:p.t; resp["pulou_"+k]=true; }
+  avanca(); }
 function ir(n){ pos=n; fechaPainel(); desenha(); }
 /* constelação: luzes dos sentidos já feitos + a do sentido atual; a 1ª acende logo depois do vaso */
 function desenhaMini(){
@@ -324,7 +353,7 @@ function desenhaMini(){
   if(!p || p.t==="brisa"){ el.hidden=true; return; }
   el.hidden=false;
   const f=p.f, chave=f===1?"gosto_":"curtiu_";
-  const feito=s=>resp[chave+s.id]!=null||(f===2&&resp["jogo_"+s.id]==="pulado");
+  const feito=s=>resp[chave+s.id]!=null||(f===2&&resp["jogo_"+s.id]==="pulado")||(f===1&&resp["pulou_gosto_"+s.id]);
   const acesas=new Set(SENT.map((s,i)=>feito(s)?i:-1).filter(i=>i>=0));
   let agora=-1;
   if(p.i!=null) agora=p.i;
@@ -342,6 +371,8 @@ function anel(cls="respira", acesa=-1, feitos=[], img=""){ return `<div class="a
 function desenha(){
   document.querySelectorAll("body > .saborear").forEach(e=>e.remove());
   const p=R[pos]; document.getElementById("voltar").hidden = pos===0 || ["revela","grafico","abre2","saborear"].includes(p.t);
+  /* "pular" aparece nas telas que pedem resposta ou jogo; nas outras o próprio botão já segue */
+  document.getElementById("pularbtn").hidden = !PULAVEIS.includes(p.t);
   desenhaMini(); brilho(p.i!=null?SENT[p.i].cor:null);
   ({brisa,vaso,escala,passagem,gosto,fim1,abre2,jogo,saborear,chute,revela,grafico})[p.t](p);
 }
@@ -434,6 +465,8 @@ function saborear(p){
 function sigaSabor(){ clearInterval(saborTm); avanca(); }
 const cab=(s,dica)=>`<div class="rot" style="color:${s.cor}">${s.s} · jogo</div><h2>${s.jogo}</h2><p class="dica">${dica}</p>`;
 
+/* true enquanto a tela atual ainda é o jogo deste sentido (se a pessoa pulou, a próxima rodada não aparece) */
+const aindaNoJogo=s=>{ const q=R[pos]; return !!q&&q.t==="jogo"&&SENT[q.i].id===s.id; };
 const JOGOS={
   /* Olho de águia: igual ao da pesquisa (3 rodadas, uma por vez) */
   visao(s,fim){ const RD=[0,1,2].map(r=>({hu:Math.floor(Math.random()*360),k:Math.floor(Math.random()*16),d:16-r*4})); let r=0, ac=0;
@@ -443,7 +476,7 @@ const JOGOS={
         c.querySelectorAll(".grade4 button").forEach(b=>b.onclick=()=>{ if(x.feito) return; x.feito=true; const okk=+b.dataset.i===x.k; if(okk) ac++; click();
           c.querySelectorAll(".grade4 button").forEach(y=>{ if(+y.dataset.i===x.k) y.classList.add("ok"); else if(y===b) y.classList.add("bad"); });
           c.querySelector("#res").innerHTML=okk?'<span class="bom">Achou!</span>':'<span class="nao">Era o quadrado marcado de verde.</span>';
-          setTimeout(()=>{ if(r<2){ r++; rod(); } else { resp.visao_acertos=ac; fim(); } },900); }); }); };
+          setTimeout(()=>{ if(!aindaNoJogo(s)) return; if(r<2){ r++; rod(); } else { resp.visao_acertos=ac; fim(); } },900); }); }); };
     rod(); },
   /* Qual som é mais fino? 3 rodadas, uma por vez: os sons vão ficando parecidos */
   audicao(s,fim){ const PARES=[[880,440],[660,520],[620,575]]; let r=0, ac=0;
@@ -452,23 +485,24 @@ const JOGOS={
       <div class="sons"><button class="som" id="s1"><svg class="onda" viewBox="0 0 72 36"><path d="M0 18 Q9 2 18 18 T36 18 T54 18 T72 18" fill="none" stroke="#4aa8ff" stroke-width="3"/></svg>Ouvir o primeiro</button>
       <button class="som" id="s2"><svg class="onda" viewBox="0 0 72 36"><path d="M0 18 Q9 2 18 18 T36 18 T54 18 T72 18" fill="none" stroke="#4aa8ff" stroke-width="3"/></svg>Ouvir o segundo</button></div>
       <div class="opts"><button class="opt" data-k="1">O primeiro é mais fino</button><button class="opt" data-k="2">O segundo é mais fino</button></div><div class="res" id="res"></div>`, c=>{
-      const toca=(b,f)=>{ tom(f); b.classList.add("tocando"); setTimeout(()=>b.classList.remove("tocando"),700); };
+      const toca=(b,f)=>{ tocaTom(f,.8); vibra(8); b.classList.add("tocando"); setTimeout(()=>b.classList.remove("tocando"),800); };
       c.querySelector("#s1").onclick=e=>toca(e.currentTarget,fA); c.querySelector("#s2").onclick=e=>toca(e.currentTarget,fB);
       let feito=false; c.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ if(feito) return; feito=true; click(); b.classList.add("sel");
         const okk=(b.dataset.k==="1")===primeiroFino; if(okk) ac++;
         c.querySelector("#res").innerHTML=okk?'<span class="bom">Acertou!</span>':`<span class="nao">O mais fino era o ${primeiroFino?"primeiro":"segundo"}.</span>`;
-        setTimeout(()=>{ if(r<2){ r++; rod(); } else { resp.audicao_acertos=ac; c.querySelector("#res").innerHTML=`<span class="bom">Você acertou ${ac} de 3.</span>`; fim(); } },1100); }); }); };
+        setTimeout(()=>{ if(!aindaNoJogo(s)) return; if(r<2){ r++; rod(); } else { resp.audicao_acertos=ac; c.querySelector("#res").innerHTML=`<span class="bom">Você acertou ${ac} de 3.</span>`; fim(); } },1100); }); }); };
     rod(); },
   /* Carinho: toque e deslize o dedo nas texturas; vibra de leve e cada uma tem um som suave */
   tato(s,fim){ const T=[["areia","Areia",0],["cobertor","Cobertor macio",1],["agua","Água gelada",2],["abraco","Abraço",3]], prog=[0,0,0,0];
-    mostra(`${cab(s,"Deslize o dedo devagar sobre cada textura, como um carinho.")}<div class="texturas">${T.map(([k,n,j],i)=>`<div class="tex" data-i="${i}" data-k="${k}"><img src="${foto("tato",j)}" alt=""><span class="barra"><b></b></span><span class="nm">${n}</span><span class="rastro"></span></div>`).join("")}</div><div class="res" id="res"></div>`, c=>{
+    const MAO='<span class="mao" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M22 8c0-3 5-3 5 0v20l3-1V22c0-3 5-3 5 0v6l3-1v-3c0-3 5-3 5 0v5l3-1c0-3 5-3 5 0v12c0 10-6 18-16 18h-2c-6 0-10-3-13-8L12 36c-2-3 2-6 5-3l5 5z" fill="#f4ecdc" stroke="#15110a" stroke-width="2" stroke-linejoin="round"/></svg></span>';
+    mostra(`${cab(s,"Encoste o dedo na foto e arraste de um lado para o outro, como um carinho.")}<p class="dica2">Uma ou duas passadas em cada foto.</p><div class="texturas">${T.map(([k,n,j],i)=>`<div class="tex" data-i="${i}" data-k="${k}"><img src="${foto("tato",j)}" alt=""><span class="barra"><b></b></span><span class="nm">${n}</span><span class="rastro"></span>${i===0?MAO:""}</div>`).join("")}</div><div class="res" id="res"></div>`, c=>{
       let terminou=false;
       c.querySelectorAll(".tex").forEach(el=>{ const i=+el.dataset.i, k=el.dataset.k, ras=el.querySelector(".rastro"); let ult=null, down=false;
         const mexe=e=>{ if(!down&&e.pointerType!=="mouse") return; const r=el.getBoundingClientRect(), x=e.clientX-r.left, y=e.clientY-r.top; ras.style.left=x+"px"; ras.style.top=y+"px"; ras.style.opacity=1;
-          if(ult){ const d=Math.hypot(x-ult[0],y-ult[1]); if(d>2){ prog[i]=Math.min(100,prog[i]+d/9); el.querySelector(".barra b").style.width=prog[i]+"%"; somTextura(k); } } ult=[x,y];
+          if(ult){ const d=Math.hypot(x-ult[0],y-ult[1]); if(d>2){ prog[i]=Math.min(100,prog[i]+d/(r.width*.95)*100); /* ~1 passada de ponta a ponta completa; 2 passadas curtas também */ el.querySelector(".barra b").style.width=prog[i]+"%"; somTextura(k); } } ult=[x,y];
           if(prog[i]>=100&&!el.classList.contains("feita")){ el.classList.add("feita"); vibra([10,40,10]); }
           if(!terminou&&prog.every(v=>v>=100)){ terminou=true; c.querySelector("#res").innerHTML='<span class="bom">Você sentiu as quatro.</span>'; resp.tato_texturas="4 de 4"; fim(); } };
-        el.addEventListener("pointerdown",e=>{ down=true; ult=null; somPronto().catch(()=>{}); try{ el.setPointerCapture(e.pointerId); }catch(_){} mexe(e); });
+        el.addEventListener("pointerdown",e=>{ down=true; ult=null; c.querySelector(".texturas").classList.add("tocou"); somPronto().catch(()=>{}); try{ el.setPointerCapture(e.pointerId); }catch(_){} mexe(e); });
         el.addEventListener("pointermove",mexe);
         const sol=()=>{ down=false; ult=null; ras.style.opacity=0; }; el.addEventListener("pointerup",sol); el.addEventListener("pointercancel",sol); el.addEventListener("pointerleave",sol);
       }); }); },
@@ -495,13 +529,9 @@ const JOGOS={
   equilibrio(s,fim){ const L=2*Math.PI*96;
     mostra(`${cab(s,"Encoste o dedo no centro e segure firme, sem mexer, até a luz fechar o círculo.")}<div class="firme" id="fr"><svg viewBox="0 0 220 220"><circle cx="110" cy="110" r="96" fill="none" stroke="#1d2654" stroke-width="10"/><circle id="arco" cx="110" cy="110" r="96" fill="none" stroke="#b48cff" stroke-width="10" stroke-linecap="round" stroke-dasharray="0 ${L}" transform="rotate(-90 110 110)" style="filter:drop-shadow(0 0 8px #b48cff)"/></svg><div class="alvo" id="alvo">Segure</div></div><div class="res" id="res"></div>`, c=>{
       const fr=c.querySelector("#fr"), alvo=c.querySelector("#alvo"), arco=c.querySelector("#arco"), res=c.querySelector("#res"); let p=0, tm=null, x0=null, feito=false, falhas=0;
-      /* depois de 2 tentativas que não deram certo, aparece o botão discreto "Pular este jogo" */
-      const mostraPular=()=>{ if(feito||c.querySelector("#pular")) return; const b=document.createElement("button"); b.type="button"; b.id="pular"; b.className="pular"; b.textContent="Pular este jogo";
-        b.onclick=()=>{ if(feito) return; feito=true; click(); clearInterval(tm); tm=null; resp["jogo_"+s.id]="pulado"; delete resp["curtiu_"+s.id]; resp[s.id+"_tentativas"]=falhas; avanca(); };
-        fr.parentNode.insertBefore(b, res.nextSibling); };
-      const zera=msg=>{ clearInterval(tm); tm=null; fr.classList.remove("segurando"); if(feito) return; p=0; arco.setAttribute("stroke-dasharray","0 "+L); if(msg){ res.innerHTML=`<span class="nao">${msg}</span>`; falhas++; if(falhas>=2) mostraPular(); } };
+      const zera=msg=>{ clearInterval(tm); tm=null; fr.classList.remove("segurando"); if(feito) return; p=0; arco.setAttribute("stroke-dasharray","0 "+L); if(msg){ res.innerHTML=`<span class="nao">${msg}</span>`; falhas++; } };
       alvo.addEventListener("pointerdown",e=>{ e.preventDefault(); if(feito||tm) return; somPronto().catch(()=>{}); try{ alvo.setPointerCapture(e.pointerId); }catch(_){} x0=[e.clientX,e.clientY]; res.textContent=""; fr.classList.add("segurando");
-        tm=setInterval(()=>{ p+=2.5; arco.setAttribute("stroke-dasharray",(L*p/100)+" "+L); if(p%25===0) vibra(6); if(p>=100){ feito=true; clearInterval(tm); tm=null; fr.classList.remove("segurando"); alvo.textContent="Firme!"; res.innerHTML='<span class="bom">Você ficou firme até o fim.</span>'; const pb=c.querySelector("#pular"); if(pb) pb.remove(); resp[s.id+"_tentativas"]=falhas+1; vibra([10,40,10]); fim(); } },100); });
+        tm=setInterval(()=>{ p+=2.5; arco.setAttribute("stroke-dasharray",(L*p/100)+" "+L); if(p%25===0) vibra(6); if(p>=100){ feito=true; clearInterval(tm); tm=null; fr.classList.remove("segurando"); alvo.textContent="Firme!"; res.innerHTML='<span class="bom">Você ficou firme até o fim.</span>'; resp[s.id+"_tentativas"]=falhas+1; vibra([10,40,10]); fim(); } },100); });
       alvo.addEventListener("pointermove",e=>{ if(!tm||!x0) return; if(Math.hypot(e.clientX-x0[0],e.clientY-x0[1])>14) zera("O dedo mexeu. Tente de novo, bem firme."); });
       ["pointerup","pointercancel"].forEach(ev=>alvo.addEventListener(ev,()=>{ if(tm) zera("Soltou antes. Tente de novo."); }));
       alvo.oncontextmenu=e=>e.preventDefault(); }); },
