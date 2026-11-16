@@ -37,7 +37,7 @@ button{font-family:inherit}
 .voltar{position:fixed;left:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:5;all:unset;cursor:pointer;color:var(--azul);font-size:16px;padding:10px 14px;border-radius:999px}
 .voltar:hover{color:var(--creme)}
 /* PULAR: discreto, no canto de baixo à direita, em todas as telas que pedem resposta ou jogo */
-.pularbtn{position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:5;all:unset;cursor:pointer;color:var(--azul);font-size:16px;padding:10px 14px;border-radius:999px;opacity:.8}
+.pularbtn{all:unset;position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:5;cursor:pointer;color:var(--azul);font-size:16px;padding:10px 14px;border-radius:999px;opacity:.8}
 .pularbtn:hover,.pularbtn:focus-visible{color:var(--creme);opacity:1;outline:2px solid rgba(245,197,66,.4)}
 .pularbtn[hidden]{display:none}
 
@@ -183,6 +183,41 @@ h1 em,h2 em{color:var(--ouro)}
 .corpo .linha{fill:none;stroke:#f5c542;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;filter:url(#luz);pointer-events:none}
 .partes{min-height:26px;color:var(--azul);font-size:17px;margin-bottom:12px}
 
+/* Caça aos cheiros (Olfato) */
+.olhos{font:400 15px "Space Mono",monospace;color:var(--azul);margin-top:6px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:480px;margin:0 auto 14px}
+.chips button{all:unset;cursor:pointer;padding:13px 18px;border-radius:999px;font-weight:700;font-size:18px;background:rgba(32,48,100,.5);border:1.5px solid var(--linha);transition:.2s}
+.chips button.sel{background:rgba(92,207,138,.2);border-color:#5ccf8a;color:#d6ffe4}
+.chips button[disabled]{opacity:.35}
+.outro{display:flex;gap:8px;max-width:420px;margin:0 auto 12px}
+.outro input{flex:1;min-height:52px;padding:0 16px;border-radius:14px;border:1.5px solid var(--linha);background:rgba(10,17,40,.8);color:var(--creme);font:600 18px Manrope,sans-serif}
+.outro input:focus{outline:none;border-color:#5ccf8a}
+.outro button{all:unset;cursor:pointer;padding:0 18px;border-radius:14px;background:rgba(92,207,138,.2);border:1.5px solid #5ccf8a;font-weight:800}
+.conta{font:700 16px "Space Mono",monospace;color:#5ccf8a;margin-bottom:12px}
+.campeao{font-family:Fraunces,serif;font-size:clamp(38px,11vw,52px);color:#5ccf8a;margin:6px 0 8px;text-shadow:0 0 30px rgba(92,207,138,.45)}
+/* Mapa do agora (Noção do corpo) */
+.sentes{display:none;flex-wrap:wrap;gap:8px;justify-content:center;max-width:460px;margin:0 auto 12px;padding:12px;border-radius:18px;background:rgba(10,17,40,.7);border:1px solid var(--linha)}
+.sentes.on{display:flex}
+.sentes p{width:100%;margin:0 0 4px;font-weight:800;font-size:18px}
+.sentes button{all:unset;cursor:pointer;padding:12px 18px;border-radius:999px;font-weight:800;font-size:18px;border:1.5px solid var(--k);color:var(--k)}
+.corpo .parte.on{fill:var(--k,rgba(63,214,208,.55))}
+.gesto{font-family:Fraunces,serif;font-size:clamp(26px,7vw,34px);line-height:1.25;margin:4px 0 10px}
+/* Saborear: olhe, respire, guarde */
+.saborear .dentro{text-shadow:0 2px 14px rgba(0,0,0,.9),0 0 4px rgba(0,0,0,.8)}
+.saborear .dentro .fala{font-size:clamp(30px,8vw,38px)}
+.saborear .fundo::after{background:radial-gradient(ellipse at 50% 50%,rgba(10,17,40,.55),rgba(10,17,40,.9) 80%)!important}
+.saborear .passo3{font-size:17px!important;font:400 15px "Space Mono",monospace;color:var(--ouro);letter-spacing:.12em;text-transform:uppercase}
+.saborear .bola{width:170px;height:170px;border-radius:50%;margin:8px auto;border:4px solid #f5c542;background:radial-gradient(circle,rgba(245,197,66,.25),transparent 70%);box-shadow:0 0 40px rgba(245,197,66,.35) inset,0 0 40px rgba(245,197,66,.25);transform:scale(.6);transition:transform 4s ease-in-out}
+.saborear .bola.cheia{transform:scale(1)}
+.saborear .carta{position:relative;width:170px;aspect-ratio:3/4;margin:8px auto;border-radius:18px;overflow:hidden;border:3px solid #f5c542;box-shadow:0 0 40px rgba(245,197,66,.5);touch-action:none;user-select:none;-webkit-user-select:none;cursor:pointer;transition:transform .6s}
+.saborear .carta img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.saborear .carta .enche{position:absolute;left:0;right:0;bottom:0;height:0;background:linear-gradient(transparent,rgba(245,197,66,.75));pointer-events:none}
+.saborear .carta.guardada{transform:rotateY(360deg) scale(1.05);box-shadow:0 0 60px 10px rgba(245,197,66,.6)}
+.saborear .carta.guardada::after{content:"Guardada";position:absolute;left:0;right:0;bottom:12px;text-align:center;font:800 18px Manrope,sans-serif;color:#15110a}
+.dourada{display:grid;justify-items:center;gap:8px}
+.dourada .carta2{width:150px;aspect-ratio:3/4;border-radius:16px;overflow:hidden;border:3px solid #f5c542;box-shadow:0 0 40px rgba(245,197,66,.45)}
+.dourada .carta2 img{width:100%;height:100%;object-fit:cover;display:block}
+
 /* curtiu */
 .curtiu{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:440px;margin:0 auto}
 .curtiu button{all:unset;cursor:pointer;padding:18px 6px;border-radius:18px;background:rgba(32,48,100,.5);border:1.5px solid var(--linha);font-weight:800;font-size:18px;display:flex;flex-direction:column;align-items:center;gap:10px}
@@ -281,9 +316,9 @@ const SENT = [
  {id:"audicao", s:"Audição", cor:"#4aa8ff", q:"O que te faz bem ouvir?", o:["Som do mar","Música ao vivo","Chuva no telhado","Silêncio total"], sons:["mar","musica","chuva","silencio"], brisa:"Agora, feche os olhos e escute.", jogo:"Qual som é mais fino?"},
  {id:"tato", s:"Tato", cor:"#ff8a3d", q:"O que te faz bem de sentir na pele?", o:["Areia nos pés","Cobertor macio","Água gelada","Abraço apertado"], brisa:"Sinta com a ponta dos dedos.", jogo:"Carinho"},
  {id:"paladar", s:"Paladar", cor:"#ff5a6e", q:"Que sabor te faz bem?", o:["Comida de vó","Doce de padaria","Fruta fresca","Café passado na hora"], brisa:"Pense no sabor que te acolhe.", jogo:"Monte o seu prato"},
- {id:"olfato", s:"Olfato", cor:"#5ccf8a", q:"Que cheiro te faz bem?", o:["Terra molhada","Pão saindo do forno","Perfume de alguém querido","Cheiro de café"], brisa:"Respire fundo. O cheiro também lembra.", jogo:"Pares de cheiros"},
+ {id:"olfato", s:"Olfato", cor:"#5ccf8a", q:"Que cheiro te faz bem?", o:["Terra molhada","Pão saindo do forno","Perfume de alguém querido","Cheiro de café"], brisa:"Respire fundo. O cheiro também lembra.", jogo:"Caça aos cheiros"},
  {id:"equilibrio", s:"Equilíbrio", cor:"#b48cff", q:"Que movimento te faz bem?", o:["Dançar","Balançar numa rede","Andar de bicicleta","Ficar de pé numa prancha"], brisa:"Encontre o seu centro.", jogo:"Segure firme"},
- {id:"corpo", s:"Noção do corpo", cor:"#3fd6d0", q:"O que te faz bem no corpo?", o:["Alongar","Correr","Nadar","Deitar e respirar fundo"], brisa:"Por último, perceba o seu corpo.", jogo:"Corpo que acende"}
+ {id:"corpo", s:"Noção do corpo", cor:"#3fd6d0", q:"O que te faz bem no corpo?", o:["Alongar","Correr","Nadar","Deitar e respirar fundo"], brisa:"Por último, perceba o seu corpo.", jogo:"Mapa do agora"}
 ];
 const foto = (sid,i) => IMG+sid+"-"+(i+1)+".jpg";
 const TEMPOS = ["Menos de 3 minutos","De 3 a 6 minutos","De 6 a 10 minutos","10 minutos ou mais"];
@@ -338,6 +373,12 @@ function tocarAmbiente(qual,btn){
     const tm=setTimeout(pararSom,dur*1000); somAtual={parar(){ clearTimeout(tm); F.forEach(f=>{ try{ f.stop(); }catch(e){} }); try{ m.disconnect(); }catch(e){} }};
   }).catch(()=>{});
 }
+/* som suave e contínuo (acorde) na cor do sentido: para os momentos de olhos fechados e de saborear */
+function somSuave(cor){ pararSom(); const BASE={"#f5c542":[262,330,392],"#4aa8ff":[220,277,330],"#ff8a3d":[196,247,294],"#ff5a6e":[233,294,349],"#5ccf8a":[247,311,370],"#b48cff":[208,262,311],"#3fd6d0":[185,233,277]}[cor]||[220,277,330];
+  somPronto().then(c=>{ const t=c.currentTime, m=c.createGain(); m.gain.setValueAtTime(0,t); m.gain.linearRampToValueAtTime(.09,t+1.5); m.connect(c.destination); const F=[];
+    BASE.forEach((f,i)=>{ const o=c.createOscillator(), g=c.createGain(), l=c.createOscillator(), lg=c.createGain(); o.type="sine"; o.frequency.value=f; g.gain.value=.5; l.frequency.value=.15+i*.07; lg.gain.value=.25; l.connect(lg).connect(g.gain); o.connect(g).connect(m); o.start(t); l.start(t); F.push(o,l); });
+    somAtual={parar(){ try{ const t2=c.currentTime; m.gain.cancelScheduledValues(t2); m.gain.setValueAtTime(m.gain.value,t2); m.gain.linearRampToValueAtTime(0,t2+.4); }catch(e){} setTimeout(()=>{ F.forEach(f=>{ try{ f.stop(); }catch(e){} }); try{ m.disconnect(); }catch(e){} },450); }};
+  }).catch(()=>{}); }
 /* som suave de cada textura do Carinho */
 const TEXSOM = {
   areia(c,t,g){ const s=c.createBufferSource(); s.buffer=ruido(c,.12,"branco"); const f=c.createBiquadFilter(); f.type="highpass"; f.frequency.value=3500; s.connect(f).connect(g); s.start(t); },
@@ -358,7 +399,7 @@ function mostra(html, depois){
 function avanca(){ if(ocupado) return; ocupado=true; pararSom(); salvaLocal(); if(pos<R.length-1){ pos++; desenha(); } }
 function voltar(){ pararSom(); if(pos>0){ pos--; while(pos>0 && (R[pos].t==="passagem"||R[pos].t==="abre2"||R[pos].t==="saborear")) pos--; desenha(); } }
 const PULAVEIS=["vaso","escala","gosto","jogo","saborear","chute"];
-function pular(){ const p=R[pos]; if(!p||!PULAVEIS.includes(p.t)) return; click(); pararSom(); clearInterval(saborTm);
+function pular(){ const p=R[pos]; if(!p||!PULAVEIS.includes(p.t)) return; click(); pararSom(); clearInterval(saborTm); clearTimeout(saborTm);
   if(audTom){ try{ audTom.pause(); }catch(e){} }
   if(p.t==="jogo"){ const s=SENT[p.i]; resp["jogo_"+s.id]="pulado"; delete resp["curtiu_"+s.id]; }
   else { const k=p.t==="escala"?"escala_"+p.id:p.t==="gosto"?"gosto_"+SENT[p.i].id:p.t; resp["pulou_"+k]=true; }
@@ -467,19 +508,36 @@ function mostraCurtiu(p){
 
 /* saborear: 20 segundos com a foto escolhida no sentido de que mais curtiu o jogo */
 let saborTm=null;
+/* Saborear · "Olhe, respire, guarde" (cerca de 20 s): foto favorita em tela cheia + som do sentido; 3 passos guiados pela Brisa */
 function saborear(p){
   const v=SENT.map(s=>resp["curtiu_"+s.id]||0), max=Math.max(...v);
   let i=v.indexOf(max); if(SENT[i] && SENT[i].o.indexOf(resp["gosto_"+SENT[i].id])<0) i=SENT.findIndex(s=>s.o.indexOf(resp["gosto_"+s.id])>=0);
-  const s=SENT[Math.max(i,0)], j=Math.max(0,s.o.indexOf(resp["gosto_"+s.id])); resp.saborear_sentido=s.s;
-  let n=20; clearInterval(saborTm);
-  mostra(`<div class="saborear"><div class="fundo" style="background-image:url('${foto(s.id,j)}')"></div>
-    <div class="dentro">${anel("respira")}<p class="fala">Fique aqui um pouquinho com isso.</p><p class="fala2" style="margin:0">${esc(s.o[j])} · ${s.s}</p>
-    <div class="seg" id="seg">${n} segundos</div><button class="btn sec" style="margin-top:14px" onclick="click();sigaSabor()">Seguir</button></div></div>`, c=>{
-    const ov=c.querySelector(".saborear"); document.body.appendChild(ov); /* fora da cena, para ocupar a tela inteira */
-    const seg=ov.querySelector("#seg");
-    saborTm=setInterval(()=>{ if(R[pos]!==p){ clearInterval(saborTm); return; } n--; seg.textContent=n+(n===1?" segundo":" segundos"); if(n<=0) sigaSabor(); },1000); });
+  const s=SENT[Math.max(i,0)], j=Math.max(0,s.o.indexOf(resp["gosto_"+s.id])), img=foto(s.id,j); resp.saborear_sentido=s.s;
+  clearInterval(saborTm);
+  mostra(`<div class="saborear"><div class="fundo" style="background-image:url('${img}')"></div><div class="dentro" id="sd"></div></div>`, c=>{
+    const ov=c.querySelector(".saborear"); document.body.appendChild(ov); const sd=ov.querySelector("#sd");
+    somSuave(s.cor); const vivo=()=>R[pos]===p;
+    /* 1 · OLHE (5 s) */
+    sd.innerHTML=`<div class="passo3">1 de 3 · Olhe</div><p class="fala">Olhe com calma.</p><p class="fala2" style="margin:0">${esc(s.o[j])} · ${s.s}</p>`;
+    saborTm=setTimeout(()=>{ if(!vivo()) return;
+      /* 2 · RESPIRE (2 respirações de 8 s) */
+      sd.innerHTML=`<div class="passo3">2 de 3 · Respire</div><div class="bola" id="bola"></div><p class="fala" id="rf">Puxe o ar…</p>`;
+      const bola=sd.querySelector("#bola"), rf=sd.querySelector("#rf"); let k=0;
+      const ciclo=()=>{ if(!vivo()) return; if(k>=4){ guarde(); return; } const enche=k%2===0; bola.classList.toggle("cheia",enche); rf.textContent=enche?"Puxe o ar…":"Solte devagar…"; vibra(enche?8:4); k++; saborTm=setTimeout(ciclo,4000); };
+      setTimeout(ciclo,60); },5000);
+    /* 3 · GUARDE: segurar a foto por 1,5 s e ela vira uma carta dourada */
+    function guarde(){ if(!vivo()) return;
+      sd.innerHTML=`<div class="passo3">3 de 3 · Guarde</div><p class="fala">Encoste e segure a foto para guardar.</p><div class="carta" id="ct"><img src="${img}" alt=""><span class="enche" id="en"></span></div><p class="olhos" id="dc">Segure até encher de luz</p>`;
+      const ct=sd.querySelector("#ct"), en=sd.querySelector("#en"); let h=0, tm=null, feito=false;
+      const para=()=>{ clearInterval(tm); tm=null; if(!feito){ h=0; en.style.height="0"; } };
+      ct.addEventListener("pointerdown",e=>{ e.preventDefault(); if(feito||tm) return; try{ ct.setPointerCapture(e.pointerId); }catch(_){}
+        tm=setInterval(()=>{ h+=100/15; en.style.height=Math.min(100,h)+"%"; if(h>=100){ feito=true; clearInterval(tm); tm=null; ct.classList.add("guardada"); vibra([10,40,10]); tom(784,1.2);
+          resp.carta_dourada={sentido:s.s,escolha:s.o[j],foto:j}; sd.querySelector("#dc").textContent="Sua carta dourada está guardada.";
+          const b=document.createElement("button"); b.className="btn"; b.style.marginTop="14px"; b.textContent="Seguir"; b.onclick=()=>{ click(); sigaSabor(); }; sd.appendChild(b); } },100); });
+      ["pointerup","pointercancel","pointerleave"].forEach(ev=>ct.addEventListener(ev,para)); ct.oncontextmenu=e=>e.preventDefault(); }
+  });
 }
-function sigaSabor(){ clearInterval(saborTm); avanca(); }
+function sigaSabor(){ clearInterval(saborTm); clearTimeout(saborTm); pararSom(); avanca(); }
 const cab=(s,dica)=>`<div class="rot" style="color:${s.cor}">${s.s} · jogo</div><h2>${s.jogo}</h2><p class="dica">${dica}</p>`;
 
 /* true enquanto a tela atual ainda é o jogo deste sentido (se a pessoa pulou, a próxima rodada não aparece) */
@@ -535,13 +593,25 @@ const JOGOS={
         if(p>=0){ sel.splice(p,1); b.classList.remove("sel"); } else { sel.push(i); b.classList.add("sel"); }
         pinta(); if(sel.length===3){ resp.paladar_prato=sel.map(i=>I[i][1]); mesa.classList.add("pronto"); c.querySelectorAll(".ingr button").forEach(x=>{ if(!x.classList.contains("sel")) x.disabled=true; }); setTimeout(fim,1600); } }); }); },
   /* Pares de cheiros: jogo da memória com 3 cheiros */
-  olfato(s,fim){ const C=[[0,"Terra molhada"],[1,"Pão saindo do forno"],[3,"Cheiro de café"]]; const cartas=C.flatMap(x=>[x,x]).sort(()=>Math.random()-.5); const abertas=[], certas=[]; let trava=false, tent=0;
-    const ic=`<svg viewBox="0 0 40 40"><path d="M20 6c-6 8-10 13-10 18a10 10 0 0 0 20 0c0-5-4-10-10-18z" fill="none" stroke="#5ccf8a" stroke-width="2"/><path d="M14 26c2 3 5 4 8 3" fill="none" stroke="#5ccf8a" stroke-width="1.6" opacity=".6"/></svg>`;
-    mostra(`${cab(s,"Vire duas cartas por vez e ache os cheiros iguais.")}<div class="pares">${cartas.map((x,i)=>`<button class="carta" data-i="${i}" aria-label="carta ${i+1}"><span class="in"><span class="f">${ic}</span><span class="v"><img src="${foto("olfato",x[0])}" alt=""><span>${x[1]}</span></span></span></button>`).join("")}</div><div class="res" id="res">0 de 3 pares</div>`, c=>{
-      const bs=[...c.querySelectorAll(".carta")];
-      bs.forEach(b=>b.onclick=()=>{ const i=+b.dataset.i; if(trava||abertas.includes(i)||certas.includes(i)) return; click(); b.classList.add("vira"); abertas.push(i);
-        if(abertas.length===2){ trava=true; tent++; const [a,d]=abertas; setTimeout(()=>{ if(cartas[a][0]===cartas[d][0]){ certas.push(a,d); bs[a].classList.add("ok"); bs[d].classList.add("ok"); vibra(15); } else { bs[a].classList.remove("vira"); bs[d].classList.remove("vira"); }
-          abertas.length=0; trava=false; c.querySelector("#res").textContent=(certas.length/2)+" de 3 pares"; if(certas.length===6){ resp.olfato_tentativas=tent; c.querySelector("#res").innerHTML='<span class="bom">Achou todos os pares!</span>'; fim(); } },800); } }); }); },
+  /* Caça aos cheiros: olhos fechados 10 s, marcar 3 cheiros de onde a pessoa está, escolher o mais gostoso */
+  olfato(s,fim){ const SUG=["Café","Comida","Perfume","Sabonete","Ar livre","Roupa limpa","Chuva","Plantas","Madeira","Mar","Pão","Nenhum cheiro"]; let sel=[];
+    mostra(`${cab(s,"Feche os olhos e respire fundo. Que cheiros tem aí onde você está?")}${anel("respira")}<p class="olhos" id="tmp">10 segundos de olhos fechados…</p><button class="btn sec" id="ja" style="margin-top:10px">Já senti</button>`, c=>{
+      const tons=somSuave(s.cor); let n=10; const tm=setInterval(()=>{ if(!aindaNoJogo(s)){ clearInterval(tm); return; } n--; c.querySelector("#tmp").textContent=n>0?n+" segundos de olhos fechados…":"Pode abrir os olhos."; if(n<=0){ clearInterval(tm); vibra(15); passo2(); } },1000);
+      c.querySelector("#ja").onclick=()=>{ clearInterval(tm); click(); passo2(); };
+      function passo2(){ pararSom(); if(!aindaNoJogo(s)) return;
+        const desenha2=()=>{ c.innerHTML=`${cab(s,"Marque 3 cheiros que você sente aí. Pode tocar ou escrever.")}<div class="conta">${sel.length} de 3</div>
+          <div class="chips">${[...new Set([...SUG,...sel])].map(t=>`<button type="button" class="${sel.includes(t)?"sel":""}" ${!sel.includes(t)&&sel.length>=3?"disabled":""} data-t="${esc(t)}">${esc(t)}</button>`).join("")}</div>
+          <div class="outro"><input id="out" maxlength="30" placeholder="Escrever outro cheiro" ${sel.length>=3?"disabled":""}><button type="button" id="add">Pôr</button></div>
+          <button class="btn" id="ok" ${sel.length===3?"":"disabled"}>Pronto</button>`;
+          c.querySelectorAll(".chips button").forEach(b=>b.onclick=()=>{ const t=b.dataset.t; click(); sel=sel.includes(t)?sel.filter(x=>x!==t):sel.length<3?[...sel,t]:sel; desenha2(); });
+          const add=()=>{ const v=c.querySelector("#out").value.trim().replace(/\s+/g," "); if(!v||sel.length>=3||sel.includes(v)) return; click(); sel.push(v.charAt(0).toUpperCase()+v.slice(1)); desenha2(); };
+          c.querySelector("#add").onclick=add; c.querySelector("#out").onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); add(); } };
+          c.querySelector("#ok").onclick=()=>{ click(); resp.olfato_cheiros=sel.slice(); passo3(); }; };
+        desenha2(); }
+      function passo3(){ c.innerHTML=`${cab(s,"Desses 3, qual é o mais gostoso?")}<div class="opts">${sel.map(t=>`<button class="opt" data-t="${esc(t)}">${esc(t)}</button>`).join("")}</div>`;
+        c.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ click(); resp.olfato_favorito=b.dataset.t; vibra([10,40,10]);
+          c.innerHTML=`<div class="rot" style="color:${s.cor}">Seu cheiro do momento</div><div class="campeao">${esc(b.dataset.t)}</div><p class="fala2" style="margin-bottom:0">Guarde esse cheiro. Ele conta onde você está agora.</p>`; fim(); }); }
+    }); },
   /* Segure firme: segurar até a luz encher, sem mexer o dedo */
   equilibrio(s,fim){ const L=2*Math.PI*96;
     mostra(`${cab(s,"Encoste o dedo no centro e segure firme, sem mexer, até a luz fechar o círculo.")}<div class="firme" id="fr"><svg viewBox="0 0 220 220"><circle cx="110" cy="110" r="96" fill="none" stroke="#1d2654" stroke-width="10"/><circle id="arco" cx="110" cy="110" r="96" fill="none" stroke="#b48cff" stroke-width="10" stroke-linecap="round" stroke-dasharray="0 ${L}" transform="rotate(-90 110 110)" style="filter:drop-shadow(0 0 8px #b48cff)"/></svg><div class="alvo" id="alvo">Segure</div></div><div class="res" id="res"></div>`, c=>{
@@ -553,21 +623,45 @@ const JOGOS={
       ["pointerup","pointercancel"].forEach(ev=>alvo.addEventListener(ev,()=>{ if(tm) zera("Soltou antes. Tente de novo."); }));
       alvo.oncontextmenu=e=>e.preventDefault(); }); },
   /* Corpo que acende: silhueta neutra em linha de luz; toque onde sente */
-  corpo(s,fim){ const P=[["cabeca","Cabeça",'<circle cx="100" cy="42" r="26"/>'],["peito","Peito",'<rect x="66" y="78" width="68" height="52" rx="16"/>'],["barriga","Barriga",'<rect x="70" y="130" width="60" height="48" rx="14"/>'],
-      ["bracoE","Braço esquerdo",'<path d="M64 84l-18 10-14 92 18 4 16-80z"/>'],["bracoD","Braço direito",'<path d="M136 84l18 10 14 92-18 4-16-80z"/>'],["maos","Mãos",'<circle cx="38" cy="200" r="14"/><circle cx="162" cy="200" r="14"/>'],
-      ["pernas","Pernas",'<path d="M72 178h56l-4 120h-18l-6-90-6 90H76z"/>'],["pes","Pés",'<ellipse cx="82" cy="312" rx="16" ry="9"/><ellipse cx="118" cy="312" rx="16" ry="9"/>']], on=new Set();
-    mostra(`${cab(s,"Toque onde você sente o seu corpo agora. Pode tocar em mais de um lugar.")}
+  /* Mapa do agora: tocar onde sente alguma coisa, dizer o que sente; o app devolve um gesto de 10 s */
+  corpo(s,fim){ const P=[["cabeca","Cabeça","a cabeça",'<circle cx="100" cy="42" r="26"/>'],["peito","Peito","o peito",'<rect x="66" y="78" width="68" height="52" rx="16"/>'],["barriga","Barriga","a barriga",'<rect x="70" y="130" width="60" height="48" rx="14"/>'],
+      ["bracos","Braços","os braços",'<path d="M64 84l-18 10-14 92 18 4 16-80z"/><path d="M136 84l18 10 14 92-18 4-16-80z"/>'],["maos","Mãos","as mãos",'<circle cx="38" cy="200" r="14"/><circle cx="162" cy="200" r="14"/>'],
+      ["pernas","Pernas","as pernas",'<path d="M72 178h56l-4 120h-18l-6-90-6 90H76z"/>'],["pes","Pés","os pés",'<ellipse cx="82" cy="312" rx="16" ry="9"/><ellipse cx="118" cy="312" rx="16" ry="9"/>']];
+    const SENTE=[["tenso","Tenso","#ff8a3d"],["leve","Leve","#9be7b0"],["quente","Quente","#ff5a6e"],["cansado","Cansado","#a9b3d1"],["vivo","Vivo","#f5c542"]];
+    const TENSO={cabeca:"Solte a testa e o queixo. Deixe o ar sair devagar, 3 vezes.",peito:"Abra os ombros e puxe o ar bem fundo. Solte devagar, 3 vezes.",barriga:"Deixe a barriga encher de ar… e esvaziar devagar. 3 vezes.",
+      bracos:"Estique os braços para cima… e solte de uma vez. 3 vezes.",maos:"Feche as mãos com força por 3 segundos… e abra devagar. 3 vezes.",pernas:"Aperte as pernas por 3 segundos… e solte devagar. 3 vezes.",pes:"Aperte os dedos dos pés… e solte devagar. 3 vezes."};
+    const GESTO={ tenso:(p,k)=>TENSO[k],
+      cansado:p=>`Espreguice ${p} bem devagar, como quem acorda.`, quente:(p,k)=>`Repare nesse calor ${EM[k]}. De onde ele vem?`,
+      vivo:p=>`Mexa ${p} de leve e aproveite essa energia.`, leve:()=>"Guarde isso: o que te deixou leve hoje?" };
+    const EM={cabeca:"na cabeça",peito:"no peito",barriga:"na barriga",bracos:"nos braços",maos:"nas mãos",pernas:"nas pernas",pes:"nos pés"};
+    const marcas=[]; let atual=null;
+    mostra(`${cab(s,"Toque onde você sente alguma coisa agora. Até 3 lugares.")}
       <svg class="corpo" viewBox="0 0 200 330" role="group" aria-label="Silhueta do corpo">
         <defs><filter id="luz" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
         <filter id="brilho" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter></defs>
-        ${P.map(([k,n,d])=>`<g class="parte" data-k="${k}" role="button" aria-label="${n}" tabindex="0">${d}</g>`).join("")}
+        ${P.map(([k,n,,d])=>`<g class="parte" data-k="${k}" role="button" aria-label="${n}" tabindex="0">${d}</g>`).join("")}
         <g class="linha"><circle cx="100" cy="42" r="24"/><path d="M92 66v10M108 66v10M66 84c10-8 58-8 68 0M66 84l-20 12-12 88M134 84l20 12 12 88M66 84l4 96M134 84l-4 96M70 180l6 118M130 180l-6 118M100 200l-4 98M100 200l4 98M70 180h60"/><circle cx="38" cy="200" r="10"/><circle cx="162" cy="200" r="10"/><path d="M68 312h26M106 312h26"/></g>
-      </svg><div class="partes" id="pt">Nenhuma parte acesa ainda</div><button class="btn" id="ok" disabled>Pronto</button>`, c=>{
-      const pt=c.querySelector("#pt"), ok=c.querySelector("#ok");
-      const nomeia=()=>{ const n=P.filter(x=>on.has(x[0])).map(x=>x[1]); pt.textContent=n.length?"Acesas: "+n.join(", "):"Nenhuma parte acesa ainda"; ok.disabled=!n.length; };
-      c.querySelectorAll(".parte").forEach(g=>{ const t=()=>{ const k=g.dataset.k; if(on.has(k)){ on.delete(k); g.classList.remove("on"); } else { on.add(k); g.classList.add("on"); tom(523,.5); vibra(10); } click(); nomeia(); };
+      </svg>
+      <div class="sentes" id="st"><p id="stq">O que você sente aí?</p>${SENTE.map(([k,n,cor])=>`<button type="button" data-s="${k}" style="--k:${cor}">${n}</button>`).join("")}</div>
+      <div class="partes" id="pt">Nenhum lugar marcado ainda</div><button class="btn" id="ok" disabled>Pronto</button>`, c=>{
+      const st=c.querySelector("#st"), pt=c.querySelector("#pt"), ok=c.querySelector("#ok");
+      const nomeia=()=>{ pt.textContent=marcas.length?marcas.map(m=>P.find(x=>x[0]===m.k)[1]+": "+SENTE.find(x=>x[0]===m.s)[1].toLowerCase()).join(" · "):"Nenhum lugar marcado ainda"; ok.disabled=!marcas.length; };
+      c.querySelectorAll(".parte").forEach(g=>{ const t=()=>{ const k=g.dataset.k, i=marcas.findIndex(m=>m.k===k); click();
+          if(i>=0){ marcas.splice(i,1); g.classList.remove("on"); g.style.removeProperty("--k"); st.classList.remove("on"); nomeia(); return; }
+          if(marcas.length>=3){ pt.textContent="Já são 3 lugares. Toque num deles para desmarcar."; return; }
+          atual=k; c.querySelector("#stq").textContent="O que você sente "+EM[k]+"?"; st.classList.add("on"); try{ st.scrollIntoView({behavior:"smooth",block:"center"}); }catch(e){} };
         g.addEventListener("click",t); g.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); t(); } }); });
-      ok.onclick=()=>{ click(); resp.corpo_partes=P.filter(x=>on.has(x[0])).map(x=>x[1]); fim(); }; }); }
+      st.querySelectorAll("button").forEach(b=>b.onclick=()=>{ if(!atual) return; const cor=SENTE.find(x=>x[0]===b.dataset.s)[2], g=c.querySelector(`.parte[data-k="${atual}"]`);
+        marcas.push({k:atual,s:b.dataset.s}); g.style.setProperty("--k",cor+"99"); g.classList.add("on"); tom(523,.4); vibra(10); click(); atual=null; st.classList.remove("on"); nomeia(); });
+      const gesto=m=>{ const parte=P.find(x=>x[0]===m.k), txt=GESTO[m.s](parte[2],m.k); resp.corpo_mapa=marcas.map(x=>({lugar:P.find(y=>y[0]===x.k)[1],sente:x.s})); resp.corpo_gesto=txt;
+        let n=10; c.innerHTML=`${cab(s,"Um gesto de 10 segundos, só para você.")}${anel("respira")}<p class="gesto">${esc(txt)}</p><p class="olhos" id="tg">10</p><button class="btn sec" id="fg" style="margin-top:8px">Pronto</button>`;
+        somSuave(s.cor); const tm=setInterval(()=>{ if(!aindaNoJogo(s)){ clearInterval(tm); return; } n--; c.querySelector("#tg").textContent=n>0?n:"Feito."; if(n<=0){ clearInterval(tm); acaba(); } },1000);
+        const acaba=()=>{ clearInterval(tm); pararSom(); if(c.querySelector("#fg")) c.querySelector("#fg").remove(); vibra([10,40,10]); fim(); };
+        c.querySelector("#fg").onclick=()=>{ click(); acaba(); }; };
+      ok.onclick=()=>{ click(); st.classList.remove("on");
+        if(marcas.length===1) return gesto(marcas[0]);
+        c.innerHTML=`${cab(s,"Qual desses está mais forte agora?")}<div class="opts">${marcas.map((m,i)=>`<button class="opt" data-i="${i}">${P.find(x=>x[0]===m.k)[1]} · ${SENTE.find(x=>x[0]===m.s)[1].toLowerCase()}</button>`).join("")}</div>`;
+        c.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ click(); gesto(marcas[+b.dataset.i]); }); }; }); }
 };
 
 function curtiu(p){
@@ -614,10 +708,12 @@ function grafico(){
       <div class="graf" id="graf">${SENT.map((s,i)=>`<span class="l" data-v="${v[i]}" style="--c:${s.cor}"></span><span class="t">${s.s.replace("Noção do corpo","Noção<br>do corpo")}</span>`).join("")}</div>
       <p class="txt">Quanto maior a luz, mais você curtiu o jogo daquele sentido.</p>`;
   const c3=`<div class="titc">Jogo por jogo</div><div class="jxj">${SENT.map((s,i)=>`<div style="--c:${s.cor}"><i></i><b>${s.s}</b><span class="${pul(s)?"pulado":""}">${pul(s)?"pulado":COMO[v[i]]}</span></div>`).join("")}</div>`;
-  const CARDS=[c1,c2,c3];
+  const cd=resp.carta_dourada, sd=cd&&SENT.find(x=>x.s===cd.sentido);
+  const c4=cd&&sd?`<div class="titc">Sua carta dourada</div><div class="dourada"><div class="carta2"><img src="${foto(sd.id,cd.foto)}" alt=""></div><div class="forte" style="font-size:34px;color:#f5c542">${esc(cd.escolha)}</div><p class="txt">O momento que você guardou hoje.</p></div>`:"";
+  const CARDS=[c1,c2,c3].concat(c4?[c4]:[]);
   mostra(`<div class="rot">Fase 2 completa</div>
     ${CARDS.map((h,i)=>`<div class="gcard ${i===0?"on":""}" data-g="${i}">${h}</div>`).join("")}
-    <div class="gpontos">${CARDS.map((h,i)=>`<button type="button" class="${i===0?"on":""}" data-p="${i}" aria-label="Parte ${i+1} de 3"></button>`).join("")}</div>
+    <div class="gpontos">${CARDS.map((h,i)=>`<button type="button" class="${i===0?"on":""}" data-p="${i}" aria-label="Parte ${i+1} de ${CARDS.length}"></button>`).join("")}</div>
     <button class="btn" id="gprox">Próximo</button>
     <button class="btn sec" id="gnovo" style="display:none" onclick="recomecar()">Fazer de novo</button>`, c=>{
     let g=0; const cards=c.querySelectorAll(".gcard"), pts=c.querySelectorAll(".gpontos button"), prox=c.querySelector("#gprox"), novo=c.querySelector("#gnovo");
@@ -639,14 +735,21 @@ function envia(){ if(!ENDPOINT||!resp.consentiu) return; try{ const r={...resp};
 
 /* ============ PAINEL DE VALIDAÇÃO (só na prévia) ============ */
 const ITENS=[
- ["pular","Bloco extra · antes do Bloco 2","\"Pular este jogo\" no Segure firme","Depois de 2 tentativas que não deram certo, aparece embaixo do jogo um botão discreto \"Pular este jogo\". Ao tocar, o app segue para o próximo sentido. No gráfico final, o Equilíbrio aparece como \"pulado\", sem nota e sem erro.",R.findIndex(x=>x.t==="jogo"&&x.i===SENT.findIndex(z=>z.id==="equilibrio"))]
+ ["t1","1 \u00b7 Audi\u00e7\u00e3o","Som dos bot\u00f5es Ouvir","Os bot\u00f5es \u201cOuvir o primeiro\u201d e \u201cOuvir o segundo\u201d agora tocam o som de outro jeito, que funciona melhor no celular.",R.findIndex(x=>x.t==="jogo"&&SENT[x.i].id==="audicao")],
+ ["t2","2 \u00b7 Tato","Carinho mais claro","M\u00e3ozinha mostrando o movimento, texto \u201carraste de um lado para o outro\u201d e cada foto completa com 1 ou 2 passadas.",R.findIndex(x=>x.t==="jogo"&&SENT[x.i].id==="tato")],
+ ["t3","3 \u00b7 Olfato","Ca\u00e7a aos cheiros","Olhos fechados 10 segundos, marcar 3 cheiros de onde voc\u00ea est\u00e1 (tocar ou escrever) e escolher o mais gostoso.",R.findIndex(x=>x.t==="jogo"&&SENT[x.i].id==="olfato")],
+ ["t4","4 \u00b7 Todas","Bot\u00e3o \u201cpular \u2192\u201d","Discreto, no canto de baixo \u00e0 direita, em todas as telas que pedem resposta ou jogo.",R.findIndex(x=>x.t==="vaso")],
+ ["t5","5 \u00b7 Equil\u00edbrio","Bolinha menor","A bolinha do Segure firme ficou menor (de 120 para 96).",R.findIndex(x=>x.t==="jogo"&&SENT[x.i].id==="equilibrio")],
+ ["t6","6 \u00b7 No\u00e7\u00e3o do corpo","Mapa do agora","Toque onde sente algo, diga o que sente (tenso, leve, quente, cansado, vivo) e receba um gesto de 10 segundos.",R.findIndex(x=>x.t==="jogo"&&SENT[x.i].id==="corpo")],
+ ["t7","7 \u00b7 Saborear","Olhe, respire, guarde","Foto em tela cheia com som suave; 3 passos: olhe, respire com a bola, segure a foto e ela vira carta dourada.",R.findIndex(x=>x.t==="saborear")],
+ ["t8","8 \u00b7 Gr\u00e1fico","Resultado em cart\u00f5es","Uma coisa por vez: sentido mais forte, os 7 sentidos, jogo por jogo e a carta dourada. Letras grandes.",R.findIndex(x=>x.t==="grafico")]
 ];
 const REVISAR=["Mudar o visual","Mudar o texto","Mudar como funciona","Tirar do app"];
 let val={}, vdb=null, VDOC=null;
 function painel(){
   let el=document.getElementById("vp"); if(!el){ el=document.createElement("div"); el.id="vp"; el.className="vpainel"; document.body.appendChild(el); }
   const nv=ITENS.filter(x=>val[x[0]]&&val[x[0]].s==="validado").length;
-  el.innerHTML=`<div class="vcaixa"><div class="rot">Prévia · app novo · bloco extra (Pular este jogo)</div><h2>Validar item por item</h2><p class="sub">${nv} de ${ITENS.length} validados. "Ver" leva direto para a tela do item.</p>
+  el.innerHTML=`<div class="vcaixa"><div class="rot">Prévia · app novo · 8 mudanças do teste no celular</div><h2>Validar item por item</h2><p class="sub">${nv} de ${ITENS.length} validados. "Ver" leva direto para a tela do item.</p>
     ${ITENS.map(([id,num,tt,ds,alvo])=>{ const v=val[id]||{}; return `<div class="vitem"><div class="rot" style="margin:0">${num}</div><div class="tt">${tt}</div><div class="ds">${ds}</div>
       <div class="bb"><button class="v ${v.s==="validado"?"on":""}" onclick="marca('${id}','validado')">Validado</button><button class="r ${v.s==="revisar"?"on":""}" onclick="marca('${id}','revisar')">Revisar</button><button class="ir" onclick="ir(${alvo})">Ver</button></div>
       <div class="rev ${v.s==="revisar"?"on":""}">${REVISAR.map(o=>`<button class="${v.o===o?"on":""}" onclick="marcaRev('${id}','${o}')">${o}</button>`).join("")}</div></div>`; }).join("")}
@@ -657,15 +760,15 @@ function painel(){
 function fechaPainel(){ const el=document.getElementById("vp"); if(el) el.classList.remove("on"); }
 function marca(id,s){ val[id]={...(val[id]||{}),s}; if(s==="validado") delete val[id].o; salvaVal(); painel(); }
 function marcaRev(id,o){ val[id]={s:"revisar",o}; salvaVal(); painel(); }
-function salvaVal(){ try{ localStorage.setItem("7e_app_novo_val_pular",JSON.stringify(val)); }catch(e){}
+function salvaVal(){ try{ localStorage.setItem("7e_app_novo_val_teste8",JSON.stringify(val)); }catch(e){}
   if(VDOC) VDOC.set({atualizado:new Date().toISOString(), itens:ITENS.map(x=>({id:x[0],item:x[1]+" · "+x[2],situacao:(val[x[0]]||{}).s||null,revisar:(val[x[0]]||{}).o||null}))}).catch(()=>{}); }
 
 /* ============ INÍCIO ============ */
 try{ const s=JSON.parse(localStorage.getItem("7e_app_novo")||"null"); if(s&&s.resp&&s.pos>0&&s.pos<R.length-2){ resp=s.resp; pos=s.pos; inicio=s.inicio||Date.now(); inicio2=s.inicio2||null; } }catch(e){}
-try{ val=JSON.parse(localStorage.getItem("7e_app_novo_val_pular")||"{}")||{}; }catch(e){}
+try{ val=JSON.parse(localStorage.getItem("7e_app_novo_val_teste8")||"{}")||{}; }catch(e){}
 if(PREVIA){ const b=document.createElement("button"); b.className="vbtn"; b.type="button"; b.textContent="Validar a prévia"; b.onclick=()=>{ click(); painel(); }; document.body.appendChild(b); }
 desenha();
-if(PREVIA && window.claude && claude.use){ claude.use("db").then(db=>{ if(!db) return; VDOC=db.doc("validacao/app-novo-bloco-pular"); return VDOC.get().then(sn=>{ const d=sn&&(sn.data?sn.data():sn); if(d&&d.itens&&!Object.keys(val).length){ d.itens.forEach(x=>{ if(x.situacao) val[x.id]={s:x.situacao,o:x.revisar||undefined}; }); } }); }).catch(()=>{}); }
+if(PREVIA && window.claude && claude.use){ claude.use("db").then(db=>{ if(!db) return; VDOC=db.doc("validacao/app-novo-teste8"); return VDOC.get().then(sn=>{ const d=sn&&(sn.data?sn.data():sn); if(d&&d.itens&&!Object.keys(val).length){ d.itens.forEach(x=>{ if(x.situacao) val[x.id]={s:x.situacao,o:x.revisar||undefined}; }); } }); }).catch(()=>{}); }
 </script>
 </body>
 </html>
