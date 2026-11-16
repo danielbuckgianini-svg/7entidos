@@ -218,11 +218,28 @@ h1 em,h2 em{color:var(--ouro)}
 .graf .l{position:absolute;border-radius:50%;background:var(--c);transform:translate(-50%,-50%);transition:all 1.2s cubic-bezier(.2,.8,.2,1)}
 .graf .t{position:absolute;font-size:14px;font-weight:700;color:var(--azul);transform:translate(-50%,-50%);white-space:nowrap;text-align:center;line-height:1.1}
 .graf .meio{position:absolute;inset:31%;border-radius:50%;display:grid;place-items:center;text-align:center;background:radial-gradient(circle,rgba(17,27,61,.9),rgba(10,17,40,0) 72%)}
+.gcard{display:none;padding:26px 20px 22px;border-radius:26px;background:linear-gradient(160deg,rgba(35,50,110,.7),rgba(17,27,61,.85));border:1px solid var(--linha);box-shadow:0 30px 60px -30px rgba(0,0,0,.9);margin:0 auto 18px;max-width:460px}
+.gcard.on{display:block;animation:entra .5s cubic-bezier(.2,.8,.2,1) both}
+.gcard .titc{font:400 15px "Space Mono",monospace;color:var(--azul);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+.gcard .forte{font-family:Fraunces,serif;font-size:clamp(44px,13vw,60px);line-height:1.02;margin:10px 0 8px}
+.gcard .luzg{width:64px;height:64px;border-radius:50%;margin:8px auto 14px;background:var(--c);box-shadow:0 0 30px 10px var(--c);animation:pulsa 2.4s ease-in-out infinite}
+.gcard .txt{font-size:21px;line-height:1.4}
+.gcard .graf .t{font-size:15px}
+.jxj{display:grid;gap:10px;text-align:left;margin:4px 0 0}
+.jxj div{display:flex;align-items:center;gap:12px;font-size:21px;padding:10px 4px;border-bottom:1px solid var(--linha)}
+.jxj div:last-child{border-bottom:none}
+.jxj i{width:16px;height:16px;border-radius:50%;background:var(--c);box-shadow:0 0 10px var(--c);flex:none}
+.jxj b{font-weight:800;flex:1}
+.jxj span{color:var(--azul);font-size:19px}
+.jxj span.pulado{font-style:italic}
+.gpontos{display:flex;gap:10px;justify-content:center;margin:0 0 18px}
+.gpontos button{all:unset;cursor:pointer;width:12px;height:12px;border-radius:50%;background:#2a3570}
+.gpontos button.on{background:var(--ouro);box-shadow:0 0 10px var(--ouro)}
 .legenda{display:grid;grid-template-columns:1fr 1fr;gap:6px 18px;max-width:420px;margin:6px auto 22px;text-align:left;font-size:16px}
 .legenda span{display:flex;align-items:center;gap:8px}.legenda i{width:12px;height:12px;border-radius:50%;background:var(--c);box-shadow:0 0 8px var(--c);flex:none}
 
 /* painel de validação (só na prévia) */
-.vbtn{position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:30;all:unset;cursor:pointer;position:fixed;right:12px;bottom:calc(64px + env(safe-area-inset-bottom));padding:12px 18px;border-radius:999px;background:#15110a;border:1.5px solid var(--ouro);color:var(--ouro);font-weight:800;font-size:16px;box-shadow:0 10px 30px rgba(0,0,0,.6)}
+.vbtn{position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:30;all:unset;cursor:pointer;position:fixed;right:12px;bottom:auto;top:calc(12px + env(safe-area-inset-top));padding:12px 18px;border-radius:999px;background:#15110a;border:1.5px solid var(--ouro);color:var(--ouro);font-weight:800;font-size:16px;box-shadow:0 10px 30px rgba(0,0,0,.6)}
 .vpainel{position:fixed;inset:0;z-index:40;background:rgba(5,8,22,.86);backdrop-filter:blur(8px);display:none;overflow:auto;padding:24px 16px 80px}
 .vpainel.on{display:block}
 .vcaixa{max-width:720px;margin:0 auto}
@@ -585,17 +602,32 @@ function revela(){
   envia();
 }
 function grafico(){
+  /* uma coisa por vez: 3 cartões (sentido mais forte → os 7 sentidos → jogo por jogo) */
   const v=SENT.map(s=>resp["curtiu_"+s.id]||0), max=Math.max(...v), forte=SENT.filter((s,i)=>v[i]===max&&max>0);
-  mostra(`<div class="rot">Fase 2 completa</div><h2>Seus <em>7 sentidos</em></h2>
-    <div class="graf" id="graf">${SENT.map((s,i)=>`<span class="l" data-v="${v[i]}" style="--c:${s.cor}"></span><span class="t">${s.s.replace("Noção do corpo","Noção<br>do corpo")}</span>`).join("")}
-      <div class="meio"><div><div class="miud" style="margin:0">mais forte</div><div style="font-family:Fraunces,serif;font-size:24px;line-height:1.1;color:${forte[0]?forte[0].cor:"#f4ecdc"}">${forte.map(s=>s.s).join("<br>")||"—"}</div></div></div></div>
-    <div class="legenda">${SENT.map((s,i)=>`<span style="--c:${s.cor}"><i></i>${s.s}: ${resp["jogo_"+s.id]==="pulado"?'<b class="pulado">pulado</b>':["—","curti pouco","curti","curti muito"][v[i]]}</span>`).join("")}</div>
-    <p class="fala2">A luz de cada sentido fica maior quanto mais você curtiu o jogo dele.</p>
-    <button class="btn sec" onclick="recomecar()">Fazer de novo</button>`, c=>{
-    const g=c.querySelector("#graf"), W=g.clientWidth, C=W/2, R0=W*.29, RT=W*.455, Ls=c.querySelectorAll(".l"), Ts=c.querySelectorAll(".t");
-    SENT.forEach((x,i)=>{ const a=(i*360/7-90)*Math.PI/180; Ls[i].style.left=(C+Math.cos(a)*R0)+"px"; Ls[i].style.top=(C+Math.sin(a)*R0)+"px"; Ls[i].style.width=Ls[i].style.height="8px"; Ls[i].style.opacity=.2;
-      Ts[i].style.left=(C+Math.cos(a)*RT)+"px"; Ts[i].style.top=(C+Math.sin(a)*RT)+"px"; });
-    setTimeout(()=>{ Ls.forEach((el,i)=>{ const val=+el.dataset.v, d=12+val*11; el.style.width=d+"px"; el.style.height=d+"px"; el.style.opacity=.3+val*.23; el.style.boxShadow=`0 0 ${8+val*10}px ${2+val*3}px ${SENT[i].cor}`; }); },150); });
+  const COMO=["—","curti pouco","curti","curti muito"], pul=s=>resp["jogo_"+s.id]==="pulado";
+  const f0=forte[0];
+  const c1=f0?`<div class="titc">Seu sentido mais forte hoje</div><div class="luzg" style="--c:${f0.cor}"></div>
+      <div class="forte" style="color:${f0.cor}">${forte.map(s=>s.s).join(" e ")}</div>
+      <p class="txt">Foi ${forte.length>1?"onde":"o jogo que"} você mais curtiu: <b>${forte.map(s=>esc(s.jogo)).join(" e ")}</b>.</p>`
+    :`<div class="titc">Hoje</div><div class="luzg" style="--c:#f5c542"></div><div class="forte" style="color:#f5c542">No seu ritmo</div><p class="txt">Você passou pelos 7 sentidos do seu jeito.</p>`;
+  const c2=`<div class="titc">Seus 7 sentidos</div>
+      <div class="graf" id="graf">${SENT.map((s,i)=>`<span class="l" data-v="${v[i]}" style="--c:${s.cor}"></span><span class="t">${s.s.replace("Noção do corpo","Noção<br>do corpo")}</span>`).join("")}</div>
+      <p class="txt">Quanto maior a luz, mais você curtiu o jogo daquele sentido.</p>`;
+  const c3=`<div class="titc">Jogo por jogo</div><div class="jxj">${SENT.map((s,i)=>`<div style="--c:${s.cor}"><i></i><b>${s.s}</b><span class="${pul(s)?"pulado":""}">${pul(s)?"pulado":COMO[v[i]]}</span></div>`).join("")}</div>`;
+  const CARDS=[c1,c2,c3];
+  mostra(`<div class="rot">Fase 2 completa</div>
+    ${CARDS.map((h,i)=>`<div class="gcard ${i===0?"on":""}" data-g="${i}">${h}</div>`).join("")}
+    <div class="gpontos">${CARDS.map((h,i)=>`<button type="button" class="${i===0?"on":""}" data-p="${i}" aria-label="Parte ${i+1} de 3"></button>`).join("")}</div>
+    <button class="btn" id="gprox">Próximo</button>
+    <button class="btn sec" id="gnovo" style="display:none" onclick="recomecar()">Fazer de novo</button>`, c=>{
+    let g=0; const cards=c.querySelectorAll(".gcard"), pts=c.querySelectorAll(".gpontos button"), prox=c.querySelector("#gprox"), novo=c.querySelector("#gnovo");
+    const anima=()=>{ const gr=c.querySelector("#graf"); if(!gr||gr.dataset.ok) return; gr.dataset.ok=1; const W=gr.clientWidth, C=W/2, R0=W*.29, RT=W*.455, Ls=gr.querySelectorAll(".l"), Ts=gr.querySelectorAll(".t");
+      SENT.forEach((x,i)=>{ const a=(i*360/7-90)*Math.PI/180; Ls[i].style.left=(C+Math.cos(a)*R0)+"px"; Ls[i].style.top=(C+Math.sin(a)*R0)+"px"; Ls[i].style.width=Ls[i].style.height="8px"; Ls[i].style.opacity=.2;
+        Ts[i].style.left=(C+Math.cos(a)*RT)+"px"; Ts[i].style.top=(C+Math.sin(a)*RT)+"px"; });
+      setTimeout(()=>{ Ls.forEach((el,i)=>{ const val=+el.dataset.v, d=12+val*12; el.style.width=d+"px"; el.style.height=d+"px"; el.style.opacity=.3+val*.23; el.style.boxShadow=`0 0 ${8+val*10}px ${2+val*3}px ${SENT[i].cor}`; }); },150); };
+    const vai=n=>{ g=n; click(); cards.forEach((x,i)=>x.classList.toggle("on",i===g)); pts.forEach((x,i)=>x.classList.toggle("on",i===g));
+      prox.style.display=g<cards.length-1?"":"none"; novo.style.display=g===cards.length-1?"":"none"; if(g===1) anima(); window.scrollTo(0,0); };
+    prox.onclick=()=>vai(Math.min(g+1,cards.length-1)); pts.forEach(x=>x.onclick=()=>vai(+x.dataset.p)); });
 }
 function recomecar(){ click(); resp={}; inicio=null; inicio2=null; pos=0; try{ localStorage.removeItem("7e_app_novo"); localStorage.removeItem("7e_app_novo_fase1"); }catch(e){} desenha(); }
 
