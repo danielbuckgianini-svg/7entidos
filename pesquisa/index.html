@@ -1208,6 +1208,7 @@ function render(){
 }
 /* fim de um jogo: se ainda tem outro jogo rodando na página, não redesenha (para não reiniciar o outro) */
 function gameDone(gid,v){
+  if(gid==="audicao") pararSom();
   answers["f2_"+gid+"_fim"]=v; click();
   const s=S[idx];
   if(s.gs.every(g=>answers["f2_"+g.id+"_fim"]!=null)) rr();
@@ -1521,6 +1522,13 @@ const GAMES = {
     const SONS=[["mar","Som do mar",0,"🌊"],["chuva","Chuva no telhado",2,"🌧️"],["musica","Música ao vivo",1,"🎸"]];
     const ordem=SONS.map((_,i)=>i).sort(()=>Math.random()-.5);
     const R=ordem.map(i=>({k:SONS[i][0], feito:false, ok:false})); let r=0;
+    /* aviso gentil depois de 1 minuto no jogo (17/11); "Sim, seguir" conta como jogo pulado */
+    setTimeout(()=>{ if(!document.body.contains(el) || answers.f2_audicao_fim!=null || document.getElementById("avisomin")) return;
+      const av=document.createElement("div"); av.className="avisomin"; av.id="avisomin";
+      av.innerHTML=`<p>Quer seguir para o próximo?</p><div class="ops"><button class="btn" type="button" id="avsim">Sim, seguir</button><button class="btn ghost" type="button" id="avnao">Quero continuar</button></div>`;
+      el.after(av); av.scrollIntoView({behavior:"smooth",block:"center"});
+      av.querySelector("#avsim").onclick=()=>{ pararSom(); gameDone("audicao","pulou"); };
+      av.querySelector("#avnao").onclick=()=>{ click(); av.remove(); }; },60000);
     const toca=(k,bt)=>{ somPronto().then(()=>{ tocarSom(k, document.createElement("button")); }); if(bt){ bt.classList.add("tocando"); bt.textContent="🔊 Tocando…"; setTimeout(()=>{ bt.classList.remove("tocando"); bt.textContent="▶ Ouvir de novo"; },5000); } };
     const draw=()=>{ const x=R[r];
       el.innerHTML=`<div class="round"><span class="rlab">Rodada ${r+1} de 3</span>
