@@ -3,7 +3,7 @@
      sem internet, mostra a página "Sem internet" (o app usa arquivos de fora,
      como o React, que não funcionam sem conexão).
    - Ícones e a página "Sem internet": ficam guardados no aparelho. */
-const VERSAO = '7entidos-app-v1';
+const VERSAO = '7entidos-app-v2';
 const GUARDAR = [
   '/app/offline.html',
   '/app/manifest.webmanifest',
