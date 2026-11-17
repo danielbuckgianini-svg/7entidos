@@ -371,6 +371,9 @@ body.tela-inicio .logo-top{visibility:hidden}
 .avisomin p{margin:0 0 10px;font-size:18px;font-weight:700}
 .avisomin .ops{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
 .introapp .introfrase{font-size:26px;line-height:1.25;margin:10px auto 6px;max-width:520px}
+.exres{margin:14px auto 0;max-width:340px}
+.exres img{width:100%;border-radius:16px;box-shadow:0 10px 26px rgba(0,0,0,.45);display:block}
+.exres figcaption{margin-top:8px;font-weight:800;font-size:18px;color:#F5C542}
 .sompic .exemplo{position:absolute;top:8px;right:8px;border:0;border-radius:999px;padding:6px 10px;font:700 16px Manrope,system-ui,sans-serif;background:rgba(5,8,20,.78);color:#fff;cursor:pointer;z-index:2}
 .prato .ping{width:46%;height:46%}
 .prato.pronto .pvazio{filter:drop-shadow(0 0 22px rgba(245,197,66,.55)) drop-shadow(0 10px 18px rgba(0,0,0,.45))}
@@ -738,6 +741,7 @@ function introApp(){
   stage.innerHTML=`<div class="scene center introapp">
     <div class="logo-ini"><img src="logo-7entidos.png" alt="7entidos · A vida é feita de boas sensações"></div>
     <h1 class="introfrase">Monte o seu mapa das boas sensações e receba ideias para se sentir bem todo dia.</h1>
+    <figure class="exres"><img src="exemplo-resultado.jpg" alt="Exemplo do gráfico dos sentidos que a pessoa recebe no final"><figcaption>É isso que você vai receber no final</figcaption></figure>
     <button class="btn" style="margin-top:18px" onclick="click();startFlow('app')">Começar →</button>
     <div class="nav"><button class="back" onclick="click();view='escolha';render();window.scrollTo({top:0})">← voltar</button></div></div>`;
 }
