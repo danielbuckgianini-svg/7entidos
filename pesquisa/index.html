@@ -608,7 +608,7 @@ function buildApp(){
   let jg=0;
   F2PAGINAS.flat().forEach(gid=>{ const g=G2(gid); jg++;
     q({type:"f2", id:"f2_"+g.id, gs:[g], block:"Fase 2 · jogo "+jg+" de 7"}); });
-  par({id:"proposito", block:"Empresa", title:"Na sua opinião, pra que serve o 7entidos?", sub:"Escolha a frase que mais combina com o que você viu.", opts:["Descobrir o que te faz bem através dos sete sentidos","Jogar mini jogos para passar o tempo","Um app de meditação","Ainda não entendi"]}, {id:"confianca", block:"Empresa", type:"nota", title:"Quanto você confiaria no 7entidos?", legend:["0 · não confiaria nada","10 · confiaria totalmente"]}, "Empresa");
+  par({id:"proposito", block:"Empresa", title:"Na sua opinião, pra que serve o 7entidos?", sub:"Escolha a frase que mais combina com o que você viu.", opts:["Montar o meu mapa das boas sensações e receber ideias para me sentir bem","Passar o tempo com joguinhos","Medir a minha saúde","Ainda não entendi"]}, {id:"confianca", block:"Empresa", type:"nota", title:"Quanto você confiaria no 7entidos?", legend:["0 · não confiaria nada","10 · confiaria totalmente"]}, "Empresa");
   q({type:"multi", id:"motivos_nao_comprar", block:"Montar o app · últimas perguntas", title:"Quais seriam os motivos para você não comprar um app?", sub:"Escolha quantos quiser.", opts:["É caro","Já tenho apps demais","Não confio em app pago","Não sei se vou usar sempre"]});
   q({type:"tempo", id:"app_tempo_chute", semFlow:true, block:"Montar o app · última pergunta", title:"Tempo que achou"});
   S.push({type:"revela", block:"Montar o app"});
