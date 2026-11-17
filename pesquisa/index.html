@@ -365,6 +365,11 @@ body.tela-inicio .logo-top{visibility:hidden}
 .testesom p{margin:0;font-size:18px}
 .testesom .tsdica{color:var(--muted);font-size:15px;max-width:300px}
 .testesom .btn{margin-top:6px}
+.pulafixo{position:sticky;top:8px;z-index:5;display:flex;justify-content:flex-end;margin:4px 0 -2px}
+.pulapill{border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:9px 16px;background:rgba(5,8,20,.85);color:#fff;font:700 16px Manrope,system-ui,sans-serif;cursor:pointer}
+.avisomin{margin-top:12px;padding:14px;border-radius:16px;background:rgba(245,197,66,.12);border:1px solid rgba(245,197,66,.5);text-align:center}
+.avisomin p{margin:0 0 10px;font-size:18px;font-weight:700}
+.avisomin .ops{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
 .sompic .exemplo{position:absolute;top:8px;right:8px;border:0;border-radius:999px;padding:6px 10px;font:700 16px Manrope,system-ui,sans-serif;background:rgba(5,8,20,.78);color:#fff;cursor:pointer;z-index:2}
 .prato .ping{width:46%;height:46%}
 .prato.pronto .pvazio{filter:drop-shadow(0 0 22px rgba(245,197,66,.55)) drop-shadow(0 10px 18px rgba(0,0,0,.45))}
@@ -1004,7 +1009,9 @@ function render(){
     const allFim = s.gs.every(g=>answers["f2_"+g.id+"_fim"]!=null);
     h = museuBox();
     s.gs.forEach((g,gi)=>{ const fimv=answers["f2_"+g.id+"_fim"], pis=(g.id==="audicao"||g.id==="tato")?" pisca":"";
-      const jogo = `<div id="gw_${g.id}">${!fimv?`<div class="gamebox" id="game_${g.id}"></div><button class="back" onclick="gameDone('${g.id}','pulou')">pular este jogo →</button>`
+      const jogo = `<div id="gw_${g.id}">${!fimv?(g.id==="audicao"
+            ? `<div class="pulafixo"><button class="pulapill" type="button" onclick="gameDone('audicao','pulou')">pular este jogo →</button></div><div class="gamebox" id="game_${g.id}"></div>`
+            : `<div class="gamebox" id="game_${g.id}"></div><button class="back" onclick="gameDone('${g.id}','pulou')">pular este jogo →</button>`)
           :`<div class="done-tag">${fimv==="completou"?"✓ Jogo completo!":"Jogo pulado"}</div>`}</div>`;
       const ref = "";
       h += `<div class="gsec"><div class="qnum">${nn(s.num+gi)}</div><div style="margin-bottom:6px"><span class="chip${pis}" style="--c:${g.cor};background:${g.cor}">${esc(g.s)}</span></div><h2 class="f2h">${esc(g.nome)}</h2>
