@@ -356,6 +356,9 @@ body.tela-inicio .logo-top{visibility:hidden}
 .fino b{color:#9fd0ff}
 .ouvirgrande{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px;border:0;border-radius:18px;background:#4aa8ff;color:#0a1128;font:800 20px Manrope,system-ui,sans-serif;cursor:pointer;margin:6px 0 12px}
 .ouvirgrande.tocando{background:#F5C542}
+.ggrid.g3som{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.g3som .fcard{aspect-ratio:3/4}
+.g3som .fnome{font-size:15px}
 .sompic .exemplo{position:absolute;top:8px;right:8px;border:0;border-radius:999px;padding:6px 10px;font:700 16px Manrope,system-ui,sans-serif;background:rgba(5,8,20,.78);color:#fff;cursor:pointer;z-index:2}
 .prato .ping{width:46%;height:46%}
 .prato.pronto .pvazio{filter:drop-shadow(0 0 22px rgba(245,197,66,.55)) drop-shadow(0 10px 18px rgba(0,0,0,.45))}
@@ -519,7 +522,7 @@ const F1SOM = ["mar","musica","chuva","silencio"];
 const f1foto = (fid,oi) => "opcoes/"+fid+"-"+(oi+1)+".jpg";
 const FASE2 = [
   {id:"visao", s:"Visão", cor:"#f5c542", nome:"Olho de águia", img:ICONE7("visao")},
-  {id:"audicao", s:"Audição", cor:"#4aa8ff", nome:"Qual som é mais fino?", img:ICONE7("audicao")},
+  {id:"audicao", s:"Audição", cor:"#4aa8ff", nome:"Que som é esse?", img:ICONE7("audicao")},
   {id:"tato", s:"Tato", cor:"#ff8a3d", nome:"Segure firme", img:ICONE7("tato")},
   {id:"paladar", s:"Paladar", cor:"#ff5a6e", nome:"Monte o seu prato", img:ICONE7("paladar")},
   {id:"olfato", s:"Olfato", cor:"#5ccf8a", nome:"Ache o pintor de cada quadro", img:ICONE7("olfato")},
@@ -1499,20 +1502,24 @@ const GAMES = {
         el.querySelector(".rres").innerHTML=x.ok?'<span style="color:#9be7b0">✓ Achou!</span>':'<span style="color:#ff8a80">Era o quadrado marcado de verde.</span>';
         setTimeout(()=>{ if(r<R.length-1){ r++; draw(); } else { answers.f2_visao_acertos=R.filter(y=>y.ok).length; win(); } },900); }); };
     draw(); },
-  /* "Qual som é mais fino?" (Bloco 3): explica o que é fino e grosso; respostas com imagens (passarinho = fino, tambor = grosso) */
-  audicao(el,win){ const R=[0,1,2].map(()=>{ const ag=Math.random()<.5; return {ag, f: ag?700+Math.random()*300:110+Math.random()*70, feito:false, ok:false}; }); let r=0;
+  /* "Que som é esse?" (17/11): sons do dia a dia, os mesmos da pergunta de Audição da Fase 1
+     (mar, chuva no telhado, música ao vivo). 3 rodadas, cada som aparece uma vez, 3 opções com foto. */
+  audicao(el,win){
+    const SONS=[["mar","Som do mar",0,"🌊"],["chuva","Chuva no telhado",2,"🌧️"],["musica","Música ao vivo",1,"🎸"]];
+    const ordem=SONS.map((_,i)=>i).sort(()=>Math.random()-.5);
+    const R=ordem.map(i=>({k:SONS[i][0], feito:false, ok:false})); let r=0;
+    const toca=(k,bt)=>{ somPronto().then(()=>{ tocarSom(k, document.createElement("button")); }); if(bt){ bt.classList.add("tocando"); bt.textContent="🔊 Tocando…"; setTimeout(()=>{ bt.classList.remove("tocando"); bt.textContent="▶ Ouvir de novo"; },5000); } };
     const draw=()=>{ const x=R[r];
-      el.innerHTML=`<div class="fino">🔊 <b>Som fino</b> é o som alto e agudinho, como o piu-piu de um passarinho.<br>🔊 <b>Som grosso</b> é o som baixo e encorpado, como a batida de um tambor.</div>
-        <div class="round"><span class="rlab">Rodada ${r+1} de 3</span>
+      el.innerHTML=`<div class="round"><span class="rlab">Rodada ${r+1} de 3</span>
         <button class="ouvirgrande" type="button" id="aouv">▶ Ouvir o som</button>
-        <p class="gtip" style="margin:0 0 8px">Esse som parece mais com qual?</p>
-        <div class="ggrid g2">${[["agudo","Fino, como o passarinho","🐦",880],["grave","Grosso, como o tambor","🥁",130]].map(([k,nm,em,fq])=>`<button class="fcard sompic" data-k="${k}" style="--fc:#4aa8ff" aria-label="${nm}"><span class="fsem" aria-hidden="true">${em}</span><img src="opcoes/jogo-som-${k}.jpg" alt="" onerror="this.remove()"><span class="exemplo" role="button" data-f="${fq}">▶ exemplo</span><span class="fnome">${nm}</span></button>`).join("")}</div>
+        <p class="gtip" style="margin:0 0 8px">Que som é esse?</p>
+        <div class="ggrid g3som">${SONS.map(([k,nm,oi,em])=>`<button class="fcard sompic" data-k="${k}" style="--fc:#4aa8ff" aria-label="${nm}"><span class="fsem" aria-hidden="true">${em}</span><img src="${f1foto("audicao",oi)}" alt="" onerror="this.remove()"><span class="fnome">${nm}</span></button>`).join("")}</div>
         <div class="rres"></div></div>`;
-      el.querySelector("#aouv").onclick=e=>{ tone(x.f,0); const bt=e.currentTarget; bt.classList.add("tocando"); setTimeout(()=>bt.classList.remove("tocando"),500); };
-      el.querySelectorAll(".exemplo").forEach(s=>s.onclick=e=>{ e.stopPropagation(); tone(+s.dataset.f,0); });
-      el.querySelectorAll(".sompic").forEach(b=>b.onclick=()=>{ if(x.feito) return; x.feito=true; x.ok=(b.dataset.k==="agudo")===x.ag; click(); b.classList.add("sel");
-        el.querySelector(".rres").innerHTML=x.ok?'<span style="color:#9be7b0">✓ Acertou!</span>':`<span style="color:#ff8a80">Era ${x.ag?"fino, como o passarinho":"grosso, como o tambor"}.</span>`;
-        setTimeout(()=>{ if(r<R.length-1){ r++; draw(); } else { answers.f2_audicao_acertos=R.filter(y=>y.ok).length; win(); } },900); }); };
+      el.querySelector("#aouv").onclick=e=>toca(x.k,e.currentTarget);
+      el.querySelectorAll(".sompic").forEach(b=>b.onclick=()=>{ if(x.feito) return; x.feito=true; x.ok=b.dataset.k===x.k; pararSom(); click(); b.classList.add("sel");
+        const certo=SONS.find(s=>s[0]===x.k)[1];
+        el.querySelector(".rres").innerHTML=x.ok?'<span style="color:#9be7b0">✓ Acertou!</span>':`<span style="color:#ff8a80">Era: ${certo.toLowerCase()}.</span>`;
+        setTimeout(()=>{ if(r<R.length-1){ r++; draw(); } else { answers.f2_audicao_acertos=R.filter(y=>y.ok).length; win(); } },1100); }); };
     draw(); },
   tato(el,win){ el.innerHTML=`<p class="gtip">Segure o botão apertado até a barra encher</p><div class="progress" style="height:16px"><i id="hb"></i></div>
       <button class="btn" id="hold" style="margin-top:10px;padding:12px 20px;font-size:18px;touch-action:none;user-select:none;-webkit-user-select:none">Segure aqui ✋</button><div class="err" id="gerr"></div>`;
