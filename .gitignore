@@ -1,0 +1,17 @@
+# --- Chave de envio do Google Play: NUNCA vai para o git ---
+*.keystore
+*.jks
+*.p12
+*.pem
+chave-envio/
+keystore.properties
+signing.properties
+
+# --- Arquivos gerados na montagem do app Android ---
+android-twa/.gradle/
+android-twa/build/
+android-twa/app/build/
+android-twa/local.properties
+*.aab
+*.apk
+*.idsig
