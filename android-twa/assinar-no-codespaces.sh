@@ -28,8 +28,13 @@ mkdir -p "$SAIDA"
 
 # --- 1. Java -------------------------------------------------------------
 passo "1/6 Conferindo o Java"
-if ! command -v keytool >/dev/null || ! java -version 2>&1 | grep -qE 'version "(17|2[0-9])'; then
-  sudo apt-get update -qq && sudo apt-get install -y -qq openjdk-21-jdk-headless >/dev/null
+# A ferramenta de montagem aceita Java 17 a 21 (o Java 25 do Codespaces nao serve).
+if ! java -version 2>&1 | grep -qE 'version "(17|18|19|20|21)[."]'; then
+  if [ ! -x /usr/lib/jvm/java-21-openjdk-amd64/bin/java ]; then
+    sudo apt-get update -qq && sudo apt-get install -y -qq openjdk-21-jdk-headless >/dev/null
+  fi
+  export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
+  export PATH="$JAVA_HOME/bin:$PATH"
 fi
 java -version 2>&1 | head -1
 
