@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "br.com.setentidos.app",
+      "sha256_cert_fingerprints": [
+        "PREENCHER_NO_BLOCO_B_IMPRESSAO_DIGITAL_DA_CHAVE_DE_ASSINATURA_DO_GOOGLE_PLAY"
+      ]
+    }
+  }
+]

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0A1030">
+<title>7entidos · Sem internet</title>
+<link rel="manifest" href="/app/manifest.webmanifest">
+<style>
+  :root{--noite:#0A1030;--ouro:#F2C14E;--texto:#F4F1EA;--suave:#B9BED6}
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{background:radial-gradient(900px 600px at 50% -10%,#1B2557 0%,var(--noite) 60%);color:var(--texto);
+       font:17px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+       display:flex;align-items:center;justify-content:center;padding:24px 16px;text-align:center}
+  main{max-width:420px;width:100%}
+  .mandala{width:132px;height:132px;border-radius:50%;margin:0 auto 26px;display:block;
+           box-shadow:0 0 0 6px rgba(242,193,78,.12),0 18px 50px rgba(0,0,0,.55);animation:respira 5s ease-in-out infinite}
+  h1{font-size:26px;line-height:1.2;margin:0 0 12px}
+  p{color:var(--suave);margin:0 0 26px}
+  .luzes{display:flex;justify-content:center;gap:9px;margin:0 0 28px}
+  .luzes i{width:10px;height:10px;border-radius:50%;opacity:.85}
+  button{font:inherit;font-weight:700;font-size:17px;border:0;border-radius:999px;padding:15px 28px;width:100%;
+         background:var(--ouro);color:#1A1406;cursor:pointer;box-shadow:0 6px 0 #A9822B,0 12px 24px rgba(0,0,0,.35)}
+  button:active{transform:translateY(3px);box-shadow:0 3px 0 #A9822B}
+  @keyframes respira{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+  @media (prefers-reduced-motion:reduce){.mandala{animation:none}}
+</style>
+</head>
+<body>
+<main>
+  <img class="mandala" src="/app/icones/icone-512.png" alt="Mandala do 7entidos" width="132" height="132">
+  <h1>Você está sem internet</h1>
+  <p>Respira um pouquinho. Assim que a conexão voltar, o 7entidos continua de onde você parou.</p>
+  <div class="luzes" aria-hidden="true">
+    <i style="background:#F2C14E"></i><i style="background:#B79CFF"></i><i style="background:#FF8FB8"></i>
+    <i style="background:#6FD39B"></i><i style="background:#FF9F4A"></i><i style="background:#8FD3FF"></i><i style="background:#9B7BFF"></i>
+  </div>
+  <button type="button" onclick="location.reload()">Tentar de novo</button>
+</main>
+<script>addEventListener('online',()=>location.reload());</script>
+</body>
+</html>
