@@ -1628,7 +1628,8 @@ function copiar(btn){ try{ navigator.clipboard.writeText(linhas().join("\n")).th
 /* CLIQUE DE CONFIRMAÇÃO: "tic" curto e grave, como a seta de carro novo (não incomoda) */
 function click(){ try{ somPronto().then(c=>{ try{ const t=c.currentTime, o=c.createOscillator(), f=c.createBiquadFilter(), g=c.createGain(); o.type="square"; o.frequency.setValueAtTime(150,t); f.type="lowpass"; f.frequency.value=900; g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.2,t+.004); g.gain.exponentialRampToValueAtTime(.0001,t+.07); o.connect(f).connect(g).connect(c.destination); o.start(t); o.stop(t+.08); }catch(e){} }); }catch(e){} }
 
-if(location.hash==="#app"){ startFlow("app"); } else render();
+/* #bia: quem vem da votação (/votar) entra direto na pesquisa dos personagens, começando pela Bia */
+if(location.hash==="#app"){ startFlow("app"); } else if(location.hash==="#bia"){ irPesquisa2(); } else render();
 </script>
 
 <!-- ===== SALA TRANCADA NAS 100 PESSOAS + LISTA DE ESPERA ===== -->
