@@ -1236,8 +1236,13 @@ function trava3(){
 function ligaBaixar(c){ const bt=c.querySelector("#baixar"), pv=c.querySelector("#sabprev"); if(!bt) return; let blob=null;
   imagemSabor().then(b=>{ blob=b; pv.src=URL.createObjectURL(b); pv.hidden=false; bt.disabled=false; }).catch(()=>{ bt.closest(".sabbaixa").remove(); });
   bt.onclick=()=>{ if(!blob) return; click(); resp.baixou_saborear=true; const nome="7entidos-meu-momento.jpg";
+    /* dentro da prévia do Claude, o download só funciona pelo "downloads" do próprio visualizador */
+    if(window.claude && claude.use && !NO_SITE){ claude.use("downloads").then(dl=>{ if(dl) return dl.save({filename:nome,data:blob}).catch(()=>{}); baixaComum(blob,nome); }).catch(()=>baixaComum(blob,nome)); return; }
+    baixaComum(blob,nome); };
+}
+function baixaComum(blob,nome){
     try{ const fl=new File([blob],nome,{type:"image/jpeg"}); if(navigator.canShare&&navigator.canShare({files:[fl]})){ navigator.share({files:[fl],title:"Meu momento · 7entidos"}).catch(()=>{}); return; } }catch(e){}
-    const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=nome; document.body.appendChild(a); a.click(); setTimeout(()=>a.remove(),500); };
+    const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=nome; document.body.appendChild(a); a.click(); setTimeout(()=>a.remove(),500);
 }
 function recomecar(){ click(); resp={}; /* o nome continua guardado no celular (7e_nome) */ inicio=null; inicio2=null; pos=0; try{ localStorage.removeItem("7e_app_novo"); localStorage.removeItem("7e_app_novo_fase1"); }catch(e){} desenha(); }
 
