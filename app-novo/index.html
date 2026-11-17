@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>7entidos · App novo (prévia)</title>
 <meta name="robots" content="noindex">
-<link rel="icon" href="mandala-icone.png" type="image/png">
+<link rel="icon" href="mandala-icone.png?v=7" type="image/png">
+<link rel="apple-touch-icon" href="mandala-icone-180.png?v=7">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Manrope:wght@400;600;700;800&family=Space+Mono&display=swap" rel="stylesheet">
@@ -23,8 +24,8 @@ button{font-family:inherit}
 .topo{position:fixed;top:0;left:0;right:0;z-index:5;display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:calc(10px + env(safe-area-inset-top)) 16px 10px;pointer-events:none;background:linear-gradient(rgba(10,17,40,.92),rgba(10,17,40,.6) 70%,transparent)}
 .marca{display:flex;align-items:center;pointer-events:auto}
 .marca img{height:52px;width:auto;display:block}
-/* MANDALA OFICIAL DO LOGO (imagem mandala.webp). As luzes são os PRÓPRIOS CÍRCULOS da mandala:
-   8 círculos em volta (os 7 primeiros, um por sentido, em sentido horário a partir do de cima; o 8º acende quando os 7 estão acesos) + o miolo com o 7 */
+/* MANDALA OFICIAL DO 7ENTIDOS (imagem mandala-7.webp, a mesma de app/icones/fonte-mandala.png). As luzes são os PRÓPRIOS CÍRCULOS:
+   7 círculos em volta (um por sentido, em sentido horário a partir do de cima) + o miolo com o 7 */
 .mdl{position:relative;display:inline-block;flex:none;border-radius:50%;transition:box-shadow .8s}
 .mdl img{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none;transition:transform .9s cubic-bezier(.3,1.35,.5,1),filter .7s,opacity .7s}
 .mdl .bs{filter:brightness(.36) saturate(.55)}
@@ -40,7 +41,7 @@ button{font-family:inherit}
 .mdl.brilha{box-shadow:0 0 26px 4px rgba(245,197,66,.3)}
 .mdl.pulsa{animation:mpulsa 1.6s ease-out}
 @keyframes mpulsa{0%{box-shadow:0 0 0 0 rgba(245,197,66,.9)}40%{box-shadow:0 0 50px 18px rgba(245,197,66,.55)}100%{box-shadow:0 0 26px 4px rgba(245,197,66,.3)}}
-.const .xde7 b.pal{display:block;font:600 19px Fraunces,serif;color:var(--creme);letter-spacing:0;text-transform:none}
+.const .xde7 b.pal{display:block;font:600 24px Fraunces,serif;color:var(--creme);letter-spacing:0;text-transform:none}
 .const .xde7 b.pal em{font-style:normal;color:var(--ouro)}
 .const .mdl{margin-right:6px}
 /* entrada: mandala grande + nome + duração */
@@ -106,6 +107,7 @@ h1 em,h2 em{color:var(--ouro)}
 .btn[disabled]{opacity:.35;pointer-events:none}
 .miud{font-size:15px;color:var(--azul);margin-top:16px}
 .miud.mini{font-size:12px;line-height:1.35;opacity:.85;max-width:340px;margin:14px auto 64px}
+.miud.priv{font-size:11px;line-height:1.3;max-width:300px}
 .miud a{color:var(--azul)}
 
 /* anel de 7 luzes */
@@ -117,8 +119,8 @@ h1 em,h2 em{color:var(--ouro)}
 .anel i.apag{opacity:.18;box-shadow:none}
 .anel i.acesa{width:30px;height:30px;margin:-15px;opacity:1;box-shadow:0 0 26px 10px var(--c),0 0 70px 20px var(--c);animation:acende 1.2s ease-out}
 @keyframes acende{from{width:10px;height:10px;margin:-5px;opacity:.2}}
-.anel.comfoto{width:250px;height:250px}
-.anel.comfoto i{transform:rotate(var(--a)) translateY(-111px)}
+.anel.comfoto{width:300px;height:300px}
+.anel.comfoto i{transform:rotate(var(--a)) translateY(-136px)}
 .anel.comfoto img{position:absolute;inset:26px;width:calc(100% - 52px);height:calc(100% - 52px);border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px rgba(245,197,66,.55),0 0 50px rgba(245,197,66,.35),0 20px 40px rgba(0,0,0,.6)}
 .anel .centro{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:40px}
 .nomesent{font:700 16px "Space Mono",monospace;letter-spacing:.14em;text-transform:uppercase}
@@ -233,8 +235,26 @@ body.foco #vinheta{opacity:.55}
 .som .nsom{position:absolute;top:8px;left:10px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:16px}
 .som.um{border-color:#4aa8ff!important;background:rgba(74,168,255,.14)!important}.som.um .nsom{background:#4aa8ff;color:#0b1020}
 .som.dois{border-color:#f5c542!important;background:rgba(245,197,66,.12)!important;border-radius:20px 6px 20px 6px!important}.som.dois .nsom{background:#f5c542;color:#0b1020}
-.trava{max-width:440px;margin:6px auto 0;padding:18px 16px;border-radius:22px;background:rgba(18,27,72,.7);border:1.5px solid rgba(245,197,66,.4)}
-.trava .cadeado{font-size:34px}.trava h2{margin:4px 0 6px}
+/* Fases 3 e 4: cartão de vidro "Falta pouco" */
+.trava{position:relative;max-width:440px;margin:10px auto 0;padding:22px 18px;border-radius:26px;overflow:hidden;
+  background:linear-gradient(140deg,rgba(255,255,255,.16),rgba(255,255,255,.05) 55%,rgba(245,197,66,.08));
+  -webkit-backdrop-filter:blur(16px) saturate(150%);backdrop-filter:blur(16px) saturate(150%);
+  border:1px solid rgba(255,255,255,.3);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 24px 50px -24px rgba(0,0,0,.9)}
+.trava::before{content:"";position:absolute;inset:-40% -20% auto;height:70%;background:radial-gradient(ellipse,rgba(255,255,255,.18),transparent 70%);pointer-events:none}
+.trava>*{position:relative}
+.trava h2{margin:2px 0 6px;font-size:clamp(34px,9vw,42px)}
+.trava .sub{margin-bottom:6px}
+.trava .opc{font-size:14px;color:var(--azul);margin:0 0 6px}
+/* imagem do Saborear para baixar */
+.sabbaixa{max-width:440px;margin:6px auto 4px;text-align:center}
+.sabbaixa img{display:block;width:min(56vw,220px);height:auto;margin:0 auto 12px;border-radius:14px;border:1.5px solid rgba(245,197,66,.5);box-shadow:0 14px 34px -14px rgba(0,0,0,.9)}
+.sabbaixa .btn[disabled]{opacity:.55}
+/* Entenda o Flow: link discreto que abre por cima */
+.linkflow{all:unset;cursor:pointer;display:inline-block;margin-top:16px;color:var(--azul);font-size:15px;text-decoration:underline;text-underline-offset:3px}
+.flowov{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:18px;background:rgba(5,8,26,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);animation:fade .3s ease-out}
+@keyframes fade{from{opacity:0}}
+.flowcx{position:relative;width:100%;max-width:440px;max-height:88vh;overflow:auto;padding:22px 16px 18px;border-radius:24px;text-align:center;background:rgba(18,27,72,.94);border:1.5px solid rgba(245,197,66,.4)}
+.flowcx .fx{all:unset;cursor:pointer;position:absolute;top:10px;right:12px;width:40px;height:40px;display:grid;place-items:center;font-size:20px;color:var(--azul)}
 #aviso{display:flex;flex-direction:column;gap:10px;margin-top:8px}
 #aviso input[type=text],#aviso input:not([type]),#aviso input[type=email]{font:600 18px Manrope,system-ui,sans-serif;color:#f4ecdc;background:#0b1236;border:1.5px solid rgba(169,179,209,.35);border-radius:14px;padding:13px 14px}
 #aviso .lgpd{display:flex;gap:10px;align-items:flex-start;text-align:left;font-size:14px;line-height:1.4;color:var(--azul)}
@@ -369,7 +389,7 @@ body.foco #vinheta{opacity:.55}
 .dourada .carta2 img{width:100%;height:100%;object-fit:cover;display:block}
 
 /* Vídeo da Brisa (vertical) */
-.vbrisa{position:relative;height:min(60vh,640px);max-width:92vw;aspect-ratio:9/16;margin:0 auto 14px;border-radius:24px;overflow:hidden;border:2px solid rgba(245,197,66,.55);box-shadow:0 0 40px rgba(245,197,66,.25),0 30px 50px -20px rgba(0,0,0,.9);background:#05081a}
+.vbrisa{position:relative;height:min(70vh,740px);max-width:94vw;aspect-ratio:9/16;margin:0 auto 14px;border-radius:24px;overflow:hidden;border:2px solid rgba(245,197,66,.55);box-shadow:0 0 40px rgba(245,197,66,.25),0 30px 50px -20px rgba(0,0,0,.9);background:#05081a}
 .vbrisa video{width:100%;height:100%;object-fit:cover;display:block}
 .vbrisa .vslot,.vbrisa .vslot video{width:100%;height:100%}
 .vbrisa video{cursor:pointer}
@@ -390,7 +410,7 @@ body.foco #vinheta{opacity:.55}
 .btn.cta{min-height:68px;padding:0 46px;font-size:23px;box-shadow:0 0 0 0 rgba(245,197,66,.6),0 16px 40px -10px rgba(245,197,66,.75);animation:ctapulsa 2.2s ease-in-out infinite}
 @keyframes ctapulsa{0%,100%{box-shadow:0 0 0 0 rgba(245,197,66,.55),0 16px 40px -10px rgba(245,197,66,.75)}50%{box-shadow:0 0 0 12px rgba(245,197,66,0),0 16px 40px -10px rgba(245,197,66,.75)}}
 .legfora.menor{font-size:17px;font-weight:600;min-height:2.6em}
-.logocom{display:block;width:min(80vw,340px);height:auto;margin:-46px auto 18px}
+.logocom{display:block;width:min(92vw,430px);height:auto;margin:-46px auto 18px}
 /* nome na tela da escala */
 .nome{max-width:420px;margin:0 auto 26px;text-align:left}
 .nome label{display:block;font-family:Fraunces,serif;font-size:clamp(26px,7vw,32px);margin-bottom:10px;text-align:center}
@@ -516,7 +536,7 @@ const NO_SITE = /7entidos\.com\.br$/i.test(location.hostname) || location.pathna
 const IMG = NO_SITE ? "/pesquisa/opcoes/" : "opcoes/";
 const BRISA = NO_SITE ? "/app-novo/brisa.jpg" : "brisa.jpg";
 const LOGO = NO_SITE ? "/app-novo/logo-7entidos.png" : "logo-7entidos.png"; /* logo comercial (a marca) */
-const MANDALA = NO_SITE ? "/app-novo/mandala.webp" : "mandala.webp"; /* mandala oficial do logo (sem os riscos antigos) */
+const MANDALA = NO_SITE ? "/app-novo/mandala-7.webp" : "mandala-7.webp"; /* mandala oficial de 7 círculos do 7entidos */
 /* VÍDEOS DA BRISA (do HeyGen): troque os arquivos brisa-entrada.mp4 (~30 s) e brisa-fase2.mp4 (~15 s), verticais.
    Os de agora são VÍDEOS DE TESTE (foto da Brisa + som suave). Quando chegarem os verdadeiros, mude VIDEO_TESTE para false
    e troque as legendas abaixo pelas falas exatas do vídeo (segundo de início, segundo de fim, texto). */
@@ -553,7 +573,7 @@ SENT.forEach((s,i)=>{ R.push({t:"gosto",i,f:1}); });
 R.push({t:"fim1",f:1});
 R.push({t:"abre2",f:2});
 SENT.forEach((s,i)=>{ R.push({t:"jogo",i,f:2}); });
-R.push({t:"saborear",f:2},{t:"escala",id:"saida",f:2},{t:"chute",f:2},{t:"flow",f:2},{t:"revela",f:2},{t:"grafico",f:2},{t:"trava3",f:2});
+R.push({t:"saborear",f:2},{t:"escala",id:"saida",f:2},{t:"chute",f:2},{t:"revela",f:2},{t:"grafico",f:2},{t:"trava3",f:2});
 
 let pos=0, resp={}, inicio=null, inicio2=null, ocupado=false;
 const palco=document.getElementById("palco");
@@ -646,21 +666,22 @@ function pularMesmo(){ const p=R[pos]; if(!p) return; click(); pararSom(); clear
   if(p.t==="jogo"){ const s=SENT[p.i]; resp["jogo_"+s.id]="pulado"; delete resp["curtiu_"+s.id]; }
   else { const k=p.t==="escala"?"escala_"+p.id:p.t==="gosto"?"gosto_"+SENT[p.i].id:p.t; resp["pulou_"+k]=true; }
   avanca(); }
-function ir(n){ if(n<0){ entrou=false; n=0; } pos=n; fechaPainel(); desenha(); }
+function ir(n){ if(n<0){ entrou=false; n=0; } pos=n; fechaPainel(); const fo=document.getElementById("flowov"); if(fo) fo.remove(); desenha(); }
 /* ===== MANDALA OFICIAL ===== montar(tam): cria a mandala; poeMandala(el,{pos,luz,miolo}): pedaços no lugar (pos), acesos (luz), miolo aceso */
-const MC=[0,1,2,3,4,5,6,7].map(k=>{ const a=(-90+k*45)*Math.PI/180; return [50+34*Math.cos(a),50+34*Math.sin(a),a]; });
+/* centro de cada um dos 7 círculos na imagem oficial (em %), em sentido horário a partir do de cima */
+const MC=[[50.5,15.8],[75.6,27.2],[84.6,52.2],[69.2,77.5],[31.6,77.2],[16.0,51.2],[25.6,26.2]].map(([x,y])=>[x,y,Math.atan2(y-50,x-50)]);
 function mandala(tam,id){ let h=`<span class="mdl" ${id?`id="${id}"`:""} style="width:${tam}px;height:${tam}px"><img class="bs" src="${MANDALA}" alt="Mandala do 7entidos"><span class="hl mh" style="left:50%;top:50%;--c:rgba(245,197,66,.95)"></span>`;
-  MC.forEach(([x,y],k)=>{ h+=`<span class="hl" style="left:${x.toFixed(1)}%;top:${y.toFixed(1)}%;--c:${k<7?SENT[k].cor:"#f5c542"}"></span>`; });
-  h+=`<img class="mi apag" src="${MANDALA}" alt="" style="clip-path:circle(19% at 50% 50%);-webkit-clip-path:circle(19% at 50% 50%)">`;
-  MC.forEach(([x,y,a],k)=>{ const cp=`circle(12.4% at ${x.toFixed(1)}% ${y.toFixed(1)}%)`; h+=`<img class="c lugar" src="${MANDALA}" alt="" style="clip-path:${cp};-webkit-clip-path:${cp};--tx:${(Math.cos(a)*tam*.32).toFixed(0)}px;--ty:${(Math.sin(a)*tam*.32).toFixed(0)}px">`; });
+  MC.forEach(([x,y],k)=>{ h+=`<span class="hl" style="left:${x.toFixed(1)}%;top:${y.toFixed(1)}%;--c:${SENT[k].cor}"></span>`; });
+  h+=`<img class="mi apag" src="${MANDALA}" alt="" style="clip-path:circle(20.5% at 50% 50%);-webkit-clip-path:circle(20.5% at 50% 50%)">`;
+  MC.forEach(([x,y,a],k)=>{ const cp=`circle(13.2% at ${x.toFixed(1)}% ${y.toFixed(1)}%)`; h+=`<img class="c lugar" src="${MANDALA}" alt="" style="clip-path:${cp};-webkit-clip-path:${cp};--tx:${(Math.cos(a)*tam*.32).toFixed(0)}px;--ty:${(Math.sin(a)*tam*.32).toFixed(0)}px">`; });
   return h+`</span>`; }
 /* poeMandala(el,{pos,luz,miolo}): pos = círculos no lugar (os outros ficam quebrados, fora do lugar); luz = círculos acesos; miolo = o 7 aceso.
-   Quando os 7 sentidos estão acesos, o 8º círculo acende junto e a mandala fica inteira e brilhante. */
+   Quando os 7 sentidos e o miolo estão acesos, a mandala fica inteira e brilhante. */
 function poeMandala(el,o){ if(!el) return; o=o||{}; let pos=o.pos||[], luz=(o.luz||[]).slice();
-  const cheia=[0,1,2,3,4,5,6].every(i=>luz.includes(i)) && o.miolo; if(cheia&&!luz.includes(7)) luz.push(7);
+  const cheia=[0,1,2,3,4,5,6].every(i=>luz.includes(i)) && o.miolo;
   el.querySelector(".mi").classList.toggle("apag",!o.miolo); el.classList.toggle("brilha",!!o.miolo); el.classList.toggle("cheia",cheia);
   const hl=el.querySelectorAll(".hl"); hl[0].classList.toggle("on",!!o.miolo);
-  el.querySelectorAll(".c").forEach((c,k)=>{ const no=pos.includes(k)||luz.includes(k)||(k===7&&pos.length>=7); c.classList.toggle("fora",!no); c.classList.toggle("lugar",no&&!luz.includes(k)); c.classList.toggle("luz",luz.includes(k)); hl[k+1].classList.toggle("on",luz.includes(k)); }); }
+  el.querySelectorAll(".c").forEach((c,k)=>{ const no=pos.includes(k)||luz.includes(k); c.classList.toggle("fora",!no); c.classList.toggle("lugar",no&&!luz.includes(k)); c.classList.toggle("luz",luz.includes(k)); hl[k+1].classList.toggle("on",luz.includes(k)); }); }
 const TODOS=[0,1,2,3,4,5,6];
 /* topo: a mandala começa QUEBRADA; na Fase 1 cada sentido escolhido faz o seu pedaço voar e encaixar;
    na Fase 2 cada jogo feito acende o seu pedaço na cor do sentido; no fim da Fase 2 ela fica completa e acesa.
@@ -669,7 +690,7 @@ function desenhaMini(){
   const p=R[pos], el=document.getElementById("const");
   if(!p || (p.t==="brisa"&&!entrou) || p.t==="vaso"){ el.hidden=true; return; }
   el.hidden=false;
-  if(!document.getElementById("mtopo")){ el.innerHTML=mandala(58,"mtopo")+`<span class="xde7" id="xde7"></span>`; }
+  if(!document.getElementById("mtopo")){ el.innerHTML=mandala(72,"mtopo")+`<span class="xde7" id="xde7"></span>`; }
   const f=p.f;
   const fez1=s=>resp["gosto_"+s.id]!=null||resp["pulou_gosto_"+s.id];
   const fez2=s=>resp["curtiu_"+s.id]!=null||resp["jogo_"+s.id]==="pulado";
@@ -693,7 +714,7 @@ function desenha(){
   /* "pular" aparece nas telas que pedem resposta ou jogo; nas outras o próprio botão já segue */
   document.getElementById("pularbtn").hidden = !PULAVEIS.includes(p.t);
   desenhaMini(); brilho(p.i!=null?SENT[p.i].cor:null);
-  ({brisa,vaso,escala,passagem,gosto,fim1,abre2,jogo,saborear,chute,flow,revela,grafico,trava3})[p.t](p);
+  ({brisa,vaso,escala,passagem,gosto,fim1,abre2,jogo,saborear,chute,revela,grafico,trava3})[p.t](p);
 }
 
 /* ============ NOME (fica SÓ no celular da pessoa; nunca vai para a planilha) ============ */
@@ -739,7 +760,7 @@ function brisa(){
     <div id="semvideo" hidden><p class="fala">Oi, eu sou a Brisa. Aqui não tem resposta certa nem errada. Só o que você sente.</p>
     <p class="fala2">Vamos descobrir, sentido por sentido, o que te faz bem?</p></div>
     <button class="btn cta" onclick="comecar()">Começar</button>
-    <p class="miud mini">Suas respostas são anônimas: sem nome e sem telefone. Elas ajudam o estudo do 7entidos. Ao começar, você concorda com isso. <a href="/privacidade.html" target="_blank" rel="noopener">Privacidade</a></p>`,
+    <p class="miud mini priv">Respostas anônimas, só para o estudo do 7entidos. Ao começar, você concorda. <a href="/privacidade.html" target="_blank" rel="noopener">Privacidade</a></p>`,
     c=>ligaVideo(c,LEG1,()=>{ c.querySelector("#semvideo").hidden=false; },VID1));
 }
 function entrar(){ click(); entrou=true; destravaVideo(VID1); document.getElementById("pularbtn").hidden=false; desenhaMini(); brisa(); }
@@ -777,9 +798,9 @@ function escala(p){
 }
 /* o nome aparece embaixo da mandala; quando há nome, a escala sobe acesa */
 function nomeVivo(){ const n=NOME(), sh=document.getElementById("nmshow"), eb=document.getElementById("escbloco"); if(sh) sh.textContent=n; if(eb&&n) eb.classList.remove("apagado"); }
-/* as luzes da mandala acendem até o número (0 a 10 → 0 a 7 pedaços) */
+/* as luzes da mandala acendem até o número (0 a 10 → miolo + 7 círculos) */
 /* 0 = tudo apagado; cada número acende mais círculos: primeiro o 7 do meio, depois os círculos em volta; 10 = mandala inteira acesa */
-function visor(n){ const m=document.getElementById("mesc"); if(m){ const k=Math.round(n*9/10); poeMandala(m,{pos:TODOS,luz:[0,1,2,3,4,5,6,7].slice(0,Math.max(0,k-1)),miolo:k>=1}); }
+function visor(n){ const m=document.getElementById("mesc"); if(m){ const k=Math.round(n*8/10); poeMandala(m,{pos:TODOS,luz:TODOS.slice(0,Math.max(0,k-1)),miolo:k>=1}); }
   const eb=document.getElementById("escbloco"); if(eb) eb.classList.remove("apagado");
   const vp=document.getElementById("vpal"); if(vp) vp.innerHTML=`<b>${n}</b>${PALAVRA[n]}`; }
 function escolheNum(b,k,n){ resp[k]=n; click(); visor(n); vibra(8+n); b.parentNode.querySelectorAll("button").forEach(x=>x.classList.remove("sel")); b.classList.add("sel");
@@ -865,21 +886,55 @@ function jogarDeNovo(){ const p=R[pos]; if(!p||p.t!=="jogo") return; const s=SEN
 
 /* Saborear: uma imagem (a foto favorita do sentido de que mais curtiu) com uma frase curta */
 let saborTm=null;
-function saborear(p){
+/* monta a composição do Saborear (usada na tela e na imagem para baixar no fim) */
+function montaSabor(){
   const v=SENT.map(s=>resp["curtiu_"+s.id]||0), max=Math.max(...v);
   let i=v.indexOf(max); if(SENT[i] && SENT[i].o.indexOf(resp["gosto_"+SENT[i].id])<0) i=SENT.findIndex(s=>s.o.indexOf(resp["gosto_"+s.id])>=0);
-  const s=SENT[Math.max(i,0)], j=Math.max(0,s.o.indexOf(resp["gosto_"+s.id])), img=foto(s.id,j); resp.saborear_sentido=s.s;
+  if(i<0) return null;
+  const s=SENT[i], j=Math.max(0,s.o.indexOf(resp["gosto_"+s.id]));
+  const outros=SENT.map((x,k)=>({x,k,j:x.o.indexOf(resp["gosto_"+x.id]),v:v[k]})).filter(o=>o.j>=0&&o.x!==s).sort((a,b)=>b.v-a.v||a.k-b.k).slice(0,6);
+  const nomes=[s.o[j]].concat(outros.slice(0,2).map(o=>o.x.o[o.j])).map(t=>t.charAt(0).toLowerCase()+t.slice(1));
+  const lista=nomes.length>1?nomes.slice(0,-1).join(", ")+" e "+nomes[nomes.length-1]:nomes[0];
+  return {v,s,j,outros,frase:`O que te faz bem tem nome: ${lista}.`};
+}
+/* desenha a imagem do Saborear num quadro 1080 x 1350 (formato de post) para a pessoa baixar */
+function imagemSabor(){
+  const m=montaSabor(); if(!m) return Promise.reject();
+  const W=1080,H=1350,cv=document.createElement("canvas"); cv.width=W; cv.height=H; const g=cv.getContext("2d");
+  const carrega=src=>new Promise(ok=>{ const im=new Image(); im.onload=()=>ok(im); im.onerror=()=>ok(null); im.src=src; });
+  const lista=[{x:m.s,j:m.j}].concat(m.outros.map(o=>({x:o.x,j:o.j})));
+  const fontes=(document.fonts&&document.fonts.ready)?document.fonts.ready.catch(()=>{}):Promise.resolve();
+  return Promise.all([fontes].concat(lista.map(o=>carrega(foto(o.x.id,o.j))))).then(r=>{ const ims=r.slice(1);
+    const fundo=g.createLinearGradient(0,0,0,H); fundo.addColorStop(0,"#0a1128"); fundo.addColorStop(1,"#141a45"); g.fillStyle=fundo; g.fillRect(0,0,W,H);
+    const caixa=(x,y,w,h,rr)=>{ g.beginPath(); g.moveTo(x+rr,y); g.arcTo(x+w,y,x+w,y+h,rr); g.arcTo(x+w,y+h,x,y+h,rr); g.arcTo(x,y+h,x,y,rr); g.arcTo(x,y,x+w,y,rr); g.closePath(); };
+    const cobre=(im,x,y,w,h,rr,cor,rot)=>{ g.save(); caixa(x,y,w,h,rr); g.clip(); g.fillStyle="#1d2654"; g.fillRect(x,y,w,h);
+      if(im){ const e=Math.max(w/im.width,h/im.height), iw=im.width*e, ih=im.height*e; g.drawImage(im,x+(w-iw)/2,y+(h-ih)/2,iw,ih); }
+      const sb=g.createLinearGradient(0,y+h*.55,0,y+h); sb.addColorStop(0,"rgba(0,0,0,0)"); sb.addColorStop(1,"rgba(0,0,0,.75)"); g.fillStyle=sb; g.fillRect(x,y,w,h); g.restore();
+      g.save(); caixa(x,y,w,h,rr); g.lineWidth=4; g.strokeStyle=cor; g.stroke(); g.restore();
+      g.fillStyle="#fff"; g.font=`800 ${h>400?44:28}px Manrope, system-ui, sans-serif`; g.textBaseline="bottom"; g.fillText(rot,x+(h>400?28:16),y+h-(h>400?24:14),w-32); };
+    g.fillStyle="#f5c542"; g.font='700 30px "Space Mono", monospace'; g.textAlign="center"; g.textBaseline="top"; g.fillText("7ENTIDOS · MEU MOMENTO",W/2,56); g.textAlign="left";
+    cobre(ims[0],60,120,960,540,34,"#f5c542",m.s.o[m.j]);
+    const n=m.outros.length, col=n<=2?n:3, lin=Math.ceil(n/3)||0, gap=20, tw=col?(960-gap*(col-1))/col:0, th=lin>1?160:220;
+    m.outros.forEach((o,i)=>{ const r=Math.floor(i/3), c=i%3, nr=r===lin-1?(n-r*3):3, w2=(960-gap*(nr-1))/nr; cobre(ims[i+1],60+c*(w2+gap),690+r*(th+gap),w2,th,24,o.x.cor,o.x.o[o.j]); });
+    const yF=690+lin*(th+gap)+(lin?24:10);
+    g.fillStyle="#f4ecdc"; g.textAlign="center"; g.font='600 48px Fraunces, Georgia, serif'; g.textBaseline="top";
+    const pal=m.frase.split(" "), linhas=[]; let l=""; pal.forEach(w=>{ const t=l?l+" "+w:w; if(g.measureText(t).width>940&&l){ linhas.push(l); l=w; } else l=t; }); if(l) linhas.push(l);
+    linhas.slice(0,3).forEach((t,i)=>g.fillText(t,W/2,yF+i*60));
+    g.fillStyle="#a9b3d1"; g.font='700 30px "Space Mono", monospace'; g.textBaseline="bottom"; g.fillText("7entidos.com.br",W/2,H-40);
+    return new Promise((ok,ruim)=>cv.toBlob(b=>b?ok(b):ruim(),"image/jpeg",.9)); });
+}
+function saborear(p){
+  const m=montaSabor(); if(!m){ ocupado=false; avanca(); return; }
+  const {v,s,j}=m, img=foto(s.id,j); resp.saborear_sentido=s.s;
   /* a imagem vira a carta dourada (aparece no resultado em cartões, como antes) */
   resp.carta_dourada={sentido:s.s,escolha:s.o[j],foto:j};
   clearTimeout(saborTm);
   /* imagem montada com as preferências: a foto principal em cima e as outras escolhas da pessoa embaixo (as que ela mais curtiu primeiro) */
-  const outros=SENT.map((x,k)=>({x,k,j:x.o.indexOf(resp["gosto_"+x.id]),v:v[k]})).filter(o=>o.j>=0&&o.x!==s).sort((a,b)=>b.v-a.v||a.k-b.k).slice(0,6);
+  const outros=m.outros;
   const n=outros.length, larg=i=>n===1?"big1":(n===2||n===4)?"meio":(n===5&&i>=3)?"meio":"";
   const tile=(x,jj,cls)=>`<div class="ph ${cls}" style="background-image:url('${foto(x.id,jj)}');--c:${x.cor}"><i></i><span>${esc(x.o[jj])}</span></div>`;
   const col=`<div class="sabcol" id="sabcol" style="${n?"":"grid-template-rows:1fr"}"><div class="marca">7ENTIDOS · MEU MOMENTO</div>${tile(s,j,"big")}${outros.map((o,i)=>tile(o.x,o.j,larg(i))).join("")}</div>`;
-  const nomes=[s.o[j]].concat(outros.slice(0,2).map(o=>o.x.o[o.j])).map(t=>t.charAt(0).toLowerCase()+t.slice(1));
-  const lista=nomes.length>1?nomes.slice(0,-1).join(", ")+" e "+nomes[nomes.length-1]:nomes[0];
-  const frase=`O que te faz bem tem nome: ${lista}.`; resp.saborear_frase=frase; resp.saborear_fotos=1+n;
+  const frase=m.frase; resp.saborear_frase=frase; resp.saborear_fotos=1+n;
   mostra(`<div class="saborear"><div class="fundo" style="background-image:url('${img}')"></div><div class="dentro" id="sd">
       ${col}<p class="frasebela">${esc(frase)}</p>
       <p class="seg">${comNome("Fique um pouco aqui, {n}. Este momento é seu.","Fique um pouco aqui. Este momento é seu.")}</p><button class="btn sabseg" id="sbs">Seguir</button></div></div>`, c=>{
@@ -926,7 +981,7 @@ const JOGOS={
   /* Olho de águia: a diferença de cor diminui a cada acerto, até a pessoa errar; o ponto onde parou vira o nível */
   visao(s,fim){ const DIF=[22,16,12,9,6.5,4.5,3.2,2.4]; let lv=0;
     const rod=()=>{ const d=DIF[lv], x={hu:Math.floor(Math.random()*360),k:Math.floor(Math.random()*16)};
-      mostra(`${cab(s,"Toque no quadrado diferente.")}<div class="nivel">Nível ${lv+1} <small>${lv===0?"as cores vão ficando parecidas":"mais parecidas agora"}</small></div>
+      mostra(`${cab(s,"Ache o quadrado de cor diferente.")}<div class="nivel">Nível ${lv+1}</div>
         <div class="grade4">${Array.from({length:16},(_,i)=>`<button data-i="${i}" aria-label="quadrado ${i+1}" style="background:hsl(${x.hu},55%,${i===x.k?46+d:46}%)"></button>`).join("")}</div><div class="res" id="res"></div>`, c=>{
         c.querySelectorAll(".grade4 button").forEach(b=>b.onclick=()=>{ if(x.feito) return; x.feito=true; const okk=+b.dataset.i===x.k; somJogo();
           c.querySelectorAll(".grade4 button").forEach(y=>{ if(+y.dataset.i===x.k) y.classList.add("ok"); else if(y===b) y.classList.add("bad"); });
@@ -938,7 +993,7 @@ const JOGOS={
   /* Qual som é mais fino? A diferença diminui a cada acerto, até a pessoa errar; o ponto onde parou vira o nível (sem bolinhas de rodada) */
   audicao(s,fim){ const PARES=[[1046,349],[880,440],[784,494],[740,554],[698,587],[659,587],[640,587]]; let lv=0;
     const rod=()=>{ const [alto,baixo]=PARES[lv], primeiroFino=Math.random()<.5, fA=primeiroFino?alto:baixo, fB=primeiroFino?baixo:alto;
-    mostra(`${cab(s,"Ouça os dois e escolha.")}<div class="nivel">Nível ${lv+1} <small>${lv===0?"os sons vão ficando parecidos":"mais parecidos agora"}</small></div>
+    mostra(`${cab(s,"Diga qual som é mais fino.")}<div class="nivel">Nível ${lv+1}</div>
       <div class="sons"><button class="som um" id="s1"><span class="nsom">1</span><svg class="onda" viewBox="0 0 72 36"><path d="M0 18 Q9 2 18 18 T36 18 T54 18 T72 18" fill="none" stroke="#4aa8ff" stroke-width="3"/></svg>Ouvir o primeiro</button>
       <button class="som dois" id="s2"><span class="nsom">2</span><svg class="onda" viewBox="0 0 72 36"><path d="M0 18 Q4.5 4 9 18 T18 18 T27 18 T36 18 T45 18 T54 18 T63 18 T72 18" fill="none" stroke="#f5c542" stroke-width="3"/></svg>Ouvir o segundo</button></div>
       <div class="opts"><button class="opt" data-k="1">O primeiro é mais fino</button><button class="opt" data-k="2">O segundo é mais fino</button></div><div class="res" id="res"></div>`, c=>{
@@ -978,7 +1033,7 @@ const JOGOS={
     /* quando as imagens do Canva chegarem: pôr o nome do arquivo aqui (ex.: carne:"comida-carne.webp") */
     const IMG_COMIDA={};
     const vis=(k,e)=>IMG_COMIDA[k]?`<img src="${IMG}${IMG_COMIDA[k]}" alt="">`:`<span class="emo" aria-hidden="true">${e}</span>`;
-    mostra(`${cab(s,"Escolha 3 comidas. Elas vão se juntando no prato.")}<div class="mesa" id="mesa"></div><div class="pratonome" id="pn">0 de 3</div>
+    mostra(`${cab(s,"Monte um prato com 3 comidas.")}<div class="mesa" id="mesa"></div><div class="pratonome" id="pn">0 de 3</div>
       ${G.map(([gn,L])=>`<div class="grupoc">${gn}</div><div class="ingr">${L.map(([k,n,e])=>`<button data-k="${k}">${vis(k,e)}${n}</button>`).join("")}</div>`).join("")}`, c=>{
       const mesa=c.querySelector("#mesa"), pn=c.querySelector("#pn"), achar=k=>I.find(x=>x[0]===k);
       const pinta=()=>{ mesa.innerHTML=sel.map((k,j)=>`<span class="ing" style="left:${LUG[j][0]};top:${LUG[j][1]}">${vis(k,achar(k)[2])}</span>`).join("");
@@ -995,13 +1050,13 @@ const JOGOS={
           c.querySelectorAll(".opt").forEach(q=>q.onclick=()=>{ somJogo(); resp[Q[2]]=q.dataset.o; q.classList.add("sel"); c.querySelectorAll(".opt").forEach(y=>y.disabled=true); vibra([10,40,10]); fim(); }); }); }; }
     }); },
   /* Viagem do cheiro: viagem guiada pela imaginação, de olhos fechados, na voz da Brisa (Praia ou Livro na estante) */
-  olfato(s,fim){ mostra(`${cab(s,"Para onde você quer ir?")}<div class="opts"><button class="opt" data-v="praia">🌊 Uma praia no fim da tarde</button><button class="opt" data-v="livro">📚 Uma estante de livros antigos</button></div>`, c=>{
+  olfato(s,fim){ mostra(`${cab(s,"Escolha uma viagem e sinta o cheiro.")}<div class="opts"><button class="opt" data-v="praia">🌊 Uma praia no fim da tarde</button><button class="opt" data-v="livro">📚 Uma estante de livros antigos</button></div>`, c=>{
       c.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ somJogo(); const v=b.dataset.v; resp.olfato_viagem=v==="praia"?"Praia":"Livro na estante";
         viagem(c,v,s,()=>{ if(!aindaNoJogo(s)) return; fundo(s); c.innerHTML=`${cab(s,"De volta.")}<h2 class="mudou">Você conseguiu sentir o cheiro?</h2><div class="opts">${["Sim","Um pouco","Não"].map(o=>`<button class="opt" data-o="${o}">${o}</button>`).join("")}</div>`;
           c.querySelectorAll(".opt").forEach(q=>q.onclick=()=>{ somJogo(); resp.olfato_sentiu=q.dataset.o; q.classList.add("sel"); c.querySelectorAll(".opt").forEach(y=>y.disabled=true); vibra([10,40,10]); fim(); }); }); }); }); },
   /* Bolinha no ritmo: a bolinha anda de um lado para o outro; a pessoa pega e segura 1 segundo; a cada acerto ela fica mais rápida; errou a bolinha, termina com o nível */
   equilibrio(s,fim){ const VEL=[1700,1450,1250,1080,940,820,720,640]; let lv=0, t0=0, raf=0, acabou=false, preso=false, x=0, hold=0, htm=null, pausa=0;
-    mostra(`${cab(s,"Pegue a bolinha e segure.")}<div class="nivel" id="nv">Nível 1 <small>ela vai acelerando a cada acerto</small></div>
+    mostra(`${cab(s,"Pegue a bolinha e segure.")}<div class="nivel" id="nv">Nível 1</div>
       <div class="trilha" id="tr" aria-label="Trilha da bolinha: toque na bolinha e segure"><span class="bola2" id="b2"><i class="anelb" id="ab"></i></span></div><div class="res" id="res"></div>`, c=>{
       const tr=c.querySelector("#tr"), b2=c.querySelector("#b2"), ab=c.querySelector("#ab"), res=c.querySelector("#res"), nv=c.querySelector("#nv");
       const anda=t=>{ if(acabou||!aindaNoJogo(s)){ cancelAnimationFrame(raf); return; } if(!t0) t0=t; if(preso){ pausa=t; raf=requestAnimationFrame(anda); return; } if(pausa){ t0+=t-pausa; pausa=0; }
@@ -1030,7 +1085,7 @@ const JOGOS={
       ["Ponha a mão no peito e fique paradinho.","Tente sentir o seu coração batendo.","Exercício usado em estudos sobre perceber o próprio corpo."]];
     let g=0, tm=null; resp.corpo_gestos=0;
     const passo=()=>{ if(!aindaNoJogo(s)) return; if(g>=G.length) return pergunta();
-      mostra(`${cab(s,`Gesto ${g+1} de ${G.length}`)}<p class="gesto">${esc(G[g][0])}</p>${aroLuz(s.cor,8)}<p class="olhos">${esc(G[g][1])}</p><p class="miud basegesto">${esc(G[g][2])}</p><button class="btn sec" id="fg" style="margin-top:8px">Pronto</button>`, c=>{
+      mostra(`${cab(s,`Gesto ${g+1} de ${G.length}`)}<p class="gesto">${esc(G[g][0])}</p>${aroLuz(s.cor,8)}<p class="olhos">${esc(G[g][1])}</p><button class="btn sec" id="fg" style="margin-top:8px">Pronto</button>`, c=>{
         somSuave(s.cor); let foi=false; const vai=()=>{ if(foi) return; foi=true; clearTimeout(tm); resp.corpo_gestos=g+1; g++; passo(); };
         tm=setTimeout(()=>{ if(aindaNoJogo(s)){ avisoFim(); vai(); } },8000); c.querySelector("#fg").onclick=()=>{ somJogo(); vai(); }; }); };
     const pergunta=()=>{ pararSom(); mostra(`${cab(s,comNome("E aí, {n}?","E aí?"))}<h2 class="mudou">Mudou alguma coisa?</h2>
@@ -1093,16 +1148,19 @@ function chute(){
   });
 }
 
-/* Entenda o Flow: tela curta antes de revelar o tempo */
-function flow(){
-  mostra(`<div class="rot">Entenda o Flow</div><h2>Por que o tempo some?</h2>
+/* Entenda o Flow: link discreto na tela do tempo; abre por cima e fecha (não é mais uma tela do caminho) */
+function abreFlow(){ if(document.getElementById("flowov")) return; click(); resp.abriu_flow=(resp.abriu_flow||0)+1;
+  const d=document.createElement("div"); d.id="flowov"; d.className="flowov";
+  d.innerHTML=`<div class="flowcx" role="dialog" aria-modal="true" aria-label="Entenda o Flow"><button class="fx" type="button" aria-label="Fechar">✕</button><div class="rot">Entenda o Flow</div><h2>Por que o tempo some?</h2>
     <p class="sub">O psicólogo Mihaly Csikszentmihalyi descobriu: quando o <b>desafio</b> e a sua <b>habilidade</b> ficam em equilíbrio, você se envolve tanto que perde a noção do tempo. Ele chamou isso de <b style="color:var(--ouro)">Flow</b>.</p>
     <div class="flowx"><div><i style="--h:26px;--c:#a9b3d1"></i><i style="--h:72px;--c:#4aa8ff"></i><b>Fácil demais</b><span>dá tédio</span></div>
       <div class="na"><i style="--h:56px;--c:#f5c542"></i><i style="--h:56px;--c:#f5c542"></i><b>Na medida</b><span>você entra no Flow</span></div>
       <div><i style="--h:76px;--c:#ff8a3d"></i><i style="--h:26px;--c:#4aa8ff"></i><b>Difícil demais</b><span>dá aflição</span></div></div>
     <p class="miud">Barra da esquerda: o desafio. Barra da direita: a sua habilidade.</p>
-    <button class="btn" onclick="click();avanca()">Ver quanto tempo passou</button>`);
-}
+    <button class="btn sec" type="button" id="flowok">Fechar</button></div>`;
+  document.body.appendChild(d);
+  const fecha=()=>{ click(); d.remove(); document.removeEventListener("keydown",esc1); }, esc1=e=>{ if(e.key==="Escape") fecha(); };
+  d.querySelector(".fx").onclick=fecha; d.querySelector("#flowok").onclick=fecha; d.onclick=e=>{ if(e.target===d) fecha(); }; document.addEventListener("keydown",esc1); }
 /* chutou MENOS do que passou = o tempo voou (Flow); chutou MAIS = o tempo passou devagar; diferença menor que 1 minuto = acertou em cheio */
 function fraseFlow(){
   const real=(resp.tempo_real_seg||0)/60, ch=resp.chute_min;
@@ -1117,7 +1175,7 @@ function revela(){
   const fr=ch==null?"":`<p class="revela2">Você achou <b>${ch} ${ch===1?"minuto":"minutos"}</b>. Foram <b>${txtMin(seg)}</b>.</p>`;
   mostra(`<div class="rot">Na verdade, se passaram</div><div class="grande" id="num">0</div><div class="unid">${unid}</div>
     ${fr}<p class="pisca">${frase}</p><button class="btn" onclick="click();avanca()">Ver meu gráfico</button>
-    <p class="miud">Flow é quando a gente se envolve tanto que nem percebe o tempo passar (Csikszentmihalyi).</p>`, c=>{
+    <div><button class="linkflow" type="button" onclick="abreFlow()">Entenda o Flow</button></div>`, c=>{
     const n=c.querySelector("#num"), dur=1800, t0=performance.now();
     const passo=t=>{ const k=Math.min(1,(t-t0)/dur), e=1-Math.pow(1-k,3); n.textContent=Math.round(alvo*e); if(k<1) requestAnimationFrame(passo); else { n.textContent=alvo; vibra(12); } };
     requestAnimationFrame(passo); });
@@ -1157,43 +1215,55 @@ function grafico(){
 /* depois da Fase 2: vídeo 3 da Brisa + trava "Fases 3 e 4 em construção" + aviso por e-mail (separado das respostas anônimas) */
 function trava3(){
   let avisado=false; try{ avisado=localStorage.getItem("7e_aviso_fases34")==="1"; }catch(e){}
+  const temSabor=!!montaSabor();
   mostra(`<div class="rot">Fases 3 e 4</div>${videoBrisa(VID3,LEG3)}
-    <div class="trava"><div class="cadeado">🔒</div><h2>Fases 3 e 4 em construção</h2>
-    ${avisado?`<p class="sub">Você já está na lista. Assim que abrirem, a gente te avisa por e-mail.</p>`:`<p class="sub">Quer ser avisado quando abrirem?</p>
-    <form id="aviso" novalidate><input id="av-nome" maxlength="40" autocomplete="given-name" placeholder="Seu nome"><input id="av-email" type="email" maxlength="80" autocomplete="email" placeholder="Seu e-mail">
+    ${temSabor?`<div class="sabbaixa"><img id="sabprev" alt="A imagem do seu momento" hidden><button class="btn" id="baixar" type="button" disabled>⬇ Baixar minha imagem</button></div>`:""}
+    <div class="trava"><h2>Falta pouco</h2><p class="sub">As Fases 3 e 4 estão quase prontas.</p>
+    ${avisado?`<p class="sub">Você já está na lista. Assim que abrirem, a gente te avisa por e-mail.</p>`:`<p class="sub">Quer ser avisado quando abrirem?</p><p class="opc">É opcional.</p>
+    <form id="aviso" novalidate><input id="av-nome" maxlength="40" autocomplete="given-name" placeholder="Seu nome (opcional)"><input id="av-email" type="email" maxlength="80" autocomplete="email" placeholder="Seu e-mail">
     <label class="lgpd"><input type="checkbox" id="av-ok"><span>Concordo em usar meu nome e meu e-mail só para ser avisado quando as Fases 3 e 4 abrirem. Eles ficam separados das minhas respostas. <a href="/privacidade.html" target="_blank" rel="noopener">Privacidade</a></span></label>
     <div class="averr" id="av-err"></div><button class="btn" type="submit">Quero ser avisado</button></form>`}</div>
     <button class="btn sec" style="margin-top:14px" onclick="recomecar()">Fazer de novo</button>`,
-    c=>{ ligaVideo(c,LEG3,()=>{},VID3); const f=c.querySelector("#aviso"); if(!f) return;
+    c=>{ ligaVideo(c,LEG3,()=>{},VID3); ligaBaixar(c); const f=c.querySelector("#aviso"); if(!f) return;
       f.addEventListener("submit",e=>{ e.preventDefault(); const n=c.querySelector("#av-nome").value.trim(), m=c.querySelector("#av-email").value.trim(), ok=c.querySelector("#av-ok").checked, er=c.querySelector("#av-err");
-        if(!n){ er.textContent="Escreva seu nome."; return; } if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(m)){ er.textContent="Confira o e-mail."; return; } if(!ok){ er.textContent="Marque a caixinha para continuar."; return; }
+        if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(m)){ er.textContent="Confira o e-mail."; return; } if(!ok){ er.textContent="Marque a caixinha para continuar."; return; }
         click(); /* vai SEPARADO das respostas anônimas (mesmo caminho da lista de espera da pesquisa) */
         try{ if(ENDPOINT) fetch(ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify({evento:"espera",origem:"app-fases-3-4",nome:n,email:m,lgpd:true,quando:new Date().toISOString()})}).catch(()=>{}); }catch(_){}
         try{ localStorage.setItem("7e_aviso_fases34","1"); }catch(_){}
-        f.outerHTML=`<p class="avok">Pronto, ${esc(n.split(" ")[0])}! Assim que as Fases 3 e 4 abrirem, a gente te avisa por e-mail. ✨</p>`; vibra([10,40,10]); }); });
+        f.outerHTML=`<p class="avok">Pronto${n?", "+esc(n.split(" ")[0]):""}! Assim que as Fases 3 e 4 abrirem, a gente te avisa por e-mail. ✨</p>`; vibra([10,40,10]); }); });
+}
+/* botão de baixar a imagem do Saborear (no celular abre o "compartilhar/salvar"; no computador baixa o arquivo) */
+function ligaBaixar(c){ const bt=c.querySelector("#baixar"), pv=c.querySelector("#sabprev"); if(!bt) return; let blob=null;
+  imagemSabor().then(b=>{ blob=b; pv.src=URL.createObjectURL(b); pv.hidden=false; bt.disabled=false; }).catch(()=>{ bt.closest(".sabbaixa").remove(); });
+  bt.onclick=()=>{ if(!blob) return; click(); resp.baixou_saborear=true; const nome="7entidos-meu-momento.jpg";
+    try{ const fl=new File([blob],nome,{type:"image/jpeg"}); if(navigator.canShare&&navigator.canShare({files:[fl]})){ navigator.share({files:[fl],title:"Meu momento · 7entidos"}).catch(()=>{}); return; } }catch(e){}
+    const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=nome; document.body.appendChild(a); a.click(); setTimeout(()=>a.remove(),500); };
 }
 function recomecar(){ click(); resp={}; /* o nome continua guardado no celular (7e_nome) */ inicio=null; inicio2=null; pos=0; try{ localStorage.removeItem("7e_app_novo"); localStorage.removeItem("7e_app_novo_fase1"); }catch(e){} desenha(); }
 
 /* ============ GUARDAR E ENVIAR (anônimo) ============ */
-function salvaLocal(){ try{ localStorage.setItem("7e_app_novo",JSON.stringify({pos,resp,inicio,inicio2})); if(resp.fase1_completa) localStorage.setItem("7e_app_novo_fase1",JSON.stringify({gostos:SENT.map(x=>resp["gosto_"+x.id]||null),chegada:resp.escala_chegada})); }catch(e){} }
+function salvaLocal(){ try{ localStorage.setItem("7e_app_novo",JSON.stringify({pos,resp,inicio,inicio2,r:R.length})); if(resp.fase1_completa) localStorage.setItem("7e_app_novo_fase1",JSON.stringify({gostos:SENT.map(x=>resp["gosto_"+x.id]||null),chegada:resp.escala_chegada})); }catch(e){} }
 const PID=(function(){ try{ let v=localStorage.getItem("7e_pessoa"); if(!v){ v=Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4); localStorage.setItem("7e_pessoa",v); } return v; }catch(e){ return Math.random().toString(36).slice(2,12); } })();
 function envia(){ if(!ENDPOINT||!resp.consentiu) return; try{ const r={...resp}; Object.keys(r).forEach(k=>{ if(/_t0$/.test(k)||/^local_/.test(k)) delete r[k]; }); /* nome e cheiros escritos ficam só no celular */
   fetch(ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify({pesquisa:"app-novo",versao:VERSAO,pessoa:PID,quando:new Date().toISOString(),respostas:r})}).catch(()=>{}); }catch(e){} }
 
 /* ============ PAINEL DE VALIDAÇÃO (só na prévia) ============ */
 const ITENS=[
- ["b4b1","Bloco 4 de 7 · 1 · Tela 14 · Noção do corpo","4 gestos de yoga e respiração + 'Mudou alguma coisa?'","Suspiro duplo (estudo de Stanford, 2023), espreguiçar com os braços para cima e girar os ombros (yoga na cadeira), mão no peito para sentir o coração. Só sensações. No fim: Sim / Um pouco / Não.",R.findIndex(x=>x.t==="jogo"&&SENT[x.i].id==="corpo")],
- ["b4b2","Bloco 4 de 7 · 2 · Tela 15","'Quanto você curtiu?' + 'Jogar de novo' mais visível","Depois de cada jogo continua a pergunta. O 'Jogar de novo' virou um botão dourado grande, logo abaixo.",R.findIndex(x=>x.t==="jogo"&&SENT[x.i].id==="corpo")],
- ["b4b3","Bloco 4 de 7 · 3 · Tela 16 · Saborear","Imagem montada com as preferências + frase bonita","A foto principal em cima e as outras escolhas da pessoa embaixo, com a frase 'O que te faz bem tem nome: ...'.",R.findIndex(x=>x.t==="saborear")],
- ["b4b4","Bloco 4 de 7 · 4 · Tela 17","Você chegou com X e sai com Y","Conferido: aparece depois da nota de saída e no topo da tela da ampulheta.",R.findIndex(x=>x.t==="escala"&&x.id==="saida")],
- ["b4b5","Bloco 4 de 7 · 5 · Tela 18","Pare a ampulheta","A ampulheta de luz enche de 0 a 15 minutos em uns 6 segundos; toque em Parar. Depois: 'Você achou X minutos. Foram Y.' e 'O tempo voou' (se achou menos) ou 'O tempo passou devagar' (se achou mais).",R.findIndex(x=>x.t==="chute")]
+ ["gp1a","Google Play · Bloco 1 · 1 · Abertura","Mandala oficial de 7 círculos","A mandala de 8 círculos (do reality) saiu. Entrou a oficial do 7entidos, de 7 círculos. Os círculos acendem um por sentido, e o 7 do meio acende no fim do vídeo da Brisa. O ícone da aba também mudou.",0],
+ ["gp1b","Google Play · Bloco 1 · 1 · Nota de 0 a 10","Mandala acende com a nota","Toque nos números: 0 = apagada; cada número acende mais um pedaço; 10 = mandala inteira acesa.",R.findIndex(x=>x.t==="escala")],
+ ["gp1c","Google Play · Bloco 1 · 2 · Tela do tempo","'Entenda o Flow' virou um link discreto","Não é mais uma tela no caminho. Fica embaixo do 'Ver meu gráfico'; abre por cima e fecha no ✕, no 'Fechar' ou tocando fora.",R.findIndex(x=>x.t==="revela")],
+ ["gp1d","Google Play · Bloco 1 · 3 · Tela final","Baixar a imagem do Saborear","Aparece uma miniatura da imagem do seu momento e o botão 'Baixar a imagem do meu momento'. No celular abre o salvar/compartilhar; no computador baixa o arquivo.",R.findIndex(x=>x.t==="trava3")],
+ ["gp1e","Google Play · Bloco 1 · 3 · Tela final","Cartão de vidro 'Falta pouco'","Aviso das Fases 3 e 4 num cartão transparente, tipo vidro. Nome é opcional; para avisar, só o e-mail + a caixinha de consentimento. Vai separado das respostas anônimas.",R.findIndex(x=>x.t==="trava3")],
+ ["gp1f","Google Play · Bloco 1 · 4 · Vídeo da Brisa e logo","Brisa e logo maiores","Vídeo da Brisa maior, logo do topo (mandala + 7entidos) maior e logo da tela do vaso maior.",0],
+ ["gp1g","Google Play · Bloco 1 · 4 · Privacidade","Texto de privacidade menor","Agora: 'Respostas anônimas, só para o estudo do 7entidos. Ao começar, você concorda. Privacidade'.",0],
+ ["gp1h","Google Play · Bloco 1 · 4 · Jogos","Menos texto dentro dos jogos","Cada jogo mostra só o nome e a missão em uma frase. Saíram as frases extras ('as cores vão ficando parecidas', 'ela vai acelerando', a linha de estudo dos gestos). O Carinho ficou como estava, porque ele não podia ser mexido.",R.findIndex(x=>x.t==="jogo")]
 ];
 const REVISAR=["Mudar o visual","Mudar o texto","Mudar como funciona","Tirar do app"];
 let val={}, vdb=null, VDOC=null;
 function painel(){
   let el=document.getElementById("vp"); if(!el){ el=document.createElement("div"); el.id="vp"; el.className="vpainel"; document.body.appendChild(el); }
   const nv=ITENS.filter(x=>val[x[0]]&&val[x[0]].s==="validado").length;
-  el.innerHTML=`<div class="vcaixa"><div class="rot">Prévia · app novo · Bloco 4 de 7</div><h2>Validar item por item</h2><p class="sub">${nv} de ${ITENS.length} validados. "Ver" leva direto para a tela do item.</p>
+  el.innerHTML=`<div class="vcaixa"><div class="rot">Prévia · app novo · Google Play · Bloco 1</div><h2>Validar item por item</h2><p class="sub">${nv} de ${ITENS.length} validados. "Ver" leva direto para a tela do item.</p>
     ${ITENS.map(([id,num,tt,ds,alvo])=>{ const v=val[id]||{}; return `<div class="vitem"><div class="rot" style="margin:0">${num}</div><div class="tt">${tt}</div><div class="ds">${ds}</div>
       <div class="bb"><button class="v ${v.s==="validado"?"on":""}" onclick="marca('${id}','validado')">Validado</button><button class="r ${v.s==="revisar"?"on":""}" onclick="marca('${id}','revisar')">Revisar</button><button class="ir" onclick="ir(${alvo})">Ver</button></div>
       <div class="rev ${v.s==="revisar"?"on":""}">${REVISAR.map(o=>`<button class="${v.o===o?"on":""}" onclick="marcaRev('${id}','${o}')">${o}</button>`).join("")}</div></div>`; }).join("")}
@@ -1204,15 +1274,15 @@ function painel(){
 function fechaPainel(){ const el=document.getElementById("vp"); if(el) el.classList.remove("on"); }
 function marca(id,s){ val[id]={...(val[id]||{}),s}; if(s==="validado") delete val[id].o; salvaVal(); painel(); }
 function marcaRev(id,o){ val[id]={s:"revisar",o}; salvaVal(); painel(); }
-function salvaVal(){ try{ localStorage.setItem("7e_app_novo_val_s2b4b",JSON.stringify(val)); }catch(e){}
+function salvaVal(){ try{ localStorage.setItem("7e_app_novo_val_gp1",JSON.stringify(val)); }catch(e){}
   if(VDOC) VDOC.set({atualizado:new Date().toISOString(), itens:ITENS.map(x=>({id:x[0],item:x[1]+" · "+x[2],situacao:(val[x[0]]||{}).s||null,revisar:(val[x[0]]||{}).o||null}))}).catch(()=>{}); }
 
 /* ============ INÍCIO ============ */
-try{ const s=JSON.parse(localStorage.getItem("7e_app_novo")||"null"); if(s&&s.resp&&s.pos>0&&s.pos<R.length-2){ resp=s.resp; pos=s.pos; inicio=s.inicio||Date.now(); inicio2=s.inicio2||null; } }catch(e){}
-try{ val=JSON.parse(localStorage.getItem("7e_app_novo_val_s2b4b")||"{}")||{}; }catch(e){}
+try{ const s=JSON.parse(localStorage.getItem("7e_app_novo")||"null"); if(s&&s.resp&&s.r===R.length&&s.pos>0&&s.pos<R.length-2){ resp=s.resp; pos=s.pos; inicio=s.inicio||Date.now(); inicio2=s.inicio2||null; } }catch(e){}
+try{ val=JSON.parse(localStorage.getItem("7e_app_novo_val_gp1")||"{}")||{}; }catch(e){}
 if(PREVIA){ const b=document.createElement("button"); b.className="vbtn"; b.type="button"; b.textContent="Validar a prévia"; b.onclick=()=>{ click(); painel(); }; document.body.appendChild(b); }
 desenha();
-if(PREVIA && window.claude && claude.use){ claude.use("db").then(db=>{ if(!db) return; VDOC=db.doc("validacao/app-novo-s2-b4b"); return VDOC.get().then(sn=>{ const d=sn&&(sn.data?sn.data():sn); if(d&&d.itens&&!Object.keys(val).length){ d.itens.forEach(x=>{ if(x.situacao) val[x.id]={s:x.situacao,o:x.revisar||undefined}; }); } }); }).catch(()=>{}); }
+if(PREVIA && window.claude && claude.use){ claude.use("db").then(db=>{ if(!db) return; VDOC=db.doc("validacao/app-novo-gp-b1"); return VDOC.get().then(sn=>{ const d=sn&&(sn.data?sn.data():sn); if(d&&d.itens&&!Object.keys(val).length){ d.itens.forEach(x=>{ if(x.situacao) val[x.id]={s:x.situacao,o:x.revisar||undefined}; }); } }); }).catch(()=>{}); }
 </script>
 </body>
 </html>
