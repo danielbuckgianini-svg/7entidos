@@ -529,9 +529,57 @@ body.foco #vinheta{opacity:.55}
 .vitem .ir{color:var(--ouro);border-color:rgba(245,197,66,.45)}
 .vsalvo{color:var(--azul);font-size:15px;margin:10px 0}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* ===== BLOCO B (Google Play) ===== */
+/* 1. COR DO SENTIDO: fundo em degradê que muda conforme o sentido; azul-noite com um toque das 7 cores no começo e no fim */
+.fundo{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:0;transition:opacity 1.1s ease;
+  background:radial-gradient(ellipse at 50% -10%,#1d2b6b 0%,#111b3d 38%,#0a1128 72%)}
+.fundo.on{opacity:1}
+body{background:transparent!important}
+:root{--azul:#c6cde6}
+.pularbtn,.voltar{background:rgba(10,17,40,.72)!important;opacity:1}
+.missao b{color:var(--cc,var(--c))}
+.brisafrase{opacity:1}
+.dica{color:var(--creme)}
+.faltam{background:rgba(10,17,40,.8)}
+.fundobtn{bottom:calc(66px + env(safe-area-inset-bottom))}
+.sabcol .marca{z-index:3;background:linear-gradient(rgba(5,8,22,.95),rgba(5,8,22,.75) 70%,transparent);text-shadow:0 1px 2px #000}
+.retrato .r span,.mosaico.grande .pc span{color:#f4ecdc;background:linear-gradient(transparent 0,rgba(5,8,22,.93) 12px);text-shadow:0 1px 2px rgba(0,0,0,.9)}
+.sete7{position:fixed;left:-20%;right:-20%;bottom:-30vh;height:58vh;z-index:-1;pointer-events:none;border-radius:50%;filter:blur(55px);opacity:0;transition:opacity 1.1s ease;
+  background:conic-gradient(from 90deg at 50% 50%,#f5c542,#dcb6ff,#ff86c0,#ff8a3d,#5ccf8a,#7fd3ff,#a78bfa,#f5c542)}
+.sete7.on{opacity:.3}
+/* 2. BOTÕES COM VOLUME (3D) E LETRA GRANDE */
+.btn{min-height:62px;font-size:22px;background:linear-gradient(180deg,#ffdd78 0%,#f5c542 52%,#e2a823 100%);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.6),inset 0 -3px 0 rgba(140,88,0,.35),0 6px 0 #a5740c,0 16px 28px -10px rgba(0,0,0,.75);transition:transform .08s,box-shadow .08s}
+.btn:active{transform:translateY(4px);box-shadow:inset 0 2px 0 rgba(255,255,255,.5),inset 0 -2px 0 rgba(140,88,0,.3),0 2px 0 #a5740c,0 6px 12px -6px rgba(0,0,0,.7)}
+.btn.sec{background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.05));border:1.5px solid rgba(220,226,245,.4);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 5px 0 rgba(3,6,18,.75),0 14px 24px -12px rgba(0,0,0,.8)}
+.btn.sec:active{box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 1px 0 rgba(3,6,18,.75)}
+.btn.cta{min-height:70px;font-size:25px}
+@keyframes ctapulsa{0%,100%{box-shadow:inset 0 2px 0 rgba(255,255,255,.6),inset 0 -3px 0 rgba(140,88,0,.35),0 6px 0 #a5740c,0 16px 28px -10px rgba(0,0,0,.75),0 0 0 0 rgba(245,197,66,.55)}
+  50%{box-shadow:inset 0 2px 0 rgba(255,255,255,.6),inset 0 -3px 0 rgba(140,88,0,.35),0 6px 0 #a5740c,0 16px 28px -10px rgba(0,0,0,.75),0 0 0 14px rgba(245,197,66,0)}}
+.opt,.som,.curtiu button,.chips button,.ingr button,#porque button:not(.volta),.sentes button,.outro button{
+  background-image:linear-gradient(180deg,rgba(255,255,255,.15),rgba(255,255,255,.03) 65%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 5px 0 rgba(3,6,18,.7),0 12px 22px -12px rgba(0,0,0,.8);transition:transform .08s,box-shadow .08s,border-color .25s}
+.opt:active,.som:active,.curtiu button:active,.chips button:active,.ingr button:active,#porque button:not(.volta):active,.sentes button:active,.outro button:active{transform:translateY(3px);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 2px 0 rgba(3,6,18,.7)}
+.escala button{box-shadow:inset 0 2px 0 rgba(255,255,255,.22),0 4px 0 rgba(3,6,18,.7)}
+.escala button:active{transform:translateY(3px)}
+.opt{font-size:22px}.som{font-size:20px}.curtiu button,.chips button,.sentes button{font-size:20px}.ingr button{font-size:16px}#porque button:not(.volta){font-size:19px}
+/* 3. CONTRASTE: todo texto com pelo menos 4,5:1 (texto grande: 3:1), medido tela por tela */
+body.foco .topo,body.foco #pularbtn,body.foco #voltar{opacity:.9}
+body.foco .topo:hover,body.foco #pularbtn:focus-visible,body.foco #voltar:focus-visible{opacity:1}
+.escbloco.apagado{opacity:.74;transform:translateY(14px) scale(.97);filter:saturate(.6)}
+.foto .nm{background:linear-gradient(transparent,rgba(5,8,22,.82) 40%,rgba(5,8,22,.97));text-shadow:0 1px 3px rgba(0,0,0,.9)}
+.fundobtn[disabled]{opacity:.85}
+.gcard .titc{color:#f4ecdc}
+.marcatxt span{color:#c8cfe6}
+@keyframes piscadev{0%,100%{opacity:1}50%{opacity:.68}}
+@keyframes pisca2{50%{opacity:.66}}
+@keyframes pisc{0%,100%{opacity:1;text-shadow:0 0 18px rgba(245,197,66,.6)}50%{opacity:.6;text-shadow:none}}
 </style>
 </head>
 <body>
+<div class="fundo on" id="fundoA"></div><div class="fundo" id="fundoB"></div><div class="sete7" id="sete7"></div>
 <div class="topo"><div class="const" id="const" hidden aria-live="polite"></div></div>
 <main id="palco"></main>
 <div id="vinheta" aria-hidden="true"></div>
@@ -550,7 +598,7 @@ const MANDALA = NO_SITE ? "/app-novo/mandala-7.webp" : "mandala-7.webp"; /* mand
    Os de agora são VÍDEOS DE TESTE (foto da Brisa + som suave). Quando chegarem os verdadeiros, mude VIDEO_TESTE para false
    e troque as legendas abaixo pelas falas exatas do vídeo (segundo de início, segundo de fim, texto). */
 const VIDEO_TESTE = false;
-const VID1 = NO_SITE ? "/app-novo/brisa-entrada.mp4" : "brisa-entrada.mp4";
+const VID1 = NO_SITE ? "/app-novo/brisa-entrada.mp4?v=288" : "brisa-entrada.mp4?v=288";
 const VID2 = NO_SITE ? "/app-novo/brisa-fase2.mp4" : "brisa-fase2.mp4";
 const VID3 = NO_SITE ? "/app-novo/brisa-fase3.mp4" : "brisa-fase3.mp4";
 /* legenda do vídeo 3: fica vazia até o Daniel confirmar o texto exato do vídeo (sem legenda, o botão "Legenda" não aparece) */
@@ -563,12 +611,12 @@ const VERSAO = "app-novo-v1";
 
 const SENT = [
  {id:"visao", missao:"achar o quadrado de cor diferente · até errar · revela o quanto seus olhos pegam detalhes.", s:"Visão", cor:"#f5c542", q:"O que te faz bem de olhar?", o:["Pôr do sol na praia","Céu estrelado","Um mural colorido de grafite","Fotos antigas de família"], brisa:"Comece pelos olhos.", jogo:"Olho de águia"},
- {id:"audicao", missao:"dizer qual som é mais fino · até errar · revela o quanto seu ouvido separa sons parecidos.", s:"Audição", cor:"#4aa8ff", q:"O que te faz bem ouvir?", o:["Som do mar","Música ao vivo","Chuva no telhado","Silêncio total"], sons:["mar","musica","chuva","silencio"], brisa:"Agora, feche os olhos e escute.", jogo:"Qual som é mais fino?"},
- {id:"tato", missao:"fazer carinho nas 4 fotos · 1 passada em cada · revela que toque a sua pele prefere.", s:"Tato", cor:"#ff8a3d", q:"O que te faz bem de sentir na pele?", o:["Areia nos pés","Cobertor macio","Água gelada","Abraço apertado"], brisa:"Sinta com a ponta dos dedos.", jogo:"Carinho"},
- {id:"paladar", missao:"montar um prato com 3 comidas e fazer uma viagem rápida · revela os sabores que te atraem.", s:"Paladar", cor:"#ff5a6e", q:"Que sabor te faz bem?", o:["Comida de vó","Doce de padaria","Fruta fresca","Café passado na hora"], brisa:"Pense no sabor que te acolhe.", jogo:"Monte o seu prato"},
+ {id:"audicao", missao:"dizer qual som é mais fino · até errar · revela o quanto seu ouvido separa sons parecidos.", s:"Audição", cor:"#dcb6ff", q:"O que te faz bem ouvir?", o:["Som do mar","Música ao vivo","Chuva no telhado","Silêncio total"], sons:["mar","musica","chuva","silencio"], brisa:"Agora, feche os olhos e escute.", jogo:"Qual som é mais fino?"},
+ {id:"tato", missao:"fazer carinho nas 4 fotos · 1 passada em cada · revela que toque a sua pele prefere.", s:"Tato", cor:"#ff86c0", q:"O que te faz bem de sentir na pele?", o:["Areia nos pés","Cobertor macio","Água gelada","Abraço apertado"], brisa:"Sinta com a ponta dos dedos.", jogo:"Carinho"},
+ {id:"paladar", missao:"montar um prato com 3 comidas e fazer uma viagem rápida · revela os sabores que te atraem.", s:"Paladar", cor:"#ff8a3d", q:"Que sabor te faz bem?", o:["Comida de vó","Doce de padaria","Fruta fresca","Café passado na hora"], brisa:"Pense no sabor que te acolhe.", jogo:"Monte o seu prato"},
  {id:"olfato", missao:"uma viagem de olhos fechados, guiada pela Brisa · revela o quanto a sua imaginação sente cheiros.", s:"Olfato", cor:"#5ccf8a", q:"Que cheiro te faz bem?", o:["Terra molhada","Pão saindo do forno","Perfume de alguém querido","Cheiro de café"], brisa:"Respire fundo. O cheiro também lembra.", jogo:"Viagem do cheiro"},
- {id:"equilibrio", missao:"pegar a bolinha e segurar · ela fica mais rápida a cada acerto · revela o seu ritmo.", s:"Equilíbrio", cor:"#b48cff", q:"Que movimento te faz bem?", o:["Dançar","Balançar numa rede","Andar de bicicleta","Ficar de pé numa prancha"], brisa:"Encontre o seu centro.", jogo:"Bolinha no ritmo"},
- {id:"corpo", missao:"fazer 4 gestos simples no próprio corpo · 8 segundos cada · revela o que muda quando você presta atenção nele.", s:"Noção do corpo", cor:"#3fd6d0", q:"O que te faz bem no corpo?", o:["Alongar","Correr","Nadar","Deitar e respirar fundo"], brisa:"Por último, perceba o seu corpo.", jogo:"Sinta o corpo"}
+ {id:"equilibrio", missao:"pegar a bolinha e segurar · ela fica mais rápida a cada acerto · revela o seu ritmo.", s:"Equilíbrio", cor:"#7fd3ff", q:"Que movimento te faz bem?", o:["Dançar","Balançar numa rede","Andar de bicicleta","Ficar de pé numa prancha"], brisa:"Encontre o seu centro.", jogo:"Bolinha no ritmo"},
+ {id:"corpo", missao:"fazer 4 gestos simples no próprio corpo · 8 segundos cada · revela o que muda quando você presta atenção nele.", s:"Noção do corpo", cor:"#a78bfa", q:"O que te faz bem no corpo?", o:["Alongar","Correr","Nadar","Deitar e respirar fundo"], brisa:"Por último, perceba o seu corpo.", jogo:"Sinta o corpo"}
 ];
 const foto = (sid,i) => IMG+sid+"-"+(i+1)+".jpg";
 const TEMPOS = ["Menos de 3 minutos","De 3 a 6 minutos","De 6 a 10 minutos","10 minutos ou mais"];
@@ -713,6 +761,19 @@ function desenhaMini(){
 }
 /* fim do vídeo 1 da Brisa (ou "Começar"): acende a primeira luz, o miolo da mandala */
 function acendeLuz0(){ if(resp.local_luz0) return; resp.local_luz0=true; const m=document.getElementById("mtopo"); desenhaMini(); if(m){ m.classList.remove("pulsa"); void m.offsetWidth; m.classList.add("pulsa"); } vibra(20); }
+/* versão mais clara da cor do sentido, para textos pequenos ficarem legíveis sobre o fundo da mesma cor */
+function claro(h){ const a=[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)); return "#"+a.map(x=>Math.round(x+(255-x)*.5).toString(16).padStart(2,"0")).join(""); }
+function mixCor(h,t){ const a=[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)), b=[10,17,40]; return "rgb("+a.map((x,k)=>Math.round(x*t+b[k]*(1-t))).join(",")+")"; }
+function rgba(h,al){ return "rgba("+[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)).join(",")+","+al+")"; }
+let FUNDO_ATUAL="noite";
+function fundoCor(cor){ const chave=cor||"noite"; if(chave===FUNDO_ATUAL) return; FUNDO_ATUAL=chave;
+  const a=document.getElementById("fundoA"), b=document.getElementById("fundoB"); if(!a||!b) return;
+  const vai=a.classList.contains("on")?b:a, sai=vai===a?b:a;
+  vai.style.background = cor
+    ? `radial-gradient(130% 50% at 50% 0%,${rgba(cor,.38)} 0%,transparent 72%),linear-gradient(180deg,${mixCor(cor,.30)} 0%,${mixCor(cor,.17)} 50%,#0a1128 90%)`
+    : "";
+  vai.classList.add("on"); sai.classList.remove("on");
+  document.getElementById("sete7").classList.toggle("on",!cor); }
 function brilho(cor){ document.body.style.setProperty("--glow", cor?cor+"26":"rgba(245,197,66,.10)"); }
 function anel(cls="respira", acesa=-1, feitos=[], img=""){ return `<div class="anel ${cls}">${img?`<img src="${img}" alt="Brisa">`:""}${SENT.map((s,i)=>`<i style="--c:${s.cor};--a:${i*360/7}deg;--d:${i*.35}s" class="${acesa<0?"":(i===acesa?"acesa":(feitos.includes(i)?"":"apag"))}"></i>`).join("")}</div>`; }
 
@@ -722,7 +783,7 @@ function desenha(){
   const p=R[pos]; document.getElementById("voltar").hidden = pos===0 || ["revela","grafico","abre2","saborear"].includes(p.t);
   /* "pular" aparece nas telas que pedem resposta ou jogo; nas outras o próprio botão já segue */
   document.getElementById("pularbtn").hidden = !PULAVEIS.includes(p.t);
-  desenhaMini(); brilho(p.i!=null?SENT[p.i].cor:null);
+  desenhaMini(); brilho(p.i!=null?SENT[p.i].cor:null); fundoCor(p.i!=null?SENT[p.i].cor:null);
   ({brisa,vaso,escala,passagem,gosto,fim1,abre2,jogo,saborear,chute,revela,grafico,trava3})[p.t](p);
 }
 
@@ -836,7 +897,7 @@ function passagem(p){
 function mosaico(grande,atual=-1){ return `<div class="mosaico ${grande?"grande":""}">${SENT.map((x,i)=>{ const j=x.o.indexOf(resp["gosto_"+x.id]); return `<div class="pc ${j>=0?"cheio":""} ${i===atual?"agora":""}" data-i="${i}" style="--c:${x.cor}">${j>=0?`<img src="${foto(x.id,j)}" alt="">`:""}${grande&&j>=0?`<span>${esc(x.o[j])}</span>`:""}</div>`; }).join("")}</div>`; }
 function gosto(p){
   const s=SENT[p.i], k="gosto_"+s.id;
-  mostra(`${p.i===4?'<div style="text-align:center"><span class="faltam">Faltam só 3</span></div>':""}${mosaico(false,p.i)}<p class="brisafrase" style="--c:${s.cor}">${esc(fraseGosto(s,p.i))}</p><div class="rot" style="color:${s.cor}">${s.s}</div><h2>${s.q}</h2><p class="sub">Escolha uma. Segure para olhar de perto.</p>
+  mostra(`${p.i===4?'<div style="text-align:center"><span class="faltam">Faltam só 3</span></div>':""}${mosaico(false,p.i)}<p class="brisafrase" style="--c:${s.cor}">${esc(fraseGosto(s,p.i))}</p><div class="rot" style="color:${claro(s.cor)}">${s.s}</div><h2>${s.q}</h2><p class="sub">Escolha uma. Segure para olhar de perto.</p>
     <div class="g22">${s.o.map((o,j)=>`<button class="foto ${resp[k]===o?"sel":""}" data-j="${j}" onclick="escolheFoto(this,'${k}',${p.i},${j})"><img src="${foto(s.id,j)}" alt="" loading="lazy" draggable="false"><span class="nm">${esc(o)}</span>${s.sons?`<span class="ouvir" role="button" onclick="event.stopPropagation();tocarAmbiente('${s.sons[j]}',this)">Ouvir</span>`:""}</button>`).join("")}</div>`, c=>ligaPerto(c,s));
 }
 /* OLHAR DE PERTO: segurar meio segundo abre a foto em tela cheia (na Audição, com o som); soltar volta sem escolher */
@@ -962,7 +1023,7 @@ function saborear(p){
 function sigaSabor(){ clearTimeout(saborTm); pararSom(); avanca(); }
 const fraseJogo=s=>`Agora, o jogo ${["tato","paladar","olfato","equilibrio"].includes(s.id)?"do":"da"} ${s.s}: ${s.jogo}${/\?$/.test(s.jogo)?"":"."}`;
 const fraseGosto=(s,i)=>i===0&&NOME()?"Boa, "+NOME()+"! "+s.brisa:i===6&&NOME()?NOME()+", "+s.brisa.charAt(0).toLowerCase()+s.brisa.slice(1):s.brisa;
-const cabLongo=(s,dica)=>`<p class="brisafrase" style="--c:${s.cor}">${esc(fraseJogo(s))}</p><h2>${s.jogo}</h2><p class="missao" style="--c:${s.cor}"><b>Missão:</b> ${s.missao}</p><p class="dica">${dica}</p>`;
+const cabLongo=(s,dica)=>`<p class="brisafrase" style="--c:${s.cor}">${esc(fraseJogo(s))}</p><h2>${s.jogo}</h2><p class="missao" style="--c:${s.cor};--cc:${claro(s.cor)}"><b>Missão:</b> ${s.missao}</p><p class="dica">${dica}</p>`;
 /* jogos com pouco texto: só o título e uma linha curta */
 const cab=(s,dica)=>`<h2 class="jtit">${s.jogo}</h2><p class="dica curta">${dica}</p>`;
 /* luzinhas de retorno (uma por rodada): 1 = acertou (acesa), 0 = errou (apagada), null = ainda não jogou */
@@ -1131,13 +1192,13 @@ const JOGOS_GUARDADOS={
         desenha2(); }
       function passo3(){ c.innerHTML=`${cab(s,"Qual é o mais gostoso?")}<div class="opts">${sel.map(t=>`<button class="opt" data-t="${esc(t)}">${esc(t)}</button>`).join("")}</div>`;
         c.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ somJogo(); const fav=b.dataset.t; if(ESCR.has(fav)){ delete resp.olfato_favorito; resp.local_olfato_favorito=fav; } else { resp.olfato_favorito=fav; delete resp.local_olfato_favorito; } vibra([10,40,10]);
-          c.innerHTML=`<div class="rot" style="color:${s.cor}">Seu cheiro do momento</div><div class="campeao">${esc(b.dataset.t)}</div><p class="fala2" style="margin-bottom:0">${comNome("Guarde esse cheiro, {n}. Ele conta onde você está agora.","Guarde esse cheiro. Ele conta onde você está agora.")}</p>`; fim(); }); }
+          c.innerHTML=`<div class="rot" style="color:${claro(s.cor)}">Seu cheiro do momento</div><div class="campeao">${esc(b.dataset.t)}</div><p class="fala2" style="margin-bottom:0">${comNome("Guarde esse cheiro, {n}. Ele conta onde você está agora.","Guarde esse cheiro. Ele conta onde você está agora.")}</p>`; fim(); }); }
     }); },
 };
 
 function curtiu(p){
   const s=SENT[p.i], k="curtiu_"+s.id;
-  mostra(`<div class="rot" style="color:${s.cor}">${s.s}</div><h2>Quanto você curtiu o jogo ${esc(s.jogo)}?</h2>
+  mostra(`<div class="rot" style="color:${claro(s.cor)}">${s.s}</div><h2>Quanto você curtiu o jogo ${esc(s.jogo)}?</h2>
     <div class="curtiu" style="--c:${s.cor}">${[["Curti pouco",1],["Curti",2],["Curti muito",3]].map(([n,v])=>`<button class="${resp[k]===v?"sel":""}" onclick="escolheCurtiu(this,'${k}',${v})"><span class="lz">${"<i></i>".repeat(v)}</span>${n}</button>`).join("")}</div>`);
 }
 function escolheCurtiu(b,k,v){ resp[k]=v; click(); b.parentNode.querySelectorAll("button").forEach(x=>x.classList.remove("sel")); b.classList.add("sel"); desenhaMini(); setTimeout(avanca,450); }
@@ -1269,20 +1330,19 @@ function envia(){ if(!ENDPOINT||!resp.consentiu) return; try{ const r={...resp};
   fetch(ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify({pesquisa:"app-novo",versao:VERSAO,pessoa:PID,quando:new Date().toISOString(),respostas:r})}).catch(()=>{}); }catch(e){} }
 
 /* ============ PAINEL DE VALIDAÇÃO (só na prévia) ============ */
-/* Bloco A (ajustes do Bloco 1 já validado no celular). Os itens já validados do Bloco 1 saíram do painel.
-   O 5º pedido do Bloco A (juntar "Baixar a imagem" e "Cartão de vidro") virou o item A4: é uma tela só. */
+/* Bloco B (Google Play). O Bloco A já foi aprovado (frase da abertura: opção A) e saiu do painel. */
 const ITENS=[
- ["gpa1","Bloco A · 1 · Abertura","A frase pisca devagar","'A vida é feita de boas sensações' acende e apaga bem devagar, embaixo do 7entidos.",-1],
- ["gpa2","Bloco A · 2 · Abertura","'2 fases' + frase curta","Saiu 'uns 7 minutos'. Fica '2 fases' e, embaixo, uma frase curta para a pessoa começar. Escolha uma das 3 (a tela muda na hora):",-1,FRASES_AB],
- ["gpa3","Bloco A · 3 · Tela do tempo","'Entenda o Flow' maior","Agora é um botão dourado com contorno e um 'i', bem visível, logo abaixo do 'Ver meu gráfico' (que continua sendo o botão principal).",R.findIndex(x=>x.t==="revela")],
- ["gpa4","Bloco A · 4 · Tela final","Imagem do Saborear + cartão de vidro 'Falta pouco'","Uma tela só: a imagem para baixar aparece sempre. Se a pessoa não escolheu nada (como quando você entra por este 'Ver'), aparece uma imagem de exemplo com o aviso 'Imagem de exemplo'. Embaixo, o cartão de vidro 'Falta pouco' (nome opcional, e-mail + consentimento, separado das respostas).",R.findIndex(x=>x.t==="trava3")]
+ ["gpb1","Bloco B · 1 · Cor do sentido","Fundo em degradê que muda com o sentido","Visão dourado, Audição lilás, Tato rosa, Paladar laranja, Olfato verde, Equilíbrio azul-claro, Noção do corpo violeta. As luzes de cima e o gráfico usam as mesmas cores. Na abertura e no fim, azul-noite com um brilho das 7 cores embaixo. Toque em 'Ver' e avance pelas 7 perguntas.",R.findIndex(x=>x.t==="gosto")],
+ ["gpb2","Bloco B · 2 · Botões","Botões com volume (3D) e letra maior","Os botões parecem 'saltados' e afundam quando você toca. A letra ficou maior em todos.",R.findIndex(x=>x.t==="vaso")],
+ ["gpb3","Bloco B · 3 · Leitura","Contraste de pelo menos 4,5 em todos os textos","Medi tela por tela, letra por letra. O azul-claro dos textos ficou um pouco mais claro, os nomes nas fotos ganharam uma faixa escura e as frases que piscam não apagam mais tanto. No modo foco dos jogos, o topo e o 'pular' ficam só um pouco apagados.",R.findIndex(x=>x.t==="jogo")],
+ ["gpb4","Bloco B · 4 · Vídeo 1 da Brisa","Sem 'Quer saber mais? Visite o nosso site'","O vídeo termina em 'Vamos começar?' (28,8 s) e a legenda termina junto. Toque em 'Ver', depois em 'Entrar', e assista até o fim.",-1]
 ];
 const REVISAR=["Mudar o visual","Mudar o texto","Mudar como funciona","Tirar do app"];
 let val={}, vdb=null, VDOC=null;
 function painel(){
   let el=document.getElementById("vp"); if(!el){ el=document.createElement("div"); el.id="vp"; el.className="vpainel"; document.body.appendChild(el); }
   const nv=ITENS.filter(x=>val[x[0]]&&val[x[0]].s==="validado").length;
-  el.innerHTML=`<div class="vcaixa"><div class="rot">Prévia · app novo · Google Play · Bloco A</div><h2>Validar item por item</h2><p class="sub">${nv} de ${ITENS.length} validados. "Ver" leva direto para a tela do item.</p>
+  el.innerHTML=`<div class="vcaixa"><div class="rot">Prévia · app novo · Google Play · Bloco B</div><h2>Validar item por item</h2><p class="sub">${nv} de ${ITENS.length} validados. "Ver" leva direto para a tela do item.</p>
     ${ITENS.map(([id,num,tt,ds,alvo,ops])=>{ const v=val[id]||{}; return `<div class="vitem"><div class="rot" style="margin:0">${num}</div><div class="tt">${tt}</div><div class="ds">${ds}</div>${ops?`<div class="esc">${ops.map((o,k)=>`<button class="${(v.e==null?fraseIdx():v.e)===k?"on":""}" onclick="escolhe('${id}',${k})">${"ABC"[k]}) ${o}</button>`).join("")}</div>`:""}
       <div class="bb"><button class="v ${v.s==="validado"?"on":""}" onclick="marca('${id}','validado')">Validado</button><button class="r ${v.s==="revisar"?"on":""}" onclick="marca('${id}','revisar')">Revisar</button><button class="ir" onclick="ir(${alvo})">Ver</button></div>
       <div class="rev ${v.s==="revisar"?"on":""}">${REVISAR.map(o=>`<button class="${v.o===o?"on":""}" onclick="marcaRev('${id}','${o}')">${o}</button>`).join("")}</div></div>`; }).join("")}
@@ -1295,15 +1355,15 @@ function escolhe(id,k){ click(); val[id]={...(val[id]||{}),e:k}; try{ localStora
 function fechaPainel(){ const el=document.getElementById("vp"); if(el) el.classList.remove("on"); }
 function marca(id,s){ val[id]={...(val[id]||{}),s}; if(s==="validado") delete val[id].o; salvaVal(); painel(); }
 function marcaRev(id,o){ val[id]={...(val[id]||{}),s:"revisar",o}; salvaVal(); painel(); }
-function salvaVal(){ try{ localStorage.setItem("7e_app_novo_val_gpA",JSON.stringify(val)); }catch(e){}
+function salvaVal(){ try{ localStorage.setItem("7e_app_novo_val_gpB",JSON.stringify(val)); }catch(e){}
   if(VDOC) VDOC.set({atualizado:new Date().toISOString(), itens:ITENS.map(x=>({id:x[0],item:x[1]+" · "+x[2],situacao:(val[x[0]]||{}).s||null,revisar:(val[x[0]]||{}).o||null,escolha:x[5]&&(val[x[0]]||{}).e!=null?x[5][val[x[0]].e]:null}))}).catch(()=>{}); }
 
 /* ============ INÍCIO ============ */
 try{ const s=JSON.parse(localStorage.getItem("7e_app_novo")||"null"); if(s&&s.resp&&s.r===R.length&&s.pos>0&&s.pos<R.length-2){ resp=s.resp; pos=s.pos; inicio=s.inicio||Date.now(); inicio2=s.inicio2||null; } }catch(e){}
-try{ val=JSON.parse(localStorage.getItem("7e_app_novo_val_gpA")||"{}")||{}; }catch(e){}
+try{ val=JSON.parse(localStorage.getItem("7e_app_novo_val_gpB")||"{}")||{}; }catch(e){}
 if(PREVIA){ const b=document.createElement("button"); b.className="vbtn"; b.type="button"; b.textContent="Validar a prévia"; b.onclick=()=>{ click(); painel(); }; document.body.appendChild(b); }
 desenha();
-if(PREVIA && window.claude && claude.use){ claude.use("db").then(db=>{ if(!db) return; VDOC=db.doc("validacao/app-novo-gp-bA"); return VDOC.get().then(sn=>{ const d=sn&&(sn.data?sn.data():sn); if(d&&d.itens&&!Object.keys(val).length){ d.itens.forEach(x=>{ if(x.situacao||x.escolha){ const k=x.escolha?FRASES_AB.indexOf(x.escolha):-1; val[x.id]={s:x.situacao||undefined,o:x.revisar||undefined,e:k>=0?k:undefined}; if(k>=0){ try{ localStorage.setItem("7e_frase_abertura",String(k)); }catch(e){} } } }); if(!entrou&&pos===0) desenha(); } }); }).catch(()=>{}); }
+if(PREVIA && window.claude && claude.use){ claude.use("db").then(db=>{ if(!db) return; VDOC=db.doc("validacao/app-novo-gp-bB"); return VDOC.get().then(sn=>{ const d=sn&&(sn.data?sn.data():sn); if(d&&d.itens&&!Object.keys(val).length){ d.itens.forEach(x=>{ if(x.situacao||x.escolha){ const k=x.escolha?FRASES_AB.indexOf(x.escolha):-1; val[x.id]={s:x.situacao||undefined,o:x.revisar||undefined,e:k>=0?k:undefined}; if(k>=0){ try{ localStorage.setItem("7e_frase_abertura",String(k)); }catch(e){} } } }); if(!entrou&&pos===0) desenha(); } }); }).catch(()=>{}); }
 </script>
 </body>
 </html>
