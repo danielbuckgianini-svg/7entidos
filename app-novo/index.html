@@ -834,7 +834,7 @@ function fraseAbertura(){ let i=0; if(PREVIA){ try{ const k=+localStorage.getIte
 function brisa(){
   if(!entrou){
     document.getElementById("pularbtn").hidden=true;
-    mostra(`<div class="entrar"><div class="entramdl">${mandala(Math.round(Math.min(innerWidth*.66,280)),"mentra")}</div><div class="marcatxt"><b><em>7</em>entidos</b><span class="piscadev">A vida é feita de boas sensações.</span></div><p class="duracao">FASE 2</p><p class="gatilho">${fraseAbertura()}</p><button class="btn" onclick="entrar()">Entrar</button></div>`, c=>poeMandala(c.querySelector("#mentra"),{pos:TODOS,luz:TODOS,miolo:true}));
+    mostra(`<div class="entrar"><div class="entramdl">${mandala(Math.round(Math.min(innerWidth*.66,280)),"mentra")}</div><div class="marcatxt"><b><em>7</em>entidos</b><span class="piscadev">A vida é feita de boas sensações.</span></div><p class="duracao">2 FASES</p><p class="gatilho">${fraseAbertura()}</p><button class="btn" onclick="entrar()">Entrar</button></div>`, c=>poeMandala(c.querySelector("#mentra"),{pos:TODOS,luz:TODOS,miolo:true}));
     return;
   }
   mostra(`${videoBrisa(VID1,LEG1)}
