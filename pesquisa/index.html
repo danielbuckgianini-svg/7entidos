@@ -359,6 +359,12 @@ body.tela-inicio .logo-top{visibility:hidden}
 .ggrid.g3som{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:none}
 .g3som .fcard{aspect-ratio:3/4}
 .g3som .fnome{font-size:15px}
+.testesom{text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px}
+.testesom .tsic{font-size:44px;line-height:1}
+.testesom h3{margin:0;font-size:22px}
+.testesom p{margin:0;font-size:18px}
+.testesom .tsdica{color:var(--muted);font-size:15px;max-width:300px}
+.testesom .btn{margin-top:6px}
 .sompic .exemplo{position:absolute;top:8px;right:8px;border:0;border-radius:999px;padding:6px 10px;font:700 16px Manrope,system-ui,sans-serif;background:rgba(5,8,20,.78);color:#fff;cursor:pointer;z-index:2}
 .prato .ping{width:46%;height:46%}
 .prato.pronto .pvazio{filter:drop-shadow(0 0 22px rgba(245,197,66,.55)) drop-shadow(0 10px 18px rgba(0,0,0,.45))}
@@ -1520,7 +1526,14 @@ const GAMES = {
         const certo=SONS.find(s=>s[0]===x.k)[1];
         el.querySelector(".rres").innerHTML=x.ok?'<span style="color:#9be7b0">✓ Acertou!</span>':`<span style="color:#ff8a80">Era: ${certo.toLowerCase()}.</span>`;
         setTimeout(()=>{ if(r<R.length-1){ r++; draw(); } else { answers.f2_audicao_acertos=R.filter(y=>y.ok).length; win(); } },1100); }); };
-    draw(); },
+    /* tela "Teste o som" antes da 1ª rodada (17/11) */
+    el.innerHTML=`<div class="testesom"><div class="tsic" aria-hidden="true">🎧</div><h3>Teste o som</h3>
+      <p>Aumente o volume ou coloque o fone.</p>
+      <button class="ouvirgrande" type="button" id="tsom">▶ Ouvir som de teste</button>
+      <small class="tsdica">Não ouviu nada? Confira se o celular não está no modo silencioso.</small>
+      <button class="btn" type="button" id="tsok">Ouvi, vamos lá →</button></div>`;
+    el.querySelector("#tsom").onclick=e=>{ const bt=e.currentTarget; [523,659,784].forEach((f,i)=>tone(f,i*.18)); bt.classList.add("tocando"); bt.textContent="🔊 Tocando…"; setTimeout(()=>{ bt.classList.remove("tocando"); bt.textContent="▶ Ouvir de novo"; },900); };
+    el.querySelector("#tsok").onclick=()=>{ click(); draw(); }; },
   tato(el,win){ el.innerHTML=`<p class="gtip">Segure o botão apertado até a barra encher</p><div class="progress" style="height:16px"><i id="hb"></i></div>
       <button class="btn" id="hold" style="margin-top:10px;padding:12px 20px;font-size:18px;touch-action:none;user-select:none;-webkit-user-select:none">Segure aqui ✋</button><div class="err" id="gerr"></div>`;
     let t=null,p=0; const bar=el.querySelector("#hb"), b=el.querySelector("#hold");
