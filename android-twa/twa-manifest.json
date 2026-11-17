@@ -14,8 +14,8 @@
   "backgroundColor": "#0A1030",
   "enableNotifications": false,
   "startUrl": "/app/",
-  "iconUrl": "http://localhost:8765/app/icones/icone-512.png",
-  "maskableIconUrl": "http://localhost:8765/app/icones/icone-maskable-512.png",
+  "iconUrl": "https://7entidos.com.br/app/icones/icone-512.png",
+  "maskableIconUrl": "https://7entidos.com.br/app/icones/icone-maskable-512.png",
   "splashScreenFadeOutDuration": 300,
   "signingKey": {
     "path": "../chave-envio/7entidos-upload.keystore",
