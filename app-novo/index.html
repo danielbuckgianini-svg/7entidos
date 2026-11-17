@@ -51,6 +51,10 @@ button{font-family:inherit}
 .marcatxt b em{font-style:normal;color:var(--ouro)}
 .marcatxt span{display:block;margin-top:8px;color:var(--azul);font-size:17px}
 .duracao{font:700 17px "Space Mono",monospace;color:var(--ouro);letter-spacing:.06em;margin:-14px 0 0}
+/* Bloco A: frase da marca pisca devagar; "2 fases" + frase-gatilho */
+.marcatxt span.piscadev{animation:piscadev 3.6s ease-in-out infinite}
+@keyframes piscadev{0%,100%{opacity:1}50%{opacity:.3}}
+.gatilho{margin:-26px 0 0;font:600 20px/1.3 Fraunces,serif;color:var(--creme);text-align:center;max-width:320px}
 /* tela 3: nome + número numa tela só */
 .escmdl{display:flex;flex-direction:column;align-items:center;gap:8px;margin:0 auto 14px}
 .nmshow{font:600 26px Fraunces,serif;color:var(--ouro);min-height:34px;transition:opacity .4s}
@@ -249,8 +253,10 @@ body.foco #vinheta{opacity:.55}
 .sabbaixa{max-width:440px;margin:6px auto 4px;text-align:center}
 .sabbaixa img{display:block;width:min(56vw,220px);height:auto;margin:0 auto 12px;border-radius:14px;border:1.5px solid rgba(245,197,66,.5);box-shadow:0 14px 34px -14px rgba(0,0,0,.9)}
 .sabbaixa .btn[disabled]{opacity:.55}
+.sabbaixa .exnota{font-size:14px;color:var(--azul);margin:-4px 0 10px}
 /* Entenda o Flow: link discreto que abre por cima */
-.linkflow{all:unset;cursor:pointer;display:inline-block;margin-top:16px;color:var(--azul);font-size:15px;text-decoration:underline;text-underline-offset:3px}
+.linkflow{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:8px;margin-top:20px;padding:11px 20px;border-radius:999px;border:1.5px solid rgba(245,197,66,.6);color:var(--ouro);font-size:18px;font-weight:800;background:rgba(245,197,66,.08)}
+.linkflow::before{content:"i";display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--ouro);color:#0a1128;font:800 14px Fraunces,serif}
 .flowov{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:18px;background:rgba(5,8,26,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);animation:fade .3s ease-out}
 @keyframes fade{from{opacity:0}}
 .flowcx{position:relative;width:100%;max-width:440px;max-height:88vh;overflow:auto;padding:22px 16px 18px;border-radius:24px;text-align:center;background:rgba(18,27,72,.94);border:1.5px solid rgba(245,197,66,.4)}
@@ -514,6 +520,9 @@ body.foco #vinheta{opacity:.55}
 .vitem button{all:unset;cursor:pointer;padding:9px 16px;border-radius:999px;font-weight:800;font-size:16px;border:1.5px solid var(--linha)}
 .vitem button.v.on{background:#5ccf8a;color:#06200f;border-color:#5ccf8a}
 .vitem button.r.on{background:#ff8a3d;color:#2a1103;border-color:#ff8a3d}
+.vitem .esc{display:flex;flex-direction:column;gap:8px;margin:0 0 10px}
+.vitem .esc button{border-radius:14px;font-weight:600;line-height:1.35}
+.vitem .esc button.on{background:var(--ouro);color:#0a1128;border-color:var(--ouro)}
 .vitem .rev{display:none;margin-top:10px;gap:8px;flex-wrap:wrap}
 .vitem .rev.on{display:flex}
 .vitem .rev button.on{background:var(--ouro);color:#15110a;border-color:var(--ouro)}
@@ -749,11 +758,15 @@ function ligaVideo(c,leg,falha,src){ const lg=c.querySelector("#leg"), lb=c.quer
   const pr=v.play();
   if(pr&&pr.then) pr.then(()=>{ resp.ouviu_brisa=true; }).catch(()=>{ v.muted=true; v.play().catch(()=>{}); ligaLeg(true); }); }
 
+/* Bloco A: frase-gatilho da abertura (no lugar de "uns 7 minutos"). Na prévia, o Daniel escolhe uma das 3 no painel. */
+const FRASES_AB=["Comece agora: são só poucos minutos.","Descubra o que te faz bem. Pode te surpreender.","Seus 7 sentidos estão esperando por você."];
+function fraseAbertura(){ let i=0; if(PREVIA){ try{ const k=+localStorage.getItem("7e_frase_abertura"); if(k>=0&&k<FRASES_AB.length) i=k; }catch(e){} } return FRASES_AB[i]; }
+
 /* ============ TELAS ============ */
 function brisa(){
   if(!entrou){
     document.getElementById("pularbtn").hidden=true;
-    mostra(`<div class="entrar"><div class="entramdl">${mandala(Math.round(Math.min(innerWidth*.66,280)),"mentra")}</div><div class="marcatxt"><b><em>7</em>entidos</b><span>A vida é feita de boas sensações.</span></div><p class="duracao">2 fases · uns 7 minutos</p><button class="btn" onclick="entrar()">Entrar</button></div>`, c=>poeMandala(c.querySelector("#mentra"),{pos:TODOS,luz:TODOS,miolo:true}));
+    mostra(`<div class="entrar"><div class="entramdl">${mandala(Math.round(Math.min(innerWidth*.66,280)),"mentra")}</div><div class="marcatxt"><b><em>7</em>entidos</b><span class="piscadev">A vida é feita de boas sensações.</span></div><p class="duracao">2 fases</p><p class="gatilho">${fraseAbertura()}</p><button class="btn" onclick="entrar()">Entrar</button></div>`, c=>poeMandala(c.querySelector("#mentra"),{pos:TODOS,luz:TODOS,miolo:true}));
     return;
   }
   mostra(`${videoBrisa(VID1,LEG1)}
@@ -897,9 +910,12 @@ function montaSabor(){
   const lista=nomes.length>1?nomes.slice(0,-1).join(", ")+" e "+nomes[nomes.length-1]:nomes[0];
   return {v,s,j,outros,frase:`O que te faz bem tem nome: ${lista}.`};
 }
+/* Bloco A: quando a pessoa não tem escolhas (ex.: entrou pelo "Ver" do painel ou pulou tudo), a tela final mostra uma imagem de EXEMPLO */
+function saborExemplo(){ const s=SENT[0], outros=[SENT[1],SENT[2],SENT[3]].map((x,k)=>({x,k:k+1,j:0,v:0}));
+  return {v:SENT.map(()=>0),s,j:0,outros,exemplo:true,frase:`O que te faz bem tem nome: ${s.o[0].toLowerCase()}, ${SENT[1].o[0].toLowerCase()} e ${SENT[2].o[0].toLowerCase()}.`}; }
 /* desenha a imagem do Saborear num quadro 1080 x 1350 (formato de post) para a pessoa baixar */
-function imagemSabor(){
-  const m=montaSabor(); if(!m) return Promise.reject();
+function imagemSabor(m){
+  m=m||montaSabor(); if(!m) return Promise.reject();
   const W=1080,H=1350,cv=document.createElement("canvas"); cv.width=W; cv.height=H; const g=cv.getContext("2d");
   const carrega=src=>new Promise(ok=>{ const im=new Image(); im.onload=()=>ok(im); im.onerror=()=>ok(null); im.src=src; });
   const lista=[{x:m.s,j:m.j}].concat(m.outros.map(o=>({x:o.x,j:o.j})));
@@ -912,7 +928,7 @@ function imagemSabor(){
       const sb=g.createLinearGradient(0,y+h*.55,0,y+h); sb.addColorStop(0,"rgba(0,0,0,0)"); sb.addColorStop(1,"rgba(0,0,0,.75)"); g.fillStyle=sb; g.fillRect(x,y,w,h); g.restore();
       g.save(); caixa(x,y,w,h,rr); g.lineWidth=4; g.strokeStyle=cor; g.stroke(); g.restore();
       g.fillStyle="#fff"; g.font=`800 ${h>400?44:28}px Manrope, system-ui, sans-serif`; g.textBaseline="bottom"; g.fillText(rot,x+(h>400?28:16),y+h-(h>400?24:14),w-32); };
-    g.fillStyle="#f5c542"; g.font='700 30px "Space Mono", monospace'; g.textAlign="center"; g.textBaseline="top"; g.fillText("7ENTIDOS · MEU MOMENTO",W/2,56); g.textAlign="left";
+    g.fillStyle="#f5c542"; g.font='700 30px "Space Mono", monospace'; g.textAlign="center"; g.textBaseline="top"; g.fillText(m.exemplo?"7ENTIDOS · EXEMPLO":"7ENTIDOS · MEU MOMENTO",W/2,56); g.textAlign="left";
     cobre(ims[0],60,120,960,540,34,"#f5c542",m.s.o[m.j]);
     const n=m.outros.length, col=n<=2?n:3, lin=Math.ceil(n/3)||0, gap=20, tw=col?(960-gap*(col-1))/col:0, th=lin>1?160:220;
     m.outros.forEach((o,i)=>{ const r=Math.floor(i/3), c=i%3, nr=r===lin-1?(n-r*3):3, w2=(960-gap*(nr-1))/nr; cobre(ims[i+1],60+c*(w2+gap),690+r*(th+gap),w2,th,24,o.x.cor,o.x.o[o.j]); });
@@ -1215,16 +1231,16 @@ function grafico(){
 /* depois da Fase 2: vídeo 3 da Brisa + trava "Fases 3 e 4 em construção" + aviso por e-mail (separado das respostas anônimas) */
 function trava3(){
   let avisado=false; try{ avisado=localStorage.getItem("7e_aviso_fases34")==="1"; }catch(e){}
-  const temSabor=!!montaSabor();
+  const msab=montaSabor()||saborExemplo();
   mostra(`<div class="rot">Fases 3 e 4</div>${videoBrisa(VID3,LEG3)}
-    ${temSabor?`<div class="sabbaixa"><img id="sabprev" alt="A imagem do seu momento" hidden><button class="btn" id="baixar" type="button" disabled>⬇ Baixar minha imagem</button></div>`:""}
+    <div class="sabbaixa"><img id="sabprev" alt="${msab.exemplo?"Imagem de exemplo":"A imagem do seu momento"}" hidden>${msab.exemplo?`<p class="exnota">Imagem de exemplo. Faça a Fase 1 para ter a sua.</p>`:""}<button class="btn" id="baixar" type="button" disabled>⬇ Baixar ${msab.exemplo?"a imagem":"minha imagem"}</button></div>
     <div class="trava"><h2>Falta pouco</h2><p class="sub">As Fases 3 e 4 estão quase prontas.</p>
     ${avisado?`<p class="sub">Você já está na lista. Assim que abrirem, a gente te avisa por e-mail.</p>`:`<p class="sub">Quer ser avisado quando abrirem?</p><p class="opc">É opcional.</p>
     <form id="aviso" novalidate><input id="av-nome" maxlength="40" autocomplete="given-name" placeholder="Seu nome (opcional)"><input id="av-email" type="email" maxlength="80" autocomplete="email" placeholder="Seu e-mail">
     <label class="lgpd"><input type="checkbox" id="av-ok"><span>Concordo em usar meu nome e meu e-mail só para ser avisado quando as Fases 3 e 4 abrirem. Eles ficam separados das minhas respostas. <a href="/privacidade.html" target="_blank" rel="noopener">Privacidade</a></span></label>
     <div class="averr" id="av-err"></div><button class="btn" type="submit">Quero ser avisado</button></form>`}</div>
     <button class="btn sec" style="margin-top:14px" onclick="recomecar()">Fazer de novo</button>`,
-    c=>{ ligaVideo(c,LEG3,()=>{},VID3); ligaBaixar(c); const f=c.querySelector("#aviso"); if(!f) return;
+    c=>{ ligaVideo(c,LEG3,()=>{},VID3); ligaBaixar(c,msab); const f=c.querySelector("#aviso"); if(!f) return;
       f.addEventListener("submit",e=>{ e.preventDefault(); const n=c.querySelector("#av-nome").value.trim(), m=c.querySelector("#av-email").value.trim(), ok=c.querySelector("#av-ok").checked, er=c.querySelector("#av-err");
         if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(m)){ er.textContent="Confira o e-mail."; return; } if(!ok){ er.textContent="Marque a caixinha para continuar."; return; }
         click(); /* vai SEPARADO das respostas anônimas (mesmo caminho da lista de espera da pesquisa) */
@@ -1233,9 +1249,9 @@ function trava3(){
         f.outerHTML=`<p class="avok">Pronto${n?", "+esc(n.split(" ")[0]):""}! Assim que as Fases 3 e 4 abrirem, a gente te avisa por e-mail. ✨</p>`; vibra([10,40,10]); }); });
 }
 /* botão de baixar a imagem do Saborear (no celular abre o "compartilhar/salvar"; no computador baixa o arquivo) */
-function ligaBaixar(c){ const bt=c.querySelector("#baixar"), pv=c.querySelector("#sabprev"); if(!bt) return; let blob=null;
-  imagemSabor().then(b=>{ blob=b; pv.src=URL.createObjectURL(b); pv.hidden=false; bt.disabled=false; }).catch(()=>{ bt.closest(".sabbaixa").remove(); });
-  bt.onclick=()=>{ if(!blob) return; click(); resp.baixou_saborear=true; const nome="7entidos-meu-momento.jpg";
+function ligaBaixar(c,m){ const bt=c.querySelector("#baixar"), pv=c.querySelector("#sabprev"); if(!bt) return; let blob=null;
+  imagemSabor(m).then(b=>{ blob=b; pv.src=URL.createObjectURL(b); pv.hidden=false; bt.disabled=false; }).catch(()=>{ bt.closest(".sabbaixa").remove(); });
+  bt.onclick=()=>{ if(!blob) return; click(); resp.baixou_saborear=true; const nome=m&&m.exemplo?"7entidos-exemplo.jpg":"7entidos-meu-momento.jpg";
     /* dentro da prévia do Claude, o download só funciona pelo "downloads" do próprio visualizador */
     if(window.claude && claude.use && !NO_SITE){ claude.use("downloads").then(dl=>{ if(dl) return dl.save({filename:nome,data:blob}).catch(()=>{}); baixaComum(blob,nome); }).catch(()=>baixaComum(blob,nome)); return; }
     baixaComum(blob,nome); };
@@ -1253,41 +1269,41 @@ function envia(){ if(!ENDPOINT||!resp.consentiu) return; try{ const r={...resp};
   fetch(ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify({pesquisa:"app-novo",versao:VERSAO,pessoa:PID,quando:new Date().toISOString(),respostas:r})}).catch(()=>{}); }catch(e){} }
 
 /* ============ PAINEL DE VALIDAÇÃO (só na prévia) ============ */
+/* Bloco A (ajustes do Bloco 1 já validado no celular). Os itens já validados do Bloco 1 saíram do painel.
+   O 5º pedido do Bloco A (juntar "Baixar a imagem" e "Cartão de vidro") virou o item A4: é uma tela só. */
 const ITENS=[
- ["gp1a","Google Play · Bloco 1 · 1 · Abertura","Mandala oficial de 7 círculos","A mandala de 8 círculos (do reality) saiu. Entrou a oficial do 7entidos, de 7 círculos. Os círculos acendem um por sentido, e o 7 do meio acende no fim do vídeo da Brisa. O ícone da aba também mudou.",0],
- ["gp1b","Google Play · Bloco 1 · 1 · Nota de 0 a 10","Mandala acende com a nota","Toque nos números: 0 = apagada; cada número acende mais um pedaço; 10 = mandala inteira acesa.",R.findIndex(x=>x.t==="escala")],
- ["gp1c","Google Play · Bloco 1 · 2 · Tela do tempo","'Entenda o Flow' virou um link discreto","Não é mais uma tela no caminho. Fica embaixo do 'Ver meu gráfico'; abre por cima e fecha no ✕, no 'Fechar' ou tocando fora.",R.findIndex(x=>x.t==="revela")],
- ["gp1d","Google Play · Bloco 1 · 3 · Tela final","Baixar a imagem do Saborear","Aparece uma miniatura da imagem do seu momento e o botão 'Baixar a imagem do meu momento'. No celular abre o salvar/compartilhar; no computador baixa o arquivo.",R.findIndex(x=>x.t==="trava3")],
- ["gp1e","Google Play · Bloco 1 · 3 · Tela final","Cartão de vidro 'Falta pouco'","Aviso das Fases 3 e 4 num cartão transparente, tipo vidro. Nome é opcional; para avisar, só o e-mail + a caixinha de consentimento. Vai separado das respostas anônimas.",R.findIndex(x=>x.t==="trava3")],
- ["gp1f","Google Play · Bloco 1 · 4 · Vídeo da Brisa e logo","Brisa e logo maiores","Vídeo da Brisa maior, logo do topo (mandala + 7entidos) maior e logo da tela do vaso maior.",0],
- ["gp1g","Google Play · Bloco 1 · 4 · Privacidade","Texto de privacidade menor","Agora: 'Respostas anônimas, só para o estudo do 7entidos. Ao começar, você concorda. Privacidade'.",0],
- ["gp1h","Google Play · Bloco 1 · 4 · Jogos","Menos texto dentro dos jogos","Cada jogo mostra só o nome e a missão em uma frase. Saíram as frases extras ('as cores vão ficando parecidas', 'ela vai acelerando', a linha de estudo dos gestos). O Carinho ficou como estava, porque ele não podia ser mexido.",R.findIndex(x=>x.t==="jogo")]
+ ["gpa1","Bloco A · 1 · Abertura","A frase pisca devagar","'A vida é feita de boas sensações' acende e apaga bem devagar, embaixo do 7entidos.",-1],
+ ["gpa2","Bloco A · 2 · Abertura","'2 fases' + frase curta","Saiu 'uns 7 minutos'. Fica '2 fases' e, embaixo, uma frase curta para a pessoa começar. Escolha uma das 3 (a tela muda na hora):",-1,FRASES_AB],
+ ["gpa3","Bloco A · 3 · Tela do tempo","'Entenda o Flow' maior","Agora é um botão dourado com contorno e um 'i', bem visível, logo abaixo do 'Ver meu gráfico' (que continua sendo o botão principal).",R.findIndex(x=>x.t==="revela")],
+ ["gpa4","Bloco A · 4 · Tela final","Imagem do Saborear + cartão de vidro 'Falta pouco'","Uma tela só: a imagem para baixar aparece sempre. Se a pessoa não escolheu nada (como quando você entra por este 'Ver'), aparece uma imagem de exemplo com o aviso 'Imagem de exemplo'. Embaixo, o cartão de vidro 'Falta pouco' (nome opcional, e-mail + consentimento, separado das respostas).",R.findIndex(x=>x.t==="trava3")]
 ];
 const REVISAR=["Mudar o visual","Mudar o texto","Mudar como funciona","Tirar do app"];
 let val={}, vdb=null, VDOC=null;
 function painel(){
   let el=document.getElementById("vp"); if(!el){ el=document.createElement("div"); el.id="vp"; el.className="vpainel"; document.body.appendChild(el); }
   const nv=ITENS.filter(x=>val[x[0]]&&val[x[0]].s==="validado").length;
-  el.innerHTML=`<div class="vcaixa"><div class="rot">Prévia · app novo · Google Play · Bloco 1</div><h2>Validar item por item</h2><p class="sub">${nv} de ${ITENS.length} validados. "Ver" leva direto para a tela do item.</p>
-    ${ITENS.map(([id,num,tt,ds,alvo])=>{ const v=val[id]||{}; return `<div class="vitem"><div class="rot" style="margin:0">${num}</div><div class="tt">${tt}</div><div class="ds">${ds}</div>
+  el.innerHTML=`<div class="vcaixa"><div class="rot">Prévia · app novo · Google Play · Bloco A</div><h2>Validar item por item</h2><p class="sub">${nv} de ${ITENS.length} validados. "Ver" leva direto para a tela do item.</p>
+    ${ITENS.map(([id,num,tt,ds,alvo,ops])=>{ const v=val[id]||{}; return `<div class="vitem"><div class="rot" style="margin:0">${num}</div><div class="tt">${tt}</div><div class="ds">${ds}</div>${ops?`<div class="esc">${ops.map((o,k)=>`<button class="${(v.e==null?fraseIdx():v.e)===k?"on":""}" onclick="escolhe('${id}',${k})">${"ABC"[k]}) ${o}</button>`).join("")}</div>`:""}
       <div class="bb"><button class="v ${v.s==="validado"?"on":""}" onclick="marca('${id}','validado')">Validado</button><button class="r ${v.s==="revisar"?"on":""}" onclick="marca('${id}','revisar')">Revisar</button><button class="ir" onclick="ir(${alvo})">Ver</button></div>
       <div class="rev ${v.s==="revisar"?"on":""}">${REVISAR.map(o=>`<button class="${v.o===o?"on":""}" onclick="marcaRev('${id}','${o}')">${o}</button>`).join("")}</div></div>`; }).join("")}
     <p class="vsalvo" id="vsalvo">${VDOC?"As marcações ficam guardadas: o Claude lê direto.":"As marcações ficam guardadas neste aparelho."}</p>
     <button class="btn" onclick="fechaPainel()">Voltar ao app</button></div>`;
   el.classList.add("on");
 }
+function fraseIdx(){ return FRASES_AB.indexOf(fraseAbertura()); }
+function escolhe(id,k){ click(); val[id]={...(val[id]||{}),e:k}; try{ localStorage.setItem("7e_frase_abertura",String(k)); }catch(e){} salvaVal(); painel(); if(!entrou&&pos===0) desenha(); }
 function fechaPainel(){ const el=document.getElementById("vp"); if(el) el.classList.remove("on"); }
 function marca(id,s){ val[id]={...(val[id]||{}),s}; if(s==="validado") delete val[id].o; salvaVal(); painel(); }
-function marcaRev(id,o){ val[id]={s:"revisar",o}; salvaVal(); painel(); }
-function salvaVal(){ try{ localStorage.setItem("7e_app_novo_val_gp1",JSON.stringify(val)); }catch(e){}
-  if(VDOC) VDOC.set({atualizado:new Date().toISOString(), itens:ITENS.map(x=>({id:x[0],item:x[1]+" · "+x[2],situacao:(val[x[0]]||{}).s||null,revisar:(val[x[0]]||{}).o||null}))}).catch(()=>{}); }
+function marcaRev(id,o){ val[id]={...(val[id]||{}),s:"revisar",o}; salvaVal(); painel(); }
+function salvaVal(){ try{ localStorage.setItem("7e_app_novo_val_gpA",JSON.stringify(val)); }catch(e){}
+  if(VDOC) VDOC.set({atualizado:new Date().toISOString(), itens:ITENS.map(x=>({id:x[0],item:x[1]+" · "+x[2],situacao:(val[x[0]]||{}).s||null,revisar:(val[x[0]]||{}).o||null,escolha:x[5]&&(val[x[0]]||{}).e!=null?x[5][val[x[0]].e]:null}))}).catch(()=>{}); }
 
 /* ============ INÍCIO ============ */
 try{ const s=JSON.parse(localStorage.getItem("7e_app_novo")||"null"); if(s&&s.resp&&s.r===R.length&&s.pos>0&&s.pos<R.length-2){ resp=s.resp; pos=s.pos; inicio=s.inicio||Date.now(); inicio2=s.inicio2||null; } }catch(e){}
-try{ val=JSON.parse(localStorage.getItem("7e_app_novo_val_gp1")||"{}")||{}; }catch(e){}
+try{ val=JSON.parse(localStorage.getItem("7e_app_novo_val_gpA")||"{}")||{}; }catch(e){}
 if(PREVIA){ const b=document.createElement("button"); b.className="vbtn"; b.type="button"; b.textContent="Validar a prévia"; b.onclick=()=>{ click(); painel(); }; document.body.appendChild(b); }
 desenha();
-if(PREVIA && window.claude && claude.use){ claude.use("db").then(db=>{ if(!db) return; VDOC=db.doc("validacao/app-novo-gp-b1"); return VDOC.get().then(sn=>{ const d=sn&&(sn.data?sn.data():sn); if(d&&d.itens&&!Object.keys(val).length){ d.itens.forEach(x=>{ if(x.situacao) val[x.id]={s:x.situacao,o:x.revisar||undefined}; }); } }); }).catch(()=>{}); }
+if(PREVIA && window.claude && claude.use){ claude.use("db").then(db=>{ if(!db) return; VDOC=db.doc("validacao/app-novo-gp-bA"); return VDOC.get().then(sn=>{ const d=sn&&(sn.data?sn.data():sn); if(d&&d.itens&&!Object.keys(val).length){ d.itens.forEach(x=>{ if(x.situacao||x.escolha){ const k=x.escolha?FRASES_AB.indexOf(x.escolha):-1; val[x.id]={s:x.situacao||undefined,o:x.revisar||undefined,e:k>=0?k:undefined}; if(k>=0){ try{ localStorage.setItem("7e_frase_abertura",String(k)); }catch(e){} } } }); if(!entrou&&pos===0) desenha(); } }); }).catch(()=>{}); }
 </script>
 </body>
 </html>
