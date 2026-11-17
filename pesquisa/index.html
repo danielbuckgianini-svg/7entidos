@@ -370,6 +370,7 @@ body.tela-inicio .logo-top{visibility:hidden}
 .avisomin{margin-top:12px;padding:14px;border-radius:16px;background:rgba(245,197,66,.12);border:1px solid rgba(245,197,66,.5);text-align:center}
 .avisomin p{margin:0 0 10px;font-size:18px;font-weight:700}
 .avisomin .ops{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.introapp .introfrase{font-size:26px;line-height:1.25;margin:10px auto 6px;max-width:520px}
 .sompic .exemplo{position:absolute;top:8px;right:8px;border:0;border-radius:999px;padding:6px 10px;font:700 16px Manrope,system-ui,sans-serif;background:rgba(5,8,20,.78);color:#fff;cursor:pointer;z-index:2}
 .prato .ping{width:46%;height:46%}
 .prato.pronto .pvazio{filter:drop-shadow(0 0 22px rgba(245,197,66,.55)) drop-shadow(0 10px 18px rgba(0,0,0,.45))}
@@ -712,7 +713,7 @@ function escolha(){
     <div class="info2" role="list">
       <div class="etapa" role="listitem">
         <div class="no"><span>1</span></div>
-        <button class="pesq ic1" onclick="startFlow('app')">
+        <button class="pesq ic1" onclick="abrirApp()">
           <span class="anel" aria-hidden="true">${["#F5C542","#4DA3FF","#FF8A3D","#FF5D7A","#3DDC84","#B38CFF","#2ED3C6"].map((c,i)=>`<i style="--c:${c};--a:${i*360/7}deg"></i>`).join("")}<em>7</em></span>
           <span class="tag" style="background:#1f6b45">PASSO 1 · COMECE AQUI</span><b>Monte o seu app</b>
           <p>Descubra o que te faz bem em cada sentido e jogue os mini jogos.</p>
@@ -728,6 +729,17 @@ function escolha(){
           ${done.reality?'<p style="color:#9be7b0;font-weight:800">você já participou ✓</p>':""}</button>
       </div>
     </div></div>`;
+}
+/* ============ ENTRADA DO "MONTE O APP" (17/11): explica o que a pessoa recebe, antes da Fase 1 ============ */
+function abrirApp(){ view="introApp"; render(); window.scrollTo({top:0}); }
+function introApp(){
+  document.getElementById("prog").style.display="none";
+  document.getElementById("anon").style.display="none";
+  stage.innerHTML=`<div class="scene center introapp">
+    <div class="logo-ini"><img src="logo-7entidos.png" alt="7entidos · A vida é feita de boas sensações"></div>
+    <h1 class="introfrase">Monte o seu mapa das boas sensações e receba ideias para se sentir bem todo dia.</h1>
+    <button class="btn" style="margin-top:18px" onclick="click();startFlow('app')">Começar →</button>
+    <div class="nav"><button class="back" onclick="click();view='escolha';render();window.scrollTo({top:0})">← voltar</button></div></div>`;
 }
 function startFlow(f){
   cur=f; S=FLOWS[f]; view="flow"; idx=0; travaSaiu=null; revelaFase=0;
@@ -840,6 +852,7 @@ function render(){
   if(view==="pergunta1") return pergunta1();
   if(view==="escolhas") return escolhas();
   if(view==="fim") return fim();
+  if(view==="introApp") return introApp();
   const s = S[idx]; enterStep();
   document.getElementById("anon").style.display="none";
   const prog=document.getElementById("prog");
@@ -1190,7 +1203,7 @@ function render(){
     h = `<div class="center"><div class="big-emoji">🚪</div><h1>Você chegou ao portão</h1>
       <p class="sub">Obrigado! Suas escolhas vão construir o 7entidos de verdade.</p></div>
       <div class="stack">
-        ${cur==="reality"?`<button class="btn" onclick="startFlow('app')">Fazer a pesquisa do app →</button>`:""}
+        ${cur==="reality"?`<button class="btn" onclick="abrirApp()">Fazer a pesquisa do app →</button>`:""}
         <button class="btn ghost" onclick="view='fim';render()">Parar por aqui</button>
         <button class="btn ghost" onclick="view='escolhas';render()">Ver minhas escolhas</button>
       </div>`;
@@ -1664,7 +1677,7 @@ function copiar(btn){ try{ navigator.clipboard.writeText(linhas().join("\n")).th
 function click(){ try{ somPronto().then(c=>{ try{ const t=c.currentTime, o=c.createOscillator(), f=c.createBiquadFilter(), g=c.createGain(); o.type="square"; o.frequency.setValueAtTime(150,t); f.type="lowpass"; f.frequency.value=900; g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.2,t+.004); g.gain.exponentialRampToValueAtTime(.0001,t+.07); o.connect(f).connect(g).connect(c.destination); o.start(t); o.stop(t+.08); }catch(e){} }); }catch(e){} }
 
 /* #bia: quem vem da votação (/votar) entra direto na pesquisa dos personagens, começando pela Bia */
-if(location.hash==="#app"){ startFlow("app"); } else if(location.hash==="#bia"){ irPesquisa2(); } else render();
+if(location.hash==="#app"){ abrirApp(); } else if(location.hash==="#bia"){ irPesquisa2(); } else render();
 </script>
 
 <!-- ===== SALA TRANCADA NAS 100 PESSOAS + LISTA DE ESPERA ===== -->
