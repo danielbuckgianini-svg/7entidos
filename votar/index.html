@@ -153,6 +153,16 @@ body.votou .jaVotou{display:block}
 .conta{font-size:14px;text-align:right;margin-top:4px}
 .aceite{display:flex!important;gap:12px;align-items:flex-start;font-weight:600!important;font-size:16px!important;color:var(--marca-apoio)!important}
 .aceite input{width:28px;height:28px;flex:none;margin-top:2px;accent-color:#f5c542}
+.convite{position:relative;margin:18px 0 6px;padding:22px 18px 20px;border-radius:24px;text-align:center;background:linear-gradient(165deg,#16224d,#0b1230);border:2px solid var(--marca-amarelo);box-shadow:0 0 0 4px rgba(245,197,66,.12),0 0 34px rgba(245,197,66,.28);animation:pula .45s cubic-bezier(.2,1.4,.4,1)}
+.convite[hidden]{display:none}
+.convite .cv-ok{margin:0;font-size:18px;font-weight:800;color:var(--marca-amarelo)}
+.convite .cv-tit{margin:6px 0 0;font-family:"Playfair Display",Georgia,serif;font-size:30px;line-height:1.15;color:#fff}
+.convite .cv-txt{margin:10px auto 0;max-width:440px;font-size:19px;line-height:1.4;color:var(--marca-texto)}
+.convite .cv-fotos{display:flex;justify-content:center;margin:16px 0 4px}
+.convite .cv-fotos img{width:46px;height:46px;border-radius:50%;object-fit:cover;object-position:center 20%;border:2.5px solid var(--marca-amarelo);margin-left:-10px;background:#0b1230}
+.convite .cv-fotos img:first-child{margin-left:0}
+.convite .botao{width:100%;min-height:64px;font-size:21px}
+.convite .cv-nao{display:inline-block;margin-top:12px;padding:10px 16px;background:none;border:0;color:var(--marca-texto);opacity:.8;font-size:16px;text-decoration:underline;cursor:pointer;font-family:inherit}
 .pesq{display:none;position:relative;margin-top:22px;padding:86px 18px 20px;border-radius:22px;text-align:center;background:linear-gradient(160deg,rgba(245,197,66,.26),rgba(245,197,66,.06));border:1.5px solid var(--marca-amarelo);box-shadow:0 0 30px rgba(245,197,66,.2)}
 .pesq.on{display:block;animation:pula .45s cubic-bezier(.2,1.4,.4,1)}
 .pesq .anelp{position:absolute;left:50%;top:18px;width:56px;height:56px;margin-left:-28px}
@@ -281,6 +291,14 @@ body.glam .resumo div{background:rgba(255,255,255,.05);border-color:rgba(233,196
   </div>
   <div class="aviso" id="avisoPronto">
     <h2>Voto registrado! Volte amanhã para votar de novo 💛</h2>
+    <div class="convite" id="convite" role="region" aria-label="Convite para a pesquisa">
+      <p class="cv-ok">Voto registrado! ✅</p>
+      <p class="cv-tit">Quer entrar nessa pesquisa?</p>
+      <p class="cv-txt">Escolha os looks e o jeito dos moradores da casa. Leva uns 2 minutos e é 100% anônima.</p>
+      <div class="cv-fotos" id="cvFotos"></div>
+      <a class="botao amarelo" id="cvSim" href="/pesquisa">Quero participar 👉</a>
+      <button type="button" class="cv-nao" id="cvNao">Agora não</button>
+    </div>
     <p>Agora chama mais gente: quanto mais gente votando, mais emoção no domingo.</p>
     <div class="dupla">
       <figure><img id="pFotoG" alt=""><figcaption id="pRotG">❤️ Mais gosto<b id="pGosto"></b></figcaption></figure>
@@ -364,14 +382,6 @@ body.glam .resumo div{background:rgba(255,255,255,.05);border-color:rgba(233,196
   </div>
 </div>
 
-<div class="janela" id="posVoto" role="dialog" aria-modal="true" aria-labelledby="pvTit">
-  <div class="dentro pv">
-    <p class="pv-tit" id="pvTit">Voto registrado! 💛</p>
-    <p class="pv-perg">Quer participar da nossa pesquisa sobre boas sensações?</p>
-    <a class="botao amarelo" href="/pesquisa" style="width:100%">Quero participar</a>
-    <button type="button" class="botao contorno" id="pvNao" style="width:100%">Agora não</button>
-  </div>
-</div>
 
 <div class="barra" id="barra">
   <div class="dentro">
@@ -507,9 +517,11 @@ function votoGuardado(g,l){
   $("pFotoG").src=FOTOS+g.foto;$("pFotoG").alt=g.nome;$("pFotoL").src=FOTOS+l.foto;$("pFotoL").alt=l.nome;
   fazerStory(g,l);
   mostrar("avisoPronto");festa("");
-  $("posVoto").classList.add("on");
+  /* Convite para a pesquisa dos personagens: só aparece depois do voto. Opcional. */
+  if(!$("cvFotos").innerHTML)$("cvFotos").innerHTML=MORADORES.map(function(m){return '<img src="'+FOTOS+m.foto+'" alt="'+m.nome+'">'}).join("");
+  $("convite").hidden=false;
 }
-$("pvNao").onclick=function(){$("posVoto").classList.remove("on");$("avisoPronto").scrollIntoView({block:"start"})};
+$("cvNao").onclick=function(){$("convite").hidden=true};
 function estado(){
   if(window.VOTAR_PREVIA)return "aberta";
   if(!CFG||CFG.aberta===false)return "fim";
