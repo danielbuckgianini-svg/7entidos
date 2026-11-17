@@ -5,7 +5,8 @@
       "namespace": "android_app",
       "package_name": "br.com.setentidos.app",
       "sha256_cert_fingerprints": [
-        "4A:46:20:99:4D:BE:FC:AB:47:05:DA:DC:B0:6D:BA:97:1B:B5:25:04:95:60:7E:D7:4F:08:47:8A:36:3D:48:2D"
+        "4A:46:20:99:4D:BE:FC:AB:47:05:DA:DC:B0:6D:BA:97:1B:B5:25:04:95:60:7E:D7:4F:08:47:8A:36:3D:48:2D",
+        "01:B5:10:CE:E1:C5:77:B2:6D:05:70:F4:E7:91:33:0E:8D:58:88:85:78:0C:28:AA:FF:95:FF:7A:D9:5C:AC:34"
       ]
     }
   }
