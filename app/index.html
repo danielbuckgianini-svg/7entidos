@@ -495,6 +495,32 @@ body.foco #vinheta{opacity:.55}
 @keyframes pisc{0%,100%{opacity:1;text-shadow:0 0 18px rgba(245,197,66,.6)}50%{opacity:.25;text-shadow:none}}
 
 /* gráfico */
+/* 18/11 · chute do tempo por número */
+.chnum{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:380px;margin:18px auto 0}
+.chnum button{all:unset;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;aspect-ratio:1;border-radius:18px;background:linear-gradient(180deg,#2a3a7a,#1a2556);border:1px solid rgba(245,197,66,.25);box-shadow:0 5px 0 #0c1333,0 10px 18px -8px rgba(0,0,0,.6);color:#f4ecdc;transition:transform .15s,opacity .3s}
+.chnum button b{font:600 30px/1 Fraunces,serif}
+.chnum button small{font-size:13px;color:#c9d2ee;margin-top:4px}
+.chnum button:active{transform:translateY(3px)}
+.chnum button.sel{background:linear-gradient(180deg,#f7d46a,#e0a91f);color:#15110a;box-shadow:0 0 24px 4px rgba(245,197,66,.55)}
+.chnum button.sel small{color:#3a2a05}
+.chnum button:disabled{opacity:.3}
+/* 18/11 · resultado da Fase 2: infográfico dos 7 sentidos em volta da mandala, numa página só */
+.infog{position:relative;width:min(370px,94vw);aspect-ratio:1;margin:4px auto 6px}
+.infog .mdl{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
+.infog .rotulo{position:absolute;transform:translate(-50%,-50%);text-align:center;line-height:1.05;width:96px}
+.infog .rotulo b{display:block;font-weight:800;font-size:15px;line-height:1.1;color:var(--c);text-shadow:0 1px 6px rgba(0,0,0,.9)}
+.infog .rotulo .lz3{display:flex;gap:4px;justify-content:center;margin-top:5px}
+.infog .rotulo .lz3 i{width:10px;height:10px;border-radius:50%;background:rgba(169,179,209,.2)}
+.infog .rotulo .lz3 i.on{background:var(--c);box-shadow:0 0 8px var(--c)}
+.infog .rotulo em{display:block;font-size:12px;color:#c9d2ee;margin-top:4px}
+.infotit{font:600 clamp(28px,8vw,34px)/1.1 Fraunces,serif;color:#f4ecdc;margin:4px 0 0}
+.infoforte{font-size:19px;line-height:1.35;margin:4px auto 10px;max-width:330px}
+.infoforte b{font-weight:800}
+.infolegenda{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;font-size:13px;color:#c9d2ee;margin:0 0 10px}
+.infolegenda span{display:flex;align-items:center;gap:3px}
+.infolegenda i{width:8px;height:8px;border-radius:50%;background:var(--ouro);display:inline-block}
+.infocarta{display:flex;align-items:center;gap:12px;max-width:330px;margin:0 auto 16px;padding:10px 12px;border-radius:16px;background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.3);text-align:left;font-size:16px}
+.infocarta img{width:48px;height:48px;border-radius:10px;object-fit:cover;flex:none}
 .graf{position:relative;width:min(340px,86vw);aspect-ratio:1;margin:0 auto 14px}
 .graf .l{position:absolute;border-radius:50%;background:var(--c);transform:translate(-50%,-50%);transition:all 1.2s cubic-bezier(.2,.8,.2,1)}
 .graf .t{position:absolute;font-size:14px;font-weight:700;color:var(--azul);transform:translate(-50%,-50%);white-space:nowrap;text-align:center;line-height:1.1}
@@ -1249,25 +1275,14 @@ function curtiu(p){
 }
 function escolheCurtiu(b,k,v){ resp[k]=v; click(); b.parentNode.querySelectorAll("button").forEach(x=>x.classList.remove("sel")); b.classList.add("sel"); desenhaMini(); setTimeout(avanca,450); }
 
-/* Pare a ampulheta: uma ampulheta de luz enche de 0 a 15 minutos em poucos segundos; a pessoa toca em "Parar" no tempo que acha que passou */
-const AMP_MAX=15, AMP_SEG=6.5;
+/* 18/11 · Chute do tempo: a ampulheta saiu (confundia). Agora a pessoa só toca num número de minutos. */
+const CHUTE_OPC=[1,2,3,4,5,6,7,8,10,12,15,20];
 function chute(){
-  mostra(`${compara()}<div class="rot">Uma última pergunta</div><h2>Quanto tempo passou desde que começou a Fase 2?</h2><p class="sub">Sem olhar o relógio: pare a ampulheta no tempo que você acha.</p>
-    <div class="amp"><svg viewBox="0 0 100 150" aria-hidden="true"><defs><clipPath id="ampc"><path d="M12 6H88L53 75L88 144H12L47 75Z"/></clipPath></defs>
-      <g clip-path="url(#ampc)"><rect class="areia" id="ampcima" x="0" y="6" width="100" height="69"/><rect class="areia" id="ampbaixo" x="0" y="144" width="100" height="0"/></g>
-      <line class="fio" id="ampfio" x1="50" y1="75" x2="50" y2="144"/><path class="vidro" d="M12 6H88L53 75L88 144H12L47 75Z"/></svg></div>
-    <div class="ampnum" id="ampn">0<small>min</small></div>
-    <button class="btn" id="ampbt" style="margin-top:14px">Parar</button>`, c=>{
-    const cima=c.querySelector("#ampcima"), baixo=c.querySelector("#ampbaixo"), fio=c.querySelector("#ampfio"), num=c.querySelector("#ampn"), bt=c.querySelector("#ampbt");
-    let t0=performance.now(), raf=0, parou=false, ult=-1;
-    const passo=t=>{ if(parou||R[pos].t!=="chute"||!document.body.contains(c)) return; let p=((t-t0)/1000)/AMP_SEG; if(p>=1){ t0=t; p=0; } /* chegou em 15: começa de novo */
-      const m=Math.floor(p*AMP_MAX+.0001); cima.setAttribute("y",6+69*p); cima.setAttribute("height",69*(1-p)); baixo.setAttribute("y",144-69*p); baixo.setAttribute("height",69*p); fio.setAttribute("y1",75); fio.setAttribute("y2",144-69*p);
-      if(m!==ult){ ult=m; num.innerHTML=`${m}<small>${m===1?"minuto":"min"}</small>`; if(m>0) vibra(4); }
-      raf=requestAnimationFrame(passo); };
-    raf=requestAnimationFrame(passo);
-    bt.onclick=()=>{ if(parou) return; parou=true; cancelAnimationFrame(raf); click(); vibra([10,40,10]);
-      resp.chute_min=ult<0?0:ult; resp.chute=resp.chute_min+" minutos"; resp.tempo_real_seg=Math.round((Date.now()-(inicio2||inicio||Date.now()))/1000);
-      bt.disabled=true; bt.textContent=`Você parou em ${resp.chute_min} ${resp.chute_min===1?"minuto":"minutos"}`; setTimeout(avanca,900); };
+  mostra(`${compara()}<div class="rot">Uma última pergunta</div><h2>Quanto tempo passou desde que começou a Fase 2?</h2><p class="sub">Sem olhar o relógio: toque no número de minutos que você acha.</p>
+    <div class="chnum">${CHUTE_OPC.map(n=>`<button type="button" data-n="${n}"><b>${n}</b><small>${n===1?"minuto":"min"}</small></button>`).join("")}</div>`, c=>{
+    c.querySelectorAll(".chnum button").forEach(bt=>bt.onclick=()=>{ if(bt.parentNode.dataset.ok) return; bt.parentNode.dataset.ok=1; click(); vibra([10,40,10]);
+      resp.chute_min=+bt.dataset.n; resp.chute=resp.chute_min+" minutos"; resp.tempo_real_seg=Math.round((Date.now()-(inicio2||inicio||Date.now()))/1000);
+      bt.classList.add("sel"); c.querySelectorAll(".chnum button").forEach(x=>{ if(x!==bt) x.disabled=true; }); setTimeout(avanca,800); });
   });
 }
 
@@ -1305,35 +1320,28 @@ function revela(){
   envia();
 }
 function grafico(){
-  /* uma coisa por vez: 3 cartões (sentido mais forte → os 7 sentidos → jogo por jogo) */
+  /* 18/11 · uma página só: a mandala de 7 no meio (cada círculo acende pelo quanto a pessoa curtiu o jogo daquele sentido)
+     e os 7 sentidos em volta, cada um com 1 a 3 luzes. Pouco texto. (Substitui os 3 cartões e o anel de bolinhas.) */
   const v=SENT.map(s=>resp["curtiu_"+s.id]||0), max=Math.max(...v), forte=SENT.filter((s,i)=>v[i]===max&&max>0);
-  const COMO=["—","curti pouco","curti","curti muito"], pul=s=>resp["jogo_"+s.id]==="pulado";
-  const f0=forte[0];
-  const c1=f0?`<div class="titc">${comNome("Boa, {n}! ","")}Seu sentido mais forte hoje</div><div class="luzg" style="--c:${f0.cor}"></div>
-      <div class="forte" style="color:${f0.cor}">${forte.map(s=>s.s).join(" e ")}</div>
-      <p class="txt">Foi ${forte.length>1?"onde":"o jogo que"} você mais curtiu: <b>${forte.map(s=>esc(s.jogo)).join(" e ")}</b>.</p>`
-    :`<div class="titc">${comNome("Boa, {n}! ","")}Hoje</div><div class="luzg" style="--c:#f5c542"></div><div class="forte" style="color:#f5c542">No seu ritmo</div><p class="txt">Você passou pelos 7 sentidos do seu jeito.</p>`;
-  const c2=`<div class="titc">Seus 7 sentidos</div>
-      <div class="graf" id="graf">${SENT.map((s,i)=>`<span class="l" data-v="${v[i]}" style="--c:${s.cor}"></span><span class="t">${s.s.replace("Noção do corpo","Noção<br>do corpo")}</span>`).join("")}</div>
-      <p class="txt">Quanto maior a luz, mais você curtiu o jogo daquele sentido.</p>`;
-  const c3=`<div class="titc">Jogo por jogo</div><div class="jxj">${SENT.map((s,i)=>`<div style="--c:${s.cor}"><i></i><b>${s.s}</b><span class="${pul(s)?"pulado":""}">${pul(s)?"pulado":COMO[v[i]]}</span></div>`).join("")}</div>`;
+  const pul=s=>resp["jogo_"+s.id]==="pulado";
+  const W=Math.min(370,window.innerWidth*.94), TM=Math.round(W*.52), RL=W*.415;
+  const rot=SENT.map((s,k)=>{ const ang=MC[k][2], x=50+Math.cos(ang)*RL/W*100, y=50+Math.sin(ang)*RL/W*100;
+    return `<div class="rotulo" style="left:${x.toFixed(1)}%;top:${y.toFixed(1)}%;--c:${claro(s.cor)}"><b>${s.s.replace("Noção do corpo","Noção<br>do corpo")}</b>${pul(s)?"<em>pulado</em>":`<span class="lz3">${[1,2,3].map(n=>`<i class="${v[k]>=n?"on":""}" style="--c:${s.cor}"></i>`).join("")}</span>`}</div>`; }).join("");
   const cd=resp.carta_dourada, sd=cd&&SENT.find(x=>x.s===cd.sentido);
-  const c4=cd&&sd?`<div class="titc">Sua carta dourada</div><div class="dourada"><div class="carta2"><img src="${foto(sd.id,cd.foto)}" alt=""></div><div class="forte" style="font-size:34px;color:#f5c542">${esc(cd.escolha)}</div><p class="txt">O momento que você guardou hoje.</p></div>`:"";
-  const CARDS=[c1,c2,c3].concat(c4?[c4]:[]);
-  mostra(`<div class="rot">Fase 2 completa</div>
-    ${CARDS.map((h,i)=>`<div class="gcard ${i===0?"on":""}" data-g="${i}">${h}</div>`).join("")}
-    <div class="gpontos">${CARDS.map((h,i)=>`<button type="button" class="${i===0?"on":""}" data-p="${i}" aria-label="Parte ${i+1} de ${CARDS.length}"></button>`).join("")}</div>
-    <button class="btn" id="gprox">Próximo</button>
-    <button class="btn" id="gsegue" style="display:none" onclick="click();destravaVideo(VID3);avanca()">Continuar</button>
-    <button class="btn sec" id="gnovo" style="display:none" onclick="recomecar()">Fazer de novo</button>`, c=>{
-    let g=0; const cards=c.querySelectorAll(".gcard"), pts=c.querySelectorAll(".gpontos button"), prox=c.querySelector("#gprox"), novo=c.querySelector("#gnovo");
-    const anima=()=>{ const gr=c.querySelector("#graf"); if(!gr||gr.dataset.ok) return; gr.dataset.ok=1; const W=gr.clientWidth, C=W/2, R0=W*.29, RT=W*.455, Ls=gr.querySelectorAll(".l"), Ts=gr.querySelectorAll(".t");
-      SENT.forEach((x,i)=>{ const a=(i*360/7-90)*Math.PI/180; Ls[i].style.left=(C+Math.cos(a)*R0)+"px"; Ls[i].style.top=(C+Math.sin(a)*R0)+"px"; Ls[i].style.width=Ls[i].style.height="8px"; Ls[i].style.opacity=.2;
-        Ts[i].style.left=(C+Math.cos(a)*RT)+"px"; Ts[i].style.top=(C+Math.sin(a)*RT)+"px"; });
-      setTimeout(()=>{ Ls.forEach((el,i)=>{ const val=+el.dataset.v, d=12+val*12; el.style.width=d+"px"; el.style.height=d+"px"; el.style.opacity=.3+val*.23; el.style.boxShadow=`0 0 ${8+val*10}px ${2+val*3}px ${SENT[i].cor}`; }); },150); };
-    const vai=n=>{ g=n; click(); cards.forEach((x,i)=>x.classList.toggle("on",i===g)); pts.forEach((x,i)=>x.classList.toggle("on",i===g));
-      prox.style.display=g<cards.length-1?"":"none"; novo.style.display=g===cards.length-1?"":"none"; c.querySelector("#gsegue").style.display=g===cards.length-1?"":"none"; if(g===1) anima(); window.scrollTo(0,0); };
-    prox.onclick=()=>vai(Math.min(g+1,cards.length-1)); pts.forEach(x=>x.onclick=()=>vai(+x.dataset.p)); });
+  mostra(`<div class="rot">Fase 2 completa</div><h2 class="infotit">${comNome("{n}, seus 7 sentidos hoje","Seus 7 sentidos hoje")}</h2>
+    <div class="infog">${mandala(TM,"minfo")}${rot}</div>
+    <div class="infolegenda"><span><i></i>&nbsp;curti pouco</span><span><i></i><i></i>&nbsp;curti</span><span><i></i><i></i><i></i>&nbsp;curti muito</span></div>
+    ${forte.length?`<p class="infoforte">Mais forte hoje: <b style="color:${claro(forte[0].cor)}">${forte.map(s=>s.s).join(" e ")}</b></p>`:`<p class="infoforte">Você passou pelos 7 sentidos <b>no seu ritmo</b>.</p>`}
+    ${cd&&sd?`<div class="infocarta"><img src="${foto(sd.id,cd.foto)}" alt=""><span>Sua carta dourada: <b>${esc(cd.escolha)}</b></span></div>`:""}
+    <button class="btn" onclick="click();destravaVideo(VID3);avanca()">Continuar</button>
+    <button class="btn sec" style="margin-top:16px" onclick="recomecar()">Fazer de novo</button>`, c=>{
+    const el=c.querySelector("#minfo"); if(!el) return; const lit=TODOS.filter(k=>v[k]>0);
+    const brilho=()=>lit.forEach(k=>{ const h=el.querySelectorAll(".hl")[k+1]; if(h) h.style.opacity=(.35+v[k]*.2).toFixed(2); });
+    poeMandala(el,{pos:TODOS,luz:[],miolo:false});
+    /* os círculos acendem um por um, e o 7 do meio por último */
+    lit.forEach((k,j)=>setTimeout(()=>{ if(!document.body.contains(el)) return; poeMandala(el,{pos:TODOS,luz:lit.slice(0,j+1),miolo:false}); brilho(); },350+j*260));
+    setTimeout(()=>{ if(!document.body.contains(el)) return; poeMandala(el,{pos:TODOS,luz:lit,miolo:true}); brilho(); el.classList.add("pulsa"); vibra(12); },450+lit.length*260);
+  });
 }
 /* depois da Fase 2: vídeo 3 da Brisa + trava "Fases 3 e 4 em construção" + aviso por e-mail (separado das respostas anônimas) */
 function trava3(){
