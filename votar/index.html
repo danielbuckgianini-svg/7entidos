@@ -655,5 +655,6 @@ $("zap").href=zap();$("zap2").href=zap();
 fetch("semana.json",{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){CFG=j;aplicar()}).catch(function(){mostrar("avisoErro")});
 if(window.PESQUISA_TESTE!==false&&!window.VOTAR_URL_TESTE){var t=document.createElement("div");t.className="teste";t.textContent=window.VOTAR_PREVIA?"PRÉVIA: este voto não é gravado":"Modo teste: este voto não é gravado na planilha";document.body.appendChild(t)}
 </script>
+<script src="/js/consentimento.js?v=20261118"></script>
 </body>
 </html>

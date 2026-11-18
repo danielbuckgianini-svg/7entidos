@@ -43,6 +43,14 @@
       '<p><strong>Podemos contar as visitas?</strong> Só números, sem saber quem você é. Nada é ligado antes do “OK”. <a href="/privacidade.html">Saiba mais</a></p>' +
       '<div class="botoes"><button type="button" data-escolha="recusado">Recusar</button><button type="button" class="aceitar" data-escolha="aceito">OK</button></div>';
     document.body.appendChild(d);
+    /* Páginas sem a folha de estilo da marca: garante que o aviso fique fixo no rodapé da tela */
+    try {
+      if (getComputedStyle(d).position !== "fixed") {
+        var st = document.createElement("style");
+        st.textContent = ".aviso-estatisticas{position:fixed;left:0;right:0;bottom:0;z-index:9999;display:flex;gap:10px;align-items:center;padding:8px 12px calc(8px + env(safe-area-inset-bottom));background:rgba(11,20,48,.97);border-top:1px solid rgba(169,179,209,.3);color:#F3EEE3;font:16px/1.35 system-ui,sans-serif}.aviso-estatisticas p{flex:1;margin:0}.aviso-estatisticas a{color:#F5C542}.aviso-estatisticas .botoes{display:flex;gap:6px}.aviso-estatisticas button{min-height:44px;padding:0 14px;font-size:16px;border-radius:999px;background:transparent;color:#F3EEE3;border:1.5px solid rgba(243,238,227,.5)}.aviso-estatisticas button.aceitar{background:#F5C542;color:#10131F;border-color:#F5C542}";
+        document.head.appendChild(st);
+      }
+    } catch (e) {}
     d.addEventListener("click", function (e) {
       var b = e.target.closest("[data-escolha]");
       if (!b) return;
