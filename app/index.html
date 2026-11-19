@@ -621,6 +621,23 @@ body.foco .topo:hover,body.foco #pularbtn:focus-visible,body.foco #voltar:focus-
 .vlegb{all:unset;cursor:pointer;display:inline-block;margin:0 auto 14px;padding:8px 18px;border-radius:999px;border:1.5px solid rgba(220,226,245,.45);color:#f4ecdc;font-size:16px;font-weight:700}
 .vlegb.on{background:rgba(245,197,66,.18);border-color:#f5c542;color:#f5c542}
 .vlegb[hidden]{display:none}
+/* Fase 3 · situações dos 5 motivos */
+.f3q{margin:0 0 6px}
+.f3opts{gap:10px}
+.f3op{position:relative;text-align:left;padding:16px 64px 16px 20px;font-size:19px;line-height:1.3}
+.f3op .f3tag{position:absolute;right:14px;top:50%;transform:translateY(-50%);min-width:36px;height:36px;border-radius:999px;display:flex;align-items:center;justify-content:center;font:800 16px "Space Mono",monospace}
+.f3op.sel .f3tag{background:var(--ouro);color:#15110a}
+.f3op.sel2{border-color:rgba(245,197,66,.7);border-style:dashed;background:rgba(245,197,66,.07)}
+.f3op.sel2 .f3tag{border:2px solid var(--ouro);color:var(--ouro)}
+.f3nenhuma{all:unset;cursor:pointer;display:block;margin:16px auto 0;padding:12px 22px;border-radius:999px;color:var(--creme);font-weight:700;font-size:18px;border:1.5px dashed rgba(220,226,245,.4)}
+.f3nenhuma:active{transform:translateY(2px)}
+#f3seguir[disabled]{opacity:.4;filter:grayscale(.6);pointer-events:none}
+.f3lista{margin:6px 0 12px;max-height:340px;overflow:auto;border-radius:12px;background:rgba(5,9,26,.5);padding:10px 12px;text-align:left}
+.f3dia{font:700 14px "Space Mono",monospace;color:var(--ouro);margin:10px 0 4px;text-transform:uppercase}
+.f3sit{margin:0 0 12px;font-size:15px}
+.f3sit b{display:block;margin-bottom:4px}
+.f3sit div{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid rgba(169,179,209,.15);padding:3px 0}
+.f3sit em{color:var(--ouro);font-style:normal;white-space:nowrap;font-size:13px}
 </style>
 </head>
 <body>
@@ -777,7 +794,7 @@ function pularMesmo(){ const p=R[pos]; if(!p) return; click(); pararSom(); clear
   if(p.t==="jogo"){ const s=SENT[p.i]; resp["jogo_"+s.id]="pulado"; delete resp["curtiu_"+s.id]; }
   else { const k=p.t==="escala"?"escala_"+p.id:p.t==="gosto"?"gosto_"+SENT[p.i].id:p.t; resp["pulou_"+k]=true; }
   avanca(); }
-function ir(n){ if(n<0){ entrou=false; n=0; } pos=n; fechaPainel(); const fo=document.getElementById("flowov"); if(fo) fo.remove(); desenha(); }
+function ir(n){ if(n==="f3"){ fechaPainel(); click(); f3Abre(); return; } if(n<0){ entrou=false; n=0; } pos=n; fechaPainel(); const fo=document.getElementById("flowov"); if(fo) fo.remove(); desenha(); }
 /* ===== MANDALA OFICIAL ===== montar(tam): cria a mandala; poeMandala(el,{pos,luz,miolo}): pedaços no lugar (pos), acesos (luz), miolo aceso */
 /* centro de cada um dos 7 círculos na imagem oficial (em %), em sentido horário a partir do de cima */
 const MC=[[50.5,15.8],[75.6,27.2],[84.6,52.2],[69.2,77.5],[31.6,77.2],[16.0,51.2],[25.6,26.2]].map(([x,y])=>[x,y,Math.atan2(y-50,x-50)]);
@@ -1347,13 +1364,9 @@ function grafico(){
 function trava3(){
   let avisado=false; try{ avisado=localStorage.getItem("7e_aviso_fases34")==="1"; }catch(e){}
   const msab=montaSabor()||saborExemplo();
-  mostra(`<div class="rot">Fases 3 e 4</div>${videoBrisa(VID3,LEG3)}
+  mostra(`<div class="rot">Fase 3</div>${videoBrisa(VID3,LEG3)}
     <div class="sabbaixa"><img id="sabprev" alt="${msab.exemplo?"Imagem de exemplo":"A imagem do seu momento"}" hidden>${msab.exemplo?`<p class="exnota">Imagem de exemplo. Faça a Fase 1 para ter a sua.</p>`:""}<button class="btn" id="baixar" type="button" disabled>⬇ Baixar ${msab.exemplo?"a imagem":"minha imagem"}</button></div>
-    <div class="trava"><h2>Falta pouco</h2><p class="sub">As Fases 3 e 4 estão quase prontas.</p>
-    ${avisado?`<p class="sub">Você já está na lista. Assim que abrirem, a gente te avisa por e-mail.</p>`:`<p class="sub">Quer ser avisado quando abrirem?</p><p class="opc">É opcional.</p>
-    <form id="aviso" novalidate><input id="av-nome" maxlength="40" autocomplete="given-name" placeholder="Seu nome (opcional)"><input id="av-email" type="email" maxlength="80" autocomplete="email" placeholder="Seu e-mail">
-    <label class="lgpd"><input type="checkbox" id="av-ok"><span>Concordo em usar meu nome e meu e-mail só para ser avisado quando as Fases 3 e 4 abrirem. Eles ficam separados das minhas respostas. <a href="/privacidade.html" target="_blank" rel="noopener">Privacidade</a></span></label>
-    <div class="averr" id="av-err"></div><button class="btn" type="submit">Quero ser avisado</button></form>`}</div>
+    <div class="trava"><h2>Fase 3</h2><p class="sub">Agora você conta o porquê das coisas que te fazem bem. São 5 perguntas por dia, em 3 dias.</p><button class="btn" type="button" onclick="click();f3Abre()">Começar a Fase 3</button></div>
     <button class="btn sec" style="margin-top:14px" onclick="recomecar()">Fazer de novo</button>`,
     c=>{ ligaVideo(c,LEG3,()=>{},VID3); ligaBaixar(c,msab); const f=c.querySelector("#aviso"); if(!f) return;
       f.addEventListener("submit",e=>{ e.preventDefault(); const n=c.querySelector("#av-nome").value.trim(), m=c.querySelector("#av-email").value.trim(), ok=c.querySelector("#av-ok").checked, er=c.querySelector("#av-err");
@@ -1375,7 +1388,108 @@ function baixaComum(blob,nome){
     try{ const fl=new File([blob],nome,{type:"image/jpeg"}); if(navigator.canShare&&navigator.canShare({files:[fl]})){ navigator.share({files:[fl],title:"Meu momento · 7entidos"}).catch(()=>{}); return; } }catch(e){}
     const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=nome; document.body.appendChild(a); a.click(); setTimeout(()=>a.remove(),500);
 }
-function recomecar(){ click(); resp={}; /* o nome continua guardado no celular (7e_nome) */ inicio=null; inicio2=null; pos=0; try{ localStorage.removeItem("7e_app_novo"); localStorage.removeItem("7e_app_novo_fase1"); }catch(e){} desenha(); }
+function recomecar(){ click(); resp={}; /* o nome continua guardado no celular (7e_nome) */ inicio=null; inicio2=null; pos=0; try{ localStorage.removeItem("7e_app_novo"); localStorage.removeItem("7e_app_novo_fase1"); localStorage.removeItem("7e_fase3_ativa"); }catch(e){} desenha(); }
+
+/* ============ FASE 3 · BLOCO 1: OS 5 MOTIVOS E AS 15 SITUAÇÕES (19/11) ============ */
+/* Os 5 motivos. Os nomes NUNCA aparecem nas opções; só ficam guardados por trás de cada resposta.
+   Não existe o motivo "dor do corpo": são só estes 5. */
+const MOTIVOS = [
+ {id:"soc", nome:"Conexão social"},
+ {id:"pau", nome:"Pausa e alívio"},
+ {id:"sen", nome:"Prazer sensorial"},
+ {id:"con", nome:"Prazer concreto"},
+ {id:"jei", nome:"Do meu jeito"}
+];
+const MOTIVO_NOME = Object.fromEntries(MOTIVOS.map(m=>[m.id,m.nome]));
+/* As 15 situações, em 3 dias de 5. Cada uma tem UMA opção por motivo (na ordem soc, pau, sen, con, jei).
+   "sent" = sentidos ligados à situação (vai servir para o Bloco 3, escolher as situações pela Fase 1). */
+const SITUACOES = [
+ {id:"praia",   dia:1, txt:"ir à praia",                       sent:["tato","visao"],          o:["Encontro meus amigos","Ninguém me pede nada por umas horas","Sinto a brisa e o pé na areia","Como pastel e tomo água de coco","Eu escolho a hora de chegar e de ir embora"]},
+ {id:"cafe",    dia:1, txt:"tomar um café da tarde",           sent:["olfato","paladar"],      o:["Reúno a família ou uma amiga","Paro tudo por meia hora","Sinto o cheiro do café passando","Um bolo gostoso me espera","Faço do jeito e na hora que eu quero"]},
+ {id:"samba",   dia:1, txt:"ir a uma roda de samba ou a um show", sent:["audicao","equilibrio"], o:["Vou com a turma e canto junto","Esqueço as obrigações da semana","Sinto o som vibrando no peito","Tem um petisco gostoso na mesa","Escolho onde ficar e a hora de ir embora"]},
+ {id:"plantas", dia:1, txt:"cuidar das plantas",               sent:["olfato","tato"],         o:["Troco mudas e conversa com as vizinhas","É a hora em que ninguém me chama","Sinto a terra nas mãos e o cheiro do verde","Colho tempero e flor para usar em casa","Cada vaso fica onde eu decidi"]},
+ {id:"bike",    dia:1, txt:"andar de bicicleta",               sent:["equilibrio","corpo"],    o:["Pedalo junto com amigos","Fico longe das tarefas por um tempo","Sinto o vento no rosto e o balanço nas curvas","Paro no caminho para tomar um sorvete","Escolho o caminho e a velocidade"]},
+ {id:"feira",   dia:2, txt:"ir à feira",                       sent:["visao","olfato"],        o:["Encontro conhecidos e converso com o feirante","Saio de casa e respiro","Vejo as cores e sinto os cheiros das barracas","Volto com fruta boa e barata","Escolho cada coisa com calma"]},
+ {id:"salao",   dia:2, txt:"ir ao salão de beleza",            sent:["tato","visao"],          o:["Converso e dou risada com as moças do salão","Ninguém me pede nada por uma hora","Sinto a massagem no cabelo","Saio com a unha feita e o cabelo bonito","Escolho a cor e o estilo que eu quero"]},
+ {id:"novela",  dia:2, txt:"ver novela ou série",              sent:["visao","audicao"],       o:["Comento depois com alguém","Desligo dos problemas","A música e as imagens me envolvem","Preparo um lanche gostoso para assistir","Eu decido o que e quando assistir"]},
+ {id:"hidro",   dia:2, txt:"fazer hidroginástica",             sent:["corpo","tato"],          o:["Encontro a turma e dou risada","Por uma hora ninguém me encontra","Sinto a água segurar e soltar o corpo","Saio de lá com o banho tomado","Escolho o dia e o ritmo dos exercícios"]},
+ {id:"cozinhar",dia:2, txt:"cozinhar uma receita especial",    sent:["paladar","olfato"],      o:["Cozinho para receber quem eu gosto","Esqueço o resto enquanto mexo a panela","Sinto o cheiro subindo da panela","No fim tem comida gostosa e sobra para amanhã","Invento e mudo a receita como eu quiser"]},
+ {id:"orla",    dia:3, txt:"caminhar na orla",                 sent:["equilibrio","corpo"],    o:["Caminho com uma amiga","Tiro um tempo longe das tarefas","Sinto o vento, o sol e o barulho do mar","Na volta, tomo uma água de coco no quiosque","Faço o meu percurso no meu ritmo"]},
+ {id:"padaria", dia:3, txt:"ir à padaria de manhã",            sent:["olfato","paladar"],      o:["Encontro o pessoal do bairro","Dou uma escapada de casa","Sinto o cheiro do pão saindo do forno","Levo pão quentinho e um doce","Escolho o que vou comer sem pressa"]},
+ {id:"decorar", dia:3, txt:"arrumar um cantinho da casa",      sent:["visao","tato"],          o:["Recebo elogios das visitas","Esqueço os problemas enquanto mexo nas coisas","Gosto de ver as cores e a luz do jeito novo","Compro uma peça nova para enfeitar","Tudo fica do jeito que eu imaginei"]},
+ {id:"viagem",  dia:3, txt:"fazer uma viagem curta",           sent:["visao","paladar"],       o:["Viajo com quem eu amo","Fico longe da rotina e das tarefas","Vejo paisagens que eu nunca vi","Trago lembrancinhas e comidas da região","Monto o roteiro do meu jeito"]},
+ {id:"compras", dia:3, txt:"passear numa loja ou no shopping", sent:["visao","tato"],          o:["Vou com uma amiga ou com a filha","Saio da rotina por umas horas","Passo a mão nos tecidos e olho as vitrines","Volto com uma peça nova","Escolho sem pressa e sem ninguém dar palpite"]}
+];
+/* o que fica guardado (só no celular): {dia, i, r:{situação:{a:motivo, b:motivo2|null} ou {n:true}}, fim:{dia:"aaaa-mm-dd"}} */
+let F3=null;
+function f3Carrega(){ if(F3) return F3; try{ F3=JSON.parse(localStorage.getItem("7e_fase3")||"null"); }catch(e){} if(!F3||!F3.r) F3={dia:1,i:0,r:{},fim:{}}; return F3; }
+function f3Salva(){ try{ localStorage.setItem("7e_fase3",JSON.stringify(F3)); }catch(e){} }
+function hojeStr(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+const f3DoDia=d=>SITUACOES.filter(s=>s.dia===d);
+/* o dia seguinte só abre no dia seguinte do calendário */
+function f3Liberado(d){ if(d<=1) return true; const f=F3.fim[d-1]; return !!f && hojeStr()>f; }
+let f3Sel={a:null,b:null};
+function f3Topo(txt){
+  const el=document.getElementById("const"); el.hidden=false;
+  if(!document.getElementById("mtopo")) el.innerHTML=mandala(72,"mtopo")+`<span class="xde7" id="xde7"></span>`;
+  const m=document.getElementById("mtopo"); requestAnimationFrame(()=>poeMandala(m,{pos:TODOS,luz:TODOS,miolo:true}));
+  document.getElementById("xde7").innerHTML=`<b class="pal"><em>7</em>entidos</b><small>Fase 3</small>${txt}`;
+  ["voltar","pularbtn","fundobtn"].forEach(id=>{ const b=document.getElementById(id); if(b) b.hidden=true; });
+  foco(null); brilho(null); fundoCor(null); pararSom();
+}
+function f3Abre(){ f3Carrega(); entrou=true; pos=R.length-1; try{ localStorage.setItem("7e_fase3_ativa","1"); }catch(e){} f3Tela(); }
+function f3Tela(){
+  const d=F3.dia, lista=f3DoDia(d);
+  if(F3.i>=lista.length){ return f3FimDia(); }
+  if(!f3Liberado(d)){ return f3Espera(); }
+  const s=lista[F3.i]; f3Sel={a:null,b:null};
+  const ant=F3.r[s.id]; if(ant&&!ant.n){ f3Sel={a:ant.a,b:ant.b||null}; }
+  f3Topo(`Dia ${d} · ${F3.i+1} de 5`);
+  mostra(`<div class="rot">Por que você gosta de…</div><h2 class="f3q">${esc(s.txt.charAt(0).toUpperCase()+s.txt.slice(1))}?</h2>
+    <p class="sub f3dica" id="f3dica">Toque no motivo que mais combina com você.</p>
+    <div class="opts f3opts">${s.o.map((t,k)=>`<button class="opt f3op" type="button" data-m="${MOTIVOS[k].id}" onclick="f3Toca(this)"><span class="f3t">${esc(t)}</span><span class="f3tag"></span></button>`).join("")}</div>
+    <button class="f3nenhuma" type="button" onclick="f3Nenhuma()">Nenhuma dessas</button>
+    <div style="margin-top:22px"><button class="btn" id="f3seguir" type="button" onclick="f3Seguir()" disabled>Seguir</button></div>
+    ${F3.i>0?`<div><button class="linkflow" type="button" onclick="f3Volta()">← voltar</button></div>`:""}`, ()=>f3Pinta());
+}
+function f3Pinta(){
+  document.querySelectorAll(".f3op").forEach(b=>{ const m=b.dataset.m, tg=b.querySelector(".f3tag");
+    b.classList.toggle("sel",m===f3Sel.a); b.classList.toggle("sel2",m===f3Sel.b);
+    tg.textContent=m===f3Sel.a?"1ª":m===f3Sel.b?"2ª":""; });
+  const dc=document.getElementById("f3dica"), sg=document.getElementById("f3seguir");
+  if(dc) dc.textContent=!f3Sel.a?"Toque no motivo que mais combina com você.":!f3Sel.b?"Se quiser, toque numa 2ª opção. É opcional.":"Pronto. Para trocar, toque de novo na opção.";
+  if(sg) sg.disabled=!f3Sel.a;
+}
+function f3Toca(b){ click(); vibra(10); const m=b.dataset.m;
+  if(f3Sel.a===m){ f3Sel.a=f3Sel.b; f3Sel.b=null; }
+  else if(f3Sel.b===m){ f3Sel.b=null; }
+  else if(!f3Sel.a){ f3Sel.a=m; }
+  else { f3Sel.b=m; }
+  f3Pinta();
+}
+function f3Guarda(v){ const s=f3DoDia(F3.dia)[F3.i]; F3.r[s.id]=v; F3.i++; if(F3.i>=5&&!F3.fim[F3.dia]) F3.fim[F3.dia]=hojeStr(); f3Salva(); }
+function f3Seguir(){ if(!f3Sel.a||ocupado) return; ocupado=true; click(); f3Guarda({a:f3Sel.a,b:f3Sel.b||null}); f3Tela(); }
+function f3Nenhuma(){ if(ocupado) return; ocupado=true; click(); f3Guarda({n:true}); f3Tela(); }
+function f3Volta(){ if(F3.i>0){ click(); F3.i--; f3Salva(); f3Tela(); } }
+function f3FimDia(){
+  const d=F3.dia;
+  if(d>=3){ f3Topo("15 de 15");
+    return mostra(`<div class="rot">Fase 3 · Dia 3 completo</div><h2>Você respondeu as 15.</h2><p class="sub">Obrigado por contar o porquê de cada coisa.</p>
+      <button class="btn sec" type="button" onclick="f3Rever()">Rever as minhas respostas</button>`); }
+  f3Topo(`Dia ${d} completo`);
+  mostra(`<div class="rot">Fase 3 · Dia ${d} completo</div><h2>Pronto por hoje.</h2><p class="sub">Amanhã tem mais 5 esperando por você.</p>
+    <button class="btn" type="button" onclick="f3ProximoDia()">Combinado</button>
+    ${PREVIA?`<div><button class="linkflow" type="button" onclick="f3PulaEspera()">Pular a espera (só na prévia)</button></div>`:""}`);
+}
+function f3ProximoDia(){ click(); F3.dia=Math.min(3,F3.dia+1); F3.i=0; f3Salva(); f3Tela(); }
+function f3Espera(){ f3Topo(`Dia ${F3.dia}`);
+  mostra(`<div class="rot">Fase 3 · Dia ${F3.dia}</div><h2>As próximas 5 abrem amanhã.</h2><p class="sub">Volte quando quiser. Elas vão estar te esperando.</p>
+    ${PREVIA?`<button class="btn" type="button" onclick="f3PulaEspera()">Pular a espera (só na prévia)</button>`:""}`); }
+function f3PulaEspera(){ click(); const ant=Math.max(1,F3.dia-(F3.i>=5?0:1)); F3.fim[ant]="2000-01-01"; if(F3.i>=5){ F3.dia=Math.min(3,F3.dia+1); F3.i=0; } f3Salva(); f3Tela(); }
+function f3Rever(){ click(); F3.dia=1; F3.i=0; f3Salva(); f3Tela(); }
+function f3Zera(){ F3={dia:1,i:0,r:{},fim:{}}; f3Salva(); }
+/* lista das 15 situações com o motivo de cada opção (só no painel de validação da prévia) */
+function f3Lista(){ return `<div class="f3lista">${[1,2,3].map(d=>`<div class="f3dia">Dia ${d}</div>${f3DoDia(d).map(s=>`<div class="f3sit"><b>Por que você gosta de ${esc(s.txt)}?</b>${s.o.map((t,k)=>`<div><span>${esc(t)}</span><em>${MOTIVOS[k].nome}</em></div>`).join("")}<div><span>Nenhuma dessas</span><em>saída</em></div></div>`).join("")}`).join("")}</div>`; }
 
 /* ============ GUARDAR E ENVIAR (anônimo) ============ */
 function salvaLocal(){ try{ localStorage.setItem("7e_app_novo",JSON.stringify({pos,resp,inicio,inicio2,r:R.length})); if(resp.fase1_completa) localStorage.setItem("7e_app_novo_fase1",JSON.stringify({gostos:SENT.map(x=>resp["gosto_"+x.id]||null),chegada:resp.escala_chegada})); }catch(e){} }
@@ -1384,24 +1498,25 @@ function envia(){ if(!ENDPOINT||!resp.consentiu) return; try{ const r={...resp};
   fetch(ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify({pesquisa:"app-novo",versao:VERSAO,pessoa:PID,quando:new Date().toISOString(),respostas:r})}).catch(()=>{}); }catch(e){} }
 
 /* ============ PAINEL DE VALIDAÇÃO (só na prévia) ============ */
-/* Bloco B (Google Play). O Bloco A já foi aprovado (frase da abertura: opção A) e saiu do painel. */
+/* Fase 3 · Bloco 1 (os 5 motivos e as 15 situações). Os blocos anteriores já foram aprovados e saíram do painel. */
 const ITENS=[
- ["gpb1","Bloco B · 1 · Cor do sentido","Fundo em degradê que muda com o sentido","Visão dourado, Audição lilás, Tato rosa, Paladar laranja, Olfato verde, Equilíbrio azul-claro, Noção do corpo violeta. As luzes de cima e o gráfico usam as mesmas cores. Na abertura e no fim, azul-noite com um brilho das 7 cores embaixo. Toque em 'Ver' e avance pelas 7 perguntas.",R.findIndex(x=>x.t==="gosto")],
- ["gpb2","Bloco B · 2 · Botões","Botões com volume (3D) e letra maior","Os botões parecem 'saltados' e afundam quando você toca. A letra ficou maior em todos.",R.findIndex(x=>x.t==="vaso")],
- ["gpb3","Bloco B · 3 · Leitura","Contraste de pelo menos 4,5 em todos os textos","Medi tela por tela, letra por letra. O azul-claro dos textos ficou um pouco mais claro, os nomes nas fotos ganharam uma faixa escura e as frases que piscam não apagam mais tanto. No modo foco dos jogos, o topo e o 'pular' ficam só um pouco apagados.",R.findIndex(x=>x.t==="jogo")],
- ["gpb4","Bloco B · 4 · Vídeo 1 da Brisa","Sem 'Quer saber mais? Visite o nosso site'","O vídeo termina em 'Vamos começar?' (28,8 s) e a legenda termina junto. Toque em 'Ver', depois em 'Entrar', e assista até o fim.",-1]
+ ["f3b1_1","Bloco 1 · 1 · Nomes dos 5 motivos","Conexão social, Pausa e alívio, Prazer sensorial, Prazer concreto e Do meu jeito","Esses 5 nomes ficam guardados por trás de cada opção. Os nomes técnicos não aparecem em lugar nenhum do app. (Pelo Bloco 2, os nomes também não aparecem nas opções: a pessoa só vê frases do dia a dia.)","f3"],
+ ["f3b1_2","Bloco 1 · 2 · Sem \"dor do corpo\"","Só existem os 5 motivos","Nenhuma opção e nenhuma conta do app usa \"dor do corpo\". Cada situação tem exatamente 5 opções, uma por motivo.","f3"],
+ ["f3b1_3","Bloco 1 · 3 · As 15 situações","\"Por que você gosta de…?\", em 3 dias de 5","6 vieram da pesquisa e 9 eu escrevi no mesmo estilo. O dia 2 só abre no dia seguinte (na prévia tem o botão \"Pular a espera\"). Confira a lista abaixo: ao lado de cada opção está o motivo que ela guarda (isso só aparece aqui no painel). A praia já usa a frase nova: \"Eu escolho a hora de chegar e de ir embora\".","f3",null,()=>f3Lista()],
+ ["f3b1_4","Bloco 1 · 4 · 1ª obrigatória e 2ª opcional","Um toque marca a 1ª; outro toque marca a 2ª","A 1ª ganha o selo dourado \"1ª\"; a 2ª fica tracejada com \"2ª\". O \"Seguir\" só acende depois da 1ª. Tocar de novo numa opção desmarca.","f3"],
+ ["f3b1_5","Bloco 1 · 5 · Saída \"Nenhuma dessas\"","Em todas as 15 situações","Fica embaixo das 5 opções. Um toque já guarda \"nenhuma\" e passa para a próxima.","f3"]
 ];
 const REVISAR=["Mudar o visual","Mudar o texto","Mudar como funciona","Tirar do app"];
 let val={}, vdb=null, VDOC=null;
 function painel(){
   let el=document.getElementById("vp"); if(!el){ el=document.createElement("div"); el.id="vp"; el.className="vpainel"; document.body.appendChild(el); }
   const nv=ITENS.filter(x=>val[x[0]]&&val[x[0]].s==="validado").length;
-  el.innerHTML=`<div class="vcaixa"><div class="rot">Prévia · app novo · Google Play · Bloco B</div><h2>Validar item por item</h2><p class="sub">${nv} de ${ITENS.length} validados. "Ver" leva direto para a tela do item.</p>
-    ${ITENS.map(([id,num,tt,ds,alvo,ops])=>{ const v=val[id]||{}; return `<div class="vitem"><div class="rot" style="margin:0">${num}</div><div class="tt">${tt}</div><div class="ds">${ds}</div>${ops?`<div class="esc">${ops.map((o,k)=>`<button class="${(v.e==null?fraseIdx():v.e)===k?"on":""}" onclick="escolhe('${id}',${k})">${"ABC"[k]}) ${o}</button>`).join("")}</div>`:""}
-      <div class="bb"><button class="v ${v.s==="validado"?"on":""}" onclick="marca('${id}','validado')">Validado</button><button class="r ${v.s==="revisar"?"on":""}" onclick="marca('${id}','revisar')">Revisar</button><button class="ir" onclick="ir(${alvo})">Ver</button></div>
+  el.innerHTML=`<div class="vcaixa"><div class="rot">Prévia · Fase 3 · Bloco 1</div><h2>Validar item por item</h2><p class="sub">${nv} de ${ITENS.length} validados. "Ver" leva direto para a tela do item.</p>
+    ${ITENS.map(([id,num,tt,ds,alvo,ops,extra])=>{ const v=val[id]||{}; return `<div class="vitem"><div class="rot" style="margin:0">${num}</div><div class="tt">${tt}</div><div class="ds">${ds}</div>${extra?extra():""}${ops?`<div class="esc">${ops.map((o,k)=>`<button class="${(v.e==null?fraseIdx():v.e)===k?"on":""}" onclick="escolhe('${id}',${k})">${"ABC"[k]}) ${o}</button>`).join("")}</div>`:""}
+      <div class="bb"><button class="v ${v.s==="validado"?"on":""}" onclick="marca('${id}','validado')">Validado</button><button class="r ${v.s==="revisar"?"on":""}" onclick="marca('${id}','revisar')">Revisar</button><button class="ir" onclick="ir(${typeof alvo==="string"?"'"+alvo+"'":alvo})">Ver</button></div>
       <div class="rev ${v.s==="revisar"?"on":""}">${REVISAR.map(o=>`<button class="${v.o===o?"on":""}" onclick="marcaRev('${id}','${o}')">${o}</button>`).join("")}</div></div>`; }).join("")}
     <p class="vsalvo" id="vsalvo">${VDOC?"As marcações ficam guardadas: o Claude lê direto.":"As marcações ficam guardadas neste aparelho."}</p>
-    <button class="btn" onclick="fechaPainel()">Voltar ao app</button></div>`;
+    <button class="btn sec" style="margin-bottom:12px" onclick="f3Zera();ir('f3')">Recomeçar a Fase 3 do zero</button><button class="btn" onclick="fechaPainel()">Voltar ao app</button></div>`;
   el.classList.add("on");
 }
 function fraseIdx(){ return FRASES_AB.indexOf(fraseAbertura()); }
@@ -1409,15 +1524,16 @@ function escolhe(id,k){ click(); val[id]={...(val[id]||{}),e:k}; try{ localStora
 function fechaPainel(){ const el=document.getElementById("vp"); if(el) el.classList.remove("on"); }
 function marca(id,s){ val[id]={...(val[id]||{}),s}; if(s==="validado") delete val[id].o; salvaVal(); painel(); }
 function marcaRev(id,o){ val[id]={...(val[id]||{}),s:"revisar",o}; salvaVal(); painel(); }
-function salvaVal(){ try{ localStorage.setItem("7e_app_novo_val_gpB",JSON.stringify(val)); }catch(e){}
+function salvaVal(){ try{ localStorage.setItem("7e_app_novo_val_f3b1",JSON.stringify(val)); }catch(e){}
   if(VDOC) VDOC.set({atualizado:new Date().toISOString(), itens:ITENS.map(x=>({id:x[0],item:x[1]+" · "+x[2],situacao:(val[x[0]]||{}).s||null,revisar:(val[x[0]]||{}).o||null,escolha:x[5]&&(val[x[0]]||{}).e!=null?x[5][val[x[0]].e]:null}))}).catch(()=>{}); }
 
 /* ============ INÍCIO ============ */
 try{ const s=JSON.parse(localStorage.getItem("7e_app_novo")||"null"); if(s&&s.resp&&s.r===R.length&&s.pos>0&&s.pos<R.length-2){ resp=s.resp; pos=s.pos; inicio=s.inicio||Date.now(); inicio2=s.inicio2||null; } }catch(e){}
-try{ val=JSON.parse(localStorage.getItem("7e_app_novo_val_gpB")||"{}")||{}; }catch(e){}
+try{ val=JSON.parse(localStorage.getItem("7e_app_novo_val_f3b1")||"{}")||{}; }catch(e){}
 if(PREVIA){ const b=document.createElement("button"); b.className="vbtn"; b.type="button"; b.textContent="Validar a prévia"; b.onclick=()=>{ click(); painel(); }; document.body.appendChild(b); }
-desenha();
-if(PREVIA && window.claude && claude.use){ claude.use("db").then(db=>{ if(!db) return; VDOC=db.doc("validacao/app-novo-gp-bB"); return VDOC.get().then(sn=>{ const d=sn&&(sn.data?sn.data():sn); if(d&&d.itens&&!Object.keys(val).length){ d.itens.forEach(x=>{ if(x.situacao||x.escolha){ const k=x.escolha?FRASES_AB.indexOf(x.escolha):-1; val[x.id]={s:x.situacao||undefined,o:x.revisar||undefined,e:k>=0?k:undefined}; if(k>=0){ try{ localStorage.setItem("7e_frase_abertura",String(k)); }catch(e){} } } }); if(!entrou&&pos===0) desenha(); } }); }).catch(()=>{}); }
+let f3Ativa=false; try{ f3Ativa=localStorage.getItem("7e_fase3_ativa")==="1"; }catch(e){}
+if(f3Ativa) f3Abre(); else desenha();
+if(PREVIA && window.claude && claude.use){ claude.use("db").then(db=>{ if(!db) return; VDOC=db.doc("validacao/app-novo-f3-b1"); return VDOC.get().then(sn=>{ const d=sn&&(sn.data?sn.data():sn); if(d&&d.itens&&!Object.keys(val).length){ d.itens.forEach(x=>{ if(x.situacao||x.escolha){ const k=x.escolha?FRASES_AB.indexOf(x.escolha):-1; val[x.id]={s:x.situacao||undefined,o:x.revisar||undefined,e:k>=0?k:undefined}; if(k>=0){ try{ localStorage.setItem("7e_frase_abertura",String(k)); }catch(e){} } } }); if(!entrou&&pos===0) desenha(); } }); }).catch(()=>{}); }
 </script>
 </body>
 </html>
