@@ -114,11 +114,42 @@ section.sec{padding:clamp(80px,12vw,140px) 0}
 
 /* ===== 1.4 COMO FUNCIONA ===== */
 .fluxo{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:stretch;gap:0}
-.passo{position:relative;padding:30px 26px 28px;border-radius:26px;background:linear-gradient(160deg,rgba(32,48,100,.55),rgba(17,27,61,.35));border:1px solid var(--linha);overflow:hidden}
-.passo::after{content:"";position:absolute;right:-40px;top:-40px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,var(--c),transparent 70%);opacity:.22}
-.passo .n{font:700 14px var(--mono);color:var(--c);letter-spacing:.12em}
-.passo h3{font-size:clamp(34px,4vw,46px);margin:14px 0 10px}
-.passo p{color:var(--azul);font-size:18px}
+/* passos (19/11): cena ilustrada na cor do sentido, sem cara de formulário */
+.passo{position:relative;padding:0 8px 8px;text-align:center;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.passo:hover{transform:translateY(-6px)}
+.passo .cena{position:relative;margin:0 auto 18px;width:100%;max-width:300px;aspect-ratio:3/2;display:grid;place-items:center;isolation:isolate}
+.passo .cena::before{content:"";position:absolute;z-index:-1;inset:6% 10%;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--c) 45%,transparent),transparent 68%);filter:blur(8px);animation:respiraLuz 5s ease-in-out infinite}
+@keyframes respiraLuz{0%,100%{opacity:.6;transform:scale(.95)}50%{opacity:1;transform:scale(1.05)}}
+.passo .cena svg{width:100%;height:auto;overflow:visible}
+.passo .n{display:inline-block;font:700 13px var(--mono);color:var(--c);letter-spacing:.14em;padding:5px 12px;border-radius:999px;background:color-mix(in srgb,var(--c) 14%,transparent)}
+.passo h3{font-size:clamp(36px,4vw,48px);margin:12px 0 10px;color:var(--creme)}
+.passo p{color:var(--azul);font-size:18px;max-width:28ch;margin:0 auto}
+/* cena 1 · Escolha: o dedo toca uma bolinha e ela acende */
+.c-escolha .bolhas circle{opacity:.55;filter:drop-shadow(0 0 6px rgba(255,255,255,.35))}
+.c-escolha .bolhas .tocada{opacity:1;animation:acende 3s ease-in-out infinite;transform-origin:66px 62px}
+@keyframes acende{0%,30%{transform:scale(1)}40%{transform:scale(1.25)}55%,100%{transform:scale(1.12)}}
+.c-escolha .onda{fill:none;stroke:#4aa8ff;stroke-width:2;transform-origin:66px 62px;animation:onda 3s ease-out infinite}
+.c-escolha .onda.o2{animation-delay:.4s}
+@keyframes onda{0%,35%{opacity:0;transform:scale(1)}40%{opacity:.9}100%{opacity:0;transform:scale(2.8)}}
+.c-escolha .dedo{fill:#f4ecdc;opacity:.92;animation:toca 3s ease-in-out infinite}
+@keyframes toca{0%,100%{transform:translate(6px,10px)}35%,45%{transform:translate(0,0)}}
+/* cena 2 · Descubra: a lupa passa e revela um coração */
+.c-descubra .pontos circle{fill:var(--azul);opacity:.35}
+.c-descubra .lupa{animation:procura 6s ease-in-out infinite}
+@keyframes procura{0%,100%{transform:translate(70px,84px)}45%,60%{transform:translate(150px,62px)}}
+.c-descubra .vidro{fill:color-mix(in srgb,var(--tato) 18%,transparent);stroke:var(--tato);stroke-width:4}
+.c-descubra .cabo{stroke:var(--tato);stroke-width:8;stroke-linecap:round}
+.c-descubra .coracao{fill:#ff5a6e;opacity:0;animation:revela 6s ease-in-out infinite;filter:drop-shadow(0 0 6px #ff5a6e)}
+@keyframes revela{0%,38%{opacity:0;transform:scale(.6)}50%,62%{opacity:1;transform:scale(1.15)}75%,100%{opacity:0;transform:scale(.8)}}
+/* cena 3 · Guarde: as boas sensações caem no pote, que brilha */
+.c-guarde .pote{fill:color-mix(in srgb,var(--olfato) 16%,transparent);stroke:var(--olfato);stroke-width:3}
+.c-guarde .tampa{fill:var(--olfato);opacity:.85}
+.c-guarde .brilho-pote{fill:var(--olfato);opacity:.18;filter:blur(14px);animation:respiraLuz 4s ease-in-out infinite;transform-origin:120px 112px}
+.c-guarde .caindo circle{opacity:0;animation:cai 4.5s ease-in infinite;filter:drop-shadow(0 0 5px rgba(255,255,255,.4))}
+.c-guarde .caindo circle:nth-child(2){animation-delay:1.5s}
+.c-guarde .caindo circle:nth-child(3){animation-delay:3s}
+@keyframes cai{0%{opacity:0;transform:translateY(0)}15%{opacity:1}70%{opacity:1;transform:translateY(96px)}85%,100%{opacity:0;transform:translateY(110px)}}
+.c-guarde .dentro circle{filter:drop-shadow(0 0 4px rgba(255,255,255,.35))}
 .ponte{display:grid;place-items:center;width:64px}
 .ponte svg{width:52px;height:24px}
 .ponte path{stroke:var(--ouro);stroke-width:1.6;fill:none;stroke-dasharray:6 6;animation:anda 1.2s linear infinite}
@@ -294,6 +325,8 @@ body.sem-selos .selo{display:none}
   .fluxo{grid-template-columns:1fr;gap:0}
   .ponte{width:auto;height:46px}
   .ponte svg{transform:rotate(90deg)}
+  .passo .cena{max-width:230px;margin-bottom:10px}
+  .passo{padding-bottom:18px}
   .grande-circulo,.lab{grid-template-columns:1fr}
   .sobre .wrap{grid-template-columns:1fr}
   .sobre nav{grid-column:1}
@@ -378,11 +411,46 @@ body.sem-selos .selo{display:none}
       <h2>Simples como <em>sentir</em>.</h2>
     </div>
     <div class="fluxo">
-      <article class="passo rev" style="--c:var(--audicao)"><span class="n">PASSO 01</span><h3>Escolha</h3><p>Escolha um sentido e responda com um toque: imagens, sons, texturas.</p></article>
+      <article class="passo rev" style="--c:var(--audicao)">
+        <div class="cena" aria-hidden="true">
+          <svg viewBox="0 0 240 160" class="c-escolha">
+            <g class="bolhas">
+              <circle cx="40" cy="96" r="13" fill="#f5c542"/><circle cx="66" cy="62" r="13" fill="#4aa8ff" class="tocada"/><circle cx="102" cy="40" r="13" fill="#ff8a3d"/>
+              <circle cx="140" cy="36" r="13" fill="#ff5a6e"/><circle cx="176" cy="52" r="13" fill="#5ccf8a"/><circle cx="204" cy="82" r="13" fill="#b48cff"/><circle cx="214" cy="118" r="13" fill="#3fd6d0"/>
+            </g>
+            <circle cx="66" cy="62" r="13" class="onda"/><circle cx="66" cy="62" r="13" class="onda o2"/>
+            <path class="dedo" d="M78 150 C 76 128, 74 108, 72 86 C 71 78, 82 77, 83 85 L 86 110 C 88 100, 99 101, 99 110 C 101 103, 111 104, 111 114 C 113 108, 122 110, 122 120 C 122 132, 118 142, 112 150 Z"/>
+          </svg>
+        </div>
+        <span class="n">PASSO 01</span><h3>Escolha</h3><p>Escolha um sentido e responda com um toque: imagens, sons, texturas.</p>
+      </article>
       <div class="ponte" aria-hidden="true"><svg viewBox="0 0 52 24"><path d="M2 12 H44 M38 5 L46 12 L38 19"/></svg></div>
-      <article class="passo rev" style="--c:var(--tato);--dl:.15s"><span class="n">PASSO 02</span><h3>Descubra</h3><p>O app mostra o que te faz bem — e por quê, com a ciência explicada de um jeito fácil.</p></article>
+      <article class="passo rev" style="--c:var(--tato);--dl:.15s">
+        <div class="cena" aria-hidden="true">
+          <svg viewBox="0 0 240 160" class="c-descubra">
+            <g class="pontos"><circle cx="50" cy="80" r="5"/><circle cx="84" cy="56" r="4"/><circle cx="120" cy="96" r="5"/><circle cx="156" cy="60" r="4"/><circle cx="192" cy="88" r="5"/></g>
+            <g class="lupa">
+              <circle cx="0" cy="0" r="30" class="vidro"/>
+              <path d="M0 10 C -14 0, -12 -12, -4 -12 C 0 -12, 0 -8, 0 -6 C 0 -8, 0 -12, 4 -12 C 12 -12, 14 0, 0 10 Z" class="coracao"/>
+              <path d="M21 21 L 40 40" class="cabo"/>
+            </g>
+          </svg>
+        </div>
+        <span class="n">PASSO 02</span><h3>Descubra</h3><p>O app mostra o que te faz bem — e por quê, com a ciência explicada de um jeito fácil.</p>
+      </article>
       <div class="ponte" aria-hidden="true"><svg viewBox="0 0 52 24"><path d="M2 12 H44 M38 5 L46 12 L38 19"/></svg></div>
-      <article class="passo rev" style="--c:var(--olfato);--dl:.3s"><span class="n">PASSO 03</span><h3>Guarde</h3><p>Guarde suas boas sensações e volte a elas quando o dia pedir.</p></article>
+      <article class="passo rev" style="--c:var(--olfato);--dl:.3s">
+        <div class="cena" aria-hidden="true">
+          <svg viewBox="0 0 240 160" class="c-guarde">
+            <circle cx="120" cy="112" r="40" class="brilho-pote"/>
+            <g class="caindo"><circle cx="104" cy="0" r="6" fill="#f5c542"/><circle cx="124" cy="0" r="5" fill="#ff5a6e"/><circle cx="140" cy="0" r="6" fill="#4aa8ff"/></g>
+            <path d="M88 76 H152 V140 Q152 152 140 152 H100 Q88 152 88 140 Z" class="pote"/>
+            <rect x="84" y="66" width="72" height="12" rx="5" class="tampa"/>
+            <g class="dentro"><circle cx="106" cy="134" r="6" fill="#f5c542"/><circle cx="122" cy="138" r="5" fill="#ff8a3d"/><circle cx="136" cy="130" r="6" fill="#5ccf8a"/><circle cx="114" cy="120" r="4" fill="#b48cff"/></g>
+          </svg>
+        </div>
+        <span class="n">PASSO 03</span><h3>Guarde</h3><p>Guarde suas boas sensações e volte a elas quando o dia pedir.</p>
+      </article>
     </div>
 
     <div class="grande-circulo">
