@@ -672,6 +672,9 @@ body.foco .topo:hover,body.foco #pularbtn:focus-visible,body.foco #voltar:focus-
 .f3mlin span{font-size:13px;font-weight:700;text-align:left;line-height:1.1}
 .f3mlin i{height:24px;border-radius:7px;background:rgba(169,179,209,.12);border:1px solid rgba(169,179,209,.18)}
 .f3mlin i.on{background:var(--c);opacity:var(--o);border-color:transparent}
+.f3mlin i.vazio{visibility:hidden}
+.f3conc{max-width:400px;margin:4px auto 16px;font-size:18px;line-height:1.4;color:var(--creme);text-align:center}
+.f3conc b{font-weight:800}
 .f3mlin i.nova{animation:f3pisca 1s ease-out;opacity:1;box-shadow:0 0 0 3px #fff8,0 0 18px var(--c)}
 @keyframes f3pisca{0%{transform:scale(.3)}60%{transform:scale(1.25)}100%{transform:scale(1)}}
 .f3mapov{position:fixed;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;background:rgba(5,9,26,.82);backdrop-filter:blur(4px);animation:f3entra .25s}
@@ -1590,7 +1593,7 @@ function f3FimDia(){
       <button class="btn" type="button" onclick="click();f3PorTras()">Ver o que apareceu</button>
       <div style="margin-top:14px"><button class="btn sec" type="button" onclick="f3Rever()">Rever as minhas respostas</button></div>`); }
   f3Topo(`Dia ${d} completo`);
-  mostra(`<div class="rot">Fase 3 · Dia ${d} completo</div><h2>Pronto por hoje.</h2><p class="sub">Amanhã tem mais 5 esperando por você.</p><div class="rot" style="margin-top:4px">Seu mapa · ${Object.keys(f3Casas()).length} de 35</div>${f3Mapa("",false)}
+  mostra(`<div class="rot">Fase 3 · Dia ${d} completo</div><h2>Pronto por hoje.</h2><p class="sub">Amanhã tem mais 5 esperando por você.</p><div class="rot" style="margin-top:4px">Seu mapa · ${Object.keys(f3Casas()).length} ${Object.keys(f3Casas()).length===1?"casinha acesa":"casinhas acesas"}</div>${f3Mapa("",false)}
     <button class="btn" type="button" onclick="f3ProximoDia()">Combinado</button>
     ${PREVIA?`<div><button class="linkflow" type="button" onclick="f3PulaEspera()">Pular a espera (só na prévia)</button></div>`:""}`);
 }
@@ -1693,11 +1696,24 @@ function f3MontaLista(){
 function f3SentidoDe(s){ const o=(F3.orig||{})[s.id]; return o?o.sid:s.sent[0]; }
 function f3Casas(){ const c={}; Object.entries(F3.r).forEach(([id,v])=>{ if(!v||v.n||!SIT[id]) return; const k=f3SentidoDe(SIT[id])+"|"+v.a; c[k]=(c[k]||0)+1; }); return c; }
 /* durante as 15, as colunas não mostram o nome do motivo (para não entregar a resposta); os nomes aparecem depois do "Por trás das perguntas" */
-function f3Mapa(nova,comNomes){ const c=f3Casas();
-  return `<div class="f3mapa"><div class="f3mcab"><span></span>${MOTIVOS.map((m,k)=>`<b>${comNomes?m.nome.replace(" e ","<br>e ").replace("Prazer ","Prazer<br>").replace("Conexão ","Conexão<br>").replace("Do meu ","Do meu<br>"):"✦".repeat(1)+"<small>"+(k+1)+"</small>"}</b>`).join("")}</div>
-  ${SENT.map(s=>`<div class="f3mlin"><span style="color:${claro(s.cor)}">${s.s}</span>${MOTIVOS.map(m=>{ const k=s.id+"|"+m.id, n=c[k]||0; return `<i class="${n?"on":""} ${k===nova?"nova":""}" style="--c:${s.cor};--o:${Math.min(1,.45+n*.25)}"></i>`; }).join("")}</div>`).join("")}</div>`; }
-function f3MostraMapa(nova,depois){ const ov=document.createElement("div"); ov.className="f3mapov"; ov.innerHTML=`<div class="f3mapcx"><div class="rot">Seu mapa · ${Object.keys(f3Casas()).length} de 35</div>${f3Mapa(nova,false)}</div>`;
-  document.body.appendChild(ov); vibra(12); setTimeout(()=>{ ov.classList.add("sai"); setTimeout(()=>{ ov.remove(); depois(); },300); },1100); }
+/* 19/11 (pedido do Daniel): o mapa mostra SÓ as casinhas que já se pintaram (sem quadrados vazios) e já traz uma conclusão curta.
+   Durante as 15, a conclusão fala só de sentidos (sem entregar o nome do motivo); depois do "Por trás das perguntas", fala do motivo também. Sempre como pista. */
+function f3Conclusao(comNomes){ const c=f3Casas(), porS={}, porM={}; Object.entries(c).forEach(([k,n])=>{ const [sid,mid]=k.split("|"); porS[sid]=(porS[sid]||0)+n; porM[mid]=(porM[mid]||0)+n; });
+  const tot=Object.values(porS).reduce((x,y)=>x+y,0); if(!tot) return "";
+  const topo=o=>{ const e=Object.entries(o).sort((x,y)=>y[1]-x[1]); return e[1]&&e[1][1]===e[0][1]?null:e[0][0]; };
+  const sTop=topo(porS), mTop=topo(porM), S=sTop&&SENT.find(x=>x.id===sTop);
+  let t;
+  if(tot<2) t="Primeira pista guardada. A cada resposta, o seu mapa ganha mais cor.";
+  else if(comNomes&&mTop&&S) t=`Pista até aqui: o que mais aparece é <b>${MOTIVO_NOME[mTop]}</b>, e quem mais acende é ${S.s==="Noção do corpo"?"a":"o"} <b style="color:${claro(S.cor)}">${S.s}</b>.`;
+  else if(S) t=`Até aqui, ${S.s==="Noção do corpo"?"a":"o"} <b style="color:${claro(S.cor)}">${S.s}</b> é o sentido que mais acende nas suas respostas.`;
+  else t="Até aqui, as suas respostas estão bem espalhadas: vários sentidos acendem por igual.";
+  return `<p class="f3conc">${t}</p>`; }
+function f3Mapa(nova,comNomes){ const c=f3Casas(); const linhas=SENT.filter(s=>MOTIVOS.some(m=>c[s.id+"|"+m.id]));
+  if(!linhas.length) return `<p class="f3conc">O seu mapa começa a se pintar na primeira resposta.</p>`;
+  return `<div class="f3mapa">${comNomes?`<div class="f3mcab"><span></span>${MOTIVOS.map(m=>`<b>${m.nome.replace(" e ","<br>e ").replace("Prazer ","Prazer<br>").replace("Conexão ","Conexão<br>").replace("Do meu ","Do meu<br>")}</b>`).join("")}</div>`:""}
+  ${linhas.map(s=>`<div class="f3mlin"><span style="color:${claro(s.cor)}">${s.s}</span>${MOTIVOS.filter(m=>comNomes||c[s.id+"|"+m.id]).map(m=>{ const k=s.id+"|"+m.id, n=c[k]||0; return `<i class="${n?"on":"vazio"} ${k===nova?"nova":""}" style="--c:${s.cor};--o:${Math.min(1,.45+n*.25)}"></i>`; }).join("")}</div>`).join("")}</div>${f3Conclusao(comNomes)}`; }
+function f3MostraMapa(nova,depois){ const ov=document.createElement("div"); ov.className="f3mapov"; ov.innerHTML=`<div class="f3mapcx"><div class="rot">Seu mapa · ${Object.keys(f3Casas()).length} ${Object.keys(f3Casas()).length===1?"casinha acesa":"casinhas acesas"}</div>${f3Mapa(nova,false)}</div>`;
+  document.body.appendChild(ov); vibra(12); setTimeout(()=>{ ov.classList.add("sai"); setTimeout(()=>{ ov.remove(); depois(); },300); },2600); }
 /* ---- uma vez por mês: repete uma situação com outras palavras, para ver se a resposta se mantém ---- */
 const SIT_ALT={
  praia:   {q:"O que mais te puxa para a praia?", o:["Ver a turma reunida","Ficar umas horas sem ninguém me chamar","O vento e a areia","O pastel e a água de coco","Chegar e sair na hora que eu decido"]},
