@@ -132,8 +132,19 @@ section.sec{padding:clamp(80px,12vw,140px) 0}
 .ponte path{stroke:var(--ouro);stroke-width:1.6;fill:none;stroke-dasharray:6 6;animation:anda 1.2s linear infinite}
 @keyframes anda{to{stroke-dashoffset:-12}}
 .grande-circulo{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center;margin-top:80px}
-.grande-circulo .circulo{max-width:520px;margin:0 auto;--raio:min(200px,36vw);--bola:24px;--fs:14px}
-.grande-circulo .meio h3{font-size:clamp(26px,3.4vw,40px)}
+/* mandala dos 7 sentidos (identidade atual, no lugar do círculo antigo) */
+.mandala-box{position:relative;margin:0 auto;width:min(480px,100%);display:grid;justify-items:center;gap:18px;isolation:isolate}
+.mandala-box img{position:relative;width:100%;height:auto;border-radius:50%;animation:respiraM 7s ease-in-out infinite;filter:drop-shadow(0 30px 50px rgba(0,0,0,.6))}
+@keyframes respiraM{0%,100%{transform:scale(.97)}50%{transform:scale(1.01)}}
+.mandala-box .halo{position:absolute;z-index:-1;left:50%;top:0;width:100%;aspect-ratio:1;transform:translateX(-50%) scale(1.12);border-radius:50%;
+  background:conic-gradient(from 0deg,var(--visao),var(--audicao),var(--tato),var(--paladar),var(--olfato),var(--equilibrio),var(--corpo),var(--visao));
+  filter:blur(46px);opacity:.38;animation:giraHalo 40s linear infinite}
+@keyframes giraHalo{to{transform:translateX(-50%) scale(1.12) rotate(360deg)}}
+.mandala-box .halo::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--foco,transparent);transition:background .5s}
+.mandala-box.foco .halo{opacity:.55}
+.mandala-box figcaption{font-family:var(--serif);font-size:clamp(26px,3.4vw,40px);line-height:1}
+.mandala-box figcaption em{font-style:italic;color:var(--ouro)}
+.legenda li.on{border-color:color-mix(in srgb,var(--c) 55%,transparent);background:rgba(32,48,100,.45)}
 .legenda{display:grid;gap:10px}
 .legenda li{list-style:none;display:flex;align-items:center;gap:14px;padding:12px 16px;border-radius:14px;border:1px solid transparent;transition:.3s}
 .legenda li:hover{border-color:var(--linha);background:rgba(32,48,100,.35)}
@@ -393,18 +404,12 @@ body.sem-selos .selo{display:none}
     </div>
 
     <div class="grande-circulo">
-      <div class="circulo rev">
-        <div class="aro"></div><div class="aro2"></div>
-        <div class="s" style="--a:0deg;--c:var(--visao)"><span><i></i><b>Visão</b></span></div>
-        <div class="s" style="--a:51.43deg;--c:var(--audicao)"><span><i></i><b>Audição</b></span></div>
-        <div class="s" style="--a:102.86deg;--c:var(--tato)"><span><i></i><b>Tato</b></span></div>
-        <div class="s" style="--a:154.29deg;--c:var(--paladar)"><span><i></i><b>Paladar</b></span></div>
-        <div class="s" style="--a:205.71deg;--c:var(--olfato)"><span><i></i><b>Olfato</b></span></div>
-        <div class="s" style="--a:257.14deg;--c:var(--equilibrio)"><span><i></i><b>Equilíbrio</b></span></div>
-        <div class="s" style="--a:308.57deg;--c:var(--corpo)"><span><i></i><b>Corpo</b></span></div>
-        <div class="meio"><h3>Os 7 <em>sentidos</em></h3></div>
-      </div>
-      <ul class="legenda">
+      <figure class="mandala-box rev" id="mandalaGrande">
+        <div class="halo" aria-hidden="true"></div>
+        <img src="assets/home/mandala-7.webp" alt="Mandala dos 7 sentidos: sete medalhões coloridos em volta de um 7 dourado" width="720" height="720" loading="lazy">
+        <figcaption>Os 7 <em>sentidos</em></figcaption>
+      </figure>
+      <ul class="legenda" id="legenda">
         <li class="rev" style="--c:var(--visao)"><i></i><b>Visão</b><span>o que te faz bem de olhar</span></li>
         <li class="rev" style="--c:var(--audicao);--dl:.05s"><i></i><b>Audição</b><span>os sons que te acalmam</span></li>
         <li class="rev" style="--c:var(--tato);--dl:.1s"><i></i><b>Tato</b><span>as texturas que te confortam</span></li>
@@ -561,6 +566,16 @@ body.sem-selos .selo{display:none}
   if(!("IntersectionObserver" in window)){els.forEach(e=>e.classList.add("ok"));return}
   const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("ok");io.unobserve(e.target)}}),{threshold:.18});
   els.forEach(e=>io.observe(e));
+})();
+
+/* lista dos 7 sentidos: passar o dedo/mouse acende a cor do sentido em volta da mandala */
+(function(){
+  const box=document.getElementById("mandalaGrande"),lis=document.querySelectorAll("#legenda li");
+  if(!box)return;
+  const acende=li=>{lis.forEach(x=>x.classList.toggle("on",x===li));box.classList.toggle("foco",!!li);
+    box.style.setProperty("--foco",li?"color-mix(in srgb,"+getComputedStyle(li).getPropertyValue("--c")+" 70%,transparent)":"transparent")};
+  lis.forEach(li=>{li.addEventListener("mouseenter",()=>acende(li));li.addEventListener("click",()=>acende(li))});
+  document.getElementById("legenda").addEventListener("mouseleave",()=>acende(null));
 })();
 
 /* topo fica sólido e mostra o botão depois da primeira tela */
