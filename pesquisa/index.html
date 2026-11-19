@@ -95,7 +95,7 @@ h3{font-family:Fraunces;font-weight:400;font-size:30px;margin:22px 0 8px;letter-
 @keyframes anel{to{transform:rotate(360deg)}}
 /* logo oficial junto dos vídeos de explicação: anel de sete luzes + 7entidos, fora da imagem (não cobre o rosto) */
 .vlogo{display:flex;align-items:center;justify-content:center;gap:10px;margin:10px auto 6px}
-.vlogo .anel7{width:34px;height:34px;border-radius:50%;flex:none;background:conic-gradient(#f5c542,#4aa8ff,#ff8a3d,#ff5a6e,#5ccf8a,#b48cff,#3fd6d0,#f5c542);-webkit-mask:radial-gradient(circle,transparent 52%,#000 55%);mask:radial-gradient(circle,transparent 52%,#000 55%);box-shadow:0 0 14px rgba(245,197,66,.45)}
+.vlogo .anel7{width:36px;height:36px;border-radius:50%;flex:none;background:url(/assets/mandala-mini.webp) center/cover no-repeat;box-shadow:0 0 14px rgba(245,197,66,.45)}
 .vlogo b{font-family:Fraunces,sans-serif;font-size:28px;letter-spacing:3px;line-height:1;color:#F3EEE3}
 .vlogo b i{font-style:normal;color:#f5c542}
 .card-dark{background:var(--panel);border:2px solid var(--line);border-radius:14px;padding:18px}
@@ -274,7 +274,7 @@ body.tela-inicio .logo-top{visibility:hidden}
 .caminho b{position:absolute;left:18px;width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 0 14px 4px #F5C542;animation:desce 1.8s ease-in-out infinite}
 @keyframes desce{0%{top:-6px;opacity:0}15%{opacity:1}85%{opacity:1}100%{top:58px;opacity:0}}
 .caminho span{font-size:16px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
-.anel{position:absolute;right:16px;top:50%;width:76px;height:76px;margin-top:-38px;border-radius:50%;border:1.5px solid rgba(245,197,66,.7)}
+.anel{position:absolute;right:14px;top:50%;width:80px;height:80px;margin-top:-40px;border-radius:50%;background:url(/assets/home/mandala-7.webp) center/cover no-repeat;box-shadow:0 0 0 1.5px rgba(245,197,66,.7),0 0 22px rgba(245,197,66,.35)}
 .anel i{position:absolute;left:50%;top:50%;width:12px;height:12px;margin:-6px;border-radius:50%;background:var(--c);box-shadow:0 0 10px var(--c);transform:rotate(var(--a)) translateY(-38px);animation:pis 2.4s ease-in-out infinite;animation-delay:calc(var(--a) / 360deg * 2.4s)}
 @keyframes pis{50%{filter:brightness(1.6)}}
 .anel em{position:absolute;inset:0;display:grid;place-items:center;font-style:italic;font-family:Fraunces,serif;font-weight:700;font-size:34px;color:#F5C542;text-shadow:0 0 12px #F5C542}
@@ -717,7 +717,7 @@ function escolha(){
       <div class="etapa" role="listitem">
         <div class="no"><span>1</span></div>
         <button class="pesq ic1" onclick="abrirApp()">
-          <span class="anel" aria-hidden="true">${["#F5C542","#4DA3FF","#FF8A3D","#FF5D7A","#3DDC84","#B38CFF","#2ED3C6"].map((c,i)=>`<i style="--c:${c};--a:${i*360/7}deg"></i>`).join("")}<em>7</em></span>
+          <span class="anel" aria-hidden="true"></span>
           <span class="tag" style="background:#1f6b45">PASSO 1 · COMECE AQUI</span><b>Monte o seu app</b>
           <p>Descubra o que te faz bem em cada sentido e jogue os mini jogos.</p>
           ${done.app?'<p style="color:#9be7b0;font-weight:800">você já participou ✓</p>':""}</button>

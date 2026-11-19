@@ -73,10 +73,9 @@ html body,html body.t-C,html body.t-X,html body.t-M,html body.pg-jornada{
 .sub{color:#A9B3D1!important}
 
 /* ===== Bloco 4 (13/11): movimento ===== */
-/* anel de 7 luzes girando bem devagar ao lado da marca, no alto */
+/* mandala dos 7 sentidos ao lado da marca, no alto (19/11: substitui o anel de 7 luzes) */
 .logo-top,.topo .logo,.vlogo{display:inline-flex;align-items:center;gap:8px}
-.logo-top::before,.topo .logo::before{content:"";width:22px;height:22px;flex:none;border-radius:50%;background:conic-gradient(#f5c542,#4aa8ff,#ff8a3d,#ff5a6e,#5ccf8a,#b48cff,#3fd6d0,#f5c542);
-  -webkit-mask:radial-gradient(circle,transparent 50%,#000 53%);mask:radial-gradient(circle,transparent 50%,#000 53%);animation:anelMarca 40s linear infinite}
+.logo-top::before,.topo .logo::before{content:"";width:24px;height:24px;flex:none;border-radius:50%;background:url(/assets/mandala-mini.webp) center/cover no-repeat;box-shadow:0 0 10px rgba(245,197,66,.45)}
 .logo-top::after,.topo .logo::after{display:none!important}
 @keyframes anelMarca{to{transform:rotate(360deg)}}
 /* quem pede menos movimento no celular vê tudo parado, em todas as páginas */
@@ -96,7 +95,7 @@ html body,html body.t-C,html body.t-X,html body.t-M,html body.pg-jornada{
 /* pesquisas: símbolo + 7entidos + Sair */
 .topo7{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:760px;margin:0 auto;padding:12px 16px 4px;position:relative;z-index:5}
 .marca7{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:#F3EEE3!important;font:800 18px Manrope,system-ui,sans-serif}
-.marca7::after{content:"";width:18px;height:18px;border-radius:50%;background:conic-gradient(#f5c542,#4aa8ff,#ff8a3d,#ff5a6e,#5ccf8a,#b48cff,#3fd6d0,#f5c542);-webkit-mask:radial-gradient(circle,transparent 50%,#000 53%);mask:radial-gradient(circle,transparent 50%,#000 53%);animation:anelMarca 40s linear infinite}
+.marca7::after{content:"";width:22px;height:22px;border-radius:50%;background:url(/assets/mandala-mini.webp) center/cover no-repeat;box-shadow:0 0 10px rgba(245,197,66,.45)}
 .sair7{min-height:44px;padding:0 18px;border-radius:999px;border:1.5px solid rgba(243,238,227,.6);display:inline-flex;align-items:center;color:#F3EEE3!important;text-decoration:none;font:700 16px Manrope,system-ui,sans-serif}
 body.pg-pesq .logo-top,body.pg-pesq .topo .logo,body.pg-pesq .bar0 .logo{display:none!important}
 
