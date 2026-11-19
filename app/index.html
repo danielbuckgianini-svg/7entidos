@@ -133,6 +133,14 @@ h1 em,h2 em{color:var(--ouro)}
 
 /* opções (texto) */
 .opts{display:grid;gap:12px;margin:0 auto;max-width:440px}
+/* 19/11 · boas-vindas de volta */
+.bvolta{text-align:center;padding-top:6vh}
+.bvmand{width:min(46vw,190px);display:block;margin:0 auto 18px;filter:drop-shadow(0 0 26px rgba(245,197,66,.45));animation:bvgira 40s linear infinite}
+@keyframes bvgira{to{transform:rotate(360deg)}}
+.bvolta h2{font-size:clamp(30px,8vw,40px)}
+.bvonde{font-size:17px;color:#c9d2ee;margin:6px 0 22px}
+.bvonde b{color:var(--ouro)}
+@media (prefers-reduced-motion:reduce){.bvmand{animation:none}}
 /* 19/11 · Viagem do cheiro: botões com foto realista (praia e estante de livros) */
 .viagens{display:grid;gap:16px;margin:6px auto 0;max-width:440px}
 .opt.viag{position:relative;padding:0;overflow:hidden;aspect-ratio:16/9;border-radius:22px;border:2px solid rgba(255,255,255,.18);box-shadow:0 6px 0 rgba(0,0,0,.35),0 14px 30px -10px rgba(0,0,0,.7)}
@@ -1787,7 +1795,16 @@ try{ const s=JSON.parse(localStorage.getItem("7e_app_novo")||"null"); if(s&&s.re
 try{ val=JSON.parse(localStorage.getItem("7e_app_novo_val_b4")||"{}")||{}; }catch(e){}
 if(PREVIA){ const b=document.createElement("button"); b.className="vbtn"; b.type="button"; b.textContent="Validar a prévia"; b.onclick=()=>{ click(); painel(); }; document.body.appendChild(b); }
 let f3Ativa=false; try{ f3Ativa=localStorage.getItem("7e_fase3_ativa")==="1"; }catch(e){}
-if(f3Ativa) f3Abre(); else desenha();
+/* 19/11 · Boas-vindas de volta: quem volta no meio do caminho vê "Que bom te ver" e continua de onde parou (sem contagem de dias, sem culpa) */
+const voltou = f3Ativa || pos>0;
+function seguirDeOnde(){ click(); if(f3Ativa) f3Abre(); else { entrou=true; desenha(); } }
+function boasVindas(){ const r=R[pos]||{}, sx=r.i!=null?SENT[r.i]:null;
+  const onde = f3Ativa ? "Fase 3 · as perguntas do porquê" : (r.f===2||r.t==="jogo") ? `Fase 2${sx?" · "+sx.s:""}` : `Fase 1${sx?" · "+sx.s:""}`;
+  mostra(`<div class="bvolta"><img class="bvmand" src="${MANDALA}" alt=""><h2>${comNome("Que bom te ver, {n}.","Que bom te ver.")}</h2>
+    <p class="sub">Vamos continuar de onde você parou.</p><p class="bvonde">Você parou em: <b>${esc(onde)}</b></p>
+    <button class="btn" type="button" onclick="seguirDeOnde()">Continuar</button>
+    <div style="margin-top:14px"><button class="btn sec" type="button" onclick="recomecar()">Prefiro começar do zero</button></div></div>`); const vb=document.getElementById("voltar"); if(vb) vb.hidden=true; }
+if(voltou) boasVindas(); else desenha();
 if(PREVIA && window.claude && claude.use){ claude.use("db").then(db=>{ if(!db) return; VDOC=db.doc("validacao/app-novo-b4"); return VDOC.get().then(sn=>{ const d=sn&&(sn.data?sn.data():sn); if(d&&d.itens&&!Object.keys(val).length){ d.itens.forEach(x=>{ if(x.situacao||x.escolha){ const k=x.escolha?FRASES_AB.indexOf(x.escolha):-1; val[x.id]={s:x.situacao||undefined,o:x.revisar||undefined,e:k>=0?k:undefined}; if(k>=0){ try{ localStorage.setItem("7e_frase_abertura",String(k)); }catch(e){} } } }); if(!entrou&&pos===0) desenha(); } }); }).catch(()=>{}); }
 </script>
 </body>
