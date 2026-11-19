@@ -1505,6 +1505,7 @@ function f3Espera(){ f3Topo(`Dia ${F3.dia}`);
 function f3PulaEspera(){ click(); const ant=Math.max(1,F3.dia-(F3.i>=5?0:1)); F3.fim[ant]="2000-01-01"; if(F3.i>=5){ F3.dia=Math.min(3,F3.dia+1); F3.i=0; } f3Salva(); f3Tela(); }
 function f3Rever(){ click(); F3.dia=1; F3.i=0; f3Salva(); f3Tela(); }
 function f3Exemplo(){ const ex=["jei","pau","sen","pau","jei","sen","pau","jei","soc","jei","pau","con","jei","sen","jei"]; SITUACOES.forEach((s,k)=>{ if(!F3.r[s.id]) F3.r[s.id]={a:ex[k],b:k%3?null:"sen"}; }); F3.intro=true; F3.dia=3; F3.i=5; F3.fim={1:"2000-01-01",2:"2000-01-01",3:hojeStr()}; f3Salva(); }
+function irInicio(){ click(); try{ localStorage.removeItem("7e_fase3_ativa"); }catch(e){} fechaPainel(); entrou=false; pos=0; document.getElementById("const").hidden=true; desenha(); }
 function f3Zera(){ F3={dia:1,i:0,r:{},fim:{}}; f3Salva(); }
 /* ---- Bloco 2 ---- */
 /* frase que diz para que servem as respostas, antes da primeira situação */
@@ -1553,7 +1554,7 @@ function envia(){ if(!ENDPOINT||!resp.consentiu) return; try{ const r={...resp};
   fetch(ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify({pesquisa:"app-novo",versao:VERSAO,pessoa:PID,quando:new Date().toISOString(),respostas:r})}).catch(()=>{}); }catch(e){} }
 
 /* ============ PAINEL DE VALIDAÇÃO (só na prévia) ============ */
-/* Fase 3 · Bloco 2. O Bloco 1 foi validado por voz em 19/11 e saiu do painel. */
+/* Fase 3 · Bloco 2 (validado em 19/11). O Bloco 3 entra aqui quando ficar pronto. */
 const ITENS=[
  ["f3b2_1","Bloco 2 · 1 · Frase antes da primeira situação","\"Suas escolhas ajudam o app a sugerir coisas do seu jeito.\"","Aparece uma vez só, numa tela de abertura da Fase 3, em dourado e com letra grande, antes da praia. Para ver de novo, use \"Recomeçar a Fase 3 do zero\" no fim deste painel.","f3intro"],
  ["f3b2_2","Bloco 2 · 2 · Tela \"Por trás das perguntas\"","Depois das 15, explica as duas linhas da psicologia","4 motivos clássicos + fazer do próprio jeito, com os 5 nomes. Termina com: \"O que aparece aqui é uma pista sobre você, nunca um diagnóstico.\" Toque em \"Ver\": o app preenche as 15 com respostas de exemplo e abre a tela.","f3portras"],
@@ -1571,7 +1572,7 @@ function painel(){
       <div class="bb"><button class="v ${v.s==="validado"?"on":""}" onclick="marca('${id}','validado')">Validado</button><button class="r ${v.s==="revisar"?"on":""}" onclick="marca('${id}','revisar')">Revisar</button><button class="ir" onclick="ir(${typeof alvo==="string"?"'"+alvo+"'":alvo})">Ver</button></div>
       <div class="rev ${v.s==="revisar"?"on":""}">${REVISAR.map(o=>`<button class="${v.o===o?"on":""}" onclick="marcaRev('${id}','${o}')">${o}</button>`).join("")}</div></div>`; }).join("")}
     <p class="vsalvo" id="vsalvo">${VDOC?"As marcações ficam guardadas: o Claude lê direto.":"As marcações ficam guardadas neste aparelho."}</p>
-    <button class="btn sec" style="margin-bottom:12px" onclick="f3Zera();ir('f3')">Recomeçar a Fase 3 do zero</button><button class="btn" onclick="fechaPainel()">Voltar ao app</button></div>`;
+    <button class="btn sec" style="margin-bottom:12px" onclick="irInicio()">Ir para o começo do app (Fase 1)</button><button class="btn sec" style="margin-bottom:12px" onclick="f3Zera();ir('f3')">Recomeçar a Fase 3 do zero</button><button class="btn" onclick="fechaPainel()">Voltar ao app</button></div>`;
   el.classList.add("on");
 }
 function fraseIdx(){ return FRASES_AB.indexOf(fraseAbertura()); }
