@@ -809,7 +809,7 @@ function pularMesmo(){ const p=R[pos]; if(!p) return; click(); pararSom(); clear
 function ir(n){ if(typeof n==="string"&&n.startsWith("f3")){ fechaPainel(); click(); f3Carrega(); entrou=true; pos=R.length-1;
     if(n==="f3intro"){ f3Zera(); f3Abre(); return; }
     if(n==="f3portras"||n==="f3resultado"){ f3Exemplo(); if(n==="f3portras") f3PorTras(); else f3MostraResultado(); return; }
-    f3Abre(); return; } if(n<0){ entrou=false; n=0; } pos=n; fechaPainel(); const fo=document.getElementById("flowov"); if(fo) fo.remove(); desenha(); }
+    f3Abre(); return; } try{ localStorage.removeItem("7e_fase3_ativa"); }catch(e){} if(n<0){ entrou=false; n=0; } pos=n; fechaPainel(); const fo=document.getElementById("flowov"); if(fo) fo.remove(); desenha(); }
 /* ===== MANDALA OFICIAL ===== montar(tam): cria a mandala; poeMandala(el,{pos,luz,miolo}): pedaços no lugar (pos), acesos (luz), miolo aceso */
 /* centro de cada um dos 7 círculos na imagem oficial (em %), em sentido horário a partir do de cima */
 const MC=[[50.5,15.8],[75.6,27.2],[84.6,52.2],[69.2,77.5],[31.6,77.2],[16.0,51.2],[25.6,26.2]].map(([x,y])=>[x,y,Math.atan2(y-50,x-50)]);
@@ -1554,20 +1554,23 @@ function envia(){ if(!ENDPOINT||!resp.consentiu) return; try{ const r={...resp};
   fetch(ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify({pesquisa:"app-novo",versao:VERSAO,pessoa:PID,quando:new Date().toISOString(),respostas:r})}).catch(()=>{}); }catch(e){} }
 
 /* ============ PAINEL DE VALIDAÇÃO (só na prévia) ============ */
-/* Fase 3 · Bloco 2 (validado em 19/11). O Bloco 3 entra aqui quando ficar pronto. */
+/* Fases 1 e 2 · conferência das últimas alterações (pedidas por voz em 18/11). A Fase 3 · Blocos 1 e 2 já foi validada em 19/11. */
+const jg=i=>R.findIndex(x=>x.t==="jogo"&&x.i===i);
 const ITENS=[
- ["f3b2_1","Bloco 2 · 1 · Frase antes da primeira situação","\"Suas escolhas ajudam o app a sugerir coisas do seu jeito.\"","Aparece uma vez só, numa tela de abertura da Fase 3, em dourado e com letra grande, antes da praia. Para ver de novo, use \"Recomeçar a Fase 3 do zero\" no fim deste painel.","f3intro"],
- ["f3b2_2","Bloco 2 · 2 · Tela \"Por trás das perguntas\"","Depois das 15, explica as duas linhas da psicologia","4 motivos clássicos + fazer do próprio jeito, com os 5 nomes. Termina com: \"O que aparece aqui é uma pista sobre você, nunca um diagnóstico.\" Toque em \"Ver\": o app preenche as 15 com respostas de exemplo e abre a tela.","f3portras"],
- ["f3b2_3","Bloco 2 · 3 · Opções embaralhadas","Cada pessoa vê as 5 opções numa ordem diferente","A mesma pessoa vê sempre a mesma ordem naquela situação (se voltar, nada muda de lugar). O nome do motivo nunca aparece nas opções. Revisei as 75 frases para todas terem o mesmo tamanho e o mesmo peso.","f3"],
- ["f3b2_4","Bloco 2 · 4 · Praia","5ª opção: \"Eu escolho a hora de chegar e de ir embora\"","Já estava assim desde o Bloco 1. Só confirmar.","f3"],
- ["f3b2_5","Bloco 2 · 5 · Motivo principal","Só com 40% dos pontos e 2 pontos de vantagem","1ª opção = 1 ponto, 2ª = meio ponto, \"nenhuma dessas\" não conta. Se não passar na regra, aparece \"Você é uma mistura de A e B\". A tela mostra as porcentagens dos 5 motivos e como a conta foi feita. Toque em \"Ver\" para ver um exemplo.","f3resultado"]
+ ["f12_1","Fase 1 · Tela do vaso","Mandala de 7 círculos no topo","Saiu o logo comercial e entrou a mandala oficial de 7 círculos (nunca a de 8 do reality).",R.findIndex(x=>x.t==="vaso")],
+ ["f12_2","Fase 2 · Audição","Som mais curto","Cada som agora dura 0,3 segundo (antes era mais longo). Toque nos dois sons para ouvir.",jg(1)],
+ ["f12_3","Fase 2 · Carinho (Tato)","\"Qual foi a mais gostosa?\" só quando o celular vibra","No Android, que vibra, a pergunta aparece. No iPhone e no computador, que não vibram, o jogo segue direto sem a pergunta.",jg(2)],
+ ["f12_4","Fase 2 · Ordem das viagens","Primeiro a brisa do mar (Olfato), depois o limão e o milkshake (Paladar)","Na Fase 2 o Olfato vem antes do Paladar. A Fase 1 continua na ordem de sempre.",jg(4)],
+ ["f12_5","Fase 2 · Sinta o corpo","Mandala de 7 deitada, em perspectiva","No lugar do círculo que enchia, a mandala gira devagar; os 7 círculos acendem um por um durante o gesto e o 7 do meio acende no fim.",jg(6)],
+ ["f12_6","Fase 2 · Chute do tempo","Saiu a ampulheta; agora são 7 números","A pessoa toca num destes: 1, 2, 3, 5, 7, 10 ou 15 minutos.",R.findIndex(x=>x.t==="chute")],
+ ["f12_7","Fase 2 · Resultado","Infográfico numa página só, com a mandala de 7","Cada círculo acende pelo quanto a pessoa curtiu o jogo daquele sentido; em volta, os 7 nomes com 1 a 3 luzes. Pouco texto. Depois do \"Continuar\", vem o vídeo 3 da Brisa e, na prévia, o botão \"Começar a Fase 3\".",R.findIndex(x=>x.t==="grafico")]
 ];
 const REVISAR=["Mudar o visual","Mudar o texto","Mudar como funciona","Tirar do app"];
 let val={}, vdb=null, VDOC=null;
 function painel(){
   let el=document.getElementById("vp"); if(!el){ el=document.createElement("div"); el.id="vp"; el.className="vpainel"; document.body.appendChild(el); }
   const nv=ITENS.filter(x=>val[x[0]]&&val[x[0]].s==="validado").length;
-  el.innerHTML=`<div class="vcaixa"><div class="rot">Prévia · Fase 3 · Bloco 2</div><h2>Validar item por item</h2><p class="sub">${nv} de ${ITENS.length} validados. "Ver" leva direto para a tela do item.</p>
+  el.innerHTML=`<div class="vcaixa"><div class="rot">Prévia · Fases 1 e 2 · alterações de 18/11</div><h2>Validar item por item</h2><p class="sub">${nv} de ${ITENS.length} validados. "Ver" leva direto para a tela do item.</p>
     ${ITENS.map(([id,num,tt,ds,alvo,ops,extra])=>{ const v=val[id]||{}; return `<div class="vitem"><div class="rot" style="margin:0">${num}</div><div class="tt">${tt}</div><div class="ds">${ds}</div>${extra?extra():""}${ops?`<div class="esc">${ops.map((o,k)=>`<button class="${(v.e==null?fraseIdx():v.e)===k?"on":""}" onclick="escolhe('${id}',${k})">${"ABC"[k]}) ${o}</button>`).join("")}</div>`:""}
       <div class="bb"><button class="v ${v.s==="validado"?"on":""}" onclick="marca('${id}','validado')">Validado</button><button class="r ${v.s==="revisar"?"on":""}" onclick="marca('${id}','revisar')">Revisar</button><button class="ir" onclick="ir(${typeof alvo==="string"?"'"+alvo+"'":alvo})">Ver</button></div>
       <div class="rev ${v.s==="revisar"?"on":""}">${REVISAR.map(o=>`<button class="${v.o===o?"on":""}" onclick="marcaRev('${id}','${o}')">${o}</button>`).join("")}</div></div>`; }).join("")}
@@ -1580,16 +1583,16 @@ function escolhe(id,k){ click(); val[id]={...(val[id]||{}),e:k}; try{ localStora
 function fechaPainel(){ const el=document.getElementById("vp"); if(el) el.classList.remove("on"); }
 function marca(id,s){ val[id]={...(val[id]||{}),s}; if(s==="validado") delete val[id].o; salvaVal(); painel(); }
 function marcaRev(id,o){ val[id]={...(val[id]||{}),s:"revisar",o}; salvaVal(); painel(); }
-function salvaVal(){ try{ localStorage.setItem("7e_app_novo_val_f3b2",JSON.stringify(val)); }catch(e){}
+function salvaVal(){ try{ localStorage.setItem("7e_app_novo_val_f12",JSON.stringify(val)); }catch(e){}
   if(VDOC) VDOC.set({atualizado:new Date().toISOString(), itens:ITENS.map(x=>({id:x[0],item:x[1]+" · "+x[2],situacao:(val[x[0]]||{}).s||null,revisar:(val[x[0]]||{}).o||null,escolha:x[5]&&(val[x[0]]||{}).e!=null?x[5][val[x[0]].e]:null}))}).catch(()=>{}); }
 
 /* ============ INÍCIO ============ */
 try{ const s=JSON.parse(localStorage.getItem("7e_app_novo")||"null"); if(s&&s.resp&&s.r===R.length&&s.pos>0&&s.pos<R.length-2){ resp=s.resp; pos=s.pos; inicio=s.inicio||Date.now(); inicio2=s.inicio2||null; } }catch(e){}
-try{ val=JSON.parse(localStorage.getItem("7e_app_novo_val_f3b2")||"{}")||{}; }catch(e){}
+try{ val=JSON.parse(localStorage.getItem("7e_app_novo_val_f12")||"{}")||{}; }catch(e){}
 if(PREVIA){ const b=document.createElement("button"); b.className="vbtn"; b.type="button"; b.textContent="Validar a prévia"; b.onclick=()=>{ click(); painel(); }; document.body.appendChild(b); }
 let f3Ativa=false; try{ f3Ativa=localStorage.getItem("7e_fase3_ativa")==="1"; }catch(e){}
 if(f3Ativa) f3Abre(); else desenha();
-if(PREVIA && window.claude && claude.use){ claude.use("db").then(db=>{ if(!db) return; VDOC=db.doc("validacao/app-novo-f3-b2"); return VDOC.get().then(sn=>{ const d=sn&&(sn.data?sn.data():sn); if(d&&d.itens&&!Object.keys(val).length){ d.itens.forEach(x=>{ if(x.situacao||x.escolha){ const k=x.escolha?FRASES_AB.indexOf(x.escolha):-1; val[x.id]={s:x.situacao||undefined,o:x.revisar||undefined,e:k>=0?k:undefined}; if(k>=0){ try{ localStorage.setItem("7e_frase_abertura",String(k)); }catch(e){} } } }); if(!entrou&&pos===0) desenha(); } }); }).catch(()=>{}); }
+if(PREVIA && window.claude && claude.use){ claude.use("db").then(db=>{ if(!db) return; VDOC=db.doc("validacao/app-novo-f12-18nov"); return VDOC.get().then(sn=>{ const d=sn&&(sn.data?sn.data():sn); if(d&&d.itens&&!Object.keys(val).length){ d.itens.forEach(x=>{ if(x.situacao||x.escolha){ const k=x.escolha?FRASES_AB.indexOf(x.escolha):-1; val[x.id]={s:x.situacao||undefined,o:x.revisar||undefined,e:k>=0?k:undefined}; if(k>=0){ try{ localStorage.setItem("7e_frase_abertura",String(k)); }catch(e){} } } }); if(!entrou&&pos===0) desenha(); } }); }).catch(()=>{}); }
 </script>
 </body>
 </html>
