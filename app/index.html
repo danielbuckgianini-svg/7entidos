@@ -650,6 +650,25 @@ body.foco .topo:hover,body.foco #pularbtn:focus-visible,body.foco #voltar:focus-
 .f3bar i::after{content:"";position:absolute;inset:0;width:var(--w);background:var(--ouro);border-radius:999px}
 .f3bar b{grid-row:1/span 2;grid-column:2;text-align:right;color:var(--ouro);font-size:18px}
 .f3crit{font-size:14px;color:var(--azul);max-width:420px;margin:12px auto 0;line-height:1.4}
+.f3orig{display:flex;align-items:center;gap:12px;max-width:440px;margin:4px auto 10px;padding:8px 12px;border-radius:16px;background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.3);text-align:left}
+.f3orig img{width:58px;height:58px;border-radius:12px;object-fit:cover;flex:none}
+.f3orig span{font-size:15px;color:var(--azul)}
+.f3orig b{display:block;color:var(--creme);font-size:17px}
+.f3de{display:block;color:var(--azul);font-size:13px;margin:-2px 0 4px}
+.f3mapa{max-width:420px;margin:6px auto 18px;display:grid;gap:5px}
+.f3mcab,.f3mlin{display:grid;grid-template-columns:84px repeat(5,1fr);gap:5px;align-items:center}
+.f3mcab b{font-size:11px;line-height:1.15;color:var(--ouro);text-align:center;font-weight:800}
+.f3mcab b small{display:block;font-size:11px;color:var(--azul)}
+.f3mlin span{font-size:13px;font-weight:700;text-align:left;line-height:1.1}
+.f3mlin i{height:24px;border-radius:7px;background:rgba(169,179,209,.12);border:1px solid rgba(169,179,209,.18)}
+.f3mlin i.on{background:var(--c);opacity:var(--o);border-color:transparent}
+.f3mlin i.nova{animation:f3pisca 1s ease-out;opacity:1;box-shadow:0 0 0 3px #fff8,0 0 18px var(--c)}
+@keyframes f3pisca{0%{transform:scale(.3)}60%{transform:scale(1.25)}100%{transform:scale(1)}}
+.f3mapov{position:fixed;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;background:rgba(5,9,26,.82);backdrop-filter:blur(4px);animation:f3entra .25s}
+.f3mapov.sai{opacity:0;transition:opacity .3s}
+.f3mapcx{width:min(92vw,440px);padding:18px 14px;border-radius:24px;background:rgba(20,30,70,.9);border:1px solid rgba(245,197,66,.35)}
+@keyframes f3entra{from{opacity:0}to{opacity:1}}
+body.emf3 #voltar,body.emf3 #pularbtn,body.emf3 #fundobtn{display:none!important}
 </style>
 </head>
 <body>
@@ -808,6 +827,8 @@ function pularMesmo(){ const p=R[pos]; if(!p) return; click(); pararSom(); clear
   avanca(); }
 function ir(n){ if(typeof n==="string"&&n.startsWith("f3")){ fechaPainel(); click(); f3Carrega(); entrou=true; pos=R.length-1;
     if(n==="f3intro"){ f3Zera(); f3Abre(); return; }
+    if(n==="f3novo"){ f3ExemploFase1(); f3Zera(); F3.intro=true; f3Salva(); f3Abre(); return; }
+    if(n==="f3repete"){ f3Exemplo(); F3.forcaRep=true; f3Salva(); const rid=f3TemRepeticao(); if(rid){ f3Repete(rid); return; } }
     if(n==="f3portras"||n==="f3resultado"){ f3Exemplo(); if(n==="f3portras") f3PorTras(); else f3MostraResultado(); return; }
     f3Abre(); return; } try{ localStorage.removeItem("7e_fase3_ativa"); }catch(e){} if(n<0){ entrou=false; n=0; } pos=n; fechaPainel(); const fo=document.getElementById("flowov"); if(fo) fo.remove(); desenha(); }
 /* ===== MANDALA OFICIAL ===== montar(tam): cria a mandala; poeMandala(el,{pos,luz,miolo}): pedaços no lugar (pos), acesos (luz), miolo aceso */
@@ -864,6 +885,7 @@ function brilho(cor){ document.body.style.setProperty("--glow", cor?cor+"26":"rg
 function anel(cls="respira", acesa=-1, feitos=[], img=""){ return `<div class="anel ${cls}">${img?`<img src="${img}" alt="Brisa">`:""}${SENT.map((s,i)=>`<i style="--c:${s.cor};--a:${i*360/7}deg;--d:${i*.35}s" class="${acesa<0?"":(i===acesa?"acesa":(feitos.includes(i)?"":"apag"))}"></i>`).join("")}</div>`; }
 
 function desenha(){
+  document.body.classList.remove("emf3");
   document.querySelectorAll("body > .saborear").forEach(e=>e.remove());
   foco(null); botaoFundo(null);
   const p=R[pos]; document.getElementById("voltar").hidden = pos===0 || ["revela","grafico","abre2","saborear"].includes(p.t);
@@ -1440,7 +1462,7 @@ let F3=null;
 function f3Carrega(){ if(F3) return F3; try{ F3=JSON.parse(localStorage.getItem("7e_fase3")||"null"); }catch(e){} if(!F3||!F3.r) F3={dia:1,i:0,r:{},fim:{}}; return F3; }
 function f3Salva(){ try{ localStorage.setItem("7e_fase3",JSON.stringify(F3)); }catch(e){} }
 function hojeStr(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
-const f3DoDia=d=>SITUACOES.filter(s=>s.dia===d);
+const f3DoDia=d=>{ if(!F3.lista) f3MontaLista(); return F3.lista.slice((d-1)*5,d*5).map(id=>SIT[id]).filter(Boolean); };
 /* o dia seguinte só abre no dia seguinte do calendário */
 function f3Liberado(d){ if(d<=1) return true; const f=F3.fim[d-1]; return !!f && hojeStr()>f; }
 let f3Sel={a:null,b:null};
@@ -1449,19 +1471,21 @@ function f3Topo(txt){
   if(!document.getElementById("mtopo")) el.innerHTML=mandala(72,"mtopo")+`<span class="xde7" id="xde7"></span>`;
   const m=document.getElementById("mtopo"); requestAnimationFrame(()=>poeMandala(m,{pos:TODOS,luz:TODOS,miolo:true}));
   document.getElementById("xde7").innerHTML=`<b class="pal"><em>7</em>entidos</b><small>Fase 3</small>${txt}`;
-  ["voltar","pularbtn","fundobtn"].forEach(id=>{ const b=document.getElementById(id); if(b) b.hidden=true; });
+  ["voltar","pularbtn","fundobtn"].forEach(id=>{ const b=document.getElementById(id); if(b) b.hidden=true; }); document.body.classList.add("emf3");
   foco(null); brilho(null); fundoCor(null); pararSom();
 }
 function f3Abre(){ f3Carrega(); entrou=true; pos=R.length-1; try{ localStorage.setItem("7e_fase3_ativa","1"); }catch(e){} f3Tela(); }
 function f3Tela(){
   const d=F3.dia, lista=f3DoDia(d);
-  if(F3.i>=lista.length){ return f3FimDia(); }
+  if(F3.i>=lista.length){ if(d>=3){ const rid=f3TemRepeticao(); if(rid) return f3Repete(rid); } return f3FimDia(); }
   if(!f3Liberado(d)){ return f3Espera(); }
   if(!F3.intro){ return f3Intro(); }
-  const s=lista[F3.i]; f3Sel={a:null,b:null};
+  const s=lista[F3.i];
+  const orig=(F3.orig||{})[s.id]; f3Sel={a:null,b:null};
   const ant=F3.r[s.id]; if(ant&&!ant.n){ f3Sel={a:ant.a,b:ant.b||null}; }
   f3Topo(`Dia ${d} · ${F3.i+1} de 5`);
   mostra(`<div class="rot">Por que você gosta de…</div><h2 class="f3q">${esc(s.txt.charAt(0).toUpperCase()+s.txt.slice(1))}?</h2>
+    ${orig?`<div class="f3orig"><img src="${foto(orig.sid,orig.j)}" alt=""><span>Você escolheu na Fase 1:<b>${esc(orig.foto)}</b></span></div>`:""}
     <p class="sub f3dica" id="f3dica">Toque no motivo que mais combina com você.</p>
     <div class="opts f3opts">${f3Ordem(s).map(k=>`<button class="opt f3op" type="button" data-m="${MOTIVOS[k].id}" onclick="f3Toca(this)"><span class="f3t">${esc(s.o[k])}</span><span class="f3tag"></span></button>`).join("")}</div>
     <button class="f3nenhuma" type="button" onclick="f3Nenhuma()">Nenhuma dessas</button>
@@ -1484,7 +1508,7 @@ function f3Toca(b){ click(); vibra(10); const m=b.dataset.m;
   f3Pinta();
 }
 function f3Guarda(v){ const s=f3DoDia(F3.dia)[F3.i]; F3.r[s.id]=v; F3.i++; if(F3.i>=5&&!F3.fim[F3.dia]) F3.fim[F3.dia]=hojeStr(); f3Salva(); }
-function f3Seguir(){ if(!f3Sel.a||ocupado) return; ocupado=true; click(); f3Guarda({a:f3Sel.a,b:f3Sel.b||null}); f3Tela(); }
+function f3Seguir(){ if(!f3Sel.a||ocupado) return; ocupado=true; click(); const s=f3DoDia(F3.dia)[F3.i], nova=f3SentidoDe(s)+"|"+f3Sel.a; f3Guarda({a:f3Sel.a,b:f3Sel.b||null}); f3MostraMapa(nova,()=>{ ocupado=false; f3Tela(); }); }
 function f3Nenhuma(){ if(ocupado) return; ocupado=true; click(); f3Guarda({n:true}); f3Tela(); }
 function f3Volta(){ if(F3.i>0){ click(); F3.i--; f3Salva(); f3Tela(); } }
 function f3FimDia(){
@@ -1494,7 +1518,7 @@ function f3FimDia(){
       <button class="btn" type="button" onclick="click();f3PorTras()">Ver o que apareceu</button>
       <div style="margin-top:14px"><button class="btn sec" type="button" onclick="f3Rever()">Rever as minhas respostas</button></div>`); }
   f3Topo(`Dia ${d} completo`);
-  mostra(`<div class="rot">Fase 3 · Dia ${d} completo</div><h2>Pronto por hoje.</h2><p class="sub">Amanhã tem mais 5 esperando por você.</p>
+  mostra(`<div class="rot">Fase 3 · Dia ${d} completo</div><h2>Pronto por hoje.</h2><p class="sub">Amanhã tem mais 5 esperando por você.</p><div class="rot" style="margin-top:4px">Seu mapa · ${Object.keys(f3Casas()).length} de 35</div>${f3Mapa("",false)}
     <button class="btn" type="button" onclick="f3ProximoDia()">Combinado</button>
     ${PREVIA?`<div><button class="linkflow" type="button" onclick="f3PulaEspera()">Pular a espera (só na prévia)</button></div>`:""}`);
 }
@@ -1504,9 +1528,11 @@ function f3Espera(){ f3Topo(`Dia ${F3.dia}`);
     ${PREVIA?`<button class="btn" type="button" onclick="f3PulaEspera()">Pular a espera (só na prévia)</button>`:""}`); }
 function f3PulaEspera(){ click(); const ant=Math.max(1,F3.dia-(F3.i>=5?0:1)); F3.fim[ant]="2000-01-01"; if(F3.i>=5){ F3.dia=Math.min(3,F3.dia+1); F3.i=0; } f3Salva(); f3Tela(); }
 function f3Rever(){ click(); F3.dia=1; F3.i=0; f3Salva(); f3Tela(); }
-function f3Exemplo(){ const ex=["jei","pau","sen","pau","jei","sen","pau","jei","soc","jei","pau","con","jei","sen","jei"]; SITUACOES.forEach((s,k)=>{ if(!F3.r[s.id]) F3.r[s.id]={a:ex[k],b:k%3?null:"sen"}; }); F3.intro=true; F3.dia=3; F3.i=5; F3.fim={1:"2000-01-01",2:"2000-01-01",3:hojeStr()}; f3Salva(); }
+/* na prévia: se a Fase 1 ainda não foi feita neste aparelho, usa escolhas de exemplo para mostrar as situações pessoais */
+function f3ExemploFase1(){ if(f3Gostos().some(Boolean)) return; const ex=[1,2,1,3,0,1,3]; SENT.forEach((s,i)=>{ resp["gosto_"+s.id]=s.o[ex[i]]; }); }
+function f3Exemplo(){ const ex=["jei","pau","sen","pau","jei","sen","pau","jei","soc","jei","pau","con","jei","sen","jei"]; if(!F3.lista) f3MontaLista(); F3.lista.map(id=>SIT[id]).forEach((s,k)=>{ if(!F3.r[s.id]) F3.r[s.id]={a:ex[k],b:k%3?null:"sen"}; }); F3.intro=true; F3.dia=3; F3.i=5; F3.fim={1:"2000-01-01",2:"2000-01-01",3:hojeStr()}; f3Salva(); }
 function irInicio(){ click(); try{ localStorage.removeItem("7e_fase3_ativa"); }catch(e){} fechaPainel(); entrou=false; pos=0; document.getElementById("const").hidden=true; desenha(); }
-function f3Zera(){ F3={dia:1,i:0,r:{},fim:{}}; f3Salva(); }
+function f3Zera(){ F3={dia:1,i:0,r:{},fim:{}}; f3MontaLista(); }
 /* ---- Bloco 2 ---- */
 /* frase que diz para que servem as respostas, antes da primeira situação */
 function f3Intro(){ f3Topo("começando");
@@ -1543,9 +1569,93 @@ function f3MostraResultado(){ const r=f3Resultado(); f3Topo("suas pistas");
   const barras=r.tot?`<div class="f3barras">${r.ord.map(m=>`<div class="f3bar"><span>${m.nome}</span><i style="--w:${Math.round(m.pc*100)}%"></i><b>${Math.round(m.pc*100)}%</b></div>`).join("")}</div>
     <p class="f3crit">Como contei: a 1ª opção vale 1 ponto e a 2ª vale meio. Um motivo só aparece sozinho quando tem pelo menos 40% dos pontos e 2 pontos a mais que o segundo.</p>`:"";
   mostra(`<div class="rot">Fase 3 · Suas pistas</div>${cab}${barras}<p class="f3pista">É uma pista, não um diagnóstico.</p>
+    ${r.tot?`<div class="rot" style="margin-top:8px">Seu mapa: sentidos × motivos</div>${f3Mapa("",true)}`:""}
     <button class="btn sec" type="button" onclick="click();f3PorTras()">← Por trás das perguntas</button>`); }
+/* ---- Bloco 3 (19/11) ---- */
+/* Situações novas, uma para cada foto da Fase 1 que ainda não tinha situação própria. dia:0 = fora da lista fixa. */
+SITUACOES.push(
+ {id:"ceu",      dia:0, txt:"olhar o céu estrelado",            sent:["visao"],      o:["Olho junto com alguém e a gente conversa","A noite fica calma e ninguém me chama","Vejo as estrelas brilhando no escuro","Levo uma manta e um chocolate quente","Escolho o cantinho e fico quanto quiser"]},
+ {id:"arte",     dia:0, txt:"ver arte colorida pela rua",       sent:["visao"],      o:["Passeio com amigos e comento cada desenho","Saio da rotina e espaireço","Vejo as cores fortes nas paredes","Tiro fotos bonitas para guardar","Faço o meu caminho, sem pressa"]},
+ {id:"fotos",    dia:0, txt:"ver fotos antigas de família",     sent:["visao"],      o:["Relembro histórias junto com a família","Esqueço as preocupações do dia","Vejo os rostos e as cores de outra época","Separo uma foto para pôr num porta-retrato","Escolho quais fotos ver e quando"]},
+ {id:"mar",      dia:0, txt:"ouvir o som do mar",               sent:["audicao"],    o:["Converso com alguém olhando o mar","Fico longe dos barulhos de casa","Ouço as ondas indo e voltando","Levo um lanche e fico por ali","Fico ali o tempo que eu quiser"]},
+ {id:"chuva",    dia:0, txt:"ouvir a chuva no telhado",         sent:["audicao"],    o:["A família fica reunida em casa","Tenho uma desculpa para não sair","Ouço o barulhinho da chuva caindo","Faço um bolinho de chuva quentinho","Decido ficar quietinha no meu canto"]},
+ {id:"silencio", dia:0, txt:"ficar em silêncio",                sent:["audicao"],    o:["Fico quietinha ao lado de alguém querido","Ninguém me pede nada por um tempo","Escuto só a minha respiração","Termino aquele livro ou bordado","Eu decido quando o silêncio acaba"]},
+ {id:"cobertor", dia:0, txt:"se enrolar num cobertor macio",    sent:["tato"],       o:["Fico abraçadinha com alguém no sofá","Paro tudo e descanso","Sinto o macio e o quentinho no corpo","Tenho um chocolate quente nas mãos","Escolho o filme e a hora de dormir"]},
+ {id:"agua",     dia:0, txt:"entrar numa água bem fresquinha",  sent:["tato"],       o:["Brinco na água com a família","Esqueço o calor e as tarefas","Sinto a água fresca na pele","Depois tomo um sorvete gostoso","Entro e saio quando eu quiser"]},
+ {id:"abraco",   dia:0, txt:"ganhar um abraço apertado",        sent:["tato"],       o:["Sinto que alguém se importa comigo","Por um instante, esqueço os problemas","Sinto o calor e o aperto do abraço","Às vezes vem junto um docinho ou presente","Abraço quem eu quero, na hora que eu quero"]},
+ {id:"comidavo", dia:0, txt:"comer comida de vó",               sent:["paladar"],    o:["Junto a família em volta da mesa","Me sinto em casa e descanso","Sinto o tempero de antigamente","Ainda levo marmita para o outro dia","Peço o prato que eu mais gosto"]},
+ {id:"perfume",  dia:0, txt:"sentir o perfume de alguém querido", sent:["olfato"],   o:["Lembro de alguém que eu amo","Por um momento, esqueço o resto","Sinto o cheiro bom no ar","Ganho um vidrinho igual de presente","Uso o perfume quando eu quero lembrar"]},
+ {id:"danca",    dia:0, txt:"dançar",                           sent:["equilibrio"], o:["Danço com o par ou com as amigas","Esqueço tudo enquanto a música toca","Sinto o corpo girar e balançar","No baile tem petisco gostoso","Danço do meu jeito, sem regra"]},
+ {id:"rede",     dia:0, txt:"balançar numa rede",               sent:["equilibrio"], o:["Converso com alguém na rede ao lado","É a minha hora de não fazer nada","Sinto o balanço devagarinho","Tenho um suco gelado do lado","Fico ali o tempo que eu quiser"]},
+ {id:"prancha",  dia:0, txt:"remar em pé numa prancha",         sent:["equilibrio"], o:["Vou com amigos e dou risada","Fico longe de tudo, no meio da água","Sinto a água balançar debaixo dos pés","Depois tem um lanche na areia","Escolho para onde remar"]},
+ {id:"alongar",  dia:0, txt:"alongar o corpo",                  sent:["corpo"],      o:["Faço junto com a turma","É o meu momento sem telefone","Sinto cada músculo soltar","Saio com uma série para fazer em casa","Faço no meu ritmo e na minha hora"]},
+ {id:"correr",   dia:0, txt:"correr ou caminhar rápido",        sent:["corpo"],      o:["Corro com um grupo ou com uma amiga","Deixo as preocupações para trás","Sinto o coração bater e o vento","Ganho medalha em corrida de rua","Escolho o percurso e o ritmo"]},
+ {id:"respirar", dia:0, txt:"deitar e respirar fundo",          sent:["corpo"],      o:["Fico deitada perto de alguém querido","Paro tudo por alguns minutos","Sinto o ar entrar e sair devagar","Depois tomo um chá quentinho","Escolho a hora e o lugar"]}
+);
+const SIT=Object.fromEntries(SITUACOES.map(s=>[s.id,s]));
+/* cada foto da Fase 1 leva a uma situação */
+const SIT_FASE1={
+ "Pôr do sol na praia":"praia","Céu estrelado":"ceu","Um mural colorido de grafite":"arte","Fotos antigas de família":"fotos",
+ "Som do mar":"mar","Música ao vivo":"samba","Chuva no telhado":"chuva","Silêncio total":"silencio",
+ "Areia nos pés":"praia","Cobertor macio":"cobertor","Água gelada":"agua","Abraço apertado":"abraco",
+ "Comida de vó":"comidavo","Doce de padaria":"padaria","Fruta fresca":"feira","Café passado na hora":"cafe",
+ "Terra molhada":"plantas","Pão saindo do forno":"padaria","Perfume de alguém querido":"perfume","Cheiro de café":"cafe",
+ "Dançar":"danca","Balançar numa rede":"rede","Andar de bicicleta":"bike","Ficar de pé numa prancha":"prancha",
+ "Alongar":"alongar","Correr":"correr","Nadar":"hidro","Deitar e respirar fundo":"respirar"
+};
+/* as escolhas da Fase 1 (do que ficou guardado no celular) e o quanto a pessoa curtiu cada jogo da Fase 2 */
+function f3Gostos(){ let g=SENT.map(s=>resp["gosto_"+s.id]||null);
+  if(!g.some(Boolean)){ try{ const f=JSON.parse(localStorage.getItem("7e_app_novo_fase1")||"null"); if(f&&f.gostos) g=f.gostos; }catch(e){} } return g; }
+/* monta a lista das 15: primeiro as situações das fotos que a pessoa escolheu na Fase 1 (sem repetir),
+   depois completa com as situações gerais, começando pelos sentidos de que ela mais curtiu os jogos na Fase 2 */
+function f3MontaLista(){
+  const g=f3Gostos(), lista=[], orig={};
+  SENT.forEach((s,i)=>{ const v=g[i], id=v&&SIT_FASE1[v]; if(id&&!lista.includes(id)){ lista.push(id); orig[id]={sid:s.id,j:s.o.indexOf(v),foto:v}; } });
+  const curtiu=Object.fromEntries(SENT.map(s=>[s.id,+(resp["curtiu_"+s.id]||0)]));
+  const gerais=SITUACOES.filter(s=>s.dia>0&&!lista.includes(s.id)).map((s,k)=>({s,k,p:Math.max(...s.sent.map(x=>curtiu[x]||0))}));
+  gerais.sort((a,b)=>b.p-a.p||a.k-b.k);
+  gerais.forEach(x=>{ if(lista.length<15) lista.push(x.s.id); });
+  F3.lista=lista; F3.orig=orig; f3Salva();
+}
+/* ---- mapa 7 sentidos × 5 motivos: cada resposta acende uma casinha (sentido da situação × 1ª opção) ---- */
+function f3SentidoDe(s){ const o=(F3.orig||{})[s.id]; return o?o.sid:s.sent[0]; }
+function f3Casas(){ const c={}; Object.entries(F3.r).forEach(([id,v])=>{ if(!v||v.n||!SIT[id]) return; const k=f3SentidoDe(SIT[id])+"|"+v.a; c[k]=(c[k]||0)+1; }); return c; }
+/* durante as 15, as colunas não mostram o nome do motivo (para não entregar a resposta); os nomes aparecem depois do "Por trás das perguntas" */
+function f3Mapa(nova,comNomes){ const c=f3Casas();
+  return `<div class="f3mapa"><div class="f3mcab"><span></span>${MOTIVOS.map((m,k)=>`<b>${comNomes?m.nome.replace(" e ","<br>e ").replace("Prazer ","Prazer<br>").replace("Conexão ","Conexão<br>").replace("Do meu ","Do meu<br>"):"✦".repeat(1)+"<small>"+(k+1)+"</small>"}</b>`).join("")}</div>
+  ${SENT.map(s=>`<div class="f3mlin"><span style="color:${claro(s.cor)}">${s.s}</span>${MOTIVOS.map(m=>{ const k=s.id+"|"+m.id, n=c[k]||0; return `<i class="${n?"on":""} ${k===nova?"nova":""}" style="--c:${s.cor};--o:${Math.min(1,.45+n*.25)}"></i>`; }).join("")}</div>`).join("")}</div>`; }
+function f3MostraMapa(nova,depois){ const ov=document.createElement("div"); ov.className="f3mapov"; ov.innerHTML=`<div class="f3mapcx"><div class="rot">Seu mapa · ${Object.keys(f3Casas()).length} de 35</div>${f3Mapa(nova,false)}</div>`;
+  document.body.appendChild(ov); vibra(12); setTimeout(()=>{ ov.classList.add("sai"); setTimeout(()=>{ ov.remove(); depois(); },300); },1100); }
+/* ---- uma vez por mês: repete uma situação com outras palavras, para ver se a resposta se mantém ---- */
+const SIT_ALT={
+ praia:   {q:"O que mais te puxa para a praia?", o:["Ver a turma reunida","Ficar umas horas sem ninguém me chamar","O vento e a areia","O pastel e a água de coco","Chegar e sair na hora que eu decido"]},
+ cafe:    {q:"O que mais vale num café da tarde?", o:["Ter companhia na mesa","Meia hora de descanso","O cheirinho do café","O bolo esperando","Fazer tudo no meu tempo"]},
+ feira:   {q:"O que mais te leva à feira?", o:["Bater papo com o pessoal","Sair um pouco de casa","As cores e os cheiros","Voltar com coisa boa e barata","Escolher tudo com calma"]},
+ padaria: {q:"O que mais vale na ida à padaria?", o:["Ver o pessoal do bairro","Escapar um pouco da rotina","O cheiro do pão no forno","O pão quentinho e o doce","Escolher sem pressa"]},
+ cozinhar:{q:"O que mais te agrada ao cozinhar?", o:["Receber quem eu gosto","Esquecer o resto","O cheiro subindo da panela","A comida pronta e a sobra","Mudar a receita do meu jeito"]},
+ bike:    {q:"O que mais vale num passeio de bicicleta?", o:["Pedalar com as amigas","Ficar longe das tarefas","O vento e as curvas","Parar para um sorvete","Escolher o caminho"]},
+ samba:   {q:"O que mais vale numa roda de samba ou show?", o:["Cantar junto com a turma","Esquecer a semana","O som batendo no peito","O petisco na mesa","Decidir onde ficar e quanto tempo"]},
+ hidro:   {q:"O que mais vale na hidroginástica?", o:["A turma e as risadas","Uma hora só minha","A água segurando o corpo","Sair de banho tomado","Escolher o dia e o ritmo"]}
+};
+function f3TemRepeticao(){ if(!F3.fim||!F3.fim[3]) return null;
+  const ult=(F3.rep&&F3.rep.length)?F3.rep[F3.rep.length-1].quando:F3.fim[3];
+  const dias=(new Date(hojeStr())-new Date(ult))/864e5; if(dias<30&&!F3.forcaRep) return null;
+  const feitas=new Set((F3.rep||[]).map(x=>x.sit));
+  const cand=Object.keys(SIT_ALT).filter(id=>F3.r[id]&&!F3.r[id].n);
+  return cand.find(id=>!feitas.has(id))||cand[0]||null; }
+function f3Repete(id){ const s=SIT[id], alt=SIT_ALT[id]; f3Sel={a:null,b:null}; f3Topo("revisita do mês");
+  mostra(`<div class="rot">Uma pergunta do mês</div><h2 class="f3q">${esc(alt.q)}</h2><p class="sub">Sem certo nem errado: só para ver se continua igual.</p>
+    <div class="opts f3opts">${f3Ordem({id:id+"_alt"}).map(k=>`<button class="opt f3op" type="button" data-m="${MOTIVOS[k].id}" onclick="f3TocaRep(this)"><span class="f3t">${esc(alt.o[k])}</span><span class="f3tag"></span></button>`).join("")}</div>
+    <div style="margin-top:22px"><button class="btn" id="f3seguir" type="button" onclick="f3GuardaRep('${id}')" disabled>Seguir</button></div>`); }
+function f3TocaRep(b){ click(); f3Sel={a:b.dataset.m,b:null}; document.querySelectorAll(".f3op").forEach(x=>{ x.classList.toggle("sel",x===b); x.querySelector(".f3tag").textContent=x===b?"✓":""; }); document.getElementById("f3seguir").disabled=false; }
+function f3GuardaRep(id){ if(!f3Sel.a) return; click(); const igual=F3.r[id].a===f3Sel.a;
+  F3.rep=F3.rep||[]; F3.rep.push({sit:id,quando:hojeStr(),antes:F3.r[id].a,agora:f3Sel.a,igual}); delete F3.forcaRep; f3Salva();
+  mostra(`<div class="rot">Pergunta do mês</div><h2>${igual?"Continua igual.":"Mudou um pouco."}</h2><p class="sub">${igual?"Sua resposta de hoje combina com a de antes. Isso deixa as suas pistas mais firmes.":"Hoje você respondeu diferente. Tudo bem: a gente muda, e o app aprende junto."}</p>
+    <button class="btn" type="button" onclick="click();f3Tela()">Continuar</button>`); }
+
 /* lista das 15 situações com o motivo de cada opção (só no painel de validação da prévia) */
-function f3Lista(){ return `<div class="f3lista">${[1,2,3].map(d=>`<div class="f3dia">Dia ${d}</div>${f3DoDia(d).map(s=>`<div class="f3sit"><b>Por que você gosta de ${esc(s.txt)}?</b>${s.o.map((t,k)=>`<div><span>${esc(t)}</span><em>${MOTIVOS[k].nome}</em></div>`).join("")}<div><span>Nenhuma dessas</span><em>saída</em></div></div>`).join("")}`).join("")}</div>`; }
+function f3Lista(){ const fotosDe=id=>Object.keys(SIT_FASE1).filter(f=>SIT_FASE1[f]===id);
+  return `<div class="f3lista">${[["Situações das fotos da Fase 1 (novas)",SITUACOES.filter(s=>s.dia===0)],["Situações gerais (completam as 15)",SITUACOES.filter(s=>s.dia>0)]].map(([t,arr])=>`<div class="f3dia">${t}</div>${arr.map(s=>`<div class="f3sit"><b>Por que você gosta de ${esc(s.txt)}?</b>${fotosDe(s.id).length?`<small class="f3de">vem da foto: ${fotosDe(s.id).map(esc).join(" · ")}</small>`:""}${s.o.map((t,k)=>`<div><span>${esc(t)}</span><em>${MOTIVOS[k].nome}</em></div>`).join("")}<div><span>Nenhuma dessas</span><em>saída</em></div></div>`).join("")}`).join("")}</div>`; }
 
 /* ============ GUARDAR E ENVIAR (anônimo) ============ */
 function salvaLocal(){ try{ localStorage.setItem("7e_app_novo",JSON.stringify({pos,resp,inicio,inicio2,r:R.length})); if(resp.fase1_completa) localStorage.setItem("7e_app_novo_fase1",JSON.stringify({gostos:SENT.map(x=>resp["gosto_"+x.id]||null),chegada:resp.escala_chegada})); }catch(e){} }
@@ -1554,23 +1664,19 @@ function envia(){ if(!ENDPOINT||!resp.consentiu) return; try{ const r={...resp};
   fetch(ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify({pesquisa:"app-novo",versao:VERSAO,pessoa:PID,quando:new Date().toISOString(),respostas:r})}).catch(()=>{}); }catch(e){} }
 
 /* ============ PAINEL DE VALIDAÇÃO (só na prévia) ============ */
-/* Fases 1 e 2 · conferência das últimas alterações (pedidas por voz em 18/11). A Fase 3 · Blocos 1 e 2 já foi validada em 19/11. */
 const jg=i=>R.findIndex(x=>x.t==="jogo"&&x.i===i);
+/* Fase 3 · Bloco 3. Fases 1 e 2: conferidas em 19/11 (ok); os pedidos novos ficaram para o fim da fila. */
 const ITENS=[
- ["f12_1","Fase 1 · Tela do vaso","Mandala de 7 círculos no topo","Saiu o logo comercial e entrou a mandala oficial de 7 círculos (nunca a de 8 do reality).",R.findIndex(x=>x.t==="vaso")],
- ["f12_2","Fase 2 · Audição","Som mais curto","Cada som agora dura 0,3 segundo (antes era mais longo). Toque nos dois sons para ouvir.",jg(1)],
- ["f12_3","Fase 2 · Carinho (Tato)","\"Qual foi a mais gostosa?\" só quando o celular vibra","No Android, que vibra, a pergunta aparece. No iPhone e no computador, que não vibram, o jogo segue direto sem a pergunta.",jg(2)],
- ["f12_4","Fase 2 · Ordem das viagens","Primeiro a brisa do mar (Olfato), depois o limão e o milkshake (Paladar)","Na Fase 2 o Olfato vem antes do Paladar. A Fase 1 continua na ordem de sempre.",jg(4)],
- ["f12_5","Fase 2 · Sinta o corpo","Mandala de 7 deitada, em perspectiva","No lugar do círculo que enchia, a mandala gira devagar; os 7 círculos acendem um por um durante o gesto e o 7 do meio acende no fim.",jg(6)],
- ["f12_6","Fase 2 · Chute do tempo","Saiu a ampulheta; agora são 7 números","A pessoa toca num destes: 1, 2, 3, 5, 7, 10 ou 15 minutos.",R.findIndex(x=>x.t==="chute")],
- ["f12_7","Fase 2 · Resultado","Infográfico numa página só, com a mandala de 7","Cada círculo acende pelo quanto a pessoa curtiu o jogo daquele sentido; em volta, os 7 nomes com 1 a 3 luzes. Pouco texto. Depois do \"Continuar\", vem o vídeo 3 da Brisa e, na prévia, o botão \"Começar a Fase 3\".",R.findIndex(x=>x.t==="grafico")]
+ ["f3b3_1","Bloco 3 · 1 · Situações tiradas da Fase 1","As 7 primeiras vêm das 7 fotos que a pessoa escolheu","Escrevi 17 situações novas, uma para cada foto da Fase 1 que ainda não tinha a sua (ex.: \"Céu estrelado\" → \"Por que você gosta de olhar o céu estrelado?\"). Na tela aparece a foto escolhida com \"Você escolheu na Fase 1\". Se duas fotos levam à mesma situação, ela entra uma vez só. As outras 8 vêm das situações gerais, começando pelos sentidos dos jogos que a pessoa mais curtiu na Fase 2. A lista completa está abaixo.","f3novo",null,()=>f3Lista()],
+ ["f3b3_2","Bloco 3 · 2 · Mapa 7 sentidos × 5 motivos","35 casinhas; cada resposta acende uma","Depois do \"Seguir\", o mapa aparece por 1 segundo e a casinha nova pisca na cor do sentido. No fim de cada dia aparece o mapa inteiro. Durante as 15, as colunas não mostram o nome dos motivos (só ✦1 a ✦5), para não entregar a resposta antes da hora; os nomes aparecem no mapa final, depois de \"Por trás das perguntas\".","f3novo"],
+ ["f3b3_3","Bloco 3 · 3 · Pergunta do mês","Uma vez por mês, uma situação volta com outras palavras","30 dias depois do fim das 15 (e depois a cada 30 dias), a pessoa recebe uma pergunta só, com as frases reescritas. O app compara com a resposta de antes e diz \"Continua igual\" ou \"Mudou um pouco\", sem julgar. Escrevi a versão com outras palavras para 8 situações gerais. Toque em \"Ver\" para ver um exemplo agora.","f3repete"]
 ];
 const REVISAR=["Mudar o visual","Mudar o texto","Mudar como funciona","Tirar do app"];
 let val={}, vdb=null, VDOC=null;
 function painel(){
   let el=document.getElementById("vp"); if(!el){ el=document.createElement("div"); el.id="vp"; el.className="vpainel"; document.body.appendChild(el); }
   const nv=ITENS.filter(x=>val[x[0]]&&val[x[0]].s==="validado").length;
-  el.innerHTML=`<div class="vcaixa"><div class="rot">Prévia · Fases 1 e 2 · alterações de 18/11</div><h2>Validar item por item</h2><p class="sub">${nv} de ${ITENS.length} validados. "Ver" leva direto para a tela do item.</p>
+  el.innerHTML=`<div class="vcaixa"><div class="rot">Prévia · Fase 3 · Bloco 3</div><h2>Validar item por item</h2><p class="sub">${nv} de ${ITENS.length} validados. "Ver" leva direto para a tela do item.</p>
     ${ITENS.map(([id,num,tt,ds,alvo,ops,extra])=>{ const v=val[id]||{}; return `<div class="vitem"><div class="rot" style="margin:0">${num}</div><div class="tt">${tt}</div><div class="ds">${ds}</div>${extra?extra():""}${ops?`<div class="esc">${ops.map((o,k)=>`<button class="${(v.e==null?fraseIdx():v.e)===k?"on":""}" onclick="escolhe('${id}',${k})">${"ABC"[k]}) ${o}</button>`).join("")}</div>`:""}
       <div class="bb"><button class="v ${v.s==="validado"?"on":""}" onclick="marca('${id}','validado')">Validado</button><button class="r ${v.s==="revisar"?"on":""}" onclick="marca('${id}','revisar')">Revisar</button><button class="ir" onclick="ir(${typeof alvo==="string"?"'"+alvo+"'":alvo})">Ver</button></div>
       <div class="rev ${v.s==="revisar"?"on":""}">${REVISAR.map(o=>`<button class="${v.o===o?"on":""}" onclick="marcaRev('${id}','${o}')">${o}</button>`).join("")}</div></div>`; }).join("")}
@@ -1583,16 +1689,16 @@ function escolhe(id,k){ click(); val[id]={...(val[id]||{}),e:k}; try{ localStora
 function fechaPainel(){ const el=document.getElementById("vp"); if(el) el.classList.remove("on"); }
 function marca(id,s){ val[id]={...(val[id]||{}),s}; if(s==="validado") delete val[id].o; salvaVal(); painel(); }
 function marcaRev(id,o){ val[id]={...(val[id]||{}),s:"revisar",o}; salvaVal(); painel(); }
-function salvaVal(){ try{ localStorage.setItem("7e_app_novo_val_f12",JSON.stringify(val)); }catch(e){}
+function salvaVal(){ try{ localStorage.setItem("7e_app_novo_val_f3b3",JSON.stringify(val)); }catch(e){}
   if(VDOC) VDOC.set({atualizado:new Date().toISOString(), itens:ITENS.map(x=>({id:x[0],item:x[1]+" · "+x[2],situacao:(val[x[0]]||{}).s||null,revisar:(val[x[0]]||{}).o||null,escolha:x[5]&&(val[x[0]]||{}).e!=null?x[5][val[x[0]].e]:null}))}).catch(()=>{}); }
 
 /* ============ INÍCIO ============ */
 try{ const s=JSON.parse(localStorage.getItem("7e_app_novo")||"null"); if(s&&s.resp&&s.r===R.length&&s.pos>0&&s.pos<R.length-2){ resp=s.resp; pos=s.pos; inicio=s.inicio||Date.now(); inicio2=s.inicio2||null; } }catch(e){}
-try{ val=JSON.parse(localStorage.getItem("7e_app_novo_val_f12")||"{}")||{}; }catch(e){}
+try{ val=JSON.parse(localStorage.getItem("7e_app_novo_val_f3b3")||"{}")||{}; }catch(e){}
 if(PREVIA){ const b=document.createElement("button"); b.className="vbtn"; b.type="button"; b.textContent="Validar a prévia"; b.onclick=()=>{ click(); painel(); }; document.body.appendChild(b); }
 let f3Ativa=false; try{ f3Ativa=localStorage.getItem("7e_fase3_ativa")==="1"; }catch(e){}
 if(f3Ativa) f3Abre(); else desenha();
-if(PREVIA && window.claude && claude.use){ claude.use("db").then(db=>{ if(!db) return; VDOC=db.doc("validacao/app-novo-f12-18nov"); return VDOC.get().then(sn=>{ const d=sn&&(sn.data?sn.data():sn); if(d&&d.itens&&!Object.keys(val).length){ d.itens.forEach(x=>{ if(x.situacao||x.escolha){ const k=x.escolha?FRASES_AB.indexOf(x.escolha):-1; val[x.id]={s:x.situacao||undefined,o:x.revisar||undefined,e:k>=0?k:undefined}; if(k>=0){ try{ localStorage.setItem("7e_frase_abertura",String(k)); }catch(e){} } } }); if(!entrou&&pos===0) desenha(); } }); }).catch(()=>{}); }
+if(PREVIA && window.claude && claude.use){ claude.use("db").then(db=>{ if(!db) return; VDOC=db.doc("validacao/app-novo-f3-b3"); return VDOC.get().then(sn=>{ const d=sn&&(sn.data?sn.data():sn); if(d&&d.itens&&!Object.keys(val).length){ d.itens.forEach(x=>{ if(x.situacao||x.escolha){ const k=x.escolha?FRASES_AB.indexOf(x.escolha):-1; val[x.id]={s:x.situacao||undefined,o:x.revisar||undefined,e:k>=0?k:undefined}; if(k>=0){ try{ localStorage.setItem("7e_frase_abertura",String(k)); }catch(e){} } } }); if(!entrou&&pos===0) desenha(); } }); }).catch(()=>{}); }
 </script>
 </body>
 </html>
