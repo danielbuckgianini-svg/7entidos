@@ -685,6 +685,13 @@ body.foco .topo:hover,body.foco #pularbtn:focus-visible,body.foco #voltar:focus-
 .f3conc b{font-weight:800}
 .f3mlin i.nova{animation:f3pisca 1s ease-out;opacity:1;box-shadow:0 0 0 3px #fff8,0 0 18px var(--c)}
 @keyframes f3pisca{0%{transform:scale(.3)}60%{transform:scale(1.25)}100%{transform:scale(1)}}
+.f3pistas{max-width:420px;margin:14px auto 18px;text-align:left;display:grid;gap:8px}
+.f3pi{background:rgba(255,255,255,.06);border:1px solid rgba(245,197,66,.25);border-radius:14px;padding:10px 14px}
+.f3pi b{display:block;font-size:18px;color:var(--creme)}.f3pi small{opacity:.7;font-size:15px}
+.f3resp3{display:grid;gap:12px;max-width:420px;margin:10px auto 0}
+.f3pensa{display:flex;flex-direction:column;align-items:center;gap:18px;padding-top:40px}
+.f3pensa .mdl{animation:f3gira 1.6s linear infinite}
+@keyframes f3gira{to{transform:rotate(360deg)}}
 #f3cerebro{position:fixed;left:10px;bottom:10px;z-index:60;width:230px;background:rgba(5,9,26,.93);border:1px solid rgba(245,197,66,.5);border-radius:14px;padding:10px 12px;font-size:12px;color:#e8ecf8;cursor:pointer;text-align:left;box-shadow:0 10px 30px rgba(0,0,0,.6)}
 #f3cerebro b{display:block;color:var(--ouro);font-size:12px}#f3cerebro small{display:block;opacity:.75;margin:2px 0 6px}
 #f3cerebro div{display:grid;grid-template-columns:92px 1fr 34px;gap:6px;align-items:center;margin:3px 0}
@@ -1716,6 +1723,8 @@ function f3Chances(){ f3Carrega(); let P=Object.fromEntries(MOTIVOS.map(m=>[m.id
   return P; }
 /* os motivos em ordem de chance */
 function f3Ranking(){ const P=f3Chances(); return MOTIVOS.map(m=>({id:m.id,nome:m.nome,p:P[m.id]})).sort((a,b)=>b.p-a.p); }
+/* para o palpite e a mistura: tira os motivos a que ela já disse "Não" e reparte a chance entre os outros */
+function f3Validos(){ const nao=new Set((F3.palpites||[]).filter(p=>p.resp==="nao").map(p=>p.m)); const rk=f3Ranking().filter(m=>!nao.has(m.id)); const t=rk.reduce((a,b)=>a+b.p,0)||1; return rk.map(m=>({...m,p:m.p/t})); }
 /* respostas da pergunta-desempate (Bloco C): Sim, muito · Um pouco · Tanto faz · Pouco · Não. Estimativa. */
 const F3_DES_SIM=[.45,.30,.13,.07,.05], F3_DES_NAO=[.10,.17,.23,.25,.25];
 const f3Feitas=()=>(F3.seq||[]).length;
@@ -1739,7 +1748,9 @@ function f3Proxima(){ if(!F3.lista) f3MontaLista();
 function f3HojeN(){ return (F3.hoje&&F3.hoje.d===hojeStr())?F3.hoje.n:0; }
 function f3Liberado(){ if(f3HojeN()>=F3_POR_DIA) return false; if(F3.trava&&F3.trava>=hojeStr()) return false; return true; }
 /* ---- quando parar ---- */
-function f3Certo(){ const [a]=f3Ranking(); return f3Feitas()>=F3_MIN && a.p>=F3_CERTEZA && !(F3.palpites||[]).some(p=>p.m===a.id); }
+/* também precisa de pistas suficientes para mostrar: 2 escolhas daquele motivo (3 depois de um "Não") */
+function f3Certo(){ const [a]=f3Validos(); const naos=(F3.palpites||[]).filter(p=>p.resp==="nao").length;
+  return f3Feitas()>=F3_MIN && a.p>=F3_CERTEZA && f3Pistas(a.id,9).length>=(naos?3:2) && !(F3.palpites||[]).some(p=>p.m===a.id); }
 function f3Tela(){ f3Carrega(); f3Painel();
   if(F3.descoberta){ const rid=f3TemRepeticao(); if(rid) return f3Repete(rid); return f3MostraResultado(); }
   if(!F3.intro) return f3Intro();
@@ -1772,10 +1783,6 @@ function f3Intro(){ f3Topo("começando");
     <p class="f3frase">Suas escolhas ajudam o app a sugerir coisas do seu jeito.</p>
     <p class="sub">Situações do dia a dia, no máximo 5 por dia. Quando a Brisa tiver uma pista firme, ela te conta. Não tem resposta certa.</p>
     <button class="btn" type="button" onclick="click();F3.intro=true;f3Salva();f3Tela()">Começar</button>`); }
-/* chegou a 15 sem certeza: o fim é uma mistura dos 2 da frente (Bloco B troca pela tela "Qual pesa mais?") */
-function f3Fim15(){ const [a,b]=f3Ranking(); F3.descoberta={tipo:"mistura",a:a.id,b:b.id,quando:hojeStr()}; f3Salva(); f3PorTras(); }
-/* palpite (Bloco B deixa completo) */
-function f3Palpite(){ const [a]=f3Ranking(); F3.descoberta={tipo:"principal",a:a.id,quando:hojeStr()}; f3Salva(); f3PorTras(); }
 function f3Zera(){ F3={dia:1,r:{},seq:[],hoje:null,fim:{}}; f3MontaLista(); }
 /* guardado de antes (formato antigo das 15 fixas): vira a sequência nova */
 function f3Migra(){ if(F3&&!F3.seq){ F3.seq=(F3.lista||[]).filter(id=>F3.r&&F3.r[id]); F3.hoje=null; F3.dia=F3.dia||1; delete F3.i; f3Salva(); } }
@@ -1785,7 +1792,7 @@ function f3MostraResultado(){ const rk=f3Ranking(), d=F3.descoberta||(rk[0].p>=F
     :`<p class="sub">Nas suas escolhas, você é uma mistura de</p><h2 class="f3prin">${MOTIVO_NOME[d.a]} e ${MOTIVO_NOME[d.b]}</h2>`;
   const barras=`<div class="f3barras">${rk.map(m=>`<div class="f3bar"><span>${m.nome}</span><i style="--w:${Math.round(m.p*100)}%"></i><b>${Math.round(m.p*100)}%</b></div>`).join("")}</div>
     <p class="f3crit">Como cheguei aqui: cada resposta sobe a chance do motivo que você escolheu e desce um pouco a dos outros (a 2ª opção conta pela metade). A Brisa só te conta uma pista quando um motivo passa de 75%.</p>`;
-  mostra(`<div class="rot">Fase 3 · Suas pistas</div>${cab}${barras}<p class="f3pista">É uma pista sobre você, nunca um rótulo.</p>
+  mostra(`<div class="rot">Fase 3 · Suas pistas</div>${cab}${d.pistas&&d.pistas.length?`<div class="f3pistas"><div class="rot">Pensei nisso porque você escolheu…</div>${d.pistas.map(x=>`<div class="f3pi"><b>“${esc(x.op)}”</b><small>${esc(x.sit)}</small></div>`).join("")}</div>`:""}${barras}<p class="f3pista">É uma pista sobre você, nunca um rótulo.</p>
     <div class="rot" style="margin-top:8px">Seu mapa: sentidos × motivos</div>${f3Mapa("",true)}
     <button class="btn sec" type="button" onclick="click();f3PorTras()">← Por trás das perguntas</button>`); }
 /* ---- painel do cérebro: SÓ na prévia, para o Daniel ver as chances mudando ---- */
@@ -1795,6 +1802,42 @@ function f3Painel(){ if(!PREVIA) return; let el=document.getElementById("f3cereb
 function f3Exemplo(){ f3Zera(); const ex=["jei","pau","sen","pau","jei","pau","pau","jei","soc"]; F3.intro=true;
   ex.forEach((m,k)=>{ const s=f3Proxima(); if(!s) return; F3.r[s.id]={a:m,b:k%3?null:"sen"}; F3.seq.push(s.id); F3.atual=null; });
   F3.hoje={d:"2000-01-01",n:0}; F3.dia=2; f3Salva(); }
+
+/* ============ FASE 3 · BLOCO B (20/11): o palpite da Brisa ============ */
+/* as pistas: até 3 respostas dela em que a 1ª opção foi daquele motivo (as mais recentes) */
+function f3Pistas(m,n){ const k=MOTIVOS.findIndex(x=>x.id===m);
+  return (F3.seq||[]).filter(id=>F3.r[id]&&F3.r[id].a===m).slice(-(n||3)).reverse().map(id=>({sit:SIT[id].txt,op:SIT[id].o[k]})); }
+const f3PistasHtml=m=>{ const p=f3Pistas(m); if(!p.length) return ""; return `<div class="f3pistas"><div class="rot">Pensei nisso porque você escolheu…</div>${p.map(x=>`<div class="f3pi"><b>“${esc(x.op)}”</b><small>${esc(x.sit)}</small></div>`).join("")}</div>`; };
+/* "A Brisa está pensando…": a mandala gira até 2 segundos antes do palpite */
+function f3Pensando(depois){ f3Topo("pensando…");
+  mostra(`<div class="f3pensa">${mandala(150,"mpensa")}<p class="f3frase">A Brisa está pensando…</p></div>`,()=>{ const m=document.getElementById("mpensa"); if(m) poeMandala(m,{pos:TODOS,luz:TODOS,miolo:true}); });
+  setTimeout(depois,1600); }
+function f3Palpite(){ const [a]=f3Validos();
+  f3Pensando(()=>{ f3Topo("uma pista");
+    mostra(`<div class="rot">A Brisa tem uma pista</div><p class="sub">O que mais te move parece ser</p><h2 class="f3prin">${MOTIVO_NOME[a.id]}</h2>
+      <p class="f3frase">Faz sentido?</p>${f3PistasHtml(a.id)}
+      <div class="f3resp3"><button class="btn" type="button" onclick="f3RespPalpite('${a.id}','sim')">Sim</button>
+      <button class="btn sec" type="button" onclick="f3RespPalpite('${a.id}','mm')">Mais ou menos</button>
+      <button class="btn sec" type="button" onclick="f3RespPalpite('${a.id}','nao')">Não</button></div>`); }); }
+function f3RespPalpite(m,r){ if(ocupado) return; click(); const [a,b]=f3Validos();
+  F3.palpites=(F3.palpites||[]).concat({m,resp:r,quando:hojeStr(),n:f3Feitas()}); f3Salva(); f3Painel();
+  if(r==="sim"){ F3.descoberta={tipo:"principal",a:m,quando:hojeStr(),pistas:f3Pistas(m)}; f3Salva(); return f3PorTras(); }
+  if(r==="mm"){ return f3Mistura(a.id,b.id,"palpite"); }
+  /* "Não": agradece, o motivo cai bastante (no cálculo) e as situações seguem até 15 */
+  f3Topo("aprendendo");
+  mostra(`<div class="rot">Tudo bem</div><h2>Obrigada, assim eu aprendo.</h2><p class="sub">Vou te mostrar mais algumas situações para entender melhor.</p>
+    <button class="btn" type="button" onclick="click();f3Tela()">Continuar</button>`); }
+/* mistura: depois do "Mais ou menos", ou quando chega a 15 sem certeza */
+function f3Mistura(a,b,de){ f3Topo("uma pista");
+  mostra(`<div class="rot">A Brisa tem uma pista</div><p class="sub">${de==="palpite"?"Talvez seja uma mistura de":"Nas suas escolhas, aparece uma mistura de"}</p>
+    <h2 class="f3prin">${MOTIVO_NOME[a]} com ${MOTIVO_NOME[b]}</h2><p class="f3frase">Qual pesa mais para você?</p>
+    <div class="f3resp3"><button class="btn sec" type="button" onclick="f3EscolheMistura('${a}','${b}','a')">${MOTIVO_NOME[a]}</button>
+    <button class="btn sec" type="button" onclick="f3EscolheMistura('${a}','${b}','b')">${MOTIVO_NOME[b]}</button>
+    <button class="btn sec" type="button" onclick="f3EscolheMistura('${a}','${b}','os2')">Os dois igual</button></div>`); }
+function f3EscolheMistura(a,b,q){ click();
+  F3.descoberta=q==="os2"?{tipo:"mistura",a,b,quando:hojeStr(),pistas:f3Pistas(a,2).concat(f3Pistas(b,2))}
+    :{tipo:"principal",a:q==="a"?a:b,quando:hojeStr(),escolheu:true,pistas:f3Pistas(q==="a"?a:b)}; f3Salva(); f3PorTras(); }
+function f3Fim15(){ const [a,b]=f3Validos(); if(a.p>=F3_CERTEZA && !(F3.palpites||[]).some(p=>p.m===a.id)) return f3Palpite(); f3Mistura(a.id,b.id,"fim"); }
 
 /* lista das 15 situações com o motivo de cada opção (só no painel de validação da prévia) */
 function f3Lista(){ const fotosDe=id=>Object.keys(SIT_FASE1).filter(f=>SIT_FASE1[f]===id);
