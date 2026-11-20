@@ -893,6 +893,7 @@ function ir(n){ if(typeof n==="string"){ fechaPainel(); click(); f3Carrega(); en
     if(n==="f3intro"){ f3Zera(); f3Abre(); return; }
     if(n==="f3novo"){ f3ExemploFase1(); f3Zera(); F3.intro=true; f3Salva(); f3Abre(); return; }
     if(n==="f3repete"){ f3Exemplo(); F3.forcaRep=true; f3Salva(); const rid=f3TemRepeticao(); if(rid){ f3Repete(rid); return; } }
+    if(n==="f4"||n==="f5"||n==="f6"){ if(!F3.descoberta) f3Exemplo(); f3GuardaDescoberta(); if(n==="f4"){ try{ localStorage.removeItem("7e_fase4"); }catch(e){} f4Abre(); } else if(n==="f5") f5Abre(); else f6Hall(); return; }
     if(n==="f3portras"||n==="f3resultado"){ f3Exemplo(); if(n==="f3portras") f3PorTras(); else f3MostraResultado(); return; }
     f3Abre(); return; } try{ localStorage.removeItem("7e_fase3_ativa"); }catch(e){} if(n<0){ entrou=false; n=0; } pos=n; fechaPainel(); const fo=document.getElementById("flowov"); if(fo) fo.remove(); desenha(); }
 /* ===== MANDALA OFICIAL ===== montar(tam): cria a mandala; poeMandala(el,{pos,luz,miolo}): pedaços no lugar (pos), acesos (luz), miolo aceso */
@@ -2086,7 +2087,7 @@ function painel(){
       <div class="bb"><button class="v ${v.s==="validado"?"on":""}" onclick="marca('${id}','validado')">Validado</button><button class="r ${v.s==="revisar"?"on":""}" onclick="marca('${id}','revisar')">Revisar</button><button class="ir" onclick="ir(${typeof alvo==="string"?"'"+alvo+"'":alvo})">Ver</button></div>
       <div class="rev ${v.s==="revisar"?"on":""}">${REVISAR.map(o=>`<button class="${v.o===o?"on":""}" onclick="marcaRev('${id}','${o}')">${o}</button>`).join("")}</div></div>`; }).join("")}
     <p class="vsalvo" id="vsalvo">${VDOC?"As marcações ficam guardadas: o Claude lê direto.":"As marcações ficam guardadas neste aparelho."}</p>
-    <button class="btn sec" style="margin-bottom:12px" onclick="irInicio()">Ir para o começo do app (Fase 1)</button><button class="btn sec" style="margin-bottom:12px" onclick="f3Zera();ir('f3')">Recomeçar a Fase 3 do zero</button><button class="btn" onclick="fechaPainel()">Voltar ao app</button></div>`;
+    <button class="btn sec" style="margin-bottom:12px" onclick="irInicio()">Ir para o começo do app (Fase 1)</button><button class="btn sec" style="margin-bottom:12px" onclick="f3Zera();ir('f3')">Recomeçar a Fase 3 do zero</button><div class="rot" style="margin:6px 0">V22 · cérebro do Akinator</div><button class="btn sec" style="margin-bottom:12px" onclick="ir('f4')">Ir para a Fase 4 (O seu 10)</button><button class="btn sec" style="margin-bottom:12px" onclick="ir('f5')">Ir para a Fase 5 (ofertas)</button><button class="btn sec" style="margin-bottom:12px" onclick="ir('f6')">Ir para a Fase 6 (o que a Brisa já descobriu)</button><button class="btn" onclick="fechaPainel()">Voltar ao app</button></div>`;
   el.classList.add("on");
 }
 function fraseIdx(){ return FRASES_AB.indexOf(fraseAbertura()); }
