@@ -685,6 +685,13 @@ body.foco .topo:hover,body.foco #pularbtn:focus-visible,body.foco #voltar:focus-
 .f3conc b{font-weight:800}
 .f3mlin i.nova{animation:f3pisca 1s ease-out;opacity:1;box-shadow:0 0 0 3px #fff8,0 0 18px var(--c)}
 @keyframes f3pisca{0%{transform:scale(.3)}60%{transform:scale(1.25)}100%{transform:scale(1)}}
+#f3cerebro{position:fixed;left:10px;bottom:10px;z-index:60;width:230px;background:rgba(5,9,26,.93);border:1px solid rgba(245,197,66,.5);border-radius:14px;padding:10px 12px;font-size:12px;color:#e8ecf8;cursor:pointer;text-align:left;box-shadow:0 10px 30px rgba(0,0,0,.6)}
+#f3cerebro b{display:block;color:var(--ouro);font-size:12px}#f3cerebro small{display:block;opacity:.75;margin:2px 0 6px}
+#f3cerebro div{display:grid;grid-template-columns:92px 1fr 34px;gap:6px;align-items:center;margin:3px 0}
+#f3cerebro i{display:block;height:8px;border-radius:9px;background:linear-gradient(90deg,var(--ouro) var(--w),rgba(255,255,255,.12) var(--w))}
+#f3cerebro em{font-style:normal;text-align:right;font-weight:800}
+#f3cerebro.min div,#f3cerebro.min small{display:none}
+body:not(.emf3) #f3cerebro{display:none}
 .f3mapov{position:fixed;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;background:rgba(5,9,26,.82);backdrop-filter:blur(4px);animation:f3entra .25s}
 .f3mapov.sai{opacity:0;transition:opacity .3s}
 .f3mapcx{width:min(92vw,440px);padding:18px 14px;border-radius:24px;background:rgba(20,30,70,.9);border:1px solid rgba(245,197,66,.35)}
@@ -1486,7 +1493,7 @@ function trava3(){
   const msab=montaSabor()||saborExemplo();
   mostra(`<div class="rot">Fase 3</div>${videoBrisa(VID3,LEG3)}
     <div class="sabbaixa"><img id="sabprev" alt="${msab.exemplo?"Imagem de exemplo":"A imagem do seu momento"}" hidden>${msab.exemplo?`<p class="exnota">Imagem de exemplo. Faça a Fase 1 para ter a sua.</p>`:""}<button class="btn" id="baixar" type="button" disabled>⬇ Baixar ${msab.exemplo?"a imagem":"minha imagem"}</button></div>
-    <div class="trava"><h2>Fase 3</h2><p class="sub">Agora você conta o porquê das coisas que te fazem bem. São 5 perguntas por dia, em 3 dias.</p><button class="btn" type="button" onclick="click();f3Abre()">Começar a Fase 3</button></div>
+    <div class="trava"><h2>Fase 3</h2><p class="sub">Agora você conta o porquê das coisas que te fazem bem. No máximo 5 perguntas por dia, até a Brisa ter uma pista firme.</p><button class="btn" type="button" onclick="click();f3Abre()">Começar a Fase 3</button></div>
     <button class="btn sec" style="margin-top:14px" onclick="recomecar()">Fazer de novo</button>`,
     c=>{ ligaVideo(c,LEG3,()=>{},VID3); ligaBaixar(c,msab); const f=c.querySelector("#aviso"); if(!f) return;
       f.addEventListener("submit",e=>{ e.preventDefault(); const n=c.querySelector("#av-nome").value.trim(), m=c.querySelector("#av-email").value.trim(), ok=c.querySelector("#av-ok").checked, er=c.querySelector("#av-err");
@@ -1542,12 +1549,10 @@ const SITUACOES = [
 ];
 /* o que fica guardado (só no celular): {dia, i, r:{situação:{a:motivo, b:motivo2|null} ou {n:true}}, fim:{dia:"aaaa-mm-dd"}} */
 let F3=null;
-function f3Carrega(){ if(F3) return F3; try{ F3=JSON.parse(localStorage.getItem("7e_fase3")||"null"); }catch(e){} if(!F3||!F3.r) F3={dia:1,i:0,r:{},fim:{}}; return F3; }
+function f3Carrega(){ if(F3) return F3; try{ F3=JSON.parse(localStorage.getItem("7e_fase3")||"null"); }catch(e){} if(!F3||!F3.r) F3={dia:1,r:{},seq:[],hoje:null,fim:{}}; f3Migra(); return F3; }
 function f3Salva(){ try{ localStorage.setItem("7e_fase3",JSON.stringify(F3)); }catch(e){} }
 function hojeStr(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
-const f3DoDia=d=>{ if(!F3.lista) f3MontaLista(); return F3.lista.slice((d-1)*5,d*5).map(id=>SIT[id]).filter(Boolean); };
 /* o dia seguinte só abre no dia seguinte do calendário */
-function f3Liberado(d){ if(d<=1) return true; const f=F3.fim[d-1]; return !!f && hojeStr()>f; }
 let f3Sel={a:null,b:null};
 function f3Topo(txt){
   const el=document.getElementById("const"); el.hidden=false;
@@ -1558,23 +1563,6 @@ function f3Topo(txt){
   foco(null); brilho(null); fundoCor(null); pararSom();
 }
 function f3Abre(){ f3Carrega(); entrou=true; pos=R.length-1; try{ localStorage.setItem("7e_fase3_ativa","1"); }catch(e){} f3Tela(); }
-function f3Tela(){
-  const d=F3.dia, lista=f3DoDia(d);
-  if(F3.i>=lista.length){ if(d>=3){ const rid=f3TemRepeticao(); if(rid) return f3Repete(rid); } return f3FimDia(); }
-  if(!f3Liberado(d)){ return f3Espera(); }
-  if(!F3.intro){ return f3Intro(); }
-  const s=lista[F3.i];
-  const orig=(F3.orig||{})[s.id]; f3Sel={a:null,b:null};
-  const ant=F3.r[s.id]; if(ant&&!ant.n){ f3Sel={a:ant.a,b:ant.b||null}; }
-  f3Topo(`Dia ${d} · ${F3.i+1} de 5`);
-  mostra(`<div class="rot">Por que você gosta de…</div><h2 class="f3q">${esc(s.txt.charAt(0).toUpperCase()+s.txt.slice(1))}?</h2>
-    ${orig?`<div class="f3orig"><img src="${foto(orig.sid,orig.j)}" alt=""><span>Você escolheu na Fase 1:<b>${esc(orig.foto)}</b></span></div>`:""}
-    <p class="sub f3dica" id="f3dica">Toque no motivo que mais combina com você.</p>
-    <div class="opts f3opts">${f3Ordem(s).map(k=>`<button class="opt f3op" type="button" data-m="${MOTIVOS[k].id}" onclick="f3Toca(this)"><span class="f3t">${esc(s.o[k])}</span><span class="f3tag"></span></button>`).join("")}</div>
-    <button class="f3nenhuma" type="button" onclick="f3Nenhuma()">Nenhuma dessas</button>
-    <div style="margin-top:22px"><button class="btn" id="f3seguir" type="button" onclick="f3Seguir()" disabled>Seguir</button></div>
-    ${F3.i>0?`<div><button class="linkflow" type="button" onclick="f3Volta()">← voltar</button></div>`:""}`, ()=>f3Pinta());
-}
 function f3Pinta(){
   document.querySelectorAll(".f3op").forEach(b=>{ const m=b.dataset.m, tg=b.querySelector(".f3tag");
     b.classList.toggle("sel",m===f3Sel.a); b.classList.toggle("sel2",m===f3Sel.b);
@@ -1590,39 +1578,11 @@ function f3Toca(b){ click(); vibra(10); const m=b.dataset.m;
   else { f3Sel.b=m; }
   f3Pinta();
 }
-function f3Guarda(v){ const s=f3DoDia(F3.dia)[F3.i]; F3.r[s.id]=v; F3.i++; if(F3.i>=5&&!F3.fim[F3.dia]) F3.fim[F3.dia]=hojeStr(); f3Salva(); }
-function f3Seguir(){ if(!f3Sel.a||ocupado) return; ocupado=true; click(); const s=f3DoDia(F3.dia)[F3.i], nova=f3SentidoDe(s)+"|"+f3Sel.a; f3Guarda({a:f3Sel.a,b:f3Sel.b||null}); f3MostraMapa(nova,()=>{ ocupado=false; f3Tela(); }); }
-function f3Nenhuma(){ if(ocupado) return; ocupado=true; click(); f3Guarda({n:true}); f3Tela(); }
-function f3Volta(){ if(F3.i>0){ click(); F3.i--; f3Salva(); f3Tela(); } }
-function f3FimDia(){
-  const d=F3.dia;
-  if(d>=3){ f3Topo("15 de 15");
-    return mostra(`<div class="rot">Fase 3 · Dia 3 completo</div><h2>Você respondeu as 15.</h2><p class="sub">Obrigado por contar o porquê de cada coisa.</p>
-      <button class="btn" type="button" onclick="click();f3PorTras()">Ver o que apareceu</button>
-      <div style="margin-top:14px"><button class="btn sec" type="button" onclick="f3Rever()">Rever as minhas respostas</button></div>`); }
-  f3Topo(`Dia ${d} completo`);
-  mostra(`<div class="rot">Fase 3 · Dia ${d} completo</div><h2>Pronto por hoje.</h2><p class="sub">Amanhã tem mais 5 esperando por você.</p><div class="rot" style="margin-top:4px">Seu mapa · ${Object.keys(f3Casas()).length} ${Object.keys(f3Casas()).length===1?"casinha acesa":"casinhas acesas"}</div>${f3Mapa("",false)}
-    <button class="btn" type="button" onclick="f3ProximoDia()">Combinado</button>
-    ${PREVIA?`<div><button class="linkflow" type="button" onclick="f3PulaEspera()">Pular a espera (só na prévia)</button></div>`:""}`);
-}
-function f3ProximoDia(){ click(); F3.dia=Math.min(3,F3.dia+1); F3.i=0; f3Salva(); f3Tela(); }
-function f3Espera(){ f3Topo(`Dia ${F3.dia}`);
-  mostra(`<div class="rot">Fase 3 · Dia ${F3.dia}</div><h2>As próximas 5 abrem amanhã.</h2><p class="sub">Volte quando quiser. Elas vão estar te esperando.</p>
-    ${PREVIA?`<button class="btn" type="button" onclick="f3PulaEspera()">Pular a espera (só na prévia)</button>`:""}`); }
-function f3PulaEspera(){ click(); const ant=Math.max(1,F3.dia-(F3.i>=5?0:1)); F3.fim[ant]="2000-01-01"; if(F3.i>=5){ F3.dia=Math.min(3,F3.dia+1); F3.i=0; } f3Salva(); f3Tela(); }
-function f3Rever(){ click(); F3.dia=1; F3.i=0; f3Salva(); f3Tela(); }
 /* na prévia: se a Fase 1 ainda não foi feita neste aparelho, usa escolhas de exemplo para mostrar as situações pessoais */
 function f3ExemploFase1(){ if(f3Gostos().some(Boolean)) return; const ex=[1,2,1,3,0,1,3]; SENT.forEach((s,i)=>{ resp["gosto_"+s.id]=s.o[ex[i]]; }); }
-function f3Exemplo(){ const ex=["jei","pau","sen","pau","jei","sen","pau","jei","soc","jei","pau","con","jei","sen","jei"]; if(!F3.lista) f3MontaLista(); F3.lista.map(id=>SIT[id]).forEach((s,k)=>{ if(!F3.r[s.id]) F3.r[s.id]={a:ex[k],b:k%3?null:"sen"}; }); F3.intro=true; F3.dia=3; F3.i=5; F3.fim={1:"2000-01-01",2:"2000-01-01",3:hojeStr()}; f3Salva(); }
 function irInicio(){ click(); try{ localStorage.removeItem("7e_fase3_ativa"); }catch(e){} fechaPainel(); entrou=false; pos=0; document.getElementById("const").hidden=true; desenha(); }
-function f3Zera(){ F3={dia:1,i:0,r:{},fim:{}}; f3MontaLista(); }
 /* ---- Bloco 2 ---- */
 /* frase que diz para que servem as respostas, antes da primeira situação */
-function f3Intro(){ f3Topo("começando");
-  mostra(`<div class="rot">Fase 3</div><h2>Por que você gosta do que gosta?</h2>
-    <p class="f3frase">Suas escolhas ajudam o app a sugerir coisas do seu jeito.</p>
-    <p class="sub">São 15 situações do dia a dia, 5 por dia. Não tem resposta certa.</p>
-    <button class="btn" type="button" onclick="click();F3.intro=true;f3Salva();f3Tela()">Começar</button>`); }
 /* ordem embaralhada: cada pessoa vê uma ordem diferente, e a mesma pessoa vê sempre a mesma ordem naquela situação */
 function f3Ordem(s){ let h=2166136261; for(const ch of (PID+"|"+s.id)){ h^=ch.charCodeAt(0); h=Math.imul(h,16777619); }
   const rnd=()=>{ h+=0x6D2B79F5; let t=h; t=Math.imul(t^t>>>15,t|1); t^=t+Math.imul(t^t>>>7,t|61); return ((t^t>>>14)>>>0)/4294967296; };
@@ -1630,14 +1590,8 @@ function f3Ordem(s){ let h=2166136261; for(const ch of (PID+"|"+s.id)){ h^=ch.ch
 /* contagem: 1ª opção = 1 ponto, 2ª opção = meio ponto, "nenhuma dessas" não conta */
 function f3Pontos(){ const p=Object.fromEntries(MOTIVOS.map(m=>[m.id,0]));
   Object.values(F3.r).forEach(v=>{ if(!v||v.n) return; if(v.a) p[v.a]+=1; if(v.b) p[v.b]+=.5; }); return p; }
-/* o motivo principal só aparece com pelo menos 40% dos pontos e 2 pontos de vantagem sobre o segundo; senão, "mistura de A e B" */
-function f3Resultado(){ const p=f3Pontos(), tot=Object.values(p).reduce((a,b)=>a+b,0);
-  const ord=MOTIVOS.map(m=>({id:m.id,nome:m.nome,v:p[m.id],pc:tot?p[m.id]/tot:0})).sort((a,b)=>b.v-a.v);
-  if(!tot) return {tipo:"vazio",ord,tot};
-  const [a,b]=ord; if(a.pc>=.4 && a.v-b.v>=2) return {tipo:"principal",a,ord,tot};
-  return {tipo:"mistura",a,b,ord,tot}; }
 const f3Num=x=>String(x).replace(".",",");
-function f3PorTras(){ f3Topo("15 de 15");
+function f3PorTras(){ f3Topo("descoberta");
   mostra(`<div class="rot">Fase 3</div><h2>Por trás das perguntas</h2>
     <div class="f3texto"><p>Cada opção que você viu estava ligada a um motivo diferente para gostar das coisas.</p>
     <p>O modelo junta duas linhas da psicologia:</p>
@@ -1645,15 +1599,6 @@ function f3PorTras(){ f3Topo("15 de 15");
     <p><b>E um quinto</b>, de outra linha de estudos: fazer do seu próprio jeito (<em>Do meu jeito</em>).</p>
     <p class="f3pista">O que aparece aqui é uma pista sobre você, nunca um diagnóstico. Você pode mudar, e o app vai aprendendo junto.</p></div>
     <button class="btn" type="button" onclick="click();f3MostraResultado()">Ver as minhas pistas</button>`); }
-function f3MostraResultado(){ const r=f3Resultado(); f3Topo("suas pistas");
-  const cab=r.tipo==="principal"?`<p class="sub">Nas suas escolhas, o que mais aparece é</p><h2 class="f3prin">${r.a.nome}</h2>`
-    :r.tipo==="mistura"?`<p class="sub">Nas suas escolhas, você é uma mistura de</p><h2 class="f3prin">${r.a.nome} e ${r.b.nome}</h2>`
-    :`<h2>Ainda não deu para ver.</h2><p class="sub">Você marcou "nenhuma dessas" em todas. Tudo bem: o app vai aprender de outros jeitos.</p>`;
-  const barras=r.tot?`<div class="f3barras">${r.ord.map(m=>`<div class="f3bar"><span>${m.nome}</span><i style="--w:${Math.round(m.pc*100)}%"></i><b>${Math.round(m.pc*100)}%</b></div>`).join("")}</div>
-    <p class="f3crit">Como contei: a 1ª opção vale 1 ponto e a 2ª vale meio. Um motivo só aparece sozinho quando tem pelo menos 40% dos pontos e 2 pontos a mais que o segundo.</p>`:"";
-  mostra(`<div class="rot">Fase 3 · Suas pistas</div>${cab}${barras}<p class="f3pista">É uma pista, não um diagnóstico.</p>
-    ${r.tot?`<div class="rot" style="margin-top:8px">Seu mapa: sentidos × motivos</div>${f3Mapa("",true)}`:""}
-    <button class="btn sec" type="button" onclick="click();f3PorTras()">← Por trás das perguntas</button>`); }
 /* ---- Bloco 3 (19/11) ---- */
 /* Situações novas, uma para cada foto da Fase 1 que ainda não tinha situação própria. dia:0 = fora da lista fixa. */
 SITUACOES.push(
@@ -1733,8 +1678,8 @@ const SIT_ALT={
  samba:   {q:"O que mais vale numa roda de samba ou show?", o:["Cantar junto com a turma","Esquecer a semana","O som batendo no peito","O petisco na mesa","Decidir onde ficar e quanto tempo"]},
  hidro:   {q:"O que mais vale na hidroginástica?", o:["A turma e as risadas","Uma hora só minha","A água segurando o corpo","Sair de banho tomado","Escolher o dia e o ritmo"]}
 };
-function f3TemRepeticao(){ if(!F3.fim||!F3.fim[3]) return null;
-  const ult=(F3.rep&&F3.rep.length)?F3.rep[F3.rep.length-1].quando:F3.fim[3];
+function f3TemRepeticao(){ if(!F3.descoberta) return null;
+  const ult=(F3.rep&&F3.rep.length)?F3.rep[F3.rep.length-1].quando:F3.descoberta.quando;
   const dias=(new Date(hojeStr())-new Date(ult))/864e5; if(dias<30&&!F3.forcaRep) return null;
   const feitas=new Set((F3.rep||[]).map(x=>x.sit));
   const cand=Object.keys(SIT_ALT).filter(id=>F3.r[id]&&!F3.r[id].n);
@@ -1748,6 +1693,108 @@ function f3GuardaRep(id){ if(!f3Sel.a) return; click(); const igual=F3.r[id].a==
   F3.rep=F3.rep||[]; F3.rep.push({sit:id,quando:hojeStr(),antes:F3.r[id].a,agora:f3Sel.a,igual}); delete F3.forcaRep; f3Salva();
   mostra(`<div class="rot">Pergunta do mês</div><h2>${igual?"Continua igual.":"Mudou um pouco."}</h2><p class="sub">${igual?"Sua resposta de hoje combina com a de antes. Isso deixa as suas pistas mais firmes.":"Hoje você respondeu diferente. Tudo bem: a gente muda, e o app aprende junto."}</p>
     <button class="btn" type="button" onclick="click();f3Tela()">Continuar</button>`); }
+
+/* ============ FASE 3 · CÉREBRO DO AKINATOR (20/11) ============
+   O "caderno": linhas = os 5 motivos; perguntas = as situações (e, no Bloco C, as perguntas-desempate).
+   Cada quadradinho guarda a chance de a pessoa escolher aquela opção, se aquele for o motivo dela.
+   Estimativa (sem estudo com esse número): quem tem o motivo escolhe a opção dele em 45 de 100 vezes; cada uma das outras 4 fica com cerca de 14.
+   Nada é eliminado de vez: cada resposta só sobe ou desce as chances, para aguentar resposta "torta".
+   A conta roda toda no celular, sem IA paga. */
+const F3_TH=.45, F3_OUT=(1-F3_TH)/4;      /* quadradinho padrão do caderno */
+const F3_CELULA={};                        /* aqui o caderno aprende depois: {"situação|motivo": chance}. Vazio por enquanto. */
+const F3_CERTEZA=.75, F3_MIN=6, F3_MAX=15, F3_POR_DIA=5;
+const f3Cel=(sid,mid,escolhido)=>{ const k=sid+"|"+mid; if(F3_CELULA[k]!=null) return escolhido?F3_CELULA[k]:(1-F3_CELULA[k])/4; return escolhido?F3_TH:F3_OUT; };
+/* as chances dos 5 motivos agora: todos começam iguais (20%); a 1ª opção puxa forte, a 2ª puxa pela metade, "Nenhuma dessas" não mexe */
+function f3Chances(){ f3Carrega(); let P=Object.fromEntries(MOTIVOS.map(m=>[m.id,1/MOTIVOS.length]));
+  const norm=()=>{ const t=Object.values(P).reduce((a,b)=>a+b,0)||1; Object.keys(P).forEach(k=>P[k]/=t); };
+  (F3.seq||[]).forEach(id=>{ const v=F3.r[id]; if(!v||v.n) return;
+    MOTIVOS.forEach(m=>{ P[m.id]*=f3Cel(id,m.id,m.id===v.a); });                          /* 1ª opção: força inteira */
+    if(v.b) MOTIVOS.forEach(m=>{ P[m.id]*=Math.sqrt(f3Cel(id,m.id,m.id===v.b)); });     /* 2ª opção: metade da força */
+    norm(); });
+  (F3.des||[]).forEach(d=>{ MOTIVOS.forEach(m=>{ P[m.id]*=(m.id===d.m?F3_DES_SIM:F3_DES_NAO)[d.nv]; }); norm(); });
+  (F3.palpites||[]).forEach(p=>{ if(p.resp==="nao") { P[p.m]*=.1; norm(); } });
+  return P; }
+/* os motivos em ordem de chance */
+function f3Ranking(){ const P=f3Chances(); return MOTIVOS.map(m=>({id:m.id,nome:m.nome,p:P[m.id]})).sort((a,b)=>b.p-a.p); }
+/* respostas da pergunta-desempate (Bloco C): Sim, muito · Um pouco · Tanto faz · Pouco · Não. Estimativa. */
+const F3_DES_SIM=[.45,.30,.13,.07,.05], F3_DES_NAO=[.10,.17,.23,.25,.25];
+const f3Feitas=()=>(F3.seq||[]).length;
+/* ---- a próxima situação ----
+   1º as que nasceram das fotos da Fase 1; depois a que mais separa os 2 motivos da frente.
+   Enquanto o caderno não aprendeu, todas separam igual: então desempata variando o sentido (nunca 2 seguidas do mesmo)
+   e começando pelos sentidos de que ela mais curtiu os jogos da Fase 2. Sempre com as 5 opções. */
+function f3Separa(id,a,b){ return Math.abs(f3Cel(id,a,true)-f3Cel(id,a,false)) + Math.abs(f3Cel(id,b,true)-f3Cel(id,b,false)) - 2*(F3_TH-F3_OUT); }
+function f3Proxima(){ if(!F3.lista) f3MontaLista();
+  if(F3.atual && !F3.r[F3.atual]) return SIT[F3.atual];
+  const feitas=new Set(F3.seq||[]);
+  const fotos=Object.keys(F3.orig||{}).filter(id=>!feitas.has(id));
+  let id=fotos[0];
+  if(!id){ const [a,b]=f3Ranking(); const ult=SIT[(F3.seq||[]).slice(-1)[0]]; const ultS=ult?f3SentidoDe(ult):null;
+    const curtiu=Object.fromEntries(SENT.map(s=>[s.id,+(resp["curtiu_"+s.id]||0)]));
+    const cand=SITUACOES.filter(s=>s.dia>0&&!feitas.has(s.id)).map((s,k)=>({s,k,
+      n:f3Separa(s.id,a.id,b.id)*10 + (s.sent[0]===ultS?-1:0) + Math.max(...s.sent.map(x=>curtiu[x]||0))/100}));
+    cand.sort((x,y)=>y.n-x.n||x.k-y.k); id=cand[0]&&cand[0].s.id; }
+  F3.atual=id||null; f3Salva(); return id?SIT[id]:null; }
+/* ---- ritmo: no máximo 5 por dia; o dia seguinte abre no dia seguinte do calendário ---- */
+function f3HojeN(){ return (F3.hoje&&F3.hoje.d===hojeStr())?F3.hoje.n:0; }
+function f3Liberado(){ if(f3HojeN()>=F3_POR_DIA) return false; if(F3.trava&&F3.trava>=hojeStr()) return false; return true; }
+/* ---- quando parar ---- */
+function f3Certo(){ const [a]=f3Ranking(); return f3Feitas()>=F3_MIN && a.p>=F3_CERTEZA && !(F3.palpites||[]).some(p=>p.m===a.id); }
+function f3Tela(){ f3Carrega(); f3Painel();
+  if(F3.descoberta){ const rid=f3TemRepeticao(); if(rid) return f3Repete(rid); return f3MostraResultado(); }
+  if(!F3.intro) return f3Intro();
+  if(f3Certo()) return f3Palpite();
+  if(f3Feitas()>=F3_MAX || !f3Proxima()) return f3Fim15();
+  if(!f3Liberado()) return f3FimDia();
+  const s=f3Proxima(), orig=(F3.orig||{})[s.id]; f3Sel={a:null,b:null};
+  f3Topo(`Dia ${F3.dia||1} · ${f3HojeN()+1} de ${F3_POR_DIA}`);
+  mostra(`<div class="rot">Por que você gosta de…</div><h2 class="f3q">${esc(s.txt.charAt(0).toUpperCase()+s.txt.slice(1))}?</h2>
+    ${orig?`<div class="f3orig"><img src="${foto(orig.sid,orig.j)}" alt=""><span>Você escolheu na Fase 1:<b>${esc(orig.foto)}</b></span></div>`:""}
+    <p class="sub f3dica" id="f3dica">Toque no motivo que mais combina com você.</p>
+    <div class="opts f3opts">${f3Ordem(s).map(k=>`<button class="opt f3op" type="button" data-m="${MOTIVOS[k].id}" onclick="f3Toca(this)"><span class="f3t">${esc(s.o[k])}</span><span class="f3tag"></span></button>`).join("")}</div>
+    <button class="f3nenhuma" type="button" onclick="f3Nenhuma()">Nenhuma dessas</button>
+    <div style="margin-top:22px"><button class="btn" id="f3seguir" type="button" onclick="f3Seguir()" disabled>Seguir</button></div>
+    ${f3HojeN()>0?`<div><button class="linkflow" type="button" onclick="f3Volta()">← voltar uma</button></div>`:""}`, ()=>f3Pinta());
+}
+function f3Guarda(v){ const id=F3.atual; if(!id) return; F3.r[id]=v; F3.seq=(F3.seq||[]).filter(x=>x!==id).concat(id); F3.atual=null;
+  const h=hojeStr(); if(!F3.hoje||F3.hoje.d!==h){ if(F3.hoje&&F3.hoje.n) F3.dia=(F3.dia||1)+1; F3.hoje={d:h,n:0}; } F3.hoje.n++; f3Salva(); }
+function f3Seguir(){ if(!f3Sel.a||ocupado) return; ocupado=true; click(); const s=SIT[F3.atual], nova=f3SentidoDe(s)+"|"+f3Sel.a; f3Guarda({a:f3Sel.a,b:f3Sel.b||null}); f3Painel(); f3MostraMapa(nova,()=>{ ocupado=false; f3Tela(); }); }
+function f3Nenhuma(){ if(ocupado) return; ocupado=true; click(); f3Guarda({n:true}); f3Tela(); }
+/* "voltar uma": desfaz a última resposta de hoje e mostra aquela situação de novo, com a escolha marcada */
+function f3Volta(){ if(f3HojeN()<1||!(F3.seq||[]).length) return; click(); const id=F3.seq.pop(), ant=F3.r[id]; delete F3.r[id]; F3.hoje.n--; F3.atual=id; f3Salva(); f3Tela();
+  if(ant&&!ant.n){ f3Sel={a:ant.a,b:ant.b||null}; setTimeout(f3Pinta,60); } }
+function f3FimDia(){ f3Topo(`Dia ${F3.dia||1} completo`);
+  mostra(`<div class="rot">Fase 3 · Dia ${F3.dia||1} completo</div><h2>Pronto por hoje.</h2><p class="sub">As próximas abrem amanhã. Volte quando quiser.</p><div class="rot" style="margin-top:4px">Seu mapa · ${Object.keys(f3Casas()).length} ${Object.keys(f3Casas()).length===1?"casinha acesa":"casinhas acesas"}</div>${f3Mapa("",false)}
+    ${PREVIA?`<div><button class="linkflow" type="button" onclick="f3PulaEspera()">Pular a espera (só na prévia)</button></div>`:""}`); }
+function f3PulaEspera(){ click(); F3.hoje={d:"2000-01-01",n:0}; F3.dia=(F3.dia||1)+1; delete F3.trava; f3Salva(); f3Tela(); }
+function f3Intro(){ f3Topo("começando");
+  mostra(`<div class="rot">Fase 3</div><h2>Por que você gosta do que gosta?</h2>
+    <p class="f3frase">Suas escolhas ajudam o app a sugerir coisas do seu jeito.</p>
+    <p class="sub">Situações do dia a dia, no máximo 5 por dia. Quando a Brisa tiver uma pista firme, ela te conta. Não tem resposta certa.</p>
+    <button class="btn" type="button" onclick="click();F3.intro=true;f3Salva();f3Tela()">Começar</button>`); }
+/* chegou a 15 sem certeza: o fim é uma mistura dos 2 da frente (Bloco B troca pela tela "Qual pesa mais?") */
+function f3Fim15(){ const [a,b]=f3Ranking(); F3.descoberta={tipo:"mistura",a:a.id,b:b.id,quando:hojeStr()}; f3Salva(); f3PorTras(); }
+/* palpite (Bloco B deixa completo) */
+function f3Palpite(){ const [a]=f3Ranking(); F3.descoberta={tipo:"principal",a:a.id,quando:hojeStr()}; f3Salva(); f3PorTras(); }
+function f3Zera(){ F3={dia:1,r:{},seq:[],hoje:null,fim:{}}; f3MontaLista(); }
+/* guardado de antes (formato antigo das 15 fixas): vira a sequência nova */
+function f3Migra(){ if(F3&&!F3.seq){ F3.seq=(F3.lista||[]).filter(id=>F3.r&&F3.r[id]); F3.hoje=null; F3.dia=F3.dia||1; delete F3.i; f3Salva(); } }
+/* resultado: mostra a descoberta (motivo ou mistura) e as chances de cada motivo */
+function f3MostraResultado(){ const rk=f3Ranking(), d=F3.descoberta||(rk[0].p>=F3_CERTEZA?{tipo:"principal",a:rk[0].id}:{tipo:"mistura",a:rk[0].id,b:rk[1].id}); f3Topo("suas pistas");
+  const cab=!d?`<h2>Ainda não deu para ver.</h2>`:d.tipo==="principal"?`<p class="sub">Nas suas escolhas, o que mais aparece é</p><h2 class="f3prin">${MOTIVO_NOME[d.a]}</h2>`
+    :`<p class="sub">Nas suas escolhas, você é uma mistura de</p><h2 class="f3prin">${MOTIVO_NOME[d.a]} e ${MOTIVO_NOME[d.b]}</h2>`;
+  const barras=`<div class="f3barras">${rk.map(m=>`<div class="f3bar"><span>${m.nome}</span><i style="--w:${Math.round(m.p*100)}%"></i><b>${Math.round(m.p*100)}%</b></div>`).join("")}</div>
+    <p class="f3crit">Como cheguei aqui: cada resposta sobe a chance do motivo que você escolheu e desce um pouco a dos outros (a 2ª opção conta pela metade). A Brisa só te conta uma pista quando um motivo passa de 75%.</p>`;
+  mostra(`<div class="rot">Fase 3 · Suas pistas</div>${cab}${barras}<p class="f3pista">É uma pista sobre você, nunca um rótulo.</p>
+    <div class="rot" style="margin-top:8px">Seu mapa: sentidos × motivos</div>${f3Mapa("",true)}
+    <button class="btn sec" type="button" onclick="click();f3PorTras()">← Por trás das perguntas</button>`); }
+/* ---- painel do cérebro: SÓ na prévia, para o Daniel ver as chances mudando ---- */
+function f3Painel(){ if(!PREVIA) return; let el=document.getElementById("f3cerebro");
+  if(!el){ el=document.createElement("div"); el.id="f3cerebro"; el.onclick=()=>el.classList.toggle("min"); document.body.appendChild(el); }
+  const rk=f3Ranking(); el.innerHTML=`<b>Cérebro da Brisa · só na prévia</b><small>${f3Feitas()} respondidas · palpite com 75% e no mínimo 6</small>${rk.map(m=>`<div><span>${m.nome}</span><i style="--w:${Math.round(m.p*100)}%"></i><em>${Math.round(m.p*100)}%</em></div>`).join("")}`; }
+function f3Exemplo(){ f3Zera(); const ex=["jei","pau","sen","pau","jei","pau","pau","jei","soc"]; F3.intro=true;
+  ex.forEach((m,k)=>{ const s=f3Proxima(); if(!s) return; F3.r[s.id]={a:m,b:k%3?null:"sen"}; F3.seq.push(s.id); F3.atual=null; });
+  F3.hoje={d:"2000-01-01",n:0}; F3.dia=2; f3Salva(); }
 
 /* lista das 15 situações com o motivo de cada opção (só no painel de validação da prévia) */
 function f3Lista(){ const fotosDe=id=>Object.keys(SIT_FASE1).filter(f=>SIT_FASE1[f]===id);
