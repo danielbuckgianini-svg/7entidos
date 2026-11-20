@@ -693,6 +693,13 @@ body.foco .topo:hover,body.foco #pularbtn:focus-visible,body.foco #voltar:focus-
 .f3pensa .mdl{animation:f3gira 1.6s linear infinite}
 @keyframes f3gira{to{transform:rotate(360deg)}}
 .f3niveis{max-width:420px;margin:12px auto 0;display:grid;gap:10px}.f3niveis .opt{text-align:center;font-size:20px;padding:16px}
+.f4iso{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:440px;margin:14px auto 0}
+.f4iso .foto{all:unset;cursor:pointer;border-radius:18px;overflow:hidden;border:2px solid rgba(245,197,66,.35);background:#0b1236;display:flex;flex-direction:column}
+.f4iso .foto{position:relative}.f4iso .foto .nm{position:static;background:none;inset:auto}
+.f4iso .foto img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block}.f4iso .nm{padding:10px;font-weight:800;font-size:17px;text-align:center}
+.f5txt{display:block;width:100%;max-width:420px;margin:14px auto;padding:14px;border-radius:14px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.06);color:inherit;font:inherit;font-size:18px}
+.f6bloco{max-width:440px;margin:12px auto;text-align:left;background:rgba(255,255,255,.06);border:1px solid rgba(245,197,66,.3);border-radius:18px;padding:14px 16px;display:grid;gap:4px}
+.f6bloco .f6g{font-size:24px;color:var(--ouro)}.f6bloco small{font-size:16px;opacity:.85}.f6bloco .f6q{opacity:.6;font-size:14px}
 #f3cerebro{position:fixed;left:10px;bottom:10px;z-index:60;width:230px;background:rgba(5,9,26,.93);border:1px solid rgba(245,197,66,.5);border-radius:14px;padding:10px 12px;font-size:12px;color:#e8ecf8;cursor:pointer;text-align:left;box-shadow:0 10px 30px rgba(0,0,0,.6)}
 #f3cerebro b{display:block;color:var(--ouro);font-size:12px}#f3cerebro small{display:block;opacity:.75;margin:2px 0 6px}
 #f3cerebro div{display:grid;grid-template-columns:92px 1fr 34px;gap:6px;align-items:center;margin:3px 0}
@@ -752,7 +759,7 @@ const LEG1 = [[0.8,3.0,"Oi! Eu sou a Brisa."],[3.0,6.9,"Aqui não tem resposta c
 const LEG2 = [[1.0,3.0,"Você já me contou do que gosta."],[3.0,4.7,"Agora vem a outra metade:"],[4.7,7.3,"desafios rápidos para os seus sentidos, um para cada."],[7.3,10.9,"Eles mostram como você sente, e não só o que escolhe."],[10.9,13.3,"Cada um revela um pouco mais de você."],[13.3,15.9,"Se entregue, e repare no que acontece."],[15.9,17.5,"Vamos?"]];
 const PREVIA = !/^(www\.)?7entidos\.com\.br$/i.test(location.hostname) || /[?&]previa/.test(location.search) || false;
 const ENDPOINT = window.PESQUISA_URL || "";
-const VERSAO = "app-novo-v1";
+const VERSAO = "app-v22";
 
 const SENT = [
  {id:"visao", missao:"achar o quadrado de cor diferente · até errar · revela o quanto seus olhos pegam detalhes.", s:"Visão", cor:"#f5c542", q:"O que te faz bem de olhar?", o:["Pôr do sol na praia","Céu estrelado","Um mural colorido de grafite","Fotos antigas de família"], brisa:"Comece pelos olhos.", jogo:"Olho de águia"},
@@ -1798,7 +1805,8 @@ function f3MostraResultado(){ const rk=f3Ranking(), d=F3.descoberta||(rk[0].p>=F
     <p class="f3crit">Como cheguei aqui: cada resposta sobe a chance do motivo que você escolheu e desce um pouco a dos outros (a 2ª opção conta pela metade). A Brisa só te conta uma pista quando um motivo passa de 75%.</p>`;
   mostra(`<div class="rot">Fase 3 · Suas pistas</div>${cab}${d.pistas&&d.pistas.length?`<div class="f3pistas"><div class="rot">Pensei nisso porque você escolheu…</div>${d.pistas.map(x=>`<div class="f3pi"><b>“${esc(x.op)}”</b><small>${esc(x.sit)}</small></div>`).join("")}</div>`:""}${barras}<p class="f3pista">É uma pista sobre você, nunca um rótulo.</p>
     <div class="rot" style="margin-top:8px">Seu mapa: sentidos × motivos</div>${f3Mapa("",true)}
-    <button class="btn sec" type="button" onclick="click();f3PorTras()">← Por trás das perguntas</button>`); }
+    <button class="btn" type="button" onclick="click();f4Abre()">Seguir para a Fase 4</button>
+    <div><button class="linkflow" type="button" onclick="click();f3PorTras()">← Por trás das perguntas</button></div>`); }
 /* ---- painel do cérebro: SÓ na prévia, para o Daniel ver as chances mudando ---- */
 function f3Painel(){ if(!PREVIA) return; let el=document.getElementById("f3cerebro");
   if(!el){ el=document.createElement("div"); el.id="f3cerebro"; el.onclick=()=>el.classList.toggle("min"); document.body.appendChild(el); }
@@ -1875,6 +1883,178 @@ function f3MudouAlgo(){ f3Topo("pergunta do mês");
   mostra(`<div class="rot">Pergunta do mês</div><h2>Parece que algo mudou.</h2><p class="sub">Nos últimos 2 meses, suas respostas apontaram para outro lado. Quer refazer a Fase 3?</p>
     <div class="f3resp3"><button class="btn" type="button" onclick="click();f3Zera();F3.intro=true;f3Salva();f3Tela()">Quero refazer</button>
     <button class="btn sec" type="button" onclick="click();F3.repDif=0;f3Salva();f3Tela()">Continuar como está</button></div>`); }
+
+/* ============ V22 · FASES 4, 5 E 6 COM O CÉREBRO (rascunho para as salas, 20/11) ============
+   Tudo roda no celular, sem IA paga. Os números são estimativas iniciais; cada sala ainda vai decidir os detalhes. */
+function fTopo(txt,fase){ f3Topo(txt); const x=document.querySelector("#xde7 small"); if(x) x.textContent="Fase "+fase; if(fase>=5){ const el=document.getElementById("f3cerebro"); if(el) el.remove(); } }
+function f5Carrega(k,ini){ try{ return JSON.parse(localStorage.getItem(k)||"null")||ini; }catch(e){ return ini; } }
+function f5Salva(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+const descMotivo=()=>f5Carrega("7e_descoberta_motivo",null);
+
+/* ---------------- FASE 4 · O SEU 10 ----------------
+   Caderno: linhas = os ingredientes do 10 (lista fixa, a validar com a Paola); perguntas de 5 níveis sobre o momento 10 dela.
+   Aqui vários ingredientes podem estar no mesmo 10: cada um tem a sua chance de "estava lá".
+   Ponto de partida: 40% cada; o motivo confirmado na Fase 3 sobe o ingrediente ligado a ele para 60% (estimativa). */
+const ING=[
+ {id:"comp",nome:"Gente querida por perto",m:"soc",q10:"Nesse momento 10, tinha gente querida por perto?",q8:"E no seu 8, tinha gente querida por perto?"},
+ {id:"calm",nome:"Calma, sem pressa",m:"pau",q10:"Era um momento calmo, sem pressa e sem ninguém te cobrando?",q8:"E o seu 8 era calmo, sem pressa?"},
+ {id:"sent",nome:"Um sentido bem aceso",m:"sen",q10:"Um dos seus sentidos estava bem aceso, como um cheiro, um som ou um toque?",q8:"E no seu 8, algum sentido estava bem aceso?"},
+ {id:"conq",nome:"Uma conquista sua",m:"con",q10:"Tinha uma conquista sua no meio, algo que você ganhou ou fez acontecer?",q8:"E no seu 8, tinha uma conquista sua?"},
+ {id:"esco",nome:"Foi você quem escolheu",m:"jei",q10:"Foi você quem escolheu estar ali, do seu jeito?",q8:"E o seu 8, foi você quem escolheu?"},
+ {id:"natu",nome:"Natureza ou céu aberto",q10:"Era ao ar livre, perto da natureza ou do céu aberto?",q8:"E o seu 8 era ao ar livre?"},
+ {id:"novi",nome:"Algo novo ou diferente",q10:"Tinha algo novo, que você nunca tinha vivido daquele jeito?",q8:"E no seu 8, tinha algo novo?"},
+ {id:"bele",nome:"Beleza para olhar",q10:"Tinha alguma beleza para olhar, como uma paisagem, uma luz ou uma cor?",q8:"E no seu 8, tinha beleza para olhar?"}];
+const ING_NOME=Object.fromEntries(ING.map(x=>[x.id,x.nome]));
+const NIV5=["Sim, muito","Um pouco","Tanto faz","Pouco","Não"], NIV_SIM=[.55,.25,.1,.06,.04], NIV_NAO=[.05,.12,.23,.27,.33];
+/* fotos da Fase 1 ligadas a ingredientes (estimativa minha, a revisar): usadas no "isto ou aquilo" */
+const FOTO_ING={"Pôr do sol na praia":["natu","bele"],"Céu estrelado":["natu","calm"],"Um mural colorido de grafite":["novi","bele"],"Fotos antigas de família":["comp"],
+ "Som do mar":["natu","calm"],"Música ao vivo":["comp","novi"],"Chuva no telhado":["calm"],"Silêncio total":["calm","esco"],
+ "Areia nos pés":["natu","sent"],"Cobertor macio":["calm","sent"],"Água gelada":["sent","novi"],"Abraço apertado":["comp"],
+ "Comida de vó":["comp"],"Doce de padaria":["sent"],"Fruta fresca":["natu"],"Café passado na hora":["calm"],
+ "Terra molhada":["natu"],"Pão saindo do forno":["sent"],"Perfume de alguém querido":["comp"],"Cheiro de café":["calm"],
+ "Dançar":["comp","sent"],"Balançar numa rede":["calm"],"Andar de bicicleta":["natu","esco"],"Ficar de pé numa prancha":["conq","novi"],
+ "Alongar":["calm"],"Correr":["conq"],"Nadar":["sent"],"Deitar e respirar fundo":["calm"]};
+const FOTOS_TODAS=SENT.flatMap(s=>s.o.map((o,j)=>({sid:s.id,j,nome:o})));
+let F4=null;
+function f4Novo(){ const d=descMotivo(); const P={}; ING.forEach(x=>{ P[x.id]=.4; if(d&&(x.m===d.motivo||x.m===d.motivo2)) P[x.id]=.6; }); return {P,r10:{},r8:{},iso:[],passo:"pense",naoIng:[]}; }
+function f4Abre(){ F4=f5Carrega("7e_fase4",null)||f4Novo(); f4Tela(); }
+function f4Salva(){ f5Salva("7e_fase4",F4); }
+function f4Atualiza(id,nv){ const p=F4.P[id], s=p*NIV_SIM[nv], n=(1-p)*NIV_NAO[nv]; F4.P[id]=s/(s+n); }
+/* a próxima pergunta é a do ingrediente mais em dúvida (chance mais perto de 50%): a que divide mais perto da metade */
+function f4Proxima(){ const c=ING.filter(x=>F4.r10[x.id]==null).sort((a,b)=>Math.abs(F4.P[a.id]-.5)-Math.abs(F4.P[b.id]-.5)); return c[0]; }
+function f4Firmes(){ return ING.every(x=>F4.r10[x.id]!=null||F4.P[x.id]<.25||F4.P[x.id]>.75); }
+function f4Tela(){ f4Salva(); fPainel4();
+  if(F4.passo==="pense") return f4Pense();
+  if(F4.passo==="q10"){ const n=Object.keys(F4.r10).length; if(n>=6||(n>=4&&f4Firmes())||!f4Proxima()){ F4.passo="pense8"; return f4Tela(); } return f4Pergunta(f4Proxima(),"q10"); }
+  if(F4.passo==="pense8") return f4Pense8();
+  if(F4.passo==="q8"){ const c=f4Candidatos().filter(x=>F4.r8[x.id]==null); if(!c.length||Object.keys(F4.r8).length>=3){ F4.passo="palpite"; return f4Tela(); } return f4Pergunta(c[0],"q8"); }
+  if(F4.passo==="palpite") return f4Palpite();
+  if(F4.passo==="iso") return f4Iso();
+  return f4Resultado(); }
+function f4Pense(){ fTopo("o seu 10",4);
+  mostra(`<div class="rot">Fase 4 · O seu 10</div><h2>Pense no seu 10.</h2><p class="f3frase">Um momento da sua vida que foi um 10, ou um 9.</p>
+    <p class="sub">Não precisa me contar qual. Só guarde ele na cabeça: eu vou te fazer algumas perguntas sobre ele.</p>
+    <button class="btn" type="button" onclick="click();F4.passo='q10';f4Tela()">Pensei</button>
+    <div><button class="linkflow" type="button" onclick="f4Outro()">Prefiro pensar em outro momento</button></div>`); }
+function f4Outro(){ click(); fTopo("o seu 10",4); mostra(`<div class="rot">Tudo bem</div><h2>Pode ser um momento simples.</h2><p class="sub">Um café bom, uma tarde tranquila, uma risada com alguém. O que importa é que foi muito bom para você.</p>
+  <button class="btn" type="button" onclick="click();F4.passo='q10';f4Tela()">Pensei</button>`); }
+function f4Pergunta(x,tipo){ fTopo(tipo==="q10"?"perguntas sobre o seu 10":"comparando com o 8",4);
+  mostra(`<div class="rot">${tipo==="q10"?"Sobre o seu 10":"Sobre o seu 8"}</div><h2 class="f3q">${tipo==="q10"?x.q10:x.q8}</h2>
+    <div class="opts f3niveis">${NIV5.map((t,k)=>`<button class="opt" type="button" onclick="f4Resp('${x.id}','${tipo}',${k})">${t}</button>`).join("")}</div>`); }
+function f4Resp(id,tipo,nv){ if(ocupado) return; click(); vibra(10);
+  if(tipo==="q10"){ F4.r10[id]=nv; f4Atualiza(id,nv); } else { F4.r8[id]=nv; }
+  f4Pensa(); }
+function f4Pensa(){ f4Salva(); f4Tela(); }
+function f4Pense8(){ fTopo("comparando",4);
+  mostra(`<div class="rot">Fase 4 · Comparando</div><h2>Agora pense num 8.</h2><p class="f3frase">Um momento bom, mas que não chegou a 10.</p>
+    <p class="sub">Vou perguntar só o que pode ser diferente entre os dois.</p>
+    <button class="btn" type="button" onclick="click();F4.passo='q8';f4Tela()">Pensei</button>`); }
+/* candidatos a "o ingrediente que faz o 10": estavam no 10 (chance alta) e ainda não foram recusados */
+function f4Candidatos(){ return ING.filter(x=>F4.P[x.id]>=.6&&!F4.naoIng.includes(x.id)).sort((a,b)=>F4.P[b.id]-F4.P[a.id]); }
+/* o ingrediente do 10: estava muito no 10 e pouco no 8 */
+function f4Ingrediente(){ const c=f4Candidatos(); if(!c.length) return null; const dif=x=>F4.P[x.id]-(F4.r8[x.id]!=null?[.95,.75,.5,.25,.05][F4.r8[x.id]]:.5); return c.sort((a,b)=>dif(b)-dif(a))[0]; }
+function f4Palpite(){ const x=f4Ingrediente(); if(!x){ F4.passo="iso"; return f4Tela(); }
+  f3Pensando(()=>{ fTopo("uma pista",4);
+    const pis=[`No seu 10: <b>${NIV5[F4.r10[x.id]]??"(pela Fase 3)"}</b>`]; if(F4.r8[x.id]!=null) pis.push(`No seu 8: <b>${NIV5[F4.r8[x.id]]}</b>`);
+    mostra(`<div class="rot">A Brisa tem uma pista</div><p class="sub">O ingrediente que faz o seu 10 parece ser</p><h2 class="f3prin">${x.nome}</h2><p class="f3frase">Faz sentido?</p>
+      <div class="f3pistas"><div class="rot">Pensei nisso porque você respondeu…</div>${pis.map(t=>`<div class="f3pi">${t}</div>`).join("")}</div>
+      <div class="f3resp3"><button class="btn" type="button" onclick="f4RespPalpite('${x.id}','sim')">Sim</button><button class="btn sec" type="button" onclick="f4RespPalpite('${x.id}','mm')">Mais ou menos</button><button class="btn sec" type="button" onclick="f4RespPalpite('${x.id}','nao')">Não</button></div>`); }); }
+function f4RespPalpite(id,r){ click(); if(r==="nao"){ F4.naoIng.push(id); F4.P[id]*=.5; return f4Tela(); }
+  F4.ing=id; F4.ingResp=r; F4.passo="iso"; f4Tela(); }
+/* "isto ou aquilo" com fotos que se adapta: cada par opõe o ingrediente mais forte a outro em dúvida */
+function f4Par(){ const top=[...ING].sort((a,b)=>F4.P[b.id]-F4.P[a.id]); const ja=new Set(F4.iso.flatMap(x=>[x.a,x.b]));
+  const comTag=(t,sem)=>FOTOS_TODAS.find(f=>!ja.has(f.nome)&&(FOTO_ING[f.nome]||[]).includes(t)&&!(FOTO_ING[f.nome]||[]).includes(sem));
+  const r=F4.iso.length, A=top[r%2], B=top[2+r]; if(!A||!B) return null;
+  const fa=comTag(A.id,B.id), fb=comTag(B.id,A.id); return fa&&fb?{fa,fb,A:A.id,B:B.id}:null; }
+function f4Iso(){ if(F4.iso.length>=4){ F4.passo="fim"; return f4Tela(); } const p=f4Par(); if(!p){ F4.passo="fim"; return f4Tela(); }
+  fTopo(`isto ou aquilo · ${F4.iso.length+1} de 4`,4);
+  mostra(`<div class="rot">Isto ou aquilo</div><h2 class="f3q">Qual combina mais com o seu 10?</h2>
+    <div class="f4iso">${[p.fa,p.fb].map((f,k)=>`<button class="foto" type="button" onclick="f4RespIso('${k?p.B:p.A}','${k?p.A:p.B}','${esc(p.fa.nome)}','${esc(p.fb.nome)}')"><img src="${foto(f.sid,f.j)}" alt=""><span class="nm">${esc(f.nome)}</span></button>`).join("")}</div>`); }
+function f4RespIso(ganha,perde,a,b){ click(); vibra(10); const up=(id,f)=>{ const p=F4.P[id], s=p*f, n=(1-p)*(1-f); F4.P[id]=s/(s+n); };
+  up(ganha,.62); up(perde,.4); F4.iso.push({a,b,ganha}); f4Tela(); }
+function f4Resultado(){ const top=[...ING].sort((a,b)=>F4.P[b.id]-F4.P[a.id]).slice(0,3); const ing=F4.ing?ING_NOME[F4.ing]:null;
+  f5Salva("7e_descoberta_10",{ingrediente:F4.ing||null,top:top.map(x=>x.id),quando:hojeStr()});
+  fTopo("descoberta",4);
+  mostra(`<div class="rot">Fase 4 · Sua descoberta</div>${ing?`<p class="sub">O ingrediente que faz o seu 10</p><h2 class="f3prin">${ing}</h2>`:`<h2>O seu 10 tem</h2>`}
+    <div class="f3barras">${top.map(x=>`<div class="f3bar"><span>${x.nome}</span><i style="--w:${Math.round(F4.P[x.id]*100)}%"></i><b>${Math.round(F4.P[x.id]*100)}%</b></div>`).join("")}</div>
+    <p class="f3crit">Os 3 ingredientes que mais apareceram no seu 10, pelas suas respostas e pelas fotos que você escolheu.</p><p class="f3pista">É uma pista sobre você, nunca um rótulo.</p>
+    <button class="btn" type="button" onclick="click();f5Abre()">Seguir para a Fase 5</button>
+    <div><button class="linkflow" type="button" onclick="click();F4=f4Novo();f4Tela()">Refazer a Fase 4</button></div>`); }
+function fPainel4(){ if(!PREVIA) return; let el=document.getElementById("f3cerebro"); if(!el){ el=document.createElement("div"); el.id="f3cerebro"; el.onclick=()=>el.classList.toggle("min"); document.body.appendChild(el); }
+  el.innerHTML=`<b>Cérebro · Fase 4 · só na prévia</b><small>chance de cada ingrediente estar no seu 10</small>${[...ING].sort((a,b)=>F4.P[b.id]-F4.P[a.id]).map(x=>`<div><span>${x.nome.split(" ").slice(0,2).join(" ")}</span><i style="--w:${Math.round(F4.P[x.id]*100)}%"></i><em>${Math.round(F4.P[x.id]*100)}%</em></div>`).join("")}`; }
+
+/* ---------------- FASE 5 · OFERTAS ----------------
+   Caderno: linhas = ofertas; cada uma ligada a um motivo, a ingredientes e a um momento (quietinha ou conversando, em casa ou fora).
+   2 ou 3 perguntas rápidas antes; "Não é isso" baixa a chance daquela oferta para ela; depois de 2 "Não é isso", "Me ensina". */
+const OFERTAS=[
+ {id:"o1",t:"Ligue para alguém querido e marque um café esta semana.",m:"soc",i:["comp"],c:"conversa",l:"fora"},
+ {id:"o2",t:"Mande um áudio para uma amiga contando uma coisa boa do seu dia.",m:"soc",i:["comp"],c:"conversa",l:"casa"},
+ {id:"o3",t:"Tire 10 minutos sem celular, perto de uma janela.",m:"pau",i:["calm"],c:"quieta",l:"casa"},
+ {id:"o4",t:"Faça 5 respirações bem fundas olhando o céu.",m:"pau",i:["calm","natu"],c:"quieta",l:"fora"},
+ {id:"o5",t:"Prepare um chá e sinta o cheiro antes do primeiro gole.",m:"sen",i:["sent","calm"],c:"quieta",l:"casa"},
+ {id:"o6",t:"Coloque os pés na grama ou na areia por 5 minutos.",m:"sen",i:["sent","natu"],c:"quieta",l:"fora"},
+ {id:"o7",t:"Compre uma fruta da estação que você não come há tempo.",m:"con",i:["novi","sent"],c:"conversa",l:"fora"},
+ {id:"o8",t:"Termine uma tarefa pequena que está parada e comemore.",m:"con",i:["conq"],c:"quieta",l:"casa"},
+ {id:"o9",t:"Escolha uma música e ouça inteira, do seu jeito.",m:"jei",i:["esco","sent"],c:"quieta",l:"casa"},
+ {id:"o10",t:"Volte para casa por um caminho novo, no seu ritmo.",m:"jei",i:["novi","esco"],c:"quieta",l:"fora"},
+ {id:"o11",t:"Faça uma receita de família e leve um pedaço para alguém.",m:"soc",i:["comp","conq"],c:"conversa",l:"casa"},
+ {id:"o12",t:"Arrume um cantinho da casa do jeito que você gosta.",m:"jei",i:["esco","bele"],c:"quieta",l:"casa"},
+ {id:"o13",t:"Assista ao pôr do sol, nem que seja da janela.",m:"pau",i:["bele","natu"],c:"quieta",l:"fora"},
+ {id:"o14",t:"Dance uma música sozinha na sala.",m:"sen",i:["sent","esco"],c:"quieta",l:"casa"},
+ {id:"o15",t:"Convide alguém para uma caminhada curta e conversem.",m:"soc",i:["comp","natu"],c:"conversa",l:"fora"},
+ {id:"o16",t:"Separe uma roupa bonita e use hoje, só porque sim.",m:"con",i:["bele","esco"],c:"quieta",l:"casa"}];
+let F5=null;
+function f5Abre(){ F5=f5Carrega("7e_fase5",{nao:{},aceitas:[],ensinou:[]}); F5.agora={}; F5.recusas=0; f5Q1(); }
+function f5S(){ f5Salva("7e_fase5",F5); }
+function f5Q1(){ fTopo("agora",5); mostra(`<div class="rot">Fase 5 · Para agora</div><h2 class="f3q">Agora você está mais pra ficar quietinha ou pra conversar?</h2>
+  <div class="opts f3niveis"><button class="opt" type="button" onclick="F5.agora.c='quieta';click();f5Q2()">Ficar quietinha</button><button class="opt" type="button" onclick="F5.agora.c='conversa';click();f5Q2()">Conversar</button><button class="opt" type="button" onclick="click();f5Q2()">Tanto faz</button></div>`); }
+function f5Q2(){ const q=F5.agora.c==="conversa"?"Pessoalmente ou de longe, por mensagem?":"Em casa ou saindo um pouco?";
+  const op=F5.agora.c==="conversa"?[["fora","Pessoalmente"],["casa","De longe"]]:[["casa","Em casa"],["fora","Saindo um pouco"]];
+  fTopo("agora",5); mostra(`<div class="rot">Fase 5 · Para agora</div><h2 class="f3q">${q}</h2>
+  <div class="opts f3niveis">${op.map(([v,t])=>`<button class="opt" type="button" onclick="F5.agora.l='${v}';click();f5Oferta()">${t}</button>`).join("")}<button class="opt" type="button" onclick="click();f5Oferta()">Tanto faz</button></div>`); }
+/* a conta da oferta: motivo da Fase 3 (+3), ingredientes do 10 da Fase 4 (+2 cada), combina com o agora (+2 cada), já recusada (−4 por vez), aceita antes (+1) */
+function f5Nota(o){ const d=descMotivo()||{}, d10=f5Carrega("7e_descoberta_10",{})||{}; let n=0;
+  if(o.m===d.motivo) n+=3; if(o.m===d.motivo2) n+=2;
+  (o.i||[]).forEach(x=>{ if(x===d10.ingrediente) n+=2; else if((d10.top||[]).includes(x)) n+=1; });
+  if(F5.agora.c&&o.c===F5.agora.c) n+=2; if(F5.agora.l&&o.l===F5.agora.l) n+=2;
+  n-=4*(F5.nao[o.id]||0); if(F5.aceitas.includes(o.id)) n+=1; return n; }
+function f5Pistas(o){ const d=descMotivo()||{}, d10=f5Carrega("7e_descoberta_10",{})||{}, p=[];
+  if(o.m===d.motivo||o.m===d.motivo2) p.push(`Sua pista da Fase 3: <b>${MOTIVO_NOME[o.m]}</b>`);
+  const ing=(o.i||[]).find(x=>x===d10.ingrediente||(d10.top||[]).includes(x)); if(ing) p.push(`O seu 10 tem: <b>${ING_NOME[ing]}</b>`);
+  if(F5.agora.c&&o.c===F5.agora.c) p.push(`Agora você quer: <b>${F5.agora.c==="quieta"?"ficar quietinha":"conversar"}</b>`); return p; }
+function f5Oferta(){ const vistas=F5.vistas||[]; const c=OFERTAS.filter(o=>!vistas.includes(o.id)).sort((a,b)=>f5Nota(b)-f5Nota(a)); const o=c[0]; if(!o) return f6Hall();
+  F5.vistas=vistas.concat(o.id); F5.atual=o.id;
+  f3Pensando(()=>{ fTopo("uma ideia",5); const p=f5Pistas(o);
+    mostra(`<div class="rot">A Brisa tem uma ideia para agora</div><h2 class="f3q">${o.t}</h2>
+      ${p.length?`<div class="f3pistas"><div class="rot">Pensei nisso porque…</div>${p.map(t=>`<div class="f3pi">${t}</div>`).join("")}</div>`:""}
+      <div class="f3resp3"><button class="btn" type="button" onclick="f5Aceita('${o.id}')">Quero fazer</button><button class="btn sec" type="button" onclick="f5NaoE('${o.id}')">Não é isso</button></div>`); }); }
+function f5Aceita(id){ click(); if(!F5.aceitas.includes(id)) F5.aceitas.push(id); F5.vistas=[]; f5S(); fTopo("combinado",5);
+  mostra(`<div class="rot">Combinado</div><h2>Que bom.</h2><p class="sub">Depois me conta como foi. Cada ideia que você aceita ou recusa me ensina a acertar mais.</p>
+    <button class="btn" type="button" onclick="click();f6Hall()">Ver o que a Brisa já descobriu</button>
+    <div><button class="linkflow" type="button" onclick="click();f5Abre()">Quero outra ideia</button></div>`); }
+function f5NaoE(id){ click(); F5.nao[id]=(F5.nao[id]||0)+1; F5.recusas=(F5.recusas||0)+1; f5S(); if(F5.recusas>=2) return f5MeEnsina(); fTopo("tudo bem",5);
+  mostra(`<div class="rot">Tudo bem</div><h2>E que tal outra?</h2><p class="sub">Vou guardar que essa não serviu.</p><button class="btn" type="button" onclick="click();f5Oferta()">Ver outra ideia</button>`); }
+function f5MeEnsina(){ fTopo("me ensina",5);
+  mostra(`<div class="rot">Me ensina</div><h2 class="f3q">Me conta: o que você queria agora?</h2>
+    <div class="opts f3niveis">${MOTIVOS.map(m=>`<button class="opt" type="button" onclick="f5Ensinou('${m.id}')">${({soc:"Ficar com alguém",pau:"Descansar um pouco",sen:"Sentir algo gostoso",con:"Ganhar ou fazer algo concreto",jei:"Fazer do meu jeito"})[m.id]}</button>`).join("")}</div>
+    <input id="f5txt" class="f5txt" placeholder="Ou escreva com as suas palavras (opcional)"><button class="btn" type="button" onclick="f5Ensinou(null)">Pronto</button>`); }
+function f5Ensinou(m){ click(); const t=(document.getElementById("f5txt")||{}).value||""; F5.ensinou.push({motivo:m,texto:t.slice(0,140),quando:hojeStr()}); F5.recusas=0; f5S();
+  if(m){ const o=OFERTAS.filter(x=>x.m===m&&!(F5.vistas||[]).includes(x.id)).sort((a,b)=>f5Nota(b)-f5Nota(a))[0]; if(o){ F5.vistas=(F5.vistas||[]).filter(x=>x!==o.id); OFERTAS.splice(OFERTAS.indexOf(o),1); OFERTAS.unshift(o); F5.agora.forca=o.id; } }
+  fTopo("aprendi",5); mostra(`<div class="rot">Obrigada</div><h2>Aprendi uma coisa nova sobre você.</h2><p class="sub">Vou usar isso nas próximas ideias.</p>
+    <button class="btn" type="button" onclick="click();${m?"f5OfertaForcada()":"f6Hall()"}">${m?"Ver uma ideia assim":"Ver o que a Brisa já descobriu"}</button>`); }
+function f5OfertaForcada(){ const id=F5.agora.forca; delete F5.agora.forca; const o=OFERTAS.find(x=>x.id===id); if(!o) return f5Oferta(); F5.vistas=(F5.vistas||[]).filter(x=>x!==id);
+  const nota=f5Nota; f5Nota=x=>x.id===id?999:nota(x); f5Oferta(); f5Nota=nota; }
+
+/* ---------------- FASE 6 · HALL DA FAMA: o caderno dela em palavras ---------------- */
+function f6Hall(){ const d=descMotivo(), d10=f5Carrega("7e_descoberta_10",null), f5=f5Carrega("7e_fase5",{aceitas:[],ensinou:[]});
+  fTopo("o que a Brisa já descobriu",6); const el=document.getElementById("f3cerebro"); if(el) el.remove();
+  const bloco=(t,html)=>`<div class="f6bloco"><div class="rot">${t}</div>${html}</div>`;
+  mostra(`<div class="rot">Fase 6 · Hall da Fama</div><h2>O que a Brisa já descobriu sobre você</h2>
+    ${bloco("O que mais te move (Fase 3)",d?`<b class="f6g">${d.nomes.join(" e ")}</b>${(d.pistas||[]).slice(0,3).map(p=>`<small>“${esc(p.op)}” · ${esc(p.sit)}</small>`).join("")}<small class="f6q">Você confirmou em ${d.quando.split("-").reverse().join("/")}</small>`:`<small>Ainda não descoberto.</small>`)}
+    ${bloco("O que faz o seu 10 (Fase 4)",d10&&d10.top?`<b class="f6g">${d10.ingrediente?ING_NOME[d10.ingrediente]:ING_NOME[d10.top[0]]}</b><small>Também aparecem: ${d10.top.filter(x=>x!==d10.ingrediente).slice(0,2).map(x=>ING_NOME[x]).join(" e ")}</small>`:`<small>Ainda não descoberto.</small>`)}
+    ${bloco("Ideias que você topou (Fase 5)",f5.aceitas&&f5.aceitas.length?f5.aceitas.map(id=>{ const o=OFERTAS.find(x=>x.id===id); return o?`<small>✓ ${esc(o.t)}</small>`:""; }).join(""):`<small>Nenhuma ainda.</small>`)}
+    <p class="f3pista">Tudo isso fica só no seu celular. São pistas, e você pode mudar quando quiser.</p>
+    <button class="btn sec" type="button" onclick="click();f5Abre()">Quero uma ideia para agora</button>`); }
 
 /* lista das 15 situações com o motivo de cada opção (só no painel de validação da prévia) */
 function f3Lista(){ const fotosDe=id=>Object.keys(SIT_FASE1).filter(f=>SIT_FASE1[f]===id);
