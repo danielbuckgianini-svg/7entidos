@@ -164,7 +164,7 @@ body.votou .jaVotou{display:block}
 .convite .cv-nao{display:inline-block;margin-top:12px;padding:10px 16px;background:none;border:0;color:var(--marca-texto);opacity:.8;font-size:16px;text-decoration:underline;cursor:pointer;font-family:inherit}
 .pesq{display:none;position:relative;margin-top:22px;padding:86px 18px 20px;border-radius:22px;text-align:center;background:linear-gradient(160deg,rgba(245,197,66,.26),rgba(245,197,66,.06));border:1.5px solid var(--marca-amarelo);box-shadow:0 0 30px rgba(245,197,66,.2)}
 .pesq.on{display:block;animation:pula .45s cubic-bezier(.2,1.4,.4,1)}
-.pesq .anelp{position:absolute;left:50%;top:18px;width:56px;height:56px;margin-left:-28px}
+.pesq .anelp{position:absolute;left:50%;top:14px;width:62px;height:62px;margin-left:-31px;border-radius:50%;background:url(/assets/home/mandala-7.webp) center/cover no-repeat;box-shadow:0 0 0 1.5px rgba(245,197,66,.8),0 0 24px rgba(245,197,66,.4)}
 .pesq .anelp i{position:absolute;width:11px;height:11px;margin:-5.5px 0 0 -5.5px;border-radius:50%;animation:luz 2.6s ease-in-out infinite}
 .pesq h3{font-family:"Playfair Display",Georgia,serif;font-size:26px;color:var(--marca-texto)}
 .pesq p{margin-top:6px}
@@ -570,11 +570,11 @@ function fazerStory(g,l){
   var fundo=c.createRadialGradient(540,300,50,540,700,1400);fundo.addColorStop(0,"#22356f");fundo.addColorStop(.55,"#0B1430");fundo.addColorStop(1,"#070d22");
   c.fillStyle=fundo;c.fillRect(0,0,1080,1920);
   var fonteOk=(document.fonts&&document.fonts.ready)?document.fonts.ready:Promise.resolve();
-  Promise.all([carregar(FOTOS+g.foto),carregar(FOTOS+l.foto),fonteOk]).then(function(r){
-    /* logo: anel de 7 luzes + "A Casa dos 7 Sentidos" */
-    var cores=["#f5c542","#4aa8ff","#ff8a3d","#5ccf8a","#ff5a6e","#b48cff","#3fd6d0"];
-    for(var k=0;k<7;k++){var a=-Math.PI/2+k*2*Math.PI/7;c.beginPath();c.fillStyle=cores[k];c.shadowColor=cores[k];c.shadowBlur=24;c.arc(540+Math.cos(a)*62,190+Math.sin(a)*62,15,0,7);c.fill()}
-    c.shadowBlur=0;c.fillStyle="#F5C542";c.font="700 60px 'Playfair Display', serif";c.textAlign="center";c.fillText("7",540,212);
+  Promise.all([carregar(FOTOS+g.foto),carregar(FOTOS+l.foto),fonteOk,carregar("/assets/home/mandala-7.webp").catch(function(){return null})]).then(function(r){
+    /* logo: mandala dos 7 sentidos + "A Casa dos 7 Sentidos" (19/11: substitui o anel de 7 luzes) */
+    if(r[3]){c.save();c.shadowColor="rgba(245,197,66,.55)";c.shadowBlur=40;c.beginPath();c.arc(540,190,84,0,7);c.closePath();c.fillStyle="#0a1128";c.fill();c.shadowBlur=0;c.clip();c.drawImage(r[3],456,106,168,168);c.restore()}
+    else{c.fillStyle="#F5C542";c.font="700 60px 'Playfair Display', serif";c.textAlign="center";c.fillText("7",540,212)}
+    c.textAlign="center";
     c.fillStyle="#F3EEE3";c.font="600 58px 'Playfair Display', serif";c.fillText("A Casa dos 7 Sentidos",540,340);
     c.fillStyle="#F5C542";c.font="700 40px 'Space Mono', monospace";c.fillText("MEU VOTO DA SEMANA",540,410);
     function painel(img,m,x,cor,emo){
@@ -603,7 +603,7 @@ $("compartilhar").onclick=function(){
 
 /* ---- Temporada 2: inscrição (fica separada dos votos, na aba "Reality · Lista de espera") ---- */
 var telSalvo=guarda("7e_whats")||"";
-function convitePesquisa(){var a=$("anelp");if(!a.innerHTML){var cs=["#f5c542","#4aa8ff","#ff8a3d","#5ccf8a","#ff5a6e","#b48cff","#3fd6d0"],h="";for(var k=0;k<7;k++){var g=-Math.PI/2+k*2*Math.PI/7;h+='<i style="left:'+(50+50*Math.cos(g))+'%;top:'+(50+50*Math.sin(g))+'%;background:'+cs[k]+';box-shadow:0 0 10px '+cs[k]+';animation-delay:'+(k*.3)+'s"></i>'}a.innerHTML=h}$("pesq").classList.add("on")}
+function convitePesquisa(){$("pesq").classList.add("on")}
 $("t2Nao").onclick=function(){$("t2").style.display="none";convitePesquisa()};
 $("t2Sim").onclick=function(){$("t2Pergunta").style.display="none";$("t2Form").classList.add("on");if(telSalvo&&!$("t2Contato").value)$("t2Contato").value=telSalvo;$("t2Contato").focus()};
 $("t2Porque").oninput=function(){$("t2Conta").textContent=$("t2Porque").value.length+" / 300"};
