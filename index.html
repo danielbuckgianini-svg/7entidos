@@ -93,17 +93,31 @@ p{margin:0}
 
 /* mandala dentro da tela do celular */
 .mandala-cel{position:relative;width:224px;aspect-ratio:1;margin:18px 0 8px;isolation:isolate}
-.mandala-cel img{width:100%;height:100%;border-radius:50%;animation:respiraM 7s ease-in-out infinite;filter:drop-shadow(0 14px 24px rgba(0,0,0,.6))}
+.mandala-cel img{display:block;width:100%;height:100%;border-radius:50%}
+.mandala-cel .gira{position:absolute;inset:0;border-radius:50%;animation:giraM 48s linear infinite;filter:drop-shadow(0 14px 24px rgba(0,0,0,.6))}
+@keyframes giraM{to{transform:rotate(360deg)}}
+/* o 7 do meio fica parado enquanto os 7 círculos giram em volta */
+.mandala-cel .miolo{position:absolute;inset:0;clip-path:circle(20.5% at 50% 50%);-webkit-clip-path:circle(20.5% at 50% 50%);animation:acende7 7s ease-in-out infinite}
+@keyframes acende7{0%,80%,100%{filter:brightness(.95)}90%{filter:brightness(1.35) drop-shadow(0 0 12px rgba(245,197,66,.9))}}
+/* cada círculo acende na cor do seu sentido, um de cada vez */
+.mandala-cel .luz{position:absolute;width:34%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;mix-blend-mode:screen;
+  background:radial-gradient(circle,color-mix(in srgb,var(--c) 85%,#fff) 0,color-mix(in srgb,var(--c) 55%,transparent) 38%,transparent 70%);
+  opacity:0;animation:acendeC 7s ease-in-out infinite;animation-delay:var(--d)}
+@keyframes acendeC{0%,100%{opacity:0}6%{opacity:.95}20%{opacity:0}}
 .mandala-cel .halo{position:absolute;z-index:-1;inset:-6%;border-radius:50%;
   background:conic-gradient(var(--visao),var(--audicao),var(--tato),var(--paladar),var(--olfato),var(--equilibrio),var(--corpo),var(--visao));
   filter:blur(22px);opacity:.45;animation:giraHalo2 30s linear infinite}
 @keyframes giraHalo2{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.mandala-cel .gira,.mandala-cel .luz,.mandala-cel .miolo,.mandala-cel .halo{animation:none}}
 .tela .sete-txt{font:400 11px var(--mono);letter-spacing:.14em;color:var(--azul);text-transform:uppercase}
 
 /* ===== 1.3 NÚMEROS ===== */
 .numeros{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--linha);border-bottom:1px solid var(--linha);margin:40px 0 0}
 .num{padding:34px 18px;text-align:center;position:relative}
 .num+.num::before{content:"";position:absolute;left:0;top:22%;bottom:22%;width:1px;background:var(--linha)}
+.num-link{text-decoration:none;color:inherit;border-radius:18px;transition:background .3s}
+.num-link:hover{background:rgba(245,197,66,.06)}
+.num-link:hover span{color:var(--ouro)}
 .num b{display:block;font-family:var(--serif);font-weight:300;font-size:clamp(56px,9vw,110px);line-height:1;color:var(--creme)}
 .num b em{color:var(--ouro);font-style:italic}
 .num span{display:block;margin-top:10px;font:400 13px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--azul)}
@@ -184,6 +198,12 @@ section.sec{padding:clamp(80px,12vw,140px) 0}
 .ciencia{position:relative;background:linear-gradient(180deg,var(--noite) 0%,#0b1636 15%,#0b1636 85%,var(--noite) 100%)}
 .ciencia::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(169,179,209,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(169,179,209,.06) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:radial-gradient(ellipse at 50% 40%,#000 20%,transparent 75%);mask-image:radial-gradient(ellipse at 50% 40%,#000 20%,transparent 75%)}
 .ciencia .wrap{position:relative}
+.video-flow{max-width:880px;margin:0 auto 56px}
+.vf-tela{position:relative;aspect-ratio:16/9;border-radius:22px;overflow:hidden;border:1px solid rgba(245,197,66,.35);background:#0a1128;box-shadow:0 30px 70px -30px rgba(0,0,0,.8)}
+.vf-tela iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vf-tela:empty{display:none}
+.vf-convite{margin-top:16px;text-align:center;font:400 15px var(--sans,inherit);color:var(--azul)}
+.vf-convite a{color:var(--ouro);text-decoration:none;font-weight:700}
 .lab{display:grid;grid-template-columns:1.15fr 1fr;gap:34px;align-items:start}
 .painel{border:1px solid var(--linha);border-radius:26px;background:rgba(10,17,40,.6);padding:26px}
 .painel .topo-p{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
@@ -339,7 +359,7 @@ body.sem-selos .selo{display:none}
     </div>
     <p class="etq rev" style="--dl:.1s">Laboratório de boas sensações</p>
     <h1 class="rev" style="--dl:.2s;margin-top:14px">Você sabe o que te faz <em>bem</em>?</h1>
-    <p class="sub rev" style="--dl:.35s">Um app que te ajuda a descobrir, sentido por sentido, as sensações que fazem o seu dia melhor.</p>
+    <p class="sub rev" style="--dl:.35s">Quanto mais o 7entidos te conhece, mais ele te surpreende, com novas oportunidades de sentir.</p>
     <div class="linha-cta rev" style="--dl:.5s">
       <a class="btn" href="#lista">Quero entrar na lista <span class="seta">→</span></a>
       <p class="prova">Baseado no <b>Flow</b>, de Mihaly Csikszentmihalyi · psicologia positiva</p>
@@ -355,7 +375,17 @@ body.sem-selos .selo{display:none}
       <p class="perg">Qual sentido vai te fazer <em>bem</em>?</p>
       <div class="mandala-cel">
         <div class="halo" aria-hidden="true"></div>
-        <img src="assets/home/mandala-7.webp" alt="Mandala dos 7 sentidos" width="720" height="720">
+        <div class="gira" aria-hidden="true">
+          <img src="assets/home/mandala-7.webp" alt="" width="720" height="720">
+          <span class="luz" style="left:50.5%;top:15.8%;--c:var(--visao);--d:0.0s"></span>
+          <span class="luz" style="left:75.6%;top:27.2%;--c:var(--audicao);--d:0.9s"></span>
+          <span class="luz" style="left:84.6%;top:52.2%;--c:var(--tato);--d:1.8s"></span>
+          <span class="luz" style="left:69.2%;top:77.5%;--c:var(--paladar);--d:2.7s"></span>
+          <span class="luz" style="left:31.6%;top:77.2%;--c:var(--olfato);--d:3.6s"></span>
+          <span class="luz" style="left:16.0%;top:51.2%;--c:var(--equilibrio);--d:4.5s"></span>
+          <span class="luz" style="left:25.6%;top:26.2%;--c:var(--corpo);--d:5.4s"></span>
+        </div>
+        <img class="miolo" src="assets/home/mandala-7.webp" alt="Mandala dos 7 sentidos" width="720" height="720">
       </div>
       <span class="sete-txt">7 sentidos</span>
       <span class="mini-btn">Começar</span>
@@ -368,7 +398,7 @@ body.sem-selos .selo{display:none}
   <div class="numeros">
     <div class="num rev"><b>7</b><span>sentidos</span></div>
     <div class="num rev" style="--dl:.12s"><b>3<em>min</em></b><span>por rodada</span></div>
-    <div class="num rev" style="--dl:.24s"><b><em>Flow</em></b><span>a ciência por trás</span></div>
+    <a class="num num-link rev" style="--dl:.24s" href="#ciencia" aria-label="Flow: ver a ciência por trás"><b><em>Flow</em></b><span>a ciência por trás ↓</span></a>
   </div>
 </div>
 
@@ -440,6 +470,11 @@ body.sem-selos .selo{display:none}
     <div class="cab rev">
       <span class="etq az">Laboratório · a ciência por trás</span>
       <h2>O <em>Flow</em>: quando o desafio<br>encontra o que você sabe fazer.</h2>
+    </div>
+    <!-- VÍDEO DO FLOW: coloque o código do vídeo do YouTube em data-youtube (ex.: data-youtube="abc123XYZ") -->
+    <div class="video-flow rev" id="videoFlow" data-youtube="">
+      <div class="vf-tela" id="vfTela"></div>
+      <p class="vf-convite">Tem mais lá no nosso canal 👉 <a href="https://www.youtube.com/@7Entidos" target="_blank" rel="noopener">youtube.com/@7Entidos</a></p>
     </div>
     <div class="lab">
       <div class="painel rev painel-flow">
@@ -560,6 +595,13 @@ body.sem-selos .selo{display:none}
     box.style.setProperty("--foco",li?"color-mix(in srgb,"+getComputedStyle(li).getPropertyValue("--c")+" 70%,transparent)":"transparent")};
   lis.forEach(li=>{li.addEventListener("mouseenter",()=>acende(li));li.addEventListener("click",()=>acende(li))});
   document.getElementById("legenda").addEventListener("mouseleave",()=>acende(null));
+})();
+
+/* vídeo do Flow: só aparece quando o código do YouTube estiver preenchido */
+(function(){
+  const v=document.getElementById("videoFlow"),t=document.getElementById("vfTela");
+  const id=v&&(v.dataset.youtube||"").trim(); if(!id||!t) return;
+  t.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+encodeURIComponent(id)+'?rel=0" title="O Flow, a ciência por trás do 7entidos" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>';
 })();
 
 /* topo fica sólido e mostra o botão depois da primeira tela */
