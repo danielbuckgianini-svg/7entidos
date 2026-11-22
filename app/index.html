@@ -652,6 +652,20 @@ body.foco .topo:hover,body.foco #pularbtn:focus-visible,body.foco #voltar:focus-
 .f3nenhuma.sel{border-style:solid;border-color:var(--ouro);color:var(--ouro);background:rgba(245,197,66,.1)}
 .f3so{all:unset;cursor:pointer;display:inline-block;padding:10px 18px;border-radius:999px;color:var(--azul);font-weight:700;font-size:17px;text-decoration:underline;text-underline-offset:4px}
 .f3so[hidden]{display:none}
+.devform{display:flex;flex-direction:column;gap:12px;margin-top:10px;text-align:left}
+.devform label{display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:16px;color:var(--creme)}
+.devform input{font:600 18px Manrope,system-ui,sans-serif;color:#f4ecdc;background:#0b1236;border:1.5px solid rgba(169,179,209,.35);border-radius:14px;padding:13px 14px;outline:none}
+.devform input:focus{border-color:var(--ouro)}
+.devform .btn{margin-top:6px;align-self:center}
+.devnota{font-size:14px;line-height:1.45;color:var(--azul);margin:2px 0}.devnota a{color:var(--azul)}.devnota b{color:var(--ouro);letter-spacing:.08em}
+.deverr{min-height:1.2em;margin:0;color:#ffb38a;font-weight:700;font-size:15px}
+.fmapa{display:flex;flex-direction:column;gap:10px;margin:8px 0 18px}
+.fcard{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02));border:1.5px solid rgba(169,179,209,.28);cursor:pointer;text-align:left}
+.fcard[disabled]{cursor:default}
+.fcard .fn{flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--ouro);color:#15110a;font:800 18px Fraunces,serif}
+.fcard .ft{flex:1;display:flex;flex-direction:column}.fcard .ft b{font-size:18px;color:var(--creme)}.fcard .ft small{font-size:15px;color:var(--azul)}
+.fcard .fs{font-weight:800;font-size:15px;color:var(--ouro)}
+.fcard.trav{border-style:dashed;opacity:.85}.fcard.trav .fn{background:rgba(255,255,255,.1);font-size:18px}.fcard.trav .fs{color:var(--azul)}
 #f3seguir[disabled]{opacity:.4;filter:grayscale(.6);pointer-events:none}
 .f3lista{margin:6px 0 12px;max-height:340px;overflow:auto;border-radius:12px;background:rgba(5,9,26,.5);padding:10px 12px;text-align:left}
 .f3dia{font:700 14px "Space Mono",monospace;color:var(--ouro);margin:10px 0 4px;text-transform:uppercase}
@@ -1815,8 +1829,83 @@ function f3MostraResultado(){ const rk=f3Ranking(), d=F3.descoberta||(rk[0].p>=F
     <p class="f3crit">Como cheguei aqui: cada resposta sobe a chance do motivo que você escolheu e desce um pouco a dos outros (a 2ª opção conta pela metade). A Brisa só te conta uma pista quando um motivo passa de 75%.</p>`;
   mostra(`<div class="rot">Fase 3 · Suas pistas</div>${cab}${d.pistas&&d.pistas.length?`<div class="f3pistas"><div class="rot">Pensei nisso porque você escolheu…</div>${d.pistas.map(x=>`<div class="f3pi"><b>“${esc(x.op)}”</b><small>${esc(x.sit)}</small></div>`).join("")}</div>`:""}${barras}<p class="f3pista">É uma pista sobre você, nunca um rótulo.</p>
     <div class="rot" style="margin-top:8px">Seu mapa: sentidos × motivos</div>${f3Mapa("",true)}
-    <button class="btn" type="button" onclick="click();f4Abre()">Seguir para a Fase 4</button>
+    <button class="btn" type="button" onclick="click();f3DepoisDoResultado()">Continuar</button>
     <div><button class="linkflow" type="button" onclick="click();f3PorTras()">← Por trás das perguntas</button></div>`); }
+
+/* ============ 22/11 · DEVOLUTIVA DA FASE 3 + FASES 4 E 5 "EM BREVE" ============
+   Depois do resultado da Fase 3: tela "Quer receber sua devolutiva?" (só Nome e E-mail).
+   O pedido vai pelo MESMO robô da planilha "Jornada dos 7entidos." que o site já usa (pesquisa/config.js):
+   - nome + e-mail + código  → aba "Reality · Lista de espera" (evento "contato", igual ao "Receba as novidades" da página inicial)
+   - respostas da Fase 3 + o mesmo código → aba "App · Respostas" (mesmo formato do app), sem nome e sem e-mail
+   O código liga as duas linhas e é o CÓDIGO DE LIBERAÇÃO que o Daniel manda junto com a devolutiva. */
+const COD_LETRAS="ACDEFGHJKMNPQRTUVWXY34679"; /* sem letras que confundem (O e 0, I e 1, S e 5...) */
+function codConta(q){ let h=7; for(const ch of q+"|7entidos-devolutiva") h=(h*31+ch.charCodeAt(0))%100003; return COD_LETRAS[h%25]+COD_LETRAS[Math.floor(h/25)%25]; }
+function codNovo(){ let q=""; for(let i=0;i<4;i++) q+=COD_LETRAS[Math.floor(Math.random()*25)]; return q+codConta(q); }
+function codConfere(t){ const c=String(t||"").toUpperCase().replace(/[^A-Z0-9]/g,""); return c.length===6 && [...c].every(x=>COD_LETRAS.includes(x)) && codConta(c.slice(0,4))===c.slice(4); }
+function devPedido(){ try{ return JSON.parse(localStorage.getItem("7e_devolutiva")||"null"); }catch(e){ return null; } }
+function fases45Liberadas(){ try{ return localStorage.getItem("7e_fases45")==="1"; }catch(e){ return false; } }
+const semCerebro=()=>{ const el=document.getElementById("f3cerebro"); if(el) el.remove(); };
+function f3DepoisDoResultado(){ if(fases45Liberadas()||devPedido()) return fasesMapa(); f3Devolutiva(); }
+function dataBR(d){ d=d||new Date(); const z=n=>String(n).padStart(2,"0"); return z(d.getDate())+"/"+z(d.getMonth()+1)+"/"+d.getFullYear()+" "+z(d.getHours())+":"+z(d.getMinutes()); }
+function f3Devolutiva(){ semCerebro(); f3LuzTudo=true; f3Topo("sua devolutiva"); f3LuzTudo=false;
+  mostra(`<div class="rot">Fase 3 concluída</div><h2>Quer receber sua devolutiva?</h2>
+    <p class="sub">Você concluiu a Fase 3! Agora a gente vai preparar a sua devolutiva: o que as suas escolhas mostram sobre você. Deixe seus dados e nós enviamos a sua devolutiva e liberamos as Fases 4 e 5 para você.</p>
+    <form id="devform" class="devform" novalidate>
+      <label>Nome<input id="dev-nome" type="text" autocomplete="name" maxlength="80" value="${esc(nomeGuardado())}"></label>
+      <label>E-mail<input id="dev-email" type="email" autocomplete="email" inputmode="email" maxlength="120"></label>
+      <p class="devnota">Junto vão as suas respostas da Fase 3, só para montar a sua devolutiva. <a href="${NO_SITE?"/privacidade.html":"https://7entidos.com.br/privacidade.html"}" target="_blank" rel="noopener">Política de Privacidade</a></p>
+      <p class="deverr" id="dev-err" role="alert"></p>
+      <button class="btn" type="submit">Quero minha devolutiva</button>
+    </form>
+    <div><button class="btn sec" type="button" style="margin-top:14px" onclick="click();fasesMapa()">Agora não</button></div>`,
+  c=>{ const f=c.querySelector("#devform"); f.addEventListener("submit",e=>{ e.preventDefault(); devEnvia(c); }); }); }
+function nomeGuardado(){ try{ return localStorage.getItem("7e_nome")||""; }catch(e){ return ""; } }
+function devEnvia(c){ if(ocupado) return; const n=c.querySelector("#dev-nome").value.trim(), m=c.querySelector("#dev-email").value.trim(), er=c.querySelector("#dev-err");
+  if(!n){ er.textContent="Escreva o seu nome."; return; }
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(m)){ er.textContent="Confira o e-mail: é por ele que vamos mandar a sua devolutiva."; return; }
+  click(); vibra([10,40,10]); const cod=codNovo(), agora=new Date();
+  const ped={nome:n,email:m,codigo:cod,quando:agora.toISOString()}; try{ localStorage.setItem("7e_devolutiva",JSON.stringify(ped)); }catch(e){}
+  if(ENDPOINT){ const manda=b=>{ try{ fetch(ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(b)}).catch(()=>{}); }catch(e){} };
+    manda({evento:"contato",pesquisa:"app",nome:n+" · Devolutiva Fase 3 · código "+cod+" · "+dataBR(agora),telefone:"",email:m,lgpd:true});
+    manda({pesquisa:"app",versao:VERSAO+"-devolutiva",pessoa:PID,quando:agora.toISOString(),respostas:devRespostas(cod,agora)}); }
+  devPronto(cod); }
+/* as respostas da Fase 3 em texto legível, para o Daniel montar a devolutiva */
+function devRespostas(cod,agora){ f3Carrega(); const d=F3.descoberta, rk=f3Ranking();
+  return {devolutiva_fase3:true, devolutiva_codigo:cod, devolutiva_pedido_em:dataBR(agora),
+    fase3_descoberta:d?(d.tipo==="mistura"?"Mistura: "+MOTIVO_NOME[d.a]+" e "+MOTIVO_NOME[d.b]:MOTIVO_NOME[d.a]):"sem descoberta",
+    fase3_chances:rk.map(m=>m.nome+" "+Math.round(m.p*100)+"%").join(" · "),
+    fase3_respostas:(F3.seq||[]).map(id=>{ const s=SIT[id], v=F3.r[id]||{}; if(!s) return null; const op=k=>{ const j=MOTIVOS.findIndex(x=>x.id===k); return j<0?null:s.o[j]+" ("+MOTIVO_NOME[k]+")"; };
+      return {situacao:s.txt, primeira:v.n?"Nenhuma dessas":op(v.a), segunda:v.b?op(v.b):null}; }).filter(Boolean),
+    fase3_palpites:(F3.palpites||[]).map(p=>MOTIVO_NOME[p.m]+": "+({sim:"Sim",mm:"Mais ou menos",nao:"Não"}[p.resp]||p.resp)),
+    fase3_desempates:(F3.des||[]).map(x=>MOTIVO_NOME[x.m]+": "+F3_NIVEIS[x.nv]),
+    fase1_gostos:f3Gostos().filter(Boolean)}; }
+function devPronto(cod){ semCerebro(); f3Topo("sua devolutiva");
+  mostra(`<div class="rot">Pedido feito</div><h2>Prontinho!</h2><p class="f3frase">Em breve você recebe a sua devolutiva no seu e-mail, junto com a liberação das Fases 4 e 5.</p>
+    ${PREVIA?`<p class="devnota">Só na prévia: nada foi enviado para a planilha. Código de teste: <b>${cod}</b></p>`:""}
+    <button class="btn" type="button" onclick="click();fasesMapa()">Ver as minhas fases</button>`); }
+/* ---- mapa das fases: 1, 2 e 3 feitas; 4 e 5 com cadeado e "Em breve" até a pessoa digitar o código ---- */
+function fasesMapa(){ semCerebro(); f3Topo("suas fases"); const x=document.querySelector("#xde7 small"); if(x) x.textContent="Mapa";
+  const lib=fases45Liberadas(), ped=devPedido();
+  const card=(n,t,st,acao,trava)=>`<button class="fcard ${trava?"trav":""}" type="button" ${acao?`onclick="${acao}"`:"disabled"}><span class="fn">${trava?"🔒":n}</span><span class="ft"><b>Fase ${n}</b><small>${t}</small></span><span class="fs">${st}</span></button>`;
+  mostra(`<div class="rot">Suas fases</div><h2>O seu caminho até aqui</h2>
+    <div class="fmapa">${card(1,"Do que você gosta","✓ feita")}${card(2,"Os 7 jogos dos sentidos","✓ feita")}${card(3,"Por que você gosta","✓ feita","click();f3MostraResultado()")}
+    ${lib?card(4,"O seu 10","Abrir","click();f4Abre()")+card(5,"Ideias para você","Abrir","click();f5Abre()")
+         :card(4,"O seu 10","Em breve","click();fasesTrava()",true)+card(5,"Ideias para você","Em breve","click();fasesTrava()",true)}</div>
+    ${lib?"":ped?`<p class="sub">Sua devolutiva está sendo preparada. Quando ela chegar no seu e-mail, vem junto um código para abrir as Fases 4 e 5.</p>`:`<p class="sub">As Fases 4 e 5 abrem junto com a sua devolutiva.</p><button class="btn" type="button" onclick="click();f3Devolutiva()">Quero minha devolutiva</button>`}
+    ${lib?"":`<div><button class="linkflow" type="button" onclick="click();fasesTrava()">Já tenho um código</button></div>`}`); }
+function fasesTrava(){ semCerebro(); f3Topo("em breve"); const ped=devPedido();
+  mostra(`<div class="rot">Fases 4 e 5 · Em breve</div><h2>Estas fases abrem com a sua devolutiva.</h2>
+    <p class="sub">${ped?"Quando a devolutiva chegar no seu e-mail, ela traz um código. É só digitar aqui.":"Peça a sua devolutiva: ela chega no seu e-mail com um código para abrir as Fases 4 e 5."}</p>
+    <form id="codform" class="devform" novalidate><label>Código de liberação<input id="cod" type="text" autocomplete="off" autocapitalize="characters" maxlength="12" placeholder="Ex.: AB3C7D"></label>
+    <p class="deverr" id="cod-err" role="alert"></p><button class="btn" type="submit">Liberar</button></form>
+    ${ped?"":`<div><button class="btn sec" type="button" style="margin-top:14px" onclick="click();f3Devolutiva()">Quero minha devolutiva</button></div>`}
+    <div><button class="btn sec" type="button" style="margin-top:14px" onclick="click();fasesMapa()">Voltar para as fases</button></div>`,
+  c=>c.querySelector("#codform").addEventListener("submit",e=>{ e.preventDefault(); const v=c.querySelector("#cod").value;
+    if(!codConfere(v)){ c.querySelector("#cod-err").textContent="Esse código não confere. Confira no seu e-mail, letra por letra."; return; }
+    click(); vibra([10,40,10]); try{ localStorage.setItem("7e_fases45","1"); }catch(_){} 
+    f3LuzTudo=true; f3Topo("liberado"); f3LuzTudo=false; somVitoria&&somVitoria();
+    mostra(`<div class="rot">Liberado</div><h2>As Fases 4 e 5 estão abertas para você!</h2><button class="btn" type="button" onclick="click();f4Abre()">Começar a Fase 4</button>
+      <div><button class="btn sec" type="button" style="margin-top:14px" onclick="click();fasesMapa()">Ver as minhas fases</button></div>`); })); }
 /* ---- painel do cérebro: SÓ na prévia, para o Daniel ver as chances mudando ---- */
 function f3Painel(){ if(!PREVIA) return; let el=document.getElementById("f3cerebro");
   if(!el){ el=document.createElement("div"); el.id="f3cerebro"; el.onclick=()=>el.classList.toggle("min"); document.body.appendChild(el); }
@@ -2096,7 +2185,7 @@ function painel(){
       <div class="bb"><button class="v ${v.s==="validado"?"on":""}" onclick="marca('${id}','validado')">Validado</button><button class="r ${v.s==="revisar"?"on":""}" onclick="marca('${id}','revisar')">Revisar</button><button class="ir" onclick="ir(${typeof alvo==="string"?"'"+alvo+"'":alvo})">Ver</button></div>
       <div class="rev ${v.s==="revisar"?"on":""}">${REVISAR.map(o=>`<button class="${v.o===o?"on":""}" onclick="marcaRev('${id}','${o}')">${o}</button>`).join("")}</div></div>`; }).join("")}
     <p class="vsalvo" id="vsalvo">${VDOC?"As marcações ficam guardadas: o Claude lê direto.":"As marcações ficam guardadas neste aparelho."}</p>
-    <button class="btn sec" style="margin-bottom:12px" onclick="irInicio()">Ir para o começo do app (Fase 1)</button><button class="btn sec" style="margin-bottom:12px" onclick="f3Zera();ir('f3')">Recomeçar a Fase 3 do zero</button><div class="rot" style="margin:6px 0">V22 · cérebro do Akinator</div><button class="btn sec" style="margin-bottom:12px" onclick="ir('f4')">Ir para a Fase 4 (O seu 10)</button><button class="btn sec" style="margin-bottom:12px" onclick="ir('f5')">Ir para a Fase 5 (ofertas)</button><button class="btn sec" style="margin-bottom:12px" onclick="ir('f6')">Ir para a Fase 6 (o que a Brisa já descobriu)</button><button class="btn" onclick="fechaPainel()">Voltar ao app</button></div>`;
+    <button class="btn sec" style="margin-bottom:12px" onclick="irInicio()">Ir para o começo do app (Fase 1)</button><button class="btn sec" style="margin-bottom:12px" onclick="f3Zera();ir('f3')">Recomeçar a Fase 3 do zero</button><div class="rot" style="margin:6px 0">22/11 · Devolutiva e Fases 4 e 5</div><button class="btn sec" style="margin-bottom:12px" onclick="fechaPainel();if(!F3||!F3.descoberta)f3Exemplo();f3Devolutiva()">Ver a tela "Quer receber sua devolutiva?"</button><button class="btn sec" style="margin-bottom:12px" onclick="fechaPainel();if(!F3||!F3.descoberta)f3Exemplo();fasesMapa()">Ver o mapa das fases (4 e 5 com cadeado)</button><button class="btn sec" style="margin-bottom:12px" onclick="try{localStorage.removeItem('7e_fases45');localStorage.removeItem('7e_devolutiva')}catch(e){};fechaPainel();if(!F3||!F3.descoberta)f3Exemplo();fasesMapa()">Zerar o pedido e trancar de novo as Fases 4 e 5</button><div class="rot" style="margin:6px 0">V22 · cérebro do Akinator</div><button class="btn sec" style="margin-bottom:12px" onclick="ir('f4')">Ir para a Fase 4 (O seu 10)</button><button class="btn sec" style="margin-bottom:12px" onclick="ir('f5')">Ir para a Fase 5 (ofertas)</button><button class="btn sec" style="margin-bottom:12px" onclick="ir('f6')">Ir para a Fase 6 (o que a Brisa já descobriu)</button><button class="btn" onclick="fechaPainel()">Voltar ao app</button></div>`;
   el.classList.add("on");
 }
 function fraseIdx(){ return FRASES_AB.indexOf(fraseAbertura()); }
