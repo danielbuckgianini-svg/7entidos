@@ -1469,8 +1469,8 @@ const txtMin=seg=>{ const m=Math.round(seg/60); return seg<60?"menos de 1 minuto
 function revela(){
   const seg=resp.tempo_real_seg||Math.round((Date.now()-(inicio2||inicio||Date.now()))/1000), frase=fraseFlow(); resp.flow=frase;
   const ch=resp.chute_min, usaMin=seg>=60, alvo=usaMin?Math.round(seg/60):seg, unid=usaMin?(alvo===1?"minuto":"minutos"):(seg===1?"segundo":"segundos");
-  const fr=ch==null?"":`<p class="revela2">Você achou <b>${ch} ${ch===1?"minuto":"minutos"}</b>. Foram <b>${txtMin(seg)}</b>.</p>`;
-  mostra(`<div class="rot">Na verdade, se passaram</div><div class="grande" id="num">0</div><div class="unid">${unid}</div>
+  const fr=ch==null?"":`<p class="revela2">Você achou <b>${ch} ${ch===1?"minuto":"minutos"}</b>. ${Math.round(seg/60)<=1?"Foi":"Foram"} <b>${txtMin(seg)}</b>.</p>`;
+  mostra(`<div class="rot">Na verdade, ${alvo===1?"se passou":"se passaram"}</div><div class="grande" id="num">0</div><div class="unid">${unid}</div>
     ${fr}<p class="pisca">${frase}</p><button class="btn" onclick="click();avanca()">Ver meu gráfico</button>
     <div><button class="linkflow" type="button" onclick="abreFlow()">Entenda o Flow</button></div>`, c=>{
     const n=c.querySelector("#num"), dur=1800, t0=performance.now();
@@ -2114,6 +2114,35 @@ function boasVindas(){ const r=R[pos]||{}, sx=r.i!=null?SENT[r.i]:null;
     <div style="margin-top:14px"><button class="btn sec" type="button" onclick="recomecar()">Prefiro começar do zero</button></div></div>`); const vb=document.getElementById("voltar"); if(vb) vb.hidden=true; }
 if(voltou) boasVindas(); else desenha();
 if(PREVIA && window.claude && claude.use){ claude.use("db").then(db=>{ if(!db) return; VDOC=db.doc("validacao/app-novo-b4"); return VDOC.get().then(sn=>{ const d=sn&&(sn.data?sn.data():sn); if(d&&d.itens&&!Object.keys(val).length){ d.itens.forEach(x=>{ if(x.situacao||x.escolha){ const k=x.escolha?FRASES_AB.indexOf(x.escolha):-1; val[x.id]={s:x.situacao||undefined,o:x.revisar||undefined,e:k>=0?k:undefined}; if(k>=0){ try{ localStorage.setItem("7e_frase_abertura",String(k)); }catch(e){} } } }); if(!entrou&&pos===0) desenha(); } }); }).catch(()=>{}); }
+</script>
+<!-- 22/11 · iPhone: passo a passo para colocar o app na tela de início (só aparece no iPhone, fora do app instalado) -->
+<style>
+.guia-ios{position:fixed;left:12px;right:12px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:50;padding:18px 18px 16px;border-radius:20px;background:#111b3d;border:1px solid rgba(245,197,66,.55);box-shadow:0 20px 50px rgba(0,0,0,.6);color:#f6efe2;font:400 15px/1.45 Inter,system-ui,sans-serif;animation:guiaSobe .5s ease-out}
+@keyframes guiaSobe{from{transform:translateY(30px);opacity:0}}
+.guia-ios b.t{display:block;font:600 18px Fraunces,Georgia,serif;margin-bottom:10px}
+.guia-ios ol{margin:0 0 12px;padding:0;list-style:none;display:grid;gap:8px}
+.guia-ios li{display:flex;gap:10px;align-items:center}
+.guia-ios li span.n{flex:none;width:26px;height:26px;border-radius:50%;background:#f5c542;color:#111;display:grid;place-items:center;font-weight:800}
+.guia-ios .ic{display:inline-block;vertical-align:-3px;width:18px;height:18px}
+.guia-ios button{border:0;background:transparent;color:#f5c542;font:700 15px inherit;padding:6px 0;cursor:pointer}
+</style>
+<script>
+(function(){
+  try{
+    var ios=/iPhone|iPad|iPod/i.test(navigator.userAgent);
+    var instalado=window.navigator.standalone===true||(window.matchMedia&&matchMedia("(display-mode: standalone)").matches);
+    var pediu=/[?&]iphone=1/.test(location.search);
+    var visto=false; try{visto=localStorage.getItem("7e_guia_ios")==="ok"}catch(e){}
+    if(!ios||instalado||(visto&&!pediu)) return;
+    var d=document.createElement("div"); d.className="guia-ios"; d.setAttribute("role","dialog"); d.setAttribute("aria-label","Como colocar o app na tela de início");
+    d.innerHTML='<b class="t">Coloque o 7entidos na sua tela de início</b><ol>'+
+      '<li><span class="n">1</span><span>Toque em <b>Compartilhar</b> <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#f5c542" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 12v8h14v-8"/></svg> aqui embaixo, no Safari.</span></li>'+
+      '<li><span class="n">2</span><span>Escolha <b>Adicionar à Tela de Início</b>. Pronto!</span></li></ol>'+
+      '<button type="button">Entendi</button>';
+    d.querySelector("button").onclick=function(){ try{localStorage.setItem("7e_guia_ios","ok")}catch(e){} d.remove(); };
+    (document.body?Promise.resolve():new Promise(function(r){addEventListener("DOMContentLoaded",r)})).then(function(){ setTimeout(function(){document.body.appendChild(d)},1200); });
+  }catch(e){}
+})();
 </script>
 </body>
 </html>

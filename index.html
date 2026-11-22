@@ -254,6 +254,31 @@ section.sec{padding:clamp(80px,12vw,140px) 0}
 .leitura span{color:var(--creme);font-size:17px}
 .leitura small{display:block;margin-top:6px;font:400 12px var(--mono);letter-spacing:.08em;color:var(--azul);text-transform:uppercase}
 
+/* ===== 1.1b BAIXE O APP ===== */
+.baixar{padding:clamp(70px,10vw,120px) 0;background:radial-gradient(ellipse at 70% 40%,rgba(245,197,66,.14),transparent 60%),linear-gradient(180deg,var(--noite),#0e1a45 50%,var(--noite))}
+.b-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+.b-mandala{width:84px;height:84px;margin-bottom:18px}
+.b-mandala img{width:100%;height:100%;border-radius:50%;animation:giraM 40s linear infinite;box-shadow:0 0 40px rgba(245,197,66,.45)}
+.baixar h2{font-family:var(--serif);font-weight:400;font-size:clamp(40px,6vw,76px);line-height:1.02;margin:14px 0 16px}
+.baixar h2 em{color:var(--ouro);font-style:italic}
+.b-sub{font-size:clamp(18px,2vw,21px);color:var(--creme);opacity:.85;max-width:30ch}
+.b-botoes{display:flex;flex-wrap:wrap;gap:14px;margin:30px 0 14px}
+.b-loja{display:inline-flex;align-items:center;gap:12px;min-height:66px;padding:0 26px 0 20px;border-radius:16px;text-decoration:none;transition:transform .25s,box-shadow .25s}
+.b-loja svg{width:30px;height:30px;flex:none}
+.b-loja span{display:grid;line-height:1.1;text-align:left}
+.b-loja small{font-size:12px;letter-spacing:.04em;text-transform:uppercase;opacity:.85}
+.b-loja b{font-size:22px;font-weight:700}
+.b-play{background:#000;color:#fff;border:1px solid rgba(255,255,255,.35);box-shadow:0 14px 34px -12px rgba(245,197,66,.55)}
+.b-ios{background:var(--ouro);color:#111;}
+.b-loja:hover{transform:translateY(-3px)}
+.b-dica{font-size:15px;color:var(--azul);max-width:44ch}
+.b-yt{text-align:left;margin-top:10px}
+.b-cel{display:grid;justify-items:center}
+.b-aparelho{position:relative;width:280px;aspect-ratio:520/1126;border-radius:44px;padding:12px;background:linear-gradient(145deg,#2a3566,#0c1433);box-shadow:0 0 0 2px #2c376d,0 50px 90px -30px rgba(0,0,0,.9),0 0 120px -20px rgba(245,197,66,.45);transform:rotate(-4deg)}
+.b-tela{position:absolute;inset:12px;width:calc(100% - 24px);height:calc(100% - 24px);border-radius:34px;object-fit:cover;opacity:0;transition:opacity 1.2s}
+.b-tela.on{opacity:1}
+@media (max-width:860px){.b-grid{grid-template-columns:1fr;gap:40px}.b-aparelho{width:240px}.b-loja{flex:1 1 100%;justify-content:center}}
+@media (prefers-reduced-motion:reduce){.b-mandala img{animation:none}.b-tela{transition:none}}
 /* ===== 2.2 LISTA DE ESPERA ===== */
 .lista{position:relative;text-align:center;overflow:hidden}
 .lista::before{content:"";position:absolute;left:50%;top:50%;width:900px;height:900px;margin:-450px;border-radius:50%;background:radial-gradient(circle,rgba(245,197,66,.16),transparent 62%);pointer-events:none}
@@ -339,7 +364,7 @@ body.sem-selos .selo{display:none}
 
 <header class="topo" id="topo">
   <img src="assets/home/logo-7entidos.png" alt="7entidos — A vida é feita de boas sensações.">
-  <a class="btn" href="#lista">Quero ser das primeiras</a>
+  <a class="btn js-baixar" href="#baixar" data-baixar="topo">Baixar o app</a>
 </header>
 
 <!-- ================= BLOCO 1 ================= -->
@@ -361,8 +386,38 @@ body.sem-selos .selo{display:none}
     <h1 class="rev" style="--dl:.2s;margin-top:14px">Você sabe o que te faz <em>bem</em>?</h1>
     <p class="sub rev" style="--dl:.35s">Quanto mais o 7entidos te conhece, mais ele te surpreende, com novas oportunidades de sentir.</p>
     <div class="linha-cta rev" style="--dl:.5s">
-      <a class="btn" href="#lista">Quero entrar na lista <span class="seta">→</span></a>
+      <a class="btn js-baixar" href="#baixar" data-baixar="primeira_tela">Baixar o app <span class="seta">→</span></a>
       <p class="prova">Baseado no <b>Flow</b>, de Mihaly Csikszentmihalyi · psicologia positiva</p>
+    </div>
+  </div>
+</section>
+
+<!-- 1.1b Baixe o app (22/11): logo depois da primeira tela -->
+<section class="baixar rel" id="baixar" aria-label="Baixe o app">
+  <div class="wrap b-grid">
+    <div class="b-txt">
+      <div class="b-mandala rev" aria-hidden="true"><img src="assets/home/mandala-7.webp" alt="" width="720" height="720"></div>
+      <span class="etq rev">Já disponível · Android e iPhone</span>
+      <h2 class="rev">O 7entidos já chegou. <em>É grátis.</em></h2>
+      <p class="b-sub rev">Baixe agora e descubra, junto com o app, o que te faz bem.</p>
+      <div class="b-botoes rev">
+        <a class="b-loja b-play" href="https://play.google.com/store/apps/details?id=br.com.setentidos.app" target="_blank" rel="noopener" data-baixar="google_play" aria-label="Disponível no Google Play">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3.5v17a1 1 0 0 0 1.5.86l14-8.5a1 1 0 0 0 0-1.72l-14-8.5A1 1 0 0 0 5 3.5z" fill="currentColor"/></svg>
+          <span><small>Disponível no</small><b>Google Play</b></span>
+        </a>
+        <a class="b-loja b-ios" href="/app/?iphone=1" data-baixar="iphone" aria-label="Tenho iPhone: abrir o app pelo site">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M10.5 18.5h3" stroke-linecap="round"/></svg>
+          <span><small>Tenho</small><b>iPhone</b></span>
+        </a>
+      </div>
+      <p class="b-dica rev">No iPhone, o app abre pelo site. Depois é só tocar em <b>Compartilhar</b> → <b>Adicionar à Tela de Início</b>.</p>
+      <p class="vf-convite b-yt rev">Tem mais lá no nosso canal 👉 <a href="https://www.youtube.com/@7Entidos" target="_blank" rel="noopener">youtube.com/@7Entidos</a></p>
+    </div>
+    <div class="b-cel rev" aria-label="Telas reais do app 7entidos">
+      <div class="b-aparelho">
+        <img class="b-tela on" src="assets/home/app-tela-1.webp" alt="Tela de entrada do app 7entidos, com a mandala e o botão Entrar" width="520" height="1126" loading="lazy">
+        <img class="b-tela" src="assets/home/app-tela-2.webp" alt="A Brisa dando as boas-vindas no app 7entidos" width="520" height="1126" loading="lazy">
+      </div>
     </div>
   </div>
 </section>
@@ -602,6 +657,26 @@ body.sem-selos .selo{display:none}
   const v=document.getElementById("videoFlow"),t=document.getElementById("vfTela");
   const id=v&&(v.dataset.youtube||"").trim(); if(!id||!t) return;
   t.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+encodeURIComponent(id)+'?rel=0" title="O Flow, a ciência por trás do 7entidos" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>';
+})();
+
+/* 22/11 · Baixar o app: botão inteligente + contagem anônima dos cliques */
+(function(){
+  const PLAY="https://play.google.com/store/apps/details?id=br.com.setentidos.app";
+  const ua=navigator.userAgent, android=/Android/i.test(ua), ios=/iPhone|iPad|iPod/i.test(ua);
+  const aparelho=android?"android":ios?"iphone":"computador";
+  /* no celular, o "Baixar o app" já vai direto: Android → Google Play; iPhone → app com o passo a passo. No computador, desce até a seção com os dois caminhos. */
+  document.querySelectorAll(".js-baixar").forEach(a=>{
+    if(android){a.href=PLAY;a.target="_blank";a.rel="noopener"}
+    else if(ios){a.href="/app/?iphone=1"}
+  });
+  /* conta cada clique (só números somados, sem saber quem clicou). Só funciona depois do "OK" das estatísticas. */
+  document.addEventListener("click",e=>{
+    const a=e.target.closest("[data-baixar]"); if(!a) return;
+    try{ if(window.gtag) window.gtag("event","baixar_app",{botao:a.dataset.baixar,aparelho}); }catch(_){}
+  });
+  /* troca devagar as telas reais do app dentro do celular */
+  const t=document.querySelectorAll(".b-tela"); let i=0;
+  if(t.length>1 && !matchMedia("(prefers-reduced-motion: reduce)").matches) setInterval(()=>{t[i].classList.remove("on");i=(i+1)%t.length;t[i].classList.add("on")},3800);
 })();
 
 /* topo fica sólido e mostra o botão depois da primeira tela */
