@@ -1469,8 +1469,8 @@ const txtMin=seg=>{ const m=Math.round(seg/60); return seg<60?"menos de 1 minuto
 function revela(){
   const seg=resp.tempo_real_seg||Math.round((Date.now()-(inicio2||inicio||Date.now()))/1000), frase=fraseFlow(); resp.flow=frase;
   const ch=resp.chute_min, usaMin=seg>=60, alvo=usaMin?Math.round(seg/60):seg, unid=usaMin?(alvo===1?"minuto":"minutos"):(seg===1?"segundo":"segundos");
-  const fr=ch==null?"":`<p class="revela2">Você achou <b>${ch} ${ch===1?"minuto":"minutos"}</b>. Foram <b>${txtMin(seg)}</b>.</p>`;
-  mostra(`<div class="rot">Na verdade, se passaram</div><div class="grande" id="num">0</div><div class="unid">${unid}</div>
+  const fr=ch==null?"":`<p class="revela2">Você achou <b>${ch} ${ch===1?"minuto":"minutos"}</b>. ${Math.round(seg/60)<=1?"Foi":"Foram"} <b>${txtMin(seg)}</b>.</p>`;
+  mostra(`<div class="rot">Na verdade, ${alvo===1?"se passou":"se passaram"}</div><div class="grande" id="num">0</div><div class="unid">${unid}</div>
     ${fr}<p class="pisca">${frase}</p><button class="btn" onclick="click();avanca()">Ver meu gráfico</button>
     <div><button class="linkflow" type="button" onclick="abreFlow()">Entenda o Flow</button></div>`, c=>{
     const n=c.querySelector("#num"), dur=1800, t0=performance.now();
