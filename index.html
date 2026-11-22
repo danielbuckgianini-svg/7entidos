@@ -254,6 +254,36 @@ section.sec{padding:clamp(80px,12vw,140px) 0}
 .leitura span{color:var(--creme);font-size:17px}
 .leitura small{display:block;margin-top:6px;font:400 12px var(--mono);letter-spacing:.08em;color:var(--azul);text-transform:uppercase}
 
+/* 22/11 · redes em destaque */
+.redes-dest{margin-top:26px}
+.rd-lista{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.rd{display:inline-flex;align-items:center;gap:10px;padding:10px 16px 10px 12px;border-radius:14px;text-decoration:none;color:var(--creme);background:rgba(17,27,61,.7);border:1px solid color-mix(in srgb,var(--rc) 55%,transparent);transition:transform .2s,background .2s}
+.rd svg{width:26px;height:26px;color:var(--rc);flex:none}
+.rd span{display:grid;line-height:1.15}
+.rd b{font-size:15px}
+.rd small{font-size:12px;color:var(--azul)}
+.rd:hover{transform:translateY(-3px);background:color-mix(in srgb,var(--rc) 18%,#111b3d)}
+/* 22/11 · banner que "explode" ao chegar no site: o app já está disponível */
+.boom{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:18px;background:rgba(5,9,26,.78);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);animation:boomFundo .4s ease-out}
+@keyframes boomFundo{from{opacity:0}}
+.boom-card{position:relative;width:min(560px,100%);border-radius:30px;padding:40px 28px 28px;text-align:center;overflow:hidden;
+  background:radial-gradient(ellipse at 50% 0%,#24357a,#0b1430 70%);border:1px solid rgba(245,197,66,.6);box-shadow:0 0 0 1px rgba(245,197,66,.2),0 40px 90px rgba(0,0,0,.7),0 0 120px rgba(245,197,66,.35);
+  animation:boomEntra .9s cubic-bezier(.2,1.6,.4,1)}
+@keyframes boomEntra{0%{transform:scale(.2) rotate(-8deg);opacity:0}60%{transform:scale(1.06) rotate(1deg);opacity:1}100%{transform:none}}
+.boom-raios{position:absolute;left:50%;top:120px;width:900px;height:900px;margin:-450px 0 0 -450px;border-radius:50%;pointer-events:none;opacity:.35;
+  background:repeating-conic-gradient(from 0deg,rgba(245,197,66,.55) 0 6deg,transparent 6deg 18deg);animation:giraM 30s linear infinite;-webkit-mask-image:radial-gradient(circle,#000 10%,transparent 60%);mask-image:radial-gradient(circle,#000 10%,transparent 60%)}
+.boom-part{position:absolute;left:50%;top:120px;width:12px;height:12px;border-radius:50%;background:var(--c);box-shadow:0 0 14px var(--c);pointer-events:none;opacity:0;animation:explode 1.4s cubic-bezier(.1,.8,.3,1) forwards;animation-delay:var(--d)}
+@keyframes explode{0%{transform:translate(-50%,-50%) scale(.3);opacity:1}80%{opacity:1}100%{transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(1);opacity:0}}
+.boom-mandala{position:relative;width:150px;height:150px;margin:0 auto 18px;border-radius:50%;box-shadow:0 0 60px rgba(245,197,66,.7);animation:giraM 24s linear infinite}
+.boom-mandala img{width:100%;height:100%;border-radius:50%;display:block}
+.boom .etq{position:relative}
+.boom h2{position:relative;font-family:var(--serif);font-weight:400;font-size:clamp(34px,6vw,50px);line-height:1.05;margin:10px 0 10px}
+.boom h2 em{color:var(--ouro);font-style:italic}
+.boom p.bs{position:relative;color:var(--creme);opacity:.85;margin:0 0 22px;font-size:18px}
+.boom .b-botoes{position:relative;justify-content:center;margin:0 0 14px}
+.boom-fechar{position:absolute;top:14px;right:16px;z-index:2;width:40px;height:40px;border-radius:50%;border:1px solid rgba(245,197,66,.4);background:rgba(10,17,40,.6);color:var(--creme);font-size:22px;cursor:pointer}
+.boom-depois{position:relative;background:none;border:0;color:var(--azul);font-size:15px;text-decoration:underline;cursor:pointer;padding:8px}
+@media (prefers-reduced-motion:reduce){.boom-card,.boom-raios,.boom-part,.boom-mandala{animation:none}.boom-part{display:none}}
 /* 22/11 · "Baixar o app" pula e pisca para chamar atenção (a cada 3 s, sem ficar cansativo) */
 .js-baixar,.b-play{animation:pulaPisca 3s ease-in-out infinite}
 .js-baixar:hover,.b-play:hover{animation-play-state:paused}
@@ -426,7 +456,16 @@ body.sem-selos .selo{display:none}
         </a>
       </div>
       <p class="b-dica rev">No iPhone, o app abre pelo site. Depois é só tocar em <b>Compartilhar</b> → <b>Adicionar à Tela de Início</b>.</p>
-      <p class="vf-convite b-yt rev">Tem mais lá no nosso canal 👉 <a href="https://www.youtube.com/@7Entidos" target="_blank" rel="noopener">youtube.com/@7Entidos</a></p>
+      <div class="redes-dest rev" aria-label="Siga o 7entidos nas redes">
+        <span class="etq">Siga o 7entidos</span>
+        <div class="rd-lista">
+        <a class="rd" href="https://www.youtube.com/@7Entidos" target="_blank" rel="noopener" style="--rc:#ff3b3b" data-rede="youtube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8zM10 15V9l5.2 3z"/></svg><span><b>YouTube</b><small>@7Entidos</small></span></a>
+        <a class="rd" href="https://www.instagram.com/7entidoss/" target="_blank" rel="noopener" style="--rc:#e1306c" data-rede="instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor"/></svg><span><b>Instagram</b><small>@7entidoss</small></span></a>
+        <a class="rd" href="https://www.facebook.com/profile.php?id=61596119254628" target="_blank" rel="noopener" style="--rc:#1877f2" data-rede="facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14 8h3V4h-3c-2.8 0-4 1.8-4 4.3V10H7v4h3v7h4v-7h3l.5-4H14V8.6c0-.4.2-.6.6-.6z"/></svg><span><b>Facebook</b><small>7entidos</small></span></a>
+        <a class="rd" href="https://www.tiktok.com/@7entidos" target="_blank" rel="noopener" style="--rc:#25f4ee" data-rede="tiktok"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.6 3c.4 2.2 1.8 3.7 4 4v3.1c-1.5 0-2.9-.4-4-1.2v6.3a5.8 5.8 0 1 1-5-5.7v3.2a2.6 2.6 0 1 0 1.8 2.5V3z"/></svg><span><b>TikTok</b><small>@7entidos</small></span></a>
+        <a class="rd" href="https://www.linkedin.com/company/145418964/" target="_blank" rel="noopener" style="--rc:#0a66c2" data-rede="linkedin"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.6 4.8 6V21h-4v-5.2c0-1.2 0-2.8-1.7-2.8s-2 1.3-2 2.7V21h-4z"/></svg><span><b>LinkedIn</b><small>7entidos</small></span></a>
+        </div>
+      </div>
     </div>
     <div class="b-cel rev" aria-label="Telas reais do app 7entidos">
       <div class="b-aparelho">
@@ -691,6 +730,33 @@ body.sem-selos .selo{display:none}
   /* troca devagar as telas reais do app dentro do celular */
   const t=document.querySelectorAll(".b-tela"); let i=0;
   if(t.length>1 && !matchMedia("(prefers-reduced-motion: reduce)").matches) setInterval(()=>{t[i].classList.remove("on");i=(i+1)%t.length;t[i].classList.add("on")},3800);
+})();
+
+/* 22/11 · banner que "explode" quando a pessoa chega: o app já está disponível (uma vez por visita) */
+(function(){
+  const PLAY="https://play.google.com/store/apps/details?id=br.com.setentidos.app";
+  let visto=false; try{visto=sessionStorage.getItem("7e_boom")==="1"}catch(_){}
+  if(visto||/[?&]sem-banner/.test(location.search)) return;
+  const ios=/iPhone|iPad|iPod/i.test(navigator.userAgent), android=/Android/i.test(navigator.userAgent);
+  const cores=["var(--visao)","var(--audicao)","var(--tato)","var(--paladar)","var(--olfato)","var(--equilibrio)","var(--corpo)"];
+  let part=""; for(let k=0;k<42;k++){const a=Math.random()*Math.PI*2,r=180+Math.random()*260;
+    part+=`<i class="boom-part" style="--c:${cores[k%7]};--x:${(Math.cos(a)*r).toFixed(0)}px;--y:${(Math.sin(a)*r).toFixed(0)}px;--d:${(.25+Math.random()*.35).toFixed(2)}s"></i>`;}
+  const play=`<a class="b-loja b-play" href="${PLAY}" target="_blank" rel="noopener" data-baixar="banner_google_play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3.5v17a1 1 0 0 0 1.5.86l14-8.5a1 1 0 0 0 0-1.72l-14-8.5A1 1 0 0 0 5 3.5z" fill="currentColor"/></svg><span><small>Disponível no</small><b>Google Play</b></span></a>`;
+  const iph=`<a class="b-loja b-ios" href="/app/?iphone=1" data-baixar="banner_iphone"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M10.5 18.5h3" stroke-linecap="round"/></svg><span><small>Tenho</small><b>iPhone</b></span></a>`;
+  const d=document.createElement("div"); d.className="boom"; d.setAttribute("role","dialog"); d.setAttribute("aria-modal","true"); d.setAttribute("aria-label","O app 7entidos já está disponível");
+  d.innerHTML=`<div class="boom-card"><div class="boom-raios" aria-hidden="true"></div>${part}
+    <button class="boom-fechar" type="button" aria-label="Fechar">×</button>
+    <div class="boom-mandala"><img src="assets/home/mandala-7.webp" alt="" width="720" height="720"></div>
+    <span class="etq">Novidade · grátis</span>
+    <h2>O app <em>7entidos</em><br>já está disponível!</h2>
+    <p class="bs">Descubra, junto com o app, o que te faz bem.</p>
+    <div class="b-botoes">${ios?iph:android?play:play+iph}</div>
+    <button class="boom-depois" type="button">Agora não, quero ver o site</button></div>`;
+  const fecha=()=>{try{sessionStorage.setItem("7e_boom","1")}catch(_){} d.remove(); document.removeEventListener("keydown",esc)};
+  const esc=e=>{if(e.key==="Escape")fecha()};
+  d.addEventListener("click",e=>{ if(e.target===d||e.target.closest(".boom-fechar,.boom-depois")) fecha(); else if(e.target.closest("[data-baixar]")) try{sessionStorage.setItem("7e_boom","1")}catch(_){} });
+  document.addEventListener("keydown",esc);
+  setTimeout(()=>{document.body.appendChild(d); try{ if(window.gtag) window.gtag("event","banner_app_visto"); }catch(_){} },700);
 })();
 
 /* topo fica sólido e mostra o botão depois da primeira tela */
