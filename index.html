@@ -628,12 +628,12 @@ body.sem-selos .selo{display:none}
   </div>
 </section>
 
-<!-- 2.2 Botão principal: lista de espera -->
+<!-- 2.2 Receba as novidades (antes: lista de espera; mudou em 22/11, app já no ar) -->
 <section class="sec lista rel" id="lista">
   <div class="wrap">
-    <span class="etq rev">Lista de espera · app 7entidos</span>
-    <h2 class="rev">Seja das primeiras pessoas a descobrir o que te faz <em>bem</em>.</h2>
-    <p class="sub rev" style="margin:0 auto">Deixe seu nome e seu WhatsApp. A gente avisa quando o app abrir.</p>
+    <span class="etq rev">Novidades · 7entidos</span>
+    <h2 class="rev">Receba as novidades do <em>7entidos</em>.</h2>
+    <p class="sub rev" style="margin:0 auto">Deixe seu nome e seu WhatsApp. A gente te conta as novidades do app e do reality.</p>
     <form class="caixa rev" id="form" novalidate>
       <div class="campo">
         <label for="f-nome">Seu nome</label>
@@ -649,11 +649,11 @@ body.sem-selos .selo{display:none}
       </div>
       <label class="concordo" for="f-ok">
         <input id="f-ok" name="concordo" type="checkbox">
-        <span>Concordo em receber o aviso do lançamento. Veja a <a href="https://7entidos.com.br/privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>.</span>
+        <span>Concordo em receber as novidades do 7entidos. Veja a <a href="https://7entidos.com.br/privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>.</span>
       </label>
       <p class="erro" id="erro" aria-live="polite"></p>
-      <button class="btn" type="submit">Quero ser das primeiras <span class="seta">→</span></button>
-      <p class="miud">Só usamos seus dados para avisar do lançamento. Sem spam.</p>
+      <button class="btn" type="submit">Quero receber novidades <span class="seta">→</span></button>
+      <p class="miud">Só usamos seus dados para mandar as novidades do 7entidos. Sem spam.</p>
       <div class="aviso" id="aviso" role="status"></div>
     </form>
   </div>
@@ -804,9 +804,9 @@ body.sem-selos .selo{display:none}
   mostra("flow");
 })();
 
-/* lista de espera: Nome + WhatsApp (obrigatórios) + e-mail (opcional) + caixinha de consentimento.
+/* novidades (antes lista de espera): Nome + WhatsApp (obrigatórios) + e-mail (opcional) + caixinha de consentimento.
    Mesmo robô da pesquisa (evento "contato", pesquisa "app"). O nome vai com a origem:
-   "Maria · Lista de espera · página inicial · 16/11/2026".
+   "Maria · Novidades · página inicial · 22/11/2026".
    Só mostra "pronto" depois que a planilha confirmar que gravou. */
 (function(){
   const $=id=>document.getElementById(id);
@@ -828,14 +828,14 @@ body.sem-selos .selo{display:none}
     erro.textContent="";
     const primeiro=nome.split(" ")[0];
     const url=window.PESQUISA_URL||"";
-    if(!url){aviso.textContent="✓ Modo teste: nada foi enviado. No site oficial apareceria: “Pronto, "+primeiro+"! Você está na lista. Avisamos quando o app abrir.”";aviso.classList.add("on");return}
+    if(!url){aviso.textContent="✓ Modo teste: nada foi enviado. No site oficial apareceria: “Pronto, "+primeiro+"! Você vai receber as novidades do 7entidos.”";aviso.classList.add("on");return}
     enviando=true;bt.disabled=true;bt.firstChild.nodeValue="Enviando… ";
     const hoje=new Date().toLocaleDateString("pt-BR",{timeZone:"America/Sao_Paulo"});
-    fetch(url,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify({evento:"contato",pesquisa:"app",nome:nome+" · Lista de espera · página inicial · "+hoje,telefone:d,email:mail,lgpd:true})})
+    fetch(url,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify({evento:"contato",pesquisa:"app",nome:nome+" · Novidades · página inicial · "+hoje,telefone:d,email:mail,lgpd:true})})
       .then(r=>r.text()).then(t=>{let j={};try{j=JSON.parse(t)}catch(_){}if(!j.ok)throw 0;
-        aviso.textContent="✓ Pronto, "+primeiro+"! Você está na lista. Avisamos quando o app abrir.";aviso.classList.add("on");form.reset();})
+        aviso.textContent="✓ Pronto, "+primeiro+"! Você vai receber as novidades do 7entidos.";aviso.classList.add("on");form.reset();})
       .catch(()=>{erro.textContent="Não conseguimos enviar agora. Confere a internet e tenta de novo."})
-      .finally(()=>{enviando=false;bt.disabled=false;bt.firstChild.nodeValue="Quero ser das primeiras ";});
+      .finally(()=>{enviando=false;bt.disabled=false;bt.firstChild.nodeValue="Quero receber novidades ";});
   });
 })();
 </script>
