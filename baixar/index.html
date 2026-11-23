@@ -21,16 +21,18 @@ small{display:block;margin-top:16px;color:#a9b3d1}
   <img src="/assets/home/mandala-7.webp" alt="Mandala do 7entidos">
   <h1>Baixe o app 7entidos</h1>
   <p>É grátis.</p>
-  <a class="p" href="https://play.google.com/store/apps/details?id=br.com.setentidos.app">Disponível no Google Play</a>
-  <a class="i" href="/app/?iphone=1">Tenho iPhone</a>
+  <a class="p" href="https://play.google.com/store/apps/details?id=br.com.setentidos.app&referrer=utm_source%3Dqr_video%26utm_medium%3Dqr%26utm_campaign%3Dbaixar">Disponível no Google Play</a>
+  <a class="i" href="/app/?iphone=1&origem=qr">Tenho iPhone</a>
   <small>Tem mais lá no nosso canal: <a style="display:inline;padding:0;color:#f5c542" href="https://www.youtube.com/@7Entidos">youtube.com/@7Entidos</a></small>
 </main>
 <script>
-/* QR code dos vídeos: leva cada pessoa direto para o lugar certo do aparelho dela */
+/* QR code dos vídeos: leva cada pessoa direto para o lugar certo do aparelho dela.
+   O link da Google Play leva a marca "qr_video" para o Play Console contar quantas pessoas vieram do QR
+   (sem cookies e sem carregar nada do Google aqui, como promete a política de privacidade). */
 (function(){
   var ua=navigator.userAgent;
-  if(/Android/i.test(ua)) location.replace("https://play.google.com/store/apps/details?id=br.com.setentidos.app");
-  else if(/iPhone|iPad|iPod/i.test(ua)) location.replace("/app/?iphone=1");
+  if(/Android/i.test(ua)) location.replace("https://play.google.com/store/apps/details?id=br.com.setentidos.app&referrer=utm_source%3Dqr_video%26utm_medium%3Dqr%26utm_campaign%3Dbaixar");
+  else if(/iPhone|iPad|iPod/i.test(ua)) location.replace("/app/?iphone=1&origem=qr");
 })();
 </script>
 </body>
