@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Dados do app 7entidos no Meta for Developers (developers.facebook.com).
+     Nao sao senhas: ficam dentro do app publicado. Mesmo assim, nao divulgue o Client Token.
+     - App ID: painel do app > Configuracoes do app > Basico > "ID do Aplicativo"
+     - Client Token: painel do app > Configuracoes do app > Avancado > Seguranca > "Token do cliente"
+     Troque os dois "COLE_AQUI" pelos numeros/codigos (sem espacos). -->
+<resources>
+    <string name="facebook_app_id" translatable="false">COLE_AQUI</string>
+    <string name="facebook_client_token" translatable="false">COLE_AQUI</string>
+</resources>

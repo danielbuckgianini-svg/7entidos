@@ -91,7 +91,8 @@ BT="$(find "$HOME/.gradle/caches/modules-2" -name 'bundletool-*.jar' | head -1)"
 if [ -n "$BT" ]; then
   CP="$(find "$HOME/.gradle/caches/modules-2" -name '*.jar' | tr '\n' ':')"
   MAN="$(java -cp "$CP" com.android.tools.build.bundletool.BundleToolMain dump manifest --bundle="$SAIDA/app-release.aab" 2>/dev/null)"
-  if echo "$MAN" | grep -q "AD_ID"; then echo "    ATENCAO: AD_ID apareceu no app!"; else echo "    Permissao AD_ID: nao aparece (OK)"; fi
+  if echo "$MAN" | grep -q "AD_ID"; then echo "    Permissao AD_ID: presente (esperado desde a versao 2 - SDK do Meta)"; else echo "    ATENCAO: AD_ID NAO aparece, mas o SDK do Meta precisa dela!"; fi
+  if echo "$MAN" | grep -q "com.facebook.sdk.ApplicationId"; then echo "    SDK do Meta: configurado (OK)"; else echo "    ATENCAO: SDK do Meta nao encontrado no app!"; fi
   echo "$MAN" | grep -o 'android:targetSdkVersion="[0-9]*"\|android:versionCode="[0-9]*"\|android:versionName="[^"]*"' | sed 's/^/    /'
 fi
 
