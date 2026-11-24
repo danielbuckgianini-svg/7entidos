@@ -28,9 +28,14 @@ mkdir -p "$SAIDA"
 
 # --- 1. Java -------------------------------------------------------------
 passo "1/6 Conferindo o Java"
-if ! command -v keytool >/dev/null || ! java -version 2>&1 | grep -qE 'version "(17|2[0-9])'; then
+# O Gradle deste projeto (8.11) so funciona com Java 17 a 21. Codespaces novos vem com Java 25,
+# entao usamos o Java 21 se ele existir (sdkman) e, se nao existir, instalamos.
+J21="$(ls -d /usr/local/sdkman/candidates/java/21* /usr/lib/jvm/java-21-openjdk* 2>/dev/null | head -1 || true)"
+if [ -z "$J21" ]; then
   sudo apt-get update -qq && sudo apt-get install -y -qq openjdk-21-jdk-headless >/dev/null
+  J21="$(ls -d /usr/lib/jvm/java-21-openjdk* | head -1)"
 fi
+export JAVA_HOME="$J21"; export PATH="$JAVA_HOME/bin:$PATH"
 java -version 2>&1 | head -1
 
 # --- 2. Kit do Android (SDK) ---------------------------------------------
@@ -91,7 +96,8 @@ BT="$(find "$HOME/.gradle/caches/modules-2" -name 'bundletool-*.jar' | head -1)"
 if [ -n "$BT" ]; then
   CP="$(find "$HOME/.gradle/caches/modules-2" -name '*.jar' | tr '\n' ':')"
   MAN="$(java -cp "$CP" com.android.tools.build.bundletool.BundleToolMain dump manifest --bundle="$SAIDA/app-release.aab" 2>/dev/null)"
-  if echo "$MAN" | grep -q "AD_ID"; then echo "    ATENCAO: AD_ID apareceu no app!"; else echo "    Permissao AD_ID: nao aparece (OK)"; fi
+  if echo "$MAN" | grep -q "AD_ID"; then echo "    Permissao AD_ID: presente (esperado desde a versao 2 - SDK do Meta)"; else echo "    ATENCAO: AD_ID NAO aparece, mas o SDK do Meta precisa dela!"; fi
+  if echo "$MAN" | grep -q "com.facebook.sdk.ApplicationId"; then echo "    SDK do Meta: configurado (OK)"; else echo "    ATENCAO: SDK do Meta nao encontrado no app!"; fi
   echo "$MAN" | grep -o 'android:targetSdkVersion="[0-9]*"\|android:versionCode="[0-9]*"\|android:versionName="[^"]*"' | sed 's/^/    /'
 fi
 

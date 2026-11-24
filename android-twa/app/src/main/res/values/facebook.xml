@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Dados do app 7entidos no Meta for Developers (developers.facebook.com).
+     Nao sao senhas: ficam dentro do app publicado. Mesmo assim, nao divulgue o Client Token.
+     - App ID: painel do app > Configuracoes do app > Basico > "ID do Aplicativo"
+     - Client Token: painel do app > Configuracoes do app > Avancado > Seguranca > "Token do cliente"
+     Os dois valores abaixo ja estao preenchidos (nov/2026). -->
+<resources>
+    <string name="facebook_app_id" translatable="false">2607690206411502</string>
+    <string name="facebook_client_token" translatable="false">a862dab27e1f28913a8ad3ad88791435</string>
+</resources>
