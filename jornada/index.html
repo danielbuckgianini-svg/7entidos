@@ -275,7 +275,7 @@ function insights(J,P,TAGS){const E=J.esc||{},fav=SEN.map(s=>(E[s[0]]||[])[0]);c
 
 const TAGS=[['Raiz','🌿','natureza, terra, ar livre','Você se sente bem quando está perto da natureza: terra, folhas, céu aberto.'],['Ninho','☕','aconchego, casa, cuidado','Você se sente bem no aconchego: casa, cheiros conhecidos, coisas quentinhas.'],['Vento','🌀','movimento, ritmo, giro','Você se sente bem em movimento: girar, pedalar, sentir o corpo andar.'],['Lago','🌙','calma, silêncio, pausa','Você se sente bem na calma: pausas, silêncio e respiração lenta.'],['Faísca','⚡','energia, intensidade, alegria','Você se sente bem com energia: cores fortes, batida e sabores intensos.'],['Brisa','💧','frescor, leveza, água','Você se sente bem com leveza e frescor: água, mar, vento no rosto.'],['Abraço','🤝','encontro, pessoas, partilha','Você se sente bem com gente perto: abraço, mesa cheia, música junto.']];
 const PERG={mapa:'Quais destas imagens você mais gosta?',aud:'Toque ▶ e ouça. Quais sons você mais gosta?',tato:'Quais texturas você mais gosta de tocar?',olf:'Quais cheiros você mais gosta?',pal:'Quais sabores você mais gosta?',equi:'Quais movimentos você mais gosta?',corpo:'O que você mais gosta de fazer com o corpo?'};
-const CONVITE='7s0a4653';const PLANILHA_URL=window.PLANILHA_URL||'';
+const CONVITE=window.codigoDaJornada(true);const PLANILHA_URL=window.PLANILHA_URL||'';
 let J={tela:'abre',i:0,esc:{},id:'',nome:'',cel:'',ok:false,nota:null};let saveTxt='';
 try{const s=JSON.parse(localStorage.getItem('jornada7')||'null');if(s&&s.id)J=Object.assign(J,s);}catch(e){}
 if(!J.id)J.id='J'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);

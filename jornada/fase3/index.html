@@ -281,7 +281,7 @@ function insights(J,P,TAGS){const E=J.esc||{},fav=SEN.map(s=>(E[s[0]]||[])[0]);c
  const inf=tem.find(x=>x.n==='infância');if(inf&&inf.hits.length>=2&&!sur.some(x=>x.t.includes('infância')))sur.push({s:1,t:'Uma criança no mapa',d:`${inf.hits.length} sentidos trouxeram coisas de infância (${inf.hits.slice(0,3).map(([,L])=>L[0]).join(', ')}). Parte do que te faz bem hoje parece vir de muito tempo atrás.`});
  return out.concat(sur.slice(0,5));}
 
-const CONVITE='7s0a4653';const PLANILHA_URL=window.PLANILHA_URL||'';
+const CONVITE=window.codigoDaJornada();const PLANILHA_URL=window.PLANILHA_URL||'';
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let J=null;try{J=JSON.parse(localStorage.getItem('jornada7')||'null');}catch(e){}
 const temConvite=true;/* 05/11 (noite): o Daniel tirou a senha (código de convite). Qualquer pessoa com o link entra. */
