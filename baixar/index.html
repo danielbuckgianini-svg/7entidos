@@ -50,9 +50,14 @@ small{display:block;margin-top:16px;color:#a9b3d1}
   }
   var fonte=utm("utm_source"), meio=utm("utm_medium"), campanha=utm("utm_campaign");
   var anuncio=!!(fonte||meio||campanha);
+  var c=new URLSearchParams(location.search).get("c");
+  var etiquetas=["ep5","ep6","teste-sala"];
+  var etiqueta=etiquetas.includes(c)?c:(etiquetas.includes(campanha)?campanha:"");
 
   var ref;
-  if(anuncio){
+  if(etiqueta){
+    ref="utm_source="+(fonte||"qr_video")+"&utm_medium="+(meio||"qr")+"&utm_campaign="+etiqueta;
+  } else if(anuncio){
     ref=[];
     if(fonte) ref.push("utm_source="+fonte);
     if(meio) ref.push("utm_medium="+meio);
@@ -62,7 +67,9 @@ small{display:block;margin-top:16px;color:#a9b3d1}
     ref="utm_source=qr_video&utm_medium=qr&utm_campaign=baixar";
   }
   var PLAY="https://play.google.com/store/apps/details?id=br.com.setentidos.app&referrer="+encodeURIComponent(ref);
+  if(etiqueta) PLAY+="&utm_campaign="+etiqueta;
   var IPHONE="/app/?iphone=1&origem="+encodeURIComponent(anuncio?(fonte||"anuncio"):"qr");
+  if(etiqueta) IPHONE+="&c="+etiqueta;
 
   /* os botões visíveis também passam a levar a origem certa */
   var bp=document.querySelector("a.p"), bi=document.querySelector("a.i");
@@ -73,6 +80,7 @@ small{display:block;margin-top:16px;color:#a9b3d1}
     var dados=anuncio
       ? {evento:"compartilhou",pesquisa:"anuncio",onde:fonte||"sem-fonte",meio:meio,campanha:campanha,canal:aparelho,quando:new Date().toISOString()}
       : {evento:"compartilhou",pesquisa:"qr-video",onde:"baixar",canal:aparelho,quando:new Date().toISOString()};
+    if(etiqueta) dados.campanha=etiqueta;
     var corpo=JSON.stringify(dados);
     try{
       var ok=navigator.sendBeacon&&navigator.sendBeacon(URL,new Blob([corpo],{type:"text/plain"}));
