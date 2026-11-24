@@ -5,6 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>7entidos · A vida é feita de boas sensações</title>
 <link rel="manifest" href="/app/manifest.webmanifest">
+<script>
+const etiquetaAppURL = new URLSearchParams(location.search).get("c");
+const etiquetasApp = ["ep5", "ep6", "teste-sala"];
+if (etiquetasApp.includes(etiquetaAppURL)) {
+  document.querySelector('link[rel="manifest"]').href = "/app/manifest-" + etiquetaAppURL + ".webmanifest";
+}
+</script>
 <meta name="theme-color" content="#0A1030">
 <link rel="icon" href="/app/mandala-icone.png?v=7" type="image/png">
 <link rel="apple-touch-icon" href="/app/mandala-icone-180.png?v=7">
@@ -1011,7 +1018,20 @@ function brisa(){
     c=>ligaVideo(c,LEG1,()=>{ c.querySelector("#semvideo").hidden=false; },VID1));
 }
 function entrar(){ click(); entrou=true; destravaVideo(VID1); document.getElementById("pularbtn").hidden=false; desenhaMini(); brisa(); }
-function comecar(){ click(); if(!inicio){ inicio=Date.now(); resp.inicio=new Date().toISOString(); } resp.consentiu=true; if(resp.local_nome==null){ const n=NOME(); if(n) resp.local_nome=n; } acendeLuz0(); avanca(); }
+function comecar(){
+  if(ocupado) return;
+  click();
+  resp.consentiu=true;
+  if(!resp.inicio){
+    inicio=Date.now();
+    resp.inicio=new Date().toISOString();
+    resp.local_campanha=etiquetaApp;
+    registraPassoApp("app_comecou", {pessoa:PID, campanha:resp.local_campanha});
+  }
+  if(resp.local_nome==null){ const n=NOME(); if(n) resp.local_nome=n; }
+  acendeLuz0();
+  avanca();
+}
 
 const VASO=`<svg class="vaso" viewBox="0 0 300 230" role="img" aria-label="Figura: um vaso dourado ou dois rostos de perfil">
   <defs><pattern id="km" width="16" height="16" patternUnits="userSpaceOnUse"><rect width="16" height="16" fill="#d9a520"/><rect x="1.5" y="1.5" width="6" height="6" fill="#f6d36b"/><rect x="9" y="9" width="5.5" height="5.5" fill="#b9821a"/><circle cx="12" cy="4" r="2.2" fill="none" stroke="#7a4f12" stroke-width="1"/><circle cx="4" cy="12" r="1.6" fill="#fff3c4"/></pattern>
@@ -2064,8 +2084,27 @@ function f3Lista(){ const fotosDe=id=>Object.keys(SIT_FASE1).filter(f=>SIT_FASE1
 /* ============ GUARDAR E ENVIAR (anônimo) ============ */
 function salvaLocal(){ try{ localStorage.setItem("7e_app_novo",JSON.stringify({pos,resp,inicio,inicio2,r:R.length})); if(resp.fase1_completa) localStorage.setItem("7e_app_novo_fase1",JSON.stringify({gostos:SENT.map(x=>resp["gosto_"+x.id]||null),chegada:resp.escala_chegada})); }catch(e){} }
 const PID=(function(){ try{ let v=localStorage.getItem("7e_pessoa"); if(!v){ v=Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4); localStorage.setItem("7e_pessoa",v); } return v; }catch(e){ return Math.random().toString(36).slice(2,12); } })();
+function leEtiquetaApp(){
+  if(PREVIA || window.PESQUISA_TESTE) return "";
+  try{
+    if(etiquetasApp.includes(etiquetaAppURL)) localStorage.setItem("7e_app_campanha", etiquetaAppURL);
+    const guardada=localStorage.getItem("7e_app_campanha");
+    return etiquetasApp.includes(guardada) ? guardada : "";
+  }catch(e){
+    return etiquetasApp.includes(etiquetaAppURL) ? etiquetaAppURL : "";
+  }
+}
+const etiquetaApp=leEtiquetaApp();
+function registraPassoApp(evento, dados){
+  if(!ENDPOINT || PREVIA) return;
+  fetch(ENDPOINT, {
+    method:"POST", mode:"no-cors", keepalive:true,
+    headers:{"Content-Type":"text/plain"},
+    body:JSON.stringify({pesquisa:"app-passos", evento, versao:VERSAO, quando:new Date().toISOString(), ...dados})
+  }).catch(()=>{});
+}
 function envia(){ if(!ENDPOINT||!resp.consentiu) return; try{ const r={...resp}; Object.keys(r).forEach(k=>{ if(/_t0$/.test(k)||/^local_/.test(k)) delete r[k]; }); /* nome e cheiros escritos ficam só no celular */
-  fetch(ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify({pesquisa:"app-novo",versao:VERSAO,pessoa:PID,quando:new Date().toISOString(),respostas:r})}).catch(()=>{}); }catch(e){} }
+  fetch(ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify({pesquisa:"app-novo",versao:VERSAO,pessoa:PID,campanha:resp.local_campanha??etiquetaApp,quando:new Date().toISOString(),respostas:r})}).catch(()=>{}); }catch(e){} }
 
 /* ============ PAINEL DE VALIDAÇÃO (só na prévia) ============ */
 const jg=i=>R.findIndex(x=>x.t==="jogo"&&x.i===i);
@@ -2112,7 +2151,9 @@ function boasVindas(){ const r=R[pos]||{}, sx=r.i!=null?SENT[r.i]:null;
     <p class="sub">Vamos continuar de onde você parou.</p><p class="bvonde">Você parou em: <b>${esc(onde)}</b></p>
     <button class="btn" type="button" onclick="seguirDeOnde()">Continuar</button>
     <div style="margin-top:14px"><button class="btn sec" type="button" onclick="recomecar()">Prefiro começar do zero</button></div></div>`); const vb=document.getElementById("voltar"); if(vb) vb.hidden=true; }
+if(resp.inicio && resp.local_campanha==null) resp.local_campanha=etiquetaApp;
 if(voltou) boasVindas(); else desenha();
+registraPassoApp("app_abriu", {campanha:resp.local_campanha??etiquetaApp});
 if(PREVIA && window.claude && claude.use){ claude.use("db").then(db=>{ if(!db) return; VDOC=db.doc("validacao/app-novo-b4"); return VDOC.get().then(sn=>{ const d=sn&&(sn.data?sn.data():sn); if(d&&d.itens&&!Object.keys(val).length){ d.itens.forEach(x=>{ if(x.situacao||x.escolha){ const k=x.escolha?FRASES_AB.indexOf(x.escolha):-1; val[x.id]={s:x.situacao||undefined,o:x.revisar||undefined,e:k>=0?k:undefined}; if(k>=0){ try{ localStorage.setItem("7e_frase_abertura",String(k)); }catch(e){} } } }); if(!entrou&&pos===0) desenha(); } }); }).catch(()=>{}); }
 </script>
 <!-- 22/11 · iPhone: passo a passo para colocar o app na tela de início (só aparece no iPhone, fora do app instalado) -->
