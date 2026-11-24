@@ -359,6 +359,7 @@ function insights(J,P,TAGS){const E=J.esc||{},fav=SEN.map(s=>(E[s[0]]||[])[0]);c
 const TAGS=[['Raiz','🌿','natureza, terra, ar livre','Você se sente bem quando está perto da natureza: terra, folhas, céu aberto.'],['Ninho','☕','aconchego, casa, cuidado','Você se sente bem no aconchego: casa, cheiros conhecidos, coisas quentinhas.'],['Vento','🌀','movimento, ritmo, giro','Você se sente bem em movimento: girar, pedalar, sentir o corpo andar.'],['Lago','🌙','calma, silêncio, pausa','Você se sente bem na calma: pausas, silêncio e respiração lenta.'],['Faísca','⚡','energia, intensidade, alegria','Você se sente bem com energia: cores fortes, batida e sabores intensos.'],['Brisa','💧','frescor, leveza, água','Você se sente bem com leveza e frescor: água, mar, vento no rosto.'],['Abraço','🤝','encontro, pessoas, partilha','Você se sente bem com gente perto: abraço, mesa cheia, música junto.']];
 const PERG={mapa:'Quais destas imagens você mais gosta?',aud:'Toque ▶ e ouça. Quais sons você mais gosta?',tato:'Quais texturas você mais gosta de tocar?',olf:'Quais cheiros você mais gosta?',pal:'Quais sabores você mais gosta?',equi:'Quais movimentos você mais gosta?',corpo:'O que você mais gosta de fazer com o corpo?'};
 const CONVITE='';const PLANILHA_URL='';const QS=new URLSearchParams(location.search);const LSK=QS.get('k')||'app7mapa';
+const CODIGO_ORIGEM=LSK==='jornada7'?window.codigoDaJornada():'7s0a4653';
 let J={tela:'abre',i:0,esc:{},pul:{},id:'',ok:true,nota:null};let saveTxt='';
 try{const s=JSON.parse(localStorage.getItem(LSK)||'null');if(s&&s.id)J=Object.assign(J,s);}catch(e){}
 if(!J.id)J.id='J'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
@@ -661,7 +662,7 @@ async function pdManda(txt){const out=document.getElementById('bx');try{if(navig
 function pdDescobertas(){const out=[];PD.ordem.forEach(id=>{const s=senDe(id);const L=PD.res[id];if(!L)return;out.push({t:`${s[1][0].toUpperCase()+s[1].slice(1)}: ${L[0]}`,d:`É a sua nº 1 em ${s[1]}. ${L[1]?`${L[1]} ficou em 2º`+(L[2]?` e ${L[2]} em 3º.`:'.'):''}`});});return out.slice(0,7);}
 /* efeito da fase + pesquisa de preço vão para a planilha da Jornada (marcado como prévia do app) */
 function pdEnviaEfeito(){const U=window.PLANILHA_URL;if(!U||!window.EF)return;const f=PD.ef||{};const pr=f.pr||{};const ok=pr.t&&!pr.pular;
- const corpo={c:'7s0a4653',tipo:'fase2',id:J.id,teste:LSK!=='jornada7',nome:(LSK!=='jornada7'?'🧪 PRÉVIA APP · ':'')+(J.nome||''),cel:'',em:new Date().toISOString(),origem:'app-previa (mini-jogos)',
+ const corpo={c:CODIGO_ORIGEM,tipo:'fase2',id:J.id,teste:LSK!=='jornada7',nome:(LSK!=='jornada7'?'🧪 PRÉVIA APP · ':'')+(J.nome||''),cel:'',em:new Date().toISOString(),origem:'app-previa (mini-jogos)',
   sensacao:EF.texto(f.chega,f.sai,f.leva)+' · '+EF.precoTexto(pr)+(f.pres?' · Presente: '+f.pres:'')+(f.sug?' · Sugestão: '+f.sug:''),chega:f.chega||'',sai:f.sai||'',leva:f.leva||'',sugestao:f.sug||'',preco:EF.precoTexto(pr),
   preco_barato_demais:ok?pr.v[0]:'',preco_bom_negocio:ok?pr.v[1]:'',preco_ficando_caro:ok?pr.v[2]:'',preco_caro_demais:ok?pr.v[3]:'',presente:f.pres||''};
  try{fetch(U,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(corpo),keepalive:true});}catch(e){}}
@@ -677,7 +678,7 @@ document.addEventListener('click',e=>{if(!PD)return;const b=e.target.closest('[d
  const ok=()=>{renderPodio();e.stopImmediatePropagation();};const topo=()=>{renderPodio();scrollTo(0,0);e.stopImmediatePropagation();};
  if(a.startsWith('fch')&&window.FCH){const f=PD.ef=PD.ef||{};const v=b.dataset.v;
   if(a==='fchcomeca'){if(!f.chega)return;f.chegaOk=true;sino(4,.2);return topo();}
-  if(a==='fchfim'){f.fimOk=true;pdEnviaEfeito();pdEntrega();festa();if(LSK==='jornada7'&&window.parent===window){location.href='/jornada/fase3/?c='+(QS.get('c')||'7s0a4653');}else{renderPodio();}e.stopImmediatePropagation();return;}
+  if(a==='fchfim'){f.fimOk=true;pdEnviaEfeito();pdEntrega();festa();if(LSK==='jornada7'&&window.parent===window){location.href='/jornada/fase3/?c='+CODIGO_ORIGEM;}else{renderPodio();}e.stopImmediatePropagation();return;}
   if(FCH.acao(a,v,f)){if(a==='fchsai'||a==='fchchega'){sino(FCH.LUZ.findIndex(l=>l[0]===v),.3);vibra(20);}else if(a==='fchpreco'&&f.pr.i>=4){festa();}else sino(2,.12);
    if(a==='fchleva'){renderPodio();setTimeout(()=>{const bo=document.getElementById('fchbolsa');if(bo){bo.classList.add('pula');vibra(25);setTimeout(()=>bo.classList.remove('pula'),300);}},450);e.stopImmediatePropagation();return;}
    if(a==='fchpres'){renderPodio();const c=document.getElementById('fchcaixa');if(c)c.classList.add('abre');e.stopImmediatePropagation();return;}
@@ -710,7 +711,7 @@ document.addEventListener('click',e=>{if(!PD)return;const b=e.target.closest('[d
  if(a==='stories'){pdStories();e.stopImmediatePropagation();return;}
  if(a==='combina'){const F=(PD.final||[]).map(v=>v.split('|')[1]);pdManda(`Minhas campeãs no 7entidos: ${F.slice(0,3).join(', ')} ${quadradinhos()}\nFaz a sua e vê se a gente combina: https://7entidos.com.br`);e.stopImmediatePropagation();return;}
  if(a==='presente'){const n1=(PD.final||[])[0];const n=n1?n1.split('|')[1].toLowerCase():'uma coisa boa';pdManda(`Hoje, ${n} por 5 minutos. Lembrei de você. 💛\n(7entidos.com.br)`);e.stopImmediatePropagation();return;}
- if(a==='pdfim'){if(window.FCH&&!(PD.ef||{}).fimOk){PD.ef=PD.ef||{};PD.ef.k=0;PD.fase='fecha';return topo();}pdEntrega();if(LSK==='jornada7'&&window.parent===window){location.href='/jornada/fase3/?c='+(QS.get('c')||'7s0a4653');}e.stopImmediatePropagation();return;}
+ if(a==='pdfim'){if(window.FCH&&!(PD.ef||{}).fimOk){PD.ef=PD.ef||{};PD.ef.k=0;PD.fase='fecha';return topo();}pdEntrega();if(LSK==='jornada7'&&window.parent===window){location.href='/jornada/fase3/?c='+CODIGO_ORIGEM;}e.stopImmediatePropagation();return;}
 },true);
 /* Volta do "quero tentar": ao terminar as 7 escolhas do sentido pulado na Fase 1, ele entra na Fase 2 */
 document.addEventListener('click',e=>{if(PD||!window.__PD)return;const b=e.target.closest('[data-a="prox"]');if(!b)return;const id=window.__PD.voltar;if(!id||(J.esc[id]||[]).length<7)return;
