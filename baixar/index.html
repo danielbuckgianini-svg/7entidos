@@ -25,14 +25,30 @@ small{display:block;margin-top:16px;color:#a9b3d1}
   <a class="i" href="/app/?iphone=1&origem=qr">Tenho iPhone</a>
   <small>Tem mais lá no nosso canal: <a style="display:inline;padding:0;color:#f5c542" href="https://www.youtube.com/@7Entidos">youtube.com/@7Entidos</a></small>
 </main>
+<script src="/pesquisa/config.js?v=20261124"></script>
 <script>
 /* QR code dos vídeos: leva cada pessoa direto para o lugar certo do aparelho dela.
-   O link da Google Play leva a marca "qr_video" para o Play Console contar quantas pessoas vieram do QR
-   (sem cookies e sem carregar nada do Google aqui, como promete a política de privacidade). */
+   O link da Google Play leva a marca "qr_video" para o Play Console contar quantas pessoas vieram do QR.
+   24/11 · Contagem anônima das escaneadas: ANTES de redirecionar, manda para a planilha só
+   "escaneou o QR + tipo de aparelho + hora". Sem nome, sem cookie, sem rastreador.
+   Só grava no site oficial (prévias e ?teste=1 não gravam — trava do pesquisa/config.js). */
 (function(){
   var ua=navigator.userAgent;
-  if(/Android/i.test(ua)) location.replace("https://play.google.com/store/apps/details?id=br.com.setentidos.app&referrer=utm_source%3Dqr_video%26utm_medium%3Dqr%26utm_campaign%3Dbaixar");
-  else if(/iPhone|iPad|iPod/i.test(ua)) location.replace("/app/?iphone=1&origem=qr");
+  var aparelho=/Android/i.test(ua)?"android":(/iPhone|iPad|iPod/i.test(ua)?"iphone":"computador");
+  var URL=window.PESQUISA_URL||"";
+  if(URL){
+    var corpo=JSON.stringify({evento:"compartilhou",pesquisa:"qr-video",onde:"baixar",canal:aparelho,quando:new Date().toISOString()});
+    try{
+      var ok=navigator.sendBeacon&&navigator.sendBeacon(URL,new Blob([corpo],{type:"text/plain"}));
+      if(!ok) fetch(URL,{method:"POST",mode:"no-cors",keepalive:true,headers:{"Content-Type":"text/plain"},body:corpo}).catch(function(){});
+    }catch(e){}
+  }
+  function ir(){
+    if(aparelho==="android") location.replace("https://play.google.com/store/apps/details?id=br.com.setentidos.app&referrer=utm_source%3Dqr_video%26utm_medium%3Dqr%26utm_campaign%3Dbaixar");
+    else if(aparelho==="iphone") location.replace("/app/?iphone=1&origem=qr");
+  }
+  /* espera um instante para o recado sair antes de trocar de página */
+  if(URL) setTimeout(ir,400); else ir();
 })();
 </script>
 <script src="/js/consentimento.js?v=20261118"></script>
