@@ -27,25 +27,61 @@ small{display:block;margin-top:16px;color:#a9b3d1}
 </main>
 <script src="/pesquisa/config.js?v=20261124"></script>
 <script>
-/* QR code dos vídeos: leva cada pessoa direto para o lugar certo do aparelho dela.
-   O link da Google Play leva a marca "qr_video" para o Play Console contar quantas pessoas vieram do QR.
-   24/11 · Contagem anônima das escaneadas: ANTES de redirecionar, manda para a planilha só
-   "escaneou o QR + tipo de aparelho + hora". Sem nome, sem cookie, sem rastreador.
+/* QR code dos vídeos E anúncios: leva cada pessoa direto para o lugar certo do aparelho dela.
+   - Link SEM utm_* (QR dos vídeos): comportamento de sempre, marca "qr_video" na Google Play
+     e registra "qr-video" na planilha.
+   - Link COM utm_source / utm_medium / utm_campaign (anúncios): repassa esses valores para a
+     Google Play (referrer) e para a planilha (pesquisa "anuncio", onde = utm_source).
+   - Contagem anônima: ANTES de redirecionar, manda para a planilha só "origem + tipo de aparelho
+     + hora". Sem nome, sem cookie, sem rastreador. Outros parâmetros (fbclid, gclid...) são ignorados.
    Só grava no site oficial (prévias e ?teste=1 não gravam — trava do pesquisa/config.js). */
 (function(){
   var ua=navigator.userAgent;
   var aparelho=/Android/i.test(ua)?"android":(/iPhone|iPad|iPod/i.test(ua)?"iphone":"computador");
   var URL=window.PESQUISA_URL||"";
+
+  /* Lê um utm_* do endereço e limpa: só letras, números, "-", "_" e ".", no máximo 60 caracteres */
+  function utm(nome){
+    var m=new RegExp("[?&]"+nome+"=([^&#]*)").exec(location.search||"");
+    if(!m) return "";
+    var v; try{ v=decodeURIComponent(m[1].replace(/\+/g," ")); }catch(e){ v=m[1]; }
+    try{ v=v.normalize("NFD").replace(/[\u0300-\u036f]/g,""); }catch(e){}
+    return v.toLowerCase().replace(/[^a-z0-9_.-]+/g,"-").replace(/^-+|-+$/g,"").slice(0,60);
+  }
+  var fonte=utm("utm_source"), meio=utm("utm_medium"), campanha=utm("utm_campaign");
+  var anuncio=!!(fonte||meio||campanha);
+
+  var ref;
+  if(anuncio){
+    ref=[];
+    if(fonte) ref.push("utm_source="+fonte);
+    if(meio) ref.push("utm_medium="+meio);
+    if(campanha) ref.push("utm_campaign="+campanha);
+    ref=ref.join("&");
+  } else {
+    ref="utm_source=qr_video&utm_medium=qr&utm_campaign=baixar";
+  }
+  var PLAY="https://play.google.com/store/apps/details?id=br.com.setentidos.app&referrer="+encodeURIComponent(ref);
+  var IPHONE="/app/?iphone=1&origem="+encodeURIComponent(anuncio?(fonte||"anuncio"):"qr");
+
+  /* os botões visíveis também passam a levar a origem certa */
+  var bp=document.querySelector("a.p"), bi=document.querySelector("a.i");
+  if(bp) bp.href=PLAY;
+  if(bi) bi.href=IPHONE;
+
   if(URL){
-    var corpo=JSON.stringify({evento:"compartilhou",pesquisa:"qr-video",onde:"baixar",canal:aparelho,quando:new Date().toISOString()});
+    var dados=anuncio
+      ? {evento:"compartilhou",pesquisa:"anuncio",onde:fonte||"sem-fonte",meio:meio,campanha:campanha,canal:aparelho,quando:new Date().toISOString()}
+      : {evento:"compartilhou",pesquisa:"qr-video",onde:"baixar",canal:aparelho,quando:new Date().toISOString()};
+    var corpo=JSON.stringify(dados);
     try{
       var ok=navigator.sendBeacon&&navigator.sendBeacon(URL,new Blob([corpo],{type:"text/plain"}));
       if(!ok) fetch(URL,{method:"POST",mode:"no-cors",keepalive:true,headers:{"Content-Type":"text/plain"},body:corpo}).catch(function(){});
     }catch(e){}
   }
   function ir(){
-    if(aparelho==="android") location.replace("https://play.google.com/store/apps/details?id=br.com.setentidos.app&referrer=utm_source%3Dqr_video%26utm_medium%3Dqr%26utm_campaign%3Dbaixar");
-    else if(aparelho==="iphone") location.replace("/app/?iphone=1&origem=qr");
+    if(aparelho==="android") location.replace(PLAY);
+    else if(aparelho==="iphone") location.replace(IPHONE);
   }
   /* espera um instante para o recado sair antes de trocar de página */
   if(URL) setTimeout(ir,400); else ir();
