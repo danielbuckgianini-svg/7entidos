@@ -66,7 +66,7 @@ h1{font-size:23px;line-height:1.25;margin:4px 0 10px}h2{font-size:18px;margin:22
 </head><body class="pg-jornada pg-pesq">
 <header class="topo7"><a class="marca7" href="/" aria-label="7entidos, página inicial"><img src="/assets/simbolo-contando-7.svg?v=20261102-novo" alt="" width="30" height="30"><span>7entidos</span></a><a class="sair7" href="/">Sair</a></header>
 <div class="w" id="app"></div><input type="file" id="fotoin" accept="image/*" hidden>
-<script src="../config.js"></script>
+<script src="../config.js?v=20261124-origem"></script>
 <script>/* ---------- estímulos sensoriais (sons feitos aqui, sem arquivos) ---------- */
 let AC=null,TOCANDO=null;
 function ac(){try{if(navigator.audioSession)navigator.audioSession.type='playback';}catch(e){}if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;AC=new C();}if(AC.state!=='running')AC.resume();return AC;}
