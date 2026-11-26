@@ -1256,6 +1256,8 @@ const fraseJogo=s=>`Agora, o jogo ${["tato","paladar","olfato","equilibrio"].inc
 const fraseGosto=(s,i)=>i===0&&NOME()?"Boa, "+NOME()+"! "+s.brisa:i===6&&NOME()?NOME()+", "+s.brisa.charAt(0).toLowerCase()+s.brisa.slice(1):s.brisa;
 const cabLongo=(s,dica)=>`<p class="brisafrase" style="--c:${s.cor}">${esc(fraseJogo(s))}</p><h2>${s.jogo}</h2><p class="missao" style="--c:${s.cor};--cc:${claro(s.cor)}"><b>Missão:</b> ${s.missao}</p><p class="dica">${dica}</p>`;
 /* jogos com pouco texto: só o título e uma linha curta */
+/* 26/11: depois do prato, a viagem do limão tem título próprio (o prato já foi montado) */
+const cabSabor=dica=>`<h2 class="jtit">Viagem do sabor</h2><p class="dica curta">${dica}</p>`;
 const cab=(s,dica)=>`<h2 class="jtit">${s.jogo}</h2><p class="dica curta">${dica}</p>`;
 /* luzinhas de retorno (uma por rodada): 1 = acertou (acesa), 0 = errou (apagada), null = ainda não jogou */
 function fraseNivel(o,n,max){ const f=n>=Math.ceil(max*.7)?`Seu ${o} pega detalhes que pouca gente percebe.`:n>=Math.ceil(max*.4)?`Seu ${o} é atento aos detalhes.`:`Seu ${o} gosta mais do todo do que dos detalhes.`;
@@ -1369,12 +1371,12 @@ const JOGOS={
         pinta(); if(sel.length===3){ resp.paladar_prato=sel.map(k=>achar(k)[1]); mesa.classList.add("pronto"); c.querySelectorAll(".ingr button").forEach(x=>{ if(!x.classList.contains("sel")) x.disabled=true; }); setTimeout(()=>{ if(aindaNoJogo(s)) limao(); },1800); } });
       /* viagem do limão: 15 s só com a gota de limão; quem volta ao app faz a versão completa (limão e milkshake) */
       function limao(){ let volta=false; try{ volta=localStorage.getItem("7e_paladar_viagem")==="1"; }catch(_){} const id=volta?"limaoMilk":"limao"; resp.paladar_viagem=volta?"completa":"curta";
-        c.innerHTML=`${cab(s,"Agora, uma viagem rápida.")}<p class="gesto">Feche os olhos e imagine comigo.</p><button class="btn" id="vai">Começar</button>`;
+        c.innerHTML=`${cabSabor("Agora, uma viagem rápida.")}<p class="gesto">Feche os olhos e imagine comigo.</p><button class="btn" id="vai">Começar</button>`;
         c.querySelector("#vai").onclick=()=>{ somJogo(); viagem(c,id,s,()=>{ if(!aindaNoJogo(s)) return; try{ localStorage.setItem("7e_paladar_viagem","1"); }catch(_){} fundo(s);
-          const Q=volta?["Qual dos dois te deu mais vontade?",["Limão","Milkshake","Os dois","Nenhum"],"paladar_mais_vontade"]:["Sua boca encheu d’água?",["Sim","Um pouco","Não"],"paladar_boca"];
+          const Q=volta?["Qual dos dois te deu mais vontade?",["Limão","Milkshake","Os dois","Nenhum"],"paladar_mais_vontade"]:["Você conseguiu sentir o gosto?",["Sim","Um pouco","Não"],"paladar_sentiu"];
           /* 19/11: na versão completa, Limão e Milkshake viram botões com foto realista; "Os dois" e "Nenhum" ficam embaixo */
-          const FOTOV={"Limão":"viagem-limao.webp","Milkshake":"viagem-milkshake.webp"};
-          c.innerHTML=`${cab(s,"De volta.")}<h2 class="mudou">${Q[0]}</h2>`+(volta
+          const FOTOV={"Limão":"viagem-limao.webp?v=2","Milkshake":"viagem-milkshake.webp"};
+          c.innerHTML=`${cabSabor("De volta.")}<h2 class="mudou">${Q[0]}</h2>`+(volta
             ?`<div class="viagens duas">${["Limão","Milkshake"].map(o=>`<button class="opt viag" data-o="${o}"><img src="${FOTOV[o]}" alt=""><span>${o}</span></button>`).join("")}</div><div class="opts" style="margin-top:12px">${["Os dois","Nenhum"].map(o=>`<button class="opt" data-o="${o}">${o}</button>`).join("")}</div>`
             :`<div class="opts">${Q[1].map(o=>`<button class="opt" data-o="${o}">${o}</button>`).join("")}</div>`);
           c.querySelectorAll(".opt").forEach(q=>q.onclick=()=>{ somJogo(); resp[Q[2]]=q.dataset.o; q.classList.add("sel"); c.querySelectorAll(".opt").forEach(y=>y.disabled=true); vibra([10,40,10]); fim(); }); }); }; }
