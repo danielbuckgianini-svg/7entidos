@@ -1009,7 +1009,7 @@ function fraseAbertura(){ let i=0; if(PREVIA){ try{ const k=+localStorage.getIte
 function brisa(){
   if(!entrou){
     document.getElementById("pularbtn").hidden=true;
-    mostra(`<div class="entrar"><div class="entramdl">${mandala(Math.round(Math.min(innerWidth*.66,280)),"mentra")}</div><div class="marcatxt"><b><em>7</em>entidos</b><span class="piscadev">A vida é feita de boas sensações.</span></div><p class="duracao">2 FASES</p><p class="gatilho">${fraseAbertura()}</p><button class="btn" onclick="entrar()">Entrar</button></div>`, c=>poeMandala(c.querySelector("#mentra"),{pos:TODOS,luz:TODOS,miolo:true}));
+    mostra(`<div class="entrar"><div class="entramdl">${mandala(Math.round(Math.min(innerWidth*.66,280)),"mentra")}</div><div class="marcatxt"><b><em>7</em>entidos</b><span class="piscadev">A vida é feita de boas sensações.</span></div><p class="duracao">PRIMEIRA VISITA · UNS 7 MINUTOS</p><p class="gatilho">${fraseAbertura()}</p><button class="btn" onclick="entrar()">Entrar</button></div>`, c=>poeMandala(c.querySelector("#mentra"),{pos:TODOS,luz:TODOS,miolo:true}));
     return;
   }
   mostra(`${videoBrisa(VID1,LEG1)}
@@ -1403,7 +1403,7 @@ const JOGOS={
       const solta=()=>{ if(!preso) return; clearInterval(htm); preso=false; b2.classList.remove("presa"); ab.style.setProperty("--p","0%"); if(!acabou) res.innerHTML='<span class="nao">Soltou cedo. Pegue de novo e segure.</span>'; };
       tr.addEventListener("pointerup",solta); tr.addEventListener("pointercancel",solta);
     }); },
-  /* Sinta o corpo: 4 gestos simples no próprio corpo (só sensações); no fim, "Mudou alguma coisa?" */
+  /* Sinta o corpo: 4 gestos simples no próprio corpo (só sensações); no fim, "Como está o seu corpo agora?" */
   /* Base dos gestos (só sensações, nada de saúde):
      1. "Suspiro duplo": duas puxadas de ar pelo nariz e uma soltada longa pela boca (Balban e colegas, Universidade Stanford, Cell Reports Medicine, 2023).
      2. Espreguiçar com os braços para cima (postura de yoga "Urdhva Hastasana", feita sentado: yoga na cadeira).
@@ -1418,10 +1418,10 @@ const JOGOS={
       mostra(`${cab(s,`Gesto ${g+1} de ${G.length}`)}<p class="gesto">${esc(G[g][0])}</p>${mandalaCorpo(s.cor)}<p class="olhos">${esc(G[g][1])}</p><button class="btn sec" id="fg" style="margin-top:8px">Pronto</button>`, c=>{
         somSuave(s.cor); acendeCorpo(c,8,g); let foi=false; const vai=()=>{ if(foi) return; foi=true; clearTimeout(tm); resp.corpo_gestos=g+1; g++; passo(); };
         tm=setTimeout(()=>{ if(aindaNoJogo(s)){ avisoFim(); vai(); } },8000); c.querySelector("#fg").onclick=()=>{ somJogo(); vai(); }; }); };
-    const pergunta=()=>{ pararSom(); mostra(`${cab(s,comNome("E aí, {n}?","E aí?"))}<h2 class="mudou">Mudou alguma coisa?</h2>
-      <div class="opts">${["Sim","Um pouco","Não"].map(o=>`<button class="opt" data-o="${o}">${o}</button>`).join("")}</div>`, c=>{
-      c.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ somJogo(); resp.corpo_mudou=b.dataset.o; b.classList.add("sel"); c.querySelectorAll(".opt").forEach(y=>y.disabled=true);
-        c.insertAdjacentHTML("beforeend",`<p class="fala2">${b.dataset.o==="Não"?"Tudo bem. Só de reparar, você já esteve aqui.":"Isso é o seu corpo respondendo a você."}</p>`); vibra([10,40,10]); fim(); }); }); };
+    const pergunta=()=>{ pararSom(); mostra(`${cab(s,comNome("E aí, {n}?","E aí?"))}<h2 class="mudou">Como está o seu corpo agora?</h2>
+      <div class="opts">${["Mais solto","Igual","Mais tenso"].map(o=>`<button class="opt" data-o="${o}">${o}</button>`).join("")}</div>`, c=>{
+      c.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ somJogo(); resp.corpo_agora=b.dataset.o; b.classList.add("sel"); c.querySelectorAll(".opt").forEach(y=>y.disabled=true);
+        c.insertAdjacentHTML("beforeend",`<p class="fala2">${b.dataset.o==="Igual"?"Tudo bem. Só de reparar, você já esteve aqui.":b.dataset.o==="Mais tenso"?"Obrigada por contar. Perceber o corpo já é um bom começo.":"Isso é o seu corpo respondendo a você."}</p>`); vibra([10,40,10]); fim(); }); }); };
     passo(); }
 };
 
@@ -1531,7 +1531,7 @@ function trava3(){
   const msab=montaSabor()||saborExemplo();
   mostra(`<div class="rot">Fase 3</div>${videoBrisa(VID3,LEG3)}
     <div class="sabbaixa"><img id="sabprev" alt="${msab.exemplo?"Imagem de exemplo":"A imagem do seu momento"}" hidden>${msab.exemplo?`<p class="exnota">Imagem de exemplo. Faça a Fase 1 para ter a sua.</p>`:""}<button class="btn" id="baixar" type="button" disabled>⬇ Baixar ${msab.exemplo?"a imagem":"minha imagem"}</button></div>
-    <div class="trava"><h2>Fase 3</h2><p class="sub">Agora você conta o porquê das coisas que te fazem bem. No máximo 5 perguntas por dia, até a Brisa ter uma pista firme.</p><button class="btn" type="button" onclick="click();f3Abre()">Começar a Fase 3</button></div>
+    <div class="trava"><h2>Me conta mais?</h2><p class="f3frase">A cada resposta, o app fica mais inteligente para você!</p><p class="sub">Não tem resposta certa ou errada. No máximo 5 perguntas por dia.</p><button class="btn" type="button" onclick="click();f3DaBrisa()">Começar a Fase 3</button></div>
     <button class="btn sec" style="margin-top:14px" onclick="recomecar()">Fazer de novo</button>`,
     c=>{ ligaVideo(c,LEG3,()=>{},VID3); ligaBaixar(c,msab); const f=c.querySelector("#aviso"); if(!f) return;
       f.addEventListener("submit",e=>{ e.preventDefault(); const n=c.querySelector("#av-nome").value.trim(), m=c.querySelector("#av-email").value.trim(), ok=c.querySelector("#av-ok").checked, er=c.querySelector("#av-err");
@@ -1570,20 +1570,20 @@ const MOTIVO_NOME = Object.fromEntries(MOTIVOS.map(m=>[m.id,m.nome]));
    "sent" = sentidos ligados à situação (vai servir para o Bloco 3, escolher as situações pela Fase 1). */
 const SITUACOES = [
  {id:"praia",   dia:1, txt:"ir à praia",                       sent:["tato","visao"],          o:["Encontro meus amigos na areia","Ninguém me pede nada por umas horas","Sinto a brisa e o pé na areia","Como pastel e tomo água de coco","Eu escolho a hora de chegar e de ir embora"]},
- {id:"cafe",    dia:1, txt:"tomar um café da tarde",           sent:["olfato","paladar"],      o:["Reúno a família ou uma amiga","Paro tudo por meia hora, sem pressa","Sinto o cheiro do café passando","Tem um bolo gostoso me esperando","Faço do jeito e na hora que eu quero"]},
+ {id:"cafe",    dia:1, txt:"tomar um café da tarde",           sent:["olfato","paladar"],      o:["Reúno a família ou alguém querido","Paro tudo por meia hora, sem pressa","Sinto o cheiro do café passando","Tem um bolo gostoso me esperando","Faço do jeito e na hora que eu quero"]},
  {id:"samba",   dia:1, txt:"ir a uma roda de samba ou a um show", sent:["audicao","equilibrio"], o:["Vou com a turma e canto junto","Esqueço as obrigações da semana","Sinto o som vibrando no peito","Tem um petisco gostoso na mesa","Escolho onde ficar e quanto tempo"]},
  {id:"plantas", dia:1, txt:"cuidar das plantas",               sent:["olfato","tato"],         o:["Troco mudas e conversa com as vizinhas","É a hora em que ninguém me chama","Sinto a terra e o cheiro do verde","Colho tempero e flor para usar em casa","Cada vaso fica no lugar que eu decidi"]},
- {id:"bike",    dia:1, txt:"andar de bicicleta",               sent:["equilibrio","corpo"],    o:["Pedalo junto com as amigas","Fico longe das tarefas por um tempo","Sinto o vento no rosto nas curvas","Paro no caminho para tomar um sorvete","Escolho o caminho e a velocidade"]},
+ {id:"bike",    dia:1, txt:"andar de bicicleta",               sent:["equilibrio","corpo"],    o:["Pedalo junto com a turma","Fico longe das tarefas por um tempo","Sinto o vento no rosto nas curvas","Paro no caminho para tomar um sorvete","Escolho o caminho e a velocidade"]},
  {id:"feira",   dia:2, txt:"ir à feira",                       sent:["visao","olfato"],        o:["Converso com os conhecidos e o feirante","Saio de casa e respiro um pouco","Vejo as cores e sinto o cheiro das frutas","Volto com fruta boa e barata","Escolho cada coisa com calma"]},
  {id:"salao",   dia:2, txt:"ir ao salão de beleza",            sent:["tato","visao"],          o:["Converso e dou risada com as moças","Ninguém me pede nada por uma hora","Sinto a massagem gostosa no cabelo","Saio com a unha feita e o cabelo bonito","Escolho a cor e o estilo que eu quero"]},
  {id:"novela",  dia:2, txt:"ver novela ou série",              sent:["visao","audicao"],       o:["Comento os capítulos com alguém","Desligo um pouco dos problemas","A música e as imagens me envolvem","Preparo um lanche gostoso para assistir","Eu decido o que e quando assistir"]},
  {id:"hidro",   dia:2, txt:"fazer hidroginástica",             sent:["corpo","tato"],          o:["Encontro a turma e dou risada","Por uma hora ninguém me encontra","Sinto a água segurar e soltar o corpo","Saio de lá com o banho tomado","Escolho o dia e o ritmo dos exercícios"]},
  {id:"cozinhar",dia:2, txt:"cozinhar uma receita especial",    sent:["paladar","olfato"],      o:["Cozinho para receber quem eu gosto","Esqueço o resto enquanto mexo a panela","Sinto o cheiro subindo da panela","Sobra comida gostosa para amanhã","Invento e mudo a receita como eu quiser"]},
- {id:"orla",    dia:3, txt:"caminhar na orla",                 sent:["equilibrio","corpo"],    o:["Caminho conversando com uma amiga","Tiro um tempo longe das tarefas","Sinto o vento e o barulho do mar","Tomo uma água de coco no quiosque","Faço o meu percurso no meu ritmo"]},
+ {id:"orla",    dia:3, txt:"caminhar na orla",                 sent:["equilibrio","corpo"],    o:["Caminho conversando com alguém querido","Tiro um tempo longe das tarefas","Sinto o vento e o barulho do mar","Tomo uma água de coco no quiosque","Faço o meu percurso no meu ritmo"]},
  {id:"padaria", dia:3, txt:"ir à padaria de manhã",            sent:["olfato","paladar"],      o:["Encontro o pessoal do bairro","Dou uma escapada da rotina da casa","Sinto o cheiro do pão saindo do forno","Levo pão quentinho e um doce","Escolho o que vou comer sem pressa"]},
  {id:"decorar", dia:3, txt:"arrumar um cantinho da casa",      sent:["visao","tato"],          o:["Mostro o cantinho novo para as visitas","Esqueço os problemas enquanto arrumo","Vejo as cores e a luz do jeito novo","Compro uma peça nova para enfeitar","Tudo fica do jeito que eu imaginei"]},
  {id:"viagem",  dia:3, txt:"fazer uma viagem curta",           sent:["visao","paladar"],       o:["Viajo junto com a família ou amigos","Fico longe da rotina e das tarefas","Vejo paisagens que eu nunca vi","Trago lembrancinhas e comidas da região","Monto o roteiro do meu jeito"]},
- {id:"compras", dia:3, txt:"passear numa loja ou no shopping", sent:["visao","tato"],          o:["Vou com uma amiga ou com a filha","Saio da rotina por umas horas","Toco os tecidos e olho as vitrines","Volto para casa com uma peça nova","Escolho sem ninguém dar palpite"]}
+ {id:"compras", dia:3, txt:"passear numa loja ou no shopping", sent:["visao","tato"],          o:["Vou com alguém querido ou com a família","Saio da rotina por umas horas","Toco os tecidos e olho as vitrines","Volto para casa com uma peça nova","Escolho sem ninguém dar palpite"]}
 ];
 /* o que fica guardado (só no celular): {dia, i, r:{situação:{a:motivo, b:motivo2|null} ou {n:true}}, fim:{dia:"aaaa-mm-dd"}} */
 let F3=null;
@@ -1600,13 +1600,15 @@ function f3Topo(txt){
   ["voltar","pularbtn","fundobtn"].forEach(id=>{ const b=document.getElementById(id); if(b) b.hidden=true; }); document.body.classList.add("emf3");
   foco(null); brilho(null); fundoCor(null); pararSom();
 }
+/* 26/11: a abertura da Fase 3 ("Me conta mais?") fica na mesma tela do vídeo da Brisa; quem entra por ali pula a tela de abertura separada */
+function f3DaBrisa(){ f3Carrega(); F3.intro=true; f3Salva(); f3Abre(); }
 function f3Abre(){ f3Carrega(); entrou=true; pos=R.length-1; try{ localStorage.setItem("7e_fase3_ativa","1"); }catch(e){} f3Tela(); }
 function f3Pinta(){
   document.querySelectorAll(".f3op").forEach(b=>{ const m=b.dataset.m, tg=b.querySelector(".f3tag");
     b.classList.toggle("sel",m===f3Sel.a); b.classList.toggle("sel2",m===f3Sel.b);
     tg.textContent=m===f3Sel.a?"1ª":m===f3Sel.b?"2ª":""; });
   const dc=document.getElementById("f3dica"), sg=document.getElementById("f3seguir");
-  if(dc) dc.textContent=!f3Sel.a?"Toque no motivo que mais combina com você.":!f3Sel.b?"Se quiser, toque numa 2ª opção. É opcional.":"Pronto. Para trocar, toque de novo na opção.";
+  if(dc) dc.textContent=!f3Sel.a?"Toque em uma opção.":!f3Sel.b?"Se quiser, toque numa 2ª opção. É opcional.":"Pronto. Para trocar, toque de novo na opção.";
   if(sg) sg.disabled=!f3Sel.a;
 }
 function f3Toca(b){ click(); vibra(10); const m=b.dataset.m;
@@ -1645,17 +1647,17 @@ SITUACOES.push(
  {id:"fotos",    dia:0, txt:"ver fotos antigas de família",     sent:["visao"],      o:["Relembro histórias junto com a família","Esqueço as preocupações do dia","Vejo os rostos e as cores de outra época","Separo uma foto para pôr num porta-retrato","Escolho quais fotos ver e quando"]},
  {id:"mar",      dia:0, txt:"ouvir o som do mar",               sent:["audicao"],    o:["Converso com alguém olhando o mar","Fico longe dos barulhos de casa","Ouço as ondas indo e voltando","Levo um lanche e fico por ali","Fico ali o tempo que eu quiser"]},
  {id:"chuva",    dia:0, txt:"ouvir a chuva no telhado",         sent:["audicao"],    o:["A família fica reunida em casa","Tenho uma desculpa para não sair","Ouço o barulhinho da chuva caindo","Faço um bolinho de chuva quentinho","Decido ficar quietinha no meu canto"]},
- {id:"silencio", dia:0, txt:"ficar em silêncio",                sent:["audicao"],    o:["Fico quietinha ao lado de alguém querido","Ninguém me pede nada por um tempo","Escuto só a minha respiração","Termino aquele livro ou bordado","Eu decido quando o silêncio acaba"]},
+ {id:"silencio", dia:0, txt:"ficar em silêncio",                sent:["audicao"],    o:["Fico em silêncio ao lado de alguém querido","Ninguém me pede nada por um tempo","Escuto só a minha respiração","Termino aquele livro ou bordado","Eu decido quando o silêncio acaba"]},
  {id:"cobertor", dia:0, txt:"se enrolar num cobertor macio",    sent:["tato"],       o:["Fico abraçadinha com alguém no sofá","Paro tudo e descanso","Sinto o macio e o quentinho no corpo","Tenho um chocolate quente nas mãos","Escolho o filme e a hora de dormir"]},
  {id:"agua",     dia:0, txt:"entrar numa água bem fresquinha",  sent:["tato"],       o:["Brinco na água com a família","Esqueço o calor e as tarefas","Sinto a água fresca na pele","Depois tomo um sorvete gostoso","Entro e saio quando eu quiser"]},
  {id:"abraco",   dia:0, txt:"ganhar um abraço apertado",        sent:["tato"],       o:["Sinto que alguém se importa comigo","Por um instante, esqueço os problemas","Sinto o calor e o aperto do abraço","Às vezes vem junto um docinho ou presente","Abraço quem eu quero, na hora que eu quero"]},
  {id:"comidavo", dia:0, txt:"comer comida de vó",               sent:["paladar"],    o:["Junto a família em volta da mesa","Me sinto em casa e descanso","Sinto o tempero de antigamente","Ainda levo marmita para o outro dia","Peço o prato que eu mais gosto"]},
  {id:"perfume",  dia:0, txt:"sentir o perfume de alguém querido", sent:["olfato"],   o:["Lembro de alguém que eu amo","Por um momento, esqueço o resto","Sinto o cheiro bom no ar","Ganho um vidrinho igual de presente","Uso o perfume quando eu quero lembrar"]},
- {id:"danca",    dia:0, txt:"dançar",                           sent:["equilibrio"], o:["Danço com o par ou com as amigas","Esqueço tudo enquanto a música toca","Sinto o corpo girar e balançar","No baile tem petisco gostoso","Danço do meu jeito, sem regra"]},
+ {id:"danca",    dia:0, txt:"dançar",                           sent:["equilibrio"], o:["Danço com o par ou com a turma","Esqueço tudo enquanto a música toca","Sinto o corpo girar e balançar","No baile tem petisco gostoso","Danço do meu jeito, sem regra"]},
  {id:"rede",     dia:0, txt:"balançar numa rede",               sent:["equilibrio"], o:["Converso com alguém na rede ao lado","É a minha hora de não fazer nada","Sinto o balanço devagarinho","Tenho um suco gelado do lado","Fico ali o tempo que eu quiser"]},
  {id:"prancha",  dia:0, txt:"remar em pé numa prancha",         sent:["equilibrio"], o:["Vou com amigos e dou risada","Fico longe de tudo, no meio da água","Sinto a água balançar debaixo dos pés","Depois tem um lanche na areia","Escolho para onde remar"]},
  {id:"alongar",  dia:0, txt:"alongar o corpo",                  sent:["corpo"],      o:["Faço junto com a turma","É o meu momento sem telefone","Sinto cada músculo soltar","Saio com uma série para fazer em casa","Faço no meu ritmo e na minha hora"]},
- {id:"correr",   dia:0, txt:"correr ou caminhar rápido",        sent:["corpo"],      o:["Corro com um grupo ou com uma amiga","Deixo as preocupações para trás","Sinto o coração bater e o vento","Ganho medalha em corrida de rua","Escolho o percurso e o ritmo"]},
+ {id:"correr",   dia:0, txt:"correr ou caminhar rápido",        sent:["corpo"],      o:["Corro com um grupo ou com alguém querido","Deixo as preocupações para trás","Sinto o coração bater e o vento","Ganho medalha em corrida de rua","Escolho o percurso e o ritmo"]},
  {id:"respirar", dia:0, txt:"deitar e respirar fundo",          sent:["corpo"],      o:["Fico deitada perto de alguém querido","Paro tudo por alguns minutos","Sinto o ar entrar e sair devagar","Depois tomo um chá quentinho","Escolho a hora e o lugar"]}
 );
 const SIT=Object.fromEntries(SITUACOES.map(s=>[s.id,s]));
@@ -1712,7 +1714,7 @@ const SIT_ALT={
  feira:   {q:"O que mais te leva à feira?", o:["Bater papo com o pessoal","Sair um pouco de casa","As cores e os cheiros","Voltar com coisa boa e barata","Escolher tudo com calma"]},
  padaria: {q:"O que mais vale na ida à padaria?", o:["Ver o pessoal do bairro","Escapar um pouco da rotina","O cheiro do pão no forno","O pão quentinho e o doce","Escolher sem pressa"]},
  cozinhar:{q:"O que mais te agrada ao cozinhar?", o:["Receber quem eu gosto","Esquecer o resto","O cheiro subindo da panela","A comida pronta e a sobra","Mudar a receita do meu jeito"]},
- bike:    {q:"O que mais vale num passeio de bicicleta?", o:["Pedalar com as amigas","Ficar longe das tarefas","O vento e as curvas","Parar para um sorvete","Escolher o caminho"]},
+ bike:    {q:"O que mais vale num passeio de bicicleta?", o:["Pedalar com a turma","Ficar longe das tarefas","O vento e as curvas","Parar para um sorvete","Escolher o caminho"]},
  samba:   {q:"O que mais vale numa roda de samba ou show?", o:["Cantar junto com a turma","Esquecer a semana","O som batendo no peito","O petisco na mesa","Decidir onde ficar e quanto tempo"]},
  hidro:   {q:"O que mais vale na hidroginástica?", o:["A turma e as risadas","Uma hora só minha","A água segurando o corpo","Sair de banho tomado","Escolher o dia e o ritmo"]}
 };
@@ -1793,9 +1795,9 @@ function f3Tela(){ f3Carrega(); f3Painel();
   { const dm=f3PrecisaDesempate(); if(dm) return f3Desempate(dm); }
   const s=f3Proxima(), orig=(F3.orig||{})[s.id]; f3Sel={a:null,b:null};
   f3Topo(`Dia ${F3.dia||1} · ${f3HojeN()+1} de ${F3_POR_DIA}`);
-  mostra(`<div class="rot">Por que você gosta de…</div><h2 class="f3q">${esc(s.txt.charAt(0).toUpperCase()+s.txt.slice(1))}?</h2>
+  mostra(`<h2 class="f3q">${esc(s.txt.charAt(0).toUpperCase()+s.txt.slice(1))}.</h2><div class="rot">O que mais combina com você?</div>
     ${orig?`<div class="f3orig"><img src="${foto(orig.sid,orig.j)}" alt=""><span>Você escolheu na Fase 1:<b>${esc(orig.foto)}</b></span></div>`:""}
-    <p class="sub f3dica" id="f3dica">Toque no motivo que mais combina com você.</p>
+    <p class="sub f3dica" id="f3dica">Toque em uma opção.</p>
     <div class="opts f3opts">${f3Ordem(s).map(k=>`<button class="opt f3op" type="button" data-m="${MOTIVOS[k].id}" onclick="f3Toca(this)"><span class="f3t">${esc(s.o[k])}</span><span class="f3tag"></span></button>`).join("")}</div>
     <button class="f3nenhuma" type="button" onclick="f3Nenhuma()">Nenhuma dessas</button>
     <div style="margin-top:22px"><button class="btn" id="f3seguir" type="button" onclick="f3Seguir()" disabled>Seguir</button></div>
@@ -1813,9 +1815,9 @@ function f3FimDia(){ f3Topo(`Dia ${F3.dia||1} completo`);
     ${PREVIA?`<div><button class="linkflow" type="button" onclick="f3PulaEspera()">Pular a espera (só na prévia)</button></div>`:""}`); }
 function f3PulaEspera(){ click(); F3.hoje={d:"2000-01-01",n:0}; F3.dia=(F3.dia||1)+1; delete F3.trava; f3Salva(); f3Tela(); }
 function f3Intro(){ f3Topo("começando");
-  mostra(`<div class="rot">Fase 3</div><h2>Por que você gosta do que gosta?</h2>
-    <p class="f3frase">Suas escolhas ajudam o app a sugerir coisas do seu jeito.</p>
-    <p class="sub">Situações do dia a dia, no máximo 5 por dia. Quando a Brisa tiver uma pista firme, ela te conta. Não tem resposta certa.</p>
+  mostra(`<div class="rot">Fase 3</div><h2>Me conta mais?</h2>
+    <p class="f3frase">A cada resposta, o app fica mais inteligente para você!</p>
+    <p class="sub">Não tem resposta certa ou errada. No máximo 5 perguntas por dia.</p>
     <button class="btn" type="button" onclick="click();F3.intro=true;f3Salva();f3Tela()">Começar</button>`); }
 function f3Zera(){ F3={dia:1,r:{},seq:[],hoje:null,fim:{}}; f3MontaLista(); }
 /* guardado de antes (formato antigo das 15 fixas): vira a sequência nova */
@@ -1886,7 +1888,7 @@ function f3AcendeMandala(){ const m=document.getElementById("mtopo"); if(!m) ret
 /* pergunta-desempate de 5 níveis: a partir da 6ª, só quando os 2 da frente estão quase empatados, no máximo 2 vezes */
 const F3_DES_TXT={
  soc:"Num dia livre, estar com gente querida é o que mais te faz bem?",
- pau:"Numa tarde livre, ficar quietinha, sem ninguém te pedir nada, te faz bem?",
+ pau:"Numa tarde livre, ficar no seu canto, sem ninguém te pedir nada, te faz bem?",
  sen:"Sentir algo gostoso no corpo, como um cheiro, uma textura ou um sabor, é o que mais te faz bem?",
  con:"Voltar para casa com algo nas mãos, como uma comida boa ou uma compra, te faz bem?",
  jei:"Fazer as coisas do seu jeito e na sua hora é o que mais te faz bem?"};
@@ -2007,11 +2009,11 @@ function fPainel4(){ if(!PREVIA) return; let el=document.getElementById("f3cereb
   el.innerHTML=`<b>Cérebro · Fase 4 · só na prévia</b><small>chance de cada ingrediente estar no seu 10</small>${[...ING].sort((a,b)=>F4.P[b.id]-F4.P[a.id]).map(x=>`<div><span>${x.nome.split(" ").slice(0,2).join(" ")}</span><i style="--w:${Math.round(F4.P[x.id]*100)}%"></i><em>${Math.round(F4.P[x.id]*100)}%</em></div>`).join("")}`; }
 
 /* ---------------- FASE 5 · OFERTAS ----------------
-   Caderno: linhas = ofertas; cada uma ligada a um motivo, a ingredientes e a um momento (quietinha ou conversando, em casa ou fora).
+   Caderno: linhas = ofertas; cada uma ligada a um motivo, a ingredientes e a um momento (no seu canto ou conversando, em casa ou fora).
    2 ou 3 perguntas rápidas antes; "Não é isso" baixa a chance daquela oferta para ela; depois de 2 "Não é isso", "Me ensina". */
 const OFERTAS=[
  {id:"o1",t:"Ligue para alguém querido e marque um café esta semana.",m:"soc",i:["comp"],c:"conversa",l:"fora"},
- {id:"o2",t:"Mande um áudio para uma amiga contando uma coisa boa do seu dia.",m:"soc",i:["comp"],c:"conversa",l:"casa"},
+ {id:"o2",t:"Mande um áudio para alguém querido contando uma coisa boa do seu dia.",m:"soc",i:["comp"],c:"conversa",l:"casa"},
  {id:"o3",t:"Tire 10 minutos sem celular, perto de uma janela.",m:"pau",i:["calm"],c:"quieta",l:"casa"},
  {id:"o4",t:"Faça 5 respirações bem fundas olhando o céu.",m:"pau",i:["calm","natu"],c:"quieta",l:"fora"},
  {id:"o5",t:"Prepare um chá e sinta o cheiro antes do primeiro gole.",m:"sen",i:["sent","calm"],c:"quieta",l:"casa"},
@@ -2029,8 +2031,8 @@ const OFERTAS=[
 let F5=null;
 function f5Abre(){ F5=f5Carrega("7e_fase5",{nao:{},aceitas:[],ensinou:[]}); F5.agora={}; F5.recusas=0; f5Q1(); }
 function f5S(){ f5Salva("7e_fase5",F5); }
-function f5Q1(){ fTopo("agora",5); mostra(`<div class="rot">Fase 5 · Para agora</div><h2 class="f3q">Agora você está mais pra ficar quietinha ou pra conversar?</h2>
-  <div class="opts f3niveis"><button class="opt" type="button" onclick="F5.agora.c='quieta';click();f5Q2()">Ficar quietinha</button><button class="opt" type="button" onclick="F5.agora.c='conversa';click();f5Q2()">Conversar</button><button class="opt" type="button" onclick="click();f5Q2()">Tanto faz</button></div>`); }
+function f5Q1(){ fTopo("agora",5); mostra(`<div class="rot">Fase 5 · Para agora</div><h2 class="f3q">Agora você quer ficar no seu canto ou conversar?</h2>
+  <div class="opts f3niveis"><button class="opt" type="button" onclick="F5.agora.c='quieta';click();f5Q2()">Ficar no meu canto</button><button class="opt" type="button" onclick="F5.agora.c='conversa';click();f5Q2()">Conversar</button><button class="opt" type="button" onclick="click();f5Q2()">Tanto faz</button></div>`); }
 function f5Q2(){ const q=F5.agora.c==="conversa"?"Pessoalmente ou de longe, por mensagem?":"Em casa ou saindo um pouco?";
   const op=F5.agora.c==="conversa"?[["fora","Pessoalmente"],["casa","De longe"]]:[["casa","Em casa"],["fora","Saindo um pouco"]];
   fTopo("agora",5); mostra(`<div class="rot">Fase 5 · Para agora</div><h2 class="f3q">${q}</h2>
@@ -2044,7 +2046,7 @@ function f5Nota(o){ const d=descMotivo()||{}, d10=f5Carrega("7e_descoberta_10",{
 function f5Pistas(o){ const d=descMotivo()||{}, d10=f5Carrega("7e_descoberta_10",{})||{}, p=[];
   if(o.m===d.motivo||o.m===d.motivo2) p.push(`Sua pista da Fase 3: <b>${MOTIVO_NOME[o.m]}</b>`);
   const ing=(o.i||[]).find(x=>x===d10.ingrediente||(d10.top||[]).includes(x)); if(ing) p.push(`O seu 10 tem: <b>${ING_NOME[ing]}</b>`);
-  if(F5.agora.c&&o.c===F5.agora.c) p.push(`Agora você quer: <b>${F5.agora.c==="quieta"?"ficar quietinha":"conversar"}</b>`); return p; }
+  if(F5.agora.c&&o.c===F5.agora.c) p.push(`Agora você quer: <b>${F5.agora.c==="quieta"?"ficar no seu canto":"conversar"}</b>`); return p; }
 function f5Oferta(){ const vistas=F5.vistas||[]; const c=OFERTAS.filter(o=>!vistas.includes(o.id)).sort((a,b)=>f5Nota(b)-f5Nota(a)); const o=c[0]; if(!o) return f6Hall();
   F5.vistas=vistas.concat(o.id); F5.atual=o.id;
   f3Pensando(()=>{ fTopo("uma ideia",5); const p=f5Pistas(o);
