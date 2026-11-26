@@ -305,6 +305,17 @@ body.foco #vinheta{opacity:.55}
 #aviso .lgpd a{color:var(--azul)}
 .averr{color:#ff9aa6;font-size:15px;min-height:1em}
 .avok{font-size:20px;font-weight:800;color:var(--ouro)}
+/* 26/11: PORTA TRANCADA da Fase 3 (fim da Fase 2) — alegre e chamativa; abre só na prévia até a Fase 3 ficar pronta */
+.porta3{max-width:440px;margin:6px auto 0;text-align:center}
+.pt-cena{position:relative;width:min(78vw,320px);margin:6px auto 18px}
+.pt-luz{position:absolute;inset:-6% -14%;background:radial-gradient(closest-side,rgba(245,197,66,.40),transparent);filter:blur(8px);animation:ptPulsa 3.2s ease-in-out infinite}
+.pt-img{position:relative;display:block;width:100%;height:auto;border-radius:18px;box-shadow:0 26px 50px -22px rgba(0,0,0,.9);animation:ptEntra .9s cubic-bezier(.2,.8,.2,1) both}
+@keyframes ptPulsa{50%{opacity:.55;transform:scale(.95)}}
+@keyframes ptEntra{from{opacity:0;transform:translateY(16px) scale(.96)}}
+.porta3 .pt-rot{font:700 14px "Space Mono",monospace;letter-spacing:.12em;color:var(--ouro);text-transform:uppercase}
+.porta3 h2{margin:6px 0 8px;font-size:clamp(30px,8vw,38px)}
+.porta3 .pt-txt{font-size:19px;line-height:1.5;margin:0 0 6px}
+@media (prefers-reduced-motion:reduce){.pt-luz,.pt-img{animation:none}}
 .rodada{font:400 15px "Space Mono",monospace;color:var(--azul);margin-bottom:10px}
 .grade4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:400px;margin:0 auto}
 .grade4 button{all:unset;cursor:pointer;aspect-ratio:1;border-radius:14px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
@@ -1531,18 +1542,30 @@ function grafico(){
 function trava3(){
   let avisado=false; try{ avisado=localStorage.getItem("7e_aviso_fases34")==="1"; }catch(e){}
   const msab=montaSabor()||saborExemplo();
+  if(!F3_ABERTA){ mostra(`${porta3HTML(avisado)}
+    <div class="sabbaixa" style="margin-top:22px"><img id="sabprev" alt="${msab.exemplo?"Imagem de exemplo":"A imagem do seu momento"}" hidden>${msab.exemplo?`<p class="exnota">Imagem de exemplo. Faça a Fase 1 para ter a sua.</p>`:""}<button class="btn" id="baixar" type="button" disabled>⬇ Baixar ${msab.exemplo?"a imagem":"minha imagem"}</button></div>
+    <button class="btn sec" style="margin-top:14px" onclick="recomecar()">Fazer de novo</button>`, c=>{ ligaBaixar(c,msab); ligaAviso(c); vibra([10,40,10]); }); return; }
   mostra(`<div class="rot">Fase 3</div>${videoBrisa(VID3,LEG3)}
     <div class="sabbaixa"><img id="sabprev" alt="${msab.exemplo?"Imagem de exemplo":"A imagem do seu momento"}" hidden>${msab.exemplo?`<p class="exnota">Imagem de exemplo. Faça a Fase 1 para ter a sua.</p>`:""}<button class="btn" id="baixar" type="button" disabled>⬇ Baixar ${msab.exemplo?"a imagem":"minha imagem"}</button></div>
     <div class="trava"><h2>Me conta mais?</h2><p class="f3frase">A cada resposta, o app fica mais inteligente para você!</p><p class="sub">Não tem resposta certa ou errada. No máximo 5 perguntas por dia.</p><button class="btn" type="button" onclick="click();f3DaBrisa()">Começar a Fase 3</button></div>
     <button class="btn sec" style="margin-top:14px" onclick="recomecar()">Fazer de novo</button>`,
-    c=>{ ligaVideo(c,LEG3,()=>{},VID3); ligaBaixar(c,msab); const f=c.querySelector("#aviso"); if(!f) return;
+    c=>{ ligaVideo(c,LEG3,()=>{},VID3); ligaBaixar(c,msab); ligaAviso(c); });
+}
+/* formulário opcional "me avise quando abrir" (nome e e-mail vão SEPARADOS das respostas anônimas) */
+function ligaAviso(c){ const f=c.querySelector("#aviso"); if(!f) return;
       f.addEventListener("submit",e=>{ e.preventDefault(); const n=c.querySelector("#av-nome").value.trim(), m=c.querySelector("#av-email").value.trim(), ok=c.querySelector("#av-ok").checked, er=c.querySelector("#av-err");
         if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(m)){ er.textContent="Confira o e-mail."; return; } if(!ok){ er.textContent="Marque a caixinha para continuar."; return; }
         click(); /* vai SEPARADO das respostas anônimas (mesmo caminho da lista de espera da pesquisa) */
         try{ if(ENDPOINT) fetch(ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify({evento:"espera",origem:"app-fases-3-4",nome:n,email:m,lgpd:true,quando:new Date().toISOString()})}).catch(()=>{}); }catch(_){}
         try{ localStorage.setItem("7e_aviso_fases34","1"); }catch(_){}
-        f.outerHTML=`<p class="avok">Pronto${n?", "+esc(n.split(" ")[0]):""}! Assim que as Fases 3 e 4 abrirem, a gente te avisa por e-mail. ✨</p>`; vibra([10,40,10]); }); });
-}
+        f.outerHTML=`<p class="avok">Pronto${n?", "+esc(n.split(" ")[0]):""}! Assim que a Fase 3 abrir, a gente te avisa por e-mail.</p>`; vibra([10,40,10]); }); }
+/* 26/11: a Fase 3 ainda está sendo decidida. Para o público, o fim da Fase 2 mostra uma porta trancada; na prévia (Daniel) ela abre. */
+const F3_ABERTA = PREVIA;
+function porta3HTML(avisado){
+  return `<div class="porta3"><div class="pt-cena"><div class="pt-luz" aria-hidden="true"></div><img class="pt-img" src="${NO_SITE?"/app/":""}porta-fase3.webp" alt="Uma porta mágica trancada, com a mandala dos 7 sentidos e luz dourada escapando pela fresta" width="720" height="892"></div>
+  <div class="pt-rot">Fase 3 · em preparação</div><h2>${comNome("{n}, a próxima porta já tem o seu nome.","A próxima porta já tem o seu nome.")}</h2>
+  <p class="pt-txt">Estamos trabalhando na Fase 3 com tudo o que você nos mostrou até aqui. Quando ela abrir, você recebe a sua devolutiva.</p>
+  ${avisado?`<p class="avok">Você já está na lista. A gente te avisa quando abrir.</p>`:`<form id="aviso" novalidate><p class="sub" style="margin:8px 0 0">Quer saber quando abrir? É opcional.</p><input id="av-nome" type="text" placeholder="Seu nome (se quiser)" autocomplete="given-name"><input id="av-email" type="email" placeholder="Seu e-mail" autocomplete="email"><label class="lgpd"><input id="av-ok" type="checkbox"><span>Aceito receber o aviso por e-mail. Meus dados ficam separados das respostas. <a href="/privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a></span></label><p class="averr" id="av-err"></p><button class="btn" type="submit">Quero ser avisado</button></form>`}</div>`; }
 /* botão de baixar a imagem do Saborear (no celular abre o "compartilhar/salvar"; no computador baixa o arquivo) */
 function ligaBaixar(c,m){ const bt=c.querySelector("#baixar"), pv=c.querySelector("#sabprev"); if(!bt) return; let blob=null;
   imagemSabor(m).then(b=>{ blob=b; pv.src=URL.createObjectURL(b); pv.hidden=false; bt.disabled=false; }).catch(()=>{ bt.closest(".sabbaixa").remove(); });
@@ -1604,7 +1627,7 @@ function f3Topo(txt){
 }
 /* 26/11: a abertura da Fase 3 ("Me conta mais?") fica na mesma tela do vídeo da Brisa; quem entra por ali pula a tela de abertura separada */
 function f3DaBrisa(){ f3Carrega(); F3.intro=true; f3Salva(); f3Abre(); }
-function f3Abre(){ f3Carrega(); entrou=true; pos=R.length-1; try{ localStorage.setItem("7e_fase3_ativa","1"); }catch(e){} f3Tela(); }
+function f3Abre(){ if(!F3_ABERTA){ try{ localStorage.removeItem("7e_fase3_ativa"); }catch(e){} entrou=true; pos=R.length-1; desenha(); return; } f3Carrega(); entrou=true; pos=R.length-1; try{ localStorage.setItem("7e_fase3_ativa","1"); }catch(e){} f3Tela(); }
 function f3Pinta(){
   document.querySelectorAll(".f3op").forEach(b=>{ const m=b.dataset.m, tg=b.querySelector(".f3tag");
     b.classList.toggle("sel",m===f3Sel.a); b.classList.toggle("sel2",m===f3Sel.b);
