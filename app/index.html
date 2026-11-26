@@ -674,8 +674,8 @@ body.foco .topo:hover,body.foco #pularbtn:focus-visible,body.foco #voltar:focus-
 .f3barras{max-width:420px;margin:0 auto 10px;display:grid;gap:10px;text-align:left}
 .f3bar{display:grid;grid-template-columns:1fr 46px;gap:2px 10px;align-items:center;font-weight:700;font-size:16px}
 .f3bar i{grid-column:1;height:12px;border-radius:999px;background:rgba(169,179,209,.18);position:relative;overflow:hidden}
-.f3bar i::after{content:"";position:absolute;inset:0;width:var(--w);background:var(--ouro);border-radius:999px}
-.f3bar b{grid-row:1/span 2;grid-column:2;text-align:right;color:var(--ouro);font-size:18px}
+.f3bar i::after{content:"";position:absolute;inset:0;width:var(--w);background:var(--mc,var(--ouro));border-radius:999px}
+.f3bar b{grid-row:1/span 2;grid-column:2;text-align:right;color:var(--mc,var(--ouro));font-size:18px}
 .f3crit{font-size:14px;color:var(--azul);max-width:420px;margin:12px auto 0;line-height:1.4}
 .f3orig{display:flex;align-items:center;gap:12px;max-width:440px;margin:4px auto 10px;padding:8px 12px;border-radius:16px;background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.3);text-align:left}
 .f3orig img{width:58px;height:58px;border-radius:12px;object-fit:cover;flex:none}
@@ -1256,6 +1256,8 @@ const fraseJogo=s=>`Agora, o jogo ${["tato","paladar","olfato","equilibrio"].inc
 const fraseGosto=(s,i)=>i===0&&NOME()?"Boa, "+NOME()+"! "+s.brisa:i===6&&NOME()?NOME()+", "+s.brisa.charAt(0).toLowerCase()+s.brisa.slice(1):s.brisa;
 const cabLongo=(s,dica)=>`<p class="brisafrase" style="--c:${s.cor}">${esc(fraseJogo(s))}</p><h2>${s.jogo}</h2><p class="missao" style="--c:${s.cor};--cc:${claro(s.cor)}"><b>Missão:</b> ${s.missao}</p><p class="dica">${dica}</p>`;
 /* jogos com pouco texto: só o título e uma linha curta */
+/* 26/11: depois do prato, a viagem do limão tem título próprio (o prato já foi montado) */
+const cabSabor=dica=>`<h2 class="jtit">Viagem do sabor</h2><p class="dica curta">${dica}</p>`;
 const cab=(s,dica)=>`<h2 class="jtit">${s.jogo}</h2><p class="dica curta">${dica}</p>`;
 /* luzinhas de retorno (uma por rodada): 1 = acertou (acesa), 0 = errou (apagada), null = ainda não jogou */
 function fraseNivel(o,n,max){ const f=n>=Math.ceil(max*.7)?`Seu ${o} pega detalhes que pouca gente percebe.`:n>=Math.ceil(max*.4)?`Seu ${o} é atento aos detalhes.`:`Seu ${o} gosta mais do todo do que dos detalhes.`;
@@ -1369,12 +1371,12 @@ const JOGOS={
         pinta(); if(sel.length===3){ resp.paladar_prato=sel.map(k=>achar(k)[1]); mesa.classList.add("pronto"); c.querySelectorAll(".ingr button").forEach(x=>{ if(!x.classList.contains("sel")) x.disabled=true; }); setTimeout(()=>{ if(aindaNoJogo(s)) limao(); },1800); } });
       /* viagem do limão: 15 s só com a gota de limão; quem volta ao app faz a versão completa (limão e milkshake) */
       function limao(){ let volta=false; try{ volta=localStorage.getItem("7e_paladar_viagem")==="1"; }catch(_){} const id=volta?"limaoMilk":"limao"; resp.paladar_viagem=volta?"completa":"curta";
-        c.innerHTML=`${cab(s,"Agora, uma viagem rápida.")}<p class="gesto">Feche os olhos e imagine comigo.</p><button class="btn" id="vai">Começar</button>`;
+        c.innerHTML=`${cabSabor("Agora, uma viagem rápida.")}<p class="gesto">Feche os olhos e imagine comigo.</p><button class="btn" id="vai">Começar</button>`;
         c.querySelector("#vai").onclick=()=>{ somJogo(); viagem(c,id,s,()=>{ if(!aindaNoJogo(s)) return; try{ localStorage.setItem("7e_paladar_viagem","1"); }catch(_){} fundo(s);
-          const Q=volta?["Qual dos dois te deu mais vontade?",["Limão","Milkshake","Os dois","Nenhum"],"paladar_mais_vontade"]:["Sua boca encheu d’água?",["Sim","Um pouco","Não"],"paladar_boca"];
+          const Q=volta?["Qual dos dois te deu mais vontade?",["Limão","Milkshake","Os dois","Nenhum"],"paladar_mais_vontade"]:["Você conseguiu sentir o gosto?",["Sim","Um pouco","Não"],"paladar_sentiu"];
           /* 19/11: na versão completa, Limão e Milkshake viram botões com foto realista; "Os dois" e "Nenhum" ficam embaixo */
           const FOTOV={"Limão":"viagem-limao.webp","Milkshake":"viagem-milkshake.webp"};
-          c.innerHTML=`${cab(s,"De volta.")}<h2 class="mudou">${Q[0]}</h2>`+(volta
+          c.innerHTML=`${cabSabor("De volta.")}<h2 class="mudou">${Q[0]}</h2>`+(volta
             ?`<div class="viagens duas">${["Limão","Milkshake"].map(o=>`<button class="opt viag" data-o="${o}"><img src="${FOTOV[o]}" alt=""><span>${o}</span></button>`).join("")}</div><div class="opts" style="margin-top:12px">${["Os dois","Nenhum"].map(o=>`<button class="opt" data-o="${o}">${o}</button>`).join("")}</div>`
             :`<div class="opts">${Q[1].map(o=>`<button class="opt" data-o="${o}">${o}</button>`).join("")}</div>`);
           c.querySelectorAll(".opt").forEach(q=>q.onclick=()=>{ somJogo(); resp[Q[2]]=q.dataset.o; q.classList.add("sel"); c.querySelectorAll(".opt").forEach(y=>y.disabled=true); vibra([10,40,10]); fim(); }); }); }; }
@@ -1566,6 +1568,8 @@ const MOTIVOS = [
  {id:"jei", nome:"Do meu jeito"}
 ];
 const MOTIVO_NOME = Object.fromEntries(MOTIVOS.map(m=>[m.id,m.nome]));
+/* 26/11: cada motivo tem uma cor fixa, usada SÓ no resultado da Fase 3 (nas perguntas não, para não influenciar) */
+const MOTIVO_COR = {soc:"#ff86c0",pau:"#7fd3ff",sen:"#ff8a3d",con:"#5ccf8a",jei:"#f5c542"};
 /* As 15 situações, em 3 dias de 5. Cada uma tem UMA opção por motivo (na ordem soc, pau, sen, con, jei).
    "sent" = sentidos ligados à situação (vai servir para o Bloco 3, escolher as situações pela Fase 1). */
 const SITUACOES = [
@@ -1824,9 +1828,9 @@ function f3Zera(){ F3={dia:1,r:{},seq:[],hoje:null,fim:{}}; f3MontaLista(); }
 function f3Migra(){ if(F3&&!F3.seq){ F3.seq=(F3.lista||[]).filter(id=>F3.r&&F3.r[id]); F3.hoje=null; F3.dia=F3.dia||1; delete F3.i; f3Salva(); } }
 /* resultado: mostra a descoberta (motivo ou mistura) e as chances de cada motivo */
 function f3MostraResultado(){ const rk=f3Ranking(), d=F3.descoberta||(rk[0].p>=F3_CERTEZA?{tipo:"principal",a:rk[0].id}:{tipo:"mistura",a:rk[0].id,b:rk[1].id}); f3Topo("suas pistas");
-  const cab=!d?`<h2>Ainda não deu para ver.</h2>`:d.tipo==="principal"?`<p class="sub">Nas suas escolhas, o que mais aparece é</p><h2 class="f3prin">${MOTIVO_NOME[d.a]}</h2>`
+  const cab=!d?`<h2>Ainda não deu para ver.</h2>`:d.tipo==="principal"?`<p class="sub">Nas suas escolhas, o que mais aparece é</p><h2 class="f3prin" style="color:${MOTIVO_COR[d.a]}">${MOTIVO_NOME[d.a]}</h2>`
     :`<p class="sub">Nas suas escolhas, você é uma mistura de</p><h2 class="f3prin">${MOTIVO_NOME[d.a]} e ${MOTIVO_NOME[d.b]}</h2>`;
-  const barras=`<div class="f3barras">${rk.map(m=>`<div class="f3bar"><span>${m.nome}</span><i style="--w:${Math.round(m.p*100)}%"></i><b>${Math.round(m.p*100)}%</b></div>`).join("")}</div>
+  const barras=`<div class="f3barras">${rk.map(m=>`<div class="f3bar" style="--mc:${MOTIVO_COR[m.id]||"#f5c542"}"><span>${m.nome}</span><i style="--w:${Math.round(m.p*100)}%"></i><b>${Math.round(m.p*100)}%</b></div>`).join("")}</div>
     <p class="f3crit">Como cheguei aqui: cada resposta sobe a chance do motivo que você escolheu e desce um pouco a dos outros (a 2ª opção conta pela metade). A Brisa só te conta uma pista quando um motivo passa de 75%.</p>`;
   mostra(`<div class="rot">Fase 3 · Suas pistas</div>${cab}${d.pistas&&d.pistas.length?`<div class="f3pistas"><div class="rot">Pensei nisso porque você escolheu…</div>${d.pistas.map(x=>`<div class="f3pi"><b>“${esc(x.op)}”</b><small>${esc(x.sit)}</small></div>`).join("")}</div>`:""}${barras}<p class="f3pista">É uma pista sobre você, nunca um rótulo.</p>
     <div class="rot" style="margin-top:8px">Seu mapa: sentidos × motivos</div>${f3Mapa("",true)}
