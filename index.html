@@ -26,7 +26,8 @@
   --serif:Fraunces,Georgia,serif;--mono:"Space Mono",ui-monospace,monospace;--sans:Manrope,system-ui,sans-serif;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;overflow-x:clip}
+@supports not (overflow:clip){html{overflow-x:hidden}}
 body{margin:0;background:var(--noite);color:var(--creme);font-family:var(--sans);font-size:19px;line-height:1.5;overflow-x:hidden;
   padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
 img{max-width:100%;display:block}
@@ -50,7 +51,10 @@ p{margin:0}
 /* ===== topo ===== */
 .topo{position:fixed;inset:0 0 auto 0;z-index:20;padding:calc(12px + env(safe-area-inset-top)) 20px 12px;display:flex;align-items:center;justify-content:space-between;transition:background .4s,backdrop-filter .4s}
 .topo.solido{background:rgba(10,17,40,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-.topo img{height:40px;width:auto}
+.topo .marca{display:flex;align-items:center;gap:10px;color:var(--creme);text-decoration:none}
+.topo .marca img{height:40px;width:40px;border-radius:50%;box-shadow:0 0 14px rgba(245,197,66,.35)}
+.topo .marca span{font-family:var(--serif);font-size:24px;line-height:1}
+.topo .marca span em{font-style:normal;color:#f5c542!important}
 .topo .btn{min-height:46px;padding:0 22px;font-size:16px;opacity:0;pointer-events:none;transform:translateY(-8px)}
 .topo.solido .btn{opacity:1;pointer-events:auto;transform:none}
 
@@ -389,7 +393,7 @@ body.sem-selos .selo{display:none}
   .sobre nav{grid-column:1}
   .numeros{grid-template-columns:1fr}
   .num+.num::before{left:22%;right:22%;top:0;bottom:auto;width:auto;height:1px}
-  .topo img{height:34px}
+  .topo .marca img{height:34px;width:34px}
 }
 @media (max-width:520px){
   body{font-size:18px}
@@ -406,7 +410,7 @@ body.sem-selos .selo{display:none}
 
 
 <header class="topo" id="topo">
-  <img src="assets/home/logo-7entidos.png" alt="7entidos — A vida é feita de boas sensações.">
+  <a class="marca" href="/" aria-label="7entidos — A vida é feita de boas sensações."><img src="assets/home/mandala-7.webp" alt=""><span><em>7</em>entidos</span></a>
   <a class="btn js-baixar" href="#baixar" data-baixar="topo">Baixar o app</a>
 </header>
 
@@ -460,7 +464,8 @@ body.sem-selos .selo{display:none}
         <span class="etq">Siga o 7entidos</span>
         <div class="rd-lista">
         <a class="rd" href="https://www.youtube.com/@7Entidos" target="_blank" rel="noopener" style="--rc:#ff3b3b" data-rede="youtube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8zM10 15V9l5.2 3z"/></svg><span><b>YouTube</b><small>@7Entidos</small></span></a>
-        <a class="rd" href="https://www.instagram.com/7entidoss/" target="_blank" rel="noopener" style="--rc:#e1306c" data-rede="instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor"/></svg><span><b>Instagram</b><small>@7entidoss</small></span></a>
+        <!-- Instagram escondido em 26/11: a conta @7entidoss está fora do ar desde 25/11. Para voltar, tire o style="display:none" abaixo. -->
+        <a class="rd" style="display:none" href="https://www.instagram.com/7entidoss/" target="_blank" rel="noopener" style="--rc:#e1306c" data-rede="instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor"/></svg><span><b>Instagram</b><small>@7entidoss</small></span></a>
         <a class="rd" href="https://www.facebook.com/profile.php?id=61596119254628" target="_blank" rel="noopener" style="--rc:#1877f2" data-rede="facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14 8h3V4h-3c-2.8 0-4 1.8-4 4.3V10H7v4h3v7h4v-7h3l.5-4H14V8.6c0-.4.2-.6.6-.6z"/></svg><span><b>Facebook</b><small>7entidos</small></span></a>
         <a class="rd" href="https://www.tiktok.com/@7entidos" target="_blank" rel="noopener" style="--rc:#25f4ee" data-rede="tiktok"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.6 3c.4 2.2 1.8 3.7 4 4v3.1c-1.5 0-2.9-.4-4-1.2v6.3a5.8 5.8 0 1 1-5-5.7v3.2a2.6 2.6 0 1 0 1.8 2.5V3z"/></svg><span><b>TikTok</b><small>@7entidos</small></span></a>
         <a class="rd" href="https://www.linkedin.com/company/145418964/" target="_blank" rel="noopener" style="--rc:#0a66c2" data-rede="linkedin"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.6 4.8 6V21h-4v-5.2c0-1.2 0-2.8-1.7-2.8s-2 1.3-2 2.7V21h-4z"/></svg><span><b>LinkedIn</b><small>7entidos</small></span></a>
@@ -506,7 +511,7 @@ body.sem-selos .selo{display:none}
 <div class="wrap rel">
   <div class="numeros">
     <div class="num rev"><b>7</b><span>sentidos</span></div>
-    <div class="num rev" style="--dl:.12s"><b>3<em>min</em></b><span>por rodada</span></div>
+    <div class="num rev" style="--dl:.12s"><b>7<em>min</em></b><span>na primeira visita</span></div>
     <a class="num num-link rev" style="--dl:.24s" href="#ciencia" aria-label="Flow: ver a ciência por trás"><b><em>Flow</em></b><span>a ciência por trás ↓</span></a>
   </div>
 </div>
@@ -519,11 +524,11 @@ body.sem-selos .selo{display:none}
       <h2>Simples como <em>sentir</em>.</h2>
     </div>
     <div class="fluxo">
-      <article class="passo rev" style="--c:var(--audicao)"><span class="n">PASSO 01</span><h3>Escolha</h3><p>Escolha um sentido e responda com um toque: imagens, sons, texturas.</p></article>
+      <article class="passo rev" style="--c:var(--audicao)"><span class="n">PASSO 01</span><h3>Escolha</h3><p>O que te faz bem em cada sentido.</p></article>
       <div class="ponte" aria-hidden="true"><svg viewBox="0 0 52 24"><path d="M2 12 H44 M38 5 L46 12 L38 19"/></svg></div>
-      <article class="passo rev" style="--c:var(--tato);--dl:.15s"><span class="n">PASSO 02</span><h3>Descubra</h3><p>O app mostra o que te faz bem — e por quê, com a ciência explicada de um jeito fácil.</p></article>
+      <article class="passo rev" style="--c:var(--tato);--dl:.15s"><span class="n">PASSO 02</span><h3>Jogue</h3><p>Um desafio rápido para cada sentido.</p></article>
       <div class="ponte" aria-hidden="true"><svg viewBox="0 0 52 24"><path d="M2 12 H44 M38 5 L46 12 L38 19"/></svg></div>
-      <article class="passo rev" style="--c:var(--olfato);--dl:.3s"><span class="n">PASSO 03</span><h3>Guarde</h3><p>Guarde suas boas sensações e volte a elas quando o dia pedir.</p></article>
+      <article class="passo rev" style="--c:var(--olfato);--dl:.3s"><span class="n">PASSO 03</span><h3>Descubra</h3><p>A cada resposta, o app fica mais inteligente para você.</p></article>
     </div>
 
     <div class="grande-circulo">
