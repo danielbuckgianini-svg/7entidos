@@ -785,8 +785,8 @@ const MANDALA = NO_SITE ? "/app/mandala-7.webp" : "mandala-7.webp"; /* mandala o
    Os de agora são VÍDEOS DE TESTE (foto da Brisa + som suave). Quando chegarem os verdadeiros, mude VIDEO_TESTE para false
    e troque as legendas abaixo pelas falas exatas do vídeo (segundo de início, segundo de fim, texto). */
 const VIDEO_TESTE = false;
-const VID1 = NO_SITE ? "/app/brisa-entrada.mp4?v=288" : "brisa-entrada.mp4?v=288";
-const VID2 = NO_SITE ? "/app/brisa-fase2.mp4" : "brisa-fase2.mp4";
+const VID1 = NO_SITE ? "/app/brisa-entrada.mp4?v=289" : "brisa-entrada.mp4?v=289";   /* 27/11: versão mais leve (internet fraca) */
+const VID2 = NO_SITE ? "/app/brisa-fase2.mp4?v=2" : "brisa-fase2.mp4?v=2";
 const VID3 = NO_SITE ? "/app/brisa-fase3.mp4" : "brisa-fase3.mp4";
 /* legenda do vídeo 3: fica vazia até o Daniel confirmar o texto exato do vídeo (sem legenda, o botão "Legenda" não aparece) */
 const LEG3 = [];
@@ -1007,14 +1007,14 @@ function guardaNome(v){ v=String(v||"").replace(/\s+/g," ").trim().slice(0,30); 
    Se o celular não deixar tocar com som, o vídeo toca sem som, a legenda liga sozinha e um toque no vídeo põe o som. */
 let GV=null, legOn=false, entrou=false;
 function pegaVideo(){ if(!GV){ GV=document.createElement("video"); GV.id="vid"; GV.setAttribute("playsinline",""); GV.setAttribute("webkit-playsinline",""); GV.preload="auto"; } return GV; }
-function destravaVideo(src){ const v=pegaVideo(); try{ v.muted=false; if(!v.src.endsWith(src.split("/").pop())){ v.src=src; v.poster=src.replace(/\.mp4$/,".jpg"); } const p=v.play(); v.pause(); if(p&&p.catch) p.catch(()=>{}); }catch(e){} }
+function destravaVideo(src){ const v=pegaVideo(); try{ v.muted=false; if(!v.src.endsWith(src.split("/").pop())){ v.src=src; v.poster=src.replace(/\.mp4(\?.*)?$/,".jpg"); } const p=v.play(); v.pause(); if(p&&p.catch) p.catch(()=>{}); }catch(e){} }
 function videoBrisa(src,leg,legcls){ return `<div class="vbrisa" id="vb"><div class="vslot" id="vslot"></div>${VIDEO_TESTE&&PREVIA?'<span class="teste">vídeo de teste</span>':""}</div>
   <div class="legfora ${legcls||""}" id="leg" ${legOn?"":"hidden"}></div>
   <div class="vbotoes"><button class="ouvirb ${legOn?"on":""}" id="legbtn" type="button" aria-pressed="${legOn}">💬 Legenda</button><button class="denovo" id="denovo" type="button" hidden>▶ Ver de novo</button></div>`; }
 function ligaVideo(c,leg,falha,src){ const lg=c.querySelector("#leg"), lb=c.querySelector("#legbtn"), dn=c.querySelector("#denovo"), slot=c.querySelector("#vslot"); if(!slot) return;
   if(!leg.length){ lb.style.display="none"; lg.hidden=true; }
   const v=pegaVideo(); slot.appendChild(v);
-  if(!v.src.endsWith(src.split("/").pop())){ v.src=src; v.poster=src.replace(/\.mp4$/,".jpg"); }
+  if(!v.src.endsWith(src.split("/").pop())){ v.src=src; v.poster=src.replace(/\.mp4(\?.*)?$/,".jpg"); }
   const poeLeg=()=>{ const t=v.currentTime, l=leg.find(x=>t>=x[0]&&t<x[1]); lg.textContent=l?l[2]:""; };
   const ligaLeg=on=>{ if(!leg.length) return; legOn=on; lg.hidden=!on; lb.classList.toggle("on",on); lb.setAttribute("aria-pressed",on); poeLeg(); };
   v.ontimeupdate=poeLeg;
@@ -1036,7 +1036,7 @@ function fraseAbertura(){ let i=0; if(PREVIA){ try{ const k=+localStorage.getIte
 function brisa(){
   if(!entrou){
     document.getElementById("pularbtn").hidden=true;
-    mostra(`<div class="entrar"><div class="entramdl">${mandala(Math.round(Math.min(innerWidth*.66,280)),"mentra")}</div><div class="marcatxt"><b><em>7</em>entidos</b><span class="piscadev">A vida é feita de boas sensações.</span></div><p class="duracao">PRIMEIRA VISITA · UNS 7 MINUTOS</p><p class="gatilho">${fraseAbertura()}</p><button class="btn" onclick="entrar()">Entrar</button></div>`, c=>poeMandala(c.querySelector("#mentra"),{pos:TODOS,luz:TODOS,miolo:true}));
+    mostra(`<div class="entrar"><div class="entramdl">${mandala(Math.round(Math.min(innerWidth*.66,280)),"mentra")}</div><div class="marcatxt"><b><em>7</em>entidos</b><span class="piscadev">A vida é feita de boas sensações.</span></div><p class="duracao">PRIMEIRA VISITA · UNS 7 MINUTOS</p><p class="gatilho">${fraseAbertura()}</p><button class="btn" onclick="entrar()">Entrar</button><p class="seguro">🔒 O 7entidos nunca pede senha, dinheiro nem dados do banco.</p></div>`, c=>poeMandala(c.querySelector("#mentra"),{pos:TODOS,luz:TODOS,miolo:true}));
     return;
   }
   mostra(`${videoBrisa(VID1,LEG1)}

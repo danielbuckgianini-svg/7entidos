@@ -41,7 +41,7 @@ const VIDEO3_NOVO = true;
 const FALA3 = "Agora começa uma fase muito importante: é aqui que eu começo a ligar tudo o que você me mostrou. Vamos montar a sua régua, do 10 até o 0. O que é um 10 pra você? E um 5? Ninguém sente igual, por isso a régua é só sua. São dez etapas, uma para cada número, e você escolhe o número do dia, sem pressa. A cada resposta, o app fica mais inteligente para você! Vamos começar pelo seu 10?";
 const LEG3_NOVA = [[1.0,6.7,"Agora começa uma fase muito importante: é aqui que eu começo a ligar tudo o que você me mostrou."],[6.7,10.4,"Vamos montar a sua régua, do 10 até o 0."],[10.4,12.9,"O que é um 10 pra você? E um 5?"],[12.9,16.8,"Ninguém sente igual, por isso a régua é só sua."],[16.8,22.3,"São dez etapas, uma para cada número, e você escolhe o número do dia, sem pressa."],[22.3,26.3,"A cada resposta, o app fica mais inteligente para você!"],[26.3,29,"Vamos começar pelo seu 10?"]];
 /* vídeo novo (27/11): arquivo separado, para não mudar o fim da Fase 2 que está no ar */
-const VID3_REGUA = (NO_SITE?"/app/":"")+"brisa-fase3-regua.mp4";
+const VID3_REGUA = (NO_SITE?"/app/":"")+"brisa-fase3-regua.mp4?v=2";   /* 27/11: versão mais leve */
 const FIM_DIA = "Por hoje é isso. Amanhã tem mais um pedacinho da sua régua.";
 const FOLGA_TXT = "Hoje é seu dia de folga. Seu foguinho fica guardado.";
 const BAU_VAZIO = "Desta vez veio vazio. Quem sabe no próximo!";
@@ -882,7 +882,8 @@ function rgFechaNumero(){ const A=RG.atual, n=A.num;
     <h2 style="margin-top:10px">${rgReguaPronta()?"Você completou a sua régua (do 10 ao 5).":A.pulou?"Tudo bem pular o 0.":"Seu "+n+" está na régua. Veja a bolinha acesa:"}</h2>
     ${rgEscada({nova:n})}
     <div id="rgbauarea"><button class="rg-bau" type="button" onclick="rgAbreBau(this)"><span>🎁</span>Abrir o baú surpresa</button></div>
-    <div style="margin-top:12px"><button class="btn" type="button" onclick="click();rgTela()">Seguir</button></div>`); }
+    <div style="margin-top:12px"><button class="btn" type="button" onclick="click();rgTela()">Seguir</button></div>
+    <div style="margin-top:12px"><button class="btn sec" type="button" onclick="rgCompartilhaRegua()">📲 Mandar no WhatsApp</button></div>`); }
 
 /* Bloco 3: a Brisa dá uma frase curta de reforço sobre o que ela fez, ao fechar cada número */
 const REFORCO = {
@@ -900,6 +901,32 @@ const REFORCO = {
 };
 function rgReforco(n,A){ const t = A&&A.pulou ? "Tudo bem pular. A régua continua sua." : (A&&A.pistas&&A.pistas.length ? "Você contou do seu jeito, e isso vale muito. Seu "+n+" está guardado!" : REFORCO[n]);
   return `<div class="rg-reforco"><img src="${BRISA}" alt="Brisa"><p><small>Brisa</small>${esc(t)}</p></div>`; }
+
+/* =================== BLOCO 10 (V4) · RECOMPENSA SEM COMPETIÇÃO: IMAGEM PARA MANDAR NO WHATSAPP ===================
+   Só o progresso (bolinhas acesas e a estrelinha), sem as respostas dela, sem pontos e sem ranking. Com o canal do YouTube. */
+const YT_LINK = "https://www.youtube.com/@7Entidos";
+function rgImagemRegua(){ const W=1080,H=1350, cv=document.createElement("canvas"); cv.width=W; cv.height=H; const g=cv.getContext("2d");
+  const fundo=g.createLinearGradient(0,0,0,H); fundo.addColorStop(0,"#1d2b6b"); fundo.addColorStop(.5,"#111b3d"); fundo.addColorStop(1,"#0a1128"); g.fillStyle=fundo; g.fillRect(0,0,W,H);
+  g.textAlign="center"; g.fillStyle="#f5c542"; g.font="600 64px Fraunces, Georgia, serif"; g.fillText("7entidos",W/2,150);
+  g.fillStyle="#f4ecdc"; g.font="800 64px Manrope, system-ui, sans-serif"; g.fillText("Minha régua está crescendo",W/2,330);
+  const feitos=rgFeitos().length; g.font="600 40px Manrope, system-ui, sans-serif"; g.fillStyle="#e4e8f6"; g.fillText("Mais um pedacinho de mim, no meu ritmo.",W/2,400);
+  /* estrelinha */
+  const t=180+feitos*22, cx=W/2, cy=650; g.save(); g.translate(cx-t/2,cy-t/2); g.scale(t/24,t/24); g.fillStyle="#f5c542"; g.shadowColor="#f5c542"; g.shadowBlur=2;
+  g.fill(new Path2D("M12 1.6l2.9 6.6 7.1.6-5.4 4.7 1.7 7-6.3-3.8-6.3 3.8 1.7-7L2 8.8l7.1-.6z")); g.restore();
+  /* as 11 bolinhas, do 0 ao 10 */
+  const r=34, gap=88, x0=W/2-gap*5; for(let n=0;n<=10;n++){ const x=x0+n*gap, y=960, ok=RG.feitos[n]!=null;
+    g.beginPath(); g.arc(x,y,r,0,Math.PI*2); g.fillStyle=ok?COR_NUM[n]:"rgba(228,232,246,.14)"; g.fill(); g.lineWidth=4; g.strokeStyle=ok?COR_NUM[n]:"rgba(228,232,246,.45)"; g.stroke();
+    g.fillStyle=ok?"#0a1128":"#e4e8f6"; g.font="800 30px Manrope, system-ui, sans-serif"; g.fillText(String(n),x,y+11); }
+  g.fillStyle="#f4ecdc"; g.font="600 40px Manrope, system-ui, sans-serif"; g.fillText("A vida é feita de boas sensações.",W/2,1150);
+  g.fillStyle="#f5c542"; g.font="700 36px Manrope, system-ui, sans-serif"; g.fillText("Assista no YouTube: youtube.com/@7Entidos",W/2,1240);
+  return new Promise(ok=>cv.toBlob(b=>ok(b),"image/png")); }
+window.rgImagemRegua = rgImagemRegua;
+window.rgCompartilhaRegua = function(){ click&&click(); const txt="Estou montando a minha régua das boas sensações no 7entidos. Assista no YouTube: "+YT_LINK;
+  rgImagemRegua().then(blob=>{ const f=blob&&new File([blob],"minha-regua-7entidos.png",{type:"image/png"});
+    if(f&&navigator.canShare&&navigator.canShare({files:[f]})) return navigator.share({files:[f],text:txt}).catch(()=>{});
+    /* sem o "compartilhar" do celular: baixa a imagem e abre o WhatsApp com o texto */
+    if(blob){ const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="minha-regua-7entidos.png"; document.body.appendChild(a); a.click(); a.remove(); }
+    window.open("https://wa.me/?text="+encodeURIComponent(txt),"_blank","noopener"); rgAviso("A imagem foi baixada. É só anexar no WhatsApp."); }); };
 
 /* =================== BLOCO D · BAÚ SURPRESA =================== */
 /* sorteio de verdade: 1 em cada 5 vem vazio */

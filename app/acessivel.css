@@ -191,3 +191,17 @@ body.emf3 #voltar:not([hidden]){display:inline-flex!important}
 .fbtns .ouvir2.tocando{background:var(--ouro);color:#15110a}
 .perto .btn{margin-top:6px}
 .f3pensa h2{font-size:28px}
+
+/* ---------- Bloco 10 · 1. "Ouvir a Brisa" (canto de cima, à direita) ---------- */
+.ouvirbrisa{all:unset;cursor:pointer;position:fixed;top:calc(10px + env(safe-area-inset-top));right:12px;z-index:21;box-sizing:border-box;min-height:64px;padding:0 18px;border-radius:999px;
+  display:inline-flex;align-items:center;gap:6px;font:800 18px Manrope,system-ui,sans-serif;color:var(--ouro);background:rgba(10,17,40,.92);border:1.5px solid rgba(245,197,66,.75);box-shadow:0 8px 20px rgba(0,0,0,.45)}
+.ouvirbrisa.on{background:var(--ouro);color:#15110a}
+body.foco .ouvirbrisa{opacity:1}
+/* ---------- Bloco 10 · 3. Mostrar que é seguro ---------- */
+.seguro{font-size:18px;font-weight:700;color:#d7f5df;background:rgba(92,207,138,.12);border:1px solid rgba(92,207,138,.45);border-radius:14px;padding:10px 14px;max-width:340px;margin:-10px auto 0;text-align:center;line-height:1.35}
+/* ---------- Bloco 10 · 5. mãozinha ---------- */
+.maozinha{position:absolute;z-index:80;width:62px;height:62px;margin:-8px 0 0 -14px;pointer-events:none;filter:drop-shadow(0 6px 10px rgba(0,0,0,.6));animation:maoToca 1.3s ease-in-out infinite}
+.maozinha::before{content:"";position:absolute;left:4px;top:2px;width:22px;height:22px;border-radius:50%;background:rgba(255,220,150,.6);animation:maoOnda 1.3s ease-out infinite}
+@keyframes maoToca{0%,100%{transform:translate(10px,14px)}45%{transform:translate(0,0)}55%{transform:translate(0,0) scale(.92)}}
+@keyframes maoOnda{0%,40%{transform:scale(.4);opacity:0}55%{opacity:.9}100%{transform:scale(1.8);opacity:0}}
+@media (prefers-reduced-motion:reduce){.maozinha,.maozinha::before{animation:none}}
