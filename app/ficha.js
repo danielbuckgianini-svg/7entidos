@@ -213,4 +213,67 @@ FICHA.fase4 = {
 FICHA.fase5 = {
   /* a Fase 5 lê SÓ as pistas fortes (e nunca um "não") */
   pistas: () => FICHA.visao().filter(e=>e.forca==="forte" && FICHA.podeSugerir(e.item)) };
+
+/* =====================================================================
+   Bloco 6 · AS FASES 1 E 2 ESCREVEM NA FICHA (SÓ NA PRÉVIA)
+   - Nenhuma tela, texto ou foto das Fases 1 e 2 muda. Só o que é guardado por trás.
+   - A Fase 1 escreve na gaveta Gostos; a Fase 2, na gaveta Jeito de jogar.
+   - Quem já fez as Fases 1 e 2 antes: ao abrir, o que já está no celular é copiado para as gavetas certas.
+   ===================================================================== */
+/* o resumo em peças, a partir de um rótulo do app (ou de uma frase dela: a frase em si nunca entra na ficha) */
+const P_QUEM=[[/fam[ií]lia|filh|net[oa]s?\b|m[ãa]e\b|pai\b|\bv[óo]\b|av[óo]|irm[ãa]/i,"família"],[/amig|turma|grupo|galera/i,"amigos"],[/algu[ée]m querido|quem (voc[êe] )?ama|quem eu amo|marido|espos|namor|\bpar\b|a dois/i,"alguém querido"],[/vizinh|bairro|conhecid|feirante/i,"vizinhança"],[/sozinh|s[óo] eu|eu mesma|ningu[ée]m/i,"sozinha"]];
+const P_ONDE=[[/praia|\bmar\b|areia|orla|onda|quiosque/i,"praia"],[/casa|cozinha|sof[áa]|\bcama\b|quarto|varanda|quintal|telhado|cobertor|len[çc]ol|banho/i,"casa"],[/natureza|jardim|planta|terra|grama|trilha|campo|montanha|\brio\b|lago|pedra/i,"natureza"],[/\brua\b|cidade|grafite|mural|feira|padaria|shopping|loja|vitrine|[ôo]nibus|cal[çc]ada/i,"rua"],[/viagem|lugar novo|desconhecid|avi[ãa]o|estrada/i,"viagem"],[/show|samba|baile|festa|restaurante|museu/i,"passeio"],[/rede\b/i,"casa"]];
+const P_QUANDO=[[/manh[ãa]|acordar|nascer do sol|\b7h\b/i,"manhã"],[/p[ôo]r do sol|fim de tarde|\btarde\b/i,"fim de tarde"],[/noite|estrel|dormir|\blua\b/i,"noite"],[/domingo|fim de semana|f[ée]rias|folga/i,"folga"],[/inf[âa]ncia|crian[çc]a|antig|de v[óo]\b/i,"lembrança antiga"],[/chuva/i,"dia de chuva"],[/calor|dia quente|ver[ãa]o/i,"calor"]];
+const P_SENT={visao:/\bver\b|olhar|\bcor(es)?\b|paisagem|vista|p[ôo]r do sol|c[ée]u|estrel|foto|mural|grafite/i,audicao:/ouvir|\bsom\b|m[úu]sica|barulho|cant|sil[êe]ncio|chuva no telhado/i,tato:/toque|pele|abra[çc]|[áa]gua|carinho|areia|cobertor|macio|massagem/i,
+  olfato:/cheir|perfume|aroma/i,paladar:/comer|sabor|\bgost(o|inho)\b|comida|bolo|caf[ée]|doce|fruta|p[ãa]o/i,equilibrio:/dan[çc]|balan[çc]|bicicleta|\brede\b|surf|prancha|barco/i,corpo:/alongar|respir|\bcorpo\b|caminh|correr|nadar|deitar/i};
+const P_MOT={soc:/amig|fam[ií]l|filh|net[oa]|marido|espos|namor|m[ãa]e\b|pai\b|\bgente\b|junt|convers|abra[çc]|vizinh|turma|pessoa|algu[ée]m querido/i,
+  pau:/descans|\bpaz\b|sossego|sil[êe]ncio|folga|relax|calm|sem pressa|dormir|cochil|ningu[ée]m|longe|respir/i,
+  sen:/cheir|sabor|gost(o|inho)|\bsom\b|m[úu]sica|\bcor(es)?\b|vento|\bmar\b|\bsol\b|pele|toque|[áa]gua|vista|\bluz\b|perfume/i,
+  con:/comid|comer|presente|ganh|compr|dinheir|lanche|bolo|doce|roupa|pr[êe]mio/i,
+  jei:/escolh|meu jeito|minha hora|quando eu quero|livre|liberdade|decid|do meu modo|eu mesma/i};
+const acha=(L,t)=>{ for(const [re,v] of L) if(re.test(t)) return v; return null; };
+FICHA.pecasDe = function(texto,o){ o=o||{}; const t=String(texto||"");
+  const sent=Object.keys(P_SENT).filter(k=>P_SENT[k].test(t)); const mot=MOTIVOS_OK.filter(k=>P_MOT[k].test(t));
+  return limpaPecas({quem:acha(P_QUEM,t), onde:acha(P_ONDE,t), quando:acha(P_QUANDO,t),
+    sentidos:[o.sentido].concat(sent).filter(Boolean).slice(0,3), motivo:o.motivo||(mot.length===1?mot[0]:null)}); };
+
+/* Fase 1 → gaveta Gostos */
+function daFase1(r){ if(!r||typeof SENT==="undefined") return 0; let k=0;
+  SENT.forEach(s=>{ const v=r["gosto_"+s.id]; if(!v) return; k++;
+    escreve(1,{id:"f1:gosto:"+s.id, tipo:"gosto", item:v, rotulo:v, pecas:FICHA.pecasDe(v,{sentido:s.id})}); });
+  if(r.vaso) escreve(1,{id:"f1:olhar", tipo:"olhar", item:"olhar "+r.vaso, rotulo:r.vaso, pecas:{quem:r.vaso==="Dois rostos"?"pessoas":null}});
+  if(r.fase1_completa) marcaFase(1);
+  if(k>=4) folha("f1");                                             /* Bloco 11: folhinha na metade da fase */
+  return k; }
+/* Fase 2 → gaveta Jeito de jogar */
+function daFase2(r,pos){ if(!r||typeof SENT==="undefined") return 0; let k=0;
+  SENT.forEach(s=>{ const st=r["jogo_"+s.id], cu=r["curtiu_"+s.id]; if(st==null&&cu==null) return; k++;
+    escreve(2,{id:"f2:jogo:"+s.id, tipo:"jogo", item:"jogo "+s.id, rotulo:s.jogo, pecas:{sentidos:[s.id]}, forca: st==="pulado"?"fraca":undefined,
+      extra:{jogou:st!=="pulado", curtiu:cu==null?null:+cu, repetiu:+(r["repetiu_"+s.id]||0), nivel:r[s.id+"_nivel"]==null?null:r[s.id+"_nivel"], bonus:r[s.id+"_bonus"]||null}}); });
+  /* as preferências que aparecem dentro dos jogos (rótulos do app): se repetem o que ela escolheu na Fase 1, ficam fortes */
+  const fav=[["tato_favorita","tato"],["olfato_favorito","olfato"],["olfato_sentiu","olfato"],["olfato_viagem","olfato"],["corpo_agora","corpo"],["saborear_sentido",null]];
+  fav.forEach(([k2,sid])=>{ const v=r[k2]; if(!v||typeof v!=="string") return;
+    escreve(2,{id:"f2:"+k2, tipo:"preferencia-no-jogo", item:v, rotulo:v, pecas:FICHA.pecasDe(v,{sentido:sid})}); });
+  if(Array.isArray(r.paladar_prato)) r.paladar_prato.slice(0,6).forEach((v,i)=>{ if(typeof v==="string") escreve(2,{id:"f2:prato:"+i, tipo:"preferencia-no-jogo", item:v, rotulo:v, pecas:FICHA.pecasDe(v,{sentido:"paladar"})}); });
+  if(k>=4) folha("f2");
+  const iFim = typeof R!=="undefined" ? R.findIndex(x=>x.t==="grafico") : -1;
+  if(pos!=null && iFim>=0 && pos>=iFim) marcaFase(2);
+  return k; }
+FICHA.daFases12 = function(r,pos){ const a=daFase1(r), b=daFase2(r,pos); return {fase1:a,fase2:b}; };
+/* folhinhas da planta (Bloco 11) */
+function folha(k){ const f=carrega(); if(!f.planta.folhas[k]){ f.planta.folhas[k]=hoje(); salva(); } }
+FICHA.folha = folha;
+
+/* quem já fez as Fases 1 e 2 antes desta mudança: copia o que está no celular para as gavetas, sem perder nada */
+FICHA.migraFases12 = function(){ let r=null, pos=null;
+  try{ const s=JSON.parse(localStorage.getItem("7e_app_novo")||"null"); if(s&&s.resp){ r=s.resp; pos=s.pos; } }catch(e){}
+  try{ const f1=JSON.parse(localStorage.getItem("7e_app_novo_fase1")||"null");
+    if(f1&&Array.isArray(f1.gostos)&&typeof SENT!=="undefined"){ r=r||{}; SENT.forEach((s,i)=>{ if(f1.gostos[i]&&!r["gosto_"+s.id]) r=Object.assign({},r,{["gosto_"+s.id]:f1.gostos[i]}); }); r=Object.assign({fase1_completa:true},r); } }catch(e){}
+  if(!r) return null;
+  const n=FICHA.daFases12(r,pos); const f=carrega(); if(!f.migrou.f12){ f.migrou.f12=hoje(); salva(); } return n; };
+
+/* ligar: depois de cada "guardar" das Fases 1 e 2, a ficha copia o que mudou (a tela não muda nada) */
+if(typeof window.salvaLocal==="function"){ const salvaLocal0=window.salvaLocal;
+  window.salvaLocal=function(){ const r=salvaLocal0.apply(this,arguments); try{ if(!document.body.classList.contains("emf3")) FICHA.daFases12(resp,pos); }catch(e){} return r; }; }
+try{ FICHA.migraFases12(); if(typeof resp!=="undefined" && resp && Object.keys(resp).length) FICHA.daFases12(resp,pos); }catch(e){}
 })();
