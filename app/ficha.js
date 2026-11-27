@@ -44,10 +44,12 @@ const slug = t => String(t||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerC
 const copia = o => JSON.parse(JSON.stringify(o));
 
 /* ---------- nunca o nome, o e-mail ou o telefone ---------- */
-function semDados(v){ let t=String(v==null?"":v);
+/* A ficha só recebe rótulos do app e peças do dicionário (nunca a frase dela). Mesmo assim, por segurança:
+   tira e-mail e telefone, corta textos longos e nunca guarda um campo que seja igual ao nome dela. */
+function semDados(v){ let t=String(v==null?"":v).replace(/[^\s@]+@[^\s@]+/g,"").replace(/\+?\d[\d\s().-]{6,}\d/g,"").replace(/\s+/g," ").trim().slice(0,80);
   let nm=""; try{ nm=(typeof NOME==="function"?NOME():"")||""; }catch(e){}
-  if(nm.length>=2) t=t.replace(new RegExp(nm.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"),"gi"),"");
-  return t.replace(/[^\s@]+@[^\s@]+/g,"").replace(/\+?\d[\d\s().-]{6,}\d/g,"").replace(/\s+/g," ").trim().slice(0,80); }
+  if(nm && t.toLowerCase()===nm.toLowerCase()) return "";
+  return t; }
 /* o "extra" só guarda números, sim/não e rótulos curtos do app. Campos de texto livre são jogados fora. */
 const PROIBIDOS = /^(texto|frase|fala|nome|email|e-mail|telefone|celular|escrito)$/i;
 function limpaExtra(x){ if(x==null||typeof x!=="object") return undefined; const o={};

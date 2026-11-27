@@ -135,8 +135,43 @@ function rgNovo(){ return {v:1,col:{},feitos:{},atual:null,hoje:null,reg:{},dias
 function rgCarrega(){ if(RG) return RG; try{ RG=JSON.parse(localStorage.getItem(CHAVE)||"null"); }catch(e){} if(!RG||RG.v!==1) RG=rgNovo();
   const n=rgNovo(); for(const k in n) if(RG[k]==null) RG[k]=n[k];
   if(RG.atual && !RG.atual.P) RG.atual=novoA(RG.atual.num); /* veio de uma versão antiga: recomeça só aquele número */
+  rgFichaLogo();   /* V5 · Bloco 7: quem já tinha respostas da Fase 3 também ganha a ficha */
   return RG; }
-function rgSalva(){ try{ localStorage.setItem(CHAVE,JSON.stringify(RG)); }catch(e){} }
+function rgSalva(){ try{ localStorage.setItem(CHAVE,JSON.stringify(RG)); }catch(e){} rgFichaLogo(); }
+/* V5 · Bloco 7: a Fase 3 ESCREVE na sua gaveta da ficha (Régua e motivos). Nunca nas gavetas das Fases 1 e 2.
+   Vai só o resumo em peças e os rótulos do app; nunca o nome e nunca a frase dela. */
+let rgFichaTm=null;
+function rgFichaLogo(){ if(!window.FICHA) return; clearTimeout(rgFichaTm); rgFichaTm=setTimeout(rgParaFicha,60); }
+function rgParaFicha(){ if(!window.FICHA||!RG) return; const W=o=>FICHA.escreve(3,o);
+  try{
+    const fracos=new Set((RG.pistasFracas||[]).map(x=>+x.num));
+    /* a régua: o que ela escolheu em cada número, os motivos e o momento real (em peças) */
+    Object.keys(RG.reg).forEach(k=>{ const n=+k, r=RG.reg[k]; if(!r||r.pulou) return;
+      const contou = !r.base || r.base==="o que você contou";
+      const mom = r.momento||{};
+      const pc = Object.assign({}, mom.pecas||{}, {sentidos:[r.sentido].concat((mom.pecas&&mom.pecas.sentidos)||[]).filter(Boolean), motivo:r.certeza>=.5?r.motivo:null});
+      W({id:"f3:regua:"+n, tipo:"regua", item:contou?null:r.base, rotulo:contou?null:cap(r.base), pecas:pc, forca:fracos.has(n)?"fraca":undefined,
+         extra:{numero:n, nome_do_numero:NOMES[n], porque:r.porque&&r.porque!=="o que você contou"?cap(r.porque):null, motivo_porque:r.motivo||null, certeza:r.certeza, palavra:r.palavra||null,
+                menos:r.menos?cap(r.menos):null, contou_do_jeito_dela:contou}});
+      if(mom.pecas||mom.sugestao) W({id:"f3:momento:"+n, tipo:"momento", pecas:mom.pecas||(window.FICHA.pecasDe?FICHA.pecasDe(mom.sugestao):{}), extra:{numero:n, de:mom.sugestao?"sugestao":"contou", sugestao:mom.sugestao||null}});
+    });
+    /* "Coloque na régua" */
+    COLOQUE.forEach(c=>{ const v=RG.col[c.sid]; if(v==null) return;
+      W({id:"f3:coloque:"+c.sid, tipo:"coloque", item:c.txt, rotulo:c.txt, pecas:FICHA.pecasDe?FICHA.pecasDe(c.txt,{sentido:c.sid}):{sentidos:[c.sid]}, extra:{numero:v}}); });
+    /* mudanças no teste de coerência (e na confirmação "deslizar"): pista fraca */
+    (RG.pistasFracas||[]).forEach(x=>{ const r=RG.reg[x.num]||{};
+      FICHA.mudou(3,{id:"f3:mudanca:"+x.num+":"+x.dia+":"+(x.de||"coerencia"), item:r.base&&r.base!=="o que você contou"?r.base:null, rotulo:r.base?cap(r.base):null, extra:{numero:x.num, antes:x.antes, agora:x.agora, de:x.de||"coerencia"}}); });
+    /* as situações dos motivos */
+    if(typeof F3!=="undefined" && F3 && F3.r){ Object.keys(F3.r).forEach(id=>{ const v=F3.r[id], st=(typeof SIT!=="undefined"&&SIT[id])||null; if(!v||!st) return;
+      if(v.n){ FICHA.nao(3,{id:"f3:nao:motivo:"+id, tipo:"nenhuma", itens:["situacao "+id], rotulos:["quando você "+(VOCE[id]||st.txt)], extra:{onde:"motivos"}}); return; }
+      W({id:"f3:motivo:"+id, tipo:"motivo", item:"situacao "+id, rotulo:"quando você "+(VOCE[id]||st.txt), pecas:{sentidos:st.sent||[], motivo:v.a}, extra:{segundo:v.b||null}}); }); }
+    /* o teste de imagens (o tipo divertido) */
+    try{ const t=JSON.parse(localStorage.getItem("7e_pistas_tracos")||"null"); if(t&&t.tipo) W({id:"f3:teste-imagens", tipo:"teste-imagens", item:"tipo "+t.tipo, rotulo:t.tipo, extra:{pontos:t.pontos, respondidas:t.respondidas}}); }catch(e){}
+    /* a pergunta curinga (desligada por enquanto): só as peças */
+    Object.keys(RG.curinga||{}).forEach(d=>{ const c=RG.curinga[d]; if(c&&c.pecas) W({id:"f3:curinga:"+d, tipo:"curinga", pecas:c.pecas, extra:{pergunta:c.q}}); });
+    if(RG.fase3Fim) FICHA.marcaFase(3);
+  }catch(e){ console.warn("ficha (Fase 3)",e); } }
+window.rgParaFicha = rgParaFicha;
 /* o "hoje" do app: no modo teste, anda com o botão "Avançar um dia" */
 function rgHoje(){ const d=new Date(); d.setDate(d.getDate()+((RG&&RG.desloc)||0)); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
 window.rgHojeStr = () => rgHoje(); window.rgDiaFase3 = () => { rgCarrega(); return rgDia(); };
@@ -653,9 +688,16 @@ function rgPensando(){ mostra(`<div class="f3pensa">${mandala(110,"mpensa")}<h2>
 /* =================== BLOCO 2 (V4) · MONTAR CADA RODADA =================== */
 /* as escolhas das Fases 1 e 2 (só entram do 6 ao 10): primeiro as que ela escolheu (do jogo que mais curtiu para o que menos curtiu),
    depois as fotos que ela viu e não escolheu. O que já virou o centro de outro número vai para o fim (a régua não repete). */
+/* V5 · Bloco 7: a Fase 3 LÊ as gavetas Gostos (Fase 1) e Jeito de jogar (Fase 2) da ficha.
+   Se a ficha ainda estiver vazia (ex.: modo teste com respostas de exemplo), usa o que está guardado no celular, como antes. */
+function rgGostos(){ if(window.FICHA){ try{ const L=FICHA.le(3).gostos||[];
+    const g=SENT.map(s=>{ const p=L.find(x=>x.id==="f1:gosto:"+s.id); return p&&p.rotulo||null; }); if(g.some(Boolean)) return g; }catch(e){} }
+  return (typeof f3Gostos==="function"?f3Gostos():SENT.map(s=>resp["gosto_"+s.id]||null)); }
+function rgCurtiu(sid){ if(window.FICHA){ try{ const p=(FICHA.le(3).jogo||[]).find(x=>x.id==="f2:jogo:"+sid); if(p&&p.extra&&p.extra.curtiu!=null) return +p.extra.curtiu; }catch(e){} }
+  return +(resp["curtiu_"+sid]||0); }
 function rgDasFases(A){
-  const g=(typeof f3Gostos==="function"?f3Gostos():SENT.map(s=>resp["gosto_"+s.id]||null));
-  const esc1=SENT.map((s,i)=>({t:g[i],s:s.id,o:"f1",p:+(resp["curtiu_"+s.id]||0)})).filter(x=>x.t).sort((a,b)=>b.p-a.p);
+  const g=rgGostos();
+  const esc1=SENT.map((s,i)=>({t:g[i],s:s.id,o:"f1",p:rgCurtiu(s.id)})).filter(x=>x.t).sort((a,b)=>b.p-a.p);
   const nao=SENT.flatMap((s,i)=>s.o.filter(o=>o!==g[i]).map(o=>({t:o,s:s.id,o:"nao",p:0})));
   const usados=Object.values(RG.reg).map(r=>r&&r.base).filter(Boolean);
   return esc1.concat(nao).filter(x=>!A.shown.includes(x.t)).sort((a,b)=>(usados.includes(a.t)?1:0)-(usados.includes(b.t)?1:0)); }
@@ -665,7 +707,8 @@ function rgNovidade(A){ const usadas=(A&&A.shown)||[];
   for(let k=0;k<NOVIDADES.length;k++){ const [t,s]=NOVIDADES[(RG.novIdx+k)%NOVIDADES.length]; if(!usadas.includes(t)&&!usadas.includes(cap(t))&&!recusou(t)){ RG.novIdx=(RG.novIdx+k+1)%NOVIDADES.length; return {t:cap(t),s,o:"nov"}; } }
   const [t,s]=NOVIDADES[RG.novIdx]; RG.novIdx=(RG.novIdx+1)%NOVIDADES.length; return {t:cap(t),s,o:"nov"}; }
 /* REGRA E: do 5 para baixo, nunca oferecer algo que ela escolheu como bom nas Fases 1 e 2 (nem o que ela pôs do 6 ao 10) */
-function rgBoasDela(){ const g=(typeof f3Gostos==="function"?f3Gostos():[]).filter(Boolean);
+function rgBoasDela(){ const g=rgGostos().filter(Boolean)
+    .concat(window.FICHA?(()=>{ try{ return (FICHA.le(3).jogo||[]).filter(x=>x.tipo==="preferencia-no-jogo"&&x.forca!=="fraca").map(x=>x.rotulo).filter(Boolean); }catch(e){ return []; } })():[]);
   const r=[6,7,8,9,10].map(n=>RG.reg[n]&&RG.reg[n].base).filter(Boolean); return new Set(g.concat(r).map(slug)); }
 /* ordem fixa por pessoa (a mesma pessoa vê sempre a mesma ordem naquele número; cada pessoa vê uma ordem) */
 function rgEmbaralha(lista,sal){ let h=2166136261; for(const ch of ((typeof PID!=="undefined"?PID:"x")+"|"+sal)){ h^=ch.charCodeAt(0); h=Math.imul(h,16777619); }
@@ -809,6 +852,8 @@ function rgResponde(){
   rgContaRodada(); A.rodadas++;
   if(op.tipo==="mm"){ const m=op.itens[sel.mais], me=op.itens[sel.menos];
     A.hist.push({tipo:"mm",mais:m.t,menos:me.t}); A.menos=me.t; A.foco={t:m.t,s:m.s,o:m.o,m:m.m||null,sit:m.sit||null};
+    /* V5 · Bloco 7: a novidade que ela marcou como "NÃO é" vai para Os "nãos" (e nunca volta como sugestão) */
+    if(me.o==="nov" && window.FICHA) FICHA.nao(3,{tipo:"novidade-recusada", itens:[me.t], rotulos:[cap(me.t)], pecas:{sentidos:[me.s]}, extra:{numero:n}});
     puxa(A.P,m.m,1.6); puxa(A.P,me.m,.6);
   } else { const x=op.itens[sel.um]; A.hist.push({tipo:op.tipo,escolha:x.t,m:x.m||null});
     if(op.tipo==="leve"){ A.foco={t:x.t,s:x.s,o:x.o,m:x.m||null}; A.final=x.t; A.fim=true; }
@@ -833,6 +878,8 @@ window.rgNenhuma = function(){ click();
     <button class="btn sec" type="button" onclick="rgFechaModal()">← Voltar</button></div>`); };
 window.rgNovas = function(){ click(); rgFechaModal(); if(window.rgAntes) rgAntes(); const A=RG.atual, op=A.op; A.pulos=(A.pulos||0)+1;
   A.hist.push({tipo:"nenhuma",em:op.tipo,viu:op.itens.map(x=>x.t)});
+  /* V5 · Bloco 7: "Nenhuma dessas" vai para a gaveta Os "nãos" */
+  if(window.FICHA) FICHA.nao(3,{tipo:"nenhuma", itens:op.itens.map(x=>x.t), rotulos:op.itens.map(x=>cap(x.t)), extra:{numero:A.num, etapa:op.tipo}});
   if(op.tipo==="mm"||op.tipo==="leve") A.set=(A.set||0)+1;
   else if(op.tipo==="porque") A.porqueAlt=(A.porqueAlt||0)+1;
   else if(op.tipo==="duelo"){ op.itens.forEach(x=>puxa(A.P,x.m,.8)); A.duelos++; }
@@ -1139,7 +1186,7 @@ function rgSitDe(n){ const r=RG.reg[n]; if(!r) return null; if(r.sit&&SIT[r.sit]
 function rgMotCandidatas(n){ const F=rgF3(), ja=new Set(F.seq.concat(Object.keys(F.cob),RG.motFila||[])), lista=[];
   const poe=id=>{ if(id&&SIT[id]&&!ja.has(id)&&!lista.includes(id)) lista.push(id); };
   if(n!=null) poe(rgSitDe(n));
-  (typeof f3Gostos==="function"?f3Gostos():[]).forEach(g=>poe(g&&SIT_FASE1[g]));
+  rgGostos().forEach(g=>poe(g&&SIT_FASE1[g]));
   const sent=n!=null&&RG.reg[n]?RG.reg[n].sentido:null;
   SITUACOES.filter(s=>s.dia>0).sort((a,b)=>(b.sent.includes(sent)?1:0)-(a.sent.includes(sent)?1:0)).forEach(s=>poe(s.id));
   return lista; }
@@ -1192,7 +1239,7 @@ let rgMSel={a:null,b:null};
 function rgMotivo(){ const F=rgF3(), id=RG.motFila[0], s=SIT[id]; if(!s){ RG.motFila.shift(); rgSalva(); return rgTela(); }
   if(rgIntro("mot",rgMotivo)) return;
   rgMSel={a:null,b:null}; RG.ultFmt="lista"; rgTopo("motivos"); window.RG_TELA="motivo";
-  const g=(typeof f3Gostos==="function"?f3Gostos():[]), j=SENT.findIndex((x,i)=>g[i]&&SIT_FASE1[g[i]]===id);
+  const g=rgGostos(), j=SENT.findIndex((x,i)=>g[i]&&SIT_FASE1[g[i]]===id);
   const ft = j>=0 ? rgFotoHTML(foto(SENT[j].id,SENT[j].o.indexOf(g[j]))) : rgFotoHTML(CANVA+"sit-"+id+".jpg","sit-"+id+".jpg");
   mostra(`<div class="rg-colfoto">${ft}</div>
     <h2 class="rg-q">O que mais te faz bem quando você ${esc(VOCE[id]||s.txt)}?</h2>
