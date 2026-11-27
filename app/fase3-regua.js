@@ -505,6 +505,50 @@ window.rgVai = function(n){ if(ocupado) return; if(EM_CONSTRUCAO.includes(n)) re
   rgSalva(); rgTela(); };
 window.rgVoltaRegua = function(){ click(); rgEscolhe(); };
 
+/* =================== BLOCO 3 (V4) · A INTELIGÊNCIA DO APP, COM CUIDADO E PRIVACIDADE =================== */
+/* Claude Haiku, para todos, SÓ em dois lugares: o último degrau e o "Escrever o meu". Nunca nas etapas 0, 1 e 2.
+   Ela nunca escreve frases novas na tela: só ESCOLHE dentro das listas aprovadas (fase3-banco.js) ou devolve uma pista (motivo e sentido).
+   A chave NUNCA fica no app: a chamada passa pelo servidor intermediário (Cloudflare, montado com o Gemini).
+   Enquanto o servidor não estiver confirmado, fica DESLIGADA e o app usa o banco (o resultado é o mesmo jeito de perguntar).
+   Privacidade: nunca manda o nome (nem e-mail ou telefone escritos no texto); o texto da pessoa não fica guardado (só a pista);
+   cada chamada registra o custo (fica em RG.iaLog, só no celular). */
+const IA_CFG = {
+  ligada: false,   /* LIGAR aqui (true) quando o servidor estiver confirmado e aceitar o endereço do app */
+  url: "https://7entidos-ia.buck-0ab.workers.dev/pergunta",
+  modelo: "claude-haiku-5-5",
+  espera: 8000     /* mais que isso, segue com o banco */
+};
+const rgIA = {
+  pode(A){ return !!(IA_CFG.ligada && A && A.num>2 && navigator.onLine!==false); },
+  limpa(t){ let v=String(t||""); const nm=(typeof NOME==="function"?NOME():"")||"";
+    if(nm.length>=2) v=v.replace(new RegExp(nm.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"),"gi"),"[nome]");
+    return v.replace(/[^\s@]+@[^\s@]+/g,"[e-mail]").replace(/\+?\d[\d\s().-]{6,}\d/g,"[número]").slice(0,280); },
+  chama(corpo){ if(!IA_CFG.ligada) return Promise.resolve(null);
+    const ac=new AbortController(), tm=setTimeout(()=>ac.abort(),IA_CFG.espera), t0=Date.now();
+    return fetch(IA_CFG.url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(Object.assign({modelo:IA_CFG.modelo},corpo)),signal:ac.signal})
+      .then(r=>r.ok?r.json():null).catch(()=>null).then(j=>{ clearTimeout(tm);
+        (RG.iaLog=RG.iaLog||[]).push({quando:new Date().toISOString(),tarefa:corpo.tarefa,numero:corpo.etapa,ms:Date.now()-t0,ok:!!(j&&!j.usar_banco),
+          tokens_entrada:j&&j.uso&&j.uso.entrada||null,tokens_saida:j&&j.uso&&j.uso.saida||null,custo_usd:j&&j.custo_usd!=null?j.custo_usd:null});
+        RG.iaLog=RG.iaLog.slice(-300); rgSalva(); return j&&!j.usar_banco?j:null; }); },
+  /* último degrau: escolhe as 4 que mais combinam, DENTRO da lista aprovada do motivo */
+  ultimo(A){ const op=A.op, lista=B.ultimo[op.m]||[];
+    rgPensando();
+    return this.chama({tarefa:"escolher",etapa:A.num,motivo:op.m,lista,
+        contexto:{escolha:A.foco&&A.foco.o==="eu"?"(ela contou do jeito dela)":A.foco&&A.foco.t,porque:A.porque&&A.porque.t,pistas:(A.pistas||[]).map(p=>({m:p.m,s:p.s}))}})
+      .then(j=>{ const idx=j&&Array.isArray(j.escolhas)?[...new Set(j.escolhas.map(Number))].filter(i=>i>=0&&i<lista.length).slice(0,4):[];
+        if(idx.length===4){ A.op.itens=idx.map(i=>({t:cap(lista[i]),m:op.m,o:"ultimo"})); A.op.ia=true; }
+        A.op.iaFeita=true; rgSalva(); }); },
+  /* "Escrever o meu": devolve só a pista (um dos 5 motivos e um dos 7 sentidos); o texto não volta e não fica guardado */
+  pista(texto,A){ rgPensando();
+    return this.chama({tarefa:"pista",etapa:A?A.num:null,texto:this.limpa(texto),motivos:MOTS,sentidos:SENT.map(s=>s.id)})
+      .then(j=>{ if(!j) return null; const m=MOTS.includes(j.motivo)?j.motivo:null, s=SENT.some(x=>x.id===j.sentido)?j.sentido:null;
+        return (m||s)?{m,s,de:"escrito"}:null; }); }
+};
+window.rgIA = rgIA; window.RG_IA_CFG = IA_CFG;   /* exposto só para testar na prévia */
+window.RG_DBG = () => { const A=RG&&RG.atual; return A?{P:A.P,op:A.op&&{tipo:A.op.tipo,m:A.op.m,itens:A.op.itens.map(x=>x.t)}}:null; };
+/* enquanto espera: "A Brisa está pensando…" */
+function rgPensando(){ mostra(`<div class="f3pensa">${mandala(110,"mpensa")}<h2>A Brisa está pensando…</h2></div>`, c=>{ try{ poeMandala(c.querySelector("#mpensa"),{pos:TODOS,luz:TODOS,miolo:true}); }catch(e){} }); }
+
 /* =================== BLOCO 2 (V4) · MONTAR CADA RODADA =================== */
 /* as escolhas das Fases 1 e 2 (só entram do 6 ao 10): primeiro as que ela escolheu (do jogo que mais curtiu para o que menos curtiu),
    depois as fotos que ela viu e não escolheu. O que já virou o centro de outro número vai para o fim (a régua não repete). */
@@ -593,7 +637,7 @@ function rgRodada(){
   if(!A.op){ A.op=rgMontaRodada(A); if(!A.op){ rgEncerra(A); rgSalva(); return rgTela(); }
     A.op.fmt=rgFormato(A.op.tipo); A.op.itens.forEach(x=>{ if(!A.shown.includes(x.t)) A.shown.push(x.t); }); A.sel={}; rgSalva();
     /* último degrau: a inteligência do app (se ligada) escolhe as 4 melhores dentro da lista aprovada */
-    if(A.op.tipo==="ultimo" && window.rgIA && rgIA.pode(A)){ return rgIA.ultimo(A).then(()=>rgRodada()); } }
+    if(A.op.tipo==="ultimo" && !A.op.iaFeita && window.rgIA && rgIA.pode(A)){ return rgIA.ultimo(A).then(()=>rgRodada()); } }
   const op=A.op, sel=A.sel||{}; RG.ultFmt=op.fmt;
   rgTopo(n+" · "+NOMES[n]);
   const parte = op.tipo==="mm"&&sel.mais!=null ? "menos" : "mais";
