@@ -280,6 +280,11 @@ const css=document.createElement("style"); css.textContent=`
 .rg-opf.menos{box-shadow:0 0 0 3px #7fd3ff;opacity:.85}
 .rg-opf.sel{box-shadow:0 0 0 3px var(--ouro),0 0 22px rgba(245,197,66,.45)}
 .rg-eu{display:grid;place-items:center;font-size:16px;font-weight:800;color:var(--ouro);text-align:center;padding:6px}
+/* V4 · Bloco 6: situações dos motivos (1ª e 2ª escolha) */
+.rg-mot{justify-content:space-between}
+.rg-mot.sel{border-color:var(--ouro);background:rgba(245,197,66,.2)}
+.rg-mot.sel2{border-color:rgba(245,197,66,.75);border-style:dashed;background:rgba(245,197,66,.07)}
+.rg-mtag{flex:none;min-width:44px;font:800 18px "Space Mono",monospace;color:var(--ouro);text-align:right}
 /* V4 · Bloco 4: momento real */
 .rg-h3{font-size:clamp(24px,6vw,30px);margin-top:18px}
 .rg-seu{font-size:19px;color:#fff3c4;margin:12px 0 4px}
@@ -441,8 +446,12 @@ window.rgTela = rgTela;
 function rgTela(nova){
   rgCarrega(); rgFechaModal();
   if(!rgColFeito()) return rgColoque();                        /* antes do 10, no primeiro dia */
-  if(rgReguaPronta() && !RG.atual) return rgFimFase();
   const limite = !LIVRE && rgHojeN()>=LIMITE_DIA;
+  /* Bloco 6: as situações dos motivos entram logo depois de cada número (régua + motivos = no máximo 5 por dia) */
+  if(RG.motFila&&RG.motFila.length&&rgMotivosOk()) RG.motFila=[];
+  const noMeio = RG.atual && RG.atual.rodadas>0;
+  if(!noMeio && RG.motFila && RG.motFila.length){ if(limite) return rgFimDia(nova); return rgMotivo(); }
+  if(rgReguaPronta() && !RG.atual){ if(!rgMotivosOk()){ if(limite) return rgFimDia(nova); if(rgMotProxima()) return rgMotivo(); } return rgFimFase(); }
   if(!limite && rgPrecisaCoerencia() && !(RG.atual&&RG.atual.fim)) return rgCoerencia();
   /* no começo de cada dia, a pessoa passa pela entrada (foguinho, número do dia); o número em andamento fica marcado */
   const novoDia = RG.entrada!==rgHoje();
@@ -826,7 +835,7 @@ function rgFechaNumero(){ const A=RG.atual, n=A.num;
   RG.feitos[n]=rgHoje();
   const om=ordemP(A.P||P0());
   RG.reg[n]={base:A.foco?A.foco.t:null, sit:A.foco&&A.foco.sit||null, sentido:A.foco&&A.foco.s||null, porque:A.porque?A.porque.t:null, motivo:A.motivo||om[0], certeza:+((A.P||P0())[A.motivo||om[0]]).toFixed(2), P:Object.fromEntries(MOTS.map(m=>[m,+((A.P||P0())[m]).toFixed(3)])), final:A.final||null, menos:A.menos||null, palavra:A.palavra||null, momento:A.momento||null, pistas:A.pistas||[], hist:A.hist, rodadas:A.rodadas, pulou:!!A.pulou, quando:rgHoje()};
-  RG.atual=null; RG.ultimo=n; rgSalva(); vibra([12,40,20]); somVitoria&&somVitoria(); rgAberto=n;
+  RG.atual=null; RG.ultimo=n; if(!A.pulou) rgMotDepoisDe(n); rgSalva(); vibra([12,40,20]); somVitoria&&somVitoria(); rgAberto=n;
   rgTopo();
   mostra(`<div class="rot">Mais um número na sua régua</div>
     <div class="rg-tit" style="font-size:44px;margin-top:8px;color:${COR_NUM[n]}">${n}<small>${NOMES[n]}</small></div>
@@ -902,19 +911,90 @@ function rgFimFase(){ rgTopo("régua montada");
     <h2>Sua régua está montada.</h2><p class="sub">Na próxima fase, você confere o que eu percebi.</p>
     <div style="margin-top:14px"><button class="btn" type="button" onclick="click();f3Mapa3()">Seguir</button></div>
     ${rgPreviaBotoes()}`); }
-/* 27/11 · prévia: depois da régua montada, segue para as perguntas dos motivos (análise da função), que já existiam no app */
-window.rgVaiMotivos = function(){ click&&click(); try{ if(typeof f3ExemploFase1==="function") f3ExemploFase1(); }catch(e){}
-  f3Carrega(); F3.intro=true; f3Salva(); entrou=true; pos=R.length-1;
-  if(!document.getElementById("rgSemCerebro")){ const st=document.createElement("style"); st.id="rgSemCerebro"; st.textContent="#f3cerebro{display:none!important}"; document.head.appendChild(st); }
-  f3Tela(); };
+
+/* =================== BLOCO 6 (V4) · LIGAR A RÉGUA AOS MOTIVOS (análise da função) =================== */
+/* Logo depois de cada número fechado: 1 ou 2 situações dos motivos ligadas ao que ela escolheu naquele número.
+   Primeiro as situações das fotos que ela escolheu na Fase 1, depois as gerais. Pergunta: "O que mais te faz bem quando você [situação]?"
+   A 2ª escolha é opcional e vale meio ponto. O app para quando tem certeza (mínimo 6, máximo 15 situações na fase toda).
+   Régua + motivos somam no máximo 5 respostas por dia. Se a régua já mostrou o motivo com certeza naquele assunto, a situação é pulada.
+   As 32 situações são as que já existem no app (aprovadas, não mudam). Aqui só entra o jeito de dizer "quando você ...". */
+const VOCE = {praia:"vai à praia",cafe:"toma um café da tarde",samba:"vai a uma roda de samba ou a um show",plantas:"cuida das plantas",bike:"anda de bicicleta",
+ feira:"vai à feira",salao:"vai ao salão de beleza",novela:"vê novela ou série",hidro:"faz hidroginástica",cozinhar:"cozinha uma receita especial",
+ orla:"caminha na orla",padaria:"vai à padaria de manhã",decorar:"arruma um cantinho da casa",viagem:"faz uma viagem curta",compras:"passeia numa loja ou no shopping",
+ ceu:"olha o céu estrelado",arte:"vê arte colorida pela rua",fotos:"vê fotos antigas de família",mar:"ouve o som do mar",chuva:"ouve a chuva no telhado",
+ silencio:"fica em silêncio",cobertor:"se enrola num cobertor macio",agua:"entra numa água bem fresquinha",abraco:"ganha um abraço apertado",comidavo:"come comida de vó",
+ perfume:"sente o perfume de alguém querido",danca:"dança",rede:"balança numa rede",prancha:"rema em pé numa prancha",alongar:"alonga o corpo",
+ correr:"corre ou caminha rápido",respirar:"deita e respira fundo"};
+const MOT_MIN=6, MOT_MAX=15, MOT_CERTEZA=.75;
+const temF3 = () => typeof f3Carrega==="function" && typeof SIT!=="undefined";
+function rgF3(){ f3Carrega(); F3.seq=F3.seq||[]; F3.r=F3.r||{}; F3.cob=F3.cob||{}; return F3; }
+const motFeitas = () => temF3() ? rgF3().seq.length : 0;
+/* as chances dos 5 motivos: as situações respondidas (força do "cérebro") + o porquê dos números bons da régua (meia força) */
+function rgMotChances(){ const F=rgF3(), P=P0();
+  F.seq.forEach(id=>{ const v=F.r[id]; if(!v||v.n) return; escolheMot(P,v.a,1); if(v.b) escolheMot(P,v.b,.5); });
+  Object.values(F.cob).forEach(v=>{ if(v&&v.a) escolheMot(P,v.a,.5); });
+  [6,7,8,9,10].forEach(n=>{ const r=RG.reg[n]; if(r&&r.motivo&&!r.pulou&&r.certeza>=.5) escolheMot(P,r.motivo,.5); });
+  return P; }
+function rgMotivosOk(){ if(!temF3()) return true; const P=rgMotChances(), [a]=ordemP(P), k=motFeitas();
+  return k>=MOT_MAX || (k>=MOT_MIN && P[a]>=MOT_CERTEZA); }
+/* a situação ligada à escolha daquele número */
+function rgSitDe(n){ const r=RG.reg[n]; if(!r) return null; if(r.sit&&SIT[r.sit]) return r.sit;
+  const f1=typeof SIT_FASE1!=="undefined"&&r.base?SIT_FASE1[r.base]:null; return f1&&SIT[f1]?f1:null; }
+/* candidatas, em ordem: a do número → as das fotos que ela escolheu na Fase 1 → as gerais (começando pelo sentido daquele número) */
+function rgMotCandidatas(n){ const F=rgF3(), ja=new Set(F.seq.concat(Object.keys(F.cob),RG.motFila||[])), lista=[];
+  const poe=id=>{ if(id&&SIT[id]&&!ja.has(id)&&!lista.includes(id)) lista.push(id); };
+  if(n!=null) poe(rgSitDe(n));
+  (typeof f3Gostos==="function"?f3Gostos():[]).forEach(g=>poe(g&&SIT_FASE1[g]));
+  const sent=n!=null&&RG.reg[n]?RG.reg[n].sentido:null;
+  SITUACOES.filter(s=>s.dia>0).sort((a,b)=>(b.sent.includes(sent)?1:0)-(a.sent.includes(sent)?1:0)).forEach(s=>poe(s.id));
+  return lista; }
+/* ao fechar o número n: escolhe 1 ou 2 situações (pulando o assunto que a régua já mostrou com certeza) */
+function rgMotDepoisDe(n){ if(!temF3()||rgMotivosOk()) return; const F=rgF3(), r=RG.reg[n];
+  const ligada=rgSitDe(n);
+  if(ligada && r && !r.pulou && r.motivo && r.certeza>=CERTEZA(n) && !F.r[ligada]){ F.cob[ligada]={a:r.motivo,de:"regua",num:n}; f3Salva(); }
+  const c=rgMotCandidatas(n); if(!c.length) return;
+  const [a]=ordemP(rgMotChances()), qtd = rgMotChances()[a]<.6 && motFeitas()<MOT_MAX-1 ? 2 : 1;
+  RG.motFila=(RG.motFila||[]).concat(c.slice(0,qtd)); rgSalva(); }
+/* depois da régua pronta, se ainda falta certeza: uma situação de cada vez */
+function rgMotProxima(){ const c=rgMotCandidatas(null); if(c.length){ RG.motFila=(RG.motFila||[]).concat(c[0]); rgSalva(); return true; } return false; }
+
+let rgMSel={a:null,b:null};
+function rgMotivo(){ const F=rgF3(), id=RG.motFila[0], s=SIT[id]; if(!s){ RG.motFila.shift(); rgSalva(); return rgTela(); }
+  rgMSel={a:null,b:null}; RG.ultFmt="lista"; rgTopo("motivos");
+  const g=(typeof f3Gostos==="function"?f3Gostos():[]), j=SENT.findIndex((x,i)=>g[i]&&SIT_FASE1[g[i]]===id);
+  const ft = j>=0 ? rgFotoHTML(foto(SENT[j].id,SENT[j].o.indexOf(g[j]))) : rgFotoHTML(CANVA+"sit-"+id+".jpg","sit-"+id+".jpg");
+  mostra(`<div class="rg-colfoto">${ft}</div>
+    <h2 class="rg-q">O que mais te faz bem quando você ${esc(VOCE[id]||s.txt)}?</h2>
+    <p class="rg-dica" id="rgmdica">Toque em uma. Se quiser, numa 2ª também.</p>
+    <div class="rg-ops lista">${f3Ordem(s).map(k=>`<button class="rg-op rg-opl rg-mot" type="button" data-m="${MOTIVOS[k].id}" onclick="rgMotToca(this)"><span class="rg-lt">${esc(s.o[k])}</span><span class="rg-mtag"></span></button>`).join("")}</div>
+    <div class="rg-tres"><button type="button" onclick="rgMotNenhuma()">Nenhuma dessas</button></div>
+    <div style="margin-top:10px"><button class="btn" id="rgmseguir" type="button" onclick="rgMotSeguir()" disabled>Seguir</button></div>`); }
+function rgMotPinta(){ document.querySelectorAll(".rg-mot").forEach(b=>{ const m=b.dataset.m; b.classList.toggle("sel",m===rgMSel.a); b.classList.toggle("sel2",m===rgMSel.b);
+    b.querySelector(".rg-mtag").textContent=m===rgMSel.a?"1ª":m===rgMSel.b?"2ª":""; });
+  const d=document.getElementById("rgmdica"), sg=document.getElementById("rgmseguir");
+  if(d) d.textContent=!rgMSel.a?"Toque em uma. Se quiser, numa 2ª também.":!rgMSel.b?"Se quiser, toque numa 2ª. É opcional.":"Pronto. Para trocar, toque de novo.";
+  if(sg) sg.disabled=!rgMSel.a; }
+window.rgMotToca = function(b){ click(); vibra(10); const m=b.dataset.m;
+  if(rgMSel.a===m){ rgMSel.a=rgMSel.b; rgMSel.b=null; } else if(rgMSel.b===m){ rgMSel.b=null; } else if(!rgMSel.a){ rgMSel.a=m; } else { rgMSel.b=m; }
+  rgMotPinta(); };
+function rgMotGuarda(v){ if(window.rgAntes) rgAntes(); const F=rgF3(), id=RG.motFila.shift();
+  F.r[id]=v; F.seq=F.seq.filter(x=>x!==id).concat(id); F.atual=null; f3Salva(); rgContaRodada();
+  if(rgMotivosOk() && !F.descoberta){ const P=rgMotChances(), [a,b]=ordemP(P);
+    F.descoberta={tipo:P[a]>=MOT_CERTEZA?"principal":"mistura",a,b:P[a]>=MOT_CERTEZA?null:b,quando:rgHoje(),pistas:[]}; f3Salva(); try{ f3GuardaDescoberta(); }catch(e){}
+    RG.motFila=[]; }
+  rgSalva(); }
+window.rgMotSeguir = function(){ if(!rgMSel.a||ocupado) return; ocupado=true; click(); if(window.rgReage) rgReage({m:rgMSel.a});
+  rgMotGuarda({a:rgMSel.a,b:rgMSel.b||null}); setTimeout(()=>{ ocupado=false; rgTela(); },350); };
+window.rgMotNenhuma = function(){ if(ocupado) return; click(); rgMotGuarda({n:true}); rgTela(); };
 
 /* =================== BLOCO 5 (27/11) · O MAPA DA FASE 3: RITMO E ORDEM =================== */
 /* Ordem: abertura (vídeo 3 da Brisa) → dia 1 "Coloque na régua" (e a régua) → régua e teste de imagens em DIAS ALTERNADOS,
    uma mecânica por dia → depois Mecânica 2 (Motivos) e Mecânica 3 (Validação, ainda a decidir).
    Com TRAVAS_LIGADAS = false, tudo fica liberado para teste. */
+/* V4 (27/11): a pergunta curinga fica DESLIGADA (somava respostas além das 5 do dia e dividia a tela em duas tarefas). Guardada para depois. */
+const CURINGA_LIGADA = false;
 const CURINGAS = ["Qual cheiro te leva para a infância?","Que música te faz dançar sozinha?","Qual comida tem gosto de casa de vó?","Que paisagem você queria ver da janela hoje?","Que som te acalma na hora de dormir?","Qual sobremesa você nunca recusa?","Onde você tiraria um cochilo agora?","Qual cor te deixa de bom humor?","Qual foi o último pôr do sol que você parou para ver?","Qual toque te acalma num dia difícil?"];
 const tiOk = () => typeof tiEstado==="function" ? tiEstado() : {diasFeitos:0,pronto:false,hojeFeito:false,tipo:null};
-function rgMotivosOk(){ try{ f3Carrega(); return !!F3.descoberta; }catch(e){ return false; } }
 /* qual mecânica é a de hoje (só vale com as travas ligadas) */
 function rgMecDoDia(){ const d=rgDia(), rOk=rgReguaPronta(), tOk=tiOk().pronto;
   if(d===1 && !rOk) return "regua";
@@ -936,13 +1016,11 @@ window.f3Mapa3 = function(){ rgCarrega(); rgFechaModal(); entrou=true; pos=R.len
     <h2>O mapa da Fase 3</h2>
     <p class="sub">${LIVRE?"Escolha por onde seguir.":"Uma atividade por dia. A de hoje está marcada."}</p>
     ${LIVRE&&PREVIA?`<p class="rg-nota">Só na prévia: travas desligadas, tudo liberado para teste.</p>`:""}
-    <div class="f3m-cur"><small>Pergunta curinga do dia</small><b>${esc(cur.q)}</b>
-      ${cur.r?`<p>${cur.r.pulou?"Hoje você pulou. Amanhã tem outra.":"Sua resposta: “"+esc(cur.r.texto)+"”"}</p>`:`<div class="rg-tres">${RG.texto===false?"":`<button type="button" onclick="rgCuringaResp()">✎ Responder</button>`}<button type="button" onclick="rgCuringaPula()">Pular</button></div>`}</div>
+    ${CURINGA_LIGADA?`<div class="f3m-cur"><small>Pergunta curinga do dia</small><b>${esc(cur.q)}</b></div>`:""}
     <div class="f3m">
-      ${item("regua","1","A sua régua", rOk?"Pronta, do 10 ao 5":(rgColFeito()?feitosR+" de 6 números (do 10 ao 5)":"Começa pelo “Coloque na régua”"),"click();rgTela()",rOk)}
+      ${item("regua","1","A sua régua", rOk&&mOk?"Pronta, do 10 ao 5":rOk?"Falta pouco":(rgColFeito()?feitosR+" de 6 números (do 10 ao 5)":"Começa pelo “Coloque na régua”"),"click();rgTela()",rOk&&mOk)}
       ${item("teste","2","Teste de imagens", t.pronto?"Pronto · seu tipo saiu":"Dia "+Math.min(4,t.diasFeitos+1)+" de 4 · 5 duplas","click();tiAbre()",t.pronto)}
-      ${item("motivos","3","Motivos", mOk?"Pronto":"Por que você gosta do que gosta","rgVaiMotivos()",mOk)}
-      <div class="f3m-it fecha"><span class="f3m-n">4</span><span class="f3m-t"><b>Validação</b><small>Em breve</small></span><em>🔒</em></div>
+      <div class="f3m-it fecha"><span class="f3m-n">3</span><span class="f3m-t"><b>Validação</b><small>Em breve</small></span><em>🔒</em></div>
     </div>
     ${fimOk||LIVRE&&PREVIA?`<div style="margin-top:16px"><button class="btn${fimOk?"":" sec"}" type="button" onclick="click();rgFimFase3()">${fimOk?"Ver o fim da Fase 3":"Ver o fim da Fase 3 (só na prévia)"}</button></div>`:""}
     ${PREVIA?`<div class="rg-previa"><small class="sub" style="margin:0;font-size:14px">Só na prévia: resumos das fases anteriores</small>
