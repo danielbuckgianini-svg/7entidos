@@ -55,8 +55,10 @@ const CURIOSIDADES = [
 
 /* ---------- as etapas ---------- */
 const NOMES = {10:"Êxtase",9:"Excelente",8:"Muito bom",7:"Bom",6:"Legal",5:"Tanto faz",4:"Sem graça",3:"Chato",2:"Ruim",1:"Péssimo",0:"Insuportável"};
-const ORDEM = [10,1,9,8,7,6,5,4,3,2,0];
-const BLOCOS = [[10,1],[9,8,7],[6,5,4],[3,2,0]];
+/* 27/11 · V4: ordem 10 → 9 → 8 → 7 → 6 → 5 (4 → 3 → 2 → 1 → 0 trancados, "em construção").
+   Liberação: primeiro o 10; depois 9, 8 e 7; depois 6 e 5. */
+const ORDEM = [10,9,8,7,6,5,4,3,2,1,0];
+const BLOCOS = [[10],[9,8,7],[6,5],[4,3,2,1,0]];
 const LIMITE_DIA = 5;
 /* os números que já dá para fazer (do 10 ao 5); do 4 ao 0 ficam "em construção" */
 const JOGAVEIS = ORDEM.filter(n=>!EM_CONSTRUCAO.includes(n));
