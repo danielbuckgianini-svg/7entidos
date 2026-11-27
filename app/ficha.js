@@ -182,7 +182,10 @@ window.fichaEntaoEscolhe = function(i){ const e=window._fichaEntao; window._fich
   const r = i>=0 ? e.opcoes[i] : null; if(r) FICHA.naoAoPalpite(e.fase,e.palpite,r); if(e.depois) e.depois(r); };
 
 /* 4. os "nãos" */
-function itensNaos(){ return new Set(carrega().gavetas.naos.flatMap(x=>x.itens||[])); }
+/* "Nenhuma dessas" diz "nenhuma destas é o meu N", não "não gosto". Por isso ele bloqueia como sugestão só o que ela nunca
+   escolheu em outro lugar; o que ela já escolheu (ex.: nas fotos da Fase 1) continua valendo. Os outros "nãos" bloqueiam sempre. */
+function itensNaos(){ const f=carrega(), escolhidos=new Set(["gostos","jogo","regua","fase4","fase5"].flatMap(g=>f.gavetas[g]).filter(p=>p.item&&p.forca!=="fraca").map(p=>p.item));
+  return new Set(f.gavetas.naos.flatMap(x=>(x.itens||[]).filter(it=>x.tipo!=="nenhuma"||!escolhidos.has(it)))); }
 FICHA.podeSugerir = function(item){ const s=slug(item); if(!s) return false; if(itensNaos().has(s)) return false;
   return !negados().has(s); };
 /* para as opções do 4 ao 0: o que ela recusou como novidade (só o rótulo do app) */
