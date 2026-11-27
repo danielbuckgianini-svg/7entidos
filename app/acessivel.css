@@ -31,6 +31,8 @@ textarea{font-size:19px!important}
 /* números de 0 a 10: 60 px, separados */
 .escala{display:flex!important;flex-wrap:wrap;justify-content:center;gap:10px!important;max-width:420px!important}
 .escala button,.rg-esc button,.rg-desl-n button{width:60px!important;height:60px!important;min-height:60px!important;aspect-ratio:auto!important;flex:none!important;font-size:24px!important}
+/* V5 · Bloco 2: na Fase 3 os números ficam com 64 px (regra dos 64 px). Os da Fase 1 e 2 (.escala) não mudam. */
+.rg-esc button,.rg-desl-n button{width:64px!important;height:64px!important;min-height:64px!important}
 .rg-esc{gap:10px!important}
 .escala .pontas{width:100%}
 .escala.e11 button.antes::after{bottom:-24px}

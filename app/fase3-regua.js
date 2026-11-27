@@ -228,7 +228,7 @@ const css=document.createElement("style"); css.textContent=`
 #rgmodal textarea{box-sizing:border-box;width:100%;min-height:110px;padding:14px;border-radius:16px;border:1.5px solid rgba(169,179,209,.35);background:rgba(5,9,26,.6);color:var(--creme);font:400 18px Inter,system-ui,sans-serif;resize:vertical}
 #rgmodal .mic{all:unset;cursor:pointer;padding:10px 16px;border-radius:999px;border:1.5px solid rgba(245,197,66,.6);color:var(--ouro);font-weight:800;margin:8px 0 12px;display:inline-block}
 #rgmodal .mic.on{background:var(--ouro);color:#15110a}
-.rg-fogo{position:absolute;top:0;right:0;display:flex;align-items:center;gap:4px;padding:6px 10px;border-radius:999px;background:rgba(17,27,61,.8);border:1px solid rgba(255,138,61,.5);font:800 15px Inter,system-ui,sans-serif;color:#ffb27a;cursor:pointer}
+.rg-fogo{all:unset;box-sizing:border-box;cursor:pointer;margin:0 auto 8px;min-height:64px;display:flex;width:fit-content;align-items:center;gap:6px;padding:6px 18px;border-radius:999px;background:rgba(17,27,61,.8);border:1px solid rgba(255,138,61,.5);font:800 18px Inter,system-ui,sans-serif;color:#ffb27a;cursor:pointer}
 .rg-fogo.pq{opacity:.85}
 .rg-entrada{position:relative;padding-top:4px}
 .rg-nota{font-size:15px;color:var(--azul);margin:-4px 0 12px}
@@ -376,6 +376,10 @@ const css=document.createElement("style"); css.textContent=`
 body.rgteste main#palco{padding-bottom:110px}
 `; document.head.appendChild(css);
 
+/* V5 · Bloco 2: enquanto a tela troca (meio segundo), a tela velha não aceita toque.
+   Sem isso, um toque duplo rápido respondia a pergunta nova com o botão da pergunta velha. Só vale na Fase 3. */
+(function(){ const pc=document.getElementById("palco"); if(!pc) return;
+  pc.addEventListener("click",e=>{ if(document.body.classList.contains("emf3") && e.target.closest && e.target.closest(".cena.sai")){ e.stopPropagation(); e.preventDefault(); } },true); })();
 /* ---------- peças pequenas ---------- */
 /* V4 (Bloco 9): a mensagem não some sozinha; fica até a pessoa tocar em "Ok" */
 function rgAviso(t){ document.querySelectorAll(".rg-aviso").forEach(x=>x.remove()); const d=document.createElement("div"); d.className="rg-aviso"; d.setAttribute("role","status");
@@ -779,7 +783,7 @@ function rgRodada(){
     ${n===0?`<button class="rg-volta" type="button" onclick="rgPula0()">Pular o 0 (é opcional)</button>`:""}`, c=>{ if(window.rgDepoisRodada) rgDepoisRodada(c,A,op); });
 }
 /* tocar numa opção */
-window.rgToca = function(i){ if(ocupado) return; const A=RG.atual, op=A.op, sel=A.sel||(A.sel={}); click(); vibra(10);
+window.rgToca = function(i){ if(ocupado) return; const A=RG.atual, op=A&&A.op; if(!op||!op.itens||!op.itens[i]) return; const sel=A.sel||(A.sel={}); click(); vibra(10);
   if(op.tipo==="mm"){
     if(sel.mais===i){ delete sel.mais; delete sel.menos; rgSalva(); return rgRodada(); }
     if(sel.menos===i){ delete sel.menos; rgSalva(); return rgRodada(); }
@@ -792,7 +796,8 @@ window.rgToca = function(i){ if(ocupado) return; const A=RG.atual, op=A.op, sel=
 /* a resposta muda o caminho */
 function rgResponde(){
   if(window.rgAntes) rgAntes();
-  const A=RG.atual, op=A.op, sel=A.sel, n=A.num; rgContaRodada(); A.rodadas++;
+  const A=RG.atual, op=A&&A.op, sel=A&&A.sel, n=A&&A.num; if(!op) return rgTela();   /* V5 · Bloco 2: toque perdido, não quebra */
+  rgContaRodada(); A.rodadas++;
   if(op.tipo==="mm"){ const m=op.itens[sel.mais], me=op.itens[sel.menos];
     A.hist.push({tipo:"mm",mais:m.t,menos:me.t}); A.menos=me.t; A.foco={t:m.t,s:m.s,o:m.o,m:m.m||null,sit:m.sit||null};
     puxa(A.P,m.m,1.6); puxa(A.P,me.m,.6);
@@ -1057,7 +1062,7 @@ window.rgDesliza = function(x,doRange){ const A=RG.atual; A.sel=A.sel||{}; A.sel
   const r=document.getElementById("rgrange"); if(r){ r.value=x; r.classList.remove("vazio"); }
   document.querySelectorAll(".rg-desl-n button").forEach((b,i)=>b.classList.toggle("sel",i===x));
   const p=document.getElementById("rgdpronto"); if(p) p.disabled=false; rgSalva(); };
-window.rgDeslPronto = function(){ const A=RG.atual; if(!A||!A.sel||A.sel.v==null||ocupado) return; ocupado=true; click(); rgReage(A.foco);
+window.rgDeslPronto = function(){ const A=RG.atual; if(!A||!A.op||A.op.tipo!=="deslizar"||!A.sel||A.sel.v==null||ocupado) return; ocupado=true; click(); rgReage(A.foco);
   setTimeout(()=>{ ocupado=false; rgResponde(); },350); };
 window.rgRespDeslizar = function(A){ const v=A.sel.v, n=A.num; A.confirmou=true; A.confirma=v; A.hist.push({tipo:"deslizar",valor:v});
   if(Math.abs(v-n)<=1){ const [m]=ordemP(A.P); puxa(A.P,m,1.2); }
