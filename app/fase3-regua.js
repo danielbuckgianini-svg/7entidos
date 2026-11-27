@@ -17,9 +17,11 @@ if(typeof F3_ABERTA==="undefined") return;
 /* ---------- textos ---------- */
 /* Quando o vídeo novo da Brisa chegar: troque o arquivo brisa-fase3.mp4, mude VIDEO3_NOVO para true
    e ajuste os segundos da legenda (LEG3_NOVA) pela fala exata. */
-const VIDEO3_NOVO = false;
+const VIDEO3_NOVO = true;
 const FALA3 = "Agora começa uma fase muito importante: é aqui que eu começo a ligar tudo o que você me mostrou. Vamos montar a sua régua, do 10 até o 0. O que é um 10 pra você? E um 5? Ninguém sente igual, por isso a régua é só sua. São dez etapas, uma para cada número, e você escolhe o número do dia, sem pressa. A cada resposta, o app fica mais inteligente para você! Vamos começar pelo seu 10?";
-const LEG3_NOVA = [[0.5,6,"Agora começa uma fase muito importante: é aqui que eu começo a ligar tudo o que você me mostrou."],[6,10,"Vamos montar a sua régua, do 10 até o 0."],[10,13.5,"O que é um 10 pra você? E um 5?"],[13.5,17.5,"Ninguém sente igual, por isso a régua é só sua."],[17.5,23,"São dez etapas, uma para cada número, e você escolhe o número do dia, sem pressa."],[23,27,"A cada resposta, o app fica mais inteligente para você!"],[27,30,"Vamos começar pelo seu 10?"]];
+const LEG3_NOVA = [[1.0,6.7,"Agora começa uma fase muito importante: é aqui que eu começo a ligar tudo o que você me mostrou."],[6.7,10.4,"Vamos montar a sua régua, do 10 até o 0."],[10.4,12.9,"O que é um 10 pra você? E um 5?"],[12.9,16.8,"Ninguém sente igual, por isso a régua é só sua."],[16.8,22.3,"São dez etapas, uma para cada número, e você escolhe o número do dia, sem pressa."],[22.3,26.3,"A cada resposta, o app fica mais inteligente para você!"],[26.3,29,"Vamos começar pelo seu 10?"]];
+/* vídeo novo (27/11): arquivo separado, para não mudar o fim da Fase 2 que está no ar */
+const VID3_REGUA = (NO_SITE?"/app/":"")+"brisa-fase3-regua.mp4";
 const FIM_DIA = "Por hoje é isso. Amanhã tem mais um pedacinho da sua régua.";
 
 /* ---------- as etapas ---------- */
@@ -125,14 +127,14 @@ const trava3Antiga = trava3;
 window.trava3 = function(p){
   if(!F3_ABERTA) return trava3Antiga(p);   /* público: continua a porta trancada */
   const msab=montaSabor()||saborExemplo();
-  const brisaTopo = VIDEO3_NOVO ? videoBrisa(VID3,LEG3_NOVA)
+  const brisaTopo = VIDEO3_NOVO ? videoBrisa(VID3_REGUA,LEG3_NOVA)
     : `<div class="rg-brisa"><img src="${NO_SITE?"/app/":""}brisa-fase3.jpg" alt="Brisa"><p><b>Brisa</b>${esc(FALA3)}</p></div>`;
   mostra(`<div class="rot">Fase 3 · A sua régua</div>${brisaTopo}
     ${PREVIA&&!VIDEO3_NOVO?`<span class="rg-tag">vídeo novo da Brisa em gravação · por enquanto, o texto</span>`:""}
     <div><button class="btn" type="button" onclick="click();rgComeca()">Vamos começar</button></div>
     <div class="sabbaixa" style="margin-top:22px"><img id="sabprev" alt="${msab.exemplo?"Imagem de exemplo":"A imagem do seu momento"}" hidden><button class="btn sec" id="baixar" type="button" disabled>⬇ Baixar ${msab.exemplo?"a imagem":"minha imagem"}</button></div>
     <button class="btn sec" style="margin-top:14px" onclick="recomecar()">Fazer de novo</button>`,
-    c=>{ if(VIDEO3_NOVO) ligaVideo(c,LEG3_NOVA,()=>{},VID3); ligaBaixar(c,msab); });
+    c=>{ if(VIDEO3_NOVO) ligaVideo(c,LEG3_NOVA,()=>{},VID3_REGUA); ligaBaixar(c,msab); });
 };
 window.rgComeca = function(){ rgCarrega(); RG.intro=true; if(!RG.primeiroDia) RG.primeiroDia=hojeStr(); rgSalva(); f3Abre(); };
 
