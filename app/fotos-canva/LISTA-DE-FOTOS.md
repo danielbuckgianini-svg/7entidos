@@ -3,7 +3,7 @@
 Coloque cada foto na pasta `app/fotos-canva/` com o nome exato do arquivo. Enquanto a foto não existe, o app mostra o quadro "foto do Canva".
 Dica para todas: foto real, pessoas adultas (45+), luz natural, sem desenho. Formato em pé (4:5) para as opções; deitado (16:10) no Coloque na régua e no resultado.
 
-Total: 144 fotos.
+Total: 144 fotos (seções 1 a 6) + 163 fotos da régua (V4, mais abaixo) + 9 fotos da plantinha (V5, no fim).
 
 ## 1. Coloque na régua (dia 1)
 
@@ -378,3 +378,23 @@ Enquanto a foto não chega, o app mostra "foto a fazer no Canva" com o nome do a
 | `sit-alongar.jpg` | Motivos · foto da situação alongar (só aparece se ela não escolheu essa foto na Fase 1) |
 | `sit-correr.jpg` | Motivos · foto da situação correr (só aparece se ela não escolheu essa foto na Fase 1) |
 | `sit-respirar.jpg` | Motivos · foto da situação respirar (só aparece se ela não escolheu essa foto na Fase 1) |
+
+---
+
+## V5 · A plantinha (27/11) — 9 fotos a fazer no Canva
+
+Formato: **PNG com fundo transparente**, quadrado ou em pé (4:5), 800 px no lado maior.
+Regra para as 9: **o mesmo vaso e o mesmo ângulo em todas** (a planta é a mesma, só cresce). Foto realista, sem desenho, sem texto na imagem.
+Enquanto a foto não chega, o app mostra "foto a fazer no Canva" com o nome do arquivo. É só salvar o arquivo com esse nome nesta pasta.
+
+| Arquivo | Onde aparece | Buscar no Canva |
+|---|---|---|
+| `planta-0-broto.png` | Tela inicial · primeira vez: o broto que a Brisa planta junto | broto pequeno em vaso fundo transparente |
+| `planta-1.png` | Plantinha com 1 andar (Fase 1 feita) | muda pequena em vaso com duas folhas |
+| `planta-2.png` | Plantinha com 2 andares (Fase 2 feita) | planta jovem em vaso, um pouco maior |
+| `planta-3.png` | Plantinha com 3 andares (Fase 3 feita) | planta em vaso com várias folhas |
+| `planta-4.png` | Plantinha com 4 andares (Fase 4 feita) | planta em vaso, mais alta e cheia |
+| `planta-5.png` | Plantinha com 5 andares (Fase 5 feita) | planta alta e frondosa em vaso |
+| `planta-6.png` | Plantinha com 6 andares (Hall da Fama) | planta grande e bonita em vaso, quase no topo |
+| `planta-7.png` | O 7º andar, "Onde tudo muda": botão de flor FECHADO e BRILHANTE no topo | botão de flor fechado brilhando no topo da planta |
+| `planta-folhinha.png` | A folhinha nova (meio da fase; na Fase 3, a cada número fechado) | uma folha verde nova, fundo transparente |
