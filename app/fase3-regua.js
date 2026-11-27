@@ -615,7 +615,13 @@ window.rgLembrete = function(){ click(); RG.lembrete=true; rgSalva();
 function rgFimFase(){ rgTopo("régua montada");
   mostra(`<div class="rot">Fase 3</div>${rgMandala()}${rgEstrela()}${rgBarra()}
     <h2>Sua régua está montada.</h2><p class="sub">Eu já estou ligando os pontos. Na próxima fase, tem uma coisa para te mostrar.</p>
+    ${PREVIA?`<div style="margin-top:18px"><button class="btn" type="button" onclick="rgVaiMotivos()">Seguir para os motivos →</button><p class="sub" style="font-size:15px;margin-top:8px">Só na prévia: a parte da análise da função (como fica a ligação com a régua é decisão da sala).</p></div>`:""}
     ${rgPreviaBotoes()}`); }
+/* 27/11 · prévia: depois da régua montada, segue para as perguntas dos motivos (análise da função), que já existiam no app */
+window.rgVaiMotivos = function(){ click&&click(); try{ if(typeof f3ExemploFase1==="function") f3ExemploFase1(); }catch(e){}
+  f3Carrega(); F3.intro=true; f3Salva(); entrou=true; pos=R.length-1;
+  if(!document.getElementById("rgSemCerebro")){ const st=document.createElement("style"); st.id="rgSemCerebro"; st.textContent="#f3cerebro{display:none!important}"; document.head.appendChild(st); }
+  f3Tela(); };
 
 /* ---------- botões só da prévia (sem modo teste) ---------- */
 window.rgPulaEspera = function(){ click(); RG.hoje=null; rgSalva(); rgTela(); };
