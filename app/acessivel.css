@@ -205,3 +205,24 @@ body.foco .ouvirbrisa{opacity:1}
 @keyframes maoToca{0%,100%{transform:translate(10px,14px)}45%{transform:translate(0,0)}55%{transform:translate(0,0) scale(.92)}}
 @keyframes maoOnda{0%,40%{transform:scale(.4);opacity:0}55%{opacity:.9}100%{transform:scale(1.8);opacity:0}}
 @media (prefers-reduced-motion:reduce){.maozinha,.maozinha::before{animation:none}}
+
+/* ---------- Bloco 12 · correções das telas da Fase 1 (só na prévia) ---------- */
+/* 1. tela de entrada: frases de baixo maiores (mínimo 18) */
+.marcatxt span{font-size:20px!important;color:#f4ecdc!important}
+.duracao{font-size:18px!important}
+.gatilho{font-size:22px!important}
+.entrar{gap:28px!important}
+/* 2. "pular" não fica em cima do texto: botão próprio, com fundo, e espaço reservado embaixo da tela */
+.pularbtn{background:rgba(10,17,40,.95)!important;border:1.5px solid rgba(228,232,246,.55)!important;color:#f4ecdc!important;font-weight:800!important;min-height:64px!important;padding:0 20px!important;display:inline-flex!important;align-items:center}
+.pularbtn[hidden]{display:none!important}
+#palco{padding-bottom:150px!important}
+/* 3. vaso: explicação com letra 18 */
+.vaso~.miud,.miud{font-size:18px!important}
+/* 4. escolha por foto: topo sem letra 12 ("Fase 1" com 16) */
+.const .xde7 small{font-size:16px!important;letter-spacing:.06em}
+.entrar{min-height:auto!important;padding-top:8px}
+.entramdl .mdl{max-width:220px;max-height:220px}
+.g22{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.fcard{min-width:0}
+.fbtns.duas,.fbtns:has(.ouvir2){flex-direction:column}
+.fbtns button{white-space:nowrap}

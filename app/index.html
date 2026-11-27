@@ -770,7 +770,7 @@ body.emf3 #voltar,body.emf3 #pularbtn,body.emf3 #fundobtn{display:none!important
 <div id="vinheta" aria-hidden="true"></div>
 <button class="fundobtn" id="fundobtn" type="button" hidden></button>
 <button class="voltar" id="voltar" type="button" onclick="voltar()" hidden>← voltar</button>
-<button class="pularbtn" id="pularbtn" type="button" onclick="pular()" hidden>pular →</button>
+<button class="pularbtn" id="pularbtn" type="button" onclick="pular()" hidden>Pular →</button>
 
 <script>/* prévia: abre direto na Fase 3 em modo teste. O botão "Ver a Fase 1" (só na prévia) desliga isso nesta aba. */
 try{ window.F3_TESTE = sessionStorage.getItem("7e_previa_fase1")==="1" ? 0 : 1; }catch(e){ window.F3_TESTE=1; }</script>
@@ -1169,7 +1169,7 @@ function gosto(p){
   /* V4 (Blocos 9 e 12): "Segure para olhar de perto" vira o botão "Ver de perto"; na Audição, o "Ouvir" fica FORA da foto, embaixo dela */
   mostra(`${p.i===4?'<div style="text-align:center"><span class="faltam">Faltam só 3</span></div>':""}${mosaico(false,p.i)}<p class="brisafrase" style="--c:${s.cor}">${esc(fraseGosto(s,p.i))}</p><div class="rot" style="color:${claro(s.cor)}">${s.s}</div><h2>${s.q}</h2>
     <div class="g22">${s.o.map((o,j)=>`<div class="fcard"><button class="foto ${resp[k]===o?"sel":""}" data-j="${j}" onclick="escolheFoto(this,'${k}',${p.i},${j})"><img src="${foto(s.id,j)}" alt="" loading="lazy" draggable="false"><span class="nm">${esc(o)}</span></button>
-      <div class="fbtns">${s.sons?`<button type="button" class="ouvir ouvir2" onclick="tocarAmbiente('${s.sons[j]}',this)">Ouvir</button>`:""}<button type="button" class="perto2" onclick="abrePerto(${p.i},${j})">Ver de perto</button></div></div>`).join("")}</div>`);
+      <div class="fbtns${s.sons?" duas":""}">${s.sons?`<button type="button" class="ouvir ouvir2" onclick="tocarAmbiente('${s.sons[j]}',this)">Ouvir</button>`:""}<button type="button" class="perto2" onclick="abrePerto(${p.i},${j})">Ver de perto</button></div></div>`).join("")}</div>`);
 }
 /* VER DE PERTO: abre a foto em tela cheia (na Audição, com o som); fecha no "← Voltar" */
 let segurou=false;
@@ -1178,7 +1178,7 @@ function abrePerto(i,j){ const s=SENT[i]; click(); vibra(10); const d=document.c
   if(s.sons){ const x=document.createElement("span"); x.className="ouvir"; tocarAmbiente(s.sons[j],x); }
   const kk="segurou_"+s.id; resp[kk]=[...new Set([...(resp[kk]||[]),s.o[j]])];
   const fecha=()=>{ d.remove(); pararSom(); }; d.querySelector("button").onclick=()=>{ click(); fecha(); }; d.onclick=e=>{ if(e.target===d) fecha(); }; }
-function escolheFoto(b,k,i,j){ if(ocupado) return; resp[k]=SENT[i].o[j]; click(); pararSom(); palco.querySelectorAll(".g22 .foto").forEach(x=>x.classList.remove("sel")); b.classList.add("sel"); ocupado=true;
+function escolheFoto(b,k,i,j){ if(ocupado) return; resp[k]=SENT[i].o[j]; click(); pararSom(); palco.querySelectorAll(".g22 .foto").forEach(x=>x.classList.remove("sel")); b.classList.add("sel");
   /* a foto encolhe e voa até o seu pedaço do mosaico */
   const alvo=palco.querySelector(`.mosaico .pc[data-i="${i}"]`), img=b.querySelector("img");
   if(alvo&&img){ const r1=img.getBoundingClientRect(), r2=alvo.getBoundingClientRect(), v=img.cloneNode(); v.className="voa"; v.style.cssText=`left:${r1.left}px;top:${r1.top}px;width:${r1.width}px;height:${r1.height}px`; document.body.appendChild(v);

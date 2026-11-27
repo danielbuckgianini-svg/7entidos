@@ -86,7 +86,7 @@ function poeMao(c){ tiraMao(); if(!c) return; const v=maosVistas();
     const some=()=>{ tiraMao(); removeEventListener("pointerdown",some,true); }; addEventListener("pointerdown",some,true); break; } }
 
 /* ---------- depois de cada tela: para a voz da tela anterior e mostra a mãozinha, se for a 1ª vez ---------- */
-window.depoisDeMostrar=function(c){ paraDeFalar(); setTimeout(()=>poeMao(c),650); };
+window.depoisDeMostrar=function(c){ paraDeFalar(); setTimeout(()=>poeMao(c),950); };
 
 /* prévia: quem saiu do modo teste para ver a Fase 1 volta para o teste da régua pelo painel "Validar a prévia" */
 if(typeof painel==="function"){ const painel0=window.painel; window.painel=function(){ painel0.apply(this,arguments);
