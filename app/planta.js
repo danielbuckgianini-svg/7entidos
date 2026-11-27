@@ -100,6 +100,19 @@ const mostra0=window.mostra;
 window.mostra=function(html,depois){ return mostra0(html, c=>{ if(depois) depois(c); try{ poeNaTela(c); }catch(e){} }); };
 try{ poeNaTela(document.querySelector("#palco .cena")); }catch(e){}
 
+/* 27/11 (pedido do Daniel, depois da V5): a plantinha também entra NO TOPO das Fases 1 e 2, no lugar da mandala que se monta.
+   Fica pequena ao lado do "Fase 1 · 3 de 7". Tocar nela: a Brisa diz em que fase ela está. A Fase 3 continua como está. */
+function plantaMini(){ const el=document.getElementById("const"); if(!el||el.hidden||document.body.classList.contains("emf3")) return;
+  const k=andares(), fo=folhasAgora(), arq=arqPlanta(k);
+  let b=document.getElementById("plmini");
+  if(!b){ b=document.createElement("button"); b.id="plmini"; b.type="button"; b.className="pl-mini"; b.onclick=()=>window.plantaToca(); el.insertBefore(b,el.firstChild); }
+  if(b.dataset.arq!==arq||b.dataset.fo!==String(fo)){ b.dataset.arq=arq; b.dataset.fo=String(fo);
+    b.setAttribute("aria-label","Sua plantinha. Toque para a Brisa dizer em que fase você está.");
+    b.innerHTML=foto(arq,"pl-pq","Sua plantinha")+(fo?`<span class="pl-minifolha" aria-hidden="true">${foto(ARQ_FOLHA,"pl-mf","")}</span>`:""); } }
+if(typeof window.desenhaMini==="function"){ const dm0=window.desenhaMini;
+  window.desenhaMini=function(){ const r=dm0.apply(this,arguments); try{ plantaMini(); }catch(e){} return r; }; }
+try{ plantaMini(); }catch(e){}
+
 /* modo teste: ver a tela inicial com a plantinha, sem sair do teste */
 window.plantaTelaInicio = function(){ try{ click(); }catch(e){} if(typeof rgFechaModal==="function") rgFechaModal();
   document.body.classList.remove("emf3"); const k=document.getElementById("const"); if(k) k.hidden=true;
@@ -131,6 +144,13 @@ const css=document.createElement("style"); css.textContent=`
 .pl-and span.agora{border-color:#f5c542;color:#fff3c4;background:rgba(245,197,66,.12)}
 .pl-festa{margin:10px auto 4px;text-align:center}
 .pl-luz{z-index:80;animation-duration:1.4s}
+body:not(.emf3) #const #mtopo{display:none!important}
+body.emf3 #plmini{display:none}
+.pl-mini{all:unset;box-sizing:border-box;cursor:pointer;position:relative;display:inline-flex;flex:none;width:72px;height:72px;min-height:64px;border-radius:16px;vertical-align:middle}
+.pl-mini .pl-pq{width:72px;height:72px}
+.pl-minifolha{position:absolute;right:-8px;bottom:-8px}
+.pl-mf{width:30px;height:30px;border-radius:8px;border:1.5px solid rgba(127,211,138,.8)}
+.pl-mf .rg-ph code,.pl-mf .rg-ph b{display:none}
 .pl-folhinha{display:flex;align-items:center;gap:12px;justify-content:center;margin:10px auto 2px;max-width:440px;font-size:18px;font-weight:700;color:#d7f5df}
 `; document.head.appendChild(css);
 })();
