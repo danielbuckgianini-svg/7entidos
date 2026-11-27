@@ -346,6 +346,7 @@ const css=document.createElement("style"); css.textContent=`
 .rg-lt{flex:1;font-size:20px;line-height:1.3}
 .rg-ops.duelo .rg-opf .rg-ft{aspect-ratio:3/4}
 .rg-seguro{font-size:18px!important;font-weight:700;color:#d7f5df!important;background:rgba(92,207,138,.12);border:1px solid rgba(92,207,138,.45);border-radius:14px;padding:10px 12px;margin:8px 0 6px!important}
+.rg-criterio{font-size:18px;opacity:.9;margin:4px auto 6px;max-width:30em;line-height:1.35}.rg-criterio b{color:#ffe14d}
 .rg-dica{font-size:17px;color:#fff3c4;margin:-6px 0 12px}
 .rg-colfoto{width:min(320px,86%);aspect-ratio:16/10;margin:6px auto 2px;border-radius:20px;overflow:hidden}
 .rg-reforco{display:flex;gap:14px;align-items:center;text-align:left;max-width:440px;margin:12px auto 4px;padding:12px 16px;border-radius:22px;background:rgba(17,27,61,.85);border:1.5px solid rgba(245,197,66,.5)}
@@ -531,6 +532,7 @@ function rgTela(nova){
 
 /* =================== BLOCO C · COLOQUE NA RÉGUA =================== */
 function rgColoque(){
+  if(rgIntro("col",rgColoque)) return;
   const lista=rgColHoje(), c=lista[0], i=COLOQUE.indexOf(c), k=corSent(c.sid), s=SENT.find(x=>x.id===c.sid), de=COLOQUE.slice(0,rgDia()<=1?COL_DIA1:COLOQUE.length);
   rgTopo("coloque na régua"); window.RG_TELA="coloque"; fundoCor(k); brilho(k);
   mostra(`<div class="rot">Coloque na régua · ${esc(s.s)}</div>
@@ -695,14 +697,15 @@ function rgMontaRodada(A){ const n=A.num;
   return (window.rgRodadaExtra && window.rgRodadaExtra(A)) || null; }   /* Bloco 7: confirmação "deslizar" */
 /* perguntas claras (V4): nunca mostrar textos de construção */
 const PERGUNTA = (A,op,parte) => { const n=A.num;
-  if(op.tipo==="mm") return parte==="menos" ? `E qual dessas você acha que se <b class="menos">distanciaria mais</b> do ${n}?` : `Qual dessas <b>mais combina</b> com o seu ${n}?`;
+  if(op.tipo==="mm") return parte==="menos" ? `E qual destas <b class="menos">NÃO é</b> um ${n} para você?` : `Qual destas <b>é um ${n}</b> para você?`;
   if(op.tipo==="leve") return `Sem pressa: qual destas é o seu 0?`;
-  if(op.tipo==="duelo") return `Entre essas duas, qual é <b>mais</b> o seu ${n}?`;
+  if(op.tipo==="duelo") return `Entre essas duas, qual é <b>mais</b> um ${n} para você?`;
   if(op.tipo==="deslizar") return `Onde isso fica na sua régua?`;
-  return `Qual dessas <b>mais combina</b> com o seu ${n}?`; };
+  if(op.tipo==="porque") return `O que faz disso <b>um ${n}</b> para você?`;
+  return `Qual destas <b>é um ${n}</b> para você?`; };
 /* uma frase curta (até 12 palavras) dizendo o que fazer agora */
-const DICA = (A,op,parte) => op.tipo==="leve" ? "Toque na que é o seu 0." : op.tipo==="mm" ? (parte==="menos" ? "Agora toque na que ficaria mais longe." : "Toque na que mais combina.")
-  : op.tipo==="porque" ? "O que faz disso o seu "+A.num+"?"
+const DICA = (A,op,parte) => op.tipo==="leve" ? "Toque na que é o seu 0." : op.tipo==="mm" ? (parte==="menos" ? "Agora toque na que não é um "+A.num+"." : "Toque na que é um "+A.num+".")
+  : op.tipo==="porque" ? "Toque no que mais pesa."
   : op.tipo==="duelo" ? "Só uma: a que pesa mais."
   : op.tipo==="deslizar" ? "Arraste a bolinha ou toque num número."
   : "Última pergunta deste número.";
@@ -727,8 +730,21 @@ const FORMATOS = {mm:["fotos","lista"], porque:["lista","fotos"], duelo:["duelo"
 function rgFormato(tipo){ const c=FORMATOS[tipo]||["lista"]; return c.find(f=>f!==RG.ultFmt) || c[0]; }
 
 /* ---------- a tela da rodada ---------- */
+/* 27/11 (pedido do Daniel): antes de cada parte, uma tela curta explicando o que o app quer entender. Aparece uma vez só. */
+const INTRO = {
+ col:{t:"Antes de começar", p:["Agora vou te mostrar algumas cenas.","Para cada uma, toque no número que ela vale para você, de 0 a 10.","Não tem resposta certa nem errada."]},
+ regua:{t:"A sua régua", p:["Agora eu quero entender o que cada nota, do 10 ao 0, significa para você.","Vou te mostrar algumas situações. Você me diz quais são aquele número para você.","Não tem resposta certa nem errada."]},
+ mot:{t:"Por que te faz bem", p:["Agora eu quero entender por que as coisas te fazem bem.","Para cada coisa que você escolheu, me conte o que mais te agrada nela.","Você escolhe duas: a 1ª e a 2ª."]}
+};
+function rgIntro(k,depois){ RG.explica=RG.explica||{}; if(RG.explica[k]) return false; window.RG_TELA="intro";
+  const I=INTRO[k]; mostra(`<div class="rot">${esc(I.t)}</div>${I.p.map((x,i)=>i?`<p class="rg-dica" style="font-size:20px">${esc(x)}</p>`:`<h2 class="rg-q">${esc(x)}</h2>`).join("")}
+    <div style="margin-top:22px"><button class="btn" type="button" onclick="rgIntroOk('${k}')">Entendi, vamos lá</button></div>`);
+  rgIntroDepois=depois; return true; }
+let rgIntroDepois=null;
+window.rgIntroOk = function(k){ click(); RG.explica=RG.explica||{}; RG.explica[k]=1; rgSalva(); const f=rgIntroDepois; rgIntroDepois=null; if(f) f(); else rgTela(); };
 function rgRodada(){
   const A=RG.atual, n=A.num;
+  if(!A.rodadas && rgIntro("regua",rgRodada)) return;
   if(!A.op){ A.op=rgMontaRodada(A); if(!A.op){ rgEncerra(A); rgSalva(); return rgTela(); }
     A.op.fmt=rgFormato(A.op.tipo); A.op.itens.forEach(x=>{ if(!A.shown.includes(x.t)) A.shown.push(x.t); }); A.sel={}; rgSalva();
     /* último degrau: a inteligência do app (se ligada) escolhe as 4 melhores dentro da lista aprovada */
@@ -738,7 +754,7 @@ function rgRodada(){
   const parte = op.tipo==="mm"&&sel.mais!=null ? "menos" : "mais";
   const cima = op.tipo!=="mm" && op.tipo!=="leve" && op.tipo!=="deslizar" && A.foco;
   const card=(x,i)=>{ const c=sel.mais===i?" mais":sel.menos===i?" menos":sel.um===i?" sel":"";
-    const selo=sel.mais===i?`<span class="selo">MAIS</span>`:sel.menos===i?`<span class="selo">MAIS LONGE</span>`:"";
+    const selo=sel.mais===i?`<span class="selo">É UM ${n}</span>`:sel.menos===i?`<span class="selo">NÃO É</span>`:"";
     const f=rgArqFoto(x), ft=f?rgFotoHTML(f.src,f.arq):`<span class="rg-ft rg-eu"><span>Você contou</span></span>`;
     if(op.fmt==="lista") return `<button class="rg-op rg-opl${c}" type="button" onclick="rgToca(${i})">${selo}${ft}<span class="rg-lt">${esc(cap(x.t))}</span></button>`;
     return `<button class="rg-op rg-opf${c}" type="button" onclick="rgToca(${i})">${selo}${ft}<span class="rg-cap">${esc(cap(x.t))}</span></button>`; };
@@ -746,6 +762,7 @@ function rgRodada(){
     : `<div class="rg-ops ${op.fmt==="lista"?"lista":op.fmt==="duelo"?"fotos duelo":"fotos"}${op.fmt==="fotos"&&op.itens.length%2?" impar":""}">${op.itens.map(card).join("")}</div>`;
   mostra(`<div class="rg-tit pq">${n}<small>${NOMES[n]}</small></div>
     ${cima?rgCartaoFoco(A):""}
+    ${FRASE_NUM[n]?`<p class="rg-criterio"><b>${n} é:</b> ${esc(FRASE_NUM[n].charAt(0).toLowerCase()+FRASE_NUM[n].slice(1))}</p>`:""}
     <h2 class="rg-q">${PERGUNTA(A,op,parte)}</h2>
     <p class="rg-dica">${DICA(A,op,parte)}</p>
     ${corpo}
@@ -1117,22 +1134,58 @@ function rgMotDepoisDe(n){ if(!temF3()||rgMotivosOk()) return; const F=rgF3(), r
 /* depois da régua pronta, se ainda falta certeza: uma situação de cada vez */
 function rgMotProxima(){ const c=rgMotCandidatas(null); if(c.length){ RG.motFila=(RG.motFila||[]).concat(c[0]); rgSalva(); return true; } return false; }
 
+/* 27/11 (pedido do Daniel): as opções dos motivos respondem direto à pergunta "O que mais te faz bem quando você...?". Mesma ordem dos motivos (soc, pau, sen, con, jei). PROVISÓRIO: vai para a lista de aprovação. */
+const OPCOES_MOT = {
+ praia:["Encontrar os amigos na areia", "Ninguém me pedir nada por umas horas", "Sentir a brisa e o pé na areia", "Comer pastel e tomar água de coco", "Escolher a hora de chegar e de ir embora"],
+ cafe:["Reunir a família ou alguém querido", "Parar tudo por meia hora, sem pressa", "Sentir o cheiro do café passando", "Ter um bolo gostoso me esperando", "Fazer do meu jeito, na hora que eu quero"],
+ samba:["Ir com a turma e cantar junto", "Esquecer as obrigações da semana", "Sentir o som vibrando no peito", "Ter um petisco gostoso na mesa", "Escolher onde ficar e quanto tempo"],
+ plantas:["Trocar mudas e conversar com as vizinhas", "Ser a hora em que ninguém me chama", "Sentir a terra e o cheiro do verde", "Colher tempero e flor para usar em casa", "Cada vaso ficar no lugar que eu decidi"],
+ bike:["Pedalar junto com a turma", "Ficar longe das tarefas por um tempo", "Sentir o vento no rosto nas curvas", "Parar no caminho para tomar um sorvete", "Escolher o caminho e a velocidade"],
+ feira:["Conversar com os conhecidos e o feirante", "Sair de casa e respirar um pouco", "Ver as cores e sentir o cheiro das frutas", "Voltar com fruta boa e barata", "Escolher cada coisa com calma"],
+ salao:["Conversar e dar risada com as moças", "Ninguém me pedir nada por uma hora", "Sentir a massagem gostosa no cabelo", "Sair com a unha feita e o cabelo bonito", "Escolher a cor e o estilo que eu quero"],
+ novela:["Comentar os capítulos com alguém", "Desligar um pouco dos problemas", "A música e as imagens me envolverem", "Preparar um lanche gostoso para assistir", "Eu decidir o que e quando assistir"],
+ hidro:["Encontrar a turma e dar risada", "Ninguém me encontrar por uma hora", "Sentir a água segurar e soltar o corpo", "Sair de lá com o banho tomado", "Escolher o dia e o ritmo dos exercícios"],
+ cozinhar:["Cozinhar para receber quem eu gosto", "Esquecer o resto enquanto mexo a panela", "Sentir o cheiro subindo da panela", "Sobrar comida gostosa para amanhã", "Inventar e mudar a receita como eu quiser"],
+ orla:["Caminhar conversando com alguém querido", "Ter um tempo longe das tarefas", "Sentir o vento e ouvir o mar", "Tomar uma água de coco no quiosque", "Fazer o meu percurso no meu ritmo"],
+ padaria:["Encontrar o pessoal do bairro", "Dar uma escapada da rotina da casa", "Sentir o cheiro do pão saindo do forno", "Levar pão quentinho e um doce", "Escolher o que vou comer, sem pressa"],
+ decorar:["Mostrar o cantinho novo para as visitas", "Esquecer os problemas enquanto arrumo", "Ver as cores e a luz do jeito novo", "Comprar uma peça nova para enfeitar", "Tudo ficar do jeito que eu imaginei"],
+ viagem:["Viajar junto com a família ou os amigos", "Ficar longe da rotina e das tarefas", "Ver paisagens que eu nunca vi", "Trazer lembrancinhas e comidas da região", "Montar o roteiro do meu jeito"],
+ compras:["Ir com alguém querido ou com a família", "Sair da rotina por umas horas", "Tocar os tecidos e olhar as vitrines", "Voltar para casa com uma peça nova", "Escolher sem ninguém dar palpite"],
+ ceu:["Olhar junto com alguém e conversar", "A noite calma, sem ninguém me chamar", "Ver as estrelas brilhando no escuro", "Ter uma manta e um chocolate quente", "Escolher o cantinho e ficar quanto quiser"],
+ arte:["Passear com amigos e comentar cada desenho", "Sair da rotina e espairecer", "Ver as cores fortes nas paredes", "Tirar fotos bonitas para guardar", "Fazer o meu caminho, sem pressa"],
+ fotos:["Relembrar histórias junto com a família", "Esquecer as preocupações do dia", "Ver os rostos e as cores de outra época", "Separar uma foto para um porta-retrato", "Escolher quais fotos ver e quando"],
+ mar:["Conversar com alguém olhando o mar", "Ficar longe dos barulhos de casa", "Ouvir as ondas indo e voltando", "Levar um lanche e ficar por ali", "Ficar ali o tempo que eu quiser"],
+ chuva:["A família ficar reunida em casa", "Ter uma desculpa para não sair", "Ouvir o barulhinho da chuva caindo", "Fazer um bolinho de chuva quentinho", "Ficar quietinha no meu canto"],
+ silencio:["Ficar em silêncio ao lado de alguém querido", "Ninguém me pedir nada por um tempo", "Escutar só a minha respiração", "Terminar aquele livro ou bordado", "Eu decidir quando o silêncio acaba"],
+ cobertor:["Ficar abraçadinha com alguém no sofá", "Parar tudo e descansar", "Sentir o macio e o quentinho no corpo", "Ter um chocolate quente nas mãos", "Escolher o filme e a hora de dormir"],
+ agua:["Brincar na água com a família", "Esquecer o calor e as tarefas", "Sentir a água fresca na pele", "Tomar um sorvete gostoso depois", "Entrar e sair quando eu quiser"],
+ abraco:["Sentir que alguém se importa comigo", "Esquecer os problemas por um instante", "Sentir o calor e o aperto do abraço", "Às vezes vir junto um docinho ou presente", "Abraçar quem eu quero, na hora que eu quero"],
+ comidavo:["Juntar a família em volta da mesa", "Me sentir em casa e descansar", "Sentir o tempero de antigamente", "Ainda levar marmita para o outro dia", "Pedir o prato de que eu mais gosto"],
+ perfume:["Lembrar de alguém que eu amo", "Esquecer o resto por um momento", "Sentir o cheiro bom no ar", "Ganhar um vidrinho igual de presente", "Usar o perfume quando eu quero lembrar"],
+ danca:["Dançar com o par ou com a turma", "Esquecer tudo enquanto a música toca", "Sentir o corpo girar e balançar", "Ter petisco gostoso no baile", "Dançar do meu jeito, sem regra"],
+ rede:["Conversar com alguém na rede ao lado", "Ser a minha hora de não fazer nada", "Sentir o balanço devagarinho", "Ter um suco gelado do lado", "Ficar ali o tempo que eu quiser"],
+ prancha:["Ir com amigos e dar risada", "Ficar longe de tudo, no meio da água", "Sentir a água balançar debaixo dos pés", "Ter um lanche na areia depois", "Escolher para onde remar"],
+ alongar:["Estar junto com a turma", "Ter um momento meu, sem telefone", "Sentir cada músculo soltar", "Sair com uma série para fazer em casa", "Fazer no meu ritmo e na minha hora"],
+ correr:["Correr com um grupo ou com alguém querido", "Deixar as preocupações para trás", "Sentir o coração bater e o vento", "Ganhar medalha em corrida de rua", "Escolher o percurso e o ritmo"],
+ respirar:["Ficar deitada perto de alguém querido", "Parar tudo por alguns minutos", "Sentir o ar entrar e sair devagar", "Tomar um chá quentinho depois", "Escolher a hora e o lugar"]
+};
 let rgMSel={a:null,b:null};
 function rgMotivo(){ const F=rgF3(), id=RG.motFila[0], s=SIT[id]; if(!s){ RG.motFila.shift(); rgSalva(); return rgTela(); }
+  if(rgIntro("mot",rgMotivo)) return;
   rgMSel={a:null,b:null}; RG.ultFmt="lista"; rgTopo("motivos"); window.RG_TELA="motivo";
   const g=(typeof f3Gostos==="function"?f3Gostos():[]), j=SENT.findIndex((x,i)=>g[i]&&SIT_FASE1[g[i]]===id);
   const ft = j>=0 ? rgFotoHTML(foto(SENT[j].id,SENT[j].o.indexOf(g[j]))) : rgFotoHTML(CANVA+"sit-"+id+".jpg","sit-"+id+".jpg");
   mostra(`<div class="rg-colfoto">${ft}</div>
     <h2 class="rg-q">O que mais te faz bem quando você ${esc(VOCE[id]||s.txt)}?</h2>
-    <p class="rg-dica" id="rgmdica">Toque em uma. Se quiser, numa 2ª também.</p>
-    <div class="rg-ops lista">${f3Ordem(s).map(k=>`<button class="rg-op rg-opl rg-mot" type="button" data-m="${MOTIVOS[k].id}" onclick="rgMotToca(this)"><span class="rg-lt">${esc(s.o[k])}</span><span class="rg-mtag"></span></button>`).join("")}</div>
+    <p class="rg-dica" id="rgmdica">Escolha duas: a 1ª e a 2ª.</p>
+    <div class="rg-ops lista">${f3Ordem(s).map(k=>`<button class="rg-op rg-opl rg-mot" type="button" data-m="${MOTIVOS[k].id}" onclick="rgMotToca(this)"><span class="rg-lt">${esc((OPCOES_MOT[id]||s.o)[k])}</span><span class="rg-mtag"></span></button>`).join("")}</div>
     <div class="rg-tres"><button type="button" onclick="rgMotNenhuma()">Nenhuma dessas</button></div>
     <div style="margin-top:10px"><button class="btn" id="rgmseguir" type="button" onclick="rgMotSeguir()" disabled>Seguir</button></div>`); }
 function rgMotPinta(){ document.querySelectorAll(".rg-mot").forEach(b=>{ const m=b.dataset.m; b.classList.toggle("sel",m===rgMSel.a); b.classList.toggle("sel2",m===rgMSel.b);
     b.querySelector(".rg-mtag").textContent=m===rgMSel.a?"1ª":m===rgMSel.b?"2ª":""; });
   const d=document.getElementById("rgmdica"), sg=document.getElementById("rgmseguir");
-  if(d) d.textContent=!rgMSel.a?"Toque em uma. Se quiser, numa 2ª também.":!rgMSel.b?"Se quiser, toque numa 2ª. É opcional.":"Pronto. Para trocar, toque de novo.";
-  if(sg) sg.disabled=!rgMSel.a; }
+  if(d) d.textContent=!rgMSel.a?"Escolha duas: a 1ª e a 2ª.":!rgMSel.b?"Agora toque na 2ª.":"Pronto. Para trocar, toque de novo.";
+  if(sg) sg.disabled=!(rgMSel.a&&rgMSel.b); }
 window.rgMotToca = function(b){ click(); vibra(10); const m=b.dataset.m;
   if(rgMSel.a===m){ rgMSel.a=rgMSel.b; rgMSel.b=null; } else if(rgMSel.b===m){ rgMSel.b=null; } else if(!rgMSel.a){ rgMSel.a=m; } else { rgMSel.b=m; }
   rgMotPinta(); };
@@ -1142,7 +1195,7 @@ function rgMotGuarda(v){ if(window.rgAntes) rgAntes(); const F=rgF3(), id=RG.mot
     F.descoberta={tipo:P[a]>=MOT_CERTEZA?"principal":"mistura",a,b:P[a]>=MOT_CERTEZA?null:b,quando:rgHoje(),pistas:[]}; f3Salva(); try{ f3GuardaDescoberta(); }catch(e){}
     RG.motFila=[]; }
   rgSalva(); }
-window.rgMotSeguir = function(){ if(!rgMSel.a||ocupado) return; ocupado=true; click(); if(window.rgReage) rgReage({m:rgMSel.a});
+window.rgMotSeguir = function(){ if(!rgMSel.a||!rgMSel.b||ocupado) return; ocupado=true; click(); if(window.rgReage) rgReage({m:rgMSel.a});
   rgMotGuarda({a:rgMSel.a,b:rgMSel.b||null}); setTimeout(()=>{ ocupado=false; rgTela(); },350); };
 window.rgMotNenhuma = function(){ if(ocupado) return; click(); rgMotGuarda({n:true}); rgTela(); };
 
