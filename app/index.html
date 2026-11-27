@@ -2187,7 +2187,7 @@ registraPassoApp("app_abriu", {campanha:resp.local_campanha??etiquetaApp});
 if(PREVIA && window.claude && claude.use){ claude.use("db").then(db=>{ if(!db) return; VDOC=db.doc("validacao/app-novo-b4"); return VDOC.get().then(sn=>{ const d=sn&&(sn.data?sn.data():sn); if(d&&d.itens&&!Object.keys(val).length){ d.itens.forEach(x=>{ if(x.situacao||x.escolha){ const k=x.escolha?FRASES_AB.indexOf(x.escolha):-1; val[x.id]={s:x.situacao||undefined,o:x.revisar||undefined,e:k>=0?k:undefined}; if(k>=0){ try{ localStorage.setItem("7e_frase_abertura",String(k)); }catch(e){} } } }); if(!entrou&&pos===0) desenha(); } }); }).catch(()=>{}); }
 </script>
 <!-- 26/11 · Fase 3 nova: a régua pessoal (arquivo separado; só abre onde a Fase 3 está aberta, hoje só na prévia) -->
-<script>document.write('<script src="'+(NO_SITE?"/app/":"")+'fase3-regua.js?v=3"><\/script>')</script>
+<script>document.write('<script src="'+(NO_SITE?"/app/":"")+'fase3-regua.js?v=4"><\/script>')</script>
 <!-- 22/11 · iPhone: passo a passo para colocar o app na tela de início (só aparece no iPhone, fora do app instalado) -->
 <style>
 .guia-ios{position:fixed;left:12px;right:12px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:50;padding:18px 18px 16px;border-radius:20px;background:#111b3d;border:1px solid rgba(245,197,66,.55);box-shadow:0 20px 50px rgba(0,0,0,.6);color:#f6efe2;font:400 15px/1.45 Inter,system-ui,sans-serif;animation:guiaSobe .5s ease-out}

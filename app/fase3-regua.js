@@ -209,7 +209,7 @@ const css=document.createElement("style"); css.textContent=`
 .rg-previa .linkflow::before{content:"⚙"}
 /* modo teste */
 #rgteste{position:fixed;right:10px;top:calc(8px + env(safe-area-inset-top));z-index:55;font:700 12px "Space Mono",monospace;color:#0a1128;background:#7fd3ff;border-radius:8px;padding:3px 8px;pointer-events:none;opacity:.92}
-#rgbarra{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom));z-index:55;display:flex;gap:8px}
+#rgbarra{position:fixed;left:50%;transform:translateX(-50%);flex-wrap:wrap;justify-content:center;width:max-content;max-width:94vw;bottom:calc(10px + env(safe-area-inset-bottom));z-index:55;display:flex;gap:8px}
 #rgbarra button{all:unset;cursor:pointer;white-space:nowrap;padding:9px 14px;border-radius:999px;background:#0b2a3d;border:1.5px solid #7fd3ff;color:#7fd3ff;font:700 14px Inter,system-ui,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.5)}
 body.rgteste main#palco{padding-bottom:70px}
 `; document.head.appendChild(css);
@@ -253,9 +253,13 @@ function rgTesteBarra(){ if(!TESTE) return; document.body.classList.add("rgteste
   let t=document.getElementById("rgteste"); if(!t){ t=document.createElement("div"); t.id="rgteste"; document.body.appendChild(t); }
   t.textContent="Modo teste · dia "+rgDia();
   if(!document.getElementById("rgbarra")){ const b=document.createElement("div"); b.id="rgbarra";
-    b.innerHTML=`<button type="button" onclick="rgAvancaDia()">Avançar um dia ☀</button><button type="button" onclick="rgRecomecaTeste()">Recomeçar a Fase 3</button>`; document.body.appendChild(b); }
+    b.innerHTML=`<button type="button" onclick="rgAvancaDia()">Avançar um dia ☀</button><button type="button" onclick="rgRecomecaTeste()">Recomeçar a Fase 3</button><button type="button" onclick="rgCompletaTeste()">Ver a régua completa ✓</button>`; document.body.appendChild(b); }
   const vb=document.querySelector(".vbtn"); if(vb) vb.style.display="none"; }
 window.rgAvancaDia = function(){ click(); rgCarrega(); rgFechaModal(); if(!RG.primeiroDia) RG.primeiroDia=rgHoje(); RG.desloc=(RG.desloc||0)+1; rgSalva(); rgAviso("Passou um dia. Agora é o dia "+rgDia()+" da Fase 3."); rgTela(); };
+/* 27/11: pula direto para o fim (régua inteira preenchida), para ver o que vem depois */
+window.rgCompletaTeste = function(){ click&&click(); rgFechaModal(); rgCarrega(); RG.intro=true; if(!RG.primeiroDia) RG.primeiroDia=rgHoje();
+  COLOQUE.forEach((c,i)=>{ if(RG.col[c.sid]==null) RG.col[c.sid]=[9,2,10,8,4,1,7][i%7]; }); RG.colFeito=RG.colFeito||rgHoje();
+  ORDEM.forEach(n=>{ if(RG.feitos[n]==null) RG.feitos[n]=rgHoje(); }); RG.atual=null; rgSalva(); entrou=true; pos=R.length-1; rgTela(); };
 window.rgRecomecaTeste = function(){ click(); rgFechaModal(); try{ localStorage.removeItem(CHAVE); }catch(e){} RG=null; rgCarrega(); rgSalva(); rgExemploF1(); entrou=true; pos=R.length-1; window.trava3(); };
 
 /* =================== BLOCO E · ABERTURA (fim da Fase 2) =================== */
@@ -623,5 +627,6 @@ window.rgZera = function(){ click(); RG=rgNovo(); rgSalva(); entrou=true; pos=R.
 if(TESTE){ rgCarrega(); rgExemploF1(); fechaPainel&&fechaPainel(); entrou=true; pos=R.length-1;
   try{ localStorage.setItem("7e_fase3_ativa","1"); }catch(e){}
   const g=document.getElementById("guia-ios"); if(g) g.remove();
-  if(RG.intro) rgTela(); else window.trava3(); }
+  if(/[?&#]completa/i.test(location.search+location.hash)) window.rgCompletaTeste();
+  else if(RG.intro) rgTela(); else window.trava3(); }
 })();
