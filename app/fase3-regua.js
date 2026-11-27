@@ -346,6 +346,11 @@ const css=document.createElement("style"); css.textContent=`
 .rg-lt{flex:1;font-size:20px;line-height:1.3}
 .rg-ops.duelo .rg-opf .rg-ft{aspect-ratio:3/4}
 .rg-seguro{font-size:18px!important;font-weight:700;color:#d7f5df!important;background:rgba(92,207,138,.12);border:1px solid rgba(92,207,138,.45);border-radius:14px;padding:10px 12px;margin:8px 0 6px!important}
+.rg-planta{display:flex;flex-direction:column;align-items:center;gap:6px;margin:0 auto 14px;background:none;border:0;padding:0;cursor:pointer;color:#fff3c4;font:inherit;font-size:18px}
+.rg-planta img{width:190px;height:190px;object-fit:cover;border-radius:50%;border:3px solid rgba(255,225,77,.55);box-shadow:0 6px 24px rgba(0,0,0,.4)}
+.rg-planta.f4 img{border-color:#ffe14d;animation:rgPlBrilho 2.4s ease-in-out infinite}
+@keyframes rgPlBrilho{0%,100%{box-shadow:0 0 18px 4px rgba(255,225,77,.45)}50%{box-shadow:0 0 38px 12px rgba(255,225,77,.85)}}
+.rg-plmod{text-align:center}.rg-plmod img{width:160px;height:160px;object-fit:cover;border-radius:50%;margin:0 auto 8px;display:block}.rg-plmod p{font-size:19px;line-height:1.4;margin:8px 0}
 .rg-criterio{font-size:18px;opacity:.9;margin:4px auto 6px;max-width:30em;line-height:1.35}.rg-criterio b{color:#ffe14d}
 .rg-dica{font-size:17px;color:#fff3c4;margin:-6px 0 12px}
 .rg-colfoto{width:min(320px,86%);aspect-ratio:16/10;margin:6px auto 2px;border-radius:20px;overflow:hidden}
@@ -1214,6 +1219,32 @@ function rgMecDoDia(){ const d=rgDia(), rOk=rgReguaPronta(), tOk=tiOk().pronto;
   if(rOk) return "teste"; if(tOk) return "regua";
   return d%2===0 ? "teste" : "regua"; }
 function rgCuringa(){ const d=rgDia(), q=CURINGAS[(d-1)%CURINGAS.length]; RG.curinga=RG.curinga||{}; return {d,q,r:RG.curinga[d]}; }
+/* =================== PLANTINHA (27/11, respostas do Daniel) =================== */
+/* Uma plantinha que cresce com o que ela faz. Começa já plantada, com broto. No fim da Fase 3 vira um botão de flor
+   fechado e brilhante (a flor abre nas fases seguintes). Grande no topo, de tocar: ao tocar, mostra primeiro o que
+   ela já fez e, no fim, o que falta. Fotos: fotos-canva/plantinha-1..7 (a 7, flor cheia, fica para o fim do app). */
+const PLANTA_TXT = ["Um broto","Uma mudinha","Folhas novas","Um botão de flor"];
+function rgPlantaConta(){ const t=tiOk(), r=JOGAVEIS.filter(n=>RG.feitos[n]!=null).length, mOk=rgMotivosOk(), m=motFeitas();
+  const p = .6*r/JOGAVEIS.length + .2*Math.min(1,(t.pronto?4:t.diasFeitos)/4) + .2*(mOk?1:Math.min(1,m/MOT_MIN));
+  const fim = rgReguaPronta() && t.pronto && mOk;
+  return {r, t, m, mOk, fim, p, fase: fim?4 : p>=.6?3 : p>=.3?2 : 1}; }
+function rgPlantaHTML(){ const c=rgPlantaConta();
+  return `<button class="rg-planta f${c.fase}" type="button" onclick="rgPlantaInfo()" aria-label="A sua plantinha. Toque para ver o que já fez e o que falta.">
+    <img src="${CANVA}plantinha-${c.fase}-${["broto","muda","folhas","botao-fechado"][c.fase-1]}.jpg" alt="">
+    <span>${PLANTA_TXT[c.fase-1]} · toque para ver</span></button>`; }
+window.rgPlantaInfo = function(){ click(); const c=rgPlantaConta(), J=JOGAVEIS.length;
+  const feito=[], falta=[];
+  feito.push(c.r ? `${c.r} de ${J} números da régua` : "Você começou a Fase 3");
+  if(c.t.diasFeitos||c.t.pronto) feito.push(c.t.pronto ? "o teste de imagens inteiro" : `${c.t.diasFeitos} de 4 dias do teste de imagens`);
+  if(c.m) feito.push(c.m===1 ? "1 pergunta dos motivos" : `${c.m} perguntas dos motivos`);
+  if(c.r<J) falta.push(J-c.r===1 ? "1 número da régua" : `${J-c.r} números da régua`);
+  if(!c.t.pronto) falta.push(`${4-c.t.diasFeitos} ${4-c.t.diasFeitos===1?"dia":"dias"} do teste de imagens`);
+  if(!c.mOk) falta.push("algumas perguntas dos motivos");
+  rgModal(`<div class="rg-plmod"><img src="${CANVA}plantinha-${c.fase}-${["broto","muda","folhas","botao-fechado"][c.fase-1]}.jpg" alt="">
+    <h2>A sua plantinha</h2>
+    <p><b>O que você já fez:</b> ${esc(feito.join(", "))}.</p>
+    <p>${c.fim ? "<b>Fase 3 completa.</b> A sua plantinha virou um botão de flor. Nas próximas fases, ela abre." : `<b>O que falta:</b> ${esc(falta.join(", "))}.`}</p>
+    <button class="btn" type="button" onclick="rgFechaModal()">Ok</button></div>`); };
 window.f3Mapa3 = function(){ rgCarrega(); rgFechaModal(); entrou=true; pos=R.length-1; try{ localStorage.setItem("7e_fase3_ativa","1"); }catch(e){}
   if(!RG.intro) return desenha();
   rgTopo("mapa da fase 3"); window.RG_TELA="mapa";
@@ -1224,7 +1255,7 @@ window.f3Mapa3 = function(){ rgCarrega(); rgFechaModal(); entrou=true; pos=R.len
     return `<button class="f3m-it${ok?" ok":""}${ab?"":" fecha"}${hoje?" hoje":""}" type="button" ${ab||ok?`onclick="${acao}"`:"disabled"}>
       <span class="f3m-n">${ok?"✓":num}</span><span class="f3m-t"><b>${tit}</b><small>${sub}</small></span>${hoje?`<em>hoje</em>`:!ab&&!ok?`<em>🔒 Trancado</em>`:""}${extra||""}</button>`; };
   const fimOk = rOk && t.pronto && mOk;
-  mostra(`<div class="rot">Fase 3 · hoje</div>
+  mostra(`${rgPlantaHTML()}<div class="rot">Fase 3 · hoje</div>
     <h2>O mapa da Fase 3</h2>
     <p class="sub">${LIVRE?"Escolha por onde seguir.":"Uma atividade por dia. A de hoje está marcada."}</p>
     ${LIVRE&&PREVIA?`<p class="rg-nota">Só na prévia: travas desligadas, tudo liberado para teste.</p>`:""}
@@ -1262,7 +1293,7 @@ window.rgVerResumo = function(f){ click(); rgExemploF1(); try{ localStorage.remo
    O tipo do teste de imagens continua aqui (decisão do Daniel em 27/11: manter o teste junto com a régua). */
 window.rgFimFase3 = function(){ rgTopo("régua montada"); const temTipo=typeof tiResultadoHTML==="function" && tiResultadoHTML();
   RG.fase3Fim=RG.fase3Fim||rgHoje(); rgSalva();
-  mostra(`<div class="rot">Fase 3 · A sua régua</div>${rgEstrela(true)}
+  mostra(`${rgPlantaHTML()}<div class="rot">Fase 3 · A sua régua</div>${rgEstrela(true)}
     <h2>Sua régua está montada.</h2><p class="sub">Na próxima fase, você confere o que eu percebi.</p>
     ${temTipo?`<h2 class="rg-h3">O seu tipo no teste de imagens</h2>${temTipo}<div class="ti-com"><button class="btn" type="button" onclick="tiCompartilha()">Compartilhar o meu tipo</button></div>`:""}
     <div class="porta3" style="margin-top:22px"><div class="pt-cena"><div class="pt-luz" aria-hidden="true"></div><img class="pt-img" src="${NO_SITE?"/app/":""}porta-fase3.webp" alt="Uma porta mágica trancada, com luz dourada escapando pela fresta" width="720" height="892"></div>
