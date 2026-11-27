@@ -772,7 +772,8 @@ body.emf3 #voltar,body.emf3 #pularbtn,body.emf3 #fundobtn{display:none!important
 <button class="voltar" id="voltar" type="button" onclick="voltar()" hidden>← voltar</button>
 <button class="pularbtn" id="pularbtn" type="button" onclick="pular()" hidden>pular →</button>
 
-<script>window.F3_TESTE=1; /* prévia: abre direto na Fase 3 em modo teste */</script>
+<script>/* prévia: abre direto na Fase 3 em modo teste. O botão "Ver a Fase 1" (só na prévia) desliga isso nesta aba. */
+try{ window.F3_TESTE = sessionStorage.getItem("7e_previa_fase1")==="1" ? 0 : 1; }catch(e){ window.F3_TESTE=1; }</script>
 <script>
 /* ============ CONFIGURAÇÃO ============ */
 const NO_SITE = /7entidos\.com\.br$/i.test(location.hostname) || false;
@@ -811,7 +812,8 @@ const TEMPO_LIM = [3,6,10,Infinity];
 /* ============ ROTEIRO (uma tela por vez) ============ */
 /* FASE 1: Brisa, vaso, nota de chegada e as 7 perguntas de gosto.
    FASE 2: passagem da Brisa, os 7 jogos (com o "quanto curtiu" na própria tela), saborear, nota de saída, chute, revelação e gráfico. */
-const R = [{t:"brisa",f:1},{t:"escala",id:"chegada",f:1},{t:"vaso",f:1}];
+/* 27/11 · V4 (Bloco 8/12): nome e nota de 0 a 10 em duas telas separadas (uma tarefa por tela) */
+const R = [{t:"brisa",f:1},{t:"nome",f:1},{t:"escala",id:"chegada",f:1},{t:"vaso",f:1}];
 SENT.forEach((s,i)=>{ R.push({t:"gosto",i,f:1}); });
 R.push({t:"fim1",f:1});
 R.push({t:"abre2",f:2});
@@ -906,8 +908,8 @@ function mostra(html, depois){
   if(velho){ velho.classList.remove("entra"); velho.classList.add("sai"); setTimeout(poe,430); } else poe();
 }
 function avanca(){ if(ocupado) return; ocupado=true; pararSom(); salvaLocal(); if(pos<R.length-1){ pos++; desenha(); } }
-function voltar(){ pararSom(); if(pos>0){ pos--; while(pos>0 && (R[pos].t==="passagem"||R[pos].t==="abre2"||R[pos].t==="saborear")) pos--; desenha(); } }
-const PULAVEIS=["brisa","abre2","vaso","escala","gosto","jogo","saborear","chute"];
+function voltar(){ pararSom(); if(window.VOLTA_SUB){ const f=window.VOLTA_SUB; window.VOLTA_SUB=null; click(); return f(); } if(pos>0){ pos--; while(pos>0 && (R[pos].t==="passagem"||R[pos].t==="abre2"||R[pos].t==="saborear")) pos--; desenha(); } }
+const PULAVEIS=["brisa","nome","abre2","vaso","escala","gosto","jogo","saborear","chute"];
 /* ao tocar em "pular", pergunta rapidinho por quê (guarda em pulou_motivo_…) e depois pula */
 function pular(){ const p=R[pos]; if(!p||!PULAVEIS.includes(p.t)||document.getElementById("porque")) return; click();
   const k=p.t==="jogo"||p.t==="gosto"?p.t+"_"+SENT[p.i].id:p.t==="escala"?"escala_"+p.id:p.t;
@@ -962,7 +964,7 @@ function desenhaMini(){
   else if(p.t==="fim1") lug=TODOS;
   const m=document.getElementById("mtopo");
   requestAnimationFrame(()=>requestAnimationFrame(()=>poeMandala(m,{pos:lug,luz,miolo:!!resp.local_luz0})));
-  const comeco=p.t==="brisa"||p.t==="vaso"||(p.t==="escala"&&p.id==="chegada");
+  const comeco=p.t==="brisa"||p.t==="nome"||p.t==="vaso"||(p.t==="escala"&&p.id==="chegada");
   document.getElementById("xde7").innerHTML=`<b class="pal"><em>7</em>entidos</b>${p.t==="brisa"?"":`<small>Fase ${f}</small>${comeco?"começando":(f===2?luz.length:lug.length)+" de 7"}`}`;
 }
 /* fim do vídeo 1 da Brisa (ou "Começar"): acende a primeira luz, o miolo da mandala */
@@ -991,7 +993,7 @@ function desenha(){
   /* "pular" aparece nas telas que pedem resposta ou jogo; nas outras o próprio botão já segue */
   document.getElementById("pularbtn").hidden = !PULAVEIS.includes(p.t);
   desenhaMini(); brilho(p.i!=null?SENT[p.i].cor:null); fundoCor(p.i!=null?SENT[p.i].cor:null);
-  ({brisa,vaso,escala,passagem,gosto,fim1,abre2,jogo,saborear,chute,revela,grafico,trava3})[p.t](p);
+  window.VOLTA_SUB=null; ({brisa,nome,vaso,escala,passagem,gosto,fim1,abre2,jogo,saborear,chute,revela,grafico,trava3})[p.t](p);
 }
 
 /* ============ NOME (fica SÓ no celular da pessoa; nunca vai para a planilha) ============ */
@@ -1069,7 +1071,7 @@ const VASO=`<svg class="vaso" viewBox="0 0 300 230" role="img" aria-label="Figur
 function vaso(){
   mostra(`<img class="mandvaso" src="${MANDALA}" alt="Mandala do 7entidos"><div class="rot">Olhe rapidinho</div>${VASO}<h2>O que você viu primeiro?</h2>
     <div class="opts">${["Um vaso","Dois rostos","Os dois juntos"].map(o=>`<button class="opt ${resp.vaso===o?"sel":""}" onclick="escolheVaso(this,'${o}')">${o}</button>`).join("")}</div><p class="volta" id="volta"></p>
-    <p class="miud">Não tem resposta certa. É só o seu olhar.</p>`);
+    <p class="miud">Não tem resposta certa.</p>`);
 }
 const VOLTA={"Um vaso":"Seu olhar foi primeiro para a forma.","Dois rostos":"Seu olhar foi primeiro para as pessoas.","Os dois juntos":"Seu olhar pegou a forma e as pessoas de uma vez."};
 function escolheVaso(b,v){ if(ocupado) return; resp.vaso=v; click(); b.parentNode.querySelectorAll(".opt").forEach(x=>{ x.classList.remove("sel"); x.disabled=true; }); b.classList.add("sel");
@@ -1099,9 +1101,9 @@ function sentimentos(n,k,todas){ const f=faixaDe(n), sel=resp["sent_"+k]&&resp["
   return `<div class="sentbox entra"><h3>Por que você escolheu esse número?</h3>
     ${pd?`<p class="spad">Quando você dá ${n}, costuma escolher <b>${esc(pd)}</b>.</p>`:""}
     <div class="scols">${col("Mais calmas",[].concat(...lista.map(x=>x.calmas)))}${col("Mais agitadas",[].concat(...lista.map(x=>x.agitadas)))}</div>
-    <div class="soutro"><input id="sout" maxlength="30" placeholder="Ou escreva a sua palavra"><button type="button" onclick="const v=document.getElementById('sout').value.trim(); if(v) escolheSent(null,'${k}',${n},v)">OK</button></div>
+    <div class="soutro"><input id="sout" maxlength="30" placeholder="Ou escreva a sua palavra" aria-label="Escreva a sua palavra"><button type="button" onclick="const v=document.getElementById('sout').value.trim(); if(v) escolheSent(null,'${k}',${n},v)">OK</button></div>
     <div class="sbaixo">${todas?"":`<button type="button" class="slink" onclick="click();mostraSent(${n},'${k}',true)">Ver outras palavras</button>`}<button type="button" class="slink" onclick="seguirSemSent('${k}')">Seguir sem escolher</button></div></div>`; }
-function mostraSent(n,k,todas){ const eb=document.getElementById("escbloco"); if(!eb) return; const old=eb.querySelector(".sentbox"); if(old) old.remove(); const cp=eb.querySelector(".compara"); if(cp) cp.remove();
+function mostraSent(n,k,todas){ if(document.querySelector(".compara1")) return telaSent(n,k,todas); const eb=document.getElementById("escbloco"); if(!eb) return; const old=eb.querySelector(".sentbox"); if(old) old.remove(); const cp=eb.querySelector(".compara"); if(cp) cp.remove();
   eb.insertAdjacentHTML("beforeend",sentimentos(n,k,todas)); const sb=eb.querySelector(".sentbox"); if(sb&&sb.scrollIntoView) setTimeout(()=>sb.scrollIntoView({behavior:"smooth",block:"center"}),60); }
 function escolheSent(b,k,n,w){ click(); vibra(10); const f=faixaDe(n); const coluna=f.calmas.includes(w)?"calma":f.agitadas.includes(w)?"agitada":(FAIXAS.some(x=>x.calmas.includes(w))?"calma":FAIXAS.some(x=>x.agitadas.includes(w))?"agitada":"propria");
   resp["sent_"+k]={nota:n,palavra:w,coluna}; guardaIndice(n,w,k==="escala_chegada"?"entrada":"saida");
@@ -1112,26 +1114,37 @@ function terminaEscala(k){ clearTimeout(window._escTm);
   if(k==="escala_saida"&&resp.escala_chegada!=null){ const eb=document.getElementById("escbloco"); if(eb){ const old=eb.querySelector(".compara"); if(old) old.remove(); const sb=eb.querySelector(".sentbox"); (sb||eb).insertAdjacentHTML(sb?"afterend":"beforeend",compara()); const c=eb.querySelector(".compara"); if(c&&c.scrollIntoView) c.scrollIntoView({behavior:"smooth",block:"center"}); } window._escTm=setTimeout(avanca,2800); return; }
   window._escTm=setTimeout(avanca,900); }
 const corNum=n=>`hsl(${215-n*16.5},${55+n*3}%,${45+n*2}%)`;
+/* tela do nome (só ela) */
+function nome(){
+  mostra(`<div class="escmdl">${mandala(170,"mesc")}<div class="nmshow" id="nmshow">${esc(NOME())}</div></div>
+    <div class="nome"><label for="nm">Como posso te chamar?</label><input id="nm" maxlength="30" autocomplete="given-name" placeholder="Seu nome ou apelido" value="${esc(NOME())}" oninput="guardaNome(this.value);nomeVivo()" onkeydown="if(event.key==='Enter'){event.preventDefault();seguirNome();}">
+    <p class="apoio">Seu nome fica só no seu celular.</p></div>
+    <button class="btn" type="button" onclick="seguirNome()">Seguir</button>`, c=>poeMandala(c.querySelector("#mesc"),{pos:TODOS,luz:[],miolo:false}));
+}
+function seguirNome(){ if(ocupado) return; const i=document.getElementById("nm"); if(i) guardaNome(i.value); click(); avanca(); }
 function escala(p){
   const k="escala_"+p.id, v=resp[k], ch=p.id==="chegada", antes=resp.escala_chegada;
-  const topo=`<div class="escmdl">${mandala(ch?170:200,"mesc")}${ch?`<div class="nmshow" id="nmshow">${esc(NOME())}</div>`:""}</div>`;
-  const campoNome = ch ? `<div class="nome"><label for="nm">Como posso te chamar?</label><input id="nm" maxlength="30" autocomplete="given-name" placeholder="Seu nome ou apelido" value="${esc(NOME())}" oninput="guardaNome(this.value);nomeVivo()"><small>Se não quiser, é só pular. Seu nome fica só no seu celular.</small></div>` : "";
-  const apag = ch && !NOME() && v==null;
-  mostra(`${topo}${campoNome}<div class="escbloco ${apag?"apagado":""}" id="escbloco"><div class="rot">${ch?"Antes de começar":"Depois dos 7 sentidos"}</div>
+  const topo=`<div class="escmdl">${mandala(ch?170:200,"mesc")}${ch&&NOME()?`<div class="nmshow" id="nmshow">${esc(NOME())}</div>`:""}</div>`;
+  mostra(`${topo}<div class="escbloco" id="escbloco"><div class="rot">${ch?"Antes de começar":"Depois dos 7 sentidos"}</div>
     <h2>${ch?"Como estão seus sentidos agora?":"E agora, como estão seus sentidos?"}</h2>
-    <p class="sub">${ch?"É o seu ponto de partida. Toque num número de 0 a 10.":(antes!=null?`Você chegou com ${antes}. Toque no número de agora.`:"Toque num número de 0 a 10.")}</p>
+    <p class="sub">${ch?"Toque num número de 0 a 10.":(antes!=null?`Você chegou com ${antes}. Toque no de agora.`:"Toque num número de 0 a 10.")}</p>
     <div class="escala e11">${Array.from({length:11},(_,n)=>`<button class="${v===n?"sel":""} ${!ch&&antes===n?"antes":""}" style="--k:${corNum(n)}" onpointerenter="visor(${n})" onclick="escolheNum(this,'${k}',${n})" aria-label="${n}">${n}</button>`).join("")}</div>
-    <div class="palavra" id="vpal"></div></div>`, c=>{ poeMandala(c.querySelector("#mesc"),{pos:TODOS,luz:[],miolo:false}); if(v!=null){ visor(v); mostraSent(v,k,false); } });
+    <div class="palavra" id="vpal"></div></div>`, c=>{ poeMandala(c.querySelector("#mesc"),{pos:TODOS,luz:[],miolo:false}); if(v!=null) visor(v); });
 }
+/* uma tarefa por tela: depois do número, o "por quê" vem numa tela só dele (o "← Voltar" volta para os números) */
+function telaSent(n,k,todas){ const p=R[pos];
+  mostra(`<div class="escmdl">${mandala(120,"mesc")}</div><div class="escbloco" id="escbloco"><div class="compara1">Você tocou no <b style="color:${corNum(n)}">${n}</b></div>${sentimentos(n,k,todas)}</div>`,
+    c=>{ const m=c.querySelector("#mesc"); if(m){ const kk=Math.round(n*8/10); poeMandala(m,{pos:TODOS,luz:TODOS.slice(0,Math.max(0,kk-1)),miolo:kk>=1}); } });
+  window.VOLTA_SUB=()=>escala(p); }
 /* o nome aparece embaixo da mandala; quando há nome, a escala sobe acesa */
-function nomeVivo(){ const n=NOME(), sh=document.getElementById("nmshow"), eb=document.getElementById("escbloco"); if(sh) sh.textContent=n; if(eb&&n) eb.classList.remove("apagado"); }
+function nomeVivo(){ const n=NOME(), sh=document.getElementById("nmshow"); if(sh) sh.textContent=n; }
 /* as luzes da mandala acendem até o número (0 a 10 → miolo + 7 círculos) */
 /* 0 = tudo apagado; cada número acende mais círculos: primeiro o 7 do meio, depois os círculos em volta; 10 = mandala inteira acesa */
 function visor(n){ const m=document.getElementById("mesc"); if(m){ const k=Math.round(n*8/10); poeMandala(m,{pos:TODOS,luz:TODOS.slice(0,Math.max(0,k-1)),miolo:k>=1}); }
   const eb=document.getElementById("escbloco"); if(eb) eb.classList.remove("apagado");
   const vp=document.getElementById("vpal"); if(vp) vp.innerHTML=`<b>${n}</b>`; }
-function escolheNum(b,k,n){ resp[k]=n; click(); visor(n); vibra(8+n); b.parentNode.querySelectorAll("button").forEach(x=>x.classList.remove("sel")); b.classList.add("sel");
-  clearTimeout(window._escTm); mostraSent(n,k,false); }
+function escolheNum(b,k,n){ if(ocupado) return; resp[k]=n; click(); visor(n); vibra(8+n); b.parentNode.querySelectorAll("button").forEach(x=>x.classList.remove("sel")); b.classList.add("sel");
+  clearTimeout(window._escTm); ocupado=true; setTimeout(()=>{ ocupado=false; telaSent(n,k,false); },420); }
 /* compara a nota de chegada com a de saída (0 a 10) */
 function compara(){ const a=resp.escala_chegada, b=resp.escala_saida; if(a==null||b==null) return "";
   const d=b-a, extra=d?`<small>${d>0?"+":"−"}${Math.abs(d)} ${Math.abs(d)===1?"ponto":"pontos"}</small>`:"";
@@ -2257,5 +2270,7 @@ if(PREVIA && window.claude && claude.use){ claude.use("db").then(db=>{ if(!db) r
 })();
 </script>
 <script src="/js/consentimento.js?v=20261118"></script>
+<!-- 27/11 · V4: usabilidade do app inteiro (só na prévia; carregado por último) -->
+<link rel="stylesheet" href="acessivel.css?v=1" id="acessivelcss">
 </body>
 </html>

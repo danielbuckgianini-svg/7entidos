@@ -1,0 +1,170 @@
+/* =====================================================================
+   7entidos · USABILIDADE (V4, 27/11) · vale para o app inteiro, só na prévia (branch fase3-regua)
+   Carregado por último, para valer por cima dos outros estilos.
+   Bloco 8: botões grandes (64 px), números de 0 a 10 com 60 px, letra mínima 18 no texto e 16 nos rótulos,
+            contraste forte (padrão 7:1), uma tarefa por tela, linguagem simples.
+   Blocos 9 e 10: o resto fica em acessivel.js (e o visual dele, aqui embaixo).
+   ===================================================================== */
+
+/* ---------- 3. CONTRASTE FORTE (7:1): o cinza-claro sobre o azul-noite fica mais claro ---------- */
+:root{--azul:#e4e8f6}
+.sub,.miud,.dica,.olhos,.rg-nota,.rg-legmand,.spad,.f3crit,.f3pista,.bvonde,.infolegenda,.rg-corval,.ti-aviso{color:#e4e8f6!important}
+.miud.mini,.miud.priv,.pularbtn,.voltar,.vbotoes .ouvirb,.basegesto{opacity:1!important}
+.escbloco.apagado{opacity:1!important;filter:none!important;transform:none!important}
+@keyframes piscadev{0%,100%{opacity:1}50%{opacity:.85}}
+@keyframes pisca2{50%{opacity:.85}}
+@keyframes pisc{0%,100%{opacity:1}50%{opacity:.85}}
+.vbotoes .ouvirb{color:#f4ecdc!important;border-color:rgba(228,232,246,.6)!important}
+.rg-ph b,.rg-ph code{color:#e4e8f6!important}
+
+/* ---------- 1. BOTÕES GRANDES E SEPARADOS: todo botão com pelo menos 64 px de altura ---------- */
+button,.btn,.opt,.linkflow,.rg-volta,.slink,.denovo,.f3nenhuma,.pular,.vlegb,.ouvirb,.rg-folga,.rg-fogo,.vbtn,#rgbarra button,#porque button,.rg-tres button,.rg-palavras button,.rg-sugs button,.scol button,.chips button,.sentes button{min-height:64px!important;box-sizing:border-box}
+.rg-volta,.slink,.denovo,.pular,.rg-folga,.linkflow,.vlegb,.ouvirb{display:inline-flex!important;align-items:center;justify-content:center;padding-left:18px!important;padding-right:18px!important}
+.rg-tres,.sbaixo,.vbotoes,.rg-sugs,.rg-palavras,.chips{gap:12px!important}
+input[type=text],input[type=email],input:not([type]),#nm{min-height:64px!important;font-size:20px!important}
+textarea{font-size:19px!important}
+.flowcx .fx{width:64px!important;height:64px!important}
+/* bolinhas do gráfico da Fase 2: a área de toque cresce, a bolinha continua pequena */
+.gpontos button{width:44px!important;height:64px!important;background:transparent!important;box-shadow:none!important;position:relative}
+.gpontos button::after{content:"";position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:#3a4890}
+.gpontos button.on::after{background:var(--ouro);box-shadow:0 0 10px var(--ouro)}
+/* números de 0 a 10: 60 px, separados */
+.escala{display:flex!important;flex-wrap:wrap;justify-content:center;gap:10px!important;max-width:420px!important}
+.escala button,.rg-esc button,.rg-desl-n button{width:60px!important;height:60px!important;min-height:60px!important;aspect-ratio:auto!important;flex:none!important;font-size:24px!important}
+.rg-esc{gap:10px!important}
+.escala .pontas{width:100%}
+.escala.e11 button.antes::after{bottom:-24px}
+.escala.e11{margin-bottom:12px!important}
+
+/* ---------- 2. LETRA MÍNIMA: 18 no texto e 16 nos rótulos (nada abaixo de 16) ---------- */
+body{font-size:19px}
+.escala.e11 button.antes::after{font-size:18px!important}
+.const .xde7 small{font-size:16px!important}
+.voltar{font-size:18px!important}
+.pularbtn{font-size:18px!important}
+#porque button{font-size:18px!important}
+#porque button.volta{font-size:18px!important}
+.rot{font-size:16px!important}
+.miud{font-size:18px!important}
+.miud.mini{font-size:18px!important}
+.miud.priv{font-size:18px!important}
+.nomesent{font-size:18px!important}
+.bvonde{font-size:18px!important}
+.escala .pontas{font-size:18px!important}
+.ouvir{font-size:18px!important}
+.missao{font-size:18px!important}
+.mosaico.grande .pc span{font-size:16px!important}
+.perto small{font-size:16px!important}
+.sabcol .ph span{font-size:16px!important}
+.sabcol .marca{font-size:18px!important}
+.fundobtn{font-size:18px!important}
+.pisca2{font-size:18px!important}
+.trava .opc{font-size:18px!important}
+.sabbaixa .exnota{font-size:18px!important}
+.linkflow::before{font-size:18px!important}
+#aviso .lgpd{font-size:18px!important}
+.averr{font-size:18px!important}
+.porta3 .pt-rot{font-size:16px!important}
+.rodada{font-size:16px!important}
+.nivel small{font-size:16px!important}
+.faltam{font-size:18px!important}
+.pista{font-size:18px!important}
+.ingr button{font-size:18px!important}
+.carta .v span{font-size:16px!important}
+.pular{font-size:18px!important}
+.partes{font-size:18px!important}
+.olhos{font-size:16px!important}
+.saborear .passo3{font-size:18px!important}
+.vbrisa .teste{font-size:16px!important}
+.denovo{font-size:18px!important}
+.vbotoes .ouvirb{font-size:18px!important}
+.legfora.menor{font-size:18px!important}
+.nome small{font-size:16px!important}
+.retrato .r span{font-size:16px!important}
+.compara small{font-size:16px!important}
+.flowx b{font-size:16px!important}
+.flowx span{font-size:16px!important}
+.grupoc{font-size:16px!important}
+.saborear .seg{font-size:18px!important}
+.chnum button small{font-size:16px!important}
+.infog .rotulo b{font-size:16px!important}
+.infog .rotulo em{font-size:16px!important}
+.infolegenda{font-size:16px!important}
+.infocarta{font-size:18px!important}
+.graf .t{font-size:16px!important}
+.gcard .titc{font-size:18px!important}
+.gcard .graf .t{font-size:16px!important}
+.legenda{font-size:18px!important}
+.vbtn{font-size:18px!important}
+.vitem .ds{font-size:18px!important}
+.vitem button{font-size:18px!important}
+.vsalvo{font-size:18px!important}
+.vlegb{font-size:18px!important}
+.f3dia{font-size:16px!important}
+.f3sit{font-size:16px!important}
+.f3sit em{font-size:16px!important}
+.f3pista{font-size:18px!important}
+.f3bar{font-size:18px!important}
+.f3crit{font-size:16px!important}
+.f3orig span{font-size:16px!important}
+.f3de{font-size:16px!important}
+.f3mcab b{font-size:16px!important}
+.f3mcab b small{font-size:16px!important}
+.f3mlin span{font-size:16px!important}
+.f3pi small{font-size:16px!important}
+.f6bloco .f6q{font-size:18px!important}
+#f3cerebro{font-size:16px!important}
+#f3cerebro b{font-size:16px!important}
+.spad{font-size:18px!important}
+.scol small{font-size:16px!important}
+.scol button{font-size:18px!important}
+.soutro input{font-size:18px!important}
+.slink{font-size:18px!important}
+.rsm-tag{font-size:16px!important}
+.rsm-d>b{font-size:16px!important}
+.rsm-dl em{font-size:16px!important}
+.rsm-d p{font-size:18px!important}
+.guia-ios{font-size:18px!important}
+.guia-ios button{font-size:18px!important}
+.rg-brisa b{font-size:16px!important}
+.rg-tag{font-size:16px!important}
+.rg-legmand{font-size:18px!important}
+.rg-bloco{font-size:18px!important}
+.rg-op em{font-size:16px!important}
+.rg-op .selo{font-size:16px!important}
+.rg-tres button{font-size:18px!important}
+.rg-deg{font-size:16px!important}
+.rg-volta{font-size:18px!important}
+#rgmodal p{font-size:18px!important}
+.rg-fogo{font-size:18px!important}
+.rg-nota{font-size:18px!important}
+.rg-folga{font-size:18px!important}
+.rg-curio b{font-size:16px!important}
+.rg-aviso{font-size:18px!important}
+.f3m-it em{font-size:16px!important}
+.f3m-cur small{font-size:16px!important}
+.f3m-cur p{font-size:18px!important}
+.rg-dir{font-size:16px!important}
+.rg-linha em{font-size:16px!important}
+.rg-info .rg-sua{font-size:18px!important}
+.rg-info .rg-obra{font-size:18px!important}
+.rg-corval{font-size:16px!important}
+.rg-opf .selo{font-size:16px!important}
+.rg-eu{font-size:18px!important}
+.rg-dica{font-size:18px!important}
+.rg-reforco small{font-size:16px!important}
+.rg-foco small{font-size:16px!important}
+.rg-ph b{font-size:16px!important}
+.rg-ph code{font-size:16px!important}
+#rgteste{font-size:16px!important}
+#rgbarra button{font-size:18px!important}
+.ti-vs{font-size:18px!important}
+.ti-gal small{font-size:16px!important}
+.ti-quiz .rg-opf .rg-cap{font-size:18px!important}
+.ti-aviso{font-size:18px!important}
+
+/* ---------- 4. UMA TAREFA POR TELA (Fase 1: nome numa tela, nota em outra, o "por quê" em outra) ---------- */
+.nome .apoio{font-size:19px;color:#f4ecdc;text-align:center;margin:10px 0 18px;font-weight:600}
+.compara1{font-size:22px;font-weight:700;margin:0 0 8px}
+.compara1 b{font:600 34px Fraunces,serif;vertical-align:-4px;margin-left:4px}
+.sentbox{margin-top:8px!important}

@@ -405,7 +405,7 @@ function rgEstrela(cresce){ const t=34+rgFeitos().length*7;
   return `<svg class="rg-estrela${cresce?" cresce":""}" width="${t}" height="${t}" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.6l2.9 6.6 7.1.6-5.4 4.7 1.7 7-6.3-3.8-6.3 3.8 1.7-7L2 8.8l7.1-.6z" fill="#f5c542"/></svg>`; }
 /* na prévia sem modo teste continuam os atalhos do Bloco 1; no modo teste, a barra de baixo substitui */
 function rgPreviaBotoes(){ if(!PREVIA||TESTE) return "";
-  return `<div class="rg-previa"><small class="sub" style="margin:0;font-size:14px">Só na prévia</small>
+  return `<div class="rg-previa"><small class="sub" style="margin:0;font-size:18px">Só na prévia</small>
     <button class="linkflow" type="button" onclick="rgPulaEspera()">Pular a espera (novo dia)</button>
     <button class="linkflow" type="button" onclick="rgRefazColoque()">Ver o "Coloque na régua" de novo</button>
     <button class="linkflow" type="button" onclick="rgZera()">Recomeçar a Fase 3 do zero</button></div>`; }
@@ -485,7 +485,7 @@ function rgColoque(){
     <div class="rg-colfoto">${rgFotoHTML(CANVA+"regua-coloque-"+c.sid+".jpg","regua-coloque-"+c.sid+".jpg")}</div>
     <h2 class="rg-sit">${esc(c.txt)}</h2>
     <div class="rg-esc" style="--k:${k}">${[0,1,2,3,4,5,6,7,8,9,10].map(n=>`<button type="button" onclick="rgColNota(this,'${c.sid}',${n})" aria-label="${n}">${n}</button>`).join("")}</div>
-    ${i>0?`<div><button class="btn sec" type="button" style="min-height:48px;font-size:17px" onclick="rgColVolta()">← voltar uma</button></div>`:""}
+    ${i>0?`<div><button class="btn sec" type="button" style="font-size:18px" onclick="rgColVolta()">← voltar uma</button></div>`:""}
     ${rgPreviaBotoes()}`);
 }
 window.rgColNota = function(b,sid,n){ if(ocupado) return; ocupado=true; click(); vibra(8+n);
@@ -1093,7 +1093,7 @@ window.f3Mapa3 = function(){ rgCarrega(); rgFechaModal(); entrou=true; pos=R.len
       <div class="f3m-it fecha"><span class="f3m-n">3</span><span class="f3m-t"><b>Validação</b><small>Em breve</small></span><em>🔒</em></div>
     </div>
     ${fimOk||LIVRE&&PREVIA?`<div style="margin-top:16px"><button class="btn${fimOk?"":" sec"}" type="button" onclick="click();rgFimFase3()">${fimOk?"Ver o fim da Fase 3":"Ver o fim da Fase 3 (só na prévia)"}</button></div>`:""}
-    ${PREVIA?`<div class="rg-previa"><small class="sub" style="margin:0;font-size:14px">Só na prévia: resumos das fases anteriores</small>
+    ${PREVIA?`<div class="rg-previa"><small class="sub" style="margin:0;font-size:18px">Só na prévia: resumos das fases anteriores</small>
       <button class="linkflow" type="button" onclick="rgVerResumo(1)">Ver o resumo da Fase 1</button>
       <button class="linkflow" type="button" onclick="rgVerResumo(2)">Ver o resumo da Fase 2</button>
       ${TESTE?`<button class="linkflow" type="button" onclick="tiCompletaTeste();f3Mapa3()">Preencher o teste de imagens inteiro</button>`:""}</div>`:""}
@@ -1103,7 +1103,7 @@ window.rgCuringaResp = function(){ click(); if(RG.texto===true) return rgCaixaCu
     <div class="col"><button class="btn" type="button" onclick="rgCuringaTexto(true)">Aceito</button><button class="btn sec" type="button" onclick="rgCuringaTexto(false)">Prefiro só escolher</button></div>`); };
 window.rgCuringaTexto = function(sim){ click(); RG.texto=!!sim; rgSalva(); if(sim) return rgCaixaCuringa(); rgFechaModal(); f3Mapa3(); };
 window.rgCaixaCuringa = function(){ const cur=rgCuringa(), pode=!!(window.SpeechRecognition||window.webkitSpeechRecognition);
-  rgModal(`<h3>${esc(cur.q)}</h3>${pode?`<button class="mic" id="rgmic" type="button" onclick="rgFala()">🎤 Falar</button>`:`<p style="font-size:15px;color:var(--azul)">Para falar, use o microfone do teclado do celular.</p>`}
+  rgModal(`<h3>${esc(cur.q)}</h3>${pode?`<button class="mic" id="rgmic" type="button" onclick="rgFala()">🎤 Falar</button>`:`<p style="font-size:18px;color:var(--azul)">Para falar, use o microfone do teclado do celular.</p>`}
     <textarea id="rgtxt" maxlength="280" placeholder="Escreva aqui…"></textarea>
     <div class="col" style="margin-top:12px"><button class="btn" type="button" onclick="rgCuringaSalva()">Pronto</button><button class="rg-volta" type="button" onclick="rgFechaModal()">voltar</button></div>`); };
 window.rgCuringaSalva = function(){ const t=document.getElementById("rgtxt"), v=String(t&&t.value||"").replace(/\s+/g," ").trim().slice(0,280);

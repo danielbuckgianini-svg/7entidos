@@ -187,7 +187,7 @@ function tiFimDia(){ const c=TI.emCurso; TI.dia=c.dia; TI.datas.push(hoje()); de
   mostra(`<div class="rot">Teste de imagens · dia ${TI.dia} de 4</div>
     <div class="ti-pontos">${[1,2,3,4].map(k=>`<i class="${k<=TI.dia?"on":""}"></i>`).join("")}</div>
     <div class="rg-reforco"><img src="${BRISA}" alt="Brisa"><p><small>Brisa</small>${FRASE_DIA[TI.dia]}</p></div>
-    <h2>Por hoje é isso. Amanhã tem mais.</h2>${window.RG_LIVRE?`<p class="sub" style="font-size:15px">Só enquanto as travas estão desligadas: dá para seguir agora.</p>`:""}
+    <h2>Por hoje é isso. Amanhã tem mais.</h2>${window.RG_LIVRE?`<p class="sub" style="font-size:18px">Só enquanto as travas estão desligadas: dá para seguir agora.</p>`:""}
     <div class="ti-com">${window.RG_LIVRE?`<button class="btn" type="button" onclick="click();tiAbre()">Fazer o dia ${TI.dia+1} agora</button>`:""}
     <button class="btn ${window.RG_LIVRE?"sec":""}" type="button" onclick="click();f3Mapa3()">Voltar ao mapa da Fase 3</button></div>`); }
 function tiVolteAmanha(){ window.rgTopo("teste de imagens");
@@ -237,7 +237,7 @@ window.tiCompartilha = function(){ click(); tiCartao().then(blob=>{ const nome="
   window.rgModal(`<h3>Compartilhar o seu tipo</h3><img src="${url}" alt="Cartão com o seu tipo" style="width:100%;border-radius:16px;margin-bottom:12px">
     <div class="col"><a class="btn" href="https://wa.me/?text=${encodeURIComponent(textoShare())}" target="_blank" rel="noopener">Mandar no WhatsApp</a>
     <button class="btn sec" type="button" id="tibaixa">Baixar a imagem (para o Instagram)</button>
-    <p style="font-size:15px;margin:4px 0 0">No Instagram, poste a imagem e escreva "link na bio" ou "procure 7Entidos no YouTube".</p>
+    <p style="font-size:18px;margin:4px 0 0">No Instagram, poste a imagem e escreva "link na bio" ou "procure 7Entidos no YouTube".</p>
     <button class="rg-volta" type="button" onclick="rgFechaModal()">fechar</button></div>`);
   document.getElementById("tibaixa").onclick=()=>{ click();
     if(window.claude&&claude.use&&!NO_SITE){ claude.use("downloads").then(dl=>{ if(dl) return dl.save({filename:nome,data:blob}).catch(()=>{}); baixaComum(blob,nome); }).catch(()=>baixaComum(blob,nome)); return; }
