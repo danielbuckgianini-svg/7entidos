@@ -908,7 +908,7 @@ function mostra(html, depois){
   if(velho){ velho.classList.remove("entra"); velho.classList.add("sai"); setTimeout(poe,430); } else poe();
 }
 function avanca(){ if(ocupado) return; ocupado=true; pararSom(); salvaLocal(); if(pos<R.length-1){ pos++; desenha(); } }
-function voltar(){ pararSom(); if(window.VOLTA_SUB){ const f=window.VOLTA_SUB; window.VOLTA_SUB=null; click(); return f(); } if(pos>0){ pos--; while(pos>0 && (R[pos].t==="passagem"||R[pos].t==="abre2"||R[pos].t==="saborear")) pos--; desenha(); } }
+function voltar(){ pararSom(); if(document.body.classList.contains("emf3")&&window.rgDesfaz){ click(); return rgDesfaz(); } if(window.VOLTA_SUB){ const f=window.VOLTA_SUB; window.VOLTA_SUB=null; click(); return f(); } if(pos>0){ pos--; while(pos>0 && (R[pos].t==="passagem"||R[pos].t==="abre2"||R[pos].t==="saborear")) pos--; desenha(); } }
 const PULAVEIS=["brisa","nome","abre2","vaso","escala","gosto","jogo","saborear","chute"];
 /* ao tocar em "pular", pergunta rapidinho por quê (guarda em pulou_motivo_…) e depois pula */
 function pular(){ const p=R[pos]; if(!p||!PULAVEIS.includes(p.t)||document.getElementById("porque")) return; click();
@@ -1166,22 +1166,19 @@ function passagem(p){
 function mosaico(grande,atual=-1){ return `<div class="mosaico ${grande?"grande":""}">${SENT.map((x,i)=>{ const j=x.o.indexOf(resp["gosto_"+x.id]); return `<div class="pc ${j>=0?"cheio":""} ${i===atual?"agora":""}" data-i="${i}" style="--c:${x.cor}">${j>=0?`<img src="${foto(x.id,j)}" alt="">`:""}${grande&&j>=0?`<span>${esc(x.o[j])}</span>`:""}</div>`; }).join("")}</div>`; }
 function gosto(p){
   const s=SENT[p.i], k="gosto_"+s.id;
-  mostra(`${p.i===4?'<div style="text-align:center"><span class="faltam">Faltam só 3</span></div>':""}${mosaico(false,p.i)}<p class="brisafrase" style="--c:${s.cor}">${esc(fraseGosto(s,p.i))}</p><div class="rot" style="color:${claro(s.cor)}">${s.s}</div><h2>${s.q}</h2><p class="sub">Escolha uma. Segure para olhar de perto.</p>
-    <div class="g22">${s.o.map((o,j)=>`<button class="foto ${resp[k]===o?"sel":""}" data-j="${j}" onclick="escolheFoto(this,'${k}',${p.i},${j})"><img src="${foto(s.id,j)}" alt="" loading="lazy" draggable="false"><span class="nm">${esc(o)}</span>${s.sons?`<span class="ouvir" role="button" onclick="event.stopPropagation();tocarAmbiente('${s.sons[j]}',this)">Ouvir</span>`:""}</button>`).join("")}</div>`, c=>ligaPerto(c,s));
+  /* V4 (Blocos 9 e 12): "Segure para olhar de perto" vira o botão "Ver de perto"; na Audição, o "Ouvir" fica FORA da foto, embaixo dela */
+  mostra(`${p.i===4?'<div style="text-align:center"><span class="faltam">Faltam só 3</span></div>':""}${mosaico(false,p.i)}<p class="brisafrase" style="--c:${s.cor}">${esc(fraseGosto(s,p.i))}</p><div class="rot" style="color:${claro(s.cor)}">${s.s}</div><h2>${s.q}</h2>
+    <div class="g22">${s.o.map((o,j)=>`<div class="fcard"><button class="foto ${resp[k]===o?"sel":""}" data-j="${j}" onclick="escolheFoto(this,'${k}',${p.i},${j})"><img src="${foto(s.id,j)}" alt="" loading="lazy" draggable="false"><span class="nm">${esc(o)}</span></button>
+      <div class="fbtns">${s.sons?`<button type="button" class="ouvir ouvir2" onclick="tocarAmbiente('${s.sons[j]}',this)">Ouvir</button>`:""}<button type="button" class="perto2" onclick="abrePerto(${p.i},${j})">Ver de perto</button></div></div>`).join("")}</div>`);
 }
-/* OLHAR DE PERTO: segurar meio segundo abre a foto em tela cheia (na Audição, com o som); soltar volta sem escolher */
+/* VER DE PERTO: abre a foto em tela cheia (na Audição, com o som); fecha no "← Voltar" */
 let segurou=false;
-function ligaPerto(c,s){ c.querySelectorAll(".foto").forEach(b=>{ const j=+b.dataset.j; let tm=null, aberto=null;
-  const abre=()=>{ segurou=true; vibra(10); aberto=document.createElement("div"); aberto.className="perto"; aberto.style.setProperty("--c",s.cor);
-    aberto.innerHTML=`<img src="${foto(s.id,j)}" alt=""><span>${esc(s.o[j])}</span><small>Solte para voltar</small>`; document.body.appendChild(aberto);
-    if(s.sons){ const d=document.createElement("span"); d.className="ouvir"; tocarAmbiente(s.sons[j],d); }
-    const k="segurou_"+s.id; resp[k]=[...new Set([...(resp[k]||[]),s.o[j]])]; };
-  const fecha=()=>{ clearTimeout(tm); tm=null; if(aberto){ aberto.remove(); aberto=null; pararSom(); } };
-  b.addEventListener("pointerdown",e=>{ if(e.target.closest(".ouvir")) return; segurou=false; try{ b.setPointerCapture(e.pointerId); }catch(_){} tm=setTimeout(abre,500); });
-  ["pointerup","pointercancel"].forEach(ev=>b.addEventListener(ev,fecha));
-  b.addEventListener("pointerleave",()=>{ if(!aberto){ clearTimeout(tm); tm=null; } });
-  b.oncontextmenu=e=>e.preventDefault(); }); }
-function escolheFoto(b,k,i,j){ if(segurou){ segurou=false; return; } resp[k]=SENT[i].o[j]; click(); pararSom(); b.parentNode.querySelectorAll(".foto").forEach(x=>x.classList.remove("sel")); b.classList.add("sel");
+function abrePerto(i,j){ const s=SENT[i]; click(); vibra(10); const d=document.createElement("div"); d.className="perto"; d.style.setProperty("--c",s.cor);
+  d.innerHTML=`<img src="${foto(s.id,j)}" alt=""><span>${esc(s.o[j])}</span><button class="btn sec" type="button">← Voltar</button>`; document.body.appendChild(d);
+  if(s.sons){ const x=document.createElement("span"); x.className="ouvir"; tocarAmbiente(s.sons[j],x); }
+  const kk="segurou_"+s.id; resp[kk]=[...new Set([...(resp[kk]||[]),s.o[j]])];
+  const fecha=()=>{ d.remove(); pararSom(); }; d.querySelector("button").onclick=()=>{ click(); fecha(); }; d.onclick=e=>{ if(e.target===d) fecha(); }; }
+function escolheFoto(b,k,i,j){ if(ocupado) return; resp[k]=SENT[i].o[j]; click(); pararSom(); palco.querySelectorAll(".g22 .foto").forEach(x=>x.classList.remove("sel")); b.classList.add("sel"); ocupado=true;
   /* a foto encolhe e voa até o seu pedaço do mosaico */
   const alvo=palco.querySelector(`.mosaico .pc[data-i="${i}"]`), img=b.querySelector("img");
   if(alvo&&img){ const r1=img.getBoundingClientRect(), r2=alvo.getBoundingClientRect(), v=img.cloneNode(); v.className="voa"; v.style.cssText=`left:${r1.left}px;top:${r1.top}px;width:${r1.width}px;height:${r1.height}px`; document.body.appendChild(v);
@@ -1397,7 +1394,7 @@ const JOGOS={
     /* cada textura vibra de um jeito: areia = tremidinha; cobertor = longa e macia; água = picadinha; abraço = pulsos firmes */
     const VIBT={areia:[6,22,6,22,6,22,6],cobertor:[70],agua:[4,60,4],abraco:[45,35,45]};
     const MAO='<span class="mao" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M22 8c0-3 5-3 5 0v20l3-1V22c0-3 5-3 5 0v6l3-1v-3c0-3 5-3 5 0v5l3-1c0-3 5-3 5 0v12c0 10-6 18-16 18h-2c-6 0-10-3-13-8L12 36c-2-3 2-6 5-3l5 5z" fill="#f4ecdc" stroke="#15110a" stroke-width="2" stroke-linejoin="round"/></svg></span>';
-    mostra(`${cabLongo(s,"Encoste o dedo na foto e arraste de um lado para o outro, como um carinho.")}<p class="dica2">Uma ou duas passadas em cada foto.</p><div class="texturas">${T.map(([k,n,j],i)=>`<div class="tex" data-i="${i}" data-k="${k}"><img src="${foto("tato",j)}" alt=""><span class="barra"><b></b></span><span class="nm">${n}</span><span class="rastro"></span>${i===0?MAO:""}</div>`).join("")}</div><div class="res" id="res"></div>`, c=>{
+    mostra(`${cabLongo(s,"Encoste o dedo na foto e arraste de um lado para o outro, como um carinho.")}<p class="dica2">Arraste o dedo, ou toque 2 vezes em cada foto.</p><div class="texturas">${T.map(([k,n,j],i)=>`<div class="tex" data-i="${i}" data-k="${k}"><img src="${foto("tato",j)}" alt=""><span class="barra"><b></b></span><span class="nm">${n}</span><span class="rastro"></span>${i===0?MAO:""}</div>`).join("")}</div><div class="res" id="res"></div>`, c=>{
       let terminou=false;
       c.querySelectorAll(".tex").forEach(el=>{ const i=+el.dataset.i, k=el.dataset.k, ras=el.querySelector(".rastro"); let ult=null, down=false;
         const mexe=e=>{ if(!down&&e.pointerType!=="mouse") return; const r=el.getBoundingClientRect(), x=e.clientX-r.left, y=e.clientY-r.top; ras.style.left=x+"px"; ras.style.top=y+"px"; ras.style.opacity=1;
@@ -1409,7 +1406,10 @@ const JOGOS={
             c.querySelector("#res").innerHTML=`<span class="bom">Você sentiu as quatro.</span><h3 class="bonusq">Qual foi a mais gostosa?</h3><div class="opts" style="margin-bottom:70px">${T.map(([kk,nn])=>`<button class="opt" data-n="${nn}">${nn}</button>`).join("")}</div>`;
             c.querySelectorAll("#res .opt").forEach(b=>b.onclick=()=>{ somJogo(); resp.tato_favorita=b.dataset.n; b.classList.add("sel"); c.querySelectorAll("#res .opt").forEach(y=>y.disabled=true); vibra([10,40,10]); setTimeout(fim,500); });
             try{ c.querySelector("#res").scrollIntoView({behavior:"smooth",block:"center"}); }catch(_){} } };
-        el.addEventListener("pointerdown",e=>{ down=true; ult=null; c.querySelector(".texturas").classList.add("tocou"); somPronto().catch(()=>{}); try{ el.setPointerCapture(e.pointerId); }catch(_){} mexe(e); });
+        el.addEventListener("pointerdown",e=>{ down=true; ult=null; c.querySelector(".texturas").classList.add("tocou"); somPronto().catch(()=>{}); try{ el.setPointerCapture(e.pointerId); }catch(_){}
+          /* V4 (Bloco 9): quem não quiser arrastar pode tocar — 2 toques enchem a foto */
+          if(prog[i]<100){ prog[i]=Math.min(100,prog[i]+50); el.querySelector(".barra b").style.width=prog[i]+"%"; somTextura(k); vibra(VIBT[k]); }
+          mexe(e); });
         el.addEventListener("pointermove",mexe);
         const sol=()=>{ down=false; ult=null; ras.style.opacity=0; }; el.addEventListener("pointerup",sol); el.addEventListener("pointercancel",sol); el.addEventListener("pointerleave",sol);
       }); }); },
@@ -1449,7 +1449,9 @@ const JOGOS={
   /* Bolinha no ritmo: a bolinha anda de um lado para o outro; a pessoa pega e segura 1 segundo; a cada acerto ela fica mais rápida; errou a bolinha, termina com o nível */
   equilibrio(s,fim){ const VEL=[1700,1450,1250,1080,940,820,720,640]; let lv=0, t0=0, raf=0, acabou=false, preso=false, x=0, hold=0, htm=null, pausa=0;
     mostra(`${cab(s,"Pegue a bolinha e segure.")}<div class="nivel" id="nv">Nível 1</div>
-      <div class="trilha" id="tr" aria-label="Trilha da bolinha: toque na bolinha e segure"><span class="bola2" id="b2"><i class="anelb" id="ab"></i></span></div><div class="res" id="res"></div>`, c=>{
+      <div class="trilha" id="tr" aria-label="Trilha da bolinha: toque na bolinha e segure"><span class="bola2" id="b2"><i class="anelb" id="ab"></i></span></div><div class="res" id="res"></div>
+      <button class="btn sec" id="sotoque" type="button" style="margin-top:12px">Prefiro só tocar</button>`, c=>{
+      let soToque=false; const st=c.querySelector("#sotoque"); if(st) st.onclick=()=>{ click(); soToque=!soToque; resp.equilibrio_so_toque=soToque; st.textContent=soToque?"Voltar a segurar":"Prefiro só tocar"; };
       const tr=c.querySelector("#tr"), b2=c.querySelector("#b2"), ab=c.querySelector("#ab"), res=c.querySelector("#res"), nv=c.querySelector("#nv");
       const anda=t=>{ if(acabou||!aindaNoJogo(s)){ cancelAnimationFrame(raf); return; } if(!t0) t0=t; if(preso){ pausa=t; raf=requestAnimationFrame(anda); return; } if(pausa){ t0+=t-pausa; pausa=0; }
         const per=VEL[lv]*2, f=((t-t0)%per)/per; x=f<.5?f*2:2-f*2; b2.style.left=(6+x*88)+"%"; raf=requestAnimationFrame(anda); };
@@ -1459,6 +1461,7 @@ const JOGOS={
         res.innerHTML=(ok?'<span class="bom">Pegou até a mais rápida!</span>':'<span class="nao">A bolinha escapou.</span>')+`<div class="fimnivel"><b>Nível ${nivel}</b><p>${fr}</p></div>`; vibra([10,40,10]); setTimeout(()=>{ if(aindaNoJogo(s)) fim(); },2600); };
       tr.addEventListener("pointerdown",e=>{ e.preventDefault(); if(acabou||preso) return; somPronto().catch(()=>{}); const r=tr.getBoundingClientRect(), bx=r.left+r.width*(6+x*88)/100;
         if(Math.abs(e.clientX-bx)>Math.max(30,r.width*.07)){ somJogo(); return termina(false); }
+        if(soToque){ somJogo(); vibra(14); if(lv>=VEL.length-1) return termina(true); lv++; nv.innerHTML=`Nível ${lv+1} <small>mais rápida agora</small>`; res.innerHTML='<span class="bom">Pegou! Agora mais rápida.</span>'; return; }
         try{ tr.setPointerCapture(e.pointerId); }catch(_){} preso=true; hold=0; b2.classList.add("presa"); res.textContent="Segure…"; vibra(8);
         htm=setInterval(()=>{ hold+=50; ab.style.setProperty("--p",Math.min(100,hold/10)+"%"); if(hold>=1000){ clearInterval(htm); preso=false; b2.classList.remove("presa"); ab.style.setProperty("--p","0%"); somJogo(); vibra(14);
           if(lv>=VEL.length-1) return termina(true); lv++; nv.innerHTML=`Nível ${lv+1} <small>mais rápida agora</small>`; res.innerHTML='<span class="bom">Pegou! Agora mais rápida.</span>'; } },50); });
@@ -1479,7 +1482,7 @@ const JOGOS={
     const passo=()=>{ if(!aindaNoJogo(s)) return; if(g>=G.length) return pergunta();
       mostra(`${cab(s,`Gesto ${g+1} de ${G.length}`)}<p class="gesto">${esc(G[g][0])}</p>${mandalaCorpo(s.cor)}<p class="olhos">${esc(G[g][1])}</p><button class="btn sec" id="fg" style="margin-top:8px">Pronto</button>`, c=>{
         somSuave(s.cor); acendeCorpo(c,8,g); let foi=false; const vai=()=>{ if(foi) return; foi=true; clearTimeout(tm); resp.corpo_gestos=g+1; g++; passo(); };
-        tm=setTimeout(()=>{ if(aindaNoJogo(s)){ avisoFim(); vai(); } },8000); c.querySelector("#fg").onclick=()=>{ somJogo(); vai(); }; }); };
+        /* V4 (Bloco 9): sem relógio — segue só no "Pronto" */ c.querySelector("#fg").onclick=()=>{ somJogo(); vai(); }; }); };
     const pergunta=()=>{ pararSom(); mostra(`${cab(s,comNome("E aí, {n}?","E aí?"))}<h2 class="mudou">Como está o seu corpo agora?</h2>
       <div class="opts">${["Mais solto","Igual","Mais tenso"].map(o=>`<button class="opt" data-o="${o}">${o}</button>`).join("")}</div>`, c=>{
       c.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ somJogo(); resp.corpo_agora=b.dataset.o; b.classList.add("sel"); c.querySelectorAll(".opt").forEach(y=>y.disabled=true);
@@ -1532,7 +1535,7 @@ function chute(){
 /* Entenda o Flow: link discreto na tela do tempo; abre por cima e fecha (não é mais uma tela do caminho) */
 function abreFlow(){ if(document.getElementById("flowov")) return; click(); resp.abriu_flow=(resp.abriu_flow||0)+1;
   const d=document.createElement("div"); d.id="flowov"; d.className="flowov";
-  d.innerHTML=`<div class="flowcx" role="dialog" aria-modal="true" aria-label="Entenda o Flow"><button class="fx" type="button" aria-label="Fechar">✕</button><div class="rot">Entenda o Flow</div><h2>Por que o tempo some?</h2>
+  d.innerHTML=`<div class="flowcx" role="dialog" aria-modal="true" aria-label="Entenda o Flow"><button class="fx" type="button" aria-label="Fechar">✕ Fechar</button><div class="rot">Entenda o Flow</div><h2>Por que o tempo some?</h2>
     <p class="sub">O psicólogo Mihaly Csikszentmihalyi descobriu: quando o <b>desafio</b> e a sua <b>habilidade</b> ficam em equilíbrio, você se envolve tanto que perde a noção do tempo. Ele chamou isso de <b style="color:var(--ouro)">Flow</b>.</p>
     <div class="flowx"><div><i style="--h:26px;--c:#a9b3d1"></i><i style="--h:72px;--c:#4aa8ff"></i><b>Fácil demais</b><span>dá tédio</span></div>
       <div class="na"><i style="--h:56px;--c:#f5c542"></i><i style="--h:56px;--c:#f5c542"></i><b>Na medida</b><span>você entra no Flow</span></div>
@@ -2271,6 +2274,7 @@ if(PREVIA && window.claude && claude.use){ claude.use("db").then(db=>{ if(!db) r
 </script>
 <script src="/js/consentimento.js?v=20261118"></script>
 <!-- 27/11 · V4: usabilidade do app inteiro (só na prévia; carregado por último) -->
-<link rel="stylesheet" href="acessivel.css?v=1" id="acessivelcss">
+<link rel="stylesheet" href="acessivel.css?v=2" id="acessivelcss">
+<script src="acessivel.js?v=1"></script>
 </body>
 </html>
