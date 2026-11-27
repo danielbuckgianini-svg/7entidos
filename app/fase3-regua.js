@@ -25,9 +25,20 @@ const CHAVE = TESTE ? "7e_regua_teste" : "7e_regua";
 const TRAVAS_LIGADAS = false;
 window.TRAVAS_LIGADAS = TRAVAS_LIGADAS; window.RG_TESTE = TESTE;
 const LIVRE = TESTE || !TRAVAS_LIGADAS; window.RG_LIVRE = LIVRE;
-/* do 4 ao 0: trancados ("em construção") até chegar o banco de situações ruins da Sala do Péssimo */
-const EM_CONSTRUCAO = [4,3,2,1,0];
-const BANCO_RUIM = [];   /* aqui entram as situações ruins (4 ao 0) quando chegarem */
+/* 27/11 · do 4 ao 0 liberados: o banco de situações ruins chegou (Sala do Péssimo, fechada com a Marina).
+   Cada número tem as SUAS situações, do nível dele (nunca as coisas boas das Fases 1 e 2).
+   Fora da tela, sempre: perda de alguém, separação/divórcio, doença/internação (só se a própria pessoa escrever).
+   O banco é o ponto de partida e se ajusta depois com o que as pessoas escolherem e escreverem. */
+const EM_CONSTRUCAO = [];
+const BANCO_RUIM = {
+ 4:[["um dia cinza","visao"],["música de elevador","audicao"],["casa com cheiro de fechado","olfato"],["ar-condicionado gelado sem casaco","tato"],["sentir-se sozinha num domingo à noite","corpo"]],
+ 3:[["alguém mastigando de boca aberta","audicao"],["calçada esburacada","equilibrio"],["fruta azeda","paladar"],["banco de trás em estrada de curvas","equilibrio"],["gosto amargo que não sai da boca","paladar"]],
+ 2:[["roupa que pinica","tato"],["muito tempo sentada na mesma posição","corpo"],["meia molhada","tato"],["cheiro de cigarro na roupa","olfato"],["café amargo e frio","paladar"],
+    ["pia cheia de louça suja","visao"],["furadeira do vizinho às 7h","audicao"],["mão melada","tato"],["barco balançando","equilibrio"],["banco apertado de avião","corpo"]],
+ 1:[["lixo no calor","olfato"],["bichinhos na comida","paladar"],["faca raspando na garrafa","audicao"],["pisar em algo gosmento","tato"],["chulé","olfato"],["enjoo no ônibus de serra","equilibrio"]],
+ 0:[["sapato apertado o dia inteiro","corpo"],["casa bagunçada","visao"],["alarme tocando a noite toda","audicao"],["ônibus lotado e abafado","equilibrio"],["esgoto entrando em casa","olfato"],
+    ["comer algo que dá nojo","paladar"],["barco em mar agitado","equilibrio"],["ficar presa no elevador","corpo"],["briga feia com a família","audicao"],["contas atrasadas","visao"]]
+};
 /* com as travas desligadas, as perguntas dos motivos (Mecânica 2) também ficam sem o limite de 5 por dia */
 if(!TRAVAS_LIGADAS && typeof f3Liberado==="function") window.f3Liberado = function(){ return true; };
 /* respostas de exemplo das Fases 1 e 2 (só no modo teste, só se a pessoa não tiver as suas) */
@@ -58,10 +69,10 @@ const NOMES = {10:"Êxtase",9:"Excelente",8:"Muito bom",7:"Bom",6:"Legal",5:"Tan
 const ORDEM = [10,1,9,8,7,6,5,4,3,2,0];
 const BLOCOS = [[10,1],[9,8,7],[6,5,4],[3,2,0]];
 const LIMITE_DIA = 5;
-/* os números que já dá para fazer (do 10 ao 5); do 4 ao 0 ficam "em construção" */
+/* os números que já dá para fazer (desde 27/11: todos, do 10 ao 0) */
 const JOGAVEIS = ORDEM.filter(n=>!EM_CONSTRUCAO.includes(n));
 /* REGRA DO NÍVEL: do 10 ao 6 só coisas boas (Fases 1 e 2 + novidades boas); o 5 é neutro (este banco);
-   do 4 ao 0 só o banco de situações ruins (BANCO_RUIM), que ainda vai chegar.
+   do 4 ao 0 só o banco de situações ruins (BANCO_RUIM), da Sala do Péssimo.
    BANCO DO 5 · PROVISÓRIO, para o Daniel validar: coisas do dia a dia que não são boas nem ruins. */
 const NEUTROS = [
  ["esperar o elevador chegar","visao"],["lavar a louça do almoço","tato"],["ouvir o barulho da geladeira","audicao"],
@@ -509,7 +520,7 @@ window.rgVoltaRegua = function(){ click(); rgEscolhe(); };
 /* 27/11 · REGRA DO NÍVEL: as fotos das Fases 1 e 2 (escolhidas OU não) são todas coisas boas,
    então só entram do 10 ao 6. O 5 usa o banco neutro; do 4 ao 0, só o banco de situações ruins (ainda vai chegar). */
 function rgDasFases(n){
-  if(n<=4) return BANCO_RUIM.map(([t,s])=>({t,s,o:"ruim"}));
+  if(n<=4){ const l=(BANCO_RUIM[n]||[]).map(([t,s])=>({t,s,o:"ruim",n})); for(let i=l.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [l[i],l[j]]=[l[j],l[i]]; } return l; }
   if(n===5) return NEUTROS.map(([t,s])=>({t,s,o:"neutro"}));
   const g=(typeof f3Gostos==="function"?f3Gostos():SENT.map(s=>resp["gosto_"+s.id]||null));
   const esc1=SENT.map((s,i)=>({t:g[i],s:s.id,o:"f1",p:+(resp["curtiu_"+s.id]||0)})).filter(x=>x.t).sort((a,b)=>b.p-a.p);
@@ -547,6 +558,9 @@ function rgMontaRodada(A){
   if(n===0) return {tipo:"leve", itens:rgBase(A,5)};
   /* a novidade (coisa boa nova) entra SÓ na 1ª rodada ("o mais e o menos") e só do 10 ao 6 */
   if(!A.foco) return {tipo:"mm", itens: n>=6 ? rgBase(A,4).concat(rgNovidade(A)) : rgBase(A,5)};
+  /* 27/11 · do 4 ao 1: uma rodada só ("o mais e o menos"). As perguntas de "com quem / onde / quando / de que jeito"
+     foram feitas para coisas boas e não combinam com situações ruins. */
+  if(n<=4) return null;
   if(A.duelo) return {tipo:"duelo", itens:A.duelo};
   /* nas rodadas de "com quem / onde / quando / de que jeito" entram SÓ as respostas daquela pergunta */
   if(A.cert>=CERTEZA(n) || A.rodadas>=max-1){ const ia=rgPerguntaIA(A); if(ia) return {tipo:"ia", ia:n>2, dim:ia.dim, itens:ia.itens}; }
@@ -570,7 +584,7 @@ function rgArqFoto(x){ if(!x) return null;
   if((x.o==="f1"||x.o==="nao") && x.s){ const s=SENT.find(k=>k.id===x.s), j=s?s.o.indexOf(x.t):-1; if(j>=0) return {src:foto(s.id,j)}; }
   if(x.o==="eu") return null;
   if(x.dim&&x.sf){ const arq="regua-"+x.dim+"-"+slug(x.sf)+".jpg"; return {src:CANVA+arq,arq}; }
-  const arq="regua-"+(x.o==="neutro"?"5-":"")+slug(x.t)+".jpg"; return {src:CANVA+arq,arq}; }
+  const arq="regua-"+(x.o==="neutro"?"5-":x.o==="ruim"?"ruim-":"")+slug(x.t)+".jpg"; return {src:CANVA+arq,arq}; }
 function rgFotoHTML(src,arq,cls){ return `<span class="rg-ft ${cls||""}"><img src="${src}" alt="" ${arq?`onerror="rgSemFoto(this,'${arq}')"`:""}></span>`; }
 window.rgSemFoto = function(img,arq){ const p=img.parentNode; if(p) p.innerHTML=`<span class="rg-ph"><b>foto do Canva</b><code>${esc(arq)}</code></span>`; };
 window.rgFotoHTML = rgFotoHTML; window.rgSlug = slug; window.RG_CANVA = CANVA;
@@ -579,7 +593,7 @@ function rgCartaoFoco(A){ const f=rgArqFoto(A.foco), chips=conhecido(A);
   return `<div class="rg-foco" style="--c:${corSent(A.foco.s)}">${f?rgFotoHTML(f.src,f.arq):""}<div><small>Você escolheu</small><b>${esc(cap(A.foco.t))}</b>${chips.length?`<span>${chips.map(esc).join(" · ")}</span>`:""}</div></div>`; }
 
 /* Bloco 3: uma frase curta e didática em cada passo (o que fazer agora) */
-const DICA = (A,op,parte) => op.tipo==="mm" ? (parte==="menos" ? "Agora toque na que ficaria mais longe." : "Primeiro, toque na foto que é mais o seu "+A.num+".")
+const DICA = (A,op,parte) => op.tipo==="leve" ? "Toque na foto que é o seu 0." : op.tipo==="mm" ? (parte==="menos" ? "Agora toque na que ficaria mais longe." : "Primeiro, toque na foto que é mais o seu "+A.num+".")
   : op.tipo==="ia" ? "Última pergunta deste número. Escolha a que fecha melhor."
   : op.tipo==="duelo" ? "Só uma: a que pesa mais."
   : "Agora a gente vai mais fundo no que você escolheu.";

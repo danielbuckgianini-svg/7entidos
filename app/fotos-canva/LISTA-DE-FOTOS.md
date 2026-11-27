@@ -3,7 +3,7 @@
 Coloque cada foto na pasta `app/fotos-canva/` com o nome exato do arquivo. Enquanto a foto não existe, o app mostra o quadro "foto do Canva".
 Dica para todas: foto real, pessoas adultas (45+), luz natural, sem desenho. Formato em pé (4:5) para as opções; deitado (16:10) no Coloque na régua e no resultado.
 
-Total: 108 fotos.
+Total: 144 fotos.
 
 ## 1. Coloque na régua (dia 1)
 
@@ -66,6 +66,49 @@ Total: 108 fotos.
 | regua-5-cheiro-de-sabao-em-po.jpg | Régua · número 5: cheiro de sabão em pó | cheiro de sabão em pó |
 | regua-5-esperar-na-fila-do-mercado.jpg | Régua · número 5: esperar na fila do mercado | esperar na fila do mercado |
 | regua-5-dobrar-as-roupas-do-varal.jpg | Régua · número 5: dobrar as roupas do varal | dobrar as roupas do varal |
+
+## 3b. Situações ruins do 4 ao 0 (Sala do Péssimo)
+
+Regra: a foto mostra a REAÇÃO da pessoa (tapando o nariz, fazendo careta), nunca a coisa nojenta em si.
+
+| Arquivo | Onde aparece | Buscar no Canva |
+|---|---|---|
+| regua-ruim-um-dia-cinza.jpg | Régua · número 4: um dia cinza | mulher olhando pela janela um dia cinza, cara de desânimo |
+| regua-ruim-musica-de-elevador.jpg | Régua · número 4: música de elevador | mulher no elevador com cara de tédio |
+| regua-ruim-casa-com-cheiro-de-fechado.jpg | Régua · número 4: casa com cheiro de fechado | mulher abrindo a janela, torcendo o nariz |
+| regua-ruim-ar-condicionado-gelado-sem-casaco.jpg | Régua · número 4: ar-condicionado gelado sem casaco | mulher se abraçando de frio no escritório |
+| regua-ruim-sentir-se-sozinha-num-domingo-a-noite.jpg | Régua · número 4: sentir-se sozinha num domingo à noite | mulher sozinha no sofá à noite, olhar parado |
+| regua-ruim-alguem-mastigando-de-boca-aberta.jpg | Régua · número 3: alguém mastigando de boca aberta | mulher incomodada à mesa olhando alguém comer |
+| regua-ruim-calcada-esburacada.jpg | Régua · número 3: calçada esburacada | mulher tropeçando na calçada esburacada |
+| regua-ruim-fruta-azeda.jpg | Régua · número 3: fruta azeda | mulher fazendo careta ao morder fruta azeda |
+| regua-ruim-banco-de-tras-em-estrada-de-curvas.jpg | Régua · número 3: banco de trás em estrada de curvas | mulher no banco de trás do carro, mão na barriga |
+| regua-ruim-gosto-amargo-que-nao-sai-da-boca.jpg | Régua · número 3: gosto amargo que não sai da boca | mulher com cara de amargo, mão na boca |
+| regua-ruim-roupa-que-pinica.jpg | Régua · número 2: roupa que pinica | mulher coçando o pescoço por causa da blusa |
+| regua-ruim-muito-tempo-sentada-na-mesma-posicao.jpg | Régua · número 2: muito tempo sentada na mesma posição | mulher com dor nas costas na cadeira |
+| regua-ruim-meia-molhada.jpg | Régua · número 2: meia molhada | mulher olhando o pé molhado com cara de nojo |
+| regua-ruim-cheiro-de-cigarro-na-roupa.jpg | Régua · número 2: cheiro de cigarro na roupa | mulher cheirando a manga da blusa, careta |
+| regua-ruim-cafe-amargo-e-frio.jpg | Régua · número 2: café amargo e frio | mulher fazendo careta com a xícara de café |
+| regua-ruim-pia-cheia-de-louca-suja.jpg | Régua · número 2: pia cheia de louça suja | mulher cansada diante da pia cheia de louça |
+| regua-ruim-furadeira-do-vizinho-as-7h.jpg | Régua · número 2: furadeira do vizinho às 7h | mulher na cama tapando os ouvidos com o travesseiro |
+| regua-ruim-mao-melada.jpg | Régua · número 2: mão melada | mulher olhando a mão melada, dedos abertos |
+| regua-ruim-barco-balancando.jpg | Régua · número 2: barco balançando | mulher segurando firme no barco, cara de enjoo |
+| regua-ruim-banco-apertado-de-aviao.jpg | Régua · número 2: banco apertado de avião | mulher espremida no banco do avião |
+| regua-ruim-lixo-no-calor.jpg | Régua · número 1: lixo no calor | mulher tapando o nariz perto da lixeira |
+| regua-ruim-bichinhos-na-comida.jpg | Régua · número 1: bichinhos na comida | mulher assustada olhando o prato |
+| regua-ruim-faca-raspando-na-garrafa.jpg | Régua · número 1: faca raspando na garrafa | mulher fazendo careta e encolhendo os ombros |
+| regua-ruim-pisar-em-algo-gosmento.jpg | Régua · número 1: pisar em algo gosmento | mulher olhando a sola do sapato com nojo |
+| regua-ruim-chule.jpg | Régua · número 1: chulé | mulher tapando o nariz, careta |
+| regua-ruim-enjoo-no-onibus-de-serra.jpg | Régua · número 1: enjoo no ônibus de serra | mulher enjoada no ônibus, mão na boca |
+| regua-ruim-sapato-apertado-o-dia-inteiro.jpg | Régua · número 0: sapato apertado o dia inteiro | mulher tirando o sapato, aliviada e com dor |
+| regua-ruim-casa-baguncada.jpg | Régua · número 0: casa bagunçada | mulher com a mão na testa diante da casa bagunçada |
+| regua-ruim-alarme-tocando-a-noite-toda.jpg | Régua · número 0: alarme tocando a noite toda | mulher acordada na cama tapando os ouvidos |
+| regua-ruim-onibus-lotado-e-abafado.jpg | Régua · número 0: ônibus lotado e abafado | mulher espremida em ônibus lotado, suando |
+| regua-ruim-esgoto-entrando-em-casa.jpg | Régua · número 0: esgoto entrando em casa | mulher tapando o nariz, cara de desespero |
+| regua-ruim-comer-algo-que-da-nojo.jpg | Régua · número 0: comer algo que dá nojo | mulher cuspindo no guardanapo, careta |
+| regua-ruim-barco-em-mar-agitado.jpg | Régua · número 0: barco em mar agitado | mulher agarrada no barco no mar agitado |
+| regua-ruim-ficar-presa-no-elevador.jpg | Régua · número 0: ficar presa no elevador | mulher aflita apertando os botões do elevador |
+| regua-ruim-briga-feia-com-a-familia.jpg | Régua · número 0: briga feia com a família | mulher chateada depois de discussão, cabeça baixa |
+| regua-ruim-contas-atrasadas.jpg | Régua · número 0: contas atrasadas | mulher preocupada olhando contas na mesa |
 
 ## 4. Rodadas fundas (com quem, onde, quando, de que jeito)
 
