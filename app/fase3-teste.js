@@ -16,6 +16,7 @@
 if(typeof F3_ABERTA==="undefined" || typeof window.rgTopo!=="function") return;
 
 const CHAVE_TI = window.RG_TESTE ? "7e_teste_img_teste" : "7e_teste_img";
+/* (tiZera também é chamado pelo "Recomeçar a Fase 3" do modo teste) */
 const YT = "https://www.youtube.com/@7Entidos";
 const TRACOS = ["ext","abe","gen","org","cal"];   /* ordem dos tipos (também usada para desempatar) */
 const DUPLAS = {
@@ -58,7 +59,7 @@ function tiCarrega(){ if(TI) return TI; try{ TI=JSON.parse(localStorage.getItem(
 function tiSalva(){ try{ localStorage.setItem(CHAVE_TI,JSON.stringify(TI));
   /* pista para a régua e as próximas fases (nunca aparece para ela) */
   localStorage.setItem("7e_pistas_tracos",JSON.stringify({pontos:TI.pontos,respondidas:Object.keys(TI.resp).length,tipo:TI.tipo})); }catch(e){} }
-function hoje(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function hoje(){ if(typeof window.rgHojeStr==="function") return window.rgHojeStr(); const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
 window.tiEstado = () => { tiCarrega(); return {diasFeitos:TI.dia, pronto:TI.dia>=4, hojeFeito:TI.datas.includes(hoje()), tipo:TI.tipo}; };
 window.tiPontos = () => { tiCarrega(); return Object.assign({},TI.pontos); };
 window.tiZera = () => { TI=tiNovo(); tiSalva(); };

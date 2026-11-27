@@ -129,6 +129,7 @@ function rgCarrega(){ if(RG) return RG; try{ RG=JSON.parse(localStorage.getItem(
 function rgSalva(){ try{ localStorage.setItem(CHAVE,JSON.stringify(RG)); }catch(e){} }
 /* o "hoje" do app: no modo teste, anda com o botão "Avançar um dia" */
 function rgHoje(){ const d=new Date(); d.setDate(d.getDate()+((RG&&RG.desloc)||0)); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+window.rgHojeStr = () => rgHoje(); window.rgDiaFase3 = () => { rgCarrega(); return rgDia(); };
 const diaNum = s => { const [a,m,d]=s.split("-").map(Number); return Date.UTC(a,m-1,d)/864e5; };
 const diaStr = k => { const d=new Date(k*864e5); return d.getUTCFullYear()+"-"+String(d.getUTCMonth()+1).padStart(2,"0")+"-"+String(d.getUTCDate()).padStart(2,"0"); };
 function rgDia(){ return RG.primeiroDia ? diaNum(rgHoje())-diaNum(RG.primeiroDia)+1 : 1; }
@@ -231,6 +232,22 @@ const css=document.createElement("style"); css.textContent=`
 .rg-aviso{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:70;max-width:min(420px,90vw);padding:12px 18px;border-radius:16px;background:#111b3d;border:1px solid rgba(245,197,66,.55);font-size:16px;text-align:center;box-shadow:0 14px 40px rgba(0,0,0,.6);animation:guiaSobe .4s ease-out}
 .rg-previa{margin-top:22px;padding-top:14px;border-top:1px dashed rgba(169,179,209,.35);display:flex;flex-direction:column;gap:6px;align-items:center}
 .rg-previa .linkflow::before{content:"⚙"}
+/* 27/11 · Bloco 5: o mapa da Fase 3 */
+.f3m{display:flex;flex-direction:column;gap:10px;max-width:440px;margin:14px auto 0;text-align:left}
+.f3m-it{all:unset;box-sizing:border-box;cursor:pointer;position:relative;display:flex;align-items:center;gap:14px;min-height:72px;padding:12px 16px;border-radius:20px;background:rgba(32,48,100,.6);border:1.5px solid rgba(245,197,66,.5);box-shadow:0 5px 0 rgba(0,0,0,.35)}
+.f3m-it.hoje{border-color:var(--ouro);box-shadow:0 0 0 2px rgba(245,197,66,.35),0 5px 0 rgba(0,0,0,.35)}
+.f3m-it.ok{border-color:rgba(127,211,255,.55)}
+.f3m-it.fecha{opacity:.5;cursor:default;border-style:dashed;box-shadow:none}
+.f3m-n{flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:rgba(245,197,66,.15);border:1.5px solid var(--ouro);font:800 20px Inter,system-ui,sans-serif;color:var(--ouro)}
+.f3m-it.ok .f3m-n{background:#7fd3ff;border-color:#7fd3ff;color:#0a1128}
+.f3m-t{flex:1}.f3m-t b{display:block;font-size:20px}.f3m-t small{display:block;font-size:16px;color:var(--azul);margin-top:2px}
+.f3m-it em{font-style:normal;font:700 12px "Space Mono",monospace;color:#0a1128;background:var(--ouro);border-radius:8px;padding:3px 8px}
+.f3m-it.fecha em{background:none;color:var(--azul);font-size:16px}
+.f3m-cur{max-width:440px;margin:12px auto 0;padding:14px 16px;border-radius:20px;background:rgba(17,27,61,.85);border:1.5px dashed rgba(245,197,66,.55);text-align:left}
+.f3m-cur small{display:block;font:700 12px "Space Mono",monospace;color:var(--ouro);text-transform:uppercase;letter-spacing:.06em}
+.f3m-cur b{display:block;font-size:20px;line-height:1.35;margin:4px 0 8px}
+.f3m-cur p{margin:0;font-size:17px;color:#fff3c4}
+.f3m-cur .rg-tres{justify-content:flex-start;margin:0}
 /* 27/11 · Bloco 2: a escada da régua (0 embaixo, 10 em cima) */
 .rg-escada{max-width:440px;margin:8px auto 6px;display:flex;flex-direction:column;gap:6px;text-align:left}
 .rg-dir{font:700 15px "Space Mono",monospace;color:var(--azul);letter-spacing:.04em;text-align:center;margin:2px 0}
@@ -377,7 +394,8 @@ window.rgAvancaDia = function(){ click(); rgCarrega(); rgFechaModal(); if(!RG.pr
 window.rgCompletaTeste = function(){ click&&click(); rgFechaModal(); rgCarrega(); RG.intro=true; if(!RG.primeiroDia) RG.primeiroDia=rgHoje();
   COLOQUE.forEach((c,i)=>{ if(RG.col[c.sid]==null) RG.col[c.sid]=[9,2,10,8,4,1,7][i%7]; }); RG.colFeito=RG.colFeito||rgHoje();
   JOGAVEIS.forEach(n=>{ if(RG.feitos[n]==null) RG.feitos[n]=rgHoje(); }); RG.atual=null; rgSalva(); entrou=true; pos=R.length-1; rgTela(); };
-window.rgRecomecaTeste = function(){ click(); rgFechaModal(); try{ localStorage.removeItem(CHAVE); }catch(e){} RG=null; rgCarrega(); rgSalva(); rgExemploF1(); entrou=true; pos=R.length-1; window.trava3(); };
+window.rgRecomecaTeste = function(){ click(); rgFechaModal(); try{ localStorage.removeItem(CHAVE); localStorage.removeItem("7e_fase3"); }catch(e){} RG=null;
+  try{ F3=null; }catch(e){} if(typeof tiZera==="function") tiZera(); rgCarrega(); rgSalva(); rgExemploF1(); entrou=true; pos=R.length-1; window.trava3(); };
 
 /* =================== BLOCO E · ABERTURA (fim da Fase 2) =================== */
 const trava3Antiga = trava3;
@@ -402,7 +420,8 @@ window.f3Abre = function(){
   if(!F3_ABERTA){ try{ localStorage.removeItem("7e_fase3_ativa"); }catch(e){} entrou=true; pos=R.length-1; desenha(); return; }
   rgCarrega(); rgExemploF1(); entrou=true; pos=R.length-1; try{ localStorage.setItem("7e_fase3_ativa","1"); }catch(e){}
   if(!RG.intro){ desenha(); return; }      /* ainda não viu a abertura: mostra a abertura */
-  rgTela();
+  if(!rgColFeito()) return rgTela();       /* dia 1: abertura → "Coloque na régua" → régua */
+  f3Mapa3();                               /* quem volta: o mapa da Fase 3 */
 };
 window.f3DaBrisa = window.rgComeca;
 
@@ -475,6 +494,7 @@ function rgEscolhe(nova,depoisColoque){
     <h2>${depoisColoque?"Pronto! Agora, o seu 10.":pendentes.length>1?"Qual número você quer fazer hoje?":"O número de hoje"}</h2>
     <p class="rg-legmand">Toque num degrau para ver o que ele quer dizer. Cada bolinha acende quando o número fica pronto.</p>
     ${rgEscada({acao:true,nova:nova?RG.ultimo:null})}
+    <button class="rg-volta" type="button" onclick="click();f3Mapa3()">← mapa da Fase 3</button>
     ${!LIVRE&&b<BLOCOS.length-1?`<p class="rg-bloco">Depois: ${BLOCOS.slice(b+1).map(x=>x.join(" · ")).join("  →  ")}</p>`:""}
     ${rgPreviaBotoes()}</div>`);
 }
@@ -591,7 +611,7 @@ function rgRodada(){
       ${RG.texto===false?"":`<button type="button" onclick="rgEscrever('rodada')">✎ Escrever o meu</button>`}
     </div>
     ${n===0?`<button class="rg-volta" type="button" onclick="rgPula0()">Pular o 0 (é opcional)</button><br>`:""}
-    <button class="rg-volta" type="button" onclick="rgVoltaRegua()">← voltar à régua</button>`);
+    <button class="rg-volta" type="button" onclick="rgVoltaRegua()">← voltar à escada</button>`);
 }
 /* tocar numa opção */
 window.rgToca = function(i){ if(ocupado) return; const A=RG.atual, op=A.op, sel=A.sel||(A.sel={}); click(); vibra(10);
@@ -772,7 +792,7 @@ function rgFimDia(nova){ rgTopo("até amanhã");
   mostra(`<div class="rg-entrada">${rgFogoHTML()}<div class="rot">Fase 3 · A sua régua</div>${rgMandala(nova)}${rgEstrela(nova)}${rgBarra()}
     <h2 style="margin-top:12px">${FIM_DIA}</h2>
     ${RG.lembrete?`<p class="sub">Combinado: amanhã eu te lembro.</p>`:`<button class="rg-volta" type="button" onclick="rgLembrete()">🔔 Quero um lembrete amanhã</button>`}
-    <div><button class="btn sec" style="margin-top:14px" type="button" onclick="irInicio()">Ir para o começo</button></div>
+    <div><button class="btn sec" style="margin-top:14px" type="button" onclick="click();f3Mapa3()">Voltar ao mapa da Fase 3</button></div>
     ${rgPreviaBotoes()}</div>`); }
 /* notificação só se a pessoa pedir. SERVIDOR: o envio do lembrete precisa do servidor; por enquanto, só guarda o pedido. */
 window.rgLembrete = function(){ click(); RG.lembrete=true; rgSalva();
@@ -782,15 +802,88 @@ window.rgLembrete = function(){ click(); RG.lembrete=true; rgSalva();
 /* =================== BLOCO D · TELA FINAL DA FASE 3 (neutra) =================== */
 /* Não revela o que a Brisa descobriu. O palpite da Brisa e "Suas pistas" ficam para a Fase 4. */
 function rgFimFase(){ rgTopo("régua montada");
-  mostra(`<div class="rot">Fase 3</div>${rgMandala()}${rgEstrela()}${rgBarra()}
-    <h2>Sua régua está montada.</h2><p class="sub">Eu já estou ligando os pontos. Na próxima fase, tem uma coisa para te mostrar.</p>
-    ${PREVIA?`<div style="margin-top:18px"><button class="btn" type="button" onclick="rgVaiMotivos()">Seguir para os motivos →</button><p class="sub" style="font-size:15px;margin-top:8px">Só na prévia: a parte da análise da função (como fica a ligação com a régua é decisão da sala).</p></div>`:""}
+  mostra(`<div class="rot">Fase 3 · A sua régua</div>${rgEstrela()}${rgBarra()}
+    <h2>Sua régua está montada, do 10 ao 5.</h2><p class="sub">Do 4 ao 0 chega depois. Enquanto isso, a Fase 3 continua no mapa.</p>
+    ${rgEscada()}
+    <div style="margin-top:14px"><button class="btn" type="button" onclick="click();f3Mapa3()">Voltar ao mapa da Fase 3</button></div>
     ${rgPreviaBotoes()}`); }
 /* 27/11 · prévia: depois da régua montada, segue para as perguntas dos motivos (análise da função), que já existiam no app */
 window.rgVaiMotivos = function(){ click&&click(); try{ if(typeof f3ExemploFase1==="function") f3ExemploFase1(); }catch(e){}
   f3Carrega(); F3.intro=true; f3Salva(); entrou=true; pos=R.length-1;
   if(!document.getElementById("rgSemCerebro")){ const st=document.createElement("style"); st.id="rgSemCerebro"; st.textContent="#f3cerebro{display:none!important}"; document.head.appendChild(st); }
   f3Tela(); };
+
+/* =================== BLOCO 5 (27/11) · O MAPA DA FASE 3: RITMO E ORDEM =================== */
+/* Ordem: abertura (vídeo 3 da Brisa) → dia 1 "Coloque na régua" (e a régua) → régua e teste de imagens em DIAS ALTERNADOS,
+   uma mecânica por dia → depois Mecânica 2 (Motivos) e Mecânica 3 (Validação, ainda a decidir).
+   Com TRAVAS_LIGADAS = false, tudo fica liberado para teste. */
+const CURINGAS = ["Qual cheiro te leva para a infância?","Que música te faz dançar sozinha?","Qual comida tem gosto de casa de vó?","Que paisagem você queria ver da janela hoje?","Que som te acalma na hora de dormir?","Qual sobremesa você nunca recusa?","Onde você tiraria um cochilo agora?","Qual cor te deixa de bom humor?","Qual foi o último pôr do sol que você parou para ver?","Qual toque te acalma num dia difícil?"];
+const tiOk = () => typeof tiEstado==="function" ? tiEstado() : {diasFeitos:0,pronto:false,hojeFeito:false,tipo:null};
+function rgMotivosOk(){ try{ f3Carrega(); return !!F3.descoberta; }catch(e){ return false; } }
+/* qual mecânica é a de hoje (só vale com as travas ligadas) */
+function rgMecDoDia(){ const d=rgDia(), rOk=rgReguaPronta(), tOk=tiOk().pronto;
+  if(d===1 && !rOk) return "regua";
+  if(rOk && tOk) return "motivos";
+  if(rOk) return "teste"; if(tOk) return "regua";
+  return d%2===0 ? "teste" : "regua"; }
+function rgCuringa(){ const d=rgDia(), q=CURINGAS[(d-1)%CURINGAS.length]; RG.curinga=RG.curinga||{}; return {d,q,r:RG.curinga[d]}; }
+window.f3Mapa3 = function(){ rgCarrega(); rgFechaModal(); entrou=true; pos=R.length-1; try{ localStorage.setItem("7e_fase3_ativa","1"); }catch(e){}
+  if(!RG.intro) return desenha();
+  rgTopo("mapa da fase 3");
+  const t=tiOk(), rOk=rgReguaPronta(), mOk=rgMotivosOk(), hojeMec=rgMecDoDia(), feitosR=JOGAVEIS.filter(n=>RG.feitos[n]!=null).length;
+  const aberta = k => LIVRE || k===hojeMec || (k==="motivos" && rOk && t.pronto);
+  const cur=rgCuringa();
+  const item=(k,num,tit,sub,acao,ok,extra)=>{ const ab=aberta(k)&&!ok; const hoje=!LIVRE&&k===hojeMec&&!ok;
+    return `<button class="f3m-it${ok?" ok":""}${ab?"":" fecha"}${hoje?" hoje":""}" type="button" ${ab||ok?`onclick="${acao}"`:"disabled"}>
+      <span class="f3m-n">${ok?"✓":num}</span><span class="f3m-t"><b>${tit}</b><small>${sub}</small></span>${hoje?`<em>hoje</em>`:!ab&&!ok?`<em>🔒</em>`:""}${extra||""}</button>`; };
+  const fimOk = rOk && t.pronto && mOk;
+  mostra(`<div class="rot">Fase 3 · dia ${rgDia()}</div>
+    <h2>O mapa da Fase 3</h2>
+    <p class="sub">${LIVRE?"Escolha por onde seguir.":"Uma atividade por dia. A de hoje está marcada."}</p>
+    ${LIVRE&&PREVIA?`<p class="rg-nota">Só na prévia: travas desligadas, tudo liberado para teste.</p>`:""}
+    <div class="f3m-cur"><small>Pergunta curinga do dia</small><b>${esc(cur.q)}</b>
+      ${cur.r?`<p>${cur.r.pulou?"Hoje você pulou. Amanhã tem outra.":"Sua resposta: “"+esc(cur.r.texto)+"”"}</p>`:`<div class="rg-tres">${RG.texto===false?"":`<button type="button" onclick="rgCuringaResp()">✎ Responder</button>`}<button type="button" onclick="rgCuringaPula()">Pular</button></div>`}</div>
+    <div class="f3m">
+      ${item("regua","1","A sua régua", rOk?"Pronta, do 10 ao 5":(rgColFeito()?feitosR+" de 6 números (do 10 ao 5)":"Começa pelo “Coloque na régua”"),"click();rgTela()",rOk)}
+      ${item("teste","2","Teste de imagens", t.pronto?"Pronto · seu tipo saiu":"Dia "+Math.min(4,t.diasFeitos+1)+" de 4 · 5 duplas","click();tiAbre()",t.pronto)}
+      ${item("motivos","3","Motivos", mOk?"Pronto":"Por que você gosta do que gosta","rgVaiMotivos()",mOk)}
+      <div class="f3m-it fecha"><span class="f3m-n">4</span><span class="f3m-t"><b>Validação</b><small>Em breve</small></span><em>🔒</em></div>
+    </div>
+    ${fimOk||LIVRE&&PREVIA?`<div style="margin-top:16px"><button class="btn${fimOk?"":" sec"}" type="button" onclick="click();rgFimFase3()">${fimOk?"Ver o fim da Fase 3":"Ver o fim da Fase 3 (só na prévia)"}</button></div>`:""}
+    ${PREVIA?`<div class="rg-previa"><small class="sub" style="margin:0;font-size:14px">Só na prévia: resumos das fases anteriores</small>
+      <button class="linkflow" type="button" onclick="rgVerResumo(1)">Ver o resumo da Fase 1</button>
+      <button class="linkflow" type="button" onclick="rgVerResumo(2)">Ver o resumo da Fase 2</button>
+      ${TESTE?`<button class="linkflow" type="button" onclick="tiCompletaTeste();f3Mapa3()">Preencher o teste de imagens inteiro</button>`:""}</div>`:""}
+    ${rgPreviaBotoes()}`); };
+window.rgCuringaResp = function(){ click(); if(RG.texto===true) return rgCaixaCuringa();
+  rgModal(`<h3>Antes de responder</h3><p>O que você escrever ou falar fica guardado só neste celular e ajuda o app a te conhecer melhor.</p>
+    <div class="col"><button class="btn" type="button" onclick="rgCuringaTexto(true)">Aceito</button><button class="btn sec" type="button" onclick="rgCuringaTexto(false)">Prefiro só escolher</button></div>`); };
+window.rgCuringaTexto = function(sim){ click(); RG.texto=!!sim; rgSalva(); if(sim) return rgCaixaCuringa(); rgFechaModal(); f3Mapa3(); };
+window.rgCaixaCuringa = function(){ const cur=rgCuringa(), pode=!!(window.SpeechRecognition||window.webkitSpeechRecognition);
+  rgModal(`<h3>${esc(cur.q)}</h3>${pode?`<button class="mic" id="rgmic" type="button" onclick="rgFala()">🎤 Falar</button>`:`<p style="font-size:15px;color:var(--azul)">Para falar, use o microfone do teclado do celular.</p>`}
+    <textarea id="rgtxt" maxlength="280" placeholder="Escreva aqui…"></textarea>
+    <div class="col" style="margin-top:12px"><button class="btn" type="button" onclick="rgCuringaSalva()">Pronto</button><button class="rg-volta" type="button" onclick="rgFechaModal()">voltar</button></div>`); };
+window.rgCuringaSalva = function(){ const t=document.getElementById("rgtxt"), v=String(t&&t.value||"").replace(/\s+/g," ").trim().slice(0,280);
+  if(!v) return rgAviso("Escreva ou fale alguma coisa, ou toque em voltar."); click(); const cur=rgCuringa();
+  RG.curinga[cur.d]={q:cur.q,texto:v,quando:rgHoje()}; (RG.pistas=RG.pistas||[]).push({tipo:"curinga",q:cur.q,texto:v,dia:rgHoje()}); rgSalva();
+  rgFechaModal(); rgAviso("Guardei. Isso vira uma pista para mim."); f3Mapa3(); };
+window.rgCuringaPula = function(){ click(); const cur=rgCuringa(); RG.curinga[cur.d]={q:cur.q,pulou:true}; rgSalva(); f3Mapa3(); };
+/* prévia: abrir o resumo do fim da Fase 1 ou da Fase 2 (com as respostas de exemplo, se não houver as dela) */
+window.rgVerResumo = function(f){ click(); rgExemploF1(); try{ localStorage.removeItem("7e_fase3_ativa"); }catch(e){}
+  const i=R.findIndex(p=>p.t===(f===1?"fim1":"grafico")); if(i<0) return; pos=i; entrou=true; const bb=document.getElementById("rgbarra"); desenha(); };
+
+/* ---------- FIM DA FASE 3: vídeo-resumo da Brisa + o tipo divertido com o cartão + a porta da Fase 4 "em breve" ---------- */
+function destFase3(){ return [10,9,8].map(n=>{ const e=rgEscolhaDe(n); return e?{t:"Seu "+n+": "+cap(e)}:null; }).filter(Boolean); }
+window.rgFimFase3 = function(){ rgTopo("fase 3 completa"); const temTipo=typeof tiResultadoHTML==="function" && tiResultadoHTML();
+  mostra(`<div class="rot pisca2">Fase 3 completa</div>
+    ${resumoBrisa(3,destFase3(),"Na sua régua")}
+    ${temTipo?`<h2 style="margin-top:6px">O seu tipo no teste de imagens</h2>${temTipo}<div class="ti-com"><button class="btn" type="button" onclick="tiCompartilha()">Compartilhar o meu tipo</button></div>`:""}
+    <div class="porta3" style="margin-top:22px"><div class="pt-cena"><div class="pt-luz" aria-hidden="true"></div><img class="pt-img" src="${NO_SITE?"/app/":""}porta-fase3.webp" alt="Uma porta mágica trancada, com luz dourada escapando pela fresta" width="720" height="892"></div>
+      <div class="pt-rot">Fase 4 · em breve</div><h2>A próxima porta já tem o seu nome.</h2>
+      <p class="pt-txt">Na Fase 4, você confere o que eu percebi em todas as fases.</p></div>
+    <div style="margin-top:14px"><button class="btn sec" type="button" onclick="click();f3Mapa3()">Voltar ao mapa da Fase 3</button></div>`, c=>{ if(typeof ligaResumo==="function") ligaResumo(c); vibra([10,40,10]); somVitoria&&somVitoria(); }); };
+/* depois dos Motivos, o "Seguir para a Fase 4" leva de volta ao mapa (a Fase 4 nova ainda não começou) */
+if(F3_ABERTA && typeof f4Abre==="function"){ const f4Antigo=f4Abre; window.f4Abre = function(){ if(RG&&RG.intro) return f3Mapa3(); return f4Antigo(); }; }
 
 /* ---------- botões só da prévia (sem modo teste) ---------- */
 window.rgPulaEspera = function(){ click(); RG.hoje=null; rgSalva(); rgTela(); };
@@ -803,5 +896,5 @@ if(TESTE){ rgCarrega(); rgExemploF1(); fechaPainel&&fechaPainel(); entrou=true; 
   try{ localStorage.setItem("7e_fase3_ativa","1"); }catch(e){}
   const g=document.getElementById("guia-ios"); if(g) g.remove();
   if(window.F3_COMPLETA || /[?&#]completa/i.test(location.search+location.hash)) window.rgCompletaTeste();
-  else if(RG.intro) rgTela(); else window.trava3(); }
+  else if(RG.intro) window.f3Abre(); else window.trava3(); }
 })();
