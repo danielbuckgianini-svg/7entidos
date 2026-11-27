@@ -627,6 +627,6 @@ window.rgZera = function(){ click(); RG=rgNovo(); rgSalva(); entrou=true; pos=R.
 if(TESTE){ rgCarrega(); rgExemploF1(); fechaPainel&&fechaPainel(); entrou=true; pos=R.length-1;
   try{ localStorage.setItem("7e_fase3_ativa","1"); }catch(e){}
   const g=document.getElementById("guia-ios"); if(g) g.remove();
-  if(/[?&#]completa/i.test(location.search+location.hash)) window.rgCompletaTeste();
+  if(window.F3_COMPLETA || /[?&#]completa/i.test(location.search+location.hash)) window.rgCompletaTeste();
   else if(RG.intro) rgTela(); else window.trava3(); }
 })();
