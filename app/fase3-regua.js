@@ -599,7 +599,9 @@ window.rgVoltaRegua = function(){ click(); rgEscolhe(); };
    Privacidade: nunca manda o nome (nem e-mail ou telefone escritos no texto); o texto da pessoa não fica guardado (só a pista);
    cada chamada registra o custo (fica em RG.iaLog, só no celular). */
 const IA_CFG = {
-  ligada: false,   /* LIGAR aqui (true) quando o servidor estiver confirmado e aceitar o endereço do app */
+  /* 27/11: servidor confirmado (manual do Gemini). Liga sozinha só quando o app está aberto em 7entidos.com.br,
+     porque o servidor só aceita esse endereço (na prévia do Claude o navegador bloqueia a chamada; lá fica o banco). */
+  ligada: /(^|\.)7entidos\.com\.br$/i.test(location.hostname),
   url: "https://7entidos-ia.buck-0ab.workers.dev/pergunta",
   modelo: "claude-haiku-5-5",
   espera: 8000     /* mais que isso, segue com o banco */
@@ -612,7 +614,7 @@ const rgIA = {
   chama(corpo){ if(!IA_CFG.ligada) return Promise.resolve(null);
     const ac=new AbortController(), tm=setTimeout(()=>ac.abort(),IA_CFG.espera), t0=Date.now();
     return fetch(IA_CFG.url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(Object.assign({modelo:IA_CFG.modelo},corpo)),signal:ac.signal})
-      .then(r=>r.ok?r.json():null).catch(()=>null).then(j=>{ clearTimeout(tm);
+      .then(r=>r.ok?r.json():null).catch(()=>null).then(j=>{ clearTimeout(tm); if(j&&j.status==="usar_banco") j.usar_banco=true;
         (RG.iaLog=RG.iaLog||[]).push({quando:new Date().toISOString(),tarefa:corpo.tarefa,numero:corpo.etapa,ms:Date.now()-t0,ok:!!(j&&!j.usar_banco),
           tokens_entrada:j&&j.uso&&j.uso.entrada||null,tokens_saida:j&&j.uso&&j.uso.saida||null,custo_usd:j&&j.custo_usd!=null?j.custo_usd:null});
         RG.iaLog=RG.iaLog.slice(-300); rgSalva(); return j&&!j.usar_banco?j:null; }); },
