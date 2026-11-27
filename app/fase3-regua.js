@@ -93,40 +93,34 @@ const PALAVRAS = [
 ];
 const palavrasDe = n => PALAVRAS.find(f=>n>=f.de&&n<=f.ate).p;
 
-/* as 30 novidades (uma entra em cada rodada), com o sentido de cada uma (para a cor) */
-const NOVIDADES = [
- ["ver o nascer do sol","visao"],["olhar as estrelas deitada","visao"],["ouvir passarinhos de manhã","audicao"],["ouvir uma música antiga que marcou","audicao"],
- ["ouvir o mar de olhos fechados","audicao"],["banho morno demorado","tato"],["pés na grama","tato"],["carinho no cabelo","tato"],["lençol que secou no sol","olfato"],
- ["mãos na massa de pão","tato"],["cheiro de bolo saindo do forno","olfato"],["cheiro de terra molhada","olfato"],["flor de laranjeira","olfato"],["cheiro de livro novo","olfato"],
- ["café coado na hora","paladar"],["manga bem madura","paladar"],["chocolate derretendo devagar na boca","paladar"],["sorvete num dia de calor","paladar"],
- ["pão quentinho com manteiga","paladar"],["chá de canela","paladar"],["balançar na rede","equilibrio"],["dançar sozinha na sala","equilibrio"],
- ["caminhar descalça na areia","equilibrio"],["alongar o corpo devagar","corpo"],["boiar no mar","equilibrio"],["andar de bicicleta","equilibrio"],
- ["respirar fundo na janela","corpo"],["deitar na grama e olhar o céu","corpo"],["massagem nos pés","tato"],["rir até a barriga doer","corpo"]
-];
-
-/* =================== BLOCO B · O MOTOR DAS RODADAS =================== */
-/* Degrau 1: "o mais e o menos" entre 5 opções (4 das Fases 1 e 2 + 1 novidade).
-   Degrau 2: banco de perguntas preparadas, que vai mais fundo no que a pessoa confirmou.
-   Degrau 3 (último): pergunta da IA (Claude Haiku). Do 0 ao 2 não tem IA: usa o banco.
-   O "isto ou aquilo" (duelo) só entra para desempatar, quando a pessoa troca de caminho. */
-const DIMS = {
- companhia:{q:n=>`E com quem isso é mais o seu ${n}?`,      s:["sozinha","com alguém que você ama","com amigos","em família"]},
- lugar:    {q:n=>`E onde isso é mais o seu ${n}?`,          s:["num lugar conhecido","pertinho de casa","viajando","num lugar novo"]},
- hora:     {q:n=>`E em que hora isso é mais o seu ${n}?`,   s:["de manhã cedo","no fim da tarde","à noite","sem hora para acabar"]},
- estado:   {q:n=>`E de que jeito isso é mais o seu ${n}?`,  s:["depois de um dia cheio","já tranquila","com uma lembrança boa junto","de surpresa"]}
-};
-/* ordem de força: a pergunta que mais separa as possibilidades vem primeiro (companhia muda mais a nota do que a hora, por exemplo) */
-const DIM_ORDEM = ["companhia","lugar","hora","estado"];
-const FALTOU = [["alguém junto","companhia"],["mais tempo","hora"],["outro lugar","lugar"],["estar mais tranquila","estado"],["outra coisa",null]];
+/* =================== BLOCO 2 (V4) · O MOTOR, JEITO AKINATOR =================== */
+/* Os dados (degraus 1 e 2, último degrau, "O que faltou", 30 novidades) ficam em fase3-banco.js.
+   Cada número tem uma "escada do porquê": a próxima pergunta depende da anterior.
+   1) degrau 1 · "o mais e o menos": o que é o número dela (no 10: 4 escolhas das Fases 1 e 2 + 1 novidade)
+   2) degrau 2 · o porquê: 5 opções, uma por motivo, sobre o que ela escolheu
+   3) desempate · "isto ou aquilo" entre os 2 motivos da frente, só quando ainda há dúvida
+   4) último degrau · dentro do motivo da frente (lista aprovada; a inteligência do app só escolhe dentro dela)
+   O app para quando tem certeza: 2 a 4 rodadas por número, até 6 no 10. */
+const B = window.RG_BANCO || {degrau1:{},degrau2:{},ultimo:{},faltou:[],novidades:[]};
+const MOTS = ["soc","pau","sen","con","jei"];
+const NOVIDADES = B.novidades;
+const FALTOU = B.faltou;
 const MAX_RODADAS = n => n===10?6 : n===0?1 : 4;
-const CERTEZA = n => n===10?.9 : .6;     /* a partir daqui, a próxima é a última (degrau 3) */
+const CERTEZA = n => n===10?.7 : .6;
+const P0 = () => Object.fromEntries(MOTS.map(m=>[m,.2]));
+const normP = P => { const t=MOTS.reduce((a,m)=>a+P[m],0)||1; MOTS.forEach(m=>P[m]/=t); return P; };
+const ordemP = P => MOTS.slice().sort((a,b)=>P[b]-P[a]);
+const puxa = (P,m,f) => { if(m&&P[m]!=null){ P[m]*=f; normP(P); } };
+/* resposta escolhida no degrau 2: força igual à do "cérebro" da Fase 3 (45 de 100 para o motivo escolhido, ~14 para cada um dos outros) */
+const escolheMot = (P,m,peso) => { MOTS.forEach(k=>{ P[k]*=Math.pow(k===m?.45:.1375, peso||1); }); normP(P); };
+function novoA(n){ return {num:n,rodadas:0,P:P0(),hist:[],shown:[],pistas:[],set:0,pulos:0,duelos:0}; }
 
 /* ---------- o que fica guardado (só no celular) ---------- */
 let RG=null;
-function rgNovo(){ return {v:1,col:{},feitos:{},atual:null,hoje:null,reg:{},dias:{},folgas:{},pistasFracas:[],coer:{},novIdx:0,curIdx:0,bau:0,desloc:0}; }
+function rgNovo(){ return {v:1,col:{},feitos:{},atual:null,hoje:null,reg:{},dias:{},folgas:{},pistasFracas:[],coer:{},novIdx:0,curIdx:0,bau:0,desloc:0,ultFmt:null,iaLog:[]}; }
 function rgCarrega(){ if(RG) return RG; try{ RG=JSON.parse(localStorage.getItem(CHAVE)||"null"); }catch(e){} if(!RG||RG.v!==1) RG=rgNovo();
   const n=rgNovo(); for(const k in n) if(RG[k]==null) RG[k]=n[k];
-  if(RG.atual && !RG.atual.hist) RG.atual={num:RG.atual.num,rodadas:0,cert:0,dims:{},hist:[],shown:[],escritos:[]}; /* veio do Bloco 1 */
+  if(RG.atual && !RG.atual.P) RG.atual=novoA(RG.atual.num); /* veio de uma versão antiga: recomeça só aquele número */
   return RG; }
 function rgSalva(){ try{ localStorage.setItem(CHAVE,JSON.stringify(RG)); }catch(e){} }
 /* o "hoje" do app: no modo teste, anda com o botão "Avançar um dia" */
@@ -195,7 +189,6 @@ const css=document.createElement("style"); css.textContent=`
 @media(min-width:720px){.rg-ops{grid-template-columns:1fr 1fr}.rg-ops.duelo{grid-template-columns:1fr 1fr}}
 .rg-ops.duelo{grid-template-columns:1fr 1fr}
 .rg-op{all:unset;box-sizing:border-box;cursor:pointer;position:relative;display:flex;align-items:center;gap:12px;min-height:64px;padding:14px 16px 14px 20px;border-radius:18px;background:rgba(32,48,100,.6);border:1.5px solid rgba(169,179,209,.3);font-size:19px;font-weight:700;line-height:1.3;box-shadow:0 5px 0 rgba(0,0,0,.35)}
-.rg-op::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:6px;border-radius:0 6px 6px 0;background:var(--c,#f5c542)}
 .rg-ops.duelo .rg-op{min-height:150px;justify-content:center;text-align:center;font-size:21px;padding:18px}
 .rg-op em{font-style:normal;font:700 11px "Space Mono",monospace;color:#0a1128;background:#fff3c4;border-radius:6px;padding:2px 6px;margin-left:auto;flex:none}
 .rg-op.mais{border-color:var(--ouro);background:rgba(245,197,66,.2);box-shadow:0 0 18px rgba(245,197,66,.35)}
@@ -279,15 +272,22 @@ const css=document.createElement("style"); css.textContent=`
 .rg-ops.fotos{grid-template-columns:1fr 1fr;gap:12px}
 .rg-ops.fotos.impar .rg-opf:last-child{grid-column:1 / -1;width:calc(50% - 6px);justify-self:center}
 .rg-opf{flex-direction:column;align-items:stretch;gap:0;padding:0!important;min-height:0!important;overflow:hidden;border-radius:20px;border-width:2px;text-align:left}
-.rg-opf::before{display:none}
 .rg-opf .rg-ft{aspect-ratio:4/5;width:100%}
-.rg-opf .rg-cap{position:absolute;left:0;right:0;bottom:0;padding:34px 12px 12px;font-size:18px;font-weight:800;line-height:1.2;color:#fff;background:linear-gradient(180deg,transparent,rgba(5,9,26,.92) 55%);border-bottom:5px solid var(--c,#f5c542);text-shadow:0 1px 6px rgba(0,0,0,.6)}
+.rg-opf .rg-cap{position:absolute;left:0;right:0;bottom:0;padding:34px 12px 12px;font-size:18px;font-weight:800;line-height:1.2;color:#fff;background:linear-gradient(180deg,transparent,rgba(5,9,26,.92) 55%);text-shadow:0 1px 6px rgba(0,0,0,.6)}
 .rg-opf em{position:absolute;top:8px;left:8px;margin:0}
 .rg-opf .selo{top:8px;right:8px;font-size:14px;padding:4px 10px;z-index:2}
 .rg-opf.mais{box-shadow:0 0 0 3px var(--ouro),0 0 22px rgba(245,197,66,.45)}
 .rg-opf.menos{box-shadow:0 0 0 3px #7fd3ff;opacity:.85}
 .rg-opf.sel{box-shadow:0 0 0 3px var(--ouro),0 0 22px rgba(245,197,66,.45)}
-.rg-eu{display:grid;place-items:center;font-size:40px;color:var(--ouro)}
+.rg-eu{display:grid;place-items:center;font-size:16px;font-weight:800;color:var(--ouro);text-align:center;padding:6px}
+/* V4 · formato "escolher 1 de 5" em lista (com foto pequena) */
+.rg-ops.lista{grid-template-columns:1fr!important;gap:10px}
+.rg-opl{padding:8px 14px 8px 8px!important;gap:14px;min-height:76px}
+.rg-opl .rg-ft{width:64px;height:64px;flex:none;border-radius:12px}
+.rg-opl .rg-ph b{font-size:0}.rg-opl .rg-ph b::after{content:"foto";font-size:16px}.rg-opl .rg-ph code{display:none}
+.rg-lt{flex:1;font-size:20px;line-height:1.3}
+.rg-ops.duelo .rg-opf .rg-ft{aspect-ratio:3/4}
+.rg-seguro{font-size:18px!important;font-weight:700;color:#d7f5df!important;background:rgba(92,207,138,.12);border:1px solid rgba(92,207,138,.45);border-radius:14px;padding:10px 12px;margin:8px 0 6px!important}
 .rg-dica{font-size:17px;color:#fff3c4;margin:-6px 0 12px}
 .rg-colfoto{width:min(320px,86%);aspect-ratio:16/10;margin:6px auto 2px;border-radius:20px;overflow:hidden}
 .rg-reforco{display:flex;gap:14px;align-items:center;text-align:left;max-width:440px;margin:12px auto 4px;padding:12px 16px;border-radius:22px;background:rgba(17,27,61,.85);border:1.5px solid rgba(245,197,66,.5)}
@@ -501,191 +501,215 @@ function rgEscolhe(nova,depoisColoque){
     ${rgPreviaBotoes()}</div>`);
 }
 window.rgVai = function(n){ if(ocupado) return; if(EM_CONSTRUCAO.includes(n)) return rgAviso("Do 4 ao 0 ainda está em construção."); click(); vibra(12);
-  if(!RG.atual||RG.atual.num!==n) RG.atual={num:n,rodadas:0,cert:0,dims:{},hist:[],shown:[],escritos:[],pulos:0};
+  if(!RG.atual||RG.atual.num!==n) RG.atual=novoA(n);
   rgSalva(); rgTela(); };
 window.rgVoltaRegua = function(){ click(); rgEscolhe(); };
 
-/* =================== BLOCO B · MONTAR CADA RODADA =================== */
-/* as escolhas das Fases 1 e 2, em ordem: primeiro o que a pessoa escolheu (do jogo que mais curtiu para o que menos curtiu),
-   depois as fotos que ela viu e não escolheu. Para os números de baixo, as não escolhidas vêm primeiro. */
-/* 27/11 · REGRA DO NÍVEL: as fotos das Fases 1 e 2 (escolhidas OU não) são todas coisas boas,
-   então só entram do 10 ao 6. O 5 usa o banco neutro; do 4 ao 0, só o banco de situações ruins (ainda vai chegar). */
-function rgDasFases(n){
-  if(n<=4) return BANCO_RUIM.map(([t,s])=>({t,s,o:"ruim"}));
-  if(n===5) return NEUTROS.map(([t,s])=>({t,s,o:"neutro"}));
+/* =================== BLOCO 2 (V4) · MONTAR CADA RODADA =================== */
+/* as escolhas das Fases 1 e 2 (só entram do 6 ao 10): primeiro as que ela escolheu (do jogo que mais curtiu para o que menos curtiu),
+   depois as fotos que ela viu e não escolheu. O que já virou o centro de outro número vai para o fim (a régua não repete). */
+function rgDasFases(A){
   const g=(typeof f3Gostos==="function"?f3Gostos():SENT.map(s=>resp["gosto_"+s.id]||null));
   const esc1=SENT.map((s,i)=>({t:g[i],s:s.id,o:"f1",p:+(resp["curtiu_"+s.id]||0)})).filter(x=>x.t).sort((a,b)=>b.p-a.p);
   const nao=SENT.flatMap((s,i)=>s.o.filter(o=>o!==g[i]).map(o=>({t:o,s:s.id,o:"nao",p:0})));
-  /* o que já virou o centro de outro número vai para o fim (para a régua não repetir) */
   const usados=Object.values(RG.reg).map(r=>r&&r.base).filter(Boolean);
-  const ord=x=>usados.includes(x.t)?1:0;
-  let lista = esc1.concat(nao);
-  if(n<=8) lista = esc1.slice(Math.max(0,9-n)).concat(esc1.slice(0,Math.max(0,9-n)),nao); /* 9 e 8 e 7 e 6 começam por outras escolhas */
-  return lista.sort((a,b)=>ord(a)-ord(b));
-}
+  return esc1.concat(nao).filter(x=>!A.shown.includes(x.t)).sort((a,b)=>(usados.includes(a.t)?1:0)-(usados.includes(b.t)?1:0)); }
 function rgNovidade(A){ const usadas=(A&&A.shown)||[];
-  for(let k=0;k<NOVIDADES.length;k++){ const [t,s]=NOVIDADES[(RG.novIdx+k)%NOVIDADES.length]; if(!usadas.includes(t)){ RG.novIdx=(RG.novIdx+k+1)%NOVIDADES.length; return {t,s,o:"nov"}; } }
-  const [t,s]=NOVIDADES[RG.novIdx]; RG.novIdx=(RG.novIdx+1)%NOVIDADES.length; return {t,s,o:"nov"}; }
-function rgBase(A,qtd){ let l=rgDasFases(A.num).filter(x=>!A.shown.includes(x.t)); if(l.length<qtd){ A.shown=A.shown.filter(t=>NOVIDADES.some(nv=>nv[0]===t)); l=rgDasFases(A.num); } return l.slice(0,qtd); }
-const conhecido = A => DIM_ORDEM.filter(d=>A.dims[d]!=null).map(d=>DIMS[d].s[A.dims[d]]);
-const textoFoco = (A,extra) => [cap(A.foco.t)].concat(conhecido(A),extra?[extra]:[]).join(", ");
-function rgProximaDim(A){ const pul=A.dimsPuladas||[];
-  if(A.pref&&A.dims[A.pref]==null&&!pul.includes(A.pref)) return A.pref;
-  return DIM_ORDEM.find(d=>A.dims[d]==null&&!pul.includes(d)) || DIM_ORDEM.find(d=>A.dims[d]==null) || null; }
+  for(let k=0;k<NOVIDADES.length;k++){ const [t,s]=NOVIDADES[(RG.novIdx+k)%NOVIDADES.length]; if(!usadas.includes(t)){ RG.novIdx=(RG.novIdx+k+1)%NOVIDADES.length; return {t:cap(t),s,o:"nov"}; } }
+  const [t,s]=NOVIDADES[RG.novIdx]; RG.novIdx=(RG.novIdx+1)%NOVIDADES.length; return {t:cap(t),s,o:"nov"}; }
+/* REGRA E: do 5 para baixo, nunca oferecer algo que ela escolheu como bom nas Fases 1 e 2 (nem o que ela pôs do 6 ao 10) */
+function rgBoasDela(){ const g=(typeof f3Gostos==="function"?f3Gostos():[]).filter(Boolean);
+  const r=[6,7,8,9,10].map(n=>RG.reg[n]&&RG.reg[n].base).filter(Boolean); return new Set(g.concat(r).map(slug)); }
+/* ordem fixa por pessoa (a mesma pessoa vê sempre a mesma ordem naquele número; cada pessoa vê uma ordem) */
+function rgEmbaralha(lista,sal){ let h=2166136261; for(const ch of ((typeof PID!=="undefined"?PID:"x")+"|"+sal)){ h^=ch.charCodeAt(0); h=Math.imul(h,16777619); }
+  const rnd=()=>{ h+=0x6D2B79F5; let t=h; t=Math.imul(t^t>>>15,t|1); t^=t+Math.imul(t^t>>>7,t|61); return ((t^t>>>14)>>>0)/4294967296; };
+  const a=lista.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(rnd()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+/* degrau 1 */
+function rgOpcoesD1(A){ const n=A.num;
+  if(n===10){ const f=rgDasFases(A); if(f.length>=4) return f.slice(0,4).concat(rgNovidade(A)); }
+  const sets=B.degrau1[n]||[]; if(!sets.length) return [];
+  let it=sets[A.set%sets.length].map(x=>Object.assign({o:"banco"},x));
+  if(n<=5){ const boas=rgBoasDela(); it=it.filter(x=>!boas.has(slug(x.t))); }
+  return rgEmbaralha(it,"d1|"+n+"|"+A.set); }
+/* degrau 2: o porquê. "Nenhuma dessas" troca pelas frases do último degrau (outro jeito de dizer o mesmo motivo) */
+function rgOpcoesPorque(A){ const n=A.num, d2=B.degrau2[n]||{}, alt=A.porqueAlt||0;
+  const it=MOTS.map(m=>({t:alt?cap((B.ultimo[m]||[])[(alt-1)%((B.ultimo[m]||[]).length||1)]||""):d2[m],m,o:"porque"})).filter(x=>x.t);
+  return rgEmbaralha(it,"pq|"+n+"|"+alt); }
+/* desempate: os 2 motivos da frente */
+function rgOpcoesDuelo(A){ const n=A.num, [a,b]=ordemP(A.P), d2=B.degrau2[n]||{};
+  const fr=m=> A.duelos ? cap((B.ultimo[m]||[])[A.duelos%6]||d2[m]) : d2[m];
+  return rgEmbaralha([{t:fr(a),m:a,o:"duelo"},{t:fr(b),m:b,o:"duelo"}],"du|"+n+"|"+A.duelos); }
+/* último degrau: 4 da lista aprovada do motivo da frente (a inteligência do app, quando ligada, reordena esta lista) */
+function rgOpcoesUltimo(A,m){ const l=(B.ultimo[m]||[]).filter(t=>!A.shown.includes(cap(t)));
+  return (l.length>=4?l:(B.ultimo[m]||[])).slice(0,4).map(t=>({t:cap(t),m,o:"ultimo"})); }
 
-/* ---- PONTO DA IA (degrau 3 e "Escrever o meu") ----
-   SERVIDOR_IA: quando o servidor intermediário (Claude Haiku) estiver pronto, troque o corpo desta função por uma chamada a ele,
-   mandando {numero, nome do número, foco, o que já se sabe (dims), histórico das rodadas, textos escritos} e recebendo 4 opções curtas.
-   Enquanto isso, a prévia usa respostas preparadas montadas com o que a pessoa já respondeu. */
-const SERVIDOR_IA = "";   /* endereço do servidor (vazio = usar as respostas preparadas) */
-function rgPerguntaIA(A){
-  const d=rgProximaDim(A);
-  if(!d) return null;
-  return {dim:d, itens:DIMS[d].s.map(sf=>({t:textoFoco(A,sf),s:A.foco.s,o:"ia",dim:d,sf}))};
-}
-
-function rgMontaRodada(A){
-  const n=A.num, max=MAX_RODADAS(n);
-  if(n===0) return {tipo:"leve", itens:rgBase(A,5)};
-  /* a novidade (coisa boa nova) entra SÓ na 1ª rodada ("o mais e o menos") e só do 10 ao 6 */
-  if(!A.foco) return {tipo:"mm", itens: n>=6 ? rgBase(A,4).concat(rgNovidade(A)) : rgBase(A,5)};
-  if(A.duelo) return {tipo:"duelo", itens:A.duelo};
-  /* nas rodadas de "com quem / onde / quando / de que jeito" entram SÓ as respostas daquela pergunta */
-  if(A.cert>=CERTEZA(n) || A.rodadas>=max-1){ const ia=rgPerguntaIA(A); if(ia) return {tipo:"ia", ia:n>2, dim:ia.dim, itens:ia.itens}; }
-  const d=rgProximaDim(A); if(!d) return null;
-  return {tipo:"fundo", dim:d, itens:DIMS[d].s.map(sf=>({t:textoFoco(A,sf),s:A.foco.s,o:"var",dim:d,sf}))};
-}
-const PERGUNTA = (A,op,parte) => {
-  const n=A.num;
-  if(op.tipo==="mm") return parte==="menos" ? `Qual dessas você acha que se <b class="menos">distanciaria mais</b> do ${n}?` : `Destas, qual é <b>mais</b> o seu ${n}?`;
+function rgMontaRodada(A){ const n=A.num;
+  if(A.rodadas>=MAX_RODADAS(n)) return null;
+  if(n===0) return {tipo:"leve", itens:rgOpcoesD1(A)};
+  if(!A.foco){ const it=rgOpcoesD1(A); return it.length?{tipo:"mm",itens:it}:null; }
+  if(!A.porqueFeito) return {tipo:"porque",itens:rgOpcoesPorque(A)};
+  const [a]=ordemP(A.P), resta=MAX_RODADAS(n)-A.rodadas;
+  if(!A.ultimoFeito){
+    if(A.P[a]<CERTEZA(n) && resta>=(n<=5?1:2) && A.duelos<(n===10?2:1)) return {tipo:"duelo",itens:rgOpcoesDuelo(A)};
+    /* o último degrau só existe do 6 ao 10 (as listas aprovadas são de coisas boas); o 5 termina no porquê */
+    if(n>=6) return {tipo:"ultimo",m:a,itens:rgOpcoesUltimo(A,a)}; }
+  return (window.rgRodadaExtra && window.rgRodadaExtra(A)) || null; }   /* Bloco 7: confirmação "deslizar" */
+/* perguntas claras (V4): nunca mostrar textos de construção */
+const PERGUNTA = (A,op,parte) => { const n=A.num;
+  if(op.tipo==="mm") return parte==="menos" ? `E qual dessas você acha que se <b class="menos">distanciaria mais</b> do ${n}?` : `Qual dessas <b>mais combina</b> com o seu ${n}?`;
   if(op.tipo==="leve") return `Sem pressa: qual destas é o seu 0?`;
-  if(op.tipo==="duelo") return `Isto ou aquilo: qual é mais o seu ${n}?`;
-  if(op.tipo==="ia") return n===10 ? `Qual destas é o seu 10 perfeito?` : `Qual destas é bem o seu ${n}?`;
-  return DIMS[op.dim].q(n);
-};
-const DEGRAU = op => op.tipo==="mm"?"degrau 1 · o mais e o menos":op.tipo==="leve"?"rodada leve do 0 · sem IA":op.tipo==="duelo"?"desempate · isto ou aquilo":op.tipo==="ia"?(op.ia?"último degrau · pergunta da IA (preparada; servidor ainda não ligado)":"último degrau · banco de perguntas (sem IA do 0 ao 2)"):"degrau 2 · banco de perguntas";
+  if(op.tipo==="duelo") return `Entre essas duas, qual é <b>mais</b> o seu ${n}?`;
+  if(op.tipo==="deslizar") return `Onde isso fica na sua régua?`;
+  return `Qual dessas <b>mais combina</b> com o seu ${n}?`; };
+/* uma frase curta (até 12 palavras) dizendo o que fazer agora */
+const DICA = (A,op,parte) => op.tipo==="mm" ? (parte==="menos" ? "Agora toque na que ficaria mais longe." : "Toque na que mais combina.")
+  : op.tipo==="porque" ? "O que faz disso o seu "+A.num+"?"
+  : op.tipo==="duelo" ? "Só uma: a que pesa mais."
+  : op.tipo==="deslizar" ? "Arraste a bolinha ou toque num número."
+  : "Última pergunta deste número.";
 
-/* ---------- fotos (Bloco 3): foto real das Fases 1 e 2, ou foto do Canva (com espaço reservado enquanto não chega) ---------- */
+/* ---------- fotos: foto real das Fases 1 e 2, ou foto do Canva (com espaço reservado enquanto não chega) ---------- */
 const CANVA = (NO_SITE?"/app/":"")+"fotos-canva/";
 const slug = t => String(t).normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
 function rgArqFoto(x){ if(!x) return null;
   if((x.o==="f1"||x.o==="nao") && x.s){ const s=SENT.find(k=>k.id===x.s), j=s?s.o.indexOf(x.t):-1; if(j>=0) return {src:foto(s.id,j)}; }
   if(x.o==="eu") return null;
-  if(x.dim&&x.sf){ const arq="regua-"+x.dim+"-"+slug(x.sf)+".jpg"; return {src:CANVA+arq,arq}; }
-  const arq="regua-"+(x.o==="neutro"?"5-":"")+slug(x.t)+".jpg"; return {src:CANVA+arq,arq}; }
+  const arq = (x.o==="porque"||x.o==="duelo") ? "regua-motivo-"+x.m+".jpg" : x.o==="ultimo" ? "regua-ultimo-"+slug(x.t)+".jpg" : "regua-"+slug(x.t)+".jpg";
+  return {src:CANVA+arq,arq}; }
 function rgFotoHTML(src,arq,cls){ return `<span class="rg-ft ${cls||""}"><img src="${src}" alt="" ${arq?`onerror="rgSemFoto(this,'${arq}')"`:""}></span>`; }
-window.rgSemFoto = function(img,arq){ const p=img.parentNode; if(p) p.innerHTML=`<span class="rg-ph"><b>foto do Canva</b><code>${esc(arq)}</code></span>`; };
+window.rgSemFoto = function(img,arq){ const p=img.parentNode; if(p) p.innerHTML=`<span class="rg-ph"><b>foto a fazer no Canva</b><code>${esc(arq)}</code></span>`; };
 window.rgFotoHTML = rgFotoHTML; window.rgSlug = slug; window.RG_CANVA = CANVA;
-/* o cartão de cima: a escolha dela, com foto, e o que ela já disse nas rodadas anteriores */
-function rgCartaoFoco(A){ const f=rgArqFoto(A.foco), chips=conhecido(A);
-  return `<div class="rg-foco" style="--c:${corSent(A.foco.s)}">${f?rgFotoHTML(f.src,f.arq):""}<div><small>Você escolheu</small><b>${esc(cap(A.foco.t))}</b>${chips.length?`<span>${chips.map(esc).join(" · ")}</span>`:""}</div></div>`; }
+/* o cartão de cima: a escolha dela (com foto) e o porquê, quando já tem */
+function rgCartaoFoco(A){ const f=rgArqFoto(A.foco);
+  return `<div class="rg-foco">${f?rgFotoHTML(f.src,f.arq):`<span class="rg-ft rg-eu"><span>Você contou</span></span>`}<div><small>Você escolheu</small><b>${esc(cap(A.foco.t))}</b>${A.porque?`<span>${esc(cap(A.porque.t))}</span>`:""}</div></div>`; }
 
-/* Bloco 3: uma frase curta e didática em cada passo (o que fazer agora) */
-const DICA = (A,op,parte) => op.tipo==="mm" ? (parte==="menos" ? "Agora toque na que ficaria mais longe." : "Primeiro, toque na foto que é mais o seu "+A.num+".")
-  : op.tipo==="ia" ? "Última pergunta deste número. Escolha a que fecha melhor."
-  : op.tipo==="duelo" ? "Só uma: a que pesa mais."
-  : "Agora a gente vai mais fundo no que você escolheu.";
+/* formato de cada rodada (Bloco 7): nunca dois iguais seguidos */
+const FORMATOS = {mm:["fotos","lista"], porque:["lista","fotos"], duelo:["duelo"], ultimo:["fotos","lista"], leve:["lista","fotos"], deslizar:["deslizar"]};
+function rgFormato(tipo){ const c=FORMATOS[tipo]||["lista"]; return c.find(f=>f!==RG.ultFmt) || c[0]; }
 
 /* ---------- a tela da rodada ---------- */
 function rgRodada(){
   const A=RG.atual, n=A.num;
-  if(!A.op){ A.op=rgMontaRodada(A); if(!A.op){ rgEncerra(A); return rgTela(); } A.op.itens.forEach(x=>{ if(!A.shown.includes(x.t)) A.shown.push(x.t); }); A.sel={}; rgSalva(); }
-  const op=A.op, sel=A.sel||{};
+  if(!A.op){ A.op=rgMontaRodada(A); if(!A.op){ rgEncerra(A); rgSalva(); return rgTela(); }
+    A.op.fmt=rgFormato(A.op.tipo); A.op.itens.forEach(x=>{ if(!A.shown.includes(x.t)) A.shown.push(x.t); }); A.sel={}; rgSalva();
+    /* último degrau: a inteligência do app (se ligada) escolhe as 4 melhores dentro da lista aprovada */
+    if(A.op.tipo==="ultimo" && window.rgIA && rgIA.pode(A)){ return rgIA.ultimo(A).then(()=>rgRodada()); } }
+  const op=A.op, sel=A.sel||{}; RG.ultFmt=op.fmt;
   rgTopo(n+" · "+NOMES[n]);
   const parte = op.tipo==="mm"&&sel.mais!=null ? "menos" : "mais";
-  /* nas rodadas mais fundas, o que ela escolheu fica EM CIMA (cartão com foto) e as opções mostram só a parte nova */
-  const fundo = (op.tipo==="fundo"||op.tipo==="ia") && A.foco;
-  const rotulo = x => fundo && x.sf ? x.sf : x.t;
-  /* Bloco 3: do 10 ao 5, cada opção é uma FOTO grande com legenda curta (estilo Stories, duas lado a lado) */
+  const cima = op.tipo!=="mm" && op.tipo!=="leve" && A.foco;
   const card=(x,i)=>{ const c=sel.mais===i?" mais":sel.menos===i?" menos":sel.um===i?" sel":"";
-    const selo=sel.mais===i?`<span class="selo">MAIS</span>`:sel.menos===i?`<span class="selo">MENOS</span>`:"";
-    const f=rgArqFoto(x);
-    return `<button class="rg-op rg-opf${c}" type="button" style="--c:${corSent(x.s)}" onclick="rgToca(${i})">${selo}${f?rgFotoHTML(f.src,f.arq):`<span class="rg-ft rg-eu"><span>✎</span></span>`}<span class="rg-cap">${esc(cap(rotulo(x)))}</span>${x.o==="nov"?`<em>novidade</em>`:""}</button>`; };
+    const selo=sel.mais===i?`<span class="selo">MAIS</span>`:sel.menos===i?`<span class="selo">MAIS LONGE</span>`:"";
+    const f=rgArqFoto(x), ft=f?rgFotoHTML(f.src,f.arq):`<span class="rg-ft rg-eu"><span>Você contou</span></span>`;
+    if(op.fmt==="lista") return `<button class="rg-op rg-opl${c}" type="button" onclick="rgToca(${i})">${selo}${ft}<span class="rg-lt">${esc(cap(x.t))}</span></button>`;
+    return `<button class="rg-op rg-opf${c}" type="button" onclick="rgToca(${i})">${selo}${ft}<span class="rg-cap">${esc(cap(x.t))}</span></button>`; };
+  const corpo = op.fmt==="deslizar" && window.rgDeslizarHTML ? rgDeslizarHTML(A,op)
+    : `<div class="rg-ops ${op.fmt==="lista"?"lista":op.fmt==="duelo"?"fotos duelo":"fotos"}${op.fmt==="fotos"&&op.itens.length%2?" impar":""}">${op.itens.map(card).join("")}</div>`;
   mostra(`<div class="rg-tit pq">${n}<small>${NOMES[n]}</small></div>
-    ${PREVIA?`<span class="rg-deg">${DEGRAU(op)} · rodada ${A.rodadas+1}</span>`:""}
-    ${fundo?rgCartaoFoco(A):""}
+    ${cima?rgCartaoFoco(A):""}
     <h2 class="rg-q">${PERGUNTA(A,op,parte)}</h2>
     <p class="rg-dica">${DICA(A,op,parte)}</p>
-    <div class="rg-ops fotos${op.itens.length%2?" impar":""}">${op.itens.map(card).join("")}</div>
-    <div class="rg-tres">
+    ${corpo}
+    ${op.fmt==="deslizar"?"":`<div class="rg-tres">
       <button type="button" onclick="rgNenhuma()">Nenhuma dessas</button>
       <button type="button" onclick="rgMaisOuMenos()">Mais ou menos</button>
       ${RG.texto===false?"":`<button type="button" onclick="rgEscrever('rodada')">✎ Escrever o meu</button>`}
-    </div>
-    ${n===0?`<button class="rg-volta" type="button" onclick="rgPula0()">Pular o 0 (é opcional)</button><br>`:""}
-    <button class="rg-volta" type="button" onclick="rgVoltaRegua()">← voltar à escada</button>`);
+    </div>`}
+    ${n===0?`<button class="rg-volta" type="button" onclick="rgPula0()">Pular o 0 (é opcional)</button>`:""}`, c=>{ if(window.rgDepoisRodada) rgDepoisRodada(c,A,op); });
 }
 /* tocar numa opção */
 window.rgToca = function(i){ if(ocupado) return; const A=RG.atual, op=A.op, sel=A.sel||(A.sel={}); click(); vibra(10);
   if(op.tipo==="mm"){
     if(sel.mais===i){ delete sel.mais; delete sel.menos; rgSalva(); return rgRodada(); }
+    if(sel.menos===i){ delete sel.menos; rgSalva(); return rgRodada(); }
     if(sel.mais==null){ sel.mais=i; rgSalva(); return rgRodada(); }
-    sel.menos=i; rgSalva(); ocupado=true; return setTimeout(()=>{ ocupado=false; rgResponde(); },450);
+    sel.menos=i; rgSalva(); ocupado=true; if(window.rgReage) rgReage(op.itens[sel.mais]); return setTimeout(()=>{ ocupado=false; rgResponde(); },450);
   }
-  sel.um=i; rgSalva(); const bt=palco.querySelectorAll(".rg-op"); bt.forEach((b,k)=>b.classList.toggle("sel",k===i)); ocupado=true; setTimeout(()=>{ ocupado=false; rgResponde(); },450);
+  sel.um=i; rgSalva(); const bt=palco.querySelectorAll(".rg-op"); bt.forEach((b,k)=>b.classList.toggle("sel",k===i)); ocupado=true; if(window.rgReage) rgReage(op.itens[i]);
+  setTimeout(()=>{ ocupado=false; rgResponde(); },450);
 };
 /* a resposta muda o caminho */
 function rgResponde(){
+  if(window.rgAntes) rgAntes();
   const A=RG.atual, op=A.op, sel=A.sel, n=A.num; rgContaRodada(); A.rodadas++;
   if(op.tipo==="mm"){ const m=op.itens[sel.mais], me=op.itens[sel.menos];
-    A.hist.push({tipo:"mm",mais:m.t,menos:me.t}); A.menos=me.t; A.foco={t:m.t,s:m.s,o:m.o}; A.dims={};
-    A.cert = m.o==="f1"?.4 : m.o==="nao"?.3 : .2;  /* confirmou o que já tinha escolhido: vai mais fundo com mais certeza */
-  } else {
-    const x=op.itens[sel.um]; A.hist.push({tipo:op.tipo,escolha:x.t});
-    if(op.tipo==="leve"){ A.foco={t:x.t,s:x.s,o:x.o}; A.final=x.t; A.fim=true; }
-    else if(op.tipo==="duelo"){ if(x.o==="nov"||x.o==="eu"){ A.foco=x; A.dims={}; A.cert=.35; } else A.cert+=.2; A.duelo=null; A.mudou=null; }
-    else if(x.o==="nov"){ A.duelo=[{t:A.foco.t,s:A.foco.s,o:A.foco.o},x]; A.cert=.2; A.mudou=true; } /* escolheu outra coisa: o caminho muda (desempate) */
-    else { A.dims[x.dim]=DIMS[x.dim].s.indexOf(x.sf); A.cert+=.3+(A.foco.o==="f1"?.1:0); if(A.pref===x.dim) A.pref=null;
-      if(op.tipo==="ia"){ A.final=x.t; A.fim=true; } }
+    A.hist.push({tipo:"mm",mais:m.t,menos:me.t}); A.menos=me.t; A.foco={t:m.t,s:m.s,o:m.o,m:m.m||null,sit:m.sit||null};
+    puxa(A.P,m.m,1.6); puxa(A.P,me.m,.6);
+  } else { const x=op.itens[sel.um]; A.hist.push({tipo:op.tipo,escolha:x.t,m:x.m||null});
+    if(op.tipo==="leve"){ A.foco={t:x.t,s:x.s,o:x.o,m:x.m||null}; A.final=x.t; A.fim=true; }
+    else if(op.tipo==="porque"){ escolheMot(A.P,x.m); A.porque={t:x.t,m:x.m}; A.porqueFeito=true; }
+    else if(op.tipo==="duelo"){ const ot=op.itens.find(y=>y!==x); puxa(A.P,x.m,.7/.3); A.duelos++; if(ot) A.hist[A.hist.length-1].contra=ot.m; }
+    else if(op.tipo==="ultimo"){ puxa(A.P,x.m,1.3); A.ultimo=x.t; A.ultimoFeito=true; A.final=cap(A.foco.t)+" · "+minus(x.t); }
+    else if(op.tipo==="deslizar" && window.rgRespDeslizar) rgRespDeslizar(A,op);
   }
-  A.op=null; A.sel={}; A.dimsPuladas=[];
-  if(!A.fim && A.rodadas>=MAX_RODADAS(n)) rgEncerra(A);
+  A.op=null; A.sel={};
+  if(!A.fim && !rgMontaRodada(A)) rgEncerra(A);
   rgSalva(); rgTela();
 }
-function rgEncerra(A){ A.duelo=null; A.final = A.foco ? textoFoco(A) : (A.escritos[0]||""); A.fim=true; }
+function rgEncerra(A){ const [m]=ordemP(A.P); A.motivo=m; A.cert=+A.P[m].toFixed(2);
+  if(!A.final) A.final = A.foco ? cap(A.foco.t)+(A.porque?" · "+minus(A.porque.t):"") : "";
+  A.fim=true; }
 
 /* "Nenhuma dessas": 5 opções novas ou escrever a própria resposta */
 window.rgNenhuma = function(){ click();
   rgModal(`<h3>Nenhuma combina?</h3><p>Sem problema. O que você prefere?</p><div class="col">
-    <button class="btn" type="button" onclick="rgNovas()">Me mostra 5 opções novas</button>
-    ${RG.texto===false?"":`<button class="btn sec" type="button" onclick="rgFechaModal();rgEscrever('rodada')">Quero escrever a minha</button>`}
-    <button class="rg-volta" type="button" onclick="rgFechaModal()">voltar</button></div>`); };
-window.rgNovas = function(){ click(); rgFechaModal(); const A=RG.atual, op=A.op; A.pulos=(A.pulos||0)+1;
-  A.hist.push({tipo:"nenhuma",viu:op.itens.map(x=>x.t)});
-  if(op.dim){ (A.dimsPuladas=A.dimsPuladas||[]).push(op.dim); }
-  if(op.tipo==="duelo"){ A.duelo=null; }
+    <button class="btn" type="button" onclick="rgNovas()">Mostrar outras opções</button>
+    ${RG.texto===false?"":`<button class="btn sec" type="button" onclick="rgFechaModal();rgEscrever('rodada')">✎ Escrever a minha</button>`}
+    <button class="btn sec" type="button" onclick="rgFechaModal()">← Voltar</button></div>`); };
+window.rgNovas = function(){ click(); rgFechaModal(); if(window.rgAntes) rgAntes(); const A=RG.atual, op=A.op; A.pulos=(A.pulos||0)+1;
+  A.hist.push({tipo:"nenhuma",em:op.tipo,viu:op.itens.map(x=>x.t)});
+  if(op.tipo==="mm"||op.tipo==="leve") A.set=(A.set||0)+1;
+  else if(op.tipo==="porque") A.porqueAlt=(A.porqueAlt||0)+1;
+  else if(op.tipo==="duelo"){ op.itens.forEach(x=>puxa(A.P,x.m,.8)); A.duelos++; }
   A.op=null; rgSalva(); rgRodada(); };
 
-/* "Mais ou menos": o que faltou para ser um N? */
-window.rgMaisOuMenos = function(){ const A=RG.atual, op=A.op, sel=A.sel||{};
+/* "Mais ou menos": qual chegou perto? → "O que faltou para ser um N?" */
+window.rgMaisOuMenos = function(){ const A=RG.atual, op=A.op, sel=A.sel||{}; click();
   const i = op.tipo==="mm" ? sel.mais : sel.um;
-  if(i==null){ click(); rgAviso("Toque primeiro na opção que chegou perto."); return; }
-  click(); const x=op.itens[i];
+  if(i==null) return rgModal(`<h3>Qual delas chegou mais perto?</h3><div class="col">${op.itens.map((x,k)=>`<button class="btn sec" type="button" onclick="rgMMquase(${k})">${esc(cap(x.t))}</button>`).join("")}
+    <button class="btn sec" type="button" onclick="rgFechaModal()">← Voltar</button></div>`);
+  rgMMquase(i); };
+window.rgMMquase = function(i){ click(); const A=RG.atual, x=A.op.itens[i];
   rgModal(`<h3>O que faltou para ser um ${A.num}?</h3><p>“${esc(cap(x.t))}”</p><div class="col">
     ${FALTOU.map(([t],k)=>`<button class="btn sec" type="button" onclick="rgFaltou(${i},${k})">${t}</button>`).join("")}
-    <button class="rg-volta" type="button" onclick="rgFechaModal()">voltar</button></div>`); };
-window.rgFaltou = function(i,k){ click(); rgFechaModal(); const A=RG.atual, op=A.op, x=op.itens[i], [txt,dim]=FALTOU[k];
-  rgContaRodada(); A.rodadas++; A.hist.push({tipo:"maisoumenos",item:x.t,faltou:txt});
-  if(!A.foco || x.o==="nov" || op.tipo==="mm" || op.tipo==="leve" || op.tipo==="duelo"){ A.foco={t:x.dim?A.foco.t:x.t,s:x.s,o:x.o==="var"||x.o==="ia"?A.foco.o:x.o}; if(!x.dim) A.dims={}; A.cert=Math.max(A.cert,.25); }
-  A.cert+=.1; A.pref=dim; A.duelo=null; A.op=null; A.sel={};
+    <button class="btn sec" type="button" onclick="rgFechaModal()">← Voltar</button></div>`); };
+window.rgFaltou = function(i,k){ click(); rgFechaModal(); if(window.rgAntes) rgAntes(); const A=RG.atual, op=A.op, x=op.itens[i], [txt,dim]=FALTOU[k];
+  rgContaRodada(); A.rodadas++; A.hist.push({tipo:"maisoumenos",em:op.tipo,item:x.t,faltou:txt});
+  if(op.tipo==="mm"||op.tipo==="leve"){ A.foco={t:x.t,s:x.s,o:x.o,m:x.m||null,sit:x.sit||null}; puxa(A.P,x.m,1.25); }   /* conta pela metade */
+  else if(op.tipo==="porque"){ escolheMot(A.P,x.m,.5); A.porque={t:x.t,m:x.m}; A.porqueFeito=true; }
+  else if(op.tipo==="duelo"){ puxa(A.P,x.m,1.4); A.duelos++; }
+  else if(op.tipo==="ultimo"){ A.ultimo=x.t; A.ultimoFeito=true; A.final=cap(A.foco.t)+" · "+minus(x.t); }
+  puxa(A.P,dim,1.4); A.faltou=dim||"outra";
   if(A.num===0){ A.final=x.t; A.fim=true; }
-  else if(A.rodadas>=MAX_RODADAS(A.num)) rgEncerra(A);
+  A.op=null; A.sel={};
+  if(!A.fim && !rgMontaRodada(A)) rgEncerra(A);
   rgSalva();
   if(dim===null && RG.texto!==false && !A.fim) return rgEscrever("faltou");
   rgTela(); };
 
-/* "Escrever o meu": escrever ou falar. Antes da primeira vez, o aviso com "Aceito" e "Prefiro só escolher". */
+/* "Escrever o meu": escrever ou falar. O texto NUNCA fica guardado: o app tira dele só uma pista (motivo e sentido). */
+const PISTA_MOT = {soc:/amig|famil|filh|net[oa]|marido|espos|namor|m[ãa]e\b|pai\b|irm[ãa]|gente|junt|convers|abra[çc]|vizinh|turma|pessoa/i,
+  pau:/descans|paz|sossego|sil[êe]ncio|folga|relax|calm|sem pressa|dormir|cochil|ningu[ée]m|longe|respir/i,
+  sen:/cheir|sabor|gost(o|inho)|som\b|m[úu]sica|cor(es)?\b|vento|mar\b|sol\b|pele|toque|[áa]gua|vista|luz|perfume/i,
+  con:/comid|comer|presente|ganh|compr|dinheir|lanche|bolo|doce|roupa|pr[êe]mio/i,
+  jei:/escolh|meu jeito|minha hora|quando eu quero|livre|liberdade|decid|do meu modo|eu mesma/i};
+const PISTA_SENT = {visao:/\bver\b|olhar|cor|paisagem|vista|p[ôo]r do sol|c[ée]u/i,audicao:/ouvir|som|m[úu]sica|barulho|cant/i,tato:/toque|pele|abra[çc]|[áa]gua|carinho|areia/i,
+  olfato:/cheir|perfume|aroma/i,paladar:/comer|sabor|gost|comida|bolo|caf[ée]|doce/i,equilibrio:/dan[çc]|balan[çc]|bicicleta|rede|surf/i,corpo:/alongar|respir|corpo|caminh|correr|nadar/i};
+function rgPistaLocal(v){ const m=MOTS.filter(k=>PISTA_MOT[k].test(v)), s=Object.keys(PISTA_SENT).filter(k=>PISTA_SENT[k].test(v));
+  return {m:m.length===1?m[0]:m[0]||null, s:s[0]||null, de:"escrito", local:true}; }
 window.rgEscrever = function(onde){ click(); if(RG.texto===true) return rgCaixaTexto(onde);
-  rgModal(`<h3>Antes de escrever</h3><p>O que você escrever ou falar fica guardado só neste celular e ajuda o app a te conhecer melhor. Quando a inteligência do app estiver ligada, ela vai ler o seu texto para criar perguntas feitas só para você.</p>
+  rgModal(`<h3>Antes de escrever</h3><p>O que você escrever é lido pelo app para te entender melhor. Seu nome não vai junto.</p>
+    <p class="rg-seguro">O 7entidos nunca pede senha, dinheiro nem dados do banco.</p>
     <div class="col"><button class="btn" type="button" onclick="rgTextoSim('${onde}')">Aceito</button><button class="btn sec" type="button" onclick="rgTextoNao()">Prefiro só escolher</button></div>`); };
 window.rgTextoSim = function(onde){ click(); RG.texto=true; rgSalva(); rgCaixaTexto(onde); };
-window.rgTextoNao = function(){ click(); RG.texto=false; rgSalva(); rgFechaModal(); rgAviso("Combinado: só escolher."); if(RG.atual&&!RG.atual.fim) rgRodada(); else rgTela(); };
+window.rgTextoNao = function(){ click(); RG.texto=false; rgSalva(); rgFechaModal(); if(RG.atual&&!RG.atual.fim) rgRodada(); else rgTela(); };
 function rgCaixaTexto(onde){
   const A=RG.atual, n=A?A.num:10, pode=!!(window.SpeechRecognition||window.webkitSpeechRecognition);
-  const tit = onde==="momento" ? `Conte o seu momento real` : onde==="faltou" ? `O que faltou? Conte do seu jeito` : `Qual é o seu ${n}? Conte do seu jeito`;
-  rgModal(`<h3>${tit}</h3>${pode?`<button class="mic" id="rgmic" type="button" onclick="rgFala()">🎤 Falar</button>`:`<p style="font-size:15px;color:var(--azul)">Para falar, use o microfone do teclado do celular.</p>`}
-    <textarea id="rgtxt" maxlength="280" placeholder="Escreva aqui…"></textarea>
-    <div class="col" style="margin-top:12px"><button class="btn" type="button" onclick="rgSalvaTexto('${onde}')">Pronto</button><button class="rg-volta" type="button" onclick="rgFechaModal()">voltar</button></div>`);
+  const tit = onde==="momento" ? `Conte o seu momento` : onde==="faltou" ? `O que faltou? Conte do seu jeito` : `Qual é o seu ${n}? Conte do seu jeito`;
+  rgModal(`<h3>${tit}</h3>${pode?`<button class="mic" id="rgmic" type="button" onclick="rgFala()">🎤 Falar</button>`:`<p class="rg-nota">Para falar, toque no microfone do teclado.</p>`}
+    <textarea id="rgtxt" maxlength="280" placeholder="Escreva aqui…" aria-label="Escreva aqui"></textarea>
+    <p class="rg-seguro">O 7entidos nunca pede senha, dinheiro nem dados do banco.</p>
+    <div class="col" style="margin-top:12px"><button class="btn" type="button" onclick="rgSalvaTexto('${onde}')">Pronto</button><button class="btn sec" type="button" onclick="rgFechaModal()">← Voltar</button></div>`);
   setTimeout(()=>{ const t=document.getElementById("rgtxt"); if(t&&!pode) t.focus(); },60);
 }
 window.rgFala = function(){ const b=document.getElementById("rgmic"), t=document.getElementById("rgtxt"); if(!b||!t) return; click();
@@ -696,15 +720,22 @@ window.rgFala = function(){ const b=document.getElementById("rgmic"), t=document
     r.onerror=()=>{ rgAviso("Não deu para ouvir. Pode escrever?"); };
     window._rgRec=r; r.start(); b.classList.add("on"); b.textContent="● Ouvindo… toque para parar"; }catch(e){ rgAviso("Não deu para ouvir. Pode escrever?"); } };
 window.rgSalvaTexto = function(onde){ const t=document.getElementById("rgtxt"); const v=String(t&&t.value||"").replace(/\s+/g," ").trim().slice(0,280);
-  if(!v){ rgAviso("Escreva ou fale alguma coisa, ou toque em voltar."); return; } click(); rgFechaModal(); const A=RG.atual;
-  if(onde==="momento"){ A.momento={escrito:v}; A.momentoFeito=true; rgSalva(); return rgTela(); }
-  rgContaRodada(); A.rodadas++; A.escritos.push(v); A.hist.push({tipo:"escrito",texto:v,onde});
-  if(onde==="faltou"){ A.faltouTexto=v; }
-  else { A.foco={t:v,s:null,o:"eu"}; A.dims={}; A.duelo=null; A.cert=Math.max(A.cert,CERTEZA(A.num)); } /* depois de escrever, a próxima é a da IA */
-  A.op=null; A.sel={};
-  if(A.num===0||A.num<=2&&A.rodadas>=MAX_RODADAS(A.num)){ A.final=v; A.fim=true; }
-  else if(A.rodadas>=MAX_RODADAS(A.num)) rgEncerra(A);
-  rgSalva(); rgTela(); };
+  if(!v){ rgAviso("Escreva ou fale alguma coisa, ou toque em Voltar."); return; } click(); rgFechaModal(); if(window.rgAntes) rgAntes(); const A=RG.atual;
+  /* a pista sai do texto; o texto em si não é guardado em lugar nenhum */
+  const usa = p => {
+    if(onde==="momento"){ A.momento={pista:p}; A.momentoFeito=true; rgSalva(); return rgTela(); }
+    rgContaRodada(); A.rodadas++; A.pistas.push(Object.assign({onde,rodada:A.op?A.op.tipo:null},p)); A.hist.push({tipo:"escrito",onde,m:p.m,s:p.s});
+    const op=A.op;
+    if(onde==="faltou"){ puxa(A.P,p.m,1.4); }
+    else if(!A.foco || (op&&op.tipo==="mm") || (op&&op.tipo==="leve")){ A.foco={t:"o que você contou",s:p.s,o:"eu",m:p.m}; puxa(A.P,p.m,1.6); }
+    else if(op&&op.tipo==="porque"){ if(p.m) escolheMot(A.P,p.m); A.porque={t:"o que você contou",m:p.m}; A.porqueFeito=true; }
+    else { puxa(A.P,p.m,1.8); if(op&&op.tipo==="ultimo"){ A.ultimoFeito=true; A.final=cap(A.foco.t)+" · do jeito que você contou"; } else A.duelos++; }
+    A.op=null; A.sel={};
+    if(A.num===0){ A.final="o que você contou"; A.fim=true; }
+    else if(!A.fim && !rgMontaRodada(A)) rgEncerra(A);
+    rgSalva(); rgTela(); };
+  if(window.rgIA && rgIA.pode(A)) return rgIA.pista(v,A).then(p=>usa(p||rgPistaLocal(v)));
+  usa(rgPistaLocal(v)); };
 window.rgPula0 = function(){ click(); const A=RG.atual; A.pulou=true; A.final=null; A.fim=true; A.palavraFeita=true; rgSalva(); rgFechaNumero(); };
 
 /* =================== BLOCO C · FIM DE CADA NÚMERO =================== */
@@ -732,7 +763,8 @@ window.rgPalavraEsc = function(b,i){ if(ocupado) return; click(); vibra(10); con
 
 function rgFechaNumero(){ const A=RG.atual, n=A.num;
   RG.feitos[n]=rgHoje();
-  RG.reg[n]={base:A.foco?A.foco.t:null, final:A.final||null, dims:A.dims, menos:A.menos||null, palavra:A.palavra||null, momento:A.momento||null, escritos:A.escritos, hist:A.hist, rodadas:A.rodadas, pulou:!!A.pulou, quando:rgHoje()};
+  const om=ordemP(A.P||P0());
+  RG.reg[n]={base:A.foco?A.foco.t:null, sit:A.foco&&A.foco.sit||null, sentido:A.foco&&A.foco.s||null, porque:A.porque?A.porque.t:null, motivo:A.motivo||om[0], certeza:+((A.P||P0())[A.motivo||om[0]]).toFixed(2), P:Object.fromEntries(MOTS.map(m=>[m,+((A.P||P0())[m]).toFixed(3)])), final:A.final||null, menos:A.menos||null, palavra:A.palavra||null, momento:A.momento||null, pistas:A.pistas||[], hist:A.hist, rodadas:A.rodadas, pulou:!!A.pulou, quando:rgHoje()};
   RG.atual=null; RG.ultimo=n; rgSalva(); vibra([12,40,20]); somVitoria&&somVitoria(); rgAberto=n;
   rgTopo();
   mostra(`<div class="rot">Mais um número na sua régua</div>
@@ -758,7 +790,7 @@ const REFORCO = {
  1:"Você foi até o fim. Isso ajuda muito.",
  0:"Pronto. O mais difícil ficou para trás."
 };
-function rgReforco(n,A){ const t = A&&A.pulou ? "Tudo bem pular. A régua continua sua." : (A&&A.escritos&&A.escritos.length ? "Você contou do seu jeito, e isso vale muito. Seu "+n+" está guardado!" : REFORCO[n]);
+function rgReforco(n,A){ const t = A&&A.pulou ? "Tudo bem pular. A régua continua sua." : (A&&A.pistas&&A.pistas.length ? "Você contou do seu jeito, e isso vale muito. Seu "+n+" está guardado!" : REFORCO[n]);
   return `<div class="rg-reforco"><img src="${BRISA}" alt="Brisa"><p><small>Brisa</small>${esc(t)}</p></div>`; }
 
 /* =================== BLOCO D · BAÚ SURPRESA =================== */
