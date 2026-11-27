@@ -135,6 +135,9 @@ function rgNovo(){ return {v:1,col:{},feitos:{},atual:null,hoje:null,reg:{},dias
 function rgCarrega(){ if(RG) return RG; try{ RG=JSON.parse(localStorage.getItem(CHAVE)||"null"); }catch(e){} if(!RG||RG.v!==1) RG=rgNovo();
   const n=rgNovo(); for(const k in n) if(RG[k]==null) RG[k]=n[k];
   if(RG.atual && !RG.atual.P) RG.atual=novoA(RG.atual.num); /* veio de uma versão antiga: recomeça só aquele número */
+  /* V5 · Bloco 8: se ficou alguma frase antiga dentro da régua (pergunta curinga), ela vai para o lugar separado das frases */
+  try{ Object.values(RG.curinga||{}).forEach(c=>{ if(c&&c.texto&&window.FICHA){ c.frase=FICHA.frases.guarda(c.texto,{onde:"curinga",fase:3}); c.pecas=FICHA.pecasDe(c.texto); delete c.texto; } });
+    (RG.pistas||[]).forEach(p=>{ if(p&&p.texto){ if(window.FICHA) p.pecas=FICHA.pecasDe(p.texto); delete p.texto; } }); }catch(e){}
   rgFichaLogo();   /* V5 · Bloco 7: quem já tinha respostas da Fase 3 também ganha a ficha */
   return RG; }
 function rgSalva(){ try{ localStorage.setItem(CHAVE,JSON.stringify(RG)); }catch(e){} rgFichaLogo(); }
@@ -641,6 +644,7 @@ window.rgVoltaRegua = function(){ click(); rgEscolhe(); };
 
 /* =================== BLOCO 3 (V4) · A INTELIGÊNCIA DO APP, COM CUIDADO E PRIVACIDADE =================== */
 /* Claude Haiku, para todos, SÓ em dois lugares: o último degrau e o "Escrever o meu". Nunca nas etapas 0, 1 e 2.
+   V5 · Bloco 8 (27/11): no "Escrever o meu", a inteligência recebe só o resumo em peças, nunca a frase.
    Ela nunca escreve frases novas na tela: só ESCOLHE dentro das listas aprovadas (fase3-banco.js) ou devolve uma pista (motivo e sentido).
    A chave NUNCA fica no app: a chamada passa pelo servidor intermediário (Cloudflare, montado com o Gemini).
    Enquanto o servidor não estiver confirmado, fica DESLIGADA e o app usa o banco (o resultado é o mesmo jeito de perguntar).
@@ -675,8 +679,11 @@ const rgIA = {
         if(idx.length===4){ A.op.itens=idx.map(i=>({t:cap(lista[i]),m:op.m,o:"ultimo"})); A.op.ia=true; }
         A.op.iaFeita=true; rgSalva(); }); },
   /* "Escrever o meu": devolve só a pista (um dos 5 motivos e um dos 7 sentidos); o texto não volta e não fica guardado */
-  pista(texto,A){ rgPensando();
-    return this.chama({tarefa:"pista",etapa:A?A.num:null,texto:this.limpa(texto),motivos:MOTS,sentidos:SENT.map(s=>s.id)})
+  /* V5 · Bloco 8: para a inteligência vai SÓ o resumo em peças (quem, onde, quando, sentidos, motivo). A frase dela não sai do celular.
+     (O resumo vai no mesmo campo "texto" de antes, para o servidor continuar entendendo.) */
+  pista(texto,A){ rgPensando(); const pc=window.FICHA&&FICHA.pecasDe?FICHA.pecasDe(texto):{};
+    const resumo=window.FICHA&&FICHA.resumoEmPecas?FICHA.resumoEmPecas(pc):"";
+    return this.chama({tarefa:"pista",etapa:A?A.num:null,texto:resumo,pecas:pc,motivos:MOTS,sentidos:SENT.map(s=>s.id)})
       .then(j=>{ if(!j) return null; const m=MOTS.includes(j.motivo)?j.motivo:null, s=SENT.some(x=>x.id===j.sentido)?j.sentido:null;
         return (m||s)?{m,s,de:"escrito"}:null; }); }
 };
@@ -920,7 +927,7 @@ const PISTA_SENT = {visao:/\bver\b|olhar|cor|paisagem|vista|p[ôo]r do sol|c[ée
 function rgPistaLocal(v){ const m=MOTS.filter(k=>PISTA_MOT[k].test(v)), s=Object.keys(PISTA_SENT).filter(k=>PISTA_SENT[k].test(v));
   return {m:m.length===1?m[0]:m[0]||null, s:s[0]||null, de:"escrito", local:true}; }
 window.rgEscrever = function(onde){ click(); if(RG.texto===true) return rgCaixaTexto(onde);
-  rgModal(`<h3>Antes de escrever</h3><p>O que você escrever é lido pelo app para te entender melhor. Seu nome não vai junto.</p>
+  rgModal(`<h3>Antes de escrever</h3><p>O que você escrever ou falar fica guardado só no seu celular. Para o app, vai só um resumo, sem o seu nome. Você pode apagar quando quiser.</p>
     <p class="rg-seguro">O 7entidos nunca pede senha, dinheiro nem dados do banco.</p>
     <div class="col"><button class="btn" type="button" onclick="rgTextoSim('${onde}')">Aceito</button><button class="btn sec" type="button" onclick="rgTextoNao()">Prefiro só escolher</button></div>`); };
 window.rgTextoSim = function(onde){ click(); RG.texto=true; rgSalva(); rgCaixaTexto(onde); if(RG._falar){ RG._falar=false; setTimeout(()=>window.rgFala&&rgFala(),120); } };
@@ -943,9 +950,13 @@ window.rgFala = function(){ const b=document.getElementById("rgmic"), t=document
     window._rgRec=r; r.start(); b.classList.add("on"); b.textContent="● Ouvindo… toque para parar"; }catch(e){ rgAviso("Não deu para ouvir. Pode escrever?"); } };
 window.rgSalvaTexto = function(onde){ const t=document.getElementById("rgtxt"); const v=String(t&&t.value||"").replace(/\s+/g," ").trim().slice(0,280);
   if(!v){ rgAviso("Escreva ou fale alguma coisa, ou toque em Voltar."); return; } click(); rgFechaModal(); if(window.rgAntes) rgAntes(); const A=RG.atual;
-  /* a pista sai do texto; o texto em si não é guardado em lugar nenhum */
+  /* V5 · Bloco 8: a frase inteira fica SÓ no celular, num lugar separado (FICHA.frases). Na régua e na ficha fica só o resumo em peças. */
+  const frId = window.FICHA&&FICHA.frases ? FICHA.frases.guarda(v,{onde:onde==="momento"?"momento":"regua",fase:3,numero:A?A.num:null}) : null;
+  const pecas = window.FICHA&&FICHA.pecasDe ? FICHA.pecasDe(v) : null;
   const usa = p => {
-    if(onde==="momento"){ A.momento={pista:p}; A.momentoFeito=true; rgSalva(); return rgTela(); }
+    if(p&&pecas){ if(!p.s&&pecas.sentidos[0]) p.s=pecas.sentidos[0]; if(!p.m&&pecas.motivo) p.m=pecas.motivo; }
+    setTimeout(()=>rgAvisoFrase(frId),500);
+    if(onde==="momento"){ A.momento={pista:p,pecas,frase:frId}; A.momentoFeito=true; rgSalva(); return rgTela(); }
     rgContaRodada(); A.rodadas++; A.pistas.push(Object.assign({onde,rodada:A.op?A.op.tipo:null},p)); A.hist.push({tipo:"escrito",onde,m:p.m,s:p.s});
     const op=A.op;
     if(onde==="faltou"){ puxa(A.P,p.m,1.4); }
@@ -958,6 +969,13 @@ window.rgSalvaTexto = function(onde){ const t=document.getElementById("rgtxt"); 
     rgSalva(); rgTela(); };
   if(window.rgIA && rgIA.pode(A)) return rgIA.pista(v,A).then(p=>usa(p||rgPistaLocal(v)));
   usa(rgPistaLocal(v)); };
+/* V5 · Bloco 8: logo depois que ela escreve ou fala, o botão "Apagar" (a mensagem fica até ela tocar) */
+function rgAvisoFrase(id){ if(!id) return; document.querySelectorAll(".rg-aviso").forEach(x=>x.remove()); const d=document.createElement("div"); d.className="rg-aviso"; d.setAttribute("role","status");
+  d.innerHTML=`<p>Guardei só no seu celular.</p><div class="rg-conta"><button class="btn" type="button">Ok</button><button class="btn sec" type="button">Apagar o que escrevi</button></div>`;
+  const [ok,ap]=d.querySelectorAll("button"); ok.onclick=()=>{ click(); d.remove(); };
+  ap.onclick=()=>{ click(); if(window.FICHA) FICHA.frases.apaga(id); d.remove(); rgAviso("Pronto, apaguei."); };
+  document.body.appendChild(d); }
+window.rgAvisoFrase = rgAvisoFrase;
 window.rgPula0 = function(){ click(); const A=RG.atual; A.pulou=true; A.final=null; A.fim=true; A.palavraFeita=true; rgSalva(); rgFechaNumero(); };
 
 /* =================== BLOCO C · FIM DE CADA NÚMERO =================== */
@@ -1333,7 +1351,7 @@ window.f3Mapa3 = function(){ rgCarrega(); rgFechaModal(); entrou=true; pos=R.len
       ${TESTE?`<button class="linkflow" type="button" onclick="tiCompletaTeste();f3Mapa3()">Preencher o teste de imagens inteiro</button>`:""}</div>`:""}
     ${rgPreviaBotoes()}`); };
 window.rgCuringaResp = function(){ click(); if(RG.texto===true) return rgCaixaCuringa();
-  rgModal(`<h3>Antes de responder</h3><p>O que você escrever ou falar fica guardado só neste celular e ajuda o app a te conhecer melhor.</p>
+  rgModal(`<h3>Antes de responder</h3><p>O que você escrever ou falar fica guardado só no seu celular. Para o app, vai só um resumo, sem o seu nome.</p>
     <div class="col"><button class="btn" type="button" onclick="rgCuringaTexto(true)">Aceito</button><button class="btn sec" type="button" onclick="rgCuringaTexto(false)">Prefiro só escolher</button></div>`); };
 window.rgCuringaTexto = function(sim){ click(); RG.texto=!!sim; rgSalva(); if(sim) return rgCaixaCuringa(); rgFechaModal(); f3Mapa3(); };
 window.rgCaixaCuringa = function(){ const cur=rgCuringa(), pode=!!(window.SpeechRecognition||window.webkitSpeechRecognition);
@@ -1342,8 +1360,10 @@ window.rgCaixaCuringa = function(){ const cur=rgCuringa(), pode=!!(window.Speech
     <div class="col" style="margin-top:12px"><button class="btn" type="button" onclick="rgCuringaSalva()">Pronto</button><button class="rg-volta" type="button" onclick="rgFechaModal()">voltar</button></div>`); };
 window.rgCuringaSalva = function(){ const t=document.getElementById("rgtxt"), v=String(t&&t.value||"").replace(/\s+/g," ").trim().slice(0,280);
   if(!v) return rgAviso("Escreva ou fale alguma coisa, ou toque em voltar."); click(); const cur=rgCuringa();
-  RG.curinga[cur.d]={q:cur.q,texto:v,quando:rgHoje()}; (RG.pistas=RG.pistas||[]).push({tipo:"curinga",q:cur.q,texto:v,dia:rgHoje()}); rgSalva();
-  rgFechaModal(); rgAviso("Guardei. Isso vira uma pista para mim."); f3Mapa3(); };
+  /* V5 · Bloco 8: a frase fica só no celular (FICHA.frases); aqui fica só o resumo em peças */
+  const frId=window.FICHA?FICHA.frases.guarda(v,{onde:"curinga",fase:3}):null, pc=window.FICHA?FICHA.pecasDe(v):null;
+  RG.curinga[cur.d]={q:cur.q,frase:frId,pecas:pc,quando:rgHoje()}; (RG.pistas=RG.pistas||[]).push({tipo:"curinga",q:cur.q,pecas:pc,dia:rgHoje()}); rgSalva();
+  rgFechaModal(); f3Mapa3(); rgAvisoFrase(frId); };
 window.rgCuringaPula = function(){ click(); const cur=rgCuringa(); RG.curinga[cur.d]={q:cur.q,pulou:true}; rgSalva(); f3Mapa3(); };
 /* prévia: abrir o resumo do fim da Fase 1 ou da Fase 2 (com as respostas de exemplo, se não houver as dela) */
 window.rgVerResumo = function(f){ click(); rgExemploF1(); try{ localStorage.removeItem("7e_fase3_ativa"); }catch(e){}

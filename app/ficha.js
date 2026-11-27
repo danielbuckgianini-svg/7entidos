@@ -278,4 +278,75 @@ FICHA.migraFases12 = function(){ let r=null, pos=null;
 if(typeof window.salvaLocal==="function"){ const salvaLocal0=window.salvaLocal;
   window.salvaLocal=function(){ const r=salvaLocal0.apply(this,arguments); try{ if(!document.body.classList.contains("emf3")) FICHA.daFases12(resp,pos); }catch(e){} return r; }; }
 try{ FICHA.migraFases12(); if(typeof resp!=="undefined" && resp && Object.keys(resp).length) FICHA.daFases12(resp,pos); }catch(e){}
+
+/* =====================================================================
+   Bloco 8 · PRIVACIDADE
+   1. A frase inteira que ela escreve ou fala fica SÓ no celular dela, num lugar SEPARADO da ficha
+      (localStorage "7e_frases"). A Brisa pode relembrar essa frase. (Atualiza a regra antiga "não guarda o texto".)
+   2. Para a ficha, para o servidor e para a inteligência do app vai só o resumo em peças
+      (quem, onde, quando, sentidos, motivo). Nunca o nome, o e-mail ou o telefone.
+   3. Botão "Apagar" logo depois que ela escreve ou fala (fica no arquivo da Fase 3).
+   4. Tela "O que eu escrevi", aberta pela planta: apaga uma frase ou todas.
+   5. Cópia da ficha (sem nome) no servidor para quem faz login: PRONTA e DESLIGADA.
+   ===================================================================== */
+const CHAVE_FRASES = TESTE ? "7e_frases_teste" : "7e_frases";
+const frLe = () => { try{ const l=JSON.parse(localStorage.getItem(CHAVE_FRASES)||"[]"); return Array.isArray(l)?l:[]; }catch(e){ return []; } };
+const frGrava = l => { try{ localStorage.setItem(CHAVE_FRASES,JSON.stringify(l.slice(-200))); }catch(e){} };
+FICHA.frases = {
+  CHAVE: CHAVE_FRASES,
+  /* guarda a frase dela (só no celular) e devolve o número da frase */
+  guarda(texto,o){ o=o||{}; const t=String(texto||"").replace(/\s+/g," ").trim().slice(0,500); if(!t) return null;
+    const l=frLe(), id="fr"+Date.now().toString(36)+Math.floor(Math.random()*1e4).toString(36);
+    l.push({id, texto:t, onde:o.onde||null, fase:o.fase||null, numero:o.numero==null?null:o.numero, data:hoje()}); frGrava(l); return id; },
+  lista: () => frLe().slice().reverse(),
+  ultima: () => frLe().slice(-1)[0] || null,
+  apaga(id){ frGrava(frLe().filter(x=>x.id!==id)); },
+  apagaTudo(){ frGrava([]); }
+};
+/* o resumo em peças, em uma linha (é isto que vai para a inteligência do app, no lugar da frase) */
+FICHA.resumoEmPecas = function(pc){ pc=limpaPecas(pc);
+  return ["quem: "+(pc.quem||"-"), "onde: "+(pc.onde||"-"), "quando: "+(pc.quando||"-"), "sentidos: "+(pc.sentidos.join(", ")||"-"), "motivo: "+(pc.motivo||"-")].join("; "); };
+
+/* 4. a tela "O que eu escrevi" */
+window.fichaTelaFrases = function(){ try{ click(); }catch(e){}
+  const l=FICHA.frases.lista();
+  const brisaTxt = l.length ? "Aqui está o que você me contou. Fica só no seu celular, e você pode apagar quando quiser." : "Você ainda não escreveu nem falou nada para mim. Quando contar, fica guardado só aqui no seu celular.";
+  mostra(`<div class="rot">O que eu escrevi</div>
+    <div class="rg-reforco"><img src="${BRISA}" alt="Brisa"><p><small>Brisa</small>${esc(brisaTxt)}</p></div>
+    <div class="fr-lista">${l.map(x=>`<div class="fr-it"><p>“${esc(x.texto)}”</p><small>${esc(fraseOnde(x))}</small>
+      <button class="btn sec" type="button" onclick="fichaApagaFrase('${x.id}')">Apagar esta frase</button></div>`).join("")}</div>
+    ${l.length>1?`<div style="margin-top:14px"><button class="btn sec" type="button" onclick="fichaApagaTudo()">Apagar todas</button></div>`:""}
+    <div style="margin-top:14px"><button class="btn" type="button" onclick="fichaVoltaInicio()">← Voltar</button></div>
+    <p class="rg-seguro" style="margin-top:16px">O 7entidos nunca pede senha, dinheiro nem dados do banco.</p>`);
+  const vb=document.getElementById("voltar"); if(vb) vb.hidden=true; };
+function fraseOnde(x){ const d=x.data?x.data.split("-").reverse().join("/"):"";
+  const o = x.onde==="momento"?"Um momento real":x.onde==="curinga"?"Pergunta do dia":"Na sua régua"; return o+(x.numero!=null?" · "+x.numero:"")+(d?" · "+d:""); }
+window.fichaApagaFrase = function(id){ try{ click(); }catch(e){} FICHA.frases.apaga(id); if(typeof rgAviso==="function") rgAviso("Pronto, apaguei."); fichaTelaFrases(); };
+window.fichaApagaTudo = function(){ try{ click(); }catch(e){}
+  if(typeof rgModal!=="function"){ FICHA.frases.apagaTudo(); return fichaTelaFrases(); }
+  rgModal(`<h3>Apagar todas as frases?</h3><p>Elas saem do seu celular e não voltam.</p><div class="col">
+    <button class="btn" type="button" onclick="FICHA.frases.apagaTudo();rgFechaModal();rgAviso('Pronto, apaguei todas.');fichaTelaFrases()">Sim, apagar todas</button>
+    <button class="btn sec" type="button" onclick="rgFechaModal()">← Voltar</button></div>`); };
+/* volta para a tela inicial */
+window.fichaVoltaInicio = function(){ try{ click(); }catch(e){} try{ entrou=false; pos=0; }catch(e){}
+  try{ const s=JSON.parse(localStorage.getItem("7e_app_novo")||"null"); if(s&&s.resp&&s.r===R.length&&s.pos>0&&s.pos<R.length-2){ resp=s.resp; pos=s.pos; } }catch(e){}
+  let f3=false; try{ f3=localStorage.getItem("7e_fase3_ativa")==="1"; }catch(e){}
+  if((f3||pos>0) && typeof boasVindas==="function") return boasVindas();
+  desenha(); };
+const cssF=document.createElement("style"); cssF.textContent=`
+.fr-lista{display:flex;flex-direction:column;gap:12px;max-width:460px;margin:12px auto 0;text-align:left}
+.fr-it{padding:14px 16px;border-radius:20px;background:rgba(17,27,61,.85);border:1.5px solid rgba(245,197,66,.45)}
+.fr-it p{margin:0 0 6px;font-size:19px;line-height:1.45;color:#f4ecdc}
+.fr-it small{display:block;font-size:16px;color:#c9d0e8;margin-bottom:10px}
+.fr-it .btn{width:100%}`; document.head.appendChild(cssF);
+
+/* 5. cópia da ficha no servidor (sem nome): PRONTA e DESLIGADA.
+   Só liga quando existir login E a revisão de privacidade (LGPD) estiver feita. As frases dela NUNCA vão. */
+const NUVEM = { ligada:false, temLogin:false, lgpdRevisada:false, url:"" };
+FICHA.NUVEM = NUVEM;
+FICHA.copiaParaNuvem = function(){
+  if(!NUVEM.ligada || !NUVEM.temLogin || !NUVEM.lgpdRevisada || !NUVEM.url) return Promise.resolve({enviada:false, motivo:"desligada"});
+  const f=copia(carrege()); /* sem nome: a ficha nunca guarda o nome; sem frases: elas ficam em outro lugar */
+  return fetch(NUVEM.url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({ficha:f})}).then(r=>({enviada:r.ok})).catch(()=>({enviada:false})); };
+function carrege(){ return carrega(); }
 })();
