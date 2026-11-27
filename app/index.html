@@ -2238,6 +2238,8 @@ if(voltou) boasVindas(); else desenha();
 registraPassoApp("app_abriu", {campanha:resp.local_campanha??etiquetaApp});
 if(PREVIA && window.claude && claude.use){ claude.use("db").then(db=>{ if(!db) return; VDOC=db.doc("validacao/app-novo-b4"); return VDOC.get().then(sn=>{ const d=sn&&(sn.data?sn.data():sn); if(d&&d.itens&&!Object.keys(val).length){ d.itens.forEach(x=>{ if(x.situacao||x.escolha){ const k=x.escolha?FRASES_AB.indexOf(x.escolha):-1; val[x.id]={s:x.situacao||undefined,o:x.revisar||undefined,e:k>=0?k:undefined}; if(k>=0){ try{ localStorage.setItem("7e_frase_abertura",String(k)); }catch(e){} } } }); if(!entrou&&pos===0) desenha(); } }); }).catch(()=>{}); }
 </script>
+<!-- 27/11 · V5: a ficha única (o "guarda-chuva"), por trás de todas as fases. Só roda na prévia. -->
+<script>document.write('<script src="'+(NO_SITE?"/app/":"")+'ficha.js?v=1"><\/script>')</script>
 <!-- 26/11 · Fase 3 nova: a régua pessoal (arquivo separado; só abre onde a Fase 3 está aberta, hoje só na prévia) -->
 <script>document.write('<script src="'+(NO_SITE?"/app/":"")+'fase3-banco.js?v=1"><\/script>')</script>
 <script>document.write('<script src="'+(NO_SITE?"/app/":"")+'fase3-regua.js?v=13"><\/script>')</script>
