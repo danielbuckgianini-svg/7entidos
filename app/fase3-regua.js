@@ -19,6 +19,17 @@ if(typeof F3_ABERTA==="undefined") return;
    Nunca liga no app de verdade (precisa estar na prévia). */
 const TESTE = !!(PREVIA && (/[?&#]teste/i.test(location.search+location.hash) || window.F3_TESTE));
 const CHAVE = TESTE ? "7e_regua_teste" : "7e_regua";
+/* 27/11 · CHAVE ÚNICA DAS TRAVAS POR DIA. Enquanto construímos fica false (tudo liberado, para testar seguido).
+   No lançamento, mude para true: liga de uma vez o limite de 5 rodadas por dia, a régua em blocos (um dia de cada vez)
+   e uma mecânica por dia (régua e teste de imagens em dias alternados). */
+const TRAVAS_LIGADAS = false;
+window.TRAVAS_LIGADAS = TRAVAS_LIGADAS;
+const LIVRE = TESTE || !TRAVAS_LIGADAS;
+/* do 4 ao 0: trancados ("em construção") até chegar o banco de situações ruins da Sala do Péssimo */
+const EM_CONSTRUCAO = [4,3,2,1,0];
+const BANCO_RUIM = [];   /* aqui entram as situações ruins (4 ao 0) quando chegarem */
+/* com as travas desligadas, as perguntas dos motivos (Mecânica 2) também ficam sem o limite de 5 por dia */
+if(!TRAVAS_LIGADAS && typeof f3Liberado==="function") window.f3Liberado = function(){ return true; };
 /* respostas de exemplo das Fases 1 e 2 (só no modo teste, só se a pessoa não tiver as suas) */
 const EXEMPLO_F1 = {visao:"Pôr do sol na praia", audicao:"Som do mar", tato:"Abraço apertado", paladar:"Café passado na hora", olfato:"Cheiro de café", equilibrio:"Balançar numa rede", corpo:"Alongar"};
 const EXEMPLO_F2 = {visao:3, olfato:3, tato:3, audicao:2, paladar:2, equilibrio:2, corpo:1};
@@ -47,6 +58,17 @@ const NOMES = {10:"Êxtase",9:"Excelente",8:"Muito bom",7:"Bom",6:"Legal",5:"Tan
 const ORDEM = [10,1,9,8,7,6,5,4,3,2,0];
 const BLOCOS = [[10,1],[9,8,7],[6,5,4],[3,2,0]];
 const LIMITE_DIA = 5;
+/* os números que já dá para fazer (do 10 ao 5); do 4 ao 0 ficam "em construção" */
+const JOGAVEIS = ORDEM.filter(n=>!EM_CONSTRUCAO.includes(n));
+/* REGRA DO NÍVEL: do 10 ao 6 só coisas boas (Fases 1 e 2 + novidades boas); o 5 é neutro (este banco);
+   do 4 ao 0 só o banco de situações ruins (BANCO_RUIM), que ainda vai chegar.
+   BANCO DO 5 · PROVISÓRIO, para o Daniel validar: coisas do dia a dia que não são boas nem ruins. */
+const NEUTROS = [
+ ["esperar o elevador chegar","visao"],["lavar a louça do almoço","tato"],["ouvir o barulho da geladeira","audicao"],
+ ["pegar o ônibus de sempre","equilibrio"],["arrumar a cama de manhã","corpo"],["um dia nublado, sem chuva","visao"],
+ ["tomar um copo d'água","paladar"],["cheiro de sabão em pó","olfato"],["esperar na fila do mercado","corpo"],
+ ["dobrar as roupas do varal","tato"]
+];
 
 /* "Coloque na régua": 7 situações iguais para todo mundo, uma por sentido (dia 1, antes do 10). */
 const COLOQUE = [
@@ -115,8 +137,10 @@ function rgContaRodada(){ const h=rgHoje(); if(!RG.hoje||RG.hoje.d!==h) RG.hoje=
 const rgFeitos = () => ORDEM.filter(n=>RG.feitos[n]!=null);
 const rgColFeito = () => COLOQUE.every(c=>RG.col[c.sid]!=null);
 /* um bloco abre quando todos os números dos blocos anteriores estão fechados (no modo teste, tudo aberto) */
-function rgBlocoAberto(){ for(let b=0;b<BLOCOS.length;b++){ if(BLOCOS[b].some(n=>RG.feitos[n]==null)) return b; } return BLOCOS.length; }
-function rgAbertos(){ return TESTE ? ORDEM.slice() : (BLOCOS[rgBlocoAberto()]||[]); }
+/* (os números "em construção" não contam para abrir o bloco seguinte) */
+function rgBlocoAberto(){ for(let b=0;b<BLOCOS.length;b++){ if(BLOCOS[b].some(n=>JOGAVEIS.includes(n)&&RG.feitos[n]==null)) return b; } return BLOCOS.length; }
+function rgAbertos(){ return LIVRE ? JOGAVEIS.slice() : (BLOCOS[rgBlocoAberto()]||[]).filter(n=>JOGAVEIS.includes(n)); }
+const rgReguaPronta = () => JOGAVEIS.every(n=>RG.feitos[n]!=null);
 const corSent = sid => (SENT.find(s=>s.id===sid)||{}).cor || "#f5c542";
 const cap = t => t ? t.charAt(0).toUpperCase()+t.slice(1) : t;
 const minus = t => t ? t.charAt(0).toLowerCase()+t.slice(1) : t;
@@ -207,6 +231,17 @@ const css=document.createElement("style"); css.textContent=`
 .rg-aviso{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:70;max-width:min(420px,90vw);padding:12px 18px;border-radius:16px;background:#111b3d;border:1px solid rgba(245,197,66,.55);font-size:16px;text-align:center;box-shadow:0 14px 40px rgba(0,0,0,.6);animation:guiaSobe .4s ease-out}
 .rg-previa{margin-top:22px;padding-top:14px;border-top:1px dashed rgba(169,179,209,.35);display:flex;flex-direction:column;gap:6px;align-items:center}
 .rg-previa .linkflow::before{content:"⚙"}
+/* 27/11 · cartão de cima (a escolha dela) e fotos */
+.rg-foco{display:flex;gap:14px;align-items:center;text-align:left;margin:10px 0 4px;padding:10px;border-radius:20px;background:rgba(17,27,61,.8);border:1.5px solid color-mix(in srgb,var(--c,#f5c542) 60%,transparent)}
+.rg-foco .rg-ft{width:96px;height:96px;flex:none;border-radius:14px}
+.rg-foco small{display:block;font:700 12px "Space Mono",monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--azul)}
+.rg-foco b{display:block;font-size:21px;line-height:1.25;margin:2px 0}
+.rg-foco span{display:block;font-size:16px;color:#fff3c4}
+.rg-ft{display:block;position:relative;overflow:hidden;background:rgba(5,9,26,.6)}
+.rg-ft img{display:block;width:100%;height:100%;object-fit:cover}
+.rg-ph{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;width:100%;height:100%;padding:8px;box-sizing:border-box;background:repeating-linear-gradient(45deg,rgba(169,179,209,.10) 0 10px,rgba(169,179,209,.05) 10px 20px);border:1.5px dashed rgba(169,179,209,.45);border-radius:inherit;text-align:center}
+.rg-ph b{font:700 13px "Space Mono",monospace;color:var(--azul);text-transform:uppercase;letter-spacing:.05em}
+.rg-ph code{font:400 11px "Space Mono",monospace;color:#cdd5f0;word-break:break-all;line-height:1.3}
 /* modo teste */
 #rgteste{position:fixed;right:10px;top:calc(8px + env(safe-area-inset-top));z-index:55;font:700 12px "Space Mono",monospace;color:#0a1128;background:#7fd3ff;border-radius:8px;padding:3px 8px;pointer-events:none;opacity:.92}
 #rgbarra{position:fixed;left:50%;transform:translateX(-50%);flex-wrap:wrap;justify-content:center;width:max-content;max-width:94vw;bottom:calc(10px + env(safe-area-inset-bottom));z-index:55;display:flex;gap:8px}
@@ -259,7 +294,7 @@ window.rgAvancaDia = function(){ click(); rgCarrega(); rgFechaModal(); if(!RG.pr
 /* 27/11: pula direto para o fim (régua inteira preenchida), para ver o que vem depois */
 window.rgCompletaTeste = function(){ click&&click(); rgFechaModal(); rgCarrega(); RG.intro=true; if(!RG.primeiroDia) RG.primeiroDia=rgHoje();
   COLOQUE.forEach((c,i)=>{ if(RG.col[c.sid]==null) RG.col[c.sid]=[9,2,10,8,4,1,7][i%7]; }); RG.colFeito=RG.colFeito||rgHoje();
-  ORDEM.forEach(n=>{ if(RG.feitos[n]==null) RG.feitos[n]=rgHoje(); }); RG.atual=null; rgSalva(); entrou=true; pos=R.length-1; rgTela(); };
+  JOGAVEIS.forEach(n=>{ if(RG.feitos[n]==null) RG.feitos[n]=rgHoje(); }); RG.atual=null; rgSalva(); entrou=true; pos=R.length-1; rgTela(); };
 window.rgRecomecaTeste = function(){ click(); rgFechaModal(); try{ localStorage.removeItem(CHAVE); }catch(e){} RG=null; rgCarrega(); rgSalva(); rgExemploF1(); entrou=true; pos=R.length-1; window.trava3(); };
 
 /* =================== BLOCO E · ABERTURA (fim da Fase 2) =================== */
@@ -294,8 +329,8 @@ window.rgTela = rgTela;
 function rgTela(nova){
   rgCarrega(); rgFechaModal();
   if(!rgColFeito()) return rgColoque();                        /* antes do 10, no primeiro dia */
-  if(rgFeitos().length===ORDEM.length) return rgFimFase();
-  const limite = !TESTE && rgHojeN()>=LIMITE_DIA;
+  if(rgReguaPronta() && !RG.atual) return rgFimFase();
+  const limite = !LIVRE && rgHojeN()>=LIMITE_DIA;
   if(!limite && rgPrecisaCoerencia() && !(RG.atual&&RG.atual.fim)) return rgCoerencia();
   /* no começo de cada dia, a pessoa passa pela entrada (foguinho, número do dia); o número em andamento fica marcado */
   const novoDia = RG.entrada!==rgHoje();
@@ -349,7 +384,7 @@ function rgEscolhe(nova,depoisColoque){
   rgTopo(); RG.entrada=rgHoje(); rgSalva(); const abertos=rgAbertos(), b=rgBlocoAberto(), g=rgFogo();
   const botao=n=>{ const ok=RG.feitos[n]!=null, tr=!abertos.includes(n)&&!ok, anda=RG.atual&&RG.atual.num===n;
     return `<button class="rg-num${ok?" ok":""}${tr?" tranca":""}${anda?" anda":""}" type="button" ${ok||tr?"disabled":`onclick="rgVai(${n})"`} aria-label="${n} ${NOMES[n]}${ok?", pronto":tr?", ainda fechado":""}"><b>${n}</b><span>${ok?"✓ ":tr?"🔒 ":""}${NOMES[n]}${n===0&&!ok?" · opcional":""}</span></button>`; };
-  const mostrar = TESTE ? ORDEM : abertos;
+  const mostrar = LIVRE ? ORDEM : abertos;
   const pendentes=abertos.filter(n=>RG.feitos[n]==null);
   let nota="";
   if(g.hojeFolga) nota=FOLGA_TXT; else if(g.ontemFolga&&!RG.dias[rgHoje()]) nota="Ontem foi seu dia de folga. Seu foguinho ficou guardado.";
@@ -359,10 +394,10 @@ function rgEscolhe(nova,depoisColoque){
     ${nota?`<p class="rg-nota">${esc(nota)}</p>`:""}
     <h2>${depoisColoque?"Pronto! Agora, o seu 10.":pendentes.length>1?"Hoje quero fazer o meu…":"O número de hoje"}</h2>
     <div class="rg-nums">${mostrar.map(botao).join("")}</div>
-    ${!TESTE&&b<BLOCOS.length-1?`<p class="rg-bloco">Depois: ${BLOCOS.slice(b+1).map(x=>x.join(" · ")).join("  →  ")}</p>`:""}
+    ${!LIVRE&&b<BLOCOS.length-1?`<p class="rg-bloco">Depois: ${BLOCOS.slice(b+1).map(x=>x.join(" · ")).join("  →  ")}</p>`:""}
     ${rgPreviaBotoes()}</div>`);
 }
-window.rgVai = function(n){ if(ocupado) return; click(); vibra(12);
+window.rgVai = function(n){ if(ocupado) return; if(EM_CONSTRUCAO.includes(n)) return rgAviso("Do 4 ao 0 ainda está em construção."); click(); vibra(12);
   if(!RG.atual||RG.atual.num!==n) RG.atual={num:n,rodadas:0,cert:0,dims:{},hist:[],shown:[],escritos:[],pulos:0};
   rgSalva(); rgTela(); };
 window.rgVoltaRegua = function(){ click(); rgEscolhe(); };
@@ -370,15 +405,19 @@ window.rgVoltaRegua = function(){ click(); rgEscolhe(); };
 /* =================== BLOCO B · MONTAR CADA RODADA =================== */
 /* as escolhas das Fases 1 e 2, em ordem: primeiro o que a pessoa escolheu (do jogo que mais curtiu para o que menos curtiu),
    depois as fotos que ela viu e não escolheu. Para os números de baixo, as não escolhidas vêm primeiro. */
+/* 27/11 · REGRA DO NÍVEL: as fotos das Fases 1 e 2 (escolhidas OU não) são todas coisas boas,
+   então só entram do 10 ao 6. O 5 usa o banco neutro; do 4 ao 0, só o banco de situações ruins (ainda vai chegar). */
 function rgDasFases(n){
+  if(n<=4) return BANCO_RUIM.map(([t,s])=>({t,s,o:"ruim"}));
+  if(n===5) return NEUTROS.map(([t,s])=>({t,s,o:"neutro"}));
   const g=(typeof f3Gostos==="function"?f3Gostos():SENT.map(s=>resp["gosto_"+s.id]||null));
   const esc1=SENT.map((s,i)=>({t:g[i],s:s.id,o:"f1",p:+(resp["curtiu_"+s.id]||0)})).filter(x=>x.t).sort((a,b)=>b.p-a.p);
   const nao=SENT.flatMap((s,i)=>s.o.filter(o=>o!==g[i]).map(o=>({t:o,s:s.id,o:"nao",p:0})));
   /* o que já virou o centro de outro número vai para o fim (para a régua não repetir) */
   const usados=Object.values(RG.reg).map(r=>r&&r.base).filter(Boolean);
   const ord=x=>usados.includes(x.t)?1:0;
-  let lista = n>=6 ? esc1.concat(nao) : nao.concat(esc1.slice().reverse());
-  if(n>=6&&n<=8) lista = esc1.slice(Math.max(0,9-n)).concat(esc1.slice(0,Math.max(0,9-n)),nao); /* 9 e 8 e 7 e 6 começam por outras escolhas */
+  let lista = esc1.concat(nao);
+  if(n<=8) lista = esc1.slice(Math.max(0,9-n)).concat(esc1.slice(0,Math.max(0,9-n)),nao); /* 9 e 8 e 7 e 6 começam por outras escolhas */
   return lista.sort((a,b)=>ord(a)-ord(b));
 }
 function rgNovidade(A){ const usadas=(A&&A.shown)||[];
@@ -404,22 +443,39 @@ function rgPerguntaIA(A){
 
 function rgMontaRodada(A){
   const n=A.num, max=MAX_RODADAS(n);
-  if(n===0) return {tipo:"leve", itens:rgBase(A,4).concat(rgNovidade(A))};
-  if(!A.foco) return {tipo:"mm", itens:rgBase(A,4).concat(rgNovidade(A))};
+  if(n===0) return {tipo:"leve", itens:rgBase(A,5)};
+  /* a novidade (coisa boa nova) entra SÓ na 1ª rodada ("o mais e o menos") e só do 10 ao 6 */
+  if(!A.foco) return {tipo:"mm", itens: n>=6 ? rgBase(A,4).concat(rgNovidade(A)) : rgBase(A,5)};
   if(A.duelo) return {tipo:"duelo", itens:A.duelo};
-  if(A.cert>=CERTEZA(n) || A.rodadas>=max-1){ const ia=rgPerguntaIA(A); if(ia) return {tipo:"ia", ia:n>2, dim:ia.dim, itens:ia.itens.concat(rgNovidade(A))}; }
+  /* nas rodadas de "com quem / onde / quando / de que jeito" entram SÓ as respostas daquela pergunta */
+  if(A.cert>=CERTEZA(n) || A.rodadas>=max-1){ const ia=rgPerguntaIA(A); if(ia) return {tipo:"ia", ia:n>2, dim:ia.dim, itens:ia.itens}; }
   const d=rgProximaDim(A); if(!d) return null;
-  return {tipo:"fundo", dim:d, itens:DIMS[d].s.map(sf=>({t:textoFoco(A,sf),s:A.foco.s,o:"var",dim:d,sf})).concat(rgNovidade(A))};
+  return {tipo:"fundo", dim:d, itens:DIMS[d].s.map(sf=>({t:textoFoco(A,sf),s:A.foco.s,o:"var",dim:d,sf}))};
 }
 const PERGUNTA = (A,op,parte) => {
   const n=A.num;
-  if(op.tipo==="mm") return parte==="menos" ? `E qual destas é <b class="menos">menos</b> o seu ${n}?` : `Destas, qual é <b>mais</b> o seu ${n}?`;
+  if(op.tipo==="mm") return parte==="menos" ? `Qual dessas você acha que se <b class="menos">distanciaria mais</b> do ${n}?` : `Destas, qual é <b>mais</b> o seu ${n}?`;
   if(op.tipo==="leve") return `Sem pressa: qual destas é o seu 0?`;
   if(op.tipo==="duelo") return `Isto ou aquilo: qual é mais o seu ${n}?`;
   if(op.tipo==="ia") return n===10 ? `Qual destas é o seu 10 perfeito?` : `Qual destas é bem o seu ${n}?`;
   return DIMS[op.dim].q(n);
 };
 const DEGRAU = op => op.tipo==="mm"?"degrau 1 · o mais e o menos":op.tipo==="leve"?"rodada leve do 0 · sem IA":op.tipo==="duelo"?"desempate · isto ou aquilo":op.tipo==="ia"?(op.ia?"último degrau · pergunta da IA (preparada; servidor ainda não ligado)":"último degrau · banco de perguntas (sem IA do 0 ao 2)"):"degrau 2 · banco de perguntas";
+
+/* ---------- fotos (Bloco 3): foto real das Fases 1 e 2, ou foto do Canva (com espaço reservado enquanto não chega) ---------- */
+const CANVA = (NO_SITE?"/app/":"")+"fotos-canva/";
+const slug = t => String(t).normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+function rgArqFoto(x){ if(!x) return null;
+  if((x.o==="f1"||x.o==="nao") && x.s){ const s=SENT.find(k=>k.id===x.s), j=s?s.o.indexOf(x.t):-1; if(j>=0) return {src:foto(s.id,j)}; }
+  if(x.o==="eu") return null;
+  if(x.dim&&x.sf){ const arq="regua-"+x.dim+"-"+slug(x.sf)+".jpg"; return {src:CANVA+arq,arq}; }
+  const arq="regua-"+(x.o==="neutro"?"5-":"")+slug(x.t)+".jpg"; return {src:CANVA+arq,arq}; }
+function rgFotoHTML(src,arq,cls){ return `<span class="rg-ft ${cls||""}"><img src="${src}" alt="" ${arq?`onerror="rgSemFoto(this,'${arq}')"`:""}></span>`; }
+window.rgSemFoto = function(img,arq){ const p=img.parentNode; if(p) p.innerHTML=`<span class="rg-ph"><b>foto do Canva</b><code>${esc(arq)}</code></span>`; };
+window.rgFotoHTML = rgFotoHTML; window.rgSlug = slug; window.RG_CANVA = CANVA;
+/* o cartão de cima: a escolha dela, com foto, e o que ela já disse nas rodadas anteriores */
+function rgCartaoFoco(A){ const f=rgArqFoto(A.foco), chips=conhecido(A);
+  return `<div class="rg-foco" style="--c:${corSent(A.foco.s)}">${f?rgFotoHTML(f.src,f.arq):""}<div><small>Você escolheu</small><b>${esc(cap(A.foco.t))}</b>${chips.length?`<span>${chips.map(esc).join(" · ")}</span>`:""}</div></div>`; }
 
 /* ---------- a tela da rodada ---------- */
 function rgRodada(){
@@ -428,11 +484,15 @@ function rgRodada(){
   const op=A.op, sel=A.sel||{};
   rgTopo(n+" · "+NOMES[n]);
   const parte = op.tipo==="mm"&&sel.mais!=null ? "menos" : "mais";
+  /* nas rodadas mais fundas, o que ela escolheu fica EM CIMA (cartão com foto) e as opções mostram só a parte nova */
+  const fundo = (op.tipo==="fundo"||op.tipo==="ia") && A.foco;
+  const rotulo = x => fundo && x.sf ? x.sf : x.t;
   const card=(x,i)=>{ const c=sel.mais===i?" mais":sel.menos===i?" menos":sel.um===i?" sel":"";
     const selo=sel.mais===i?`<span class="selo">MAIS</span>`:sel.menos===i?`<span class="selo">MENOS</span>`:"";
-    return `<button class="rg-op${c}" type="button" style="--c:${corSent(x.s)}" onclick="rgToca(${i})">${selo}<span>${esc(cap(x.t))}</span>${x.o==="nov"?`<em>novidade</em>`:""}</button>`; };
+    return `<button class="rg-op${c}" type="button" style="--c:${corSent(x.s)}" onclick="rgToca(${i})">${selo}<span>${esc(cap(rotulo(x)))}</span>${x.o==="nov"?`<em>novidade</em>`:""}</button>`; };
   mostra(`<div class="rg-tit pq">${n}<small>${NOMES[n]}</small></div>
     ${PREVIA?`<span class="rg-deg">${DEGRAU(op)} · rodada ${A.rodadas+1}</span>`:""}
+    ${fundo?rgCartaoFoco(A):""}
     <h2 class="rg-q">${PERGUNTA(A,op,parte)}</h2>
     <div class="rg-ops${op.tipo==="duelo"?" duelo":""}">${op.itens.map(card).join("")}</div>
     <div class="rg-tres">
@@ -566,7 +626,7 @@ function rgFechaNumero(){ const A=RG.atual, n=A.num;
   mostra(`<div class="rot">Mais um número na sua régua</div>
     ${rgMandala(true)}${rgEstrela(true)}${rgBarra()}
     <div class="rg-tit" style="font-size:44px;margin-top:8px">${n}<small>${NOMES[n]}</small></div>
-    <h2 style="margin-top:14px">${rgFeitos().length===ORDEM.length?"Você completou a sua régua.":A.pulou?"Tudo bem pular o 0.":"Seu "+n+" está na régua."}</h2>
+    <h2 style="margin-top:14px">${rgReguaPronta()?"Você completou a sua régua (do 10 ao 5).":A.pulou?"Tudo bem pular o 0.":"Seu "+n+" está na régua."}</h2>
     <div id="rgbauarea"><button class="rg-bau" type="button" onclick="rgAbreBau(this)"><span>🎁</span>Abrir o baú surpresa</button></div>
     <div style="margin-top:12px"><button class="btn" type="button" onclick="click();rgTela()">Seguir</button></div>`); }
 
