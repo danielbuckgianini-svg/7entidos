@@ -120,7 +120,8 @@ function anotaComum(gaveta,fase,o){ if(gaveta!=="naos"&&gaveta!=="correcoes") re
 
 /* ---------- marcos (qual fase ela já terminou) ---------- */
 function marcaFase(fase){ const f=carrega(); if(!f.marcos["f"+fase]){ f.marcos["f"+fase]=hoje(); salva(); } }
-function fasesFeitas(){ const f=carrega(); let k=0; for(let n=1;n<=7;n++){ if(f.marcos["f"+n]) k=n; else break; } return k; }
+/* as fases vêm em ordem: quem terminou a Fase 3 já passou pela 1 e pela 2 */
+function fasesFeitas(){ const f=carrega(); let k=0; for(let n=1;n<=7;n++){ if(f.marcos["f"+n]) k=n; } return k; }
 
 window.FICHA = {
   VERSAO, CHAVE, GAVETAS, DA_FASE, TESTE,
@@ -349,4 +350,47 @@ FICHA.copiaParaNuvem = function(){
   const f=copia(carrege()); /* sem nome: a ficha nunca guarda o nome; sem frases: elas ficam em outro lugar */
   return fetch(NUVEM.url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({ficha:f})}).then(r=>({enviada:r.ok})).catch(()=>({enviada:false})); };
 function carrege(){ return carrega(); }
+
+/* =====================================================================
+   Bloco 9 · RECOMEÇAR, CONTINUAR APRENDENDO E RESUMO DO FIM DA FASE
+   1. Recomeçar uma fase: na tela ela vê a fase zerada; por trás, as respostas antigas ficam na ficha como pista FRACA.
+      (Continua valendo: 1 vez por semana no grátis, até 5 no pago — com as travas desligadas por enquanto.)
+   2. Depois da Fase 5 a ficha continua aprendendo: sugestão aceita volta como pista; recusada vai para Os "nãos".
+   3. O resumo do fim de cada fase (vídeo da Brisa + 3 destaques) mostra SÓ o que ela escolheu, tirado da ficha, sem interpretar.
+   4. Junto do resumo, uma frase curta: é uma primeira visão, ainda em construção.
+   5. O resumo nunca mostra força das pistas, gavetas ou qualquer coisa da ficha.
+   ===================================================================== */
+FICHA.recomeca = function(fase){ const g=DA_FASE[fase]; if(!g) return 0; const f=carrega(), t=Date.now().toString(36); let k=0;
+  f.gavetas[g].forEach(p=>{ if(p.recomecou) return; p.forca="fraca"; p.recomecou=hoje(); p.id=p.id+"~r"+t; k++; });
+  salva(); return k; };   /* a planta e os marcos NÃO voltam: ela nunca murcha */
+FICHA.depoisDaFase5 = {
+  aceitou(sug){ sug=sug||{}; return escreve(5,{id:sug.id?"f5:aceita:"+sug.id:undefined, tipo:"sugestao-aceita", item:sug.item||sug.rotulo, rotulo:sug.rotulo, pecas:sug.pecas}); },
+  recusou(sug){ sug=sug||{}; return FICHA.nao(5,{tipo:"sugestao-recusada", itens:[sug.item||sug.rotulo], rotulos:[sug.rotulo||""], pecas:sug.pecas}); } };
+
+/* 3. os destaques de cada fase, tirados da ficha (só o que ela escolheu) */
+FICHA.destaques = function(fase){ const L=(le(fase)[DA_FASE[fase]]||[]).filter(p=>!p.recomecou);   /* só o que ela escolheu agora (sem olhar a força) */
+  if(fase===1) return SENT.map(s=>{ const p=L.find(x=>x.id==="f1:gosto:"+s.id); const j=p?s.o.indexOf(p.rotulo):-1; return j<0?null:{t:s.o[j],img:foto(s.id,j)}; }).filter(Boolean).slice(0,3);
+  if(fase===2){ const g=FICHA.destaques(1).length?(le(2).gostos||[]):[];
+    return SENT.map((s,i)=>{ const p=L.find(x=>x.id==="f2:jogo:"+s.id); return {s,i,v:p&&p.extra&&p.extra.curtiu?+p.extra.curtiu:0}; }).filter(x=>x.v>0).sort((a,b)=>b.v-a.v||a.i-b.i).slice(0,3)
+      .map(x=>{ const gp=g.find(y=>y.id==="f1:gosto:"+x.s.id), j=gp?x.s.o.indexOf(gp.rotulo):-1; return {t:x.s.jogo, img:j>=0?foto(x.s.id,j):""}; }); }
+  if(fase===3) return L.filter(p=>p.tipo==="regua"&&p.rotulo&&p.extra&&p.extra.numero>=5).sort((a,b)=>b.extra.numero-a.extra.numero).slice(0,3)
+      .map(p=>{ const s=SENT.find(x=>(p.pecas.sentidos||[])[0]===x.id), j=s?s.o.indexOf(p.rotulo):-1; return {t:p.extra.numero+" · "+p.rotulo, img:j>=0?foto(s.id,j):""}; });
+  return []; };
+/* 4. a frase da "primeira visão" */
+FICHA.FRASE_PRIMEIRA_VISAO = "Esta é uma primeira visão, ainda em construção. Quanto mais você preencher, mais o app vai te surpreender.";
+/* nas Fases 1 e 2 a frase fica PRONTA e DESLIGADA: as telas das Fases 1 e 2 não podem mudar sem o Daniel dizer (ver relatório) */
+FICHA.PRIMEIRA_VISAO_NAS_FASES_1_E_2 = false;
+FICHA.htmlPrimeiraVisao = () => `<p class="rsm-visao">${esc(FICHA.FRASE_PRIMEIRA_VISAO)}</p>`;
+const cssV=document.createElement("style"); cssV.textContent=`.rsm-visao{font-size:18px;line-height:1.45;color:#fff3c4;margin:10px auto 4px;max-width:30em;padding:10px 14px;border-radius:16px;border:1.5px dashed rgba(245,197,66,.55);background:rgba(17,27,61,.6)}`; document.head.appendChild(cssV);
+
+/* as telas do fim das Fases 1 e 2 passam a pegar os destaques da ficha (o que aparece é exatamente o mesmo) */
+if(typeof window.destFase1==="function"){ const d10=window.destFase1;
+  window.destFase1=function(){ try{ FICHA.daFases12(resp,pos); const d=FICHA.destaques(1); if(d.length) return d; }catch(e){} return d10(); }; }
+if(typeof window.destFase2==="function"){ const d20=window.destFase2;
+  window.destFase2=function(){ try{ FICHA.daFases12(resp,pos); const d=FICHA.destaques(2); if(d.length) return d; }catch(e){} return d20(); }; }
+if(FICHA.PRIMEIRA_VISAO_NAS_FASES_1_E_2 && typeof window.resumoBrisa==="function"){ const rb0=window.resumoBrisa;
+  window.resumoBrisa=function(fase){ const h=rb0.apply(this,arguments); return fase<=2 ? h+FICHA.htmlPrimeiraVisao() : h; }; }
+/* 1. recomeçar as Fases 1 e 2 ("Fazer de novo" / "Prefiro começar do zero"): por trás, o antigo vira fraco */
+if(typeof window.recomecar==="function"){ const rc0=window.recomecar;
+  window.recomecar=function(){ try{ FICHA.recomeca(1); FICHA.recomeca(2); }catch(e){} return rc0.apply(this,arguments); }; }
 })();

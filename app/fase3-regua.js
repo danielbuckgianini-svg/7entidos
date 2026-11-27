@@ -528,7 +528,7 @@ window.rgAvancaDia = function(){ click(); rgCarrega(); rgFechaModal(); if(!RG.pr
 window.rgCompletaTeste = function(){ click&&click(); rgFechaModal(); rgCarrega(); RG.intro=true; if(!RG.primeiroDia) RG.primeiroDia=rgHoje();
   COLOQUE.forEach((c,i)=>{ if(RG.col[c.sid]==null) RG.col[c.sid]=[9,2,10,8,4,1,7][i%7]; }); RG.colFeito=RG.colFeito||rgHoje();
   JOGAVEIS.forEach(n=>{ if(RG.feitos[n]==null) RG.feitos[n]=rgHoje(); }); RG.atual=null; rgSalva(); entrou=true; pos=R.length-1; rgTela(); };
-window.rgRecomecaTeste = function(){ click(); rgFechaModal(); try{ localStorage.removeItem(CHAVE); localStorage.removeItem("7e_fase3"); }catch(e){} RG=null;
+window.rgRecomecaTeste = function(){ click(); rgFechaModal(); if(window.FICHA) FICHA.recomeca(3); /* V5 · Bloco 9: na tela fica zerada; na ficha, o antigo vira pista fraca */ try{ localStorage.removeItem(CHAVE); localStorage.removeItem("7e_fase3"); }catch(e){} RG=null;
   try{ F3=null; }catch(e){} if(typeof tiZera==="function") tiZera(); rgCarrega(); rgSalva(); rgExemploF1(); entrou=true; pos=R.length-1; window.trava3(); };
 
 /* =================== BLOCO E · ABERTURA (fim da Fase 2) =================== */
@@ -1373,9 +1373,14 @@ window.rgVerResumo = function(f){ click(); rgExemploF1(); try{ localStorage.remo
 /* ---------- FIM DA FASE 3 (V4): tela NEUTRA. Nada de palpites, "Suas pistas" ou "Cérebro da Brisa". ----------
    O tipo do teste de imagens continua aqui (decisão do Daniel em 27/11: manter o teste junto com a régua). */
 window.rgFimFase3 = function(){ rgTopo("régua montada"); const temTipo=typeof tiResultadoHTML==="function" && tiResultadoHTML();
-  RG.fase3Fim=RG.fase3Fim||rgHoje(); rgSalva();
-  mostra(`${rgPlantaHTML()}<div class="rot">Fase 3 · A sua régua</div>${rgEstrela(true)}
-    <h2>Sua régua está montada.</h2><p class="sub">Na próxima fase, você confere o que eu percebi.</p>
+  RG.fase3Fim=RG.fase3Fim||rgHoje(); rgSalva(); rgParaFicha();
+  /* V5 · Bloco 9: o resumo do fim da fase (Brisa + 3 destaques) mostra SÓ o que ela escolheu, tirado da ficha, sem interpretar,
+     com a frase da "primeira visão". Nada de força das pistas ou gavetas. */
+  const dest = window.FICHA&&FICHA.destaques ? FICHA.destaques(3) : [];
+  const resumo = typeof resumoBrisa==="function" ? resumoBrisa(3,dest,"Você escolheu")+(window.FICHA?FICHA.htmlPrimeiraVisao():"") : "";
+  mostra(`${rgPlantaHTML()}<div class="rot">Fase 3 · A sua régua</div>${resumo}${rgEstrela(true)}
+    <h2>Sua régua está montada.</h2>${resumo?"":`<p class="sub">Na próxima fase, você confere o que eu percebi.</p>`}
+    ${window.plantaFestaHTML?plantaFestaHTML(3):""}
     ${temTipo?`<h2 class="rg-h3">O seu tipo no teste de imagens</h2>${temTipo}<div class="ti-com"><button class="btn" type="button" onclick="tiCompartilha()">Compartilhar o meu tipo</button></div>`:""}
     <div class="porta3" style="margin-top:22px"><div class="pt-cena"><div class="pt-luz" aria-hidden="true"></div><img class="pt-img" src="${NO_SITE?"/app/":""}porta-fase3.webp" alt="Uma porta mágica trancada, com luz dourada escapando pela fresta" width="720" height="892"></div>
       <div class="pt-rot">Fase 4 · em breve</div></div>
@@ -1394,13 +1399,13 @@ function rgRecomecosNaSemana(){ const w=semanaDe(rgHoje()); return (RG.recomecos
 window.rgPodeAvancarDia = () => rgPago();
 window.rgPodeRecomecar = () => PLANO.ligado && rgRecomecosNaSemana() < (rgPago()?5:1);
 window.rgAvancaDiaPago = function(){ if(!rgPodeAvancarDia()) return; click(); rgCarrega(); RG.desloc=(RG.desloc||0)+1; RG.hoje=null; rgSalva(); rgTela(); };
-window.rgRecomecaFase = function(){ if(!window.rgPodeRecomecar()) return; click(); const rec=(RG.recomecos||[]).concat(rgHoje()), d=RG.desloc||0;
+window.rgRecomecaFase = function(){ if(!window.rgPodeRecomecar()) return; click(); if(window.FICHA) FICHA.recomeca(3); /* V5 · Bloco 9: na tela fica zerada; na ficha, o antigo vira pista fraca */ const rec=(RG.recomecos||[]).concat(rgHoje()), d=RG.desloc||0;
   RG=rgNovo(); RG.recomecos=rec; RG.desloc=d; RG.intro=true; RG.primeiroDia=rgHoje(); rgSalva(); try{ F3=null; localStorage.removeItem("7e_fase3"); }catch(e){} rgTela(); };
 
 /* ---------- botões só da prévia (sem modo teste) ---------- */
 window.rgPulaEspera = function(){ click(); RG.hoje=null; rgSalva(); rgTela(); };
 window.rgRefazColoque = function(){ click(); RG.col={}; delete RG.colFeito; rgSalva(); rgTela(); };
-window.rgZera = function(){ click(); RG=rgNovo(); rgSalva(); entrou=true; pos=R.length-1; desenha(); };
+window.rgZera = function(){ click(); if(window.FICHA) FICHA.recomeca(3); /* V5 · Bloco 9: na tela fica zerada; na ficha, o antigo vira pista fraca */ RG=rgNovo(); rgSalva(); entrou=true; pos=R.length-1; desenha(); };
 
 /* =================== BLOCO A · LINK DIRETO =================== */
 /* No modo teste, o app abre direto na Fase 3 (sem passar pelas Fases 1 e 2), com as respostas de exemplo. */
