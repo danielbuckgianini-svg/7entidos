@@ -280,6 +280,14 @@ const css=document.createElement("style"); css.textContent=`
 .rg-opf.menos{box-shadow:0 0 0 3px #7fd3ff;opacity:.85}
 .rg-opf.sel{box-shadow:0 0 0 3px var(--ouro),0 0 22px rgba(245,197,66,.45)}
 .rg-eu{display:grid;place-items:center;font-size:16px;font-weight:800;color:var(--ouro);text-align:center;padding:6px}
+/* V4 · Bloco 4: momento real */
+.rg-seu{font-size:19px;color:#fff3c4;margin:12px 0 4px}
+.rg-conta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:6px 0 4px}
+.rg-conta .btn{flex:1 1 140px;max-width:220px}
+.rg-ajuda{font-size:18px;color:var(--creme);margin:16px 0 8px}
+.rg-sugs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.rg-sugs button{all:unset;cursor:pointer;min-height:56px;box-sizing:border-box;padding:10px 16px;border-radius:999px;border:1.5px solid rgba(220,226,245,.45);font-size:18px;font-weight:700;color:var(--creme);display:inline-flex;align-items:center}
+.rg-agoranao{min-width:220px}
 /* V4 · formato "escolher 1 de 5" em lista (com foto pequena) */
 .rg-ops.lista{grid-template-columns:1fr!important;gap:10px}
 .rg-opl{padding:8px 14px 8px 8px!important;gap:14px;min-height:76px}
@@ -745,7 +753,7 @@ window.rgEscrever = function(onde){ click(); if(RG.texto===true) return rgCaixaT
   rgModal(`<h3>Antes de escrever</h3><p>O que você escrever é lido pelo app para te entender melhor. Seu nome não vai junto.</p>
     <p class="rg-seguro">O 7entidos nunca pede senha, dinheiro nem dados do banco.</p>
     <div class="col"><button class="btn" type="button" onclick="rgTextoSim('${onde}')">Aceito</button><button class="btn sec" type="button" onclick="rgTextoNao()">Prefiro só escolher</button></div>`); };
-window.rgTextoSim = function(onde){ click(); RG.texto=true; rgSalva(); rgCaixaTexto(onde); };
+window.rgTextoSim = function(onde){ click(); RG.texto=true; rgSalva(); rgCaixaTexto(onde); if(RG._falar){ RG._falar=false; setTimeout(()=>window.rgFala&&rgFala(),120); } };
 window.rgTextoNao = function(){ click(); RG.texto=false; rgSalva(); rgFechaModal(); if(RG.atual&&!RG.atual.fim) rgRodada(); else rgTela(); };
 function rgCaixaTexto(onde){
   const A=RG.atual, n=A?A.num:10, pode=!!(window.SpeechRecognition||window.webkitSpeechRecognition);
@@ -789,14 +797,22 @@ function rgFimEtapa(){ const A=RG.atual, n=A.num;
   if(n>=6 && !A.momentoFeito) return rgMomento();
   if(!A.palavraFeita) return rgPalavra();
   rgFechaNumero(); }
+/* Bloco 4 (V4): o principal é CONTAR (escrever ou falar); as sugestões são só uma ajuda. "Agora não" grande e visível. */
 function rgMomento(){ const A=RG.atual, n=A.num; rgTopo(n+" · "+NOMES[n]);
+  const pode = RG.texto!==false;
   mostra(`<div class="rg-tit pq">${n}<small>${NOMES[n]}</small></div>
-    <p class="sub" style="margin:12px 0 4px">Seu ${n}: “${esc(A.final||"")}”</p>
-    <h2 class="rg-q">Você lembra de um momento real assim?</h2><p class="sub" style="margin-top:-6px">É opcional.</p>
-    <div class="rg-ops">${MOMENTO_SUG.map((t,i)=>`<button class="rg-op" type="button" onclick="rgMomentoSug(${i})"><span>${t}</span></button>`).join("")}</div>
-    <div class="rg-tres">${RG.texto===false?"":`<button type="button" onclick="rgEscrever('momento')">✎ Escrever ou falar</button>`}<button type="button" onclick="rgMomentoPula()">Agora não</button></div>`); }
-window.rgMomentoSug = function(i){ click(); vibra(10); const A=RG.atual; A.momento={sugestao:MOMENTO_SUG[i]}; A.momentoFeito=true; rgSalva(); rgTela(); };
-window.rgMomentoPula = function(){ click(); const A=RG.atual; A.momentoFeito=true; rgSalva(); rgTela(); };
+    <p class="rg-seu">Seu ${n}: “${esc(A.final||"")}”</p>
+    <h2 class="rg-q">Você lembra de um momento real assim?</h2>
+    <p class="rg-dica">Conte para a gente do seu jeito.</p>
+    <div class="rg-conta">${pode?`<button class="btn" type="button" onclick="rgMomentoConta(false)">✎ Escrever</button><button class="btn" type="button" onclick="rgMomentoConta(true)">🎤 Falar</button>`
+      :`<button class="btn" type="button" onclick="rgMomentoConta(false)">Quero contar</button>`}</div>
+    <p class="rg-ajuda">Se quiser uma ajuda, toque numa ideia:</p>
+    <div class="rg-sugs">${MOMENTO_SUG.map((t,i)=>`<button type="button" onclick="rgMomentoSug(${i})">${t}</button>`).join("")}</div>
+    <div style="margin-top:16px"><button class="btn sec rg-agoranao" type="button" onclick="rgMomentoPula()">Agora não</button></div>`); }
+window.rgMomentoConta = function(falar){ click(); if(RG.texto!==true){ RG._falar=falar; return rgEscrever("momento"); }
+  rgCaixaTexto("momento"); if(falar) setTimeout(()=>window.rgFala&&rgFala(),120); };
+window.rgMomentoSug = function(i){ click(); vibra(10); if(window.rgAntes) rgAntes(); const A=RG.atual; A.momento={sugestao:MOMENTO_SUG[i]}; A.momentoFeito=true; rgSalva(); rgTela(); };
+window.rgMomentoPula = function(){ click(); if(window.rgAntes) rgAntes(); const A=RG.atual; A.momentoFeito=true; rgSalva(); rgTela(); };
 function rgPalavra(){ const A=RG.atual, n=A.num, k=corNum(n); rgTopo(n+" · "+NOMES[n]);
   mostra(`<div class="rg-tit pq">${n}<small>${NOMES[n]}</small></div>
     <h2 class="rg-q">Quando algo é o seu ${n}, você fica…</h2>
