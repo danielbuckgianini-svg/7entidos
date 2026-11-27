@@ -660,7 +660,9 @@ function rgDasFases(A){
   const usados=Object.values(RG.reg).map(r=>r&&r.base).filter(Boolean);
   return esc1.concat(nao).filter(x=>!A.shown.includes(x.t)).sort((a,b)=>(usados.includes(a.t)?1:0)-(usados.includes(b.t)?1:0)); }
 function rgNovidade(A){ const usadas=(A&&A.shown)||[];
-  for(let k=0;k<NOVIDADES.length;k++){ const [t,s]=NOVIDADES[(RG.novIdx+k)%NOVIDADES.length]; if(!usadas.includes(t)){ RG.novIdx=(RG.novIdx+k+1)%NOVIDADES.length; return {t:cap(t),s,o:"nov"}; } }
+  /* V5 · Bloco 5: um "não" nunca vira sugestão: novidade que ela já recusou não volta */
+  const recusou = t => !!(window.FICHA && FICHA.podeSugerir && !FICHA.podeSugerir(t));
+  for(let k=0;k<NOVIDADES.length;k++){ const [t,s]=NOVIDADES[(RG.novIdx+k)%NOVIDADES.length]; if(!usadas.includes(t)&&!usadas.includes(cap(t))&&!recusou(t)){ RG.novIdx=(RG.novIdx+k+1)%NOVIDADES.length; return {t:cap(t),s,o:"nov"}; } }
   const [t,s]=NOVIDADES[RG.novIdx]; RG.novIdx=(RG.novIdx+1)%NOVIDADES.length; return {t:cap(t),s,o:"nov"}; }
 /* REGRA E: do 5 para baixo, nunca oferecer algo que ela escolheu como bom nas Fases 1 e 2 (nem o que ela pôs do 6 ao 10) */
 function rgBoasDela(){ const g=(typeof f3Gostos==="function"?f3Gostos():[]).filter(Boolean);
@@ -675,7 +677,11 @@ function rgOpcoesD1(A){ const n=A.num;
   if(n<=4 && BANCO_RUIM[n]&&BANCO_RUIM[n].length){ const l=BANCO_RUIM[n], grupos=[]; for(let i=0;i<l.length;i+=5) grupos.push(l.slice(i,i+5));
     if(grupos.length>1 && grupos[grupos.length-1].length<5) grupos[grupos.length-1]=grupos[grupos.length-1].concat(l.slice(0,5-grupos[grupos.length-1].length));
     /* V5 · Bloco 3: nada que ela escolheu como bom (Fases 1 e 2, e do 6 ao 10) aparece do 4 ao 0 */
-    const boas=rgBoasDela(); const it=grupos[A.set%grupos.length].filter(([t])=>!boas.has(slug(t))).map(([t,s])=>({t:cap(t),s,o:"ruim",m:null}));
+    const boas=rgBoasDela(); let it=grupos[A.set%grupos.length].filter(([t])=>!boas.has(slug(t))).map(([t,s])=>({t:cap(t),s,o:"ruim",m:null}));
+    /* V5 · Bloco 5: os "nãos" alimentam as opções de baixo. No 4 (Sem graça), 1 das 5 pode ser uma novidade que ela recusou
+       (é um teste: as Fases 1 a 3 podem testar coisas novas). Nunca no 3, 2, 1 e 0, que são só situações ruins. */
+    if(n===4 && window.FICHA && FICHA.naosParaBaixo){ const nn=FICHA.naosParaBaixo().filter(x=>x.rotulo&&!boas.has(slug(x.rotulo))&&!A.shown.includes(cap(x.rotulo)))[A.set||0];
+      if(nn && it.length){ it[it.length-1]={t:cap(nn.rotulo),s:nn.sentido,o:"nao"}; } }
     return rgEmbaralha(it,"d1|"+n+"|"+A.set); }
   if(n===10){ const f=rgDasFases(A); if(f.length>=4) return f.slice(0,4).concat(rgNovidade(A)); }
   const sets=B.degrau1[n]||[]; if(!sets.length) return [];

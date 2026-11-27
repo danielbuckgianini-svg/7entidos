@@ -129,4 +129,88 @@ window.FICHA = {
   podeTestarNovidade: fase => fase>=1 && fase<=3,
   _interno: { carrega, salva, slug, semDados, limpaPecas, pista, hoje, get F(){ return F; }, zera(){ F=nova(); salva(); } }
 };
+
+/* =====================================================================
+   Bloco 5 · AS FORÇAS DAS PISTAS
+   1. Escolheu uma vez = MÉDIA. Escolheu de novo em outra fase = FORTE.
+      Mudou de ideia (ou o teste de coerência mostrou mudança) = FRACA.
+   2. A correção dela sempre vence: o que ela corrigiu entra FORTE e o palpite antigo vira FRACO
+      (anotado também na gaveta Correções).
+   3. Quando ela diz "não" a um palpite, o app pergunta "Então o que é?" e a resposta dela entra FORTE.
+   4. Os "nãos": "Nenhuma dessas", novidade recusada e sugestão recusada. Um "não" NUNCA vira sugestão.
+      Essas pistas alimentam as opções do 4 ao 0.
+   5. Peças da Fase 4 e da Fase 5 (sem telas): a Fase 4 valida tudo (o confirmado vira forte, o negado sai);
+      a Fase 5 lê SÓ as pistas fortes.
+   ===================================================================== */
+/* 1. ao escrever: se ela já tinha escolhido a mesma coisa numa fase anterior, a pista nasce forte */
+FICHA._forcaAoEscrever = function(fase,p,o){
+  if(o.forca) return;                                  /* quem escreve já disse a força (ex.: mudança = fraca) */
+  if(!p.item) return;
+  const antes=anteriores(fase).filter(x=>x.item===p.item && x.forca!=="fraca");
+  if(antes.length){ p.forca="forte"; p.confirma=antes.map(x=>x.id).slice(0,6); } };
+/* 1. mudou de ideia: a mesma pergunta com outra resposta. A antiga continua guardada, como fraca. */
+FICHA._mudouDeIdeia = function(velha,nova){
+  if(!velha.item || velha.item===nova.item) return false;
+  velha.id = velha.id+"~"+Date.now().toString(36); velha.forca="fraca"; velha.mudou=hoje(); return true; };
+/* 1. mudança vista no teste de coerência (ou na confirmação): fica uma pista fraca sobre aquele item */
+FICHA.mudou = function(fase,o){ return escreve(fase,Object.assign({tipo:"mudanca"},o,{forca:"fraca"})); };
+
+/* 2. a correção dela vence */
+FICHA.corrige = function(fase,antiga,nova){
+  const de = antiga ? {item:slug(antiga.item||antiga.rotulo), rotulo:antiga.rotulo?semDados(antiga.rotulo):null, id:antiga.id||null} : null;
+  const p = escreve(fase,Object.assign({tipo:"correcao"},nova,{forca:"forte"}));
+  FICHA.anotaCorrecao(fase,{tipo:"correcao", de, para:p?{item:p.item,rotulo:p.rotulo,id:p.id}:null});
+  return p; };
+
+/* 3. "não" a um palpite → "Então o que é?" → a resposta dela entra forte (e o palpite antigo, fraco) */
+FICHA.naoAoPalpite = function(fase,palpite,resposta){
+  FICHA.nao(fase,{tipo:"palpite-recusado", itens:[palpite.item||palpite.rotulo], rotulos:[palpite.rotulo||""]});
+  if(resposta) return FICHA.corrige(fase,palpite,Object.assign({tipo:"resposta-dela"},resposta));
+  return null; };
+/* a pergunta "Então o que é?" (pronta para quando houver palpite na tela, na Fase 4).
+   opcoes = [{rotulo, item, pecas}] · pode ter "Escrever o meu" (a frase fica só no celular, ver Bloco 8). */
+window.fichaEntaoOQueE = function(fase,palpite,opcoes,depois){
+  if(typeof rgModal!=="function"){ if(depois) depois(null); return; }
+  window._fichaEntao={fase,palpite,opcoes,depois};
+  rgModal(`<h3>Então o que é?</h3><p>Me conta, para eu acertar da próxima vez.</p><div class="col">
+    ${(opcoes||[]).map((x,i)=>`<button class="btn sec" type="button" onclick="fichaEntaoEscolhe(${i})">${esc(x.rotulo)}</button>`).join("")}
+    <button class="btn sec" type="button" onclick="fichaEntaoEscolhe(-1)">← Voltar</button></div>`); };
+window.fichaEntaoEscolhe = function(i){ const e=window._fichaEntao; window._fichaEntao=null; if(typeof rgFechaModal==="function") rgFechaModal(); if(!e) return;
+  const r = i>=0 ? e.opcoes[i] : null; if(r) FICHA.naoAoPalpite(e.fase,e.palpite,r); if(e.depois) e.depois(r); };
+
+/* 4. os "nãos" */
+function itensNaos(){ return new Set(carrega().gavetas.naos.flatMap(x=>x.itens||[])); }
+FICHA.podeSugerir = function(item){ const s=slug(item); if(!s) return false; if(itensNaos().has(s)) return false;
+  return !negados().has(s); };
+/* para as opções do 4 ao 0: o que ela recusou como novidade (só o rótulo do app) */
+FICHA.naosParaBaixo = function(){ return carrega().gavetas.naos.filter(x=>x.tipo==="novidade-recusada").flatMap(x=>(x.rotulos||[]).map((r,k)=>({rotulo:r,item:(x.itens||[])[k],sentido:(x.pecas&&x.pecas.sentidos||[])[0]||null}))); };
+
+/* a visão de tudo junto: uma linha por item, com a força final (é isto que as próximas fases usam) */
+function negados(){ return new Set(carrega().gavetas.fase4.filter(x=>x.tipo==="validacao"&&x.extra&&x.extra.resposta==="nao").map(x=>x.item).filter(Boolean)); }
+FICHA.visao = function(){ const f=carrega(), por={}, corrigidos=new Set(), corrigidoPara=new Set();
+  f.gavetas.correcoes.forEach(c=>{ if(c.de&&c.de.item) corrigidos.add(c.de.item); if(c.para&&c.para.item) corrigidoPara.add(c.para.item); });
+  const naos=itensNaos(), neg=negados();
+  ["gostos","jogo","regua","fase4","fase5"].forEach(g=>f.gavetas[g].forEach(p=>{ if(!p.item) return;
+    const e=por[p.item]||(por[p.item]={item:p.item,rotulo:p.rotulo,pecas:p.pecas,forca:p.forca,fases:[],ids:[]});
+    e.fases.push(p.fase); e.ids.push(p.id); e.rotulo=p.rotulo||e.rotulo; e.ultima=p; }));
+  Object.values(por).forEach(e=>{ e.fases=[...new Set(e.fases)];
+    e.forca = e.ultima.forca;
+    if(corrigidos.has(e.item) && !corrigidoPara.has(e.item)) e.forca="fraca";   /* o palpite antigo vira fraco */
+    if(corrigidoPara.has(e.item)) e.forca="forte";                               /* a correção dela vence */
+    e.saiu = neg.has(e.item) || naos.has(e.item);                               /* o negado sai */
+    delete e.ultima; });
+  return Object.values(por).filter(e=>!e.saiu); };
+
+/* 5. peças preparadas para a Fase 4 e a Fase 5 (ainda sem telas) */
+FICHA.fase4 = {
+  /* o que a Fase 4 vai conferir com ela: tudo o que não é forte ainda */
+  paraValidar: () => FICHA.visao().filter(e=>e.forca!=="forte"),
+  /* ela confirmou → forte · ela negou → sai (e vai para os "nãos") */
+  valida(item,sim,o){ o=o||{};
+    if(sim) return escreve(4,Object.assign({tipo:"validacao",item,rotulo:o.rotulo||item,extra:{resposta:"sim"}},o,{forca:"forte"}));
+    const p=escreve(4,Object.assign({tipo:"validacao",item,rotulo:o.rotulo||item,extra:{resposta:"nao"}},o,{forca:"fraca"}));
+    FICHA.nao(4,{tipo:"negado",itens:[item],rotulos:[o.rotulo||item]}); return p; } };
+FICHA.fase5 = {
+  /* a Fase 5 lê SÓ as pistas fortes (e nunca um "não") */
+  pistas: () => FICHA.visao().filter(e=>e.forca==="forte" && FICHA.podeSugerir(e.item)) };
 })();
