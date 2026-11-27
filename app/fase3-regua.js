@@ -72,7 +72,7 @@ const NOMES = {10:"Êxtase",9:"Excelente",8:"Muito bom",7:"Bom",6:"Legal",5:"Tan
 const ORDEM = [10,9,8,7,6,5,4,3,2,1,0];
 const BLOCOS = [[10],[9,8,7],[6,5],[4,3,2,1,0]];
 const LIMITE_DIA = 5;
-/* os números que já dá para fazer (do 10 ao 5); do 4 ao 0 ficam "em construção" */
+/* os números que já dá para fazer: todos (desde 27/11 o 4 ao 0 também, com o banco do Péssimo) */
 const JOGAVEIS = ORDEM.filter(n=>!EM_CONSTRUCAO.includes(n));
 /* REGRA DO NÍVEL: do 10 ao 6 só coisas boas (Fases 1 e 2 + novidades boas); o 5 é neutro (este banco);
    do 4 ao 0 só o banco de situações ruins (BANCO_RUIM), da Sala do Péssimo.
@@ -940,7 +940,7 @@ function rgFechaNumero(){ const A=RG.atual, n=A.num;
     <div class="rg-tit" style="font-size:44px;margin-top:8px;color:${COR_NUM[n]}">${n}<small>${NOMES[n]}</small></div>
     ${rgReforco(n,A)}
     ${rgEstrela(true)}${rgBarra()}
-    <h2 style="margin-top:10px">${rgReguaPronta()?"Você completou a sua régua (do 10 ao 5).":A.pulou?"Tudo bem pular o 0.":"Seu "+n+" está na régua."}</h2>
+    <h2 style="margin-top:10px">${rgReguaPronta()?"Você completou a sua régua, do 10 ao 0.":A.pulou?"Tudo bem pular o 0.":"Seu "+n+" está na régua."}</h2>
     ${(rgAberto=null,rgBarra11({nova:n}))}
     <div id="rgbauarea"><button class="rg-bau" type="button" onclick="rgAbreBau(this)"><span>🎁</span>Abrir o baú surpresa</button></div>
     <div style="margin-top:12px"><button class="btn" type="button" onclick="click();rgTela()">Seguir</button></div>
@@ -1261,7 +1261,7 @@ window.f3Mapa3 = function(){ rgCarrega(); rgFechaModal(); entrou=true; pos=R.len
     ${LIVRE&&PREVIA?`<p class="rg-nota">Só na prévia: travas desligadas, tudo liberado para teste.</p>`:""}
     ${CURINGA_LIGADA?`<div class="f3m-cur"><small>Pergunta curinga do dia</small><b>${esc(cur.q)}</b></div>`:""}
     <div class="f3m">
-      ${item("regua","1","A sua régua", rOk&&mOk?"Pronta, do 10 ao 5":rOk?"Falta pouco":(Object.keys(RG.col).length?"Em andamento":"Começa pelo “Coloque na régua”"),"click();rgTela()",rOk&&mOk)}
+      ${item("regua","1","A sua régua", rOk&&mOk?"Pronta, do 10 ao 0":rOk?"Falta pouco":(Object.keys(RG.col).length?"Em andamento":"Começa pelo “Coloque na régua”"),"click();rgTela()",rOk&&mOk)}
       ${item("teste","2","Teste de imagens", t.pronto?"Pronto · seu tipo saiu":"Dia "+Math.min(4,t.diasFeitos+1)+" de 4 · 5 duplas","click();tiAbre()",t.pronto)}
       <div class="f3m-it fecha"><span class="f3m-n">3</span><span class="f3m-t"><b>Validação</b><small>Em breve</small></span><em>🔒 Em breve</em></div>
     </div>
