@@ -67,10 +67,12 @@ const CURIOSIDADES = [
 
 /* ---------- as etapas ---------- */
 const NOMES = {10:"Êxtase",9:"Excelente",8:"Muito bom",7:"Bom",6:"Legal",5:"Tanto faz",4:"Sem graça",3:"Chato",2:"Ruim",1:"Péssimo",0:"Insuportável"};
-/* 27/11 · V4: ordem 10 → 9 → 8 → 7 → 6 → 5 (4 → 3 → 2 → 1 → 0 trancados, "em construção").
-   Liberação: primeiro o 10; depois 9, 8 e 7; depois 6 e 5. */
-const ORDEM = [10,9,8,7,6,5,4,3,2,1,0];
-const BLOCOS = [[10],[9,8,7],[6,5],[4,3,2,1,0]];
+/* V5 · Bloco 3 (27/11): o 1 abre JUNTO com o 10 (antes o 10 abria sozinho e o 1 ficava para o fim).
+   Grupos: 1º grupo 10 e 1 → 2º grupo 9, 8, 7 → 3º grupo 6, 5, 4 → 4º grupo 3, 2, 0.
+   Com as travas ligadas, um grupo só abre quando o anterior termina. A ordem sugerida é a ORDEM abaixo (o 10 primeiro, depois o 1).
+   O 1 usa as situações ruins do banco do Péssimo (BANCO_RUIM), nunca coisas boas. */
+const BLOCOS = [[10,1],[9,8,7],[6,5,4],[3,2,0]];
+const ORDEM = BLOCOS.flat();   /* 10, 1, 9, 8, 7, 6, 5, 4, 3, 2, 0 */
 const LIMITE_DIA = 5;
 /* os números que já dá para fazer: todos (desde 27/11 o 4 ao 0 também, com o banco do Péssimo) */
 const JOGAVEIS = ORDEM.filter(n=>!EM_CONSTRUCAO.includes(n));
@@ -187,7 +189,7 @@ const css=document.createElement("style"); css.textContent=`
 .rg-num.anda{border-color:#fff3c4;box-shadow:0 0 0 2px rgba(255,243,196,.35),0 6px 0 rgba(0,0,0,.35)}
 .rg-num.tranca{opacity:.35;cursor:default;border-style:dashed;box-shadow:none}
 .rg-num:active:not(.ok):not(.tranca){transform:translateY(3px)}
-.rg-bloco{font:400 14px "Space Mono",monospace;color:var(--azul);letter-spacing:.06em;text-transform:uppercase;margin:18px 0 0}
+.rg-bloco{font:400 16px "Space Mono",monospace;color:var(--azul);letter-spacing:.06em;text-transform:uppercase;margin:18px 0 0}
 .rg-tit{font:800 clamp(44px,13vw,64px)/1 Fraunces,Georgia,serif;color:var(--ouro);margin:6px 0 2px}
 .rg-tit small{display:block;font:700 22px Inter,system-ui,sans-serif;color:var(--creme);margin-top:8px}
 .rg-tit.pq{font-size:40px}.rg-tit.pq small{font-size:18px;margin-top:4px}
@@ -594,7 +596,7 @@ function rgEscolhe(nova,depoisColoque){
     <p class="rg-legmand">Toque numa bolinha para ver o que ela quer dizer.</p>
     ${rgBarra11({acao:true,nova:nova?RG.ultimo:null})}
     <div style="margin-top:14px"><button class="btn sec" type="button" onclick="click();f3Mapa3()">Ver o mapa da Fase 3</button></div>
-    ${!LIVRE&&b<BLOCOS.length-1?`<p class="rg-bloco">Depois: ${BLOCOS.slice(b+1).map(x=>x.join(" · ")).join("  →  ")}</p>`:""}
+    ${!LIVRE&&b<BLOCOS.length-1?`<p class="rg-bloco">Depois: ${BLOCOS.slice(b+1).map(x=>x.join(", ")).join("  →  ")}</p>`:""}
     ${rgPreviaBotoes()}</div>`);
 }
 window.rgVai = function(n){ if(ocupado) return; if(EM_CONSTRUCAO.includes(n)) return rgAviso("Do 4 ao 0 ainda está em construção."); click(); vibra(12);
@@ -672,7 +674,8 @@ function rgOpcoesD1(A){ const n=A.num;
   /* 27/11 · do 4 ao 0: o banco do Péssimo (BANCO_RUIM), em grupos de 5 */
   if(n<=4 && BANCO_RUIM[n]&&BANCO_RUIM[n].length){ const l=BANCO_RUIM[n], grupos=[]; for(let i=0;i<l.length;i+=5) grupos.push(l.slice(i,i+5));
     if(grupos.length>1 && grupos[grupos.length-1].length<5) grupos[grupos.length-1]=grupos[grupos.length-1].concat(l.slice(0,5-grupos[grupos.length-1].length));
-    const it=grupos[A.set%grupos.length].map(([t,s])=>({t:cap(t),s,o:"ruim",m:null}));
+    /* V5 · Bloco 3: nada que ela escolheu como bom (Fases 1 e 2, e do 6 ao 10) aparece do 4 ao 0 */
+    const boas=rgBoasDela(); const it=grupos[A.set%grupos.length].filter(([t])=>!boas.has(slug(t))).map(([t,s])=>({t:cap(t),s,o:"ruim",m:null}));
     return rgEmbaralha(it,"d1|"+n+"|"+A.set); }
   if(n===10){ const f=rgDasFases(A); if(f.length>=4) return f.slice(0,4).concat(rgNovidade(A)); }
   const sets=B.degrau1[n]||[]; if(!sets.length) return [];
