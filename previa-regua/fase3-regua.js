@@ -702,14 +702,14 @@ function rgMontaRodada(A){ const n=A.num;
   return (window.rgRodadaExtra && window.rgRodadaExtra(A)) || null; }   /* Bloco 7: confirmação "deslizar" */
 /* perguntas claras (V4): nunca mostrar textos de construção */
 const PERGUNTA = (A,op,parte) => { const n=A.num;
-  if(op.tipo==="mm") return parte==="menos" ? `E qual destas <b class="menos">NÃO é</b> um ${n} para você?` : `Qual destas <b>é um ${n}</b> para você?`;
+  if(op.tipo==="mm") return parte==="menos" ? `E qual destas você daria uma nota <b class="menos">diferente de ${n}</b>, maior ou menor?` : `Qual destas você <b>daria nota ${n}</b>?`;
   if(op.tipo==="leve") return `Sem pressa: qual destas é o seu 0?`;
-  if(op.tipo==="duelo") return `Entre essas duas, qual é <b>mais</b> um ${n} para você?`;
+  if(op.tipo==="duelo") return `Entre essas duas, qual você <b>daria nota ${n}</b>?`;
   if(op.tipo==="deslizar") return `Onde isso fica na sua régua?`;
-  if(op.tipo==="porque") return `O que faz disso <b>um ${n}</b> para você?`;
-  return `Qual destas <b>é um ${n}</b> para você?`; };
+  if(op.tipo==="porque") return `O que mais pesa para isso ser <b>nota ${n}</b>?`;
+  return `Qual destas você <b>daria nota ${n}</b>?`; };
 /* uma frase curta (até 12 palavras) dizendo o que fazer agora */
-const DICA = (A,op,parte) => op.tipo==="leve" ? "Toque na que é o seu 0." : op.tipo==="mm" ? (parte==="menos" ? "Agora toque na que não é um "+A.num+"." : "Toque na que é um "+A.num+".")
+const DICA = (A,op,parte) => op.tipo==="leve" ? "Toque na que é o seu 0." : op.tipo==="mm" ? (parte==="menos" ? "Agora toque na que teria outra nota." : "Toque na que você daria nota "+A.num+".")
   : op.tipo==="porque" ? "Toque no que mais pesa."
   : op.tipo==="duelo" ? "Só uma: a que pesa mais."
   : op.tipo==="deslizar" ? "Arraste a bolinha ou toque num número."
@@ -759,7 +759,7 @@ function rgRodada(){
   const parte = op.tipo==="mm"&&sel.mais!=null ? "menos" : "mais";
   const cima = op.tipo!=="mm" && op.tipo!=="leve" && op.tipo!=="deslizar" && A.foco;
   const card=(x,i)=>{ const c=sel.mais===i?" mais":sel.menos===i?" menos":sel.um===i?" sel":"";
-    const selo=sel.mais===i?`<span class="selo">É UM ${n}</span>`:sel.menos===i?`<span class="selo">NÃO É</span>`:"";
+    const selo=sel.mais===i?`<span class="selo">NOTA ${n}</span>`:sel.menos===i?`<span class="selo">OUTRA NOTA</span>`:"";
     const f=rgArqFoto(x), ft=f?rgFotoHTML(f.src,f.arq):`<span class="rg-ft rg-eu"><span>Você contou</span></span>`;
     if(op.fmt==="lista") return `<button class="rg-op rg-opl${c}" type="button" onclick="rgToca(${i})">${selo}${ft}<span class="rg-lt">${esc(cap(x.t))}</span></button>`;
     return `<button class="rg-op rg-opf${c}" type="button" onclick="rgToca(${i})">${selo}${ft}<span class="rg-cap">${esc(cap(x.t))}</span></button>`; };
