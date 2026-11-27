@@ -287,6 +287,20 @@ const css=document.createElement("style"); css.textContent=`
 .rg-mtag{flex:none;min-width:44px;font:800 18px "Space Mono",monospace;color:var(--ouro);text-align:right}
 /* V4 · Bloco 4: momento real */
 .rg-h3{font-size:clamp(24px,6vw,30px);margin-top:18px}
+.rg-luz{position:fixed;inset:0;z-index:58;pointer-events:none;background:radial-gradient(circle at 50% 45%,color-mix(in srgb,var(--k) 55%,transparent),transparent 65%);animation:rgLuz .9s ease-out forwards}
+@keyframes rgLuz{0%{opacity:0}25%{opacity:1}100%{opacity:0}}
+.rg-dots{display:flex;gap:6px;margin-top:4px}.rg-dots i{width:14px;height:14px;border-radius:50%;background:rgba(220,226,245,.22);border:1.5px solid rgba(220,226,245,.5)}.rg-dots i.on{background:var(--ouro);border-color:var(--ouro);box-shadow:0 0 10px var(--ouro)}
+.rg-confcard{font-size:21px;font-weight:800;line-height:1.35;margin:6px auto 14px;max-width:440px;padding:14px 16px;border-radius:18px;background:rgba(17,27,61,.85);border:1.5px solid rgba(245,197,66,.5)}
+.rg-desl{max-width:460px;margin:0 auto}
+.rg-desl input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:60px;background:transparent;margin:0 0 10px}
+.rg-desl input[type=range]::-webkit-slider-runnable-track{height:14px;border-radius:99px;background:linear-gradient(90deg,#5b6aa8,var(--k))}
+.rg-desl input[type=range]::-moz-range-track{height:14px;border-radius:99px;background:linear-gradient(90deg,#5b6aa8,var(--k))}
+.rg-desl input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:52px;height:52px;margin-top:-19px;border-radius:50%;background:#fff3c4;border:4px solid var(--k);box-shadow:0 4px 14px rgba(0,0,0,.5)}
+.rg-desl input[type=range]::-moz-range-thumb{width:46px;height:46px;border-radius:50%;background:#fff3c4;border:4px solid var(--k)}
+.rg-desl input.vazio::-webkit-slider-thumb{opacity:.45}
+.rg-desl-n{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.rg-desl-n button{all:unset;cursor:pointer;display:grid;place-items:center;width:60px;height:60px;border-radius:50%;font:800 22px Manrope,system-ui,sans-serif;background:rgba(32,48,100,.6);border:1.5px solid rgba(220,226,245,.4)}
+.rg-desl-n button.sel{background:var(--k);color:#0b1020;box-shadow:0 0 18px var(--k)}
 .rg-seu{font-size:19px;color:#fff3c4;margin:12px 0 4px}
 .rg-conta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:6px 0 4px}
 .rg-conta .btn{flex:1 1 140px;max-width:220px}
@@ -338,7 +352,7 @@ function rgTopo(txt){
   const el=document.getElementById("const"); el.hidden=false;
   if(!document.getElementById("mtopo")) el.innerHTML=mandala(72,"mtopo")+`<span class="xde7" id="xde7"></span>`;
   const m=document.getElementById("mtopo"); requestAnimationFrame(()=>poeMandala(m,{pos:TODOS,luz:TODOS,miolo:true}));
-  document.getElementById("xde7").innerHTML=`<b class="pal"><em>7</em>entidos</b><small>Fase 3</small>${esc(txt||"sua régua")}`;
+  document.getElementById("xde7").innerHTML=`<b class="pal"><em>7</em>entidos</b><small>Fase 3 · hoje</small>${RG?rgDots():""}`;
   ["voltar","pularbtn","fundobtn"].forEach(id=>{ const b=document.getElementById(id); if(b) b.hidden=true; }); document.body.classList.add("emf3");
   foco(null); brilho(null); fundoCor(null); pararSom(); rgTesteBarra();
 }
@@ -446,6 +460,7 @@ window.rgTela = rgTela;
 function rgTela(nova){
   rgCarrega(); rgFechaModal();
   if(!rgColFeito()) return rgColoque();                        /* antes do 10, no primeiro dia */
+  if(rgPrecisaSurpresa()) return rgSurpresa();             /* Bloco 7: algo diferente entre um dia e outro */
   const limite = !LIVRE && rgHojeN()>=LIMITE_DIA;
   /* Bloco 6: as situações dos motivos entram logo depois de cada número (régua + motivos = no máximo 5 por dia) */
   if(RG.motFila&&RG.motFila.length&&rgMotivosOk()) RG.motFila=[];
@@ -659,7 +674,7 @@ function rgRodada(){
   const op=A.op, sel=A.sel||{}; RG.ultFmt=op.fmt;
   rgTopo(n+" · "+NOMES[n]);
   const parte = op.tipo==="mm"&&sel.mais!=null ? "menos" : "mais";
-  const cima = op.tipo!=="mm" && op.tipo!=="leve" && A.foco;
+  const cima = op.tipo!=="mm" && op.tipo!=="leve" && op.tipo!=="deslizar" && A.foco;
   const card=(x,i)=>{ const c=sel.mais===i?" mais":sel.menos===i?" menos":sel.um===i?" sel":"";
     const selo=sel.mais===i?`<span class="selo">MAIS</span>`:sel.menos===i?`<span class="selo">MAIS LONGE</span>`:"";
     const f=rgArqFoto(x), ft=f?rgFotoHTML(f.src,f.arq):`<span class="rg-ft rg-eu"><span>Você contou</span></span>`;
@@ -912,6 +927,61 @@ function rgFimFase(){ rgTopo("régua montada");
     <div style="margin-top:14px"><button class="btn" type="button" onclick="click();f3Mapa3()">Seguir</button></div>
     ${rgPreviaBotoes()}`); }
 
+/* =================== BLOCO 7 (V4) · FASE 3 MAIS VIVA =================== */
+/* 1. Formatos que mudam a cada rodada (nunca dois iguais seguidos): escolher 1 de 5 (lista), "isto ou aquilo" (duas cartas),
+      deslizar de 0 a 10 e responder por foto. O "deslizar" é a rodada de confirmação: onde fica, na régua, o que ela montou. */
+window.rgRodadaExtra = function(A){ const n=A.num;
+  if(A.confirmou || n<5 || !A.foco || A.rodadas>=MAX_RODADAS(n)) return null;
+  if(n>=6 && !A.ultimoFeito) return null;
+  if(RG.ultFmt==="deslizar") return null;
+  return {tipo:"deslizar", itens:[{t:A.final||cap(A.foco.t)+(A.porque?" · "+minus(A.porque.t):""),s:A.foco.s,o:"conf"}]}; };
+window.rgDeslizarHTML = function(A,op){ const v=A.sel&&A.sel.v!=null?A.sel.v:null, k=COR_NUM[A.num];
+  return `<div class="rg-confcard">“${esc(op.itens[0].t)}”</div>
+  <div class="rg-desl" style="--k:${k}">
+    <input type="range" min="0" max="10" step="1" value="${v==null?5:v}" class="${v==null?"vazio":""}" id="rgrange" aria-label="Arraste de 0 a 10" oninput="rgDesliza(+this.value,1)">
+    <div class="rg-desl-n">${[0,1,2,3,4,5,6,7,8,9,10].map(x=>`<button type="button" class="${v===x?"sel":""}" onclick="rgDesliza(${x})" aria-label="${x}">${x}</button>`).join("")}</div>
+  </div>
+  <div style="margin-top:16px"><button class="btn" id="rgdpronto" type="button" onclick="rgDeslPronto()" ${v==null?"disabled":""}>Pronto</button></div>`; };
+window.rgDesliza = function(x,doRange){ const A=RG.atual; A.sel=A.sel||{}; A.sel.v=x; A.sel.um=0; if(!doRange) click(); vibra(6+x);
+  const r=document.getElementById("rgrange"); if(r){ r.value=x; r.classList.remove("vazio"); }
+  document.querySelectorAll(".rg-desl-n button").forEach((b,i)=>b.classList.toggle("sel",i===x));
+  const p=document.getElementById("rgdpronto"); if(p) p.disabled=false; rgSalva(); };
+window.rgDeslPronto = function(){ const A=RG.atual; if(!A||!A.sel||A.sel.v==null||ocupado) return; ocupado=true; click(); rgReage(A.foco);
+  setTimeout(()=>{ ocupado=false; rgResponde(); },350); };
+window.rgRespDeslizar = function(A){ const v=A.sel.v, n=A.num; A.confirmou=true; A.confirma=v; A.hist.push({tipo:"deslizar",valor:v});
+  if(Math.abs(v-n)<=1){ const [m]=ordemP(A.P); puxa(A.P,m,1.2); }
+  else (RG.pistasFracas=RG.pistasFracas||[]).push({num:n,item:A.final||null,antes:n,agora:v,dia:rgHoje(),forca:"fraca",de:"confirmação"}); };
+
+/* 3. Reação da tela a cada resposta, sem revelar nada: luz da cor do sentido + som curto + vibração */
+window.rgReage = function(x){ let cor=null;
+  if(x&&x.s) cor=corSent(x.s);
+  else if(x&&x.m&&RG.motFila&&RG.motFila[0]&&typeof SIT!=="undefined"&&SIT[RG.motFila[0]]) cor=corSent(SIT[RG.motFila[0]].sent[0]);
+  else if(RG.atual&&RG.atual.foco&&RG.atual.foco.s) cor=corSent(RG.atual.foco.s);
+  cor=cor||"#f5c542";
+  const d=document.createElement("div"); d.className="rg-luz"; d.style.setProperty("--k",cor); document.body.appendChild(d); setTimeout(()=>d.remove(),900);
+  try{ tom(784,.22); setTimeout(()=>tom(1046,.28),90); }catch(e){} vibra([12,30,12]); };
+
+/* 4. Algo diferente entre um dia e outro: ao abrir o dia seguinte, antes das perguntas, uma surpresa curta
+      (curiosidade da ciência dos sentidos, 30 segundos de viagem guiada ou o baú). Vale também para quem paga e avança dias. */
+const VIAGEM30 = ["Feche os olhos por um instante.","Puxe o ar devagar pelo nariz.","Lembre de um lugar onde você se sente bem.","Repare numa cor, num som e num cheiro desse lugar.","Abra os olhos devagar. Vamos?"];
+function rgPrecisaSurpresa(){ return !!(RG.primeiroDia && rgDia()>1 && RG.surpresa!==rgHoje() && RG.entrada!==rgHoje()); }
+function rgSurpresa(){ const tipo=["curiosidade","viagem","bau"][(rgDia()-2)%3]; RG.surpresaTipo=tipo; rgSalva(); rgTopo("surpresa");
+  if(tipo==="viagem") return rgViagem30(0);
+  if(tipo==="bau") return mostra(`<div class="rot">Surpresa do dia</div><h2>Tem um baú esperando você.</h2>
+      <div id="rgbauarea"><button class="rg-bau" type="button" onclick="rgAbreBau(this)"><span>🎁</span>Abrir o baú</button></div>
+      <div style="margin-top:14px"><button class="btn" type="button" onclick="rgFimSurpresa()">Seguir</button></div>`);
+  const t=CURIOSIDADES[RG.curIdx%CURIOSIDADES.length]; RG.curIdx++; rgSalva();
+  mostra(`<div class="rot">Surpresa do dia</div><h2>Você sabia?</h2><div class="rg-curio">${esc(t)}</div>
+    <div style="margin-top:14px"><button class="btn" type="button" onclick="rgFimSurpresa()">Seguir</button></div>`); }
+function rgViagem30(i){ mostra(`<div class="rot">Viagem rápida</div><div class="viagem" style="--c:#f5c542;min-height:auto"><div class="vlua"></div>
+    <p class="vleg on">${esc(VIAGEM30[i])}</p></div>
+    <div style="margin-top:14px"><button class="btn" type="button" onclick="${i<VIAGEM30.length-1?`click();rgViagemPasso(${i+1})`:"rgFimSurpresa()"}">${i<VIAGEM30.length-1?"Próximo":"Seguir"}</button></div>`); }
+window.rgViagemPasso = rgViagem30;
+window.rgFimSurpresa = function(){ click(); RG.surpresa=rgHoje(); rgSalva(); rgTela(); };
+
+/* 5. Barra do dia SEM número: "Fase 3 · hoje" com 5 pontinhos que acendem. Nunca mostra contagem de perguntas. */
+function rgDots(){ const k=Math.min(5,rgHojeN()); return `<span class="rg-dots" aria-label="Respostas de hoje">${[0,1,2,3,4].map(i=>`<i class="${i<k?"on":""}"></i>`).join("")}</span>`; }
+
 /* =================== BLOCO 6 (V4) · LIGAR A RÉGUA AOS MOTIVOS (análise da função) =================== */
 /* Logo depois de cada número fechado: 1 ou 2 situações dos motivos ligadas ao que ela escolheu naquele número.
    Primeiro as situações das fotos que ela escolheu na Fase 1, depois as gerais. Pergunta: "O que mais te faz bem quando você [situação]?"
@@ -1012,7 +1082,7 @@ window.f3Mapa3 = function(){ rgCarrega(); rgFechaModal(); entrou=true; pos=R.len
     return `<button class="f3m-it${ok?" ok":""}${ab?"":" fecha"}${hoje?" hoje":""}" type="button" ${ab||ok?`onclick="${acao}"`:"disabled"}>
       <span class="f3m-n">${ok?"✓":num}</span><span class="f3m-t"><b>${tit}</b><small>${sub}</small></span>${hoje?`<em>hoje</em>`:!ab&&!ok?`<em>🔒</em>`:""}${extra||""}</button>`; };
   const fimOk = rOk && t.pronto && mOk;
-  mostra(`<div class="rot">Fase 3 · dia ${rgDia()}</div>
+  mostra(`<div class="rot">Fase 3 · hoje</div>
     <h2>O mapa da Fase 3</h2>
     <p class="sub">${LIVRE?"Escolha por onde seguir.":"Uma atividade por dia. A de hoje está marcada."}</p>
     ${LIVRE&&PREVIA?`<p class="rg-nota">Só na prévia: travas desligadas, tudo liberado para teste.</p>`:""}
