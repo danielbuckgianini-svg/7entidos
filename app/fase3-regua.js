@@ -518,6 +518,7 @@ function rgTesteBarra(){ if(!TESTE) return; document.body.classList.add("rgteste
 window.rgTesteMenu = function(){ click(); rgModal(`<h3>Modo teste (só na prévia)</h3><div class="col">
     <button class="btn" type="button" onclick="rgAvancaDia()">☀ Avançar um dia</button>
     <button class="btn sec" type="button" onclick="rgCompletaTeste()">✓ Ver a régua completa</button>
+    ${window.plantaTelaInicio?`<button class="btn sec" type="button" onclick="plantaTelaInicio()">Ver a tela inicial (a plantinha)</button>`:""}
     <button class="btn sec" type="button" onclick="rgRecomecaTeste()">↺ Recomeçar a Fase 3</button>
     <button class="btn sec" type="button" onclick="rgVerFase1()">Ver a Fase 1 (com as correções)</button>
     <button class="btn sec" type="button" onclick="rgFechaModal()">← Voltar</button></div>`); };
@@ -1021,6 +1022,7 @@ function rgFechaNumero(){ const A=RG.atual, n=A.num;
     ${rgEstrela(true)}${rgBarra()}
     <h2 style="margin-top:10px">${rgReguaPronta()?"Você completou a sua régua, do 10 ao 0.":A.pulou?"Tudo bem pular o 0.":"Seu "+n+" está na régua."}</h2>
     ${(rgAberto=null,rgBarra11({nova:n}))}
+    ${window.plantaFolhaHTML&&!A.pulou?plantaFolhaHTML("f3:"+n):""}
     <div id="rgbauarea"><button class="rg-bau" type="button" onclick="rgAbreBau(this)"><span>🎁</span>Abrir o baú surpresa</button></div>
     <div style="margin-top:12px"><button class="btn" type="button" onclick="click();rgTela()">Seguir</button></div>
     <div style="margin-top:12px"><button class="btn sec" type="button" onclick="rgCompartilhaRegua()">📲 Mandar no WhatsApp</button></div>`); }
