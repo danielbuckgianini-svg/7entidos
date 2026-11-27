@@ -23,8 +23,8 @@ const CHAVE = TESTE ? "7e_regua_teste" : "7e_regua";
    No lançamento, mude para true: liga de uma vez o limite de 5 rodadas por dia, a régua em blocos (um dia de cada vez)
    e uma mecânica por dia (régua e teste de imagens em dias alternados). */
 const TRAVAS_LIGADAS = false;
-window.TRAVAS_LIGADAS = TRAVAS_LIGADAS;
-const LIVRE = TESTE || !TRAVAS_LIGADAS;
+window.TRAVAS_LIGADAS = TRAVAS_LIGADAS; window.RG_TESTE = TESTE;
+const LIVRE = TESTE || !TRAVAS_LIGADAS; window.RG_LIVRE = LIVRE;
 /* do 4 ao 0: trancados ("em construção") até chegar o banco de situações ruins da Sala do Péssimo */
 const EM_CONSTRUCAO = [4,3,2,1,0];
 const BANCO_RUIM = [];   /* aqui entram as situações ruins (4 ao 0) quando chegarem */
@@ -297,9 +297,10 @@ body.rgteste main#palco{padding-bottom:70px}
 function rgAviso(t,ms){ const d=document.createElement("div"); d.className="rg-aviso"; d.textContent=t; document.body.appendChild(d); setTimeout(()=>d.remove(),ms||2600); }
 function rgModal(html){ rgFechaModal(); const d=document.createElement("div"); d.id="rgmodal"; d.innerHTML=`<div class="cx">${html}</div>`; d.onclick=e=>{ if(e.target===d) rgFechaModal(); }; document.body.appendChild(d); return d; }
 function rgFechaModal(){ const d=document.getElementById("rgmodal"); if(d) d.remove(); if(window._rgRec){ try{ window._rgRec.stop(); }catch(e){} window._rgRec=null; } }
-window.rgFechaModal = rgFechaModal;
+window.rgFechaModal = rgFechaModal; window.rgAviso = rgAviso; window.rgModal = rgModal;
 
 /* ---------- topo e mandala ---------- */
+window.rgTopo = function(t){ return rgTopo(t); };
 function rgTopo(txt){
   const el=document.getElementById("const"); el.hidden=false;
   if(!document.getElementById("mtopo")) el.innerHTML=mandala(72,"mtopo")+`<span class="xde7" id="xde7"></span>`;
