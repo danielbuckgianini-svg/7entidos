@@ -73,7 +73,7 @@ function filaManda(){ if(mandando||navigator.onLine===false) return; const l=fil
 addEventListener("online",filaManda); setTimeout(filaManda,4000);
 
 /* ---------- Bloco 10 · 5. Primeira vez com uma mãozinha: na 1ª tela de cada tipo, uma mãozinha mostra onde tocar e some depois ---------- */
-const MAOS=[["numeros",".escala button,.rg-esc button,.rg-desl-n button"],["bolinhas",".rg-b"],["fotos",".g22 .foto,.rg-ops.fotos .rg-op"],["lista",".rg-ops.lista .rg-op,.opts .opt"],
+const MAOS=[["numeros",".escala button,.rg-esc button,.rg-desl-n button"],["bolinhas",".rg-b.ab"],["fotos",".g22 .foto,.rg-ops.fotos .rg-op"],["lista",".rg-ops.lista .rg-op,.opts .opt"],
   ["palavras",".rg-palavras button,.scol button"],["ouvir",".fbtns .ouvir2"]];
 const MAO_SVG='<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M22 8c0-3 5-3 5 0v20l3-1V22c0-3 5-3 5 0v6l3-1v-3c0-3 5-3 5 0v5l3-1c0-3 5-3 5 0v12c0 10-6 18-16 18h-2c-6 0-10-3-13-8L12 36c-2-3 2-6 5-3l5 5z" fill="#f4ecdc" stroke="#15110a" stroke-width="2" stroke-linejoin="round"/></svg>';
 function maosVistas(){ try{ return JSON.parse(localStorage.getItem("7e_maos")||"{}"); }catch(e){ return {}; } }
