@@ -281,6 +281,7 @@ const css=document.createElement("style"); css.textContent=`
 .rg-opf.sel{box-shadow:0 0 0 3px var(--ouro),0 0 22px rgba(245,197,66,.45)}
 .rg-eu{display:grid;place-items:center;font-size:16px;font-weight:800;color:var(--ouro);text-align:center;padding:6px}
 /* V4 · Bloco 4: momento real */
+.rg-h3{font-size:clamp(24px,6vw,30px);margin-top:18px}
 .rg-seu{font-size:19px;color:#fff3c4;margin:12px 0 4px}
 .rg-conta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:6px 0 4px}
 .rg-conta .btn{flex:1 1 140px;max-width:220px}
@@ -876,30 +877,30 @@ function rgCoerencia(){
     <h2 class="rg-q">Rapidinho: onde fica isso na sua régua?</h2>
     <h2 class="rg-sit">“${esc(r.final)}”</h2>
     <div class="rg-esc" style="--k:#f5c542">${[0,1,2,3,4,5,6,7,8,9,10].map(v=>`<button type="button" onclick="rgCoerResp(this,${v})" aria-label="${v}">${v}</button>`).join("")}</div>`); }
-window.rgCoerResp = function(b,v){ if(ocupado) return; ocupado=true; click(); vibra(8+v); b.classList.add("sel");
+window.rgCoerResp = function(b,v){ if(ocupado) return; ocupado=true; click(); vibra(8+v); b.classList.add("sel"); if(window.rgAntes) rgAntes(); rgContaRodada();
   const n=RG.coerAtual, r=RG.reg[n], h=rgHoje(); RG.coer[h]={num:n,resposta:v}; r.reteste={dia:h,resposta:v};
-  if(v!==n) RG.pistasFracas.push({num:n,item:r.final,antes:n,agora:v,dia:h});
+  /* "muda muito" = 2 números ou mais de diferença: vira pista FRACA para a Fase 4 (nunca aparece para ela) */
+  if(Math.abs(v-n)>=2) RG.pistasFracas.push({num:n,item:r.final,motivo:r.motivo||null,antes:n,agora:v,dia:h,forca:"fraca"});
   delete RG.coerAtual; rgSalva(); setTimeout(()=>{ ocupado=false; rgTela(); },420); };
 
 /* =================== BLOCO D · FIM DO DIA =================== */
 function rgFimDia(nova){ rgTopo("até amanhã");
   mostra(`<div class="rg-entrada">${rgFogoHTML()}<div class="rot">Fase 3 · A sua régua</div>${rgMandala(nova)}${rgEstrela(nova)}${rgBarra()}
     <h2 style="margin-top:12px">${FIM_DIA}</h2>
-    ${RG.lembrete?`<p class="sub">Combinado: amanhã eu te lembro.</p>`:`<button class="rg-volta" type="button" onclick="rgLembrete()">🔔 Quero um lembrete amanhã</button>`}
+    ${RG.lembrete?`<p class="sub">Combinado. Quando o app estiver na loja, eu te lembro.</p>`:`<button class="rg-volta" type="button" onclick="rgLembrete()">🔔 Quero um lembrete amanhã</button>`}
     <div><button class="btn sec" style="margin-top:14px" type="button" onclick="click();f3Mapa3()">Voltar ao mapa da Fase 3</button></div>
     ${rgPreviaBotoes()}</div>`); }
-/* notificação só se a pessoa pedir. SERVIDOR: o envio do lembrete precisa do servidor; por enquanto, só guarda o pedido. */
+/* lembrete só se a pessoa pedir. As notificações só são enviadas quando o app estiver na loja; até lá, só guarda o pedido. */
 window.rgLembrete = function(){ click(); RG.lembrete=true; rgSalva();
-  try{ if(window.Notification && Notification.permission==="default") Notification.requestPermission().catch(()=>{}); }catch(e){}
+  /* não pede permissão de notificação agora: as notificações só ligam quando o app estiver na loja (o pedido fica guardado) */
   rgFimDia(); };
 
 /* =================== BLOCO D · TELA FINAL DA FASE 3 (neutra) =================== */
 /* Não revela o que a Brisa descobriu. O palpite da Brisa e "Suas pistas" ficam para a Fase 4. */
 function rgFimFase(){ rgTopo("régua montada");
   mostra(`<div class="rot">Fase 3 · A sua régua</div>${rgEstrela()}${rgBarra()}
-    <h2>Sua régua está montada, do 10 ao 5.</h2><p class="sub">Do 4 ao 0 chega depois. Enquanto isso, a Fase 3 continua no mapa.</p>
-    ${rgEscada()}
-    <div style="margin-top:14px"><button class="btn" type="button" onclick="click();f3Mapa3()">Voltar ao mapa da Fase 3</button></div>
+    <h2>Sua régua está montada.</h2><p class="sub">Na próxima fase, você confere o que eu percebi.</p>
+    <div style="margin-top:14px"><button class="btn" type="button" onclick="click();f3Mapa3()">Seguir</button></div>
     ${rgPreviaBotoes()}`); }
 /* 27/11 · prévia: depois da régua montada, segue para as perguntas dos motivos (análise da função), que já existiam no app */
 window.rgVaiMotivos = function(){ click&&click(); try{ if(typeof f3ExemploFase1==="function") f3ExemploFase1(); }catch(e){}
@@ -967,17 +968,32 @@ window.rgVerResumo = function(f){ click(); rgExemploF1(); try{ localStorage.remo
   const i=R.findIndex(p=>p.t===(f===1?"fim1":"grafico")); if(i<0) return; pos=i; entrou=true; const bb=document.getElementById("rgbarra"); desenha(); };
 
 /* ---------- FIM DA FASE 3: vídeo-resumo da Brisa + o tipo divertido com o cartão + a porta da Fase 4 "em breve" ---------- */
-function destFase3(){ return [10,9,8].map(n=>{ const e=rgEscolhaDe(n); return e?{t:"Seu "+n+": "+cap(e)}:null; }).filter(Boolean); }
-window.rgFimFase3 = function(){ rgTopo("fase 3 completa"); const temTipo=typeof tiResultadoHTML==="function" && tiResultadoHTML();
-  mostra(`<div class="rot pisca2">Fase 3 completa</div>
-    ${resumoBrisa(3,destFase3(),"Na sua régua")}
-    ${temTipo?`<h2 style="margin-top:6px">O seu tipo no teste de imagens</h2>${temTipo}<div class="ti-com"><button class="btn" type="button" onclick="tiCompartilha()">Compartilhar o meu tipo</button></div>`:""}
+/* ---------- FIM DA FASE 3 (V4): tela NEUTRA. Nada de palpites, "Suas pistas" ou "Cérebro da Brisa". ----------
+   O tipo do teste de imagens continua aqui (decisão do Daniel em 27/11: manter o teste junto com a régua). */
+window.rgFimFase3 = function(){ rgTopo("régua montada"); const temTipo=typeof tiResultadoHTML==="function" && tiResultadoHTML();
+  RG.fase3Fim=RG.fase3Fim||rgHoje(); rgSalva();
+  mostra(`<div class="rot">Fase 3 · A sua régua</div>${rgEstrela(true)}
+    <h2>Sua régua está montada.</h2><p class="sub">Na próxima fase, você confere o que eu percebi.</p>
+    ${temTipo?`<h2 class="rg-h3">O seu tipo no teste de imagens</h2>${temTipo}<div class="ti-com"><button class="btn" type="button" onclick="tiCompartilha()">Compartilhar o meu tipo</button></div>`:""}
     <div class="porta3" style="margin-top:22px"><div class="pt-cena"><div class="pt-luz" aria-hidden="true"></div><img class="pt-img" src="${NO_SITE?"/app/":""}porta-fase3.webp" alt="Uma porta mágica trancada, com luz dourada escapando pela fresta" width="720" height="892"></div>
-      <div class="pt-rot">Fase 4 · em breve</div><h2>A próxima porta já tem o seu nome.</h2>
-      <p class="pt-txt">Na Fase 4, você confere o que eu percebi em todas as fases.</p></div>
-    <div style="margin-top:14px"><button class="btn sec" type="button" onclick="click();f3Mapa3()">Voltar ao mapa da Fase 3</button></div>`, c=>{ if(typeof ligaResumo==="function") ligaResumo(c); vibra([10,40,10]); somVitoria&&somVitoria(); }); };
+      <div class="pt-rot">Fase 4 · em breve</div></div>
+    <div style="margin-top:14px"><button class="btn sec" type="button" onclick="click();f3Mapa3()">Voltar ao mapa da Fase 3</button></div>`, c=>{ vibra([10,40,10]); somVitoria&&somVitoria(); }); };
 /* depois dos Motivos, o "Seguir para a Fase 4" leva de volta ao mapa (a Fase 4 nova ainda não começou) */
 if(F3_ABERTA && typeof f4Abre==="function"){ const f4Antigo=f4Abre; window.f4Abre = function(){ if(RG&&RG.intro) return f3Mapa3(); return f4Antigo(); }; }
+
+/* =================== BLOCO 5 (V4) · PLANO PAGO (só preparado, DESLIGADO) ===================
+   Pago: "avançar um dia" na hora; grátis espera o dia seguinte.
+   Recomeçar uma fase: grátis 1 vez por semana; pago até 5 vezes por semana. Recomeçar apaga as respostas daquela fase.
+   Para ligar: PLANO.ligado = true e PLANO.tipo vem da compra ("gratis" ou "pago"). Nada disso aparece na tela por enquanto. */
+const PLANO = { ligado:false, tipo:"gratis" };
+const rgPago = () => PLANO.ligado && PLANO.tipo==="pago";
+const semanaDe = d => Math.floor(diaNum(d)/7);
+function rgRecomecosNaSemana(){ const w=semanaDe(rgHoje()); return (RG.recomecos||[]).filter(d=>semanaDe(d)===w).length; }
+window.rgPodeAvancarDia = () => rgPago();
+window.rgPodeRecomecar = () => PLANO.ligado && rgRecomecosNaSemana() < (rgPago()?5:1);
+window.rgAvancaDiaPago = function(){ if(!rgPodeAvancarDia()) return; click(); rgCarrega(); RG.desloc=(RG.desloc||0)+1; RG.hoje=null; rgSalva(); rgTela(); };
+window.rgRecomecaFase = function(){ if(!window.rgPodeRecomecar()) return; click(); const rec=(RG.recomecos||[]).concat(rgHoje()), d=RG.desloc||0;
+  RG=rgNovo(); RG.recomecos=rec; RG.desloc=d; RG.intro=true; RG.primeiroDia=rgHoje(); rgSalva(); try{ F3=null; localStorage.removeItem("7e_fase3"); }catch(e){} rgTela(); };
 
 /* ---------- botões só da prévia (sem modo teste) ---------- */
 window.rgPulaEspera = function(){ click(); RG.hoje=null; rgSalva(); rgTela(); };
