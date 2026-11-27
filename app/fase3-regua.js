@@ -223,7 +223,7 @@ const css=document.createElement("style"); css.textContent=`
 .rg-nota{font-size:15px;color:var(--azul);margin:-4px 0 12px}
 .rg-folga{all:unset;cursor:pointer;font-size:14px;color:#ffb27a;text-decoration:underline;text-underline-offset:3px}
 .rg-bau{all:unset;cursor:pointer;display:inline-flex;flex-direction:column;align-items:center;gap:6px;margin:14px auto 6px;padding:14px 22px;border-radius:22px;border:1.5px dashed rgba(245,197,66,.7);background:rgba(245,197,66,.08);font-weight:800;font-size:18px;color:var(--ouro)}
-.rg-bau span{font-size:46px;line-height:1}
+.rg-bau span{font-size:26px;line-height:1}
 .rg-bau.abre span{animation:rgBau .8s ease-out}
 @keyframes rgBau{0%{transform:scale(1)}40%{transform:scale(1.3) rotate(-8deg)}70%{transform:scale(.95) rotate(5deg)}100%{transform:none}}
 .rg-curio{max-width:440px;margin:10px auto 6px;padding:16px 18px;border-radius:20px;background:rgba(17,27,61,.85);border:1px solid rgba(245,197,66,.5);font-size:18px;line-height:1.5}
@@ -256,6 +256,25 @@ const css=document.createElement("style"); css.textContent=`
 .rg-fazer{margin-top:4px;min-height:52px;width:100%;white-space:nowrap}
 .rg-corval{font-size:13px;color:var(--azul);margin:6px 0 0;text-align:center}
 @media(max-width:360px){.rg-deg2{margin-left:calc(var(--d) * 1.2%);margin-right:0}}
+/* 27/11 · Bloco 3: opções em FOTO grande com legenda curta (estilo Stories, duas lado a lado) */
+.rg-ops.fotos{grid-template-columns:1fr 1fr;gap:12px}
+.rg-ops.fotos.impar .rg-opf:last-child{grid-column:1 / -1;width:calc(50% - 6px);justify-self:center}
+.rg-opf{flex-direction:column;align-items:stretch;gap:0;padding:0!important;min-height:0!important;overflow:hidden;border-radius:20px;border-width:2px;text-align:left}
+.rg-opf::before{display:none}
+.rg-opf .rg-ft{aspect-ratio:4/5;width:100%}
+.rg-opf .rg-cap{position:absolute;left:0;right:0;bottom:0;padding:34px 12px 12px;font-size:18px;font-weight:800;line-height:1.2;color:#fff;background:linear-gradient(180deg,transparent,rgba(5,9,26,.92) 55%);border-bottom:5px solid var(--c,#f5c542);text-shadow:0 1px 6px rgba(0,0,0,.6)}
+.rg-opf em{position:absolute;top:8px;left:8px;margin:0}
+.rg-opf .selo{top:8px;right:8px;font-size:14px;padding:4px 10px;z-index:2}
+.rg-opf.mais{box-shadow:0 0 0 3px var(--ouro),0 0 22px rgba(245,197,66,.45)}
+.rg-opf.menos{box-shadow:0 0 0 3px #7fd3ff;opacity:.85}
+.rg-opf.sel{box-shadow:0 0 0 3px var(--ouro),0 0 22px rgba(245,197,66,.45)}
+.rg-eu{display:grid;place-items:center;font-size:40px;color:var(--ouro)}
+.rg-dica{font-size:17px;color:#fff3c4;margin:-6px 0 12px}
+.rg-colfoto{width:min(320px,86%);aspect-ratio:16/10;margin:6px auto 2px;border-radius:20px;overflow:hidden}
+.rg-reforco{display:flex;gap:14px;align-items:center;text-align:left;max-width:440px;margin:12px auto 4px;padding:12px 16px;border-radius:22px;background:rgba(17,27,61,.85);border:1.5px solid rgba(245,197,66,.5)}
+.rg-reforco img{width:64px;height:64px;border-radius:50%;object-fit:cover;flex:none;border:2px solid var(--ouro)}
+.rg-reforco p{margin:0;font-size:19px;line-height:1.4;font-weight:700}
+.rg-reforco small{display:block;font:700 12px "Space Mono",monospace;color:var(--ouro);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
 /* 27/11 · cartão de cima (a escolha dela) e fotos */
 .rg-foco{display:flex;gap:14px;align-items:center;text-align:left;margin:10px 0 4px;padding:10px;border-radius:20px;background:rgba(17,27,61,.8);border:1.5px solid color-mix(in srgb,var(--c,#f5c542) 60%,transparent)}
 .rg-foco .rg-ft{width:96px;height:96px;flex:none;border-radius:14px}
@@ -408,6 +427,7 @@ function rgColoque(){
   mostra(`<div class="rot">Coloque na régua · ${esc(s.s)}</div>
     ${i===0?`<p class="sub" style="margin-bottom:6px">Antes do seu 10: de 0 a 10, onde fica cada situação na sua régua?</p>`:""}
     <div class="rg-pontos" style="--k:${k}">${COLOQUE.map((_,j)=>`<i class="${j<=i?"on":""}"></i>`).join("")}</div>
+    <div class="rg-colfoto">${rgFotoHTML(CANVA+"regua-coloque-"+c.sid+".jpg","regua-coloque-"+c.sid+".jpg")}</div>
     <h2 class="rg-sit">${esc(c.txt)}</h2>
     <div class="rg-esc" style="--k:${k}">${[0,1,2,3,4,5,6,7,8,9,10].map(n=>`<button type="button" onclick="rgColNota(this,'${c.sid}',${n})" aria-label="${n}">${n}</button>`).join("")}</div>
     ${i>0?`<div><button class="btn sec" type="button" style="min-height:48px;font-size:17px" onclick="rgColVolta()">← voltar uma</button></div>`:""}
@@ -537,6 +557,12 @@ window.rgFotoHTML = rgFotoHTML; window.rgSlug = slug; window.RG_CANVA = CANVA;
 function rgCartaoFoco(A){ const f=rgArqFoto(A.foco), chips=conhecido(A);
   return `<div class="rg-foco" style="--c:${corSent(A.foco.s)}">${f?rgFotoHTML(f.src,f.arq):""}<div><small>Você escolheu</small><b>${esc(cap(A.foco.t))}</b>${chips.length?`<span>${chips.map(esc).join(" · ")}</span>`:""}</div></div>`; }
 
+/* Bloco 3: uma frase curta e didática em cada passo (o que fazer agora) */
+const DICA = (A,op,parte) => op.tipo==="mm" ? (parte==="menos" ? "Agora toque na que ficaria mais longe." : "Primeiro, toque na foto que é mais o seu "+A.num+".")
+  : op.tipo==="ia" ? "Última pergunta deste número. Escolha a que fecha melhor."
+  : op.tipo==="duelo" ? "Só uma: a que pesa mais."
+  : "Agora a gente vai mais fundo no que você escolheu.";
+
 /* ---------- a tela da rodada ---------- */
 function rgRodada(){
   const A=RG.atual, n=A.num;
@@ -547,14 +573,17 @@ function rgRodada(){
   /* nas rodadas mais fundas, o que ela escolheu fica EM CIMA (cartão com foto) e as opções mostram só a parte nova */
   const fundo = (op.tipo==="fundo"||op.tipo==="ia") && A.foco;
   const rotulo = x => fundo && x.sf ? x.sf : x.t;
+  /* Bloco 3: do 10 ao 5, cada opção é uma FOTO grande com legenda curta (estilo Stories, duas lado a lado) */
   const card=(x,i)=>{ const c=sel.mais===i?" mais":sel.menos===i?" menos":sel.um===i?" sel":"";
     const selo=sel.mais===i?`<span class="selo">MAIS</span>`:sel.menos===i?`<span class="selo">MENOS</span>`:"";
-    return `<button class="rg-op${c}" type="button" style="--c:${corSent(x.s)}" onclick="rgToca(${i})">${selo}<span>${esc(cap(rotulo(x)))}</span>${x.o==="nov"?`<em>novidade</em>`:""}</button>`; };
+    const f=rgArqFoto(x);
+    return `<button class="rg-op rg-opf${c}" type="button" style="--c:${corSent(x.s)}" onclick="rgToca(${i})">${selo}${f?rgFotoHTML(f.src,f.arq):`<span class="rg-ft rg-eu"><span>✎</span></span>`}<span class="rg-cap">${esc(cap(rotulo(x)))}</span>${x.o==="nov"?`<em>novidade</em>`:""}</button>`; };
   mostra(`<div class="rg-tit pq">${n}<small>${NOMES[n]}</small></div>
     ${PREVIA?`<span class="rg-deg">${DEGRAU(op)} · rodada ${A.rodadas+1}</span>`:""}
     ${fundo?rgCartaoFoco(A):""}
     <h2 class="rg-q">${PERGUNTA(A,op,parte)}</h2>
-    <div class="rg-ops${op.tipo==="duelo"?" duelo":""}">${op.itens.map(card).join("")}</div>
+    <p class="rg-dica">${DICA(A,op,parte)}</p>
+    <div class="rg-ops fotos${op.itens.length%2?" impar":""}">${op.itens.map(card).join("")}</div>
     <div class="rg-tres">
       <button type="button" onclick="rgNenhuma()">Nenhuma dessas</button>
       <button type="button" onclick="rgMaisOuMenos()">Mais ou menos</button>
@@ -684,11 +713,30 @@ function rgFechaNumero(){ const A=RG.atual, n=A.num;
   RG.atual=null; RG.ultimo=n; rgSalva(); vibra([12,40,20]); somVitoria&&somVitoria(); rgAberto=n;
   rgTopo();
   mostra(`<div class="rot">Mais um número na sua régua</div>
-    ${rgMandala(true)}${rgEstrela(true)}${rgBarra()}
-    <div class="rg-tit" style="font-size:44px;margin-top:8px">${n}<small>${NOMES[n]}</small></div>
-    <h2 style="margin-top:14px">${rgReguaPronta()?"Você completou a sua régua (do 10 ao 5).":A.pulou?"Tudo bem pular o 0.":"Seu "+n+" está na régua."}</h2>
+    <div class="rg-tit" style="font-size:44px;margin-top:8px;color:${COR_NUM[n]}">${n}<small>${NOMES[n]}</small></div>
+    ${rgReforco(n,A)}
+    ${rgEstrela(true)}${rgBarra()}
+    <h2 style="margin-top:10px">${rgReguaPronta()?"Você completou a sua régua (do 10 ao 5).":A.pulou?"Tudo bem pular o 0.":"Seu "+n+" está na régua. Veja a bolinha acesa:"}</h2>
+    ${rgEscada({nova:n})}
     <div id="rgbauarea"><button class="rg-bau" type="button" onclick="rgAbreBau(this)"><span>🎁</span>Abrir o baú surpresa</button></div>
     <div style="margin-top:12px"><button class="btn" type="button" onclick="click();rgTela()">Seguir</button></div>`); }
+
+/* Bloco 3: a Brisa dá uma frase curta de reforço sobre o que ela fez, ao fechar cada número */
+const REFORCO = {
+ 10:"Você escolheu com calma. Seu 10 está guardado!",
+ 9:"Muito bem! Agora eu sei o que é quase perfeito para você.",
+ 8:"Mais um degrau! Seu 8 já tem nome.",
+ 7:"Isso! Você está montando a régua do seu jeito.",
+ 6:"Ótimo. Até as coisas leves contam, e você percebeu.",
+ 5:"Perfeito. Saber o que é \"tanto faz\" também me ajuda muito.",
+ 4:"Pronto. Conhecer o que é sem graça também é se conhecer.",
+ 3:"Feito! O que te chateia também tem lugar na régua.",
+ 2:"Obrigada por olhar para isso com coragem.",
+ 1:"Você foi até o fim. Isso ajuda muito.",
+ 0:"Pronto. O mais difícil ficou para trás."
+};
+function rgReforco(n,A){ const t = A&&A.pulou ? "Tudo bem pular. A régua continua sua." : (A&&A.escritos&&A.escritos.length ? "Você contou do seu jeito, e isso vale muito. Seu "+n+" está guardado!" : REFORCO[n]);
+  return `<div class="rg-reforco"><img src="${BRISA}" alt="Brisa"><p><small>Brisa</small>${esc(t)}</p></div>`; }
 
 /* =================== BLOCO D · BAÚ SURPRESA =================== */
 /* sorteio de verdade: 1 em cada 5 vem vazio */
