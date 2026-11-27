@@ -231,6 +231,31 @@ const css=document.createElement("style"); css.textContent=`
 .rg-aviso{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:70;max-width:min(420px,90vw);padding:12px 18px;border-radius:16px;background:#111b3d;border:1px solid rgba(245,197,66,.55);font-size:16px;text-align:center;box-shadow:0 14px 40px rgba(0,0,0,.6);animation:guiaSobe .4s ease-out}
 .rg-previa{margin-top:22px;padding-top:14px;border-top:1px dashed rgba(169,179,209,.35);display:flex;flex-direction:column;gap:6px;align-items:center}
 .rg-previa .linkflow::before{content:"⚙"}
+/* 27/11 · Bloco 2: a escada da régua (0 embaixo, 10 em cima) */
+.rg-escada{max-width:440px;margin:8px auto 6px;display:flex;flex-direction:column;gap:6px;text-align:left}
+.rg-dir{font:700 15px "Space Mono",monospace;color:var(--azul);letter-spacing:.04em;text-align:center;margin:2px 0}
+.rg-deg2{margin-left:calc(var(--d) * 1.8%);margin-right:calc((10 - var(--d)) * .6%);border-radius:18px;background:rgba(17,27,61,.72);border:1.5px solid rgba(169,179,209,.22);border-bottom:4px solid rgba(0,0,0,.35);transition:background .3s,border-color .3s}
+.rg-linha{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:12px;width:100%;min-height:58px;padding:8px 14px}
+.rg-bol{flex:none;width:30px;height:30px;border-radius:50%;background:rgba(169,179,209,.14);border:2.5px solid color-mix(in srgb,var(--k) 55%,transparent);transition:background .6s,box-shadow .6s,transform .6s}
+.rg-deg2.ok .rg-bol{background:var(--k);border-color:var(--k);box-shadow:0 0 16px var(--k)}
+.rg-deg2.nova .rg-bol{animation:rgAcende 1.3s ease-out}
+.rg-linha b{font:800 28px/1 Fraunces,Georgia,serif;color:var(--creme);min-width:36px}
+.rg-deg2.ok .rg-linha b{color:var(--k)}
+.rg-linha span{font-size:19px;font-weight:700;flex:1}
+.rg-linha em{font-style:normal;font:700 13px "Space Mono",monospace;color:var(--azul);text-align:right;white-space:nowrap}
+.rg-deg2.ok .rg-linha em{color:var(--k);font-size:18px}
+.rg-deg2.anda{border-color:#fff3c4}
+.rg-deg2.anda .rg-linha em{color:#fff3c4}
+.rg-deg2.obra{opacity:.55;border-style:dashed}
+.rg-deg2.ab{background:rgba(32,48,100,.9);border-color:var(--k)}
+.rg-info{padding:0 14px 14px 14px}
+.rg-info p{margin:0 0 8px;font-size:18px;line-height:1.45}
+.rg-info .rg-sua{font-size:17px;color:#fff3c4}
+.rg-info .rg-sua b{color:var(--k)}
+.rg-info .rg-obra{font-size:16px;color:var(--azul)}
+.rg-fazer{margin-top:4px;min-height:52px;width:100%;white-space:nowrap}
+.rg-corval{font-size:13px;color:var(--azul);margin:6px 0 0;text-align:center}
+@media(max-width:360px){.rg-deg2{margin-left:calc(var(--d) * 1.2%);margin-right:0}}
 /* 27/11 · cartão de cima (a escolha dela) e fotos */
 .rg-foco{display:flex;gap:14px;align-items:center;text-align:left;margin:10px 0 4px;padding:10px;border-radius:20px;background:rgba(17,27,61,.8);border:1.5px solid color-mix(in srgb,var(--c,#f5c542) 60%,transparent)}
 .rg-foco .rg-ft{width:96px;height:96px;flex:none;border-radius:14px}
@@ -264,11 +289,48 @@ function rgTopo(txt){
   ["voltar","pularbtn","fundobtn"].forEach(id=>{ const b=document.getElementById(id); if(b) b.hidden=true; }); document.body.classList.add("emf3");
   foco(null); brilho(null); fundoCor(null); pararSom(); rgTesteBarra();
 }
-/* 13 luzes em volta da mandala: as 2 primeiras já acesas (Fases 1 e 2), depois 1 por número fechado */
-function rgMandala(nova){ const feitos=rgFeitos().length, N=13; let h=`<div class="rg-mand" aria-label="Sua régua: ${feitos} de 11 números"><img src="${MANDALA}" alt="">`;
-  for(let k=0;k<N;k++){ const a=-Math.PI/2+k*2*Math.PI/N, x=50+Math.cos(a)*46, y=50+Math.sin(a)*46;
-    const cls=k<2?"fase":(k-2<feitos?"on"+(nova&&k-2===feitos-1?" nova":""):""); h+=`<i class="${cls}" style="left:${x.toFixed(1)}%;top:${y.toFixed(1)}%"></i>`; }
-  return h+`</div>`; }
+/* =================== BLOCO 2 (27/11) · A ESCADA DA RÉGUA =================== */
+/* No lugar da mandala com luzinhas: uma escada que sobe, com o 0 embaixo e o 10 em cima, e uma bolinha colorida por degrau.
+   A bolinha começa apagada e acende quando o número fica pronto. Tocar (ou passar o mouse) mostra o nome, a frase e, se já
+   estiver pronto, a escolha dela. CORES SUGERIDAS (para o Daniel validar antes de fixar): */
+const COR_NUM = {0:"#3b4a8f",1:"#3f63b8",2:"#4a86d6",3:"#5ec8ff",4:"#8fd6e6",5:"#b9c0e0",6:"#a6e8a0",7:"#6fe0a0",8:"#ffcf3f",9:"#ff9b4a",10:"#ff6fa8"};
+const FRASE_NUM = {
+ 10:"O melhor que existe. Você queria que esse momento não acabasse.",
+ 9:"Muito, muito bom. Quase perfeito.",
+ 8:"Te deixa feliz de verdade.",
+ 7:"Gostoso. Você aproveita.",
+ 6:"Agradável e leve, um pouco melhor que o normal.",
+ 5:"Nem bom nem ruim. Passa, e você nem lembra.",
+ 4:"Nada de bom acontece. Tédio.",
+ 3:"Incomoda e irrita, mas passa.",
+ 2:"Dá vontade de sair dali.",
+ 1:"Nojo, aflição ou mal-estar forte.",
+ 0:"Forte e sem saída. O pior do dia a dia."
+};
+let rgAberto = null;   /* degrau aberto (mostrando a frase) */
+function rgEscolhaDe(n){ const r=RG.reg[n]; if(!r) return ""; if(r.pulou) return "pulou (opcional)"; return r.final||r.base||""; }
+/* acao = true: é a tela de escolher o número (cada degrau aberto mostra o botão para fazer aquele número) */
+function rgEscada(o){ o=o||{}; const abertos=rgAbertos(), feitos=rgFeitos().length;
+  if(rgAberto==null && o.acao){ const prox=(RG.atual&&RG.atual.num!=null)?RG.atual.num:ORDEM.find(n=>abertos.includes(n)&&RG.feitos[n]==null); rgAberto=prox==null?null:prox; }
+  let h=`<div class="rg-escada" aria-label="Sua régua: ${feitos} de 11 números prontos"><div class="rg-dir">↑ mais alto</div>`;
+  for(let n=10;n>=0;n--){
+    const ok=RG.feitos[n]!=null, obra=EM_CONSTRUCAO.includes(n), pode=abertos.includes(n)&&!ok, anda=RG.atual&&RG.atual.num===n, ab=rgAberto===n, nova=o.nova===n;
+    const st = ok?"✓":obra?"🔒 em obra":anda?"continuar":pode?"":"🔒";
+    const esc1 = ok ? rgEscolhaDe(n) : "";
+    h+=`<div class="rg-deg2${ok?" ok":""}${obra?" obra":""}${ab?" ab":""}${nova?" nova":""}${anda?" anda":""}" style="--k:${COR_NUM[n]};--d:${n}" data-n="${n}">
+      <button class="rg-linha" type="button" onclick="rgInfo(${n})" onmouseenter="rgInfo(${n},1)" aria-expanded="${ab}" aria-label="${n}, ${NOMES[n]}${ok?", pronto":obra?", em construção":""}">
+        <i class="rg-bol"></i><b>${n}</b><span>${NOMES[n]}</span><em>${st}</em></button>
+      <div class="rg-info"${ab?"":" hidden"}><p>${FRASE_NUM[n]}</p>${esc1?`<p class="rg-sua">Sua escolha: <b>${esc(cap(esc1))}</b></p>`:""}
+        ${o.acao&&pode?`<button class="btn rg-fazer" type="button" onclick="rgVai(${n})">${anda?"Continuar o meu "+n:"Fazer o meu "+n}</button>`:""}
+        ${obra?`<p class="rg-obra">Do 4 ao 0 ainda está em construção.</p>`:""}</div></div>`; }
+  h+=`<div class="rg-dir">↓ mais baixo</div></div>`;
+  if(PREVIA) h+=`<p class="rg-corval">Só na prévia: cores das bolinhas sugeridas, para você validar.</p>`;
+  return h; }
+window.rgInfo = function(n,hover){ if(hover && window.matchMedia && !matchMedia("(hover:hover)").matches) return;
+  if(!hover) click&&click(); rgAberto = (rgAberto===n && !hover) ? null : n;
+  document.querySelectorAll(".rg-deg2").forEach(d=>{ const k=+d.dataset.n, on=k===rgAberto; d.classList.toggle("ab",on); d.querySelector(".rg-info").hidden=!on; d.querySelector(".rg-linha").setAttribute("aria-expanded",on); }); };
+/* a mandala saiu (Bloco 2): quem chamava rgMandala agora recebe a escada sem os botões */
+function rgMandala(nova){ return rgEscada({nova: nova&&RG&&RG.ultimo!=null?RG.ultimo:null}); }
 /* barra: já começa andando (2 de 13), anda 1 por número fechado (não conta perguntas) */
 function rgBarra(){ const p=(2+rgFeitos().length)/13*100; return `<div class="rg-barra" aria-label="Progresso da Fase 3"><i style="width:${p.toFixed(1)}%"></i></div>`; }
 /* estrelinha: 11 tamanhos, um a cada número fechado */
@@ -382,18 +444,16 @@ window.rgTiraFolga = function(){ click(); RG.folgas[rgHoje()]=true; rgSalva(); r
 /* =================== BLOCO E · ESCOLHER O NÚMERO DO DIA =================== */
 function rgEscolhe(nova,depoisColoque){
   rgTopo(); RG.entrada=rgHoje(); rgSalva(); const abertos=rgAbertos(), b=rgBlocoAberto(), g=rgFogo();
-  const botao=n=>{ const ok=RG.feitos[n]!=null, tr=!abertos.includes(n)&&!ok, anda=RG.atual&&RG.atual.num===n;
-    return `<button class="rg-num${ok?" ok":""}${tr?" tranca":""}${anda?" anda":""}" type="button" ${ok||tr?"disabled":`onclick="rgVai(${n})"`} aria-label="${n} ${NOMES[n]}${ok?", pronto":tr?", ainda fechado":""}"><b>${n}</b><span>${ok?"✓ ":tr?"🔒 ":""}${NOMES[n]}${n===0&&!ok?" · opcional":""}</span></button>`; };
-  const mostrar = LIVRE ? ORDEM : abertos;
   const pendentes=abertos.filter(n=>RG.feitos[n]==null);
   let nota="";
   if(g.hojeFolga) nota=FOLGA_TXT; else if(g.ontemFolga&&!RG.dias[rgHoje()]) nota="Ontem foi seu dia de folga. Seu foguinho ficou guardado.";
+  rgAberto=null;
   mostra(`<div class="rg-entrada">${rgFogoHTML()}<div class="rot">Fase 3 · A sua régua</div>
-    ${rgMandala(nova)}${rgEstrela(nova)}${rgBarra()}
-    <p class="rg-legmand">${rgFeitos().length?`Cada luz é um número da sua régua: ${rgFeitos().length} de 11.`:"Você já fez as Fases 1 e 2: duas luzes já estão acesas."}</p>
+    ${rgEstrela(nova)}${rgBarra()}
     ${nota?`<p class="rg-nota">${esc(nota)}</p>`:""}
-    <h2>${depoisColoque?"Pronto! Agora, o seu 10.":pendentes.length>1?"Hoje quero fazer o meu…":"O número de hoje"}</h2>
-    <div class="rg-nums">${mostrar.map(botao).join("")}</div>
+    <h2>${depoisColoque?"Pronto! Agora, o seu 10.":pendentes.length>1?"Qual número você quer fazer hoje?":"O número de hoje"}</h2>
+    <p class="rg-legmand">Toque num degrau para ver o que ele quer dizer. Cada bolinha acende quando o número fica pronto.</p>
+    ${rgEscada({acao:true,nova:nova?RG.ultimo:null})}
     ${!LIVRE&&b<BLOCOS.length-1?`<p class="rg-bloco">Depois: ${BLOCOS.slice(b+1).map(x=>x.join(" · ")).join("  →  ")}</p>`:""}
     ${rgPreviaBotoes()}</div>`);
 }
@@ -621,7 +681,7 @@ window.rgPalavraEsc = function(b,i){ if(ocupado) return; click(); vibra(10); con
 function rgFechaNumero(){ const A=RG.atual, n=A.num;
   RG.feitos[n]=rgHoje();
   RG.reg[n]={base:A.foco?A.foco.t:null, final:A.final||null, dims:A.dims, menos:A.menos||null, palavra:A.palavra||null, momento:A.momento||null, escritos:A.escritos, hist:A.hist, rodadas:A.rodadas, pulou:!!A.pulou, quando:rgHoje()};
-  RG.atual=null; rgSalva(); vibra([12,40,20]); somVitoria&&somVitoria();
+  RG.atual=null; RG.ultimo=n; rgSalva(); vibra([12,40,20]); somVitoria&&somVitoria(); rgAberto=n;
   rgTopo();
   mostra(`<div class="rot">Mais um número na sua régua</div>
     ${rgMandala(true)}${rgEstrela(true)}${rgBarra()}
